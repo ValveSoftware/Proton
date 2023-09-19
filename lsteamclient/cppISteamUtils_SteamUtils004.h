@@ -87,7 +87,7 @@ struct cppISteamUtils_SteamUtils004_IsAPICallCompleted_params
 {
     void *linux_side;
     bool _ret;
-    SteamAPICall_t hSteamAPICall;
+    uint64_t hSteamAPICall;
     bool *pbFailed;
 };
 extern void cppISteamUtils_SteamUtils004_IsAPICallCompleted( struct cppISteamUtils_SteamUtils004_IsAPICallCompleted_params *params );
@@ -96,7 +96,7 @@ struct cppISteamUtils_SteamUtils004_GetAPICallFailureReason_params
 {
     void *linux_side;
     uint32_t _ret;
-    SteamAPICall_t hSteamAPICall;
+    uint64_t hSteamAPICall;
 };
 extern void cppISteamUtils_SteamUtils004_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils004_GetAPICallFailureReason_params *params );
 
@@ -104,7 +104,7 @@ struct cppISteamUtils_SteamUtils004_GetAPICallResult_params
 {
     void *linux_side;
     bool _ret;
-    SteamAPICall_t hSteamAPICall;
+    uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;

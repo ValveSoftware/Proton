@@ -6,7 +6,7 @@ struct cppISteamGameServer_SteamGameServer013_InitGameServer_params
     uint16_t usGamePort;
     uint16_t usQueryPort;
     uint32_t unFlags;
-    AppId_t nGameAppId;
+    uint32_t nGameAppId;
     const char *pchVersionString;
 };
 extern void cppISteamGameServer_SteamGameServer013_InitGameServer( struct cppISteamGameServer_SteamGameServer013_InitGameServer_params *params );
@@ -208,7 +208,7 @@ extern void cppISteamGameServer_SteamGameServer013_BUpdateUserData( struct cppIS
 struct cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket_params
 {
     void *linux_side;
-    HAuthTicket _ret;
+    uint32_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -235,7 +235,7 @@ extern void cppISteamGameServer_SteamGameServer013_EndAuthSession( struct cppISt
 struct cppISteamGameServer_SteamGameServer013_CancelAuthTicket_params
 {
     void *linux_side;
-    HAuthTicket hAuthTicket;
+    uint32_t hAuthTicket;
 };
 extern void cppISteamGameServer_SteamGameServer013_CancelAuthTicket( struct cppISteamGameServer_SteamGameServer013_CancelAuthTicket_params *params );
 
@@ -244,7 +244,7 @@ struct cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params
     void *linux_side;
     uint32_t _ret;
     CSteamID steamID;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp( struct cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params *params );
 
@@ -266,7 +266,7 @@ extern void cppISteamGameServer_SteamGameServer013_GetGameplayStats( struct cppI
 struct cppISteamGameServer_SteamGameServer013_GetServerReputation_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
 };
 extern void cppISteamGameServer_SteamGameServer013_GetServerReputation( struct cppISteamGameServer_SteamGameServer013_GetServerReputation_params *params );
 
@@ -322,7 +322,7 @@ extern void cppISteamGameServer_SteamGameServer013_ForceHeartbeat( struct cppISt
 struct cppISteamGameServer_SteamGameServer013_AssociateWithClan_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamGameServer_SteamGameServer013_AssociateWithClan( struct cppISteamGameServer_SteamGameServer013_AssociateWithClan_params *params );
@@ -330,7 +330,7 @@ extern void cppISteamGameServer_SteamGameServer013_AssociateWithClan( struct cpp
 struct cppISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDNewPlayer;
 };
 extern void cppISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility( struct cppISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility_params *params );

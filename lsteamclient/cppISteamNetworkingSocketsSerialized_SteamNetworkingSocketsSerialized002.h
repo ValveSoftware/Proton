@@ -21,7 +21,7 @@ extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialize
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync_params *params );
 

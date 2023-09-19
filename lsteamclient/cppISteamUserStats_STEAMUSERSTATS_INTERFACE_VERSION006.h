@@ -113,7 +113,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchie
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDUser;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats_params *params );
@@ -159,7 +159,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     const char *pchLeaderboardName;
     uint32_t eLeaderboardSortMethod;
     uint32_t eLeaderboardDisplayType;
@@ -169,7 +169,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateL
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     const char *pchLeaderboardName;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard_params *params );
@@ -178,7 +178,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName
 {
     void *linux_side;
     const char *_ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName_params *params );
 
@@ -186,7 +186,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntr
 {
     void *linux_side;
     int32_t _ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount_params *params );
 
@@ -194,7 +194,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSort
 {
     void *linux_side;
     uint32_t _ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod_params *params );
 
@@ -202,15 +202,15 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisp
 {
     void *linux_side;
     uint32_t _ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType_params *params );
 
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
     uint32_t eLeaderboardDataRequest;
     int32_t nRangeStart;
     int32_t nRangeEnd;
@@ -221,7 +221,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeade
 {
     void *linux_side;
     bool _ret;
-    SteamLeaderboardEntries_t hSteamLeaderboardEntries;
+    uint64_t hSteamLeaderboardEntries;
     int32_t index;
     LeaderboardEntry_t *pLeaderboardEntry;
     int32_t *pDetails;
@@ -232,8 +232,8 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloaded
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
-    SteamLeaderboard_t hSteamLeaderboard;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
     uint32_t eLeaderboardUploadScoreMethod;
     int32_t nScore;
     const int32_t *pScoreDetails;
@@ -244,7 +244,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderb
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers_params *params );
 

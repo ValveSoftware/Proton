@@ -42,7 +42,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser004_SetSelfAsPrimaryChatDestinati
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser004_IsPrimaryChatDestination, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser004_RequestLegacyCDKey, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser004_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser004_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser004_GetHSteamUser_params params =
     {
@@ -446,7 +446,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetAccountName, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetPassword, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetAccountCreationTime, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser005_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser005_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser005_GetHSteamUser_params params =
     {
@@ -713,7 +713,7 @@ void __thiscall winISteamUser_SteamUser005_RequestLegacyCDKey(struct w_steam_ifa
     cppISteamUser_SteamUser005_RequestLegacyCDKey( &params );
 }
 
-bool __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(struct w_steam_iface *_this, const char *pchEmailAccount, GID_t gidGuestPassID, bool bResending)
+bool __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(struct w_steam_iface *_this, const char *pchEmailAccount, uint64_t gidGuestPassID, bool bResending)
 {
     struct cppISteamUser_SteamUser005_SendGuestPassByEmail_params params =
     {
@@ -727,7 +727,7 @@ bool __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_SendGuestPassByAccountID(struct w_steam_iface *_this, uint32_t uAccountID, GID_t gidGuestPassID, bool bResending)
+bool __thiscall winISteamUser_SteamUser005_SendGuestPassByAccountID(struct w_steam_iface *_this, uint32_t uAccountID, uint64_t gidGuestPassID, bool bResending)
 {
     struct cppISteamUser_SteamUser005_SendGuestPassByAccountID_params params =
     {
@@ -787,7 +787,7 @@ uint32_t __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemCount(struct 
     return params._ret;
 }
 
-RTime32 __thiscall winISteamUser_SteamUser005_GetGuestPassLastUpdateTime(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUser_SteamUser005_GetGuestPassLastUpdateTime(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime_params params =
     {
@@ -798,7 +798,7 @@ RTime32 __thiscall winISteamUser_SteamUser005_GetGuestPassLastUpdateTime(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveInfo(struct w_steam_iface *_this, uint32_t nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed, char *pchRecipientAddress, int32_t cRecipientAddressSize)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveInfo(struct w_steam_iface *_this, uint32_t nPassIndex, uint64_t *pgidGuestPassID, uint32_t *pnPackageID, uint32_t *pRTime32Created, uint32_t *pRTime32Expiration, uint32_t *pRTime32Sent, uint32_t *pRTime32Redeemed, char *pchRecipientAddress, int32_t cRecipientAddressSize)
 {
     struct cppISteamUser_SteamUser005_GetGuestPassToGiveInfo_params params =
     {
@@ -818,7 +818,7 @@ bool __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveInfo(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemInfo(struct w_steam_iface *_this, uint32_t nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemInfo(struct w_steam_iface *_this, uint32_t nPassIndex, uint64_t *pgidGuestPassID, uint32_t *pnPackageID, uint32_t *pRTime32Created, uint32_t *pRTime32Expiration, uint32_t *pRTime32Sent, uint32_t *pRTime32Redeemed)
 {
     struct cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params params =
     {
@@ -922,7 +922,7 @@ void __thiscall winISteamUser_SteamUser005_SetPassword(struct w_steam_iface *_th
     cppISteamUser_SteamUser005_SetPassword( &params );
 }
 
-void __thiscall winISteamUser_SteamUser005_SetAccountCreationTime(struct w_steam_iface *_this, RTime32 rt)
+void __thiscall winISteamUser_SteamUser005_SetAccountCreationTime(struct w_steam_iface *_this, uint32_t rt)
 {
     struct cppISteamUser_SteamUser005_SetAccountCreationTime_params params =
     {
@@ -1007,7 +1007,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser006_InitiateGameConnection, 40)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser006_TerminateGameConnection, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser006_TrackAppUsageEvent, 20)
 
-HSteamUser __thiscall winISteamUser_SteamUser006_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser006_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser006_GetHSteamUser_params params =
     {
@@ -1210,7 +1210,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser007_TerminateGameConnection, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser007_TrackAppUsageEvent, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser007_RefreshSteam2Login, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser007_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser007_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser007_GetHSteamUser_params params =
     {
@@ -1420,7 +1420,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser008_TerminateGameConnection, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser008_TrackAppUsageEvent, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser008_RefreshSteam2Login, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser008_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser008_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser008_GetHSteamUser_params params =
     {
@@ -1546,7 +1546,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser009_TerminateGameConnection, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser009_TrackAppUsageEvent, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser009_RefreshSteam2Login, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser009_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser009_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser009_GetHSteamUser_params params =
     {
@@ -1669,7 +1669,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser010_InitiateGameConnection, 32)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser010_TerminateGameConnection, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser010_TrackAppUsageEvent, 20)
 
-HSteamUser __thiscall winISteamUser_SteamUser010_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser010_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser010_GetHSteamUser_params params =
     {
@@ -1785,7 +1785,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_StopVoiceRecording, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_GetCompressedVoice, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_DecompressVoice, 24)
 
-HSteamUser __thiscall winISteamUser_SteamUser011_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser011_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser011_GetHSteamUser_params params =
     {
@@ -1975,7 +1975,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_EndAuthSession, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_CancelAuthTicket, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_UserHasLicenseForApp, 16)
 
-HSteamUser __thiscall winISteamUser_SteamUser012_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser012_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser012_GetHSteamUser_params params =
     {
@@ -2115,7 +2115,7 @@ uint32_t __thiscall winISteamUser_SteamUser012_DecompressVoice(struct w_steam_if
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser012_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser012_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser012_GetAuthSessionTicket_params params =
     {
@@ -2129,7 +2129,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser012_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser012_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser012_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser012_BeginAuthSession_params params =
     {
@@ -2154,7 +2154,7 @@ void __thiscall winISteamUser_SteamUser012_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser012_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser012_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser012_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser012_CancelAuthTicket_params params =
     {
@@ -2165,7 +2165,7 @@ void __thiscall winISteamUser_SteamUser012_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser012_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser012_UserHasLicenseForApp_params params =
     {
@@ -2234,7 +2234,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_EndAuthSession, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_CancelAuthTicket, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_UserHasLicenseForApp, 16)
 
-HSteamUser __thiscall winISteamUser_SteamUser013_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser013_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser013_GetHSteamUser_params params =
     {
@@ -2392,7 +2392,7 @@ uint32_t __thiscall winISteamUser_SteamUser013_DecompressVoice(struct w_steam_if
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser013_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser013_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser013_GetAuthSessionTicket_params params =
     {
@@ -2406,7 +2406,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser013_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser013_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser013_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser013_BeginAuthSession_params params =
     {
@@ -2431,7 +2431,7 @@ void __thiscall winISteamUser_SteamUser013_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser013_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser013_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser013_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser013_CancelAuthTicket_params params =
     {
@@ -2442,7 +2442,7 @@ void __thiscall winISteamUser_SteamUser013_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser013_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser013_UserHasLicenseForApp_params params =
     {
@@ -2516,7 +2516,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_AdvertiseGame, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_RequestEncryptedAppTicket, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_GetEncryptedAppTicket, 16)
 
-HSteamUser __thiscall winISteamUser_SteamUser014_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser014_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser014_GetHSteamUser_params params =
     {
@@ -2674,7 +2674,7 @@ uint32_t __thiscall winISteamUser_SteamUser014_DecompressVoice(struct w_steam_if
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser014_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser014_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser014_GetAuthSessionTicket_params params =
     {
@@ -2688,7 +2688,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser014_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser014_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser014_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser014_BeginAuthSession_params params =
     {
@@ -2713,7 +2713,7 @@ void __thiscall winISteamUser_SteamUser014_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser014_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser014_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser014_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser014_CancelAuthTicket_params params =
     {
@@ -2724,7 +2724,7 @@ void __thiscall winISteamUser_SteamUser014_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser014_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser014_UserHasLicenseForApp_params params =
     {
@@ -2761,7 +2761,7 @@ void __thiscall winISteamUser_SteamUser014_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser014_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser014_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser014_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser014_RequestEncryptedAppTicket_params params =
     {
@@ -2854,7 +2854,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_AdvertiseGame, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_RequestEncryptedAppTicket, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetEncryptedAppTicket, 16)
 
-HSteamUser __thiscall winISteamUser_SteamUser015_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser015_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser015_GetHSteamUser_params params =
     {
@@ -3024,7 +3024,7 @@ uint32_t __thiscall winISteamUser_SteamUser015_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser015_GetAuthSessionTicket_params params =
     {
@@ -3038,7 +3038,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser015_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser015_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser015_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser015_BeginAuthSession_params params =
     {
@@ -3063,7 +3063,7 @@ void __thiscall winISteamUser_SteamUser015_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser015_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser015_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser015_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser015_CancelAuthTicket_params params =
     {
@@ -3074,7 +3074,7 @@ void __thiscall winISteamUser_SteamUser015_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser015_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser015_UserHasLicenseForApp_params params =
     {
@@ -3111,7 +3111,7 @@ void __thiscall winISteamUser_SteamUser015_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser015_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser015_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser015_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser015_RequestEncryptedAppTicket_params params =
     {
@@ -3205,7 +3205,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_AdvertiseGame, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_RequestEncryptedAppTicket, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_GetEncryptedAppTicket, 16)
 
-HSteamUser __thiscall winISteamUser_SteamUser016_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser016_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser016_GetHSteamUser_params params =
     {
@@ -3377,7 +3377,7 @@ uint32_t __thiscall winISteamUser_SteamUser016_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser016_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser016_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser016_GetAuthSessionTicket_params params =
     {
@@ -3391,7 +3391,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser016_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser016_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser016_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser016_BeginAuthSession_params params =
     {
@@ -3416,7 +3416,7 @@ void __thiscall winISteamUser_SteamUser016_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser016_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser016_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser016_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser016_CancelAuthTicket_params params =
     {
@@ -3427,7 +3427,7 @@ void __thiscall winISteamUser_SteamUser016_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser016_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser016_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser016_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser016_UserHasLicenseForApp_params params =
     {
@@ -3464,7 +3464,7 @@ void __thiscall winISteamUser_SteamUser016_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser016_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser016_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser016_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser016_RequestEncryptedAppTicket_params params =
     {
@@ -3560,7 +3560,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_GetEncryptedAppTicket, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_GetGameBadgeLevel, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_GetPlayerSteamLevel, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser017_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser017_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser017_GetHSteamUser_params params =
     {
@@ -3732,7 +3732,7 @@ uint32_t __thiscall winISteamUser_SteamUser017_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser017_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser017_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser017_GetAuthSessionTicket_params params =
     {
@@ -3746,7 +3746,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser017_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser017_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser017_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser017_BeginAuthSession_params params =
     {
@@ -3771,7 +3771,7 @@ void __thiscall winISteamUser_SteamUser017_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser017_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser017_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser017_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser017_CancelAuthTicket_params params =
     {
@@ -3782,7 +3782,7 @@ void __thiscall winISteamUser_SteamUser017_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser017_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser017_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser017_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser017_UserHasLicenseForApp_params params =
     {
@@ -3819,7 +3819,7 @@ void __thiscall winISteamUser_SteamUser017_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser017_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser017_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser017_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser017_RequestEncryptedAppTicket_params params =
     {
@@ -3942,7 +3942,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_GetGameBadgeLevel, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_GetPlayerSteamLevel, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_RequestStoreAuthURL, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser018_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser018_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser018_GetHSteamUser_params params =
     {
@@ -4114,7 +4114,7 @@ uint32_t __thiscall winISteamUser_SteamUser018_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser018_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser018_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser018_GetAuthSessionTicket_params params =
     {
@@ -4153,7 +4153,7 @@ void __thiscall winISteamUser_SteamUser018_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser018_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser018_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser018_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser018_CancelAuthTicket_params params =
     {
@@ -4164,7 +4164,7 @@ void __thiscall winISteamUser_SteamUser018_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser018_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser018_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser018_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser018_UserHasLicenseForApp_params params =
     {
@@ -4201,7 +4201,7 @@ void __thiscall winISteamUser_SteamUser018_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser018_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser018_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser018_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser018_RequestEncryptedAppTicket_params params =
     {
@@ -4252,7 +4252,7 @@ int32_t __thiscall winISteamUser_SteamUser018_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser018_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser018_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser018_RequestStoreAuthURL_params params =
     {
@@ -4341,7 +4341,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_BIsTwoFactorEnabled, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_BIsPhoneIdentifying, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_BIsPhoneRequiringVerification, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser019_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser019_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser019_GetHSteamUser_params params =
     {
@@ -4513,7 +4513,7 @@ uint32_t __thiscall winISteamUser_SteamUser019_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser019_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser019_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser019_GetAuthSessionTicket_params params =
     {
@@ -4552,7 +4552,7 @@ void __thiscall winISteamUser_SteamUser019_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser019_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser019_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser019_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser019_CancelAuthTicket_params params =
     {
@@ -4563,7 +4563,7 @@ void __thiscall winISteamUser_SteamUser019_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser019_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser019_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser019_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser019_UserHasLicenseForApp_params params =
     {
@@ -4600,7 +4600,7 @@ void __thiscall winISteamUser_SteamUser019_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser019_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser019_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser019_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser019_RequestEncryptedAppTicket_params params =
     {
@@ -4651,7 +4651,7 @@ int32_t __thiscall winISteamUser_SteamUser019_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser019_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser019_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser019_RequestStoreAuthURL_params params =
     {
@@ -4790,7 +4790,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser020_BIsPhoneRequiringVerification
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser020_GetMarketEligibility, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser020_GetDurationControl, 4)
 
-HSteamUser __thiscall winISteamUser_SteamUser020_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser020_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser020_GetHSteamUser_params params =
     {
@@ -4962,7 +4962,7 @@ uint32_t __thiscall winISteamUser_SteamUser020_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser020_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser020_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser020_GetAuthSessionTicket_params params =
     {
@@ -5001,7 +5001,7 @@ void __thiscall winISteamUser_SteamUser020_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser020_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser020_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser020_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser020_CancelAuthTicket_params params =
     {
@@ -5012,7 +5012,7 @@ void __thiscall winISteamUser_SteamUser020_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser020_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser020_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser020_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser020_UserHasLicenseForApp_params params =
     {
@@ -5049,7 +5049,7 @@ void __thiscall winISteamUser_SteamUser020_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser020_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser020_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser020_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser020_RequestEncryptedAppTicket_params params =
     {
@@ -5100,7 +5100,7 @@ int32_t __thiscall winISteamUser_SteamUser020_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser020_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser020_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser020_RequestStoreAuthURL_params params =
     {
@@ -5156,7 +5156,7 @@ bool __thiscall winISteamUser_SteamUser020_BIsPhoneRequiringVerification(struct 
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetMarketEligibility(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser020_GetMarketEligibility(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser020_GetMarketEligibility_params params =
     {
@@ -5167,7 +5167,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetMarketEligibility(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetDurationControl(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser020_GetDurationControl(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser020_GetDurationControl_params params =
     {
@@ -5264,7 +5264,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_GetMarketEligibility, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_GetDurationControl, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_BSetDurationControlOnlineState, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser021_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser021_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser021_GetHSteamUser_params params =
     {
@@ -5436,7 +5436,7 @@ uint32_t __thiscall winISteamUser_SteamUser021_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser021_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamUser_SteamUser021_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamUser_SteamUser021_GetAuthSessionTicket_params params =
     {
@@ -5475,7 +5475,7 @@ void __thiscall winISteamUser_SteamUser021_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser021_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser021_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser021_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser021_CancelAuthTicket_params params =
     {
@@ -5486,7 +5486,7 @@ void __thiscall winISteamUser_SteamUser021_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser021_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser021_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser021_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser021_UserHasLicenseForApp_params params =
     {
@@ -5523,7 +5523,7 @@ void __thiscall winISteamUser_SteamUser021_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser021_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser021_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser021_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser021_RequestEncryptedAppTicket_params params =
     {
@@ -5574,7 +5574,7 @@ int32_t __thiscall winISteamUser_SteamUser021_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser021_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser021_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser021_RequestStoreAuthURL_params params =
     {
@@ -5630,7 +5630,7 @@ bool __thiscall winISteamUser_SteamUser021_BIsPhoneRequiringVerification(struct 
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetMarketEligibility(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser021_GetMarketEligibility(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser021_GetMarketEligibility_params params =
     {
@@ -5641,7 +5641,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetMarketEligibility(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetDurationControl(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser021_GetDurationControl(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser021_GetDurationControl_params params =
     {
@@ -5751,7 +5751,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser022_GetMarketEligibility, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser022_GetDurationControl, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser022_BSetDurationControlOnlineState, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser022_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser022_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser022_GetHSteamUser_params params =
     {
@@ -5923,7 +5923,7 @@ uint32_t __thiscall winISteamUser_SteamUser022_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
     struct cppISteamUser_SteamUser022_GetAuthSessionTicket_params params =
     {
@@ -5963,7 +5963,7 @@ void __thiscall winISteamUser_SteamUser022_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser022_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser022_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser022_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser022_CancelAuthTicket_params params =
     {
@@ -5974,7 +5974,7 @@ void __thiscall winISteamUser_SteamUser022_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser022_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser022_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser022_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser022_UserHasLicenseForApp_params params =
     {
@@ -6011,7 +6011,7 @@ void __thiscall winISteamUser_SteamUser022_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser022_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser022_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser022_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser022_RequestEncryptedAppTicket_params params =
     {
@@ -6062,7 +6062,7 @@ int32_t __thiscall winISteamUser_SteamUser022_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser022_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser022_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser022_RequestStoreAuthURL_params params =
     {
@@ -6118,7 +6118,7 @@ bool __thiscall winISteamUser_SteamUser022_BIsPhoneRequiringVerification(struct 
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetMarketEligibility(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser022_GetMarketEligibility(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser022_GetMarketEligibility_params params =
     {
@@ -6129,7 +6129,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetMarketEligibility(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetDurationControl(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser022_GetDurationControl(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser022_GetDurationControl_params params =
     {
@@ -6240,7 +6240,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser023_GetMarketEligibility, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser023_GetDurationControl, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser023_BSetDurationControlOnlineState, 8)
 
-HSteamUser __thiscall winISteamUser_SteamUser023_GetHSteamUser(struct w_steam_iface *_this)
+int32_t __thiscall winISteamUser_SteamUser023_GetHSteamUser(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser023_GetHSteamUser_params params =
     {
@@ -6412,7 +6412,7 @@ uint32_t __thiscall winISteamUser_SteamUser023_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
     struct cppISteamUser_SteamUser023_GetAuthSessionTicket_params params =
     {
@@ -6427,7 +6427,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthTicketForWebApi(struct w_steam_iface *_this, const char *pchIdentity)
+uint32_t __thiscall winISteamUser_SteamUser023_GetAuthTicketForWebApi(struct w_steam_iface *_this, const char *pchIdentity)
 {
     struct cppISteamUser_SteamUser023_GetAuthTicketForWebApi_params params =
     {
@@ -6464,7 +6464,7 @@ void __thiscall winISteamUser_SteamUser023_EndAuthSession(struct w_steam_iface *
     cppISteamUser_SteamUser023_EndAuthSession( &params );
 }
 
-void __thiscall winISteamUser_SteamUser023_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamUser_SteamUser023_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamUser_SteamUser023_CancelAuthTicket_params params =
     {
@@ -6475,7 +6475,7 @@ void __thiscall winISteamUser_SteamUser023_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser023_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamUser_SteamUser023_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser023_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamUser_SteamUser023_UserHasLicenseForApp_params params =
     {
@@ -6512,7 +6512,7 @@ void __thiscall winISteamUser_SteamUser023_AdvertiseGame(struct w_steam_iface *_
     cppISteamUser_SteamUser023_AdvertiseGame( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser023_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
+uint64_t __thiscall winISteamUser_SteamUser023_RequestEncryptedAppTicket(struct w_steam_iface *_this, void *pDataToInclude, int32_t cbDataToInclude)
 {
     struct cppISteamUser_SteamUser023_RequestEncryptedAppTicket_params params =
     {
@@ -6563,7 +6563,7 @@ int32_t __thiscall winISteamUser_SteamUser023_GetPlayerSteamLevel(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser023_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
+uint64_t __thiscall winISteamUser_SteamUser023_RequestStoreAuthURL(struct w_steam_iface *_this, const char *pchRedirectURL)
 {
     struct cppISteamUser_SteamUser023_RequestStoreAuthURL_params params =
     {
@@ -6619,7 +6619,7 @@ bool __thiscall winISteamUser_SteamUser023_BIsPhoneRequiringVerification(struct 
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetMarketEligibility(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser023_GetMarketEligibility(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser023_GetMarketEligibility_params params =
     {
@@ -6630,7 +6630,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetMarketEligibility(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetDurationControl(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUser_SteamUser023_GetDurationControl(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser023_GetDurationControl_params params =
     {

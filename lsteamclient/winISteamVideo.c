@@ -18,7 +18,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting, 8)
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(struct w_steam_iface *_this, uint32_t unVideoAppID)
 {
     struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params params =
     {
@@ -70,7 +70,7 @@ DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting,
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp, 16)
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(struct w_steam_iface *_this, uint32_t unVideoAppID)
 {
     struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL_params params =
     {
@@ -93,7 +93,7 @@ bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(struct w
     return params._ret;
 }
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w_steam_iface *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w_steam_iface *_this, uint32_t unVideoAppID)
 {
     struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings_params params =
     {
@@ -104,7 +104,7 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w
     cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings( &params );
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, AppId_t unVideoAppID, char *pchBuffer, int32_t *pnBufferSize)
+bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, uint32_t unVideoAppID, char *pchBuffer, int32_t *pnBufferSize)
 {
     struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params params =
     {

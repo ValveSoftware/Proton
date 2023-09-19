@@ -1,7 +1,7 @@
 struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDUser;
 };
 extern void cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params *params );
@@ -88,7 +88,7 @@ extern void cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievemen
 struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDUser;
 };
 extern void cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params *params );
