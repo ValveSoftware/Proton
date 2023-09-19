@@ -128,7 +128,7 @@ extern void cppISteamUtils_SteamUtils005_GetIPCCallCount( struct cppISteamUtils_
 struct cppISteamUtils_SteamUtils005_SetWarningMessageHook_params
 {
     void *linux_side;
-    SteamAPIWarningMessageHook_t pFunction;
+    void (*__cdecl pFunction)(int32_t, const char *);
 };
 extern void cppISteamUtils_SteamUtils005_SetWarningMessageHook( struct cppISteamUtils_SteamUtils005_SetWarningMessageHook_params *params );
 
