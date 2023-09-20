@@ -288,6 +288,18 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
     return ret;
 }
 
+void *create_LinuxISteamNetworkingConnectionCustomSignaling( void *win, const char *version )
+{
+    FIXME( "not implemented!\n" );
+    return NULL;
+}
+
+void *create_LinuxISteamNetworkingCustomSignalingRecvContext( void *win, const char *version )
+{
+    FIXME( "not implemented!\n" );
+    return NULL;
+}
+
 /***** FSteamNetworkingSocketsDebugOutput *****/
 static w_FSteamNetworkingSocketsDebugOutput stored_FSteamNetworkingSocketsDebugOutput;
 
