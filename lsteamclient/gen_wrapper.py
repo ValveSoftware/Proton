@@ -289,7 +289,12 @@ WRAPPED_CLASSES = [
     "ISteamNetworkingFakeUDPPort",
 ]
 
+all_records = {}
+all_sources = {}
+all_versions = {}
+
 class_versions = {}
+iface_versions = {}
 
 PATH_CONV = [
     {
@@ -1284,13 +1289,12 @@ def parse(sources, abi):
     return build, structs
 
 
-prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
-for sdkver in SDK_VERSIONS:
-    print(f"parsing SDK version {sdkver}...")
+def load(sdkver):
+    prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
     sdkdir = f"steamworks_sdk_{sdkver}"
 
     sources = {}
-    iface_versions = {}
+    versions = {}
     for file in os.listdir(sdkdir):
         # Some files from Valve have non-UTF-8 stuff in the comments
         # (typically the copyright symbol); therefore we ignore UTF-8
@@ -1305,7 +1309,7 @@ for sdkver in SDK_VERSIONS:
                 result = prog.match(line)
                 if result:
                     iface, version = result.group(1, 2)
-                    iface_versions[iface] = version
+                    versions[iface] = version
 
     source = [f'#if __has_include("{sdkdir}/{file}")\n'
               f'#include "{sdkdir}/{file}"\n'
@@ -1313,16 +1317,49 @@ for sdkver in SDK_VERSIONS:
               for file in SDK_SOURCES.keys()]
     sources["source.cpp"] = "\n".join(source)
 
-    linux_build32, linux_structs32 = parse(sources, 'u32')
-    linux_build64, linux_structs64 = parse(sources, 'u64')
-    windows_build32, windows_structs32 = parse(sources, 'w32')
-    windows_build64, windows_structs64 = parse(sources, 'w64')
+    return versions, sources
+
+
+def generate(sdkver, records):
+    global linux_structs32
+    global linux_structs64
+    global windows_structs32
+    global windows_structs64
+    global iface_versions
+
+    print(f'generating SDK version {sdkver}...')
+    linux_build32, linux_structs32 = records['u32']
+    linux_build64, linux_structs64 = records['u64']
+    windows_build32, windows_structs32 = records['w32']
+    windows_build64, windows_structs64 = records['w64']
+    iface_versions = all_versions[sdkver]
 
     for child in linux_build32.cursor.get_children():
         if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
             handle_class(sdkver, child, SDK_CLASSES[child.displayname])
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
+
+
+for i, sdkver in enumerate(SDK_VERSIONS):
+    print(f'loading SDKs... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
+    all_versions[sdkver], all_sources[sdkver] = load(sdkver)
+print(u'loading SDKs... 100%')
+
+for i, sdkver in enumerate(SDK_VERSIONS):
+    print(f'parsing SDKs... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
+    sources = all_sources[sdkver]
+    records = {}
+    records['u32'] = parse(sources, 'u32')
+    records['u64'] = parse(sources, 'u64')
+    records['w32'] = parse(sources, 'w32')
+    records['w64'] = parse(sources, 'w64')
+    all_records[sdkver] = records
+print(u'parsing SDKs... 100%')
+
+for sdkver, records in all_records.items():
+    generate(sdkver, records)
+
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
