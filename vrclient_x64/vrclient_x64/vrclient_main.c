@@ -159,7 +159,7 @@ bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
         if (!realpath(unix_path, dst))
         {
             ERR("Could not get real path for %s.\n", unix_path);
-            strncpy(dst, unix_path, PATH_MAX);
+            lstrcpynA(dst, unix_path, PATH_MAX);
         }
 
         HeapFree(GetProcessHeap(), 0, unix_path);
@@ -260,6 +260,7 @@ static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code)
 
 static int load_vrclient(void)
 {
+    static const WCHAR PROTON_VR_RUNTIME_W[] = {'P','R','O','T','O','N','_','V','R','_','R','U','N','T','I','M','E',0};
     WCHAR pathW[PATH_MAX];
     char *pathU;
     DWORD sz;
@@ -274,7 +275,7 @@ static int load_vrclient(void)
         return 1;
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
-    if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    if(!GetEnvironmentVariableW(PROTON_VR_RUNTIME_W, pathW, ARRAY_SIZE(pathW)))
     {
         DWORD type, size;
         LSTATUS status;
@@ -287,7 +288,7 @@ static int load_vrclient(void)
         }
 
         size = sizeof(pathW);
-        if ((status = RegQueryValueExW(vr_key, L"PROTON_VR_RUNTIME", NULL, &type, (BYTE *)pathW, &size)))
+        if ((status = RegQueryValueExW(vr_key, PROTON_VR_RUNTIME_W, NULL, &type, (BYTE *)pathW, &size)))
         {
             WINE_WARN("Could not query value, status %#x.\n", status);
             RegCloseKey(vr_key);

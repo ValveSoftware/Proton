@@ -1,3 +1,10 @@
+#include <stdarg.h>
+#include <stddef.h>
+
+#include <windef.h>
+#include <winbase.h>
+
+#undef wcsncpy
 #include <windows.h>
 #include <wine/debug.h>
 
