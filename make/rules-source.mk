@@ -8,12 +8,14 @@
 #
 # outputs:
 #   $($(2)_SRC): variable, absolute rsynced source folder
+#   $($(2)_ORIGIN): variable, absolute origin source folder
 #   $(1)-rebuild: target, call it to force package rebuild
 #   $(1)-source: target, tracking package source changes
 #   $(1)-clean: target, clean package and force rebuild
 #
 define create-rules-source
 $(2)_SRC = $$(OBJ)/src-$(1)
+$(2)_ORIGIN = $(3)
 
 $(1)-rebuild:
 .PHONY: $(1)-rebuild
