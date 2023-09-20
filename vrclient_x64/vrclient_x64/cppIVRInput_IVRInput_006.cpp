@@ -207,8 +207,13 @@ void cppIVRInput_IVRInput_006_GetOriginLocalizedName( struct cppIVRInput_IVRInpu
 void cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo( struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params *params )
 {
     struct cppIVRInput_IVRInput_006 *iface = (struct cppIVRInput_IVRInput_006 *)params->linux_side;
-    uint32_t lin_unOriginInfoSize = std::min( params->unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t) );
-    params->_ret = iface->GetOriginTrackedDeviceInfo( params->origin, params->pOriginInfo, lin_unOriginInfoSize );
+    InputOriginInfo_t lin_pOriginInfo;
+    if (params->pOriginInfo)
+        struct_InputOriginInfo_t_1418_win_to_lin( params->pOriginInfo, &lin_pOriginInfo );
+    uint32_t lin_unOriginInfoSize = params->unOriginInfoSize ? sizeof(lin_pOriginInfo) : 0;
+    params->_ret = iface->GetOriginTrackedDeviceInfo( params->origin, params->pOriginInfo ? &lin_pOriginInfo : nullptr, lin_unOriginInfoSize );
+    if (params->pOriginInfo)
+        struct_InputOriginInfo_t_1418_lin_to_win( &lin_pOriginInfo, params->pOriginInfo, params->unOriginInfoSize );
 }
 
 void cppIVRInput_IVRInput_006_ShowActionOrigins( struct cppIVRInput_IVRInput_006_ShowActionOrigins_params *params )

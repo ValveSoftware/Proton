@@ -289,5 +289,31 @@ void struct_InputSkeletonActionData_t_1015_win_to_lin(const void *w, void *l)
     lin->activeOrigin = win->activeOrigin;
 }
 
+#pragma pack(push, 8)
+struct winInputOriginInfo_t_1015 {
+    vr::VRInputValueHandle_t devicePath;
+    vr::TrackedDeviceIndex_t trackedDeviceIndex;
+    char rchRenderModelComponentName[128];
+}  __attribute__ ((ms_struct));
+#pragma pack(pop)
+
+void struct_InputOriginInfo_t_1015_lin_to_win(void *l, void *w, uint32_t sz)
+{
+    struct winInputOriginInfo_t_1015 *win = (struct winInputOriginInfo_t_1015 *)w;
+    InputOriginInfo_t *lin = (InputOriginInfo_t *)l;
+    win->devicePath = lin->devicePath;
+    win->trackedDeviceIndex = lin->trackedDeviceIndex;
+    memcpy(win->rchRenderModelComponentName, lin->rchRenderModelComponentName, sizeof(win->rchRenderModelComponentName));
+}
+
+void struct_InputOriginInfo_t_1015_win_to_lin(const void *w, void *l)
+{
+    struct winInputOriginInfo_t_1015 *win = (struct winInputOriginInfo_t_1015 *)w;
+    InputOriginInfo_t *lin = (InputOriginInfo_t *)l;
+    lin->devicePath = win->devicePath;
+    lin->trackedDeviceIndex = win->trackedDeviceIndex;
+    memcpy(lin->rchRenderModelComponentName, win->rchRenderModelComponentName, sizeof(lin->rchRenderModelComponentName));
+}
+
 
 }

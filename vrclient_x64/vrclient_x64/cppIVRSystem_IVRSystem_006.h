@@ -242,7 +242,7 @@ struct cppIVRSystem_IVRSystem_006_PollNextEvent_params
 {
     void *linux_side;
     bool _ret;
-    VREvent_t *pEvent;
+    winVREvent_t_0910 *pEvent;
 };
 extern void cppIVRSystem_IVRSystem_006_PollNextEvent( struct cppIVRSystem_IVRSystem_006_PollNextEvent_params *params );
 
@@ -251,7 +251,7 @@ struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    VREvent_t *pEvent;
+    winVREvent_t_0910 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
 extern void cppIVRSystem_IVRSystem_006_PollNextEventWithPose( struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params *params );

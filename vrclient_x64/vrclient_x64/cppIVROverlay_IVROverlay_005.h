@@ -298,7 +298,7 @@ struct cppIVROverlay_IVROverlay_005_PollNextOverlayEvent_params
     void *linux_side;
     bool _ret;
     uint64_t ulOverlayHandle;
-    VREvent_t *pEvent;
+    winVREvent_t_0910 *pEvent;
 };
 extern void cppIVROverlay_IVROverlay_005_PollNextOverlayEvent( struct cppIVROverlay_IVROverlay_005_PollNextOverlayEvent_params *params );
 

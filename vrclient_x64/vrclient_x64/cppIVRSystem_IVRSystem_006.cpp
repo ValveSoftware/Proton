@@ -217,13 +217,23 @@ void cppIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum( struct cppIVRSystem_IV
 void cppIVRSystem_IVRSystem_006_PollNextEvent( struct cppIVRSystem_IVRSystem_006_PollNextEvent_params *params )
 {
     struct cppIVRSystem_IVRSystem_006 *iface = (struct cppIVRSystem_IVRSystem_006 *)params->linux_side;
-    params->_ret = iface->PollNextEvent( params->pEvent );
+    VREvent_t lin_pEvent;
+    if (params->pEvent)
+        struct_VREvent_t_0910_win_to_lin( params->pEvent, &lin_pEvent );
+    params->_ret = iface->PollNextEvent( params->pEvent ? &lin_pEvent : nullptr );
+    if (params->pEvent)
+        struct_VREvent_t_0910_lin_to_win( &lin_pEvent, params->pEvent, -1 );
 }
 
 void cppIVRSystem_IVRSystem_006_PollNextEventWithPose( struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params *params )
 {
     struct cppIVRSystem_IVRSystem_006 *iface = (struct cppIVRSystem_IVRSystem_006 *)params->linux_side;
-    params->_ret = iface->PollNextEventWithPose( params->eOrigin, params->pEvent, params->pTrackedDevicePose );
+    VREvent_t lin_pEvent;
+    if (params->pEvent)
+        struct_VREvent_t_0910_win_to_lin( params->pEvent, &lin_pEvent );
+    params->_ret = iface->PollNextEventWithPose( params->eOrigin, params->pEvent ? &lin_pEvent : nullptr, params->pTrackedDevicePose );
+    if (params->pEvent)
+        struct_VREvent_t_0910_lin_to_win( &lin_pEvent, params->pEvent, -1 );
 }
 
 void cppIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum( struct cppIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum_params *params )
