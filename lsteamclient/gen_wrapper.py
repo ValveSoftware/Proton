@@ -1001,9 +1001,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     constructors.write(f"extern void *create_{winclassname}(void *);\n")
 
     constructors = open("win_constructors_table.dat", "a")
-    constructors.write(f"    {{\"{version}\", &create_{winclassname}}},\n")
     for alias in VERSION_ALIASES.get(version, []):
         constructors.write(f"    {{\"{alias}\", &create_{winclassname}}}, /* alias */\n")
+    constructors.write(f"    {{\"{version}\", &create_{winclassname}}},\n")
 
 
 generated_cb_handlers = []
@@ -1334,7 +1334,7 @@ print('parsing SDKs... 100%')
 
 all_classes = {}
 
-for i, sdkver in enumerate(SDK_VERSIONS):
+for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
     print(f'enumerating classes... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
     index, _ = all_records[sdkver]['u32']
     versions = all_versions[sdkver]
@@ -1346,13 +1346,11 @@ for i, sdkver in enumerate(SDK_VERSIONS):
     classes = filter(lambda c: c.spelling[1:].upper() in versions, classes)
     classes = {versions[c.spelling[1:].upper()]: (sdkver, c) for c in classes}
 
-    for k, v in classes.items():
-        if k not in all_classes:
-            all_classes[k] = v
+    all_classes.update(classes)
 print('enumerating classes... 100%')
 
 
-for version, tuple in all_classes.items():
+for version, tuple in sorted(all_classes.items()):
     sdkver, klass = tuple
 
     linux_build32, linux_structs32 = all_records[sdkver]['u32']
