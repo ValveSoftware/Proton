@@ -98,8 +98,8 @@ SDK_VERSIONS = [
     "099u",
 ]
 
-SDK_SOURCES = [
-    ("steam_api.h", [
+SDK_SOURCES = {
+    "steam_api.h": [
         "ISteamApps",
         "ISteamAppList",
         "ISteamClient",
@@ -125,44 +125,47 @@ SDK_SOURCES = [
         "ISteamUserStats",
         "ISteamUtils",
         "ISteamVideo"
-    ]),
-    ("isteamappticket.h", [
+    ],
+    "isteamappticket.h": [
         "ISteamAppTicket"
-    ]),
-    ("isteamgameserver.h", [
+    ],
+    "isteamgameserver.h": [
         "ISteamGameServer"
-    ]),
-    ("isteamgameserverstats.h", [
+    ],
+    "isteamgameserverstats.h": [
         "ISteamGameServerStats"
-    ]),
-    ("isteamgamestats.h", [
+    ],
+    "isteamgamestats.h": [
         "ISteamGameStats"
-    ]),
-    ("isteammasterserverupdater.h", [
+    ],
+    "isteammasterserverupdater.h": [
         "ISteamMasterServerUpdater"
-    ]),
-    ("isteamgamecoordinator.h", [
+    ],
+    "isteamgamecoordinator.h": [
         "ISteamGameCoordinator"
-    ]),
-    ("isteamparentalsettings.h", [
+    ],
+    "isteamparentalsettings.h": [
         "ISteamParentalSettings"
-    ]),
-    ("isteamnetworkingmessages.h", [
+    ],
+    "isteamnetworkingmessages.h": [
         "ISteamNetworkingMessages"
-    ]),
-    ("isteamnetworkingsockets.h", [
+    ],
+    "isteamnetworkingsockets.h": [
         "ISteamNetworkingSockets"
-    ]),
-    ("isteamnetworkingsocketsserialized.h", [
+    ],
+    "isteamnetworkingsocketsserialized.h": [
         "ISteamNetworkingSocketsSerialized"
-    ]),
-    ("isteamnetworkingutils.h", [
+    ],
+    "isteamnetworkingutils.h": [
         "ISteamNetworkingUtils"
-    ]),
-    ("steamnetworkingfakeip.h", [
+    ],
+    "steamnetworkingfakeip.h": [
         "ISteamNetworkingFakeUDPPort"
-    ]),
-]
+    ],
+}
+
+SDK_CLASSES = {klass: source for source, klasses in SDK_SOURCES.items()
+               for klass in klasses}
 
 VERSION_ALIASES = {
     #these interfaces are undocumented and binary compatible
@@ -1281,9 +1284,10 @@ for sdkver in SDK_VERSIONS:
                     iface, version = result.group(1, 2)
                     iface_versions[iface] = version
 
-    source = [f"""#if __has_include("{sdkdir}/{file}")
-                  #include "{sdkdir}/{file}"
-                  #endif""" for file, _ in SDK_SOURCES]
+    source = [f'#if __has_include("{sdkdir}/{file}")\n'
+              f'#include "{sdkdir}/{file}"\n'
+              f'#endif\n'
+              for file in SDK_SOURCES.keys()]
     sources["source.cpp"] = "\n".join(source)
     windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
                     "-mms-bitfields", "-U__linux__", "-Wno-incompatible-ms-struct"]
@@ -1320,10 +1324,9 @@ for sdkver in SDK_VERSIONS:
     windows_structs64 = dict(reversed([(child.spelling, child.type) for child
                                        in windows_build64.cursor.get_children()]))
 
-    classes = dict([(klass, file) for file, classes in SDK_SOURCES for klass in classes])
     for child in linux_build32.cursor.get_children():
-        if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
-            handle_class(sdkver, child, classes[child.displayname])
+        if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
+            handle_class(sdkver, child, SDK_CLASSES[child.displayname])
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
 
