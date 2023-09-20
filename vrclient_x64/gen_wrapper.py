@@ -100,6 +100,9 @@ SDK_SOURCES = [
     ),
 ]
 
+SDK_CLASSES = {klass: source for source, klasses in SDK_SOURCES.items()
+               for klass in klasses}
+
 STRUCTS_NEXT_IS_SIZE = [
     "VREvent_t",
     "VRControllerState001_t",
