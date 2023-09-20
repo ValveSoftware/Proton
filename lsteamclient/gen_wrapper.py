@@ -297,9 +297,6 @@ all_records = {}
 all_sources = {}
 all_versions = {}
 
-class_versions = {}
-iface_versions = {}
-
 PATH_CONV = [
     {
         "parent_name": "GetAppInstallDir",
@@ -917,29 +914,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cpp.write("    return retval;\n")
     cpp.write("}\n\n")
 
-def get_iface_version(classname):
-    # ISteamClient -> STEAMCLIENT_INTERFACE_VERSION
-    key = classname[1:].upper()
-    if key in iface_versions:
-        ver = iface_versions[key]
-    else:
-        ver = "UNVERSIONED"
-    if classname in class_versions.keys() and ver in class_versions[classname]:
-        return (ver, True)
-    if not classname in class_versions.keys():
-        class_versions[classname] = []
-    class_versions[classname].append(ver)
-    return (ver, False)
 
-def handle_class(sdkver, classnode, file):
-    children = list(classnode.get_children())
-    if len(children) == 0:
-        return
-    (iface_version, already_generated) = get_iface_version(classnode.spelling)
-    if already_generated:
-        return
-    winname = f"win{classnode.spelling}"
-    cppname = f"cpp{classnode.spelling}_{iface_version}"
+def handle_class(sdkver, klass, version, file):
+    winname = f"win{klass.spelling}"
+    cppname = f"cpp{klass.spelling}_{version}"
 
     file_exists = os.path.isfile(f"{winname}.c")
     cfile = open(f"{winname}.c", "a")
@@ -982,19 +960,19 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
     cpp_h = open(f"{cppname}.h", "w")
 
-    winclassname = f"win{classnode.spelling}_{iface_version}"
+    winclassname = f"win{klass.spelling}_{version}"
     cfile.write(f"#include \"{cppname}.h\"\n\n")
     cfile.write(f"typedef struct __{winclassname} {{\n")
     cfile.write("    vtable_ptr *vtable;\n")
     cfile.write("    void *linux_side;\n")
     cfile.write(f"}} {winclassname};\n\n")
     methods = []
-    for child in children:
+    for child in klass.get_children():
         if child.kind == CursorKind.CXX_METHOD and \
                 child.is_virtual_method():
-            handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
+            handle_method(cfile, klass.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
         elif child.kind == CursorKind.DESTRUCTOR:
-            methods.append(handle_destructor(cfile, classnode.spelling, winclassname, child))
+            methods.append(handle_destructor(cfile, klass.spelling, winclassname, child))
 
     cfile.write(f"extern vtable_ptr {winclassname}_vtable;\n\n")
     cfile.write("#ifndef __GNUC__\n")
@@ -1008,12 +986,12 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("}\n")
     cfile.write("#endif\n\n")
     cfile.write(f"{winclassname} *create_{winclassname}(void *linux_side)\n{{\n")
-    if classnode.spelling in WRAPPED_CLASSES:
+    if klass.spelling in WRAPPED_CLASSES:
         cfile.write(f"    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n")
     else:
-        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{iface_version}\");\n")
+        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{version}\");\n")
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{iface_version}\");\n")
+    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{version}\");\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
 
@@ -1023,10 +1001,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     constructors.write(f"extern void *create_{winclassname}(void *);\n")
 
     constructors = open("win_constructors_table.dat", "a")
-    constructors.write(f"    {{\"{iface_version}\", &create_{winclassname}}},\n")
-    if iface_version in VERSION_ALIASES.keys():
-        for alias in VERSION_ALIASES[iface_version]:
-            constructors.write(f"    {{\"{alias}\", &create_{winclassname}}}, /* alias */\n")
+    constructors.write(f"    {{\"{version}\", &create_{winclassname}}},\n")
+    for alias in VERSION_ALIASES.get(version, []):
+        constructors.write(f"    {{\"{alias}\", &create_{winclassname}}}, /* alias */\n")
 
 
 generated_cb_handlers = []
@@ -1323,18 +1300,14 @@ def generate(sdkver, records):
     global linux_structs64
     global windows_structs32
     global windows_structs64
-    global iface_versions
 
     print(f'generating SDK version {sdkver}...')
     linux_build32, linux_structs32 = records['u32']
     linux_build64, linux_structs64 = records['u64']
     windows_build32, windows_structs32 = records['w32']
     windows_build64, windows_structs64 = records['w64']
-    iface_versions = all_versions[sdkver]
 
     for child in linux_build32.cursor.get_children():
-        if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
-            handle_class(sdkver, child, SDK_CLASSES[child.displayname])
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
 
@@ -1357,6 +1330,38 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         if sdkver not in all_records: all_records[sdkver] = {}
         all_records[sdkver][abi] = index
 print('parsing SDKs... 100%')
+
+
+all_classes = {}
+
+for i, sdkver in enumerate(SDK_VERSIONS):
+    print(f'enumerating classes... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
+    index, _ = all_records[sdkver]['u32']
+    versions = all_versions[sdkver]
+
+    classes = index.cursor.get_children()
+    classes = filter(lambda c: c.is_definition(), classes)
+    classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
+    classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
+    classes = filter(lambda c: c.spelling[1:].upper() in versions, classes)
+    classes = {versions[c.spelling[1:].upper()]: (sdkver, c) for c in classes}
+
+    for k, v in classes.items():
+        if k not in all_classes:
+            all_classes[k] = v
+print('enumerating classes... 100%')
+
+
+for version, tuple in all_classes.items():
+    sdkver, klass = tuple
+
+    linux_build32, linux_structs32 = all_records[sdkver]['u32']
+    linux_build64, linux_structs64 = all_records[sdkver]['u64']
+    windows_build32, windows_structs32 = all_records[sdkver]['w32']
+    windows_build64, windows_structs64 = all_records[sdkver]['w64']
+
+    handle_class(sdkver, klass, version, SDK_CLASSES[klass.displayname])
+
 
 for sdkver in SDK_VERSIONS:
     generate(sdkver, all_records[sdkver])
