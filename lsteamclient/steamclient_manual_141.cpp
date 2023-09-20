@@ -11,8 +11,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
+#pragma push_macro("strncpy")
+#undef strncpy
 #include "steamworks_sdk_141/steam_api.h"
 #pragma pop_macro("__cdecl")
+#pragma pop_macro("strncpy")
 #include "steamclient_private.h"
 
 #define SDK_VERSION 1410
