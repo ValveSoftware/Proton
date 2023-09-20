@@ -49,6 +49,10 @@ $$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-post-build$(3)
 ifneq ($(UNSTRIPPED_BUILD),)
 $$(OBJ)/.$(1)-dist$(3):
 	@echo ":: installing $(3)bit $(1)..." >&2
+	if [ -f "$$($(2)_OBJ$(3))/compile_commands.json" ]; then \
+	    mkdir -p "$$(OBJ)/compile_commands/$(1)$(3)/"; \
+	    sed "s#$$($(2)_SRC)#$$($(2)_ORIGIN)#g" "$$($(2)_OBJ$(3))/compile_commands.json" > "$$(OBJ)/compile_commands/$(1)$(3)/compile_commands.json"; \
+	fi
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
 	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
 	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
@@ -62,6 +66,10 @@ $$(OBJ)/.$(1)-dist$(3):
 else
 $$(OBJ)/.$(1)-dist$(3):
 	@echo ":: installing $(3)bit $(1)..." >&2
+	if [ -f "$$($(2)_OBJ$(3))/compile_commands.json" ]; then \
+	    mkdir -p "$$(OBJ)/compile_commands/$(1)$(3)/"; \
+	    sed "s#$$($(2)_SRC)#$$($(2)_ORIGIN)#g" "$$($(2)_OBJ$(3))/compile_commands.json" > "$$(OBJ)/compile_commands/$(1)$(3)/compile_commands.json"; \
+	fi
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
 	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
 	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
