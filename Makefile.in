@@ -437,24 +437,11 @@ $(OBJ)/.wine-post-build32:
 ## vrclient
 ##
 
-VRCLIENT_CFLAGS = -Wno-attributes
-VRCLIENT_CXXFLAGS = -Wno-attributes
-VRCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
-
-VRCLIENT_WINEMAKER_ARGS = \
-	"-I$(VRCLIENT_SRC)/" \
-	"-I$(VRCLIENT_SRC)/vrclient_x64/"
-
 VRCLIENT_DEPENDS = wine
 
 $(eval $(call rules-source,vrclient,$(SRCDIR)/vrclient_x64))
-$(eval $(call rules-winemaker,vrclient,32,vrclient.dll))
-$(eval $(call rules-winemaker,vrclient,64,vrclient_x64.dll))
-
-$(OBJ)/.vrclient-post-source:
-	mkdir -p $(VRCLIENT_OBJ32) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ32)/vrclient.spec
-	mkdir -p $(VRCLIENT_OBJ64) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ64)/vrclient_x64.spec
-	touch $@
+$(eval $(call rules-makedep,vrclient,32))
+$(eval $(call rules-makedep,vrclient,64))
 
 
 ##
