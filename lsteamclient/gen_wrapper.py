@@ -247,6 +247,7 @@ POST_EXEC_FUNCS = {
 }
 
 INTERFACE_NAME_VERSION = re.compile(r'^(?P<name>.+?)(?P<version>\d*)$')
+DEFINE_INTERFACE_VERSION = re.compile(r'^#define\s*(?P<name>STEAM(?:\w*)_VERSION(?:\w*))\s*"(?P<version>.*)"')
 
 def method_needs_manual_handling(interface_with_version, method_name):
     match_dict = INTERFACE_NAME_VERSION.match(interface_with_version).groupdict()
@@ -918,15 +919,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
 
 def get_iface_version(classname):
     # ISteamClient -> STEAMCLIENT_INTERFACE_VERSION
-    defname = f"{classname[1:].upper()}_INTERFACE_VERSION"
-    if defname in iface_versions.keys():
-        ver = iface_versions[defname]
+    key = classname[1:].upper()
+    if key in iface_versions:
+        ver = iface_versions[key]
     else:
-        defname = f"{classname[1:].upper()}_VERSION"
-        if defname in iface_versions.keys():
-            ver = iface_versions[defname]
-        else:
-            ver = "UNVERSIONED"
+        ver = "UNVERSIONED"
     if classname in class_versions.keys() and ver in class_versions[classname]:
         return (ver, True)
     if not classname in class_versions.keys():
@@ -1293,7 +1290,6 @@ def parse(sources, abi):
 
 
 def load(sdkver):
-    prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
     sdkdir = f"steamworks_sdk_{sdkver}"
 
     sources = {}
@@ -1303,16 +1299,15 @@ def load(sdkver):
         # (typically the copyright symbol); therefore we ignore UTF-8
         # encoding errors
         lines = open(f"{sdkdir}/{file}", "r", errors="replace").readlines()
-        if file == "isteammasterserverupdater.h":
-            if """#error "This file isn't used any more"\n""" in lines:
-                sources[f"{sdkdir}/isteammasterserverupdater.h"] = ""
+        if """#error "This file isn't used any more"\n""" in lines:
+            sources[f"{sdkdir}/{file}"] = ""
 
-        for line in lines:
-            if "define STEAM" in line and "_VERSION" in line:
-                result = prog.match(line)
-                if result:
-                    iface, version = result.group(1, 2)
-                    versions[iface] = version
+        results = (DEFINE_INTERFACE_VERSION.match(l) for l in lines)
+        for result in (r.groupdict() for r in results if r):
+            name, version = result['name'], result['version']
+            name = name.replace('_INTERFACE_VERSION', '')
+            name = name.replace('_VERSION', '')
+            versions[name] = version
 
     source = [f'#if __has_include("{sdkdir}/{file}")\n'
               f'#include "{sdkdir}/{file}"\n'
