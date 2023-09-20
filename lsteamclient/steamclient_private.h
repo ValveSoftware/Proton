@@ -57,6 +57,8 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *ver
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version);
+void *create_LinuxISteamNetworkingConnectionCustomSignaling( void *win, const char *version );
+void *create_LinuxISteamNetworkingCustomSignalingRecvContext( void *win, const char *version );
 
 typedef void (U_CDECL *u_SteamAPIWarningMessageHook_t)( int32_t, const char * );
 typedef void (W_CDECL *w_SteamAPIWarningMessageHook_t)( int32_t, const char * );
