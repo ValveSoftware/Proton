@@ -257,7 +257,12 @@ void cppIVROverlay_IVROverlay_005_IsOverlayVisible( struct cppIVROverlay_IVROver
 void cppIVROverlay_IVROverlay_005_PollNextOverlayEvent( struct cppIVROverlay_IVROverlay_005_PollNextOverlayEvent_params *params )
 {
     struct cppIVROverlay_IVROverlay_005 *iface = (struct cppIVROverlay_IVROverlay_005 *)params->linux_side;
-    params->_ret = iface->PollNextOverlayEvent( params->ulOverlayHandle, params->pEvent );
+    VREvent_t lin_pEvent;
+    if (params->pEvent)
+        struct_VREvent_t_0910_win_to_lin( params->pEvent, &lin_pEvent );
+    params->_ret = iface->PollNextOverlayEvent( params->ulOverlayHandle, params->pEvent ? &lin_pEvent : nullptr );
+    if (params->pEvent)
+        struct_VREvent_t_0910_lin_to_win( &lin_pEvent, params->pEvent, -1 );
 }
 
 void cppIVROverlay_IVROverlay_005_GetOverlayInputMethod( struct cppIVROverlay_IVROverlay_005_GetOverlayInputMethod_params *params )

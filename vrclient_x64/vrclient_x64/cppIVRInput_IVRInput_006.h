@@ -241,7 +241,7 @@ struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params
     void *linux_side;
     uint32_t _ret;
     uint64_t origin;
-    InputOriginInfo_t *pOriginInfo;
+    winInputOriginInfo_t_1418 *pOriginInfo;
     uint32_t unOriginInfoSize;
 };
 extern void cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo( struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params *params );
