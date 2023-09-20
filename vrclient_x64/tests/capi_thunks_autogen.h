@@ -11,99 +11,297 @@
 
 #include "capi_thunks.h"
 
-void test_capi_thunks_IVRSystem_022(void);
+void test_capi_thunks_IVRApplications_001(void);
 
-void __thiscall IVRSystem_022_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVRApplicationError __thiscall IVRApplications_001_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
 
-HmdMatrix44_t *__thiscall IVRSystem_022_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+EVRApplicationError __thiscall IVRApplications_001_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
 
-void __thiscall IVRSystem_022_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+bool __thiscall IVRApplications_001_IsApplicationInstalled(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+uint32_t __thiscall IVRApplications_001_GetApplicationCount(void *_this);
 
-HmdMatrix34_t *__thiscall IVRSystem_022_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVRApplicationError __thiscall IVRApplications_001_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-bool __thiscall IVRSystem_022_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVRApplicationError __thiscall IVRApplications_001_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-int32_t __thiscall IVRSystem_022_GetD3D9AdapterIndex(void *_this);
+EVRApplicationError __thiscall IVRApplications_001_LaunchApplication(void *_this, const char * pchAppKey);
 
-void __thiscall IVRSystem_022_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVRApplicationError __thiscall IVRApplications_001_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
 
-void __thiscall IVRSystem_022_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+EVRApplicationError __thiscall IVRApplications_001_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_IsDisplayOnDesktop(void *_this);
+uint32_t __thiscall IVRApplications_001_GetApplicationProcessId(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+const char * __thiscall IVRApplications_001_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
 
-void __thiscall IVRSystem_022_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+uint32_t __thiscall IVRApplications_001_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
 
-HmdMatrix34_t *__thiscall IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+bool __thiscall IVRApplications_001_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
 
-HmdMatrix34_t *__thiscall IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVRApplicationError __thiscall IVRApplications_001_GetHomeApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-uint32_t __thiscall IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVRApplicationError __thiscall IVRApplications_001_SetHomeApplication(void *_this, const char * pchAppKey);
 
-EDeviceActivityLevel __thiscall IVRSystem_022_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVRApplicationError __thiscall IVRApplications_001_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
 
-void __thiscall IVRSystem_022_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+bool __thiscall IVRApplications_001_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_022_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+EVRApplicationError __thiscall IVRApplications_001_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-ETrackedControllerRole __thiscall IVRSystem_022_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVRApplicationTransitionState __thiscall IVRApplications_001_GetTransitionState(void *_this);
 
-ETrackedDeviceClass __thiscall IVRSystem_022_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVRApplicationError __thiscall IVRApplications_001_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+const char * __thiscall IVRApplications_001_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
 
-bool __thiscall IVRSystem_022_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void test_capi_thunks_IVRApplications_002(void);
 
-float __thiscall IVRSystem_022_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVRApplicationError __thiscall IVRApplications_002_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
 
-int32_t __thiscall IVRSystem_022_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVRApplicationError __thiscall IVRApplications_002_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
 
-uint64_t __thiscall IVRSystem_022_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+bool __thiscall IVRApplications_002_IsApplicationInstalled(void *_this, const char * pchAppKey);
 
-HmdMatrix34_t *__thiscall IVRSystem_022_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+uint32_t __thiscall IVRApplications_002_GetApplicationCount(void *_this);
 
-uint32_t __thiscall IVRSystem_022_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVRApplicationError __thiscall IVRApplications_002_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-uint32_t __thiscall IVRSystem_022_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVRApplicationError __thiscall IVRApplications_002_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-const char * __thiscall IVRSystem_022_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVRApplicationError __thiscall IVRApplications_002_LaunchApplication(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVRApplicationError __thiscall IVRApplications_002_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVRApplicationError __thiscall IVRApplications_002_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
 
-const char * __thiscall IVRSystem_022_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+uint32_t __thiscall IVRApplications_002_GetApplicationProcessId(void *_this, const char * pchAppKey);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_022_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+const char * __thiscall IVRApplications_002_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
 
-bool __thiscall IVRSystem_022_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+uint32_t __thiscall IVRApplications_002_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
 
-bool __thiscall IVRSystem_022_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+bool __thiscall IVRApplications_002_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
 
-void __thiscall IVRSystem_022_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVRApplicationError __thiscall IVRApplications_002_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
 
-const char * __thiscall IVRSystem_022_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+bool __thiscall IVRApplications_002_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
 
-const char * __thiscall IVRSystem_022_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVRApplicationError __thiscall IVRApplications_002_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
 
-bool __thiscall IVRSystem_022_IsInputAvailable(void *_this);
+EVRApplicationTransitionState __thiscall IVRApplications_002_GetTransitionState(void *_this);
 
-bool __thiscall IVRSystem_022_IsSteamVRDrawingControllers(void *_this);
+EVRApplicationError __thiscall IVRApplications_002_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
 
-bool __thiscall IVRSystem_022_ShouldApplicationPause(void *_this);
+const char * __thiscall IVRApplications_002_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
 
-bool __thiscall IVRSystem_022_ShouldApplicationReduceRenderingWork(void *_this);
+bool __thiscall IVRApplications_002_IsQuitUserPromptRequested(void *_this);
 
-EVRFirmwareError __thiscall IVRSystem_022_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void test_capi_thunks_IVRApplications_003(void);
 
-void __thiscall IVRSystem_022_AcknowledgeQuit_Exiting(void *_this);
+EVRApplicationError __thiscall IVRApplications_003_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
 
-uint32_t __thiscall IVRSystem_022_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+EVRApplicationError __thiscall IVRApplications_003_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
 
-const char * __thiscall IVRSystem_022_GetRuntimeVersion(void *_this);
+bool __thiscall IVRApplications_003_IsApplicationInstalled(void *_this, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_003_GetApplicationCount(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_003_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_003_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_003_LaunchApplication(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_003_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_003_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_003_GetApplicationProcessId(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_003_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+
+uint32_t __thiscall IVRApplications_003_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+
+bool __thiscall IVRApplications_003_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+uint64_t __thiscall IVRApplications_003_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+EVRApplicationError __thiscall IVRApplications_003_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+
+bool __thiscall IVRApplications_003_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_003_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationTransitionState __thiscall IVRApplications_003_GetTransitionState(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_003_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_003_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+
+bool __thiscall IVRApplications_003_IsQuitUserPromptRequested(void *_this);
+
+void test_capi_thunks_IVRApplications_004(void);
+
+EVRApplicationError __thiscall IVRApplications_004_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+
+EVRApplicationError __thiscall IVRApplications_004_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+
+bool __thiscall IVRApplications_004_IsApplicationInstalled(void *_this, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_004_GetApplicationCount(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_004_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_004_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_004_LaunchApplication(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_004_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+
+bool __thiscall IVRApplications_004_CancelApplicationLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_004_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_004_GetApplicationProcessId(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_004_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+
+uint32_t __thiscall IVRApplications_004_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+
+bool __thiscall IVRApplications_004_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+uint64_t __thiscall IVRApplications_004_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+EVRApplicationError __thiscall IVRApplications_004_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+
+bool __thiscall IVRApplications_004_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_004_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationTransitionState __thiscall IVRApplications_004_GetTransitionState(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_004_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_004_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+
+bool __thiscall IVRApplications_004_IsQuitUserPromptRequested(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_004_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
+
+void test_capi_thunks_IVRApplications_005(void);
+
+EVRApplicationError __thiscall IVRApplications_005_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+
+EVRApplicationError __thiscall IVRApplications_005_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+
+bool __thiscall IVRApplications_005_IsApplicationInstalled(void *_this, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_005_GetApplicationCount(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_005_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_005_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_005_LaunchApplication(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_005_LaunchTemplateApplication(void *_this, const char * pchTemplateAppKey, const char * pchNewAppKey, AppOverrideKeys_t * pKeys, uint32_t unKeys);
+
+EVRApplicationError __thiscall IVRApplications_005_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+
+bool __thiscall IVRApplications_005_CancelApplicationLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_005_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_005_GetApplicationProcessId(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_005_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+
+uint32_t __thiscall IVRApplications_005_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+
+bool __thiscall IVRApplications_005_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+uint64_t __thiscall IVRApplications_005_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+EVRApplicationError __thiscall IVRApplications_005_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+
+bool __thiscall IVRApplications_005_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_005_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationTransitionState __thiscall IVRApplications_005_GetTransitionState(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_005_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_005_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+
+bool __thiscall IVRApplications_005_IsQuitUserPromptRequested(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_005_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
+
+void test_capi_thunks_IVRApplications_006(void);
+
+EVRApplicationError __thiscall IVRApplications_006_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+
+EVRApplicationError __thiscall IVRApplications_006_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+
+bool __thiscall IVRApplications_006_IsApplicationInstalled(void *_this, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_006_GetApplicationCount(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_006_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_006_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationError __thiscall IVRApplications_006_LaunchApplication(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_006_LaunchTemplateApplication(void *_this, const char * pchTemplateAppKey, const char * pchNewAppKey, AppOverrideKeys_t * pKeys, uint32_t unKeys);
+
+EVRApplicationError __thiscall IVRApplications_006_LaunchApplicationFromMimeType(void *_this, const char * pchMimeType, const char * pchArgs);
+
+EVRApplicationError __thiscall IVRApplications_006_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+
+bool __thiscall IVRApplications_006_CancelApplicationLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_006_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+
+uint32_t __thiscall IVRApplications_006_GetApplicationProcessId(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_006_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+
+uint32_t __thiscall IVRApplications_006_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+
+bool __thiscall IVRApplications_006_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+uint64_t __thiscall IVRApplications_006_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+
+EVRApplicationError __thiscall IVRApplications_006_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+
+bool __thiscall IVRApplications_006_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+
+EVRApplicationError __thiscall IVRApplications_006_SetDefaultApplicationForMimeType(void *_this, const char * pchAppKey, const char * pchMimeType);
+
+bool __thiscall IVRApplications_006_GetDefaultApplicationForMimeType(void *_this, const char * pchMimeType, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+bool __thiscall IVRApplications_006_GetApplicationSupportedMimeTypes(void *_this, const char * pchAppKey, char * pchMimeTypesBuffer, uint32_t unMimeTypesBuffer);
+
+uint32_t __thiscall IVRApplications_006_GetApplicationsThatSupportMimeType(void *_this, const char * pchMimeType, char * pchAppKeysThatSupportBuffer, uint32_t unAppKeysThatSupportBuffer);
+
+uint32_t __thiscall IVRApplications_006_GetApplicationLaunchArguments(void *_this, uint32_t unHandle, char * pchArgs, uint32_t unArgs);
+
+EVRApplicationError __thiscall IVRApplications_006_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+
+EVRApplicationTransitionState __thiscall IVRApplications_006_GetTransitionState(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_006_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+
+const char * __thiscall IVRApplications_006_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+
+bool __thiscall IVRApplications_006_IsQuitUserPromptRequested(void *_this);
+
+EVRApplicationError __thiscall IVRApplications_006_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
+
+uint32_t __thiscall IVRApplications_006_GetCurrentSceneProcessId(void *_this);
 
 void test_capi_thunks_IVRApplications_007(void);
 
@@ -167,49 +365,81 @@ EVRApplicationError __thiscall IVRApplications_007_LaunchInternalProcess(void *_
 
 uint32_t __thiscall IVRApplications_007_GetCurrentSceneProcessId(void *_this);
 
-void test_capi_thunks_IVRSettings_003(void);
+void test_capi_thunks_IVRChaperoneSetup_004(void);
 
-const char * __thiscall IVRSettings_003_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
+bool __thiscall IVRChaperoneSetup_004_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile);
 
-void __thiscall IVRSettings_003_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
+void __thiscall IVRChaperoneSetup_004_RevertWorkingCopy(void *_this);
 
-void __thiscall IVRSettings_003_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
 
-void __thiscall IVRSettings_003_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect);
 
-void __thiscall IVRSettings_003_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
 
-bool __thiscall IVRSettings_003_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
 
-int32_t __thiscall IVRSettings_003_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
 
-float __thiscall IVRSettings_003_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+bool __thiscall IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose);
 
-void __thiscall IVRSettings_003_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError);
+void __thiscall IVRChaperoneSetup_004_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ);
 
-void __thiscall IVRSettings_003_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
+void __thiscall IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
 
-void __thiscall IVRSettings_003_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+void __thiscall IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose);
 
-void test_capi_thunks_IVRChaperone_004(void);
+void __thiscall IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose);
 
-ChaperoneCalibrationState __thiscall IVRChaperone_004_GetCalibrationState(void *_this);
+void __thiscall IVRChaperoneSetup_004_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile);
 
-bool __thiscall IVRChaperone_004_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
+bool __thiscall IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
 
-bool __thiscall IVRChaperone_004_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
+void __thiscall IVRChaperoneSetup_004_SetWorkingWallTagInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount);
 
-void __thiscall IVRChaperone_004_ReloadInfo(void *_this);
+bool __thiscall IVRChaperoneSetup_004_GetLiveWallTagInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount);
 
-void __thiscall IVRChaperone_004_SetSceneColor(void *_this, HmdColor_t color);
+void test_capi_thunks_IVRChaperoneSetup_005(void);
 
-void __thiscall IVRChaperone_004_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
+bool __thiscall IVRChaperoneSetup_005_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile);
 
-bool __thiscall IVRChaperone_004_AreBoundsVisible(void *_this);
+void __thiscall IVRChaperoneSetup_005_RevertWorkingCopy(void *_this);
 
-void __thiscall IVRChaperone_004_ForceBoundsVisible(void *_this, bool bForce);
+bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
 
-void __thiscall IVRChaperone_004_ResetZeroPose(void *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin);
+bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect);
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose);
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ);
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose);
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose);
+
+void __thiscall IVRChaperoneSetup_005_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile);
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount);
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount);
+
+bool __thiscall IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
+
+bool __thiscall IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+
+bool __thiscall IVRChaperoneSetup_005_ExportLiveToBuffer(void *_this, char * pBuffer, uint32_t * pnBufferLength);
+
+bool __thiscall IVRChaperoneSetup_005_ImportFromBufferToWorking(void *_this, const char * pBuffer, uint32_t nImportFlags);
 
 void test_capi_thunks_IVRChaperoneSetup_006(void);
 
@@ -253,497 +483,79 @@ void __thiscall IVRChaperoneSetup_006_HideWorkingSetPreview(void *_this);
 
 void __thiscall IVRChaperoneSetup_006_RoomSetupStarting(void *_this);
 
-void test_capi_thunks_IVRCompositor_027(void);
+void test_capi_thunks_IVRChaperone_002(void);
 
-void __thiscall IVRCompositor_027_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+ChaperoneCalibrationState __thiscall IVRChaperone_002_GetCalibrationState(void *_this);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_027_GetTrackingSpace(void *_this);
+bool __thiscall IVRChaperone_002_GetSoftBoundsInfo(void *_this, ChaperoneSoftBoundsInfo_t * pInfo);
 
-EVRCompositorError __thiscall IVRCompositor_027_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVRChaperone_002_GetHardBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
 
-EVRCompositorError __thiscall IVRCompositor_027_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVRChaperone_002_GetSeatedBoundsInfo(void *_this, ChaperoneSeatedBoundsInfo_t * pInfo);
 
-EVRCompositorError __thiscall IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+void __thiscall IVRChaperone_002_ReloadInfo(void *_this);
 
-EVRCompositorError __thiscall IVRCompositor_027_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+void __thiscall IVRChaperone_002_SetSceneColor(void *_this, HmdColor_t color);
 
-void __thiscall IVRCompositor_027_ClearLastSubmittedFrame(void *_this);
+void __thiscall IVRChaperone_002_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors);
 
-void __thiscall IVRCompositor_027_PostPresentHandoff(void *_this);
+bool __thiscall IVRChaperone_002_AreBoundsVisible(void *_this);
 
-bool __thiscall IVRCompositor_027_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+void __thiscall IVRChaperone_002_ForceBoundsVisible(void *_this, bool bForce);
 
-uint32_t __thiscall IVRCompositor_027_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+void test_capi_thunks_IVRChaperone_003(void);
 
-float __thiscall IVRCompositor_027_GetFrameTimeRemaining(void *_this);
+ChaperoneCalibrationState __thiscall IVRChaperone_003_GetCalibrationState(void *_this);
 
-void __thiscall IVRCompositor_027_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+bool __thiscall IVRChaperone_003_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
 
-void __thiscall IVRCompositor_027_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+bool __thiscall IVRChaperone_003_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
 
-HmdColor_t *__thiscall IVRCompositor_027_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+void __thiscall IVRChaperone_003_ReloadInfo(void *_this);
 
-void __thiscall IVRCompositor_027_FadeGrid(void *_this, float fSeconds, bool bFadeGridIn);
+void __thiscall IVRChaperone_003_SetSceneColor(void *_this, HmdColor_t color);
 
-float __thiscall IVRCompositor_027_GetCurrentGridAlpha(void *_this);
+void __thiscall IVRChaperone_003_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
 
-EVRCompositorError __thiscall IVRCompositor_027_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+bool __thiscall IVRChaperone_003_AreBoundsVisible(void *_this);
 
-void __thiscall IVRCompositor_027_ClearSkyboxOverride(void *_this);
+void __thiscall IVRChaperone_003_ForceBoundsVisible(void *_this, bool bForce);
 
-void __thiscall IVRCompositor_027_CompositorBringToFront(void *_this);
+void test_capi_thunks_IVRChaperone_004(void);
 
-void __thiscall IVRCompositor_027_CompositorGoToBack(void *_this);
+ChaperoneCalibrationState __thiscall IVRChaperone_004_GetCalibrationState(void *_this);
 
-void __thiscall IVRCompositor_027_CompositorQuit(void *_this);
+bool __thiscall IVRChaperone_004_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
 
-bool __thiscall IVRCompositor_027_IsFullscreen(void *_this);
+bool __thiscall IVRChaperone_004_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
 
-uint32_t __thiscall IVRCompositor_027_GetCurrentSceneFocusProcess(void *_this);
+void __thiscall IVRChaperone_004_ReloadInfo(void *_this);
 
-uint32_t __thiscall IVRCompositor_027_GetLastFrameRenderer(void *_this);
+void __thiscall IVRChaperone_004_SetSceneColor(void *_this, HmdColor_t color);
 
-bool __thiscall IVRCompositor_027_CanRenderScene(void *_this);
+void __thiscall IVRChaperone_004_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
 
-void __thiscall IVRCompositor_027_ShowMirrorWindow(void *_this);
+bool __thiscall IVRChaperone_004_AreBoundsVisible(void *_this);
 
-void __thiscall IVRCompositor_027_HideMirrorWindow(void *_this);
+void __thiscall IVRChaperone_004_ForceBoundsVisible(void *_this, bool bForce);
 
-bool __thiscall IVRCompositor_027_IsMirrorWindowVisible(void *_this);
+void __thiscall IVRChaperone_004_ResetZeroPose(void *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin);
 
-void __thiscall IVRCompositor_027_CompositorDumpImages(void *_this);
+void test_capi_thunks_IVRClientCore_002(void);
 
-bool __thiscall IVRCompositor_027_ShouldAppRenderWithLowResources(void *_this);
+EVRInitError __thiscall IVRClientCore_002_Init(void *_this, EVRApplicationType eApplicationType);
 
-void __thiscall IVRCompositor_027_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+void __thiscall IVRClientCore_002_Cleanup(void *_this);
 
-void __thiscall IVRCompositor_027_ForceReconnectProcess(void *_this);
+EVRInitError __thiscall IVRClientCore_002_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion);
 
-void __thiscall IVRCompositor_027_SuspendRendering(void *_this, bool bSuspend);
+void * __thiscall IVRClientCore_002_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError);
 
-EVRCompositorError __thiscall IVRCompositor_027_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+bool __thiscall IVRClientCore_002_BIsHmdPresent(void *_this);
 
-void __thiscall IVRCompositor_027_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+const char * __thiscall IVRClientCore_002_GetEnglishStringForHmdError(void *_this, EVRInitError eError);
 
-EVRCompositorError __thiscall IVRCompositor_027_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
-
-bool __thiscall IVRCompositor_027_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
-
-void __thiscall IVRCompositor_027_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
-
-void __thiscall IVRCompositor_027_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
-
-uint32_t __thiscall IVRCompositor_027_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
-
-uint32_t __thiscall IVRCompositor_027_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
-
-void __thiscall IVRCompositor_027_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
-
-EVRCompositorError __thiscall IVRCompositor_027_SubmitExplicitTimingData(void *_this);
-
-bool __thiscall IVRCompositor_027_IsMotionSmoothingEnabled(void *_this);
-
-bool __thiscall IVRCompositor_027_IsMotionSmoothingSupported(void *_this);
-
-bool __thiscall IVRCompositor_027_IsCurrentSceneFocusAppLoading(void *_this);
-
-EVRCompositorError __thiscall IVRCompositor_027_SetStageOverride_Async(void *_this, const char * pchRenderModelPath, HmdMatrix34_t * pTransform, Compositor_StageRenderSettings * pRenderSettings, uint32_t nSizeOfRenderSettings);
-
-void __thiscall IVRCompositor_027_ClearStageOverride(void *_this);
-
-bool __thiscall IVRCompositor_027_GetCompositorBenchmarkResults(void *_this, Compositor_BenchmarkResults * pBenchmarkResults, uint32_t nSizeOfBenchmarkResults);
-
-EVRCompositorError __thiscall IVRCompositor_027_GetLastPosePredictionIDs(void *_this, uint32_t * pRenderPosePredictionID, uint32_t * pGamePosePredictionID);
-
-EVRCompositorError __thiscall IVRCompositor_027_GetPosesForFrame(void *_this, uint32_t unPosePredictionID, TrackedDevicePose_t * pPoseArray, uint32_t unPoseArrayCount);
-
-void test_capi_thunks_IVRHeadsetView_001(void);
-
-void __thiscall IVRHeadsetView_001_SetHeadsetViewSize(void *_this, uint32_t nWidth, uint32_t nHeight);
-
-void __thiscall IVRHeadsetView_001_GetHeadsetViewSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRHeadsetView_001_SetHeadsetViewMode(void *_this, HeadsetViewMode_t eHeadsetViewMode);
-
-HeadsetViewMode_t __thiscall IVRHeadsetView_001_GetHeadsetViewMode(void *_this);
-
-void __thiscall IVRHeadsetView_001_SetHeadsetViewCropped(void *_this, bool bCropped);
-
-bool __thiscall IVRHeadsetView_001_GetHeadsetViewCropped(void *_this);
-
-float __thiscall IVRHeadsetView_001_GetHeadsetViewAspectRatio(void *_this);
-
-void __thiscall IVRHeadsetView_001_SetHeadsetViewBlendRange(void *_this, float flStartPct, float flEndPct);
-
-void __thiscall IVRHeadsetView_001_GetHeadsetViewBlendRange(void *_this, float * pStartPct, float * pEndPct);
-
-void test_capi_thunks_IVRNotifications_002(void);
-
-EVRNotificationError __thiscall IVRNotifications_002_CreateNotification(void *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char * pchText, EVRNotificationStyle style, NotificationBitmap_t * pImage, VRNotificationId * pNotificationId);
-
-EVRNotificationError __thiscall IVRNotifications_002_RemoveNotification(void *_this, VRNotificationId notificationId);
-
-void test_capi_thunks_IVROverlay_027(void);
-
-EVROverlayError __thiscall IVROverlay_027_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-uint32_t __thiscall IVROverlay_027_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_027_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_027_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
-
-uint32_t __thiscall IVROverlay_027_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float fRadians);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRadians);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
-
-EVROverlayError __thiscall IVROverlay_027_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_027_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
-
-EVROverlayError __thiscall IVROverlay_027_WaitFrameSync(void *_this, uint32_t nTimeoutMs);
-
-bool __thiscall IVROverlay_027_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_027_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_027_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
-
-EVROverlayError __thiscall IVROverlay_027_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
-
-EVROverlayError __thiscall IVROverlay_027_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_027_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
-
-EVROverlayError __thiscall IVROverlay_027_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_027_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
-
-EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
-
-EVROverlayError __thiscall IVROverlay_027_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_027_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_027_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_027_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_027_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_027_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_027_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_027_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_027_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_027_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_027_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_027_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_027_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
-
-VRMessageOverlayResponse __thiscall IVROverlay_027_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
-
-void __thiscall IVROverlay_027_CloseMessageOverlay(void *_this);
-
-void test_capi_thunks_IVROverlayView_003(void);
-
-EVROverlayError __thiscall IVROverlayView_003_AcquireOverlayView(void *_this, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t * pNativeDevice, VROverlayView_t * pOverlayView, uint32_t unOverlayViewSize);
-
-EVROverlayError __thiscall IVROverlayView_003_ReleaseOverlayView(void *_this, VROverlayView_t * pOverlayView);
-
-void __thiscall IVROverlayView_003_PostOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pvrEvent);
-
-bool __thiscall IVROverlayView_003_IsViewingPermitted(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-void test_capi_thunks_IVRRenderModels_006(void);
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
-
-void __thiscall IVRRenderModels_006_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
-
-void __thiscall IVRRenderModels_006_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D);
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture);
-
-void __thiscall IVRRenderModels_006_FreeTextureD3D11(void *_this, void * pD3D11Texture2D);
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelCount(void *_this);
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentCount(void *_this, const char * pchRenderModelName);
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
-
-uint64_t __thiscall IVRRenderModels_006_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
-
-bool __thiscall IVRRenderModels_006_GetComponentStateForDevicePath(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
-
-bool __thiscall IVRRenderModels_006_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
-
-bool __thiscall IVRRenderModels_006_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError);
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError);
-
-const char * __thiscall IVRRenderModels_006_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error);
-
-void test_capi_thunks_IVRExtendedDisplay_001(void);
-
-void __thiscall IVRExtendedDisplay_001_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRExtendedDisplay_001_GetEyeOutputViewport(void *_this, EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRExtendedDisplay_001_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
-
-void test_capi_thunks_IVRTrackedCamera_006(void);
-
-const char * __thiscall IVRTrackedCamera_006_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_006_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
-
-void __thiscall IVRTrackedCamera_006_SetCameraTrackingSpace(void *_this, ETrackingUniverseOrigin eUniverse);
-
-ETrackingUniverseOrigin __thiscall IVRTrackedCamera_006_GetCameraTrackingSpace(void *_this);
-
-void test_capi_thunks_IVRScreenshots_001(void);
-
-EVRScreenshotError __thiscall IVRScreenshots_001_RequestScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename);
-
-EVRScreenshotError __thiscall IVRScreenshots_001_HookScreenshot(void *_this, EVRScreenshotType * pSupportedTypes, int numTypes);
-
-EVRScreenshotType __thiscall IVRScreenshots_001_GetScreenshotPropertyType(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError);
-
-uint32_t __thiscall IVRScreenshots_001_GetScreenshotPropertyFilename(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError);
-
-EVRScreenshotError __thiscall IVRScreenshots_001_UpdateScreenshotProgress(void *_this, ScreenshotHandle_t screenshotHandle, float flProgress);
-
-EVRScreenshotError __thiscall IVRScreenshots_001_TakeStereoScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename);
-
-EVRScreenshotError __thiscall IVRScreenshots_001_SubmitScreenshot(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename);
-
-void test_capi_thunks_IVRResources_001(void);
-
-uint32_t __thiscall IVRResources_001_LoadSharedResource(void *_this, const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen);
-
-uint32_t __thiscall IVRResources_001_GetResourceFullPath(void *_this, const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen);
-
-void test_capi_thunks_IVRDriverManager_001(void);
-
-uint32_t __thiscall IVRDriverManager_001_GetDriverCount(void *_this);
-
-uint32_t __thiscall IVRDriverManager_001_GetDriverName(void *_this, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize);
-
-DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, const char * pchDriverName);
-
-bool __thiscall IVRDriverManager_001_IsEnabled(void *_this, DriverId_t nDriver);
-
-void test_capi_thunks_IVRInput_010(void);
-
-EVRInputError __thiscall IVRInput_010_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
-
-EVRInputError __thiscall IVRInput_010_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
-
-EVRInputError __thiscall IVRInput_010_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
-
-EVRInputError __thiscall IVRInput_010_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
-
-EVRInputError __thiscall IVRInput_010_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
-
-EVRInputError __thiscall IVRInput_010_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
-
-EVRInputError __thiscall IVRInput_010_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
-
-EVRInputError __thiscall IVRInput_010_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
-
-EVRInputError __thiscall IVRInput_010_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
-
-EVRInputError __thiscall IVRInput_010_GetDominantHand(void *_this, ETrackedControllerRole * peDominantHand);
-
-EVRInputError __thiscall IVRInput_010_SetDominantHand(void *_this, ETrackedControllerRole eDominantHand);
-
-EVRInputError __thiscall IVRInput_010_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
-
-EVRInputError __thiscall IVRInput_010_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
-
-EVRInputError __thiscall IVRInput_010_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData);
-
-EVRInputError __thiscall IVRInput_010_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
-
-EVRInputError __thiscall IVRInput_010_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
-
-EVRInputError __thiscall IVRInput_010_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
-
-EVRInputError __thiscall IVRInput_010_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
-
-EVRInputError __thiscall IVRInput_010_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
-
-EVRInputError __thiscall IVRInput_010_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
-
-EVRInputError __thiscall IVRInput_010_GetActionBindingInfo(void *_this, VRActionHandle_t action, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t * punReturnedBindingInfoCount);
-
-EVRInputError __thiscall IVRInput_010_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
-
-EVRInputError __thiscall IVRInput_010_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
-
-EVRInputError __thiscall IVRInput_010_GetComponentStateForBinding(void *_this, const char * pchRenderModelName, const char * pchComponentName, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t * pComponentState);
-
-bool __thiscall IVRInput_010_IsUsingLegacyInput(void *_this);
-
-EVRInputError __thiscall IVRInput_010_OpenBindingUI(void *_this, const char * pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop);
-
-EVRInputError __thiscall IVRInput_010_GetBindingVariant(void *_this, VRInputValueHandle_t ulDevicePath, char * pchVariantArray, uint32_t unVariantArraySize);
-
-void test_capi_thunks_IVRIOBuffer_002(void);
-
-EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
-
-EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer);
-
-EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
-
-EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
-
-PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
-
-bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer);
+const char * __thiscall IVRClientCore_002_GetIDForVRInitError(void *_this, EVRInitError eError);
 
 void test_capi_thunks_IVRClientCore_003(void);
 
@@ -761,331 +573,1257 @@ const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_thi
 
 const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError);
 
-void test_capi_thunks_IVROverlay_026(void);
+void test_capi_thunks_IVRCompositor_005(void);
 
-EVROverlayError __thiscall IVROverlay_026_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+uint32_t __thiscall IVRCompositor_005_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_026_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+void __thiscall IVRCompositor_005_SetVSync(void *_this, bool bVSync);
 
-EVROverlayError __thiscall IVROverlay_026_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRCompositor_005_GetVSync(void *_this);
 
-uint32_t __thiscall IVROverlay_026_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+void __thiscall IVRCompositor_005_SetGamma(void *_this, float fGamma);
 
-uint32_t __thiscall IVROverlay_026_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+float __thiscall IVRCompositor_005_GetGamma(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+void __thiscall IVRCompositor_005_SetGraphicsDevice(void *_this, Compositor_DeviceType eType, void * pDevice);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+void __thiscall IVRCompositor_005_WaitGetPoses(void *_this, TrackedDevicePose_t * pPoseArray, uint32_t unPoseArrayCount);
 
-const char * __thiscall IVROverlay_026_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+void __thiscall IVRCompositor_005_Submit(void *_this, Hmd_Eye eEye, void * pTexture, Compositor_TextureBounds * pBounds);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+void __thiscall IVRCompositor_005_ClearLastSubmittedFrame(void *_this);
 
-uint32_t __thiscall IVROverlay_026_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_005_GetOverlayDefaults(void *_this, Compositor_OverlaySettings * pSettings);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+void __thiscall IVRCompositor_005_SetOverlay(void *_this, void * pTexture, Compositor_OverlaySettings * pSettings);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+void __thiscall IVRCompositor_005_SetOverlayRaw(void *_this, void * buffer, uint32_t width, uint32_t height, uint32_t depth, Compositor_OverlaySettings * pSettings);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+void __thiscall IVRCompositor_005_SetOverlayFromFile(void *_this, const char * pchFilePath, Compositor_OverlaySettings * pSettings);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+void __thiscall IVRCompositor_005_ClearOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+bool __thiscall IVRCompositor_005_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+void __thiscall IVRCompositor_005_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+void __thiscall IVRCompositor_005_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+void __thiscall IVRCompositor_005_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+void __thiscall IVRCompositor_005_CompositorGoToBack(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+void __thiscall IVRCompositor_005_CompositorQuit(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+bool __thiscall IVRCompositor_005_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+bool __thiscall IVRCompositor_005_ComputeOverlayIntersection(void *_this, Compositor_OverlaySettings * pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t * pvecIntersectionUV, HmdVector3_t * pvecIntersectionTrackingSpace);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+void __thiscall IVRCompositor_005_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
+TrackingUniverseOrigin __thiscall IVRCompositor_005_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
+void test_capi_thunks_IVRCompositor_006(void);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float fRadians);
+uint32_t __thiscall IVRCompositor_006_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRadians);
+void __thiscall IVRCompositor_006_SetVSync(void *_this, bool bVSync);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+bool __thiscall IVRCompositor_006_GetVSync(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+void __thiscall IVRCompositor_006_SetGamma(void *_this, float fGamma);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+float __thiscall IVRCompositor_006_GetGamma(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+void __thiscall IVRCompositor_006_SetGraphicsDevice(void *_this, Compositor_DeviceType eType, void * pDevice);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+VRCompositorError __thiscall IVRCompositor_006_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+VRCompositorError __thiscall IVRCompositor_006_Submit(void *_this, Hmd_Eye eEye, void * pTexture, VRTextureBounds_t * pBounds);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVRCompositor_006_ClearLastSubmittedFrame(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+bool __thiscall IVRCompositor_006_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVRCompositor_006_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+void __thiscall IVRCompositor_006_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+void __thiscall IVRCompositor_006_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+void __thiscall IVRCompositor_006_CompositorGoToBack(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+void __thiscall IVRCompositor_006_CompositorQuit(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
+bool __thiscall IVRCompositor_006_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
+void __thiscall IVRCompositor_006_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
+TrackingUniverseOrigin __thiscall IVRCompositor_006_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVRCompositor_006_GetCurrentSceneFocusProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRCompositor_006_CanRenderScene(void *_this);
 
-bool __thiscall IVROverlay_026_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+void test_capi_thunks_IVRCompositor_007(void);
 
-EVROverlayError __thiscall IVROverlay_026_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+uint32_t __thiscall IVRCompositor_007_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_026_WaitFrameSync(void *_this, uint32_t nTimeoutMs);
+void __thiscall IVRCompositor_007_SetVSync(void *_this, bool bVSync);
 
-bool __thiscall IVROverlay_026_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVRCompositor_007_GetVSync(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+void __thiscall IVRCompositor_007_SetGamma(void *_this, float fGamma);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+float __thiscall IVRCompositor_007_GetGamma(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VRCompositorError __thiscall IVRCompositor_007_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VRCompositorError __thiscall IVRCompositor_007_Submit(void *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds);
 
-bool __thiscall IVROverlay_026_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+void __thiscall IVRCompositor_007_ClearLastSubmittedFrame(void *_this);
 
-bool __thiscall IVROverlay_026_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRCompositor_007_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+void __thiscall IVRCompositor_007_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_026_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
+void __thiscall IVRCompositor_007_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
+void __thiscall IVRCompositor_007_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
+void __thiscall IVRCompositor_007_CompositorGoToBack(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_007_CompositorQuit(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+bool __thiscall IVRCompositor_007_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_007_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
+TrackingUniverseOrigin __thiscall IVRCompositor_007_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+uint32_t __thiscall IVRCompositor_007_GetCurrentSceneFocusProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+bool __thiscall IVRCompositor_007_CanRenderScene(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+void test_capi_thunks_IVRCompositor_008(void);
 
-EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+uint32_t __thiscall IVRCompositor_008_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_026_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+void __thiscall IVRCompositor_008_SetVSync(void *_this, bool bVSync);
 
-bool __thiscall IVROverlay_026_IsDashboardVisible(void *_this);
+bool __thiscall IVRCompositor_008_GetVSync(void *_this);
 
-bool __thiscall IVROverlay_026_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_008_SetGamma(void *_this, float fGamma);
 
-EVROverlayError __thiscall IVROverlay_026_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+float __thiscall IVRCompositor_008_GetGamma(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+VRCompositorError __thiscall IVRCompositor_008_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-void __thiscall IVROverlay_026_ShowDashboard(void *_this, const char * pchOverlayToShow);
+VRCompositorError __thiscall IVRCompositor_008_Submit(void *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds, VRSubmitFlags_t nSubmitFlags);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_026_GetPrimaryDashboardDevice(void *_this);
+void __thiscall IVRCompositor_008_ClearLastSubmittedFrame(void *_this);
 
-EVROverlayError __thiscall IVROverlay_026_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
+bool __thiscall IVRCompositor_008_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_026_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
+void __thiscall IVRCompositor_008_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-uint32_t __thiscall IVROverlay_026_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+void __thiscall IVRCompositor_008_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-void __thiscall IVROverlay_026_HideKeyboard(void *_this);
+void __thiscall IVRCompositor_008_SetSkyboxOverride(void *_this, GraphicsAPIConvention eTextureType, void * pFront, void * pBack, void * pLeft, void * pRight, void * pTop, void * pBottom);
 
-void __thiscall IVROverlay_026_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+void __thiscall IVRCompositor_008_ClearSkyboxOverride(void *_this);
 
-void __thiscall IVROverlay_026_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+void __thiscall IVRCompositor_008_CompositorBringToFront(void *_this);
 
-VRMessageOverlayResponse __thiscall IVROverlay_026_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+void __thiscall IVRCompositor_008_CompositorGoToBack(void *_this);
 
-void __thiscall IVROverlay_026_CloseMessageOverlay(void *_this);
+void __thiscall IVRCompositor_008_CompositorQuit(void *_this);
 
-void test_capi_thunks_IVROverlay_025(void);
+bool __thiscall IVRCompositor_008_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+void __thiscall IVRCompositor_008_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_025_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+TrackingUniverseOrigin __thiscall IVRCompositor_008_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVRCompositor_008_GetCurrentSceneFocusProcess(void *_this);
 
-uint32_t __thiscall IVROverlay_025_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+bool __thiscall IVRCompositor_008_CanRenderScene(void *_this);
 
-uint32_t __thiscall IVROverlay_025_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+void __thiscall IVRCompositor_008_ShowMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+void __thiscall IVRCompositor_008_HideMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+void __thiscall IVRCompositor_008_CompositorDumpImages(void *_this);
 
-const char * __thiscall IVROverlay_025_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+float __thiscall IVRCompositor_008_GetFrameTimeRemaining(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+uint32_t __thiscall IVRCompositor_008_GetLastFrameRenderer(void *_this);
 
-uint32_t __thiscall IVROverlay_025_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+void test_capi_thunks_IVRCompositor_009(void);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+void __thiscall IVRCompositor_009_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+ETrackingUniverseOrigin __thiscall IVRCompositor_009_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+EVRCompositorError __thiscall IVRCompositor_009_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+EVRCompositorError __thiscall IVRCompositor_009_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+EVRCompositorError __thiscall IVRCompositor_009_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+void __thiscall IVRCompositor_009_ClearLastSubmittedFrame(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+void __thiscall IVRCompositor_009_PostPresentHandoff(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+bool __thiscall IVRCompositor_009_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+float __thiscall IVRCompositor_009_GetFrameTimeRemaining(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+void __thiscall IVRCompositor_009_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+void __thiscall IVRCompositor_009_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+EVRCompositorError __thiscall IVRCompositor_009_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+void __thiscall IVRCompositor_009_ClearSkyboxOverride(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
+void __thiscall IVRCompositor_009_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
+void __thiscall IVRCompositor_009_CompositorGoToBack(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+void __thiscall IVRCompositor_009_CompositorQuit(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+bool __thiscall IVRCompositor_009_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+uint32_t __thiscall IVRCompositor_009_GetCurrentSceneFocusProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+uint32_t __thiscall IVRCompositor_009_GetLastFrameRenderer(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+bool __thiscall IVRCompositor_009_CanRenderScene(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVRCompositor_009_ShowMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVRCompositor_009_HideMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+bool __thiscall IVRCompositor_009_IsMirrorWindowVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVRCompositor_009_CompositorDumpImages(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+void test_capi_thunks_IVRCompositor_010(void);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+void __thiscall IVRCompositor_010_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+ETrackingUniverseOrigin __thiscall IVRCompositor_010_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVRCompositorError __thiscall IVRCompositor_010_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
+EVRCompositorError __thiscall IVRCompositor_010_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
+EVRCompositorError __thiscall IVRCompositor_010_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
+void __thiscall IVRCompositor_010_ClearLastSubmittedFrame(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_010_PostPresentHandoff(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRCompositor_010_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-bool __thiscall IVROverlay_025_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+float __thiscall IVRCompositor_010_GetFrameTimeRemaining(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+void __thiscall IVRCompositor_010_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-bool __thiscall IVROverlay_025_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+void __thiscall IVRCompositor_010_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+EVRCompositorError __thiscall IVRCompositor_010_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+void __thiscall IVRCompositor_010_ClearSkyboxOverride(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+void __thiscall IVRCompositor_010_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+void __thiscall IVRCompositor_010_CompositorGoToBack(void *_this);
 
-bool __thiscall IVROverlay_025_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+void __thiscall IVRCompositor_010_CompositorQuit(void *_this);
 
-bool __thiscall IVROverlay_025_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRCompositor_010_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+uint32_t __thiscall IVRCompositor_010_GetCurrentSceneFocusProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
+uint32_t __thiscall IVRCompositor_010_GetLastFrameRenderer(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
+bool __thiscall IVRCompositor_010_CanRenderScene(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
+void __thiscall IVRCompositor_010_ShowMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_010_HideMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+bool __thiscall IVRCompositor_010_IsMirrorWindowVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_010_CompositorDumpImages(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
+void test_capi_thunks_IVRCompositor_011(void);
 
-EVROverlayError __thiscall IVROverlay_025_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+void __thiscall IVRCompositor_011_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+ETrackingUniverseOrigin __thiscall IVRCompositor_011_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVRCompositorError __thiscall IVRCompositor_011_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVRCompositorError __thiscall IVRCompositor_011_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVROverlayError __thiscall IVROverlay_025_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVRCompositorError __thiscall IVRCompositor_011_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
 
-bool __thiscall IVROverlay_025_IsDashboardVisible(void *_this);
+void __thiscall IVRCompositor_011_ClearLastSubmittedFrame(void *_this);
 
-bool __thiscall IVROverlay_025_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_011_PostPresentHandoff(void *_this);
 
-EVROverlayError __thiscall IVROverlay_025_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+bool __thiscall IVRCompositor_011_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-EVROverlayError __thiscall IVROverlay_025_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+float __thiscall IVRCompositor_011_GetFrameTimeRemaining(void *_this);
 
-void __thiscall IVROverlay_025_ShowDashboard(void *_this, const char * pchOverlayToShow);
+void __thiscall IVRCompositor_011_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_025_GetPrimaryDashboardDevice(void *_this);
+void __thiscall IVRCompositor_011_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
 
-EVROverlayError __thiscall IVROverlay_025_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
+EVRCompositorError __thiscall IVRCompositor_011_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
 
-EVROverlayError __thiscall IVROverlay_025_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
+void __thiscall IVRCompositor_011_ClearSkyboxOverride(void *_this);
 
-uint32_t __thiscall IVROverlay_025_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+void __thiscall IVRCompositor_011_CompositorBringToFront(void *_this);
 
-void __thiscall IVROverlay_025_HideKeyboard(void *_this);
+void __thiscall IVRCompositor_011_CompositorGoToBack(void *_this);
 
-void __thiscall IVROverlay_025_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+void __thiscall IVRCompositor_011_CompositorQuit(void *_this);
 
-void __thiscall IVROverlay_025_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+bool __thiscall IVRCompositor_011_IsFullscreen(void *_this);
 
-VRMessageOverlayResponse __thiscall IVROverlay_025_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+uint32_t __thiscall IVRCompositor_011_GetCurrentSceneFocusProcess(void *_this);
 
-void __thiscall IVROverlay_025_CloseMessageOverlay(void *_this);
+uint32_t __thiscall IVRCompositor_011_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_011_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_011_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_011_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_011_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_011_CompositorDumpImages(void *_this);
+
+void test_capi_thunks_IVRCompositor_012(void);
+
+void __thiscall IVRCompositor_012_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_012_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_012_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_012_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_012_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_012_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_012_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_012_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+float __thiscall IVRCompositor_012_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_012_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_012_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_012_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_012_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_012_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_012_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_012_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_012_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_012_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_012_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_012_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_012_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_012_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_012_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_012_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_012_ShouldAppRenderWithLowResources(void *_this);
+
+void test_capi_thunks_IVRCompositor_013(void);
+
+void __thiscall IVRCompositor_013_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_013_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_013_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_013_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_013_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_013_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_013_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_013_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+float __thiscall IVRCompositor_013_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_013_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_013_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_013_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_013_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_013_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_013_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_013_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_013_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_013_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_013_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_013_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_013_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_013_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_013_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_013_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_013_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_013_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void test_capi_thunks_IVRCompositor_014(void);
+
+void __thiscall IVRCompositor_014_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_014_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_014_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_014_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_014_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_014_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_014_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_014_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+float __thiscall IVRCompositor_014_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_014_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_014_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_014_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_014_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_014_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_014_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_014_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_014_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_014_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_014_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_014_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_014_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_014_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_014_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_014_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_014_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_014_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_014_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_014_SuspendRendering(void *_this, bool bSuspend);
+
+void test_capi_thunks_IVRCompositor_015(void);
+
+void __thiscall IVRCompositor_015_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_015_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_015_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_015_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_015_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_015_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_015_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_015_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+float __thiscall IVRCompositor_015_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_015_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_015_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_015_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_015_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_015_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_015_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_015_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_015_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_015_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_015_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_015_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_015_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_015_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_015_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_015_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_015_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_015_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_015_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_015_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_015_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_015_RequestScreenshot(void *_this, EVRScreenshotType type, const char * pchDestinationFileName, const char * pchVRDestinationFileName);
+
+EVRScreenshotType __thiscall IVRCompositor_015_GetCurrentScreenshotType(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_015_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_015_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_015_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_015_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_015_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void test_capi_thunks_IVRCompositor_016(void);
+
+void __thiscall IVRCompositor_016_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_016_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_016_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_016_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_016_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_016_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_016_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_016_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+float __thiscall IVRCompositor_016_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_016_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_016_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_016_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_016_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_016_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_016_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_016_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_016_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_016_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_016_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_016_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_016_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_016_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_016_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_016_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_016_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_016_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_016_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_016_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_016_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_016_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_016_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_016_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_016_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_016_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void test_capi_thunks_IVRCompositor_017(void);
+
+void __thiscall IVRCompositor_017_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_017_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_017_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_017_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_017_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_017_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_017_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_017_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_017_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_017_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_017_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+void __thiscall IVRCompositor_017_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+EVRCompositorError __thiscall IVRCompositor_017_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_017_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_017_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_017_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_017_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_017_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_017_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_017_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_017_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_017_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_017_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_017_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_017_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_017_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_017_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_017_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_017_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_017_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_017_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_017_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void test_capi_thunks_IVRCompositor_018(void);
+
+void __thiscall IVRCompositor_018_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_018_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_018_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_018_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_018_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_018_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_018_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_018_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_018_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_018_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_018_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_018_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_018_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_018_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_018_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_018_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_018_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_018_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_018_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_018_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_018_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_018_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_018_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_018_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_018_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_018_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_018_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_018_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_018_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_018_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_018_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_018_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_018_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_018_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_018_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_018_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_018_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void test_capi_thunks_IVRCompositor_019(void);
+
+void __thiscall IVRCompositor_019_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_019_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_019_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_019_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_019_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_019_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_019_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_019_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_019_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_019_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_019_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_019_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_019_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_019_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_019_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_019_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_019_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_019_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_019_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_019_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_019_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_019_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_019_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_019_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_019_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_019_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_019_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_019_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_019_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_019_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_019_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_019_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_019_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_019_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_019_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_019_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_019_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+uint32_t __thiscall IVRCompositor_019_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+
+uint32_t __thiscall IVRCompositor_019_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+
+void test_capi_thunks_IVRCompositor_020(void);
+
+void __thiscall IVRCompositor_020_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_020_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_020_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_020_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_020_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_020_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_020_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_020_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_020_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_020_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_020_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_020_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_020_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_020_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_020_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_020_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_020_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_020_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_020_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_020_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_020_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_020_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_020_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_020_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_020_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_020_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_020_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_020_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_020_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_020_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_020_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_020_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_020_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+void __thiscall IVRCompositor_020_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_020_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_020_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_020_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_020_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+uint32_t __thiscall IVRCompositor_020_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+
+uint32_t __thiscall IVRCompositor_020_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+
+void test_capi_thunks_IVRCompositor_021(void);
+
+void __thiscall IVRCompositor_021_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_021_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_021_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_021_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_021_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_021_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_021_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_021_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_021_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_021_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_021_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_021_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_021_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_021_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_021_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_021_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_021_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_021_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_021_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_021_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_021_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_021_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_021_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_021_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_021_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_021_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_021_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_021_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_021_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_021_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_021_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_021_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_021_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+void __thiscall IVRCompositor_021_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_021_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_021_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_021_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_021_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+uint32_t __thiscall IVRCompositor_021_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+
+uint32_t __thiscall IVRCompositor_021_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+
+void __thiscall IVRCompositor_021_SetExplicitTimingMode(void *_this, bool bExplicitTimingMode);
+
+EVRCompositorError __thiscall IVRCompositor_021_SubmitExplicitTimingData(void *_this);
+
+void test_capi_thunks_IVRCompositor_022(void);
+
+void __thiscall IVRCompositor_022_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_022_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_022_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_022_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_022_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_022_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_022_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_022_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_022_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_022_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_022_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_022_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_022_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_022_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_022_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_022_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_022_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_022_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_022_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_022_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_022_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_022_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_022_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_022_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_022_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_022_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_022_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_022_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_022_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_022_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_022_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_022_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_022_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+void __thiscall IVRCompositor_022_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_022_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_022_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_022_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_022_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+uint32_t __thiscall IVRCompositor_022_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+
+uint32_t __thiscall IVRCompositor_022_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+
+void __thiscall IVRCompositor_022_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
+
+EVRCompositorError __thiscall IVRCompositor_022_SubmitExplicitTimingData(void *_this);
+
+bool __thiscall IVRCompositor_022_IsMotionSmoothingEnabled(void *_this);
+
+bool __thiscall IVRCompositor_022_IsMotionSmoothingSupported(void *_this);
+
+bool __thiscall IVRCompositor_022_IsCurrentSceneFocusAppLoading(void *_this);
+
+void test_capi_thunks_IVRCompositor_024(void);
+
+void __thiscall IVRCompositor_024_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_024_GetTrackingSpace(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_024_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_024_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+EVRCompositorError __thiscall IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+
+EVRCompositorError __thiscall IVRCompositor_024_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+
+void __thiscall IVRCompositor_024_ClearLastSubmittedFrame(void *_this);
+
+void __thiscall IVRCompositor_024_PostPresentHandoff(void *_this);
+
+bool __thiscall IVRCompositor_024_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+
+uint32_t __thiscall IVRCompositor_024_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+
+float __thiscall IVRCompositor_024_GetFrameTimeRemaining(void *_this);
+
+void __thiscall IVRCompositor_024_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+
+void __thiscall IVRCompositor_024_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+
+HmdColor_t *__thiscall IVRCompositor_024_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+
+void __thiscall IVRCompositor_024_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+
+float __thiscall IVRCompositor_024_GetCurrentGridAlpha(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_024_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+
+void __thiscall IVRCompositor_024_ClearSkyboxOverride(void *_this);
+
+void __thiscall IVRCompositor_024_CompositorBringToFront(void *_this);
+
+void __thiscall IVRCompositor_024_CompositorGoToBack(void *_this);
+
+void __thiscall IVRCompositor_024_CompositorQuit(void *_this);
+
+bool __thiscall IVRCompositor_024_IsFullscreen(void *_this);
+
+uint32_t __thiscall IVRCompositor_024_GetCurrentSceneFocusProcess(void *_this);
+
+uint32_t __thiscall IVRCompositor_024_GetLastFrameRenderer(void *_this);
+
+bool __thiscall IVRCompositor_024_CanRenderScene(void *_this);
+
+void __thiscall IVRCompositor_024_ShowMirrorWindow(void *_this);
+
+void __thiscall IVRCompositor_024_HideMirrorWindow(void *_this);
+
+bool __thiscall IVRCompositor_024_IsMirrorWindowVisible(void *_this);
+
+void __thiscall IVRCompositor_024_CompositorDumpImages(void *_this);
+
+bool __thiscall IVRCompositor_024_ShouldAppRenderWithLowResources(void *_this);
+
+void __thiscall IVRCompositor_024_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+
+void __thiscall IVRCompositor_024_ForceReconnectProcess(void *_this);
+
+void __thiscall IVRCompositor_024_SuspendRendering(void *_this, bool bSuspend);
+
+EVRCompositorError __thiscall IVRCompositor_024_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+
+void __thiscall IVRCompositor_024_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+
+EVRCompositorError __thiscall IVRCompositor_024_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+
+bool __thiscall IVRCompositor_024_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_024_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+void __thiscall IVRCompositor_024_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+
+uint32_t __thiscall IVRCompositor_024_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+
+uint32_t __thiscall IVRCompositor_024_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+
+void __thiscall IVRCompositor_024_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
+
+EVRCompositorError __thiscall IVRCompositor_024_SubmitExplicitTimingData(void *_this);
+
+bool __thiscall IVRCompositor_024_IsMotionSmoothingEnabled(void *_this);
+
+bool __thiscall IVRCompositor_024_IsMotionSmoothingSupported(void *_this);
+
+bool __thiscall IVRCompositor_024_IsCurrentSceneFocusAppLoading(void *_this);
+
+EVRCompositorError __thiscall IVRCompositor_024_SetStageOverride_Async(void *_this, const char * pchRenderModelPath, HmdMatrix34_t * pTransform, Compositor_StageRenderSettings * pRenderSettings, uint32_t nSizeOfRenderSettings);
+
+void __thiscall IVRCompositor_024_ClearStageOverride(void *_this);
 
 void test_capi_thunks_IVRCompositor_026(void);
 
@@ -1191,277 +1929,109 @@ EVRCompositorError __thiscall IVRCompositor_026_GetLastPosePredictionIDs(void *_
 
 EVRCompositorError __thiscall IVRCompositor_026_GetPosesForFrame(void *_this, uint32_t unPosePredictionID, TrackedDevicePose_t * pPoseArray, uint32_t unPoseArrayCount);
 
-void test_capi_thunks_IVROverlay_024(void);
+void test_capi_thunks_IVRCompositor_027(void);
 
-EVROverlayError __thiscall IVROverlay_024_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+void __thiscall IVRCompositor_027_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
 
-EVROverlayError __thiscall IVROverlay_024_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+ETrackingUniverseOrigin __thiscall IVRCompositor_027_GetTrackingSpace(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRCompositorError __thiscall IVRCompositor_027_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-uint32_t __thiscall IVROverlay_024_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVRCompositorError __thiscall IVRCompositor_027_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-uint32_t __thiscall IVROverlay_024_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVRCompositorError __thiscall IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+EVRCompositorError __thiscall IVRCompositor_027_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+void __thiscall IVRCompositor_027_ClearLastSubmittedFrame(void *_this);
 
-const char * __thiscall IVROverlay_024_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+void __thiscall IVRCompositor_027_PostPresentHandoff(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+bool __thiscall IVRCompositor_027_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
 
-uint32_t __thiscall IVROverlay_024_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVRCompositor_027_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+float __thiscall IVRCompositor_027_GetFrameTimeRemaining(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+void __thiscall IVRCompositor_027_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+void __thiscall IVRCompositor_027_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+HmdColor_t *__thiscall IVRCompositor_027_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+void __thiscall IVRCompositor_027_FadeGrid(void *_this, float fSeconds, bool bFadeGridIn);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+float __thiscall IVRCompositor_027_GetCurrentGridAlpha(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+EVRCompositorError __thiscall IVRCompositor_027_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+void __thiscall IVRCompositor_027_ClearSkyboxOverride(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+void __thiscall IVRCompositor_027_CompositorBringToFront(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+void __thiscall IVRCompositor_027_CompositorGoToBack(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+void __thiscall IVRCompositor_027_CompositorQuit(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+bool __thiscall IVRCompositor_027_IsFullscreen(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+uint32_t __thiscall IVRCompositor_027_GetCurrentSceneFocusProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
+uint32_t __thiscall IVRCompositor_027_GetLastFrameRenderer(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
+bool __thiscall IVRCompositor_027_CanRenderScene(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+void __thiscall IVRCompositor_027_ShowMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+void __thiscall IVRCompositor_027_HideMirrorWindow(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+bool __thiscall IVRCompositor_027_IsMirrorWindowVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+void __thiscall IVRCompositor_027_CompositorDumpImages(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+bool __thiscall IVRCompositor_027_ShouldAppRenderWithLowResources(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVRCompositor_027_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVRCompositor_027_ForceReconnectProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVRCompositor_027_SuspendRendering(void *_this, bool bSuspend);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVRCompositorError __thiscall IVRCompositor_027_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+void __thiscall IVRCompositor_027_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVRCompositorError __thiscall IVRCompositor_027_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+bool __thiscall IVRCompositor_027_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+void __thiscall IVRCompositor_027_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
+void __thiscall IVRCompositor_027_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
+uint32_t __thiscall IVRCompositor_027_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_024_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVRCompositor_027_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
 
-EVROverlayError __thiscall IVROverlay_024_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRCompositor_027_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
 
-bool __thiscall IVROverlay_024_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRCompositorError __thiscall IVRCompositor_027_SubmitExplicitTimingData(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+bool __thiscall IVRCompositor_027_IsMotionSmoothingEnabled(void *_this);
 
-bool __thiscall IVROverlay_024_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVRCompositor_027_IsMotionSmoothingSupported(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+bool __thiscall IVRCompositor_027_IsCurrentSceneFocusAppLoading(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+EVRCompositorError __thiscall IVRCompositor_027_SetStageOverride_Async(void *_this, const char * pchRenderModelPath, HmdMatrix34_t * pTransform, Compositor_StageRenderSettings * pRenderSettings, uint32_t nSizeOfRenderSettings);
 
-EVROverlayError __thiscall IVROverlay_024_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+void __thiscall IVRCompositor_027_ClearStageOverride(void *_this);
 
-EVROverlayError __thiscall IVROverlay_024_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+bool __thiscall IVRCompositor_027_GetCompositorBenchmarkResults(void *_this, Compositor_BenchmarkResults * pBenchmarkResults, uint32_t nSizeOfBenchmarkResults);
 
-bool __thiscall IVROverlay_024_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+EVRCompositorError __thiscall IVRCompositor_027_GetLastPosePredictionIDs(void *_this, uint32_t * pRenderPosePredictionID, uint32_t * pGamePosePredictionID);
 
-bool __thiscall IVROverlay_024_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
-
-EVROverlayError __thiscall IVROverlay_024_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
-
-EVROverlayError __thiscall IVROverlay_024_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_024_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
-
-EVROverlayError __thiscall IVROverlay_024_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_024_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
-
-EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
-
-EVROverlayError __thiscall IVROverlay_024_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_024_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_024_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_024_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_024_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_024_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_024_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_024_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_024_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_024_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_024_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_024_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_024_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
-
-VRMessageOverlayResponse __thiscall IVROverlay_024_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
-
-void __thiscall IVROverlay_024_CloseMessageOverlay(void *_this);
-
-void test_capi_thunks_IVRSystem_021(void);
-
-void __thiscall IVRSystem_021_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_021_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
-
-void __thiscall IVRSystem_021_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-bool __thiscall IVRSystem_021_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
-
-HmdMatrix34_t *__thiscall IVRSystem_021_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
-
-bool __thiscall IVRSystem_021_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_021_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_021_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
-
-void __thiscall IVRSystem_021_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
-
-bool __thiscall IVRSystem_021_IsDisplayOnDesktop(void *_this);
-
-bool __thiscall IVRSystem_021_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
-
-void __thiscall IVRSystem_021_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_021_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-HmdMatrix34_t *__thiscall IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-uint32_t __thiscall IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
-
-EDeviceActivityLevel __thiscall IVRSystem_021_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
-
-void __thiscall IVRSystem_021_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
-
-TrackedDeviceIndex_t __thiscall IVRSystem_021_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
-
-ETrackedControllerRole __thiscall IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-ETrackedDeviceClass __thiscall IVRSystem_021_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_021_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_021_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-float __thiscall IVRSystem_021_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_021_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_021_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_021_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_021_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_021_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_021_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
-
-bool __thiscall IVRSystem_021_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-bool __thiscall IVRSystem_021_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_021_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_021_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
-
-bool __thiscall IVRSystem_021_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
-
-bool __thiscall IVRSystem_021_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_021_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_021_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_021_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_021_IsInputAvailable(void *_this);
-
-bool __thiscall IVRSystem_021_IsSteamVRDrawingControllers(void *_this);
-
-bool __thiscall IVRSystem_021_ShouldApplicationPause(void *_this);
-
-bool __thiscall IVRSystem_021_ShouldApplicationReduceRenderingWork(void *_this);
-
-EVRFirmwareError __thiscall IVRSystem_021_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-void __thiscall IVRSystem_021_AcknowledgeQuit_Exiting(void *_this);
-
-uint32_t __thiscall IVRSystem_021_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-const char * __thiscall IVRSystem_021_GetRuntimeVersion(void *_this);
-
-void test_capi_thunks_IVRChaperone_003(void);
-
-ChaperoneCalibrationState __thiscall IVRChaperone_003_GetCalibrationState(void *_this);
-
-bool __thiscall IVRChaperone_003_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
-
-bool __thiscall IVRChaperone_003_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
-
-void __thiscall IVRChaperone_003_ReloadInfo(void *_this);
-
-void __thiscall IVRChaperone_003_SetSceneColor(void *_this, HmdColor_t color);
-
-void __thiscall IVRChaperone_003_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
-
-bool __thiscall IVRChaperone_003_AreBoundsVisible(void *_this);
-
-void __thiscall IVRChaperone_003_ForceBoundsVisible(void *_this, bool bForce);
+EVRCompositorError __thiscall IVRCompositor_027_GetPosesForFrame(void *_this, uint32_t unPosePredictionID, TrackedDevicePose_t * pPoseArray, uint32_t unPoseArrayCount);
 
 void test_capi_thunks_IVRControlPanel_006(void);
 
@@ -1521,279 +2091,249 @@ EVRCompositorError __thiscall IVRControlPanel_006_undoc27(void *_this, const cha
 
 void __thiscall IVRControlPanel_006_undoc28(void *_this, VROverlayHandle_t a);
 
-void test_capi_thunks_IVRMailbox_001(void);
+void test_capi_thunks_IVRDriverManager_001(void);
 
-vrmb_typeb __thiscall IVRMailbox_001_undoc1(void *_this, const char * a, vrmb_typea * b);
+uint32_t __thiscall IVRDriverManager_001_GetDriverCount(void *_this);
 
-vrmb_typeb __thiscall IVRMailbox_001_undoc2(void *_this, vrmb_typea a);
+uint32_t __thiscall IVRDriverManager_001_GetDriverName(void *_this, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize);
 
-vrmb_typeb __thiscall IVRMailbox_001_undoc3(void *_this, vrmb_typea a, const char * b, const char * c);
+DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, const char * pchDriverName);
 
-vrmb_typeb __thiscall IVRMailbox_001_undoc4(void *_this, vrmb_typea a, char * b, uint32_t c, uint32_t * d);
+bool __thiscall IVRDriverManager_001_IsEnabled(void *_this, DriverId_t nDriver);
 
-void test_capi_thunks_IVRCompositor_024(void);
+void test_capi_thunks_IVRExtendedDisplay_001(void);
 
-void __thiscall IVRCompositor_024_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+void __thiscall IVRExtendedDisplay_001_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_024_GetTrackingSpace(void *_this);
+void __thiscall IVRExtendedDisplay_001_GetEyeOutputViewport(void *_this, EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
 
-EVRCompositorError __thiscall IVRCompositor_024_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+void __thiscall IVRExtendedDisplay_001_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
 
-EVRCompositorError __thiscall IVRCompositor_024_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+void test_capi_thunks_IVRHeadsetView_001(void);
 
-EVRCompositorError __thiscall IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+void __thiscall IVRHeadsetView_001_SetHeadsetViewSize(void *_this, uint32_t nWidth, uint32_t nHeight);
 
-EVRCompositorError __thiscall IVRCompositor_024_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+void __thiscall IVRHeadsetView_001_GetHeadsetViewSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
 
-void __thiscall IVRCompositor_024_ClearLastSubmittedFrame(void *_this);
+void __thiscall IVRHeadsetView_001_SetHeadsetViewMode(void *_this, HeadsetViewMode_t eHeadsetViewMode);
 
-void __thiscall IVRCompositor_024_PostPresentHandoff(void *_this);
+HeadsetViewMode_t __thiscall IVRHeadsetView_001_GetHeadsetViewMode(void *_this);
 
-bool __thiscall IVRCompositor_024_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+void __thiscall IVRHeadsetView_001_SetHeadsetViewCropped(void *_this, bool bCropped);
 
-uint32_t __thiscall IVRCompositor_024_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+bool __thiscall IVRHeadsetView_001_GetHeadsetViewCropped(void *_this);
 
-float __thiscall IVRCompositor_024_GetFrameTimeRemaining(void *_this);
+float __thiscall IVRHeadsetView_001_GetHeadsetViewAspectRatio(void *_this);
 
-void __thiscall IVRCompositor_024_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+void __thiscall IVRHeadsetView_001_SetHeadsetViewBlendRange(void *_this, float flStartPct, float flEndPct);
 
-void __thiscall IVRCompositor_024_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+void __thiscall IVRHeadsetView_001_GetHeadsetViewBlendRange(void *_this, float * pStartPct, float * pEndPct);
 
-HmdColor_t *__thiscall IVRCompositor_024_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+void test_capi_thunks_IVRIOBuffer_001(void);
 
-void __thiscall IVRCompositor_024_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
 
-float __thiscall IVRCompositor_024_GetCurrentGridAlpha(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer);
 
-EVRCompositorError __thiscall IVRCompositor_024_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
 
-void __thiscall IVRCompositor_024_ClearSkyboxOverride(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
 
-void __thiscall IVRCompositor_024_CompositorBringToFront(void *_this);
+PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
 
-void __thiscall IVRCompositor_024_CompositorGoToBack(void *_this);
+void test_capi_thunks_IVRIOBuffer_002(void);
 
-void __thiscall IVRCompositor_024_CompositorQuit(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
 
-bool __thiscall IVRCompositor_024_IsFullscreen(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer);
 
-uint32_t __thiscall IVRCompositor_024_GetCurrentSceneFocusProcess(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
 
-uint32_t __thiscall IVRCompositor_024_GetLastFrameRenderer(void *_this);
+EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
 
-bool __thiscall IVRCompositor_024_CanRenderScene(void *_this);
+PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
 
-void __thiscall IVRCompositor_024_ShowMirrorWindow(void *_this);
+bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer);
 
-void __thiscall IVRCompositor_024_HideMirrorWindow(void *_this);
+void test_capi_thunks_IVRInput_003(void);
 
-bool __thiscall IVRCompositor_024_IsMirrorWindowVisible(void *_this);
+EVRInputError __thiscall IVRInput_003_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
 
-void __thiscall IVRCompositor_024_CompositorDumpImages(void *_this);
+EVRInputError __thiscall IVRInput_003_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
 
-bool __thiscall IVRCompositor_024_ShouldAppRenderWithLowResources(void *_this);
+EVRInputError __thiscall IVRInput_003_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
 
-void __thiscall IVRCompositor_024_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVRInputError __thiscall IVRInput_003_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
 
-void __thiscall IVRCompositor_024_ForceReconnectProcess(void *_this);
+EVRInputError __thiscall IVRInput_003_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
 
-void __thiscall IVRCompositor_024_SuspendRendering(void *_this, bool bSuspend);
+EVRInputError __thiscall IVRInput_003_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize);
 
-EVRCompositorError __thiscall IVRCompositor_024_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVRInputError __thiscall IVRInput_003_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize);
 
-void __thiscall IVRCompositor_024_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+EVRInputError __thiscall IVRInput_003_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize);
 
-EVRCompositorError __thiscall IVRCompositor_024_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVRInputError __thiscall IVRInput_003_GetSkeletalActionData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, InputSkeletonActionData_t * pActionData, uint32_t unActionDataSize, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-bool __thiscall IVRCompositor_024_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+EVRInputError __thiscall IVRInput_003_GetSkeletalActionDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
 
-void __thiscall IVRCompositor_024_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVRInputError __thiscall IVRInput_003_UncompressSkeletalActionData(void *_this, void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace * peBoneParent, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-void __thiscall IVRCompositor_024_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVRInputError __thiscall IVRInput_003_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-uint32_t __thiscall IVRCompositor_024_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+EVRInputError __thiscall IVRInput_003_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
 
-uint32_t __thiscall IVRCompositor_024_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+EVRInputError __thiscall IVRInput_003_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize);
 
-void __thiscall IVRCompositor_024_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
+EVRInputError __thiscall IVRInput_003_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
 
-EVRCompositorError __thiscall IVRCompositor_024_SubmitExplicitTimingData(void *_this);
+EVRInputError __thiscall IVRInput_003_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
 
-bool __thiscall IVRCompositor_024_IsMotionSmoothingEnabled(void *_this);
+EVRInputError __thiscall IVRInput_003_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-bool __thiscall IVRCompositor_024_IsMotionSmoothingSupported(void *_this);
+void test_capi_thunks_IVRInput_004(void);
 
-bool __thiscall IVRCompositor_024_IsCurrentSceneFocusAppLoading(void *_this);
+EVRInputError __thiscall IVRInput_004_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
 
-EVRCompositorError __thiscall IVRCompositor_024_SetStageOverride_Async(void *_this, const char * pchRenderModelPath, HmdMatrix34_t * pTransform, Compositor_StageRenderSettings * pRenderSettings, uint32_t nSizeOfRenderSettings);
+EVRInputError __thiscall IVRInput_004_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
 
-void __thiscall IVRCompositor_024_ClearStageOverride(void *_this);
+EVRInputError __thiscall IVRInput_004_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
 
-void test_capi_thunks_IVROverlay_022(void);
+EVRInputError __thiscall IVRInput_004_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVRInputError __thiscall IVRInput_004_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
 
-EVROverlayError __thiscall IVROverlay_022_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+EVRInputError __thiscall IVRInput_004_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_004_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-uint32_t __thiscall IVROverlay_022_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVRInputError __thiscall IVRInput_004_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-uint32_t __thiscall IVROverlay_022_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVRInputError __thiscall IVRInput_004_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+EVRInputError __thiscall IVRInput_004_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+EVRInputError __thiscall IVRInput_004_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice);
 
-const char * __thiscall IVROverlay_022_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+EVRInputError __thiscall IVRInput_004_DecompressSkeletalBoneData(void *_this, void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace * peTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+EVRInputError __thiscall IVRInput_004_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
 
-uint32_t __thiscall IVROverlay_022_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_004_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+EVRInputError __thiscall IVRInput_004_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+EVRInputError __thiscall IVRInput_004_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+EVRInputError __thiscall IVRInput_004_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+EVRInputError __thiscall IVRInput_004_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+void test_capi_thunks_IVRInput_005(void);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+EVRInputError __thiscall IVRInput_005_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+EVRInputError __thiscall IVRInput_005_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+EVRInputError __thiscall IVRInput_005_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+EVRInputError __thiscall IVRInput_005_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+EVRInputError __thiscall IVRInput_005_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+EVRInputError __thiscall IVRInput_005_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+EVRInputError __thiscall IVRInput_005_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+EVRInputError __thiscall IVRInput_005_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
+EVRInputError __thiscall IVRInput_005_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
+EVRInputError __thiscall IVRInput_005_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+EVRInputError __thiscall IVRInput_005_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+EVRInputError __thiscall IVRInput_005_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVRInputError __thiscall IVRInput_005_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVRInputError __thiscall IVRInput_005_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
 
-uint32_t __thiscall IVROverlay_022_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+EVRInputError __thiscall IVRInput_005_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+EVRInputError __thiscall IVRInput_005_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, VRSkeletalSummaryData_t * pSkeletalSummaryData);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+EVRInputError __thiscall IVRInput_005_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVRInputError __thiscall IVRInput_005_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVRInputError __thiscall IVRInput_005_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVRInputError __thiscall IVRInput_005_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVRInputError __thiscall IVRInput_005_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+EVRInputError __thiscall IVRInput_005_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVRInputError __thiscall IVRInput_005_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+bool __thiscall IVRInput_005_IsUsingLegacyInput(void *_this);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
+void test_capi_thunks_IVRInput_006(void);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
+EVRInputError __thiscall IVRInput_006_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
 
-EVROverlayError __thiscall IVROverlay_022_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
 
-bool __thiscall IVROverlay_022_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
 
-EVROverlayError __thiscall IVROverlay_022_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+EVRInputError __thiscall IVRInput_006_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
 
-bool __thiscall IVROverlay_022_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVRInputError __thiscall IVRInput_006_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+EVRInputError __thiscall IVRInput_006_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+EVRInputError __thiscall IVRInput_006_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVRInputError __thiscall IVRInput_006_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVRInputError __thiscall IVRInput_006_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
 
-bool __thiscall IVROverlay_022_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+EVRInputError __thiscall IVRInput_006_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
 
-bool __thiscall IVROverlay_022_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
+EVRInputError __thiscall IVRInput_006_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
+EVRInputError __thiscall IVRInput_006_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVRInputError __thiscall IVRInput_006_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
 
-EVROverlayError __thiscall IVROverlay_022_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
+EVRInputError __thiscall IVRInput_006_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
+EVRInputError __thiscall IVRInput_006_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
+EVRInputError __thiscall IVRInput_006_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
 
-EVROverlayError __thiscall IVROverlay_022_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVRInputError __thiscall IVRInput_006_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
 
-EVROverlayError __thiscall IVROverlay_022_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVRInputError __thiscall IVRInput_006_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
+EVRInputError __thiscall IVRInput_006_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
 
-EVROverlayError __thiscall IVROverlay_022_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+EVRInputError __thiscall IVRInput_006_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+EVRInputError __thiscall IVRInput_006_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
 
-EVROverlayError __thiscall IVROverlay_022_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVRInputError __thiscall IVRInput_006_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
-
-EVROverlayError __thiscall IVROverlay_022_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_022_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_022_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_022_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_022_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_022_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_022_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_022_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_022_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_022_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_022_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_022_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_022_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
-
-VRMessageOverlayResponse __thiscall IVROverlay_022_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
-
-void __thiscall IVROverlay_022_CloseMessageOverlay(void *_this);
+bool __thiscall IVRInput_006_IsUsingLegacyInput(void *_this);
 
 void test_capi_thunks_IVRInput_007(void);
 
@@ -1853,1473 +2393,1675 @@ bool __thiscall IVRInput_007_IsUsingLegacyInput(void *_this);
 
 EVRInputError __thiscall IVRInput_007_OpenBindingUI(void *_this, const char * pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop);
 
-void test_capi_thunks_IVRSettings_002(void);
+void test_capi_thunks_IVRInput_010(void);
 
-const char * __thiscall IVRSettings_002_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
+EVRInputError __thiscall IVRInput_010_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
 
-bool __thiscall IVRSettings_002_Sync(void *_this, bool bForce, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
 
-void __thiscall IVRSettings_002_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
 
-void __thiscall IVRSettings_002_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
 
-void __thiscall IVRSettings_002_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
 
-void __thiscall IVRSettings_002_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-bool __thiscall IVRSettings_002_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-int32_t __thiscall IVRSettings_002_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-float __thiscall IVRSettings_002_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-void __thiscall IVRSettings_002_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
 
-void __thiscall IVRSettings_002_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_GetDominantHand(void *_this, ETrackedControllerRole * peDominantHand);
 
-void __thiscall IVRSettings_002_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+EVRInputError __thiscall IVRInput_010_SetDominantHand(void *_this, ETrackedControllerRole eDominantHand);
 
-void test_capi_thunks_IVRCompositor_022(void);
+EVRInputError __thiscall IVRInput_010_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
 
-void __thiscall IVRCompositor_022_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVRInputError __thiscall IVRInput_010_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_022_GetTrackingSpace(void *_this);
+EVRInputError __thiscall IVRInput_010_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
 
-EVRCompositorError __thiscall IVRCompositor_022_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRInputError __thiscall IVRInput_010_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVRCompositorError __thiscall IVRCompositor_022_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRInputError __thiscall IVRInput_010_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
 
-EVRCompositorError __thiscall IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVRInputError __thiscall IVRInput_010_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-EVRCompositorError __thiscall IVRCompositor_022_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVRInputError __thiscall IVRInput_010_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData);
 
-void __thiscall IVRCompositor_022_ClearLastSubmittedFrame(void *_this);
+EVRInputError __thiscall IVRInput_010_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
 
-void __thiscall IVRCompositor_022_PostPresentHandoff(void *_this);
+EVRInputError __thiscall IVRInput_010_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
 
-bool __thiscall IVRCompositor_022_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVRInputError __thiscall IVRInput_010_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
 
-uint32_t __thiscall IVRCompositor_022_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+EVRInputError __thiscall IVRInput_010_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
 
-float __thiscall IVRCompositor_022_GetFrameTimeRemaining(void *_this);
+EVRInputError __thiscall IVRInput_010_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
 
-void __thiscall IVRCompositor_022_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVRInputError __thiscall IVRInput_010_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
 
-void __thiscall IVRCompositor_022_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVRInputError __thiscall IVRInput_010_GetActionBindingInfo(void *_this, VRActionHandle_t action, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t * punReturnedBindingInfoCount);
 
-HmdColor_t *__thiscall IVRCompositor_022_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+EVRInputError __thiscall IVRInput_010_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
 
-void __thiscall IVRCompositor_022_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVRInputError __thiscall IVRInput_010_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-float __thiscall IVRCompositor_022_GetCurrentGridAlpha(void *_this);
+EVRInputError __thiscall IVRInput_010_GetComponentStateForBinding(void *_this, const char * pchRenderModelName, const char * pchComponentName, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t * pComponentState);
 
-EVRCompositorError __thiscall IVRCompositor_022_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+bool __thiscall IVRInput_010_IsUsingLegacyInput(void *_this);
 
-void __thiscall IVRCompositor_022_ClearSkyboxOverride(void *_this);
+EVRInputError __thiscall IVRInput_010_OpenBindingUI(void *_this, const char * pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop);
 
-void __thiscall IVRCompositor_022_CompositorBringToFront(void *_this);
+EVRInputError __thiscall IVRInput_010_GetBindingVariant(void *_this, VRInputValueHandle_t ulDevicePath, char * pchVariantArray, uint32_t unVariantArraySize);
 
-void __thiscall IVRCompositor_022_CompositorGoToBack(void *_this);
+void test_capi_thunks_IVRMailbox_001(void);
 
-void __thiscall IVRCompositor_022_CompositorQuit(void *_this);
+vrmb_typeb __thiscall IVRMailbox_001_undoc1(void *_this, const char * a, vrmb_typea * b);
 
-bool __thiscall IVRCompositor_022_IsFullscreen(void *_this);
+vrmb_typeb __thiscall IVRMailbox_001_undoc2(void *_this, vrmb_typea a);
 
-uint32_t __thiscall IVRCompositor_022_GetCurrentSceneFocusProcess(void *_this);
+vrmb_typeb __thiscall IVRMailbox_001_undoc3(void *_this, vrmb_typea a, const char * b, const char * c);
 
-uint32_t __thiscall IVRCompositor_022_GetLastFrameRenderer(void *_this);
+vrmb_typeb __thiscall IVRMailbox_001_undoc4(void *_this, vrmb_typea a, char * b, uint32_t c, uint32_t * d);
 
-bool __thiscall IVRCompositor_022_CanRenderScene(void *_this);
+void test_capi_thunks_IVRNotifications_001(void);
 
-void __thiscall IVRCompositor_022_ShowMirrorWindow(void *_this);
+uint32_t __thiscall IVRNotifications_001_GetErrorString(void *_this, NotificationError_t error, char * pchBuffer, uint32_t unBufferSize);
 
-void __thiscall IVRCompositor_022_HideMirrorWindow(void *_this);
+NotificationError_t __thiscall IVRNotifications_001_CreateNotification(void *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char * strType, const char * strText, const char * strCategory, NotificationBitmap * photo, VRNotificationId * notificationId);
 
-bool __thiscall IVRCompositor_022_IsMirrorWindowVisible(void *_this);
+NotificationError_t __thiscall IVRNotifications_001_DismissNotification(void *_this, VRNotificationId notificationId);
 
-void __thiscall IVRCompositor_022_CompositorDumpImages(void *_this);
+void test_capi_thunks_IVRNotifications_002(void);
 
-bool __thiscall IVRCompositor_022_ShouldAppRenderWithLowResources(void *_this);
+EVRNotificationError __thiscall IVRNotifications_002_CreateNotification(void *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char * pchText, EVRNotificationStyle style, NotificationBitmap_t * pImage, VRNotificationId * pNotificationId);
 
-void __thiscall IVRCompositor_022_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVRNotificationError __thiscall IVRNotifications_002_RemoveNotification(void *_this, VRNotificationId notificationId);
 
-void __thiscall IVRCompositor_022_ForceReconnectProcess(void *_this);
+void test_capi_thunks_IVROverlayView_003(void);
 
-void __thiscall IVRCompositor_022_SuspendRendering(void *_this, bool bSuspend);
+EVROverlayError __thiscall IVROverlayView_003_AcquireOverlayView(void *_this, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t * pNativeDevice, VROverlayView_t * pOverlayView, uint32_t unOverlayViewSize);
 
-EVRCompositorError __thiscall IVRCompositor_022_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlayView_003_ReleaseOverlayView(void *_this, VROverlayView_t * pOverlayView);
 
-void __thiscall IVRCompositor_022_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+void __thiscall IVROverlayView_003_PostOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pvrEvent);
 
-EVRCompositorError __thiscall IVRCompositor_022_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+bool __thiscall IVROverlayView_003_IsViewingPermitted(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_022_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+void test_capi_thunks_IVROverlay_001(void);
 
-void __thiscall IVRCompositor_022_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+VROverlayError __thiscall IVROverlay_001_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVRCompositor_022_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+VROverlayError __thiscall IVROverlay_001_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-uint32_t __thiscall IVRCompositor_022_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+VROverlayError __thiscall IVROverlay_001_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVRCompositor_022_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+VROverlayError __thiscall IVROverlay_001_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_022_SetExplicitTimingMode(void *_this, EVRCompositorTimingMode eTimingMode);
+VROverlayHandle_t __thiscall IVROverlay_001_GetHighQualityOverlay(void *_this);
 
-EVRCompositorError __thiscall IVRCompositor_022_SubmitExplicitTimingData(void *_this);
+const char * __thiscall IVROverlay_001_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
 
-bool __thiscall IVRCompositor_022_IsMotionSmoothingEnabled(void *_this);
+VROverlayError __thiscall IVROverlay_001_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-bool __thiscall IVRCompositor_022_IsMotionSmoothingSupported(void *_this);
+VROverlayError __thiscall IVROverlay_001_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-bool __thiscall IVRCompositor_022_IsCurrentSceneFocusAppLoading(void *_this);
+VROverlayError __thiscall IVROverlay_001_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-void test_capi_thunks_IVROverlay_021(void);
+VROverlayError __thiscall IVROverlay_001_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_021_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+VROverlayError __thiscall IVROverlay_001_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
 
-EVROverlayError __thiscall IVROverlay_021_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+VROverlayError __thiscall IVROverlay_001_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
 
-EVROverlayError __thiscall IVROverlay_021_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_001_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-uint32_t __thiscall IVROverlay_021_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_001_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-uint32_t __thiscall IVROverlay_021_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_001_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+VROverlayError __thiscall IVROverlay_001_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+VROverlayError __thiscall IVROverlay_001_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-const char * __thiscall IVROverlay_021_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+VROverlayError __thiscall IVROverlay_001_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+VROverlayError __thiscall IVROverlay_001_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-uint32_t __thiscall IVROverlay_021_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_001_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+VROverlayError __thiscall IVROverlay_001_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+VROverlayError __thiscall IVROverlay_001_GetOverlayVisibility(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayVisibility * peOverlayVisibility);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+VROverlayError __thiscall IVROverlay_001_SetOverlayVisibility(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayVisibility eOverlayVisibility);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+VROverlayError __thiscall IVROverlay_001_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+VROverlayError __thiscall IVROverlay_001_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+bool __thiscall IVROverlay_001_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+bool __thiscall IVROverlay_001_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+VROverlayError __thiscall IVROverlay_001_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+VROverlayError __thiscall IVROverlay_001_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+VROverlayError __thiscall IVROverlay_001_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+VROverlayError __thiscall IVROverlay_001_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+bool __thiscall IVROverlay_001_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
+bool __thiscall IVROverlay_001_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
+VROverlayError __thiscall IVROverlay_001_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void * pTexture);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+VROverlayError __thiscall IVROverlay_001_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+VROverlayError __thiscall IVROverlay_001_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+bool __thiscall IVROverlay_001_IsSystemOverlayVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+bool __thiscall IVROverlay_001_IsActiveSystemOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVROverlay_021_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_001_SetSystemOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+VROverlayError __thiscall IVROverlay_001_GetSystemOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+void test_capi_thunks_IVROverlay_002(void);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+VROverlayHandle_t __thiscall IVROverlay_002_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+const char * __thiscall IVROverlay_002_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+VROverlayError __thiscall IVROverlay_002_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_021_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_021_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-bool __thiscall IVROverlay_021_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_021_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+VROverlayError __thiscall IVROverlay_002_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-bool __thiscall IVROverlay_021_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+VROverlayError __thiscall IVROverlay_002_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+VROverlayError __thiscall IVROverlay_002_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+VROverlayError __thiscall IVROverlay_002_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VROverlayError __thiscall IVROverlay_002_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VROverlayError __thiscall IVROverlay_002_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVROverlay_021_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+VROverlayError __thiscall IVROverlay_002_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVROverlay_021_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
+VROverlayError __thiscall IVROverlay_002_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
+VROverlayError __thiscall IVROverlay_002_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+VROverlayError __thiscall IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+VROverlayError __thiscall IVROverlay_002_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+VROverlayError __thiscall IVROverlay_002_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+bool __thiscall IVROverlay_002_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+bool __thiscall IVROverlay_002_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+VROverlayError __thiscall IVROverlay_002_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_021_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+VROverlayError __thiscall IVROverlay_002_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-bool __thiscall IVROverlay_021_IsDashboardVisible(void *_this);
+VROverlayError __thiscall IVROverlay_002_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVROverlay_021_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_002_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_021_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+bool __thiscall IVROverlay_002_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_021_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+bool __thiscall IVROverlay_002_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-void __thiscall IVROverlay_021_ShowDashboard(void *_this, const char * pchOverlayToShow);
+VROverlayError __thiscall IVROverlay_002_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_021_GetPrimaryDashboardDevice(void *_this);
+VROverlayError __thiscall IVROverlay_002_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_021_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+VROverlayError __thiscall IVROverlay_002_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_021_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+VROverlayError __thiscall IVROverlay_002_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-uint32_t __thiscall IVROverlay_021_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+VROverlayError __thiscall IVROverlay_002_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-void __thiscall IVROverlay_021_HideKeyboard(void *_this);
+bool __thiscall IVROverlay_002_IsDashboardVisible(void *_this);
 
-void __thiscall IVROverlay_021_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+bool __thiscall IVROverlay_002_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVROverlay_021_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+VROverlayError __thiscall IVROverlay_002_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_021_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+VROverlayError __thiscall IVROverlay_002_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_021_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+void test_capi_thunks_IVROverlay_003(void);
 
-VRMessageOverlayResponse __thiscall IVROverlay_021_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+VROverlayError __thiscall IVROverlay_003_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVROverlay_021_CloseMessageOverlay(void *_this);
+VROverlayError __thiscall IVROverlay_003_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-void test_capi_thunks_IVRSystem_020(void);
+VROverlayError __thiscall IVROverlay_003_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_020_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+VROverlayError __thiscall IVROverlay_003_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-HmdMatrix44_t *__thiscall IVRSystem_020_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+VROverlayHandle_t __thiscall IVROverlay_003_GetHighQualityOverlay(void *_this);
 
-void __thiscall IVRSystem_020_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+uint32_t __thiscall IVROverlay_003_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-bool __thiscall IVRSystem_020_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+uint32_t __thiscall IVROverlay_003_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-HmdMatrix34_t *__thiscall IVRSystem_020_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+VROverlayError __thiscall IVROverlay_003_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-bool __thiscall IVRSystem_020_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+const char * __thiscall IVROverlay_003_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
 
-int32_t __thiscall IVRSystem_020_GetD3D9AdapterIndex(void *_this);
+VROverlayError __thiscall IVROverlay_003_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-void __thiscall IVRSystem_020_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+VROverlayError __thiscall IVROverlay_003_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void __thiscall IVRSystem_020_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+VROverlayError __thiscall IVROverlay_003_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-bool __thiscall IVRSystem_020_IsDisplayOnDesktop(void *_this);
+VROverlayError __thiscall IVROverlay_003_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-bool __thiscall IVRSystem_020_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+VROverlayError __thiscall IVROverlay_003_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-void __thiscall IVRSystem_020_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+VROverlayError __thiscall IVROverlay_003_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-void __thiscall IVRSystem_020_ResetSeatedZeroPose(void *_this);
+VROverlayError __thiscall IVROverlay_003_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
 
-HmdMatrix34_t *__thiscall IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+VROverlayError __thiscall IVROverlay_003_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
 
-HmdMatrix34_t *__thiscall IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+VROverlayError __thiscall IVROverlay_003_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-uint32_t __thiscall IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+VROverlayError __thiscall IVROverlay_003_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EDeviceActivityLevel __thiscall IVRSystem_020_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+VROverlayError __thiscall IVROverlay_003_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVRSystem_020_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+VROverlayError __thiscall IVROverlay_003_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_020_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+VROverlayError __thiscall IVROverlay_003_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-ETrackedControllerRole __thiscall IVRSystem_020_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+VROverlayError __thiscall IVROverlay_003_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-ETrackedDeviceClass __thiscall IVRSystem_020_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+VROverlayError __thiscall IVROverlay_003_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRSystem_020_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+VROverlayError __thiscall IVROverlay_003_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRSystem_020_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+VROverlayError __thiscall IVROverlay_003_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-float __thiscall IVRSystem_020_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+VROverlayError __thiscall IVROverlay_003_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-int32_t __thiscall IVRSystem_020_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+VROverlayError __thiscall IVROverlay_003_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint64_t __thiscall IVRSystem_020_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+bool __thiscall IVROverlay_003_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-HmdMatrix34_t *__thiscall IVRSystem_020_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+bool __thiscall IVROverlay_003_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-uint32_t __thiscall IVRSystem_020_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+VROverlayError __thiscall IVROverlay_003_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-uint32_t __thiscall IVRSystem_020_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+VROverlayError __thiscall IVROverlay_003_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-const char * __thiscall IVRSystem_020_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+VROverlayError __thiscall IVROverlay_003_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRSystem_020_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+VROverlayError __thiscall IVROverlay_003_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRSystem_020_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+bool __thiscall IVROverlay_003_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-const char * __thiscall IVRSystem_020_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+bool __thiscall IVROverlay_003_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_020_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+VROverlayError __thiscall IVROverlay_003_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
 
-bool __thiscall IVRSystem_020_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+VROverlayError __thiscall IVROverlay_003_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_020_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+VROverlayError __thiscall IVROverlay_003_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-void __thiscall IVRSystem_020_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+VROverlayError __thiscall IVROverlay_003_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-const char * __thiscall IVRSystem_020_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+VROverlayError __thiscall IVROverlay_003_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-const char * __thiscall IVRSystem_020_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+bool __thiscall IVROverlay_003_IsDashboardVisible(void *_this);
 
-bool __thiscall IVRSystem_020_IsInputAvailable(void *_this);
+bool __thiscall IVROverlay_003_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_020_IsSteamVRDrawingControllers(void *_this);
+VROverlayError __thiscall IVROverlay_003_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-bool __thiscall IVRSystem_020_ShouldApplicationPause(void *_this);
+VROverlayError __thiscall IVROverlay_003_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-bool __thiscall IVRSystem_020_ShouldApplicationReduceRenderingWork(void *_this);
+void __thiscall IVROverlay_003_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVRFirmwareError __thiscall IVRSystem_020_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void test_capi_thunks_IVROverlay_004(void);
 
-void __thiscall IVRSystem_020_AcknowledgeQuit_Exiting(void *_this);
+VROverlayError __thiscall IVROverlay_004_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVRSystem_020_AcknowledgeQuit_UserPrompt(void *_this);
+VROverlayError __thiscall IVROverlay_004_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-uint32_t __thiscall IVRSystem_020_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+VROverlayError __thiscall IVROverlay_004_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRSystem_020_GetRuntimeVersion(void *_this);
+VROverlayError __thiscall IVROverlay_004_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRApplications_006(void);
+VROverlayHandle_t __thiscall IVROverlay_004_GetHighQualityOverlay(void *_this);
 
-EVRApplicationError __thiscall IVRApplications_006_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+uint32_t __thiscall IVROverlay_004_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-EVRApplicationError __thiscall IVRApplications_006_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+uint32_t __thiscall IVROverlay_004_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-bool __thiscall IVRApplications_006_IsApplicationInstalled(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-uint32_t __thiscall IVRApplications_006_GetApplicationCount(void *_this);
+const char * __thiscall IVROverlay_004_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
 
-EVRApplicationError __thiscall IVRApplications_006_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+VROverlayError __thiscall IVROverlay_004_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVRApplicationError __thiscall IVRApplications_006_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+VROverlayError __thiscall IVROverlay_004_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVRApplicationError __thiscall IVRApplications_006_LaunchApplication(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVRApplicationError __thiscall IVRApplications_006_LaunchTemplateApplication(void *_this, const char * pchTemplateAppKey, const char * pchNewAppKey, AppOverrideKeys_t * pKeys, uint32_t unKeys);
+VROverlayError __thiscall IVROverlay_004_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVRApplicationError __thiscall IVRApplications_006_LaunchApplicationFromMimeType(void *_this, const char * pchMimeType, const char * pchArgs);
+VROverlayError __thiscall IVROverlay_004_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVRApplicationError __thiscall IVRApplications_006_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-bool __thiscall IVRApplications_006_CancelApplicationLaunch(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
 
-EVRApplicationError __thiscall IVRApplications_006_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
 
-uint32_t __thiscall IVRApplications_006_GetApplicationProcessId(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-const char * __thiscall IVRApplications_006_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+VROverlayError __thiscall IVROverlay_004_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-uint32_t __thiscall IVRApplications_006_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+VROverlayError __thiscall IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-bool __thiscall IVRApplications_006_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+VROverlayError __thiscall IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-uint64_t __thiscall IVRApplications_006_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+VROverlayError __thiscall IVROverlay_004_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRApplicationError __thiscall IVRApplications_006_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+VROverlayError __thiscall IVROverlay_004_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVRApplications_006_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+VROverlayError __thiscall IVROverlay_004_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVRApplicationError __thiscall IVRApplications_006_SetDefaultApplicationForMimeType(void *_this, const char * pchAppKey, const char * pchMimeType);
+VROverlayError __thiscall IVROverlay_004_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRApplications_006_GetDefaultApplicationForMimeType(void *_this, const char * pchMimeType, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+VROverlayError __thiscall IVROverlay_004_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRApplications_006_GetApplicationSupportedMimeTypes(void *_this, const char * pchAppKey, char * pchMimeTypesBuffer, uint32_t unMimeTypesBuffer);
+VROverlayError __thiscall IVROverlay_004_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-uint32_t __thiscall IVRApplications_006_GetApplicationsThatSupportMimeType(void *_this, const char * pchMimeType, char * pchAppKeysThatSupportBuffer, uint32_t unAppKeysThatSupportBuffer);
+VROverlayError __thiscall IVROverlay_004_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-uint32_t __thiscall IVRApplications_006_GetApplicationLaunchArguments(void *_this, uint32_t unHandle, char * pchArgs, uint32_t unArgs);
+VROverlayError __thiscall IVROverlay_004_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationError __thiscall IVRApplications_006_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+VROverlayError __thiscall IVROverlay_004_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationTransitionState __thiscall IVRApplications_006_GetTransitionState(void *_this);
+bool __thiscall IVROverlay_004_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationError __thiscall IVRApplications_006_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+bool __thiscall IVROverlay_004_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-const char * __thiscall IVRApplications_006_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+VROverlayError __thiscall IVROverlay_004_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-bool __thiscall IVRApplications_006_IsQuitUserPromptRequested(void *_this);
+VROverlayError __thiscall IVROverlay_004_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVRApplicationError __thiscall IVRApplications_006_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
+VROverlayError __thiscall IVROverlay_004_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-uint32_t __thiscall IVRApplications_006_GetCurrentSceneProcessId(void *_this);
+VROverlayError __thiscall IVROverlay_004_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void test_capi_thunks_IVROverlay_020(void);
+bool __thiscall IVROverlay_004_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_020_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+bool __thiscall IVROverlay_004_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_020_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+VROverlayError __thiscall IVROverlay_004_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
 
-EVROverlayError __thiscall IVROverlay_020_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_004_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVROverlay_020_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_004_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-uint32_t __thiscall IVROverlay_020_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_004_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+VROverlayError __thiscall IVROverlay_004_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+bool __thiscall IVROverlay_004_IsDashboardVisible(void *_this);
 
-const char * __thiscall IVROverlay_020_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+bool __thiscall IVROverlay_004_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+VROverlayError __thiscall IVROverlay_004_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-uint32_t __thiscall IVROverlay_020_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_004_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+void __thiscall IVROverlay_004_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+void test_capi_thunks_IVROverlay_005(void);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+VROverlayError __thiscall IVROverlay_005_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+VROverlayError __thiscall IVROverlay_005_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+VROverlayError __thiscall IVROverlay_005_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+VROverlayError __thiscall IVROverlay_005_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+VROverlayHandle_t __thiscall IVROverlay_005_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+uint32_t __thiscall IVROverlay_005_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+uint32_t __thiscall IVROverlay_005_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+VROverlayError __thiscall IVROverlay_005_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+const char * __thiscall IVROverlay_005_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+VROverlayError __thiscall IVROverlay_005_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+VROverlayError __thiscall IVROverlay_005_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+VROverlayError __thiscall IVROverlay_005_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+VROverlayError __thiscall IVROverlay_005_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+VROverlayError __thiscall IVROverlay_005_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+VROverlayError __thiscall IVROverlay_005_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+VROverlayError __thiscall IVROverlay_005_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
 
-uint32_t __thiscall IVROverlay_020_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+VROverlayError __thiscall IVROverlay_005_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+VROverlayError __thiscall IVROverlay_005_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+VROverlayError __thiscall IVROverlay_005_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+VROverlayError __thiscall IVROverlay_005_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+VROverlayError __thiscall IVROverlay_005_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+VROverlayError __thiscall IVROverlay_005_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_020_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_005_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_020_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_005_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_020_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayError __thiscall IVROverlay_005_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+bool __thiscall IVROverlay_005_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_020_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVROverlay_005_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+VROverlayError __thiscall IVROverlay_005_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+VROverlayError __thiscall IVROverlay_005_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VROverlayError __thiscall IVROverlay_005_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+VROverlayError __thiscall IVROverlay_005_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVROverlay_020_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+bool __thiscall IVROverlay_005_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-bool __thiscall IVROverlay_020_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVROverlay_005_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-VROverlayHandle_t __thiscall IVROverlay_020_GetGamepadFocusOverlay(void *_this);
+bool __thiscall IVROverlay_005_IsFocusOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+VROverlayError __thiscall IVROverlay_005_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+VROverlayError __thiscall IVROverlay_005_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+VROverlayError __thiscall IVROverlay_005_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
+VROverlayError __thiscall IVROverlay_005_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
+VROverlayError __thiscall IVROverlay_005_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+bool __thiscall IVROverlay_005_IsDashboardVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_020_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVROverlay_005_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+VROverlayError __thiscall IVROverlay_005_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+VROverlayError __thiscall IVROverlay_005_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+void __thiscall IVROverlay_005_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_020_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+VROverlayError __thiscall IVROverlay_005_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+uint32_t __thiscall IVROverlay_005_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_020_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+void __thiscall IVROverlay_005_HideKeyboard(void *_this);
 
-bool __thiscall IVROverlay_020_IsDashboardVisible(void *_this);
+void test_capi_thunks_IVROverlay_007(void);
 
-bool __thiscall IVROverlay_020_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+EVROverlayError __thiscall IVROverlay_007_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_020_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+EVROverlayError __thiscall IVROverlay_007_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVROverlay_020_ShowDashboard(void *_this, const char * pchOverlayToShow);
+EVROverlayError __thiscall IVROverlay_007_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_020_GetPrimaryDashboardDevice(void *_this);
+VROverlayHandle_t __thiscall IVROverlay_007_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_020_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+uint32_t __thiscall IVROverlay_007_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_020_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+uint32_t __thiscall IVROverlay_007_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-uint32_t __thiscall IVROverlay_020_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-void __thiscall IVROverlay_020_HideKeyboard(void *_this);
+const char * __thiscall IVROverlay_007_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-void __thiscall IVROverlay_020_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-void __thiscall IVROverlay_020_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_020_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_020_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-VRMessageOverlayResponse __thiscall IVROverlay_020_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-void __thiscall IVROverlay_020_CloseMessageOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-void test_capi_thunks_IVROverlay_019(void);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-VROverlayHandle_t __thiscall IVROverlay_019_GetHighQualityOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-uint32_t __thiscall IVROverlay_019_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-uint32_t __thiscall IVROverlay_019_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-const char * __thiscall IVROverlay_019_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-uint32_t __thiscall IVROverlay_019_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+EVROverlayError __thiscall IVROverlay_007_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+EVROverlayError __thiscall IVROverlay_007_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+bool __thiscall IVROverlay_007_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+bool __thiscall IVROverlay_007_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+EVROverlayError __thiscall IVROverlay_007_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+bool __thiscall IVROverlay_007_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+bool __thiscall IVROverlay_007_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+bool __thiscall IVROverlay_007_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+VROverlayHandle_t __thiscall IVROverlay_007_GetGamepadFocusOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_007_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_007_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_007_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-uint32_t __thiscall IVROverlay_019_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_007_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+EVROverlayError __thiscall IVROverlay_007_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+bool __thiscall IVROverlay_007_IsDashboardVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+bool __thiscall IVROverlay_007_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_007_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_007_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVROverlay_007_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_007_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVROverlayError __thiscall IVROverlay_007_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+uint32_t __thiscall IVROverlay_007_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+void __thiscall IVROverlay_007_HideKeyboard(void *_this);
 
-EVROverlayError __thiscall IVROverlay_019_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void test_capi_thunks_IVROverlay_008(void);
 
-EVROverlayError __thiscall IVROverlay_019_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_008_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-bool __thiscall IVROverlay_019_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_008_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+EVROverlayError __thiscall IVROverlay_008_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_019_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_008_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+VROverlayHandle_t __thiscall IVROverlay_008_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+uint32_t __thiscall IVROverlay_008_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+uint32_t __thiscall IVROverlay_008_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-bool __thiscall IVROverlay_019_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+const char * __thiscall IVROverlay_008_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-bool __thiscall IVROverlay_019_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-VROverlayHandle_t __thiscall IVROverlay_019_GetGamepadFocusOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_019_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_019_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_019_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_019_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-bool __thiscall IVROverlay_019_IsDashboardVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVROverlay_019_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_019_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_019_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVROverlay_019_ShowDashboard(void *_this, const char * pchOverlayToShow);
+EVROverlayError __thiscall IVROverlay_008_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_019_GetPrimaryDashboardDevice(void *_this);
+EVROverlayError __thiscall IVROverlay_008_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+bool __thiscall IVROverlay_008_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_019_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_008_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-uint32_t __thiscall IVROverlay_019_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+bool __thiscall IVROverlay_008_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
 
-void __thiscall IVROverlay_019_HideKeyboard(void *_this);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-void __thiscall IVROverlay_019_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-void __thiscall IVROverlay_019_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+EVROverlayError __thiscall IVROverlay_008_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_019_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_019_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+bool __thiscall IVROverlay_008_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-VRMessageOverlayResponse __thiscall IVROverlay_019_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+bool __thiscall IVROverlay_008_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-void __thiscall IVROverlay_019_CloseMessageOverlay(void *_this);
+bool __thiscall IVROverlay_008_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRTrackedCamera_005(void);
+VROverlayHandle_t __thiscall IVROverlay_008_GetGamepadFocusOverlay(void *_this);
 
-const char * __thiscall IVRTrackedCamera_005_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
+EVROverlayError __thiscall IVROverlay_008_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
+EVROverlayError __thiscall IVROverlay_008_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
+EVROverlayError __thiscall IVROverlay_008_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
+EVROverlayError __thiscall IVROverlay_008_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_008_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
+bool __thiscall IVROverlay_008_IsDashboardVisible(void *_this);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+bool __thiscall IVROverlay_008_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_008_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
+EVROverlayError __thiscall IVROverlay_008_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-void test_capi_thunks_IVRSystem_019(void);
+void __thiscall IVROverlay_008_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-void __thiscall IVRSystem_019_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_008_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-HmdMatrix44_t *__thiscall IVRSystem_019_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+EVROverlayError __thiscall IVROverlay_008_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-void __thiscall IVRSystem_019_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+uint32_t __thiscall IVROverlay_008_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-bool __thiscall IVRSystem_019_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+void __thiscall IVROverlay_008_HideKeyboard(void *_this);
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+void __thiscall IVROverlay_008_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-bool __thiscall IVRSystem_019_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+void __thiscall IVROverlay_008_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-int32_t __thiscall IVRSystem_019_GetD3D9AdapterIndex(void *_this);
+void test_capi_thunks_IVROverlay_010(void);
 
-void __thiscall IVRSystem_019_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVROverlayError __thiscall IVROverlay_010_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVRSystem_019_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+EVROverlayError __thiscall IVROverlay_010_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-bool __thiscall IVRSystem_019_IsDisplayOnDesktop(void *_this);
+EVROverlayError __thiscall IVROverlay_010_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_019_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+EVROverlayError __thiscall IVROverlay_010_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_019_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+VROverlayHandle_t __thiscall IVROverlay_010_GetHighQualityOverlay(void *_this);
 
-void __thiscall IVRSystem_019_ResetSeatedZeroPose(void *_this);
+uint32_t __thiscall IVROverlay_010_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+uint32_t __thiscall IVROverlay_010_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-uint32_t __thiscall IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+const char * __thiscall IVROverlay_010_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EDeviceActivityLevel __thiscall IVRSystem_019_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-void __thiscall IVRSystem_019_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_019_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-ETrackedControllerRole __thiscall IVRSystem_019_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-ETrackedDeviceClass __thiscall IVRSystem_019_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-bool __thiscall IVRSystem_019_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-bool __thiscall IVRSystem_019_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-float __thiscall IVRSystem_019_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-int32_t __thiscall IVRSystem_019_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-uint64_t __thiscall IVRSystem_019_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-uint32_t __thiscall IVRSystem_019_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-uint32_t __thiscall IVRSystem_019_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-const char * __thiscall IVRSystem_019_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVRSystem_019_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-bool __thiscall IVRSystem_019_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-const char * __thiscall IVRSystem_019_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_019_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRSystem_019_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRSystem_019_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-void __thiscall IVRSystem_019_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-const char * __thiscall IVRSystem_019_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+EVROverlayError __thiscall IVROverlay_010_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRSystem_019_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVROverlayError __thiscall IVROverlay_010_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_019_IsInputAvailable(void *_this);
+bool __thiscall IVROverlay_010_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_019_IsSteamVRDrawingControllers(void *_this);
+EVROverlayError __thiscall IVROverlay_010_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-bool __thiscall IVRSystem_019_ShouldApplicationPause(void *_this);
+bool __thiscall IVROverlay_010_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-bool __thiscall IVRSystem_019_ShouldApplicationReduceRenderingWork(void *_this);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-uint32_t __thiscall IVRSystem_019_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVRFirmwareError __thiscall IVRSystem_019_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_010_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRSystem_019_AcknowledgeQuit_Exiting(void *_this);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRSystem_019_AcknowledgeQuit_UserPrompt(void *_this);
+bool __thiscall IVROverlay_010_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void test_capi_thunks_IVRInput_006(void);
+bool __thiscall IVROverlay_010_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-EVRInputError __thiscall IVRInput_006_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
+bool __thiscall IVROverlay_010_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_006_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
+VROverlayHandle_t __thiscall IVROverlay_010_GetGamepadFocusOverlay(void *_this);
 
-EVRInputError __thiscall IVRInput_006_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_010_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVRInputError __thiscall IVRInput_006_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-EVRInputError __thiscall IVRInput_006_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
+EVROverlayError __thiscall IVROverlay_010_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVRInputError __thiscall IVRInput_006_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRInputError __thiscall IVRInput_006_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_010_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_006_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVRInputError __thiscall IVRInput_006_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_010_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
+EVROverlayError __thiscall IVROverlay_010_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVRInputError __thiscall IVRInput_006_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
+bool __thiscall IVROverlay_010_IsDashboardVisible(void *_this);
 
-EVRInputError __thiscall IVRInput_006_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
+bool __thiscall IVROverlay_010_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_006_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
+EVROverlayError __thiscall IVROverlay_010_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_010_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
+void __thiscall IVROverlay_010_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+TrackedDeviceIndex_t __thiscall IVROverlay_010_GetPrimaryDashboardDevice(void *_this);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData);
+EVROverlayError __thiscall IVROverlay_010_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVRInputError __thiscall IVRInput_006_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
+EVROverlayError __thiscall IVROverlay_010_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVRInputError __thiscall IVRInput_006_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+uint32_t __thiscall IVROverlay_010_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVRInputError __thiscall IVRInput_006_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
+void __thiscall IVROverlay_010_HideKeyboard(void *_this);
 
-EVRInputError __thiscall IVRInput_006_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
+void __thiscall IVROverlay_010_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVRInputError __thiscall IVRInput_006_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
+void __thiscall IVROverlay_010_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVRInputError __thiscall IVRInput_006_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
+void test_capi_thunks_IVROverlay_011(void);
 
-EVRInputError __thiscall IVRInput_006_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
+EVROverlayError __thiscall IVROverlay_011_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVRInputError __thiscall IVRInput_006_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
+EVROverlayError __thiscall IVROverlay_011_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-bool __thiscall IVRInput_006_IsUsingLegacyInput(void *_this);
+EVROverlayError __thiscall IVROverlay_011_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRInput_005(void);
+EVROverlayError __thiscall IVROverlay_011_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_005_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
+VROverlayHandle_t __thiscall IVROverlay_011_GetHighQualityOverlay(void *_this);
 
-EVRInputError __thiscall IVRInput_005_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
+uint32_t __thiscall IVROverlay_011_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRInputError __thiscall IVRInput_005_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
+uint32_t __thiscall IVROverlay_011_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRInputError __thiscall IVRInput_005_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVRInputError __thiscall IVRInput_005_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
+const char * __thiscall IVROverlay_011_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVRInputError __thiscall IVRInput_005_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVRInputError __thiscall IVRInput_005_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+uint32_t __thiscall IVROverlay_011_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_005_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVRInputError __thiscall IVRInput_005_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVRInputError __thiscall IVRInput_005_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVRInputError __thiscall IVRInput_005_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, VRSkeletalSummaryData_t * pSkeletalSummaryData);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVRInputError __thiscall IVRInput_005_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVRInputError __thiscall IVRInput_005_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVRInputError __thiscall IVRInput_005_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVRInputError __thiscall IVRInput_005_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRInputError __thiscall IVRInput_005_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRInputError __thiscall IVRInput_005_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVRInputError __thiscall IVRInput_005_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRInput_005_IsUsingLegacyInput(void *_this);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void test_capi_thunks_IVRIOBuffer_001(void);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
+EVROverlayError __thiscall IVROverlay_011_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
+EVROverlayError __thiscall IVROverlay_011_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
+bool __thiscall IVROverlay_011_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRChaperoneSetup_005(void);
+EVROverlayError __thiscall IVROverlay_011_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-bool __thiscall IVRChaperoneSetup_005_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile);
+bool __thiscall IVROverlay_011_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVRChaperoneSetup_005_RevertWorkingCopy(void *_this);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+bool __thiscall IVROverlay_011_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+bool __thiscall IVROverlay_011_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose);
+bool __thiscall IVROverlay_011_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ);
+VROverlayHandle_t __thiscall IVROverlay_011_GetGamepadFocusOverlay(void *_this);
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
+EVROverlayError __thiscall IVROverlay_011_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose);
+EVROverlayError __thiscall IVROverlay_011_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-void __thiscall IVRChaperoneSetup_005_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-bool __thiscall IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+EVROverlayError __thiscall IVROverlay_011_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount);
+EVROverlayError __thiscall IVROverlay_011_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-bool __thiscall IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
+EVROverlayError __thiscall IVROverlay_011_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
 
-bool __thiscall IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+EVROverlayError __thiscall IVROverlay_011_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-bool __thiscall IVRChaperoneSetup_005_ExportLiveToBuffer(void *_this, char * pBuffer, uint32_t * pnBufferLength);
+EVROverlayError __thiscall IVROverlay_011_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-bool __thiscall IVRChaperoneSetup_005_ImportFromBufferToWorking(void *_this, const char * pBuffer, uint32_t nImportFlags);
+bool __thiscall IVROverlay_011_IsDashboardVisible(void *_this);
 
-void test_capi_thunks_IVROverlay_018(void);
+bool __thiscall IVROverlay_011_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_011_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_018_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_011_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_018_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVROverlay_011_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_018_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+TrackedDeviceIndex_t __thiscall IVROverlay_011_GetPrimaryDashboardDevice(void *_this);
 
-VROverlayHandle_t __thiscall IVROverlay_018_GetHighQualityOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_011_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-uint32_t __thiscall IVROverlay_018_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_011_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-uint32_t __thiscall IVROverlay_018_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+uint32_t __thiscall IVROverlay_011_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+void __thiscall IVROverlay_011_HideKeyboard(void *_this);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+void __thiscall IVROverlay_011_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-const char * __thiscall IVROverlay_018_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+void __thiscall IVROverlay_011_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+void test_capi_thunks_IVROverlay_012(void);
 
-uint32_t __thiscall IVROverlay_018_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+EVROverlayError __thiscall IVROverlay_012_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+EVROverlayError __thiscall IVROverlay_012_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+EVROverlayError __thiscall IVROverlay_012_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+VROverlayHandle_t __thiscall IVROverlay_012_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+uint32_t __thiscall IVROverlay_012_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+uint32_t __thiscall IVROverlay_012_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+const char * __thiscall IVROverlay_012_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+uint32_t __thiscall IVROverlay_012_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-uint32_t __thiscall IVROverlay_018_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_018_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-EVROverlayError __thiscall IVROverlay_018_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-bool __thiscall IVROverlay_018_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+EVROverlayError __thiscall IVROverlay_012_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_018_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVROverlay_012_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+EVROverlayError __thiscall IVROverlay_012_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+bool __thiscall IVROverlay_012_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-bool __thiscall IVROverlay_018_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVROverlay_018_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-VROverlayHandle_t __thiscall IVROverlay_018_GetGamepadFocusOverlay(void *_this);
+bool __thiscall IVROverlay_012_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_018_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+bool __thiscall IVROverlay_012_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+bool __thiscall IVROverlay_012_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+VROverlayHandle_t __thiscall IVROverlay_012_GetGamepadFocusOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * vCenter, float fRadius);
+EVROverlayError __thiscall IVROverlay_012_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVROverlayError __thiscall IVROverlay_012_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVROverlayError __thiscall IVROverlay_018_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+EVROverlayError __thiscall IVROverlay_012_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+EVROverlayError __thiscall IVROverlay_012_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_018_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVROverlayError __thiscall IVROverlay_012_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_018_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-bool __thiscall IVROverlay_018_IsDashboardVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_012_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-bool __thiscall IVROverlay_018_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVROverlay_012_IsDashboardVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_018_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+bool __thiscall IVROverlay_012_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_018_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+EVROverlayError __thiscall IVROverlay_012_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-void __thiscall IVROverlay_018_ShowDashboard(void *_this, const char * pchOverlayToShow);
+EVROverlayError __thiscall IVROverlay_012_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_018_GetPrimaryDashboardDevice(void *_this);
+void __thiscall IVROverlay_012_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_018_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+TrackedDeviceIndex_t __thiscall IVROverlay_012_GetPrimaryDashboardDevice(void *_this);
 
-EVROverlayError __thiscall IVROverlay_018_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_012_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-uint32_t __thiscall IVROverlay_018_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+EVROverlayError __thiscall IVROverlay_012_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-void __thiscall IVROverlay_018_HideKeyboard(void *_this);
+uint32_t __thiscall IVROverlay_012_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-void __thiscall IVROverlay_018_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+void __thiscall IVROverlay_012_HideKeyboard(void *_this);
 
-void __thiscall IVROverlay_018_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+void __thiscall IVROverlay_012_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVROverlayError __thiscall IVROverlay_018_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+void __thiscall IVROverlay_012_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVROverlayError __thiscall IVROverlay_018_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+void test_capi_thunks_IVROverlay_013(void);
 
-VRMessageOverlayResponse __thiscall IVROverlay_018_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+EVROverlayError __thiscall IVROverlay_013_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVROverlay_018_CloseMessageOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_013_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-void test_capi_thunks_IVRTrackedCamera_004(void);
+EVROverlayError __thiscall IVROverlay_013_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRTrackedCamera_004_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
+EVROverlayError __thiscall IVROverlay_013_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
+VROverlayHandle_t __thiscall IVROverlay_013_GetHighQualityOverlay(void *_this);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
+uint32_t __thiscall IVROverlay_013_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
+uint32_t __thiscall IVROverlay_013_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
+const char * __thiscall IVROverlay_013_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+uint32_t __thiscall IVROverlay_013_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_004_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-void test_capi_thunks_IVRInput_004(void);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVRInputError __thiscall IVRInput_004_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVRInputError __thiscall IVRInput_004_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-EVRInputError __thiscall IVRInput_004_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-EVRInputError __thiscall IVRInput_004_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
+EVROverlayError __thiscall IVROverlay_013_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-EVRInputError __thiscall IVRInput_004_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
+EVROverlayError __thiscall IVROverlay_013_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-EVRInputError __thiscall IVRInput_004_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVRInputError __thiscall IVRInput_004_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVRInputError __thiscall IVRInput_004_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVRInputError __thiscall IVRInput_004_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-EVRInputError __thiscall IVRInput_004_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVRInputError __thiscall IVRInput_004_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVRInputError __thiscall IVRInput_004_DecompressSkeletalBoneData(void *_this, void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace * peTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRInputError __thiscall IVRInput_004_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRInputError __thiscall IVRInput_004_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVRInputError __thiscall IVRInput_004_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVRInputError __thiscall IVRInput_004_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVRInputError __thiscall IVRInput_004_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVRInputError __thiscall IVRInput_004_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void test_capi_thunks_IVRTrackedCamera_003(void);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-const char * __thiscall IVRTrackedCamera_003_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
+EVROverlayError __thiscall IVROverlay_013_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
+EVROverlayError __thiscall IVROverlay_013_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
+bool __thiscall IVROverlay_013_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
+EVROverlayError __thiscall IVROverlay_013_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
+bool __thiscall IVROverlay_013_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
+bool __thiscall IVROverlay_013_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVRTrackedCameraError __thiscall IVRTrackedCamera_003_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
+bool __thiscall IVROverlay_013_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-void test_capi_thunks_IVRRenderModels_005(void);
+bool __thiscall IVROverlay_013_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRRenderModelError __thiscall IVRRenderModels_005_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
+VROverlayHandle_t __thiscall IVROverlay_013_GetGamepadFocusOverlay(void *_this);
 
-void __thiscall IVRRenderModels_005_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
+EVROverlayError __thiscall IVROverlay_013_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVRRenderModelError __thiscall IVRRenderModels_005_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-void __thiscall IVRRenderModels_005_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
+EVROverlayError __thiscall IVROverlay_013_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVRRenderModelError __thiscall IVRRenderModels_005_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRRenderModelError __thiscall IVRRenderModels_005_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture);
+EVROverlayError __thiscall IVROverlay_013_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRRenderModels_005_FreeTextureD3D11(void *_this, void * pD3D11Texture2D);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-uint32_t __thiscall IVRRenderModels_005_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-uint32_t __thiscall IVRRenderModels_005_GetRenderModelCount(void *_this);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
 
-uint32_t __thiscall IVRRenderModels_005_GetComponentCount(void *_this, const char * pchRenderModelName);
+EVROverlayError __thiscall IVROverlay_013_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-uint32_t __thiscall IVRRenderModels_005_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
+EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-uint64_t __thiscall IVRRenderModels_005_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_013_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-uint32_t __thiscall IVRRenderModels_005_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
+bool __thiscall IVROverlay_013_IsDashboardVisible(void *_this);
 
-bool __thiscall IVRRenderModels_005_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
+bool __thiscall IVROverlay_013_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRRenderModels_005_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_013_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-uint32_t __thiscall IVRRenderModels_005_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError);
+EVROverlayError __thiscall IVROverlay_013_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-uint32_t __thiscall IVRRenderModels_005_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError);
+void __thiscall IVROverlay_013_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-const char * __thiscall IVRRenderModels_005_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error);
+TrackedDeviceIndex_t __thiscall IVROverlay_013_GetPrimaryDashboardDevice(void *_this);
 
-void test_capi_thunks_IVRInput_003(void);
+EVROverlayError __thiscall IVROverlay_013_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVRInputError __thiscall IVRInput_003_SetActionManifestPath(void *_this, const char * pchActionManifestPath);
+EVROverlayError __thiscall IVROverlay_013_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVRInputError __thiscall IVRInput_003_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle);
+uint32_t __thiscall IVROverlay_013_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVRInputError __thiscall IVRInput_003_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle);
+void __thiscall IVROverlay_013_HideKeyboard(void *_this);
 
-EVRInputError __thiscall IVRInput_003_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle);
+void __thiscall IVROverlay_013_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVRInputError __thiscall IVRInput_003_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount);
+void __thiscall IVROverlay_013_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVRInputError __thiscall IVRInput_003_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize);
+EVROverlayError __thiscall IVROverlay_013_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-EVRInputError __thiscall IVRInput_003_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize);
+void test_capi_thunks_IVROverlay_014(void);
 
-EVRInputError __thiscall IVRInput_003_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize);
+EVROverlayError __thiscall IVROverlay_014_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVRInputError __thiscall IVRInput_003_GetSkeletalActionData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, InputSkeletonActionData_t * pActionData, uint32_t unActionDataSize, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_014_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
 
-EVRInputError __thiscall IVRInput_003_GetSkeletalActionDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize);
+EVROverlayError __thiscall IVROverlay_014_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_003_UncompressSkeletalActionData(void *_this, void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace * peBoneParent, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount);
+EVROverlayError __thiscall IVROverlay_014_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInputError __thiscall IVRInput_003_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude);
+VROverlayHandle_t __thiscall IVROverlay_014_GetHighQualityOverlay(void *_this);
 
-EVRInputError __thiscall IVRInput_003_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount);
+uint32_t __thiscall IVROverlay_014_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRInputError __thiscall IVRInput_003_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize);
+uint32_t __thiscall IVROverlay_014_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRInputError __thiscall IVRInput_003_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVRInputError __thiscall IVRInput_003_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle);
+const char * __thiscall IVROverlay_014_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVRInputError __thiscall IVRInput_003_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-void test_capi_thunks_IVRSystem_017(void);
+uint32_t __thiscall IVROverlay_014_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_017_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-HmdMatrix44_t *__thiscall IVRSystem_017_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void __thiscall IVRSystem_017_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-bool __thiscall IVRSystem_017_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-HmdMatrix34_t *__thiscall IVRSystem_017_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-bool __thiscall IVRSystem_017_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-int32_t __thiscall IVRSystem_017_GetD3D9AdapterIndex(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void __thiscall IVRSystem_017_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRSystem_017_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+EVROverlayError __thiscall IVROverlay_014_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-bool __thiscall IVRSystem_017_IsDisplayOnDesktop(void *_this);
+EVROverlayError __thiscall IVROverlay_014_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-bool __thiscall IVRSystem_017_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-void __thiscall IVRSystem_017_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-void __thiscall IVRSystem_017_ResetSeatedZeroPose(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-HmdMatrix34_t *__thiscall IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-HmdMatrix34_t *__thiscall IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-uint32_t __thiscall IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EDeviceActivityLevel __thiscall IVRSystem_017_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVRSystem_017_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_017_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-ETrackedControllerRole __thiscall IVRSystem_017_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-ETrackedDeviceClass __thiscall IVRSystem_017_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRSystem_017_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRSystem_017_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-float __thiscall IVRSystem_017_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-int32_t __thiscall IVRSystem_017_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-uint64_t __thiscall IVRSystem_017_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_014_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-HmdMatrix34_t *__thiscall IVRSystem_017_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_014_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVRSystem_017_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+bool __thiscall IVROverlay_014_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRSystem_017_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVROverlayError __thiscall IVROverlay_014_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-bool __thiscall IVRSystem_017_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVROverlay_014_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-bool __thiscall IVRSystem_017_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-const char * __thiscall IVRSystem_017_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_017_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+EVROverlayError __thiscall IVROverlay_014_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRSystem_017_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRSystem_017_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+bool __thiscall IVROverlay_014_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void __thiscall IVRSystem_017_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+bool __thiscall IVROverlay_014_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
 
-const char * __thiscall IVRSystem_017_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+bool __thiscall IVROverlay_014_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRSystem_017_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+VROverlayHandle_t __thiscall IVROverlay_014_GetGamepadFocusOverlay(void *_this);
 
-bool __thiscall IVRSystem_017_CaptureInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-void __thiscall IVRSystem_017_ReleaseInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-bool __thiscall IVRSystem_017_IsInputFocusCapturedByAnotherProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_014_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-uint32_t __thiscall IVRSystem_017_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRFirmwareError __thiscall IVRSystem_017_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_014_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_017_AcknowledgeQuit_Exiting(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-void __thiscall IVRSystem_017_AcknowledgeQuit_UserPrompt(void *_this);
+EVROverlayError __thiscall IVROverlay_014_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+
+EVROverlayError __thiscall IVROverlay_014_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+
+EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+
+EVROverlayError __thiscall IVROverlay_014_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+
+bool __thiscall IVROverlay_014_IsDashboardVisible(void *_this);
+
+bool __thiscall IVROverlay_014_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_014_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+
+EVROverlayError __thiscall IVROverlay_014_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+
+void __thiscall IVROverlay_014_ShowDashboard(void *_this, const char * pchOverlayToShow);
+
+TrackedDeviceIndex_t __thiscall IVROverlay_014_GetPrimaryDashboardDevice(void *_this);
+
+EVROverlayError __thiscall IVROverlay_014_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+
+EVROverlayError __thiscall IVROverlay_014_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+
+uint32_t __thiscall IVROverlay_014_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+
+void __thiscall IVROverlay_014_HideKeyboard(void *_this);
+
+void __thiscall IVROverlay_014_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+
+void __thiscall IVROverlay_014_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+
+EVROverlayError __thiscall IVROverlay_014_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+
+EVROverlayError __thiscall IVROverlay_014_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+
+VRMessageOverlayResponse __thiscall IVROverlay_014_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+
+void test_capi_thunks_IVROverlay_016(void);
+
+EVROverlayError __thiscall IVROverlay_016_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+VROverlayHandle_t __thiscall IVROverlay_016_GetHighQualityOverlay(void *_this);
+
+uint32_t __thiscall IVROverlay_016_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+
+uint32_t __thiscall IVROverlay_016_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+
+const char * __thiscall IVROverlay_016_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+
+uint32_t __thiscall IVROverlay_016_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+
+uint32_t __thiscall IVROverlay_016_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+
+EVROverlayError __thiscall IVROverlay_016_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+bool __thiscall IVROverlay_016_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+
+bool __thiscall IVROverlay_016_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+
+bool __thiscall IVROverlay_016_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+
+bool __thiscall IVROverlay_016_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
+
+bool __thiscall IVROverlay_016_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+VROverlayHandle_t __thiscall IVROverlay_016_GetGamepadFocusOverlay(void *_this);
+
+EVROverlayError __thiscall IVROverlay_016_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+
+EVROverlayError __thiscall IVROverlay_016_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+
+EVROverlayError __thiscall IVROverlay_016_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+
+EVROverlayError __thiscall IVROverlay_016_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+
+EVROverlayError __thiscall IVROverlay_016_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+
+bool __thiscall IVROverlay_016_IsDashboardVisible(void *_this);
+
+bool __thiscall IVROverlay_016_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+
+EVROverlayError __thiscall IVROverlay_016_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+
+EVROverlayError __thiscall IVROverlay_016_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+
+void __thiscall IVROverlay_016_ShowDashboard(void *_this, const char * pchOverlayToShow);
+
+TrackedDeviceIndex_t __thiscall IVROverlay_016_GetPrimaryDashboardDevice(void *_this);
+
+EVROverlayError __thiscall IVROverlay_016_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+
+EVROverlayError __thiscall IVROverlay_016_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+
+uint32_t __thiscall IVROverlay_016_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+
+void __thiscall IVROverlay_016_HideKeyboard(void *_this);
+
+void __thiscall IVROverlay_016_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+
+void __thiscall IVROverlay_016_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+
+EVROverlayError __thiscall IVROverlay_016_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+
+EVROverlayError __thiscall IVROverlay_016_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+
+VRMessageOverlayResponse __thiscall IVROverlay_016_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+
+void __thiscall IVROverlay_016_CloseMessageOverlay(void *_this);
 
 void test_capi_thunks_IVROverlay_017(void);
 
@@ -3489,2155 +4231,1501 @@ VRMessageOverlayResponse __thiscall IVROverlay_017_ShowMessageOverlay(void *_thi
 
 void __thiscall IVROverlay_017_CloseMessageOverlay(void *_this);
 
-void test_capi_thunks_IVRCompositor_021(void);
+void test_capi_thunks_IVROverlay_018(void);
 
-void __thiscall IVRCompositor_021_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_018_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_021_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_018_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_021_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_018_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_021_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_018_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+VROverlayHandle_t __thiscall IVROverlay_018_GetHighQualityOverlay(void *_this);
 
-EVRCompositorError __thiscall IVRCompositor_021_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+uint32_t __thiscall IVROverlay_018_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_021_ClearLastSubmittedFrame(void *_this);
+uint32_t __thiscall IVROverlay_018_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_021_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-bool __thiscall IVRCompositor_021_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-uint32_t __thiscall IVRCompositor_021_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+const char * __thiscall IVROverlay_018_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-float __thiscall IVRCompositor_021_GetFrameTimeRemaining(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-void __thiscall IVRCompositor_021_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+uint32_t __thiscall IVROverlay_018_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_021_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-HmdColor_t *__thiscall IVRCompositor_021_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void __thiscall IVRCompositor_021_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-float __thiscall IVRCompositor_021_GetCurrentGridAlpha(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVRCompositorError __thiscall IVRCompositor_021_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-void __thiscall IVRCompositor_021_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-void __thiscall IVRCompositor_021_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void __thiscall IVRCompositor_021_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRCompositor_021_CompositorQuit(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-bool __thiscall IVRCompositor_021_IsFullscreen(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-uint32_t __thiscall IVRCompositor_021_GetCurrentSceneFocusProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-uint32_t __thiscall IVRCompositor_021_GetLastFrameRenderer(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-bool __thiscall IVRCompositor_021_CanRenderScene(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-void __thiscall IVRCompositor_021_ShowMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-void __thiscall IVRCompositor_021_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-bool __thiscall IVRCompositor_021_IsMirrorWindowVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-void __thiscall IVRCompositor_021_CompositorDumpImages(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVRCompositor_021_ShouldAppRenderWithLowResources(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVRCompositor_021_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+uint32_t __thiscall IVROverlay_018_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_021_ForceReconnectProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
 
-void __thiscall IVRCompositor_021_SuspendRendering(void *_this, bool bSuspend);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVRCompositorError __thiscall IVRCompositor_021_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-void __thiscall IVRCompositor_021_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVRCompositorError __thiscall IVRCompositor_021_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRCompositor_021_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVRCompositor_021_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-void __thiscall IVRCompositor_021_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-uint32_t __thiscall IVRCompositor_021_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-uint32_t __thiscall IVRCompositor_021_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-void __thiscall IVRCompositor_021_SetExplicitTimingMode(void *_this, bool bExplicitTimingMode);
+EVROverlayError __thiscall IVROverlay_018_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_021_SubmitExplicitTimingData(void *_this);
+EVROverlayError __thiscall IVROverlay_018_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVROverlay_016(void);
+bool __thiscall IVROverlay_018_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_018_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-EVROverlayError __thiscall IVROverlay_016_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
+bool __thiscall IVROverlay_018_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVROverlayError __thiscall IVROverlay_016_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_016_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-VROverlayHandle_t __thiscall IVROverlay_016_GetHighQualityOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-uint32_t __thiscall IVROverlay_016_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-uint32_t __thiscall IVROverlay_016_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+bool __thiscall IVROverlay_018_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
+bool __thiscall IVROverlay_018_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+VROverlayHandle_t __thiscall IVROverlay_018_GetGamepadFocusOverlay(void *_this);
 
-const char * __thiscall IVROverlay_016_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+EVROverlayError __thiscall IVROverlay_018_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-uint32_t __thiscall IVROverlay_016_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_018_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * vCenter, float fRadius);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+EVROverlayError __thiscall IVROverlay_018_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+EVROverlayError __thiscall IVROverlay_018_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+EVROverlayError __thiscall IVROverlay_018_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+bool __thiscall IVROverlay_018_IsDashboardVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+bool __thiscall IVROverlay_018_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_018_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_018_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+void __thiscall IVROverlay_018_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+TrackedDeviceIndex_t __thiscall IVROverlay_018_GetPrimaryDashboardDevice(void *_this);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_018_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_018_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-uint32_t __thiscall IVROverlay_016_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
+uint32_t __thiscall IVROverlay_018_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
+void __thiscall IVROverlay_018_HideKeyboard(void *_this);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+void __thiscall IVROverlay_018_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+void __thiscall IVROverlay_018_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_018_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_018_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+VRMessageOverlayResponse __thiscall IVROverlay_018_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+void __thiscall IVROverlay_018_CloseMessageOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+void test_capi_thunks_IVROverlay_019(void);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_019_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_019_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_019_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_016_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_019_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_016_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+VROverlayHandle_t __thiscall IVROverlay_019_GetHighQualityOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_016_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+uint32_t __thiscall IVROverlay_019_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-bool __thiscall IVROverlay_016_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+uint32_t __thiscall IVROverlay_019_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+const char * __thiscall IVROverlay_019_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-bool __thiscall IVROverlay_016_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+uint32_t __thiscall IVROverlay_019_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_016_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-bool __thiscall IVROverlay_016_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-VROverlayHandle_t __thiscall IVROverlay_016_GetGamepadFocusOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_016_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_016_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-EVROverlayError __thiscall IVROverlay_016_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+EVROverlayError __thiscall IVROverlay_019_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+EVROverlayError __thiscall IVROverlay_019_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_016_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-EVROverlayError __thiscall IVROverlay_016_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-bool __thiscall IVROverlay_016_IsDashboardVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-bool __thiscall IVROverlay_016_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_016_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_016_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVROverlay_016_ShowDashboard(void *_this, const char * pchOverlayToShow);
+uint32_t __thiscall IVROverlay_019_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_016_GetPrimaryDashboardDevice(void *_this);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
 
-EVROverlayError __thiscall IVROverlay_016_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_016_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-uint32_t __thiscall IVROverlay_016_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-void __thiscall IVROverlay_016_HideKeyboard(void *_this);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVROverlay_016_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVROverlay_016_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-EVROverlayError __thiscall IVROverlay_016_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-EVROverlayError __thiscall IVROverlay_016_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-VRMessageOverlayResponse __thiscall IVROverlay_016_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-void __thiscall IVROverlay_016_CloseMessageOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_019_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRSystem_016(void);
+EVROverlayError __thiscall IVROverlay_019_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_016_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+bool __thiscall IVROverlay_019_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-HmdMatrix44_t *__thiscall IVRSystem_016_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+EVROverlayError __thiscall IVROverlay_019_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-void __thiscall IVRSystem_016_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+bool __thiscall IVROverlay_019_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-bool __thiscall IVRSystem_016_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-HmdMatrix34_t *__thiscall IVRSystem_016_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-bool __thiscall IVRSystem_016_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-int32_t __thiscall IVRSystem_016_GetD3D9AdapterIndex(void *_this);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRSystem_016_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+bool __thiscall IVROverlay_019_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void __thiscall IVRSystem_016_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType);
+bool __thiscall IVROverlay_019_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_016_IsDisplayOnDesktop(void *_this);
+VROverlayHandle_t __thiscall IVROverlay_019_GetGamepadFocusOverlay(void *_this);
 
-bool __thiscall IVRSystem_016_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+EVROverlayError __thiscall IVROverlay_019_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-void __thiscall IVRSystem_016_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-void __thiscall IVRSystem_016_ResetSeatedZeroPose(void *_this);
+EVROverlayError __thiscall IVROverlay_019_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-HmdMatrix34_t *__thiscall IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
 
-HmdMatrix34_t *__thiscall IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
 
-uint32_t __thiscall IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EDeviceActivityLevel __thiscall IVRSystem_016_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_019_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_016_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_016_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-ETrackedControllerRole __thiscall IVRSystem_016_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-ETrackedDeviceClass __thiscall IVRSystem_016_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_019_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-bool __thiscall IVRSystem_016_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-bool __thiscall IVRSystem_016_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_019_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-float __thiscall IVRSystem_016_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+bool __thiscall IVROverlay_019_IsDashboardVisible(void *_this);
 
-int32_t __thiscall IVRSystem_016_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+bool __thiscall IVROverlay_019_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint64_t __thiscall IVRSystem_016_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_019_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-HmdMatrix34_t *__thiscall IVRSystem_016_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_019_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-uint32_t __thiscall IVRSystem_016_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+void __thiscall IVROverlay_019_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-const char * __thiscall IVRSystem_016_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+TrackedDeviceIndex_t __thiscall IVROverlay_019_GetPrimaryDashboardDevice(void *_this);
 
-bool __thiscall IVRSystem_016_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_019_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-bool __thiscall IVRSystem_016_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_019_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-const char * __thiscall IVRSystem_016_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+uint32_t __thiscall IVROverlay_019_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_016_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+void __thiscall IVROverlay_019_HideKeyboard(void *_this);
 
-bool __thiscall IVRSystem_016_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+void __thiscall IVROverlay_019_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-bool __thiscall IVRSystem_016_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+void __thiscall IVROverlay_019_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-void __thiscall IVRSystem_016_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVROverlayError __thiscall IVROverlay_019_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-const char * __thiscall IVRSystem_016_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+EVROverlayError __thiscall IVROverlay_019_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-const char * __thiscall IVRSystem_016_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+VRMessageOverlayResponse __thiscall IVROverlay_019_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-bool __thiscall IVRSystem_016_CaptureInputFocus(void *_this);
+void __thiscall IVROverlay_019_CloseMessageOverlay(void *_this);
 
-void __thiscall IVRSystem_016_ReleaseInputFocus(void *_this);
+void test_capi_thunks_IVROverlay_020(void);
 
-bool __thiscall IVRSystem_016_IsInputFocusCapturedByAnotherProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_020_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-uint32_t __thiscall IVRSystem_016_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+EVROverlayError __thiscall IVROverlay_020_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-EVRFirmwareError __thiscall IVRSystem_016_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_020_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_016_AcknowledgeQuit_Exiting(void *_this);
+uint32_t __thiscall IVROverlay_020_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRSystem_016_AcknowledgeQuit_UserPrompt(void *_this);
+uint32_t __thiscall IVROverlay_020_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void test_capi_thunks_IVRCompositor_020(void);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-void __thiscall IVRCompositor_020_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_020_GetTrackingSpace(void *_this);
+const char * __thiscall IVROverlay_020_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVRCompositorError __thiscall IVRCompositor_020_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVRCompositorError __thiscall IVRCompositor_020_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+uint32_t __thiscall IVROverlay_020_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVRCompositorError __thiscall IVRCompositor_020_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void __thiscall IVRCompositor_020_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-void __thiscall IVRCompositor_020_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-bool __thiscall IVRCompositor_020_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-uint32_t __thiscall IVRCompositor_020_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-float __thiscall IVRCompositor_020_GetFrameTimeRemaining(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void __thiscall IVRCompositor_020_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRCompositor_020_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_020_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-HmdColor_t *__thiscall IVRCompositor_020_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+EVROverlayError __thiscall IVROverlay_020_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-void __thiscall IVRCompositor_020_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-float __thiscall IVRCompositor_020_GetCurrentGridAlpha(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVRCompositorError __thiscall IVRCompositor_020_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
 
-void __thiscall IVRCompositor_020_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
 
-void __thiscall IVRCompositor_020_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-void __thiscall IVRCompositor_020_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-void __thiscall IVRCompositor_020_CompositorQuit(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVRCompositor_020_IsFullscreen(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-uint32_t __thiscall IVRCompositor_020_GetCurrentSceneFocusProcess(void *_this);
+uint32_t __thiscall IVROverlay_020_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
 
-uint32_t __thiscall IVRCompositor_020_GetLastFrameRenderer(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
 
-bool __thiscall IVRCompositor_020_CanRenderScene(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-void __thiscall IVRCompositor_020_ShowMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-void __thiscall IVRCompositor_020_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRCompositor_020_IsMirrorWindowVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVRCompositor_020_CompositorDumpImages(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-bool __thiscall IVRCompositor_020_ShouldAppRenderWithLowResources(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-void __thiscall IVRCompositor_020_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-void __thiscall IVRCompositor_020_ForceReconnectProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-void __thiscall IVRCompositor_020_SuspendRendering(void *_this, bool bSuspend);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVRCompositorError __thiscall IVRCompositor_020_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_020_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_020_ReleaseMirrorTextureD3D11(void *_this, void * pD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_020_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_020_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+bool __thiscall IVROverlay_020_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_020_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_020_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-void __thiscall IVRCompositor_020_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+bool __thiscall IVROverlay_020_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVRCompositor_020_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-uint32_t __thiscall IVRCompositor_020_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-uint32_t __thiscall IVRCompositor_020_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void test_capi_thunks_IVRClientCore_002(void);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVRInitError __thiscall IVRClientCore_002_Init(void *_this, EVRApplicationType eApplicationType);
+bool __thiscall IVROverlay_020_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void __thiscall IVRClientCore_002_Cleanup(void *_this);
+bool __thiscall IVROverlay_020_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRInitError __thiscall IVRClientCore_002_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion);
+VROverlayHandle_t __thiscall IVROverlay_020_GetGamepadFocusOverlay(void *_this);
 
-void * __thiscall IVRClientCore_002_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError);
+EVROverlayError __thiscall IVROverlay_020_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
 
-bool __thiscall IVRClientCore_002_BIsHmdPresent(void *_this);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
 
-const char * __thiscall IVRClientCore_002_GetEnglishStringForHmdError(void *_this, EVRInitError eError);
+EVROverlayError __thiscall IVROverlay_020_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
 
-const char * __thiscall IVRClientCore_002_GetIDForVRInitError(void *_this, EVRInitError eError);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
 
-void test_capi_thunks_IVRSystem_015(void);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
 
-void __thiscall IVRSystem_015_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-HmdMatrix44_t *__thiscall IVRSystem_015_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+EVROverlayError __thiscall IVROverlay_020_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_015_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-bool __thiscall IVRSystem_015_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-HmdMatrix34_t *__thiscall IVRSystem_015_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-bool __thiscall IVRSystem_015_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVROverlayError __thiscall IVROverlay_020_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-int32_t __thiscall IVRSystem_015_GetD3D9AdapterIndex(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-void __thiscall IVRSystem_015_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVROverlayError __thiscall IVROverlay_020_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-bool __thiscall IVRSystem_015_IsDisplayOnDesktop(void *_this);
+bool __thiscall IVROverlay_020_IsDashboardVisible(void *_this);
 
-bool __thiscall IVRSystem_015_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+bool __thiscall IVROverlay_020_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_015_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_020_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-void __thiscall IVRSystem_015_ResetSeatedZeroPose(void *_this);
+EVROverlayError __thiscall IVROverlay_020_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-HmdMatrix34_t *__thiscall IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+void __thiscall IVROverlay_020_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-HmdMatrix34_t *__thiscall IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+TrackedDeviceIndex_t __thiscall IVROverlay_020_GetPrimaryDashboardDevice(void *_this);
 
-uint32_t __thiscall IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVROverlayError __thiscall IVROverlay_020_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EDeviceActivityLevel __thiscall IVRSystem_015_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_020_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-void __thiscall IVRSystem_015_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+uint32_t __thiscall IVROverlay_020_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_015_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+void __thiscall IVROverlay_020_HideKeyboard(void *_this);
 
-ETrackedControllerRole __thiscall IVRSystem_015_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void __thiscall IVROverlay_020_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-ETrackedDeviceClass __thiscall IVRSystem_015_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void __thiscall IVROverlay_020_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-bool __thiscall IVRSystem_015_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_020_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-bool __thiscall IVRSystem_015_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_020_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-float __thiscall IVRSystem_015_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+VRMessageOverlayResponse __thiscall IVROverlay_020_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-int32_t __thiscall IVRSystem_015_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void __thiscall IVROverlay_020_CloseMessageOverlay(void *_this);
 
-uint64_t __thiscall IVRSystem_015_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void test_capi_thunks_IVROverlay_021(void);
 
-HmdMatrix34_t *__thiscall IVRSystem_015_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_021_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-uint32_t __thiscall IVRSystem_015_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_021_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-const char * __thiscall IVRSystem_015_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVROverlayError __thiscall IVROverlay_021_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_015_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+uint32_t __thiscall IVROverlay_021_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-bool __thiscall IVRSystem_015_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+uint32_t __thiscall IVROverlay_021_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-const char * __thiscall IVRSystem_015_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_015_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-bool __thiscall IVRSystem_015_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+const char * __thiscall IVROverlay_021_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-bool __thiscall IVRSystem_015_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-void __thiscall IVRSystem_015_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+uint32_t __thiscall IVROverlay_021_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-const char * __thiscall IVRSystem_015_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-const char * __thiscall IVRSystem_015_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-bool __thiscall IVRSystem_015_CaptureInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-void __thiscall IVRSystem_015_ReleaseInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-bool __thiscall IVRSystem_015_IsInputFocusCapturedByAnotherProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-uint32_t __thiscall IVRSystem_015_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVRFirmwareError __thiscall IVRSystem_015_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void __thiscall IVRSystem_015_AcknowledgeQuit_Exiting(void *_this);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRSystem_015_AcknowledgeQuit_UserPrompt(void *_this);
+EVROverlayError __thiscall IVROverlay_021_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-void test_capi_thunks_IVROverlay_014(void);
+EVROverlayError __thiscall IVROverlay_021_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-EVROverlayError __thiscall IVROverlay_014_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_014_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_014_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-EVROverlayError __thiscall IVROverlay_014_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-VROverlayHandle_t __thiscall IVROverlay_014_GetHighQualityOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-uint32_t __thiscall IVROverlay_014_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-uint32_t __thiscall IVROverlay_014_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-const char * __thiscall IVROverlay_014_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+uint32_t __thiscall IVROverlay_021_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
 
-uint32_t __thiscall IVROverlay_014_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+EVROverlayError __thiscall IVROverlay_021_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+EVROverlayError __thiscall IVROverlay_021_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+bool __thiscall IVROverlay_021_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+EVROverlayError __thiscall IVROverlay_021_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+bool __thiscall IVROverlay_021_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+bool __thiscall IVROverlay_021_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+bool __thiscall IVROverlay_021_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_021_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVROverlayError __thiscall IVROverlay_014_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_014_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-bool __thiscall IVROverlay_014_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-EVROverlayError __thiscall IVROverlay_014_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+EVROverlayError __thiscall IVROverlay_021_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-bool __thiscall IVROverlay_014_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVROverlay_021_IsDashboardVisible(void *_this);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+bool __thiscall IVROverlay_021_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+EVROverlayError __thiscall IVROverlay_021_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_021_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+void __thiscall IVROverlay_021_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-bool __thiscall IVROverlay_014_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+TrackedDeviceIndex_t __thiscall IVROverlay_021_GetPrimaryDashboardDevice(void *_this);
 
-bool __thiscall IVROverlay_014_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
+EVROverlayError __thiscall IVROverlay_021_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-bool __thiscall IVROverlay_014_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-VROverlayHandle_t __thiscall IVROverlay_014_GetGamepadFocusOverlay(void *_this);
+uint32_t __thiscall IVROverlay_021_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_014_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+void __thiscall IVROverlay_021_HideKeyboard(void *_this);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+void __thiscall IVROverlay_021_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVROverlayError __thiscall IVROverlay_014_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+void __thiscall IVROverlay_021_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVROverlayError __thiscall IVROverlay_021_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-EVROverlayError __thiscall IVROverlay_014_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_021_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+VRMessageOverlayResponse __thiscall IVROverlay_021_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+void __thiscall IVROverlay_021_CloseMessageOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
+void test_capi_thunks_IVROverlay_022(void);
 
-EVROverlayError __thiscall IVROverlay_014_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVROverlayError __thiscall IVROverlay_022_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVROverlayError __thiscall IVROverlay_022_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVROverlayError __thiscall IVROverlay_022_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_014_IsDashboardVisible(void *_this);
+uint32_t __thiscall IVROverlay_022_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-bool __thiscall IVROverlay_014_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVROverlay_022_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_014_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-EVROverlayError __thiscall IVROverlay_014_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-void __thiscall IVROverlay_014_ShowDashboard(void *_this, const char * pchOverlayToShow);
+const char * __thiscall IVROverlay_022_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_014_GetPrimaryDashboardDevice(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVROverlayError __thiscall IVROverlay_014_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+uint32_t __thiscall IVROverlay_022_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_014_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-uint32_t __thiscall IVROverlay_014_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void __thiscall IVROverlay_014_HideKeyboard(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-void __thiscall IVROverlay_014_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-void __thiscall IVROverlay_014_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_014_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_014_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-VRMessageOverlayResponse __thiscall IVROverlay_014_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void test_capi_thunks_IVRCompositor_019(void);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRCompositor_019_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_022_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_019_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-EVRCompositorError __thiscall IVRCompositor_019_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-EVRCompositorError __thiscall IVRCompositor_019_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVRCompositorError __thiscall IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-EVRCompositorError __thiscall IVRCompositor_019_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-void __thiscall IVRCompositor_019_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-void __thiscall IVRCompositor_019_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-bool __thiscall IVRCompositor_019_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-uint32_t __thiscall IVRCompositor_019_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-float __thiscall IVRCompositor_019_GetFrameTimeRemaining(void *_this);
+uint32_t __thiscall IVROverlay_022_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_019_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor);
 
-void __thiscall IVRCompositor_019_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-HmdColor_t *__thiscall IVRCompositor_019_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-void __thiscall IVRCompositor_019_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-float __thiscall IVRCompositor_019_GetCurrentGridAlpha(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVRCompositorError __thiscall IVRCompositor_019_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVRCompositor_019_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-void __thiscall IVRCompositor_019_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-void __thiscall IVRCompositor_019_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-void __thiscall IVRCompositor_019_CompositorQuit(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-bool __thiscall IVRCompositor_019_IsFullscreen(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
 
-uint32_t __thiscall IVRCompositor_019_GetCurrentSceneFocusProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
 
-uint32_t __thiscall IVRCompositor_019_GetLastFrameRenderer(void *_this);
+EVROverlayError __thiscall IVROverlay_022_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_019_CanRenderScene(void *_this);
+EVROverlayError __thiscall IVROverlay_022_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_019_ShowMirrorWindow(void *_this);
+bool __thiscall IVROverlay_022_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_019_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-bool __thiscall IVRCompositor_019_IsMirrorWindowVisible(void *_this);
+bool __thiscall IVROverlay_022_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVRCompositor_019_CompositorDumpImages(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-bool __thiscall IVRCompositor_019_ShouldAppRenderWithLowResources(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-void __thiscall IVRCompositor_019_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRCompositor_019_ForceReconnectProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRCompositor_019_SuspendRendering(void *_this, bool bSuspend);
+bool __thiscall IVROverlay_022_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVRCompositorError __thiscall IVRCompositor_019_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+bool __thiscall IVROverlay_022_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_019_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius);
 
-bool __thiscall IVRCompositor_019_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius);
 
-void __thiscall IVRCompositor_019_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-void __thiscall IVRCompositor_019_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_022_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-uint32_t __thiscall IVRCompositor_019_GetVulkanInstanceExtensionsRequired(void *_this, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
 
-uint32_t __thiscall IVRCompositor_019_GetVulkanDeviceExtensionsRequired(void *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
 
-void test_capi_thunks_IVRSystem_014(void);
+EVROverlayError __thiscall IVROverlay_022_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_014_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-HmdMatrix44_t *__thiscall IVRSystem_014_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
+EVROverlayError __thiscall IVROverlay_022_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_014_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
 
-bool __thiscall IVRSystem_014_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+EVROverlayError __thiscall IVROverlay_022_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-HmdMatrix34_t *__thiscall IVRSystem_014_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-bool __thiscall IVRSystem_014_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVROverlayError __thiscall IVROverlay_022_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-int32_t __thiscall IVRSystem_014_GetD3D9AdapterIndex(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-void __thiscall IVRSystem_014_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVROverlayError __thiscall IVROverlay_022_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-bool __thiscall IVRSystem_014_IsDisplayOnDesktop(void *_this);
+bool __thiscall IVROverlay_022_IsDashboardVisible(void *_this);
 
-bool __thiscall IVRSystem_014_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+bool __thiscall IVROverlay_022_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_014_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_022_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-void __thiscall IVRSystem_014_ResetSeatedZeroPose(void *_this);
+EVROverlayError __thiscall IVROverlay_022_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-HmdMatrix34_t *__thiscall IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+void __thiscall IVROverlay_022_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-HmdMatrix34_t *__thiscall IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+TrackedDeviceIndex_t __thiscall IVROverlay_022_GetPrimaryDashboardDevice(void *_this);
 
-uint32_t __thiscall IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVROverlayError __thiscall IVROverlay_022_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-EDeviceActivityLevel __thiscall IVRSystem_014_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_022_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
 
-void __thiscall IVRSystem_014_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+uint32_t __thiscall IVROverlay_022_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_014_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+void __thiscall IVROverlay_022_HideKeyboard(void *_this);
 
-ETrackedControllerRole __thiscall IVRSystem_014_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void __thiscall IVROverlay_022_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-ETrackedDeviceClass __thiscall IVRSystem_014_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void __thiscall IVROverlay_022_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-bool __thiscall IVRSystem_014_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+VRMessageOverlayResponse __thiscall IVROverlay_022_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-bool __thiscall IVRSystem_014_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void __thiscall IVROverlay_022_CloseMessageOverlay(void *_this);
 
-float __thiscall IVRSystem_014_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void test_capi_thunks_IVROverlay_024(void);
 
-int32_t __thiscall IVRSystem_014_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_024_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-uint64_t __thiscall IVRSystem_014_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_024_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-HmdMatrix34_t *__thiscall IVRSystem_014_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_024_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVRSystem_014_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+uint32_t __thiscall IVROverlay_024_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-const char * __thiscall IVRSystem_014_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+uint32_t __thiscall IVROverlay_024_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-bool __thiscall IVRSystem_014_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-bool __thiscall IVRSystem_014_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-const char * __thiscall IVRSystem_014_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+const char * __thiscall IVROverlay_024_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_014_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-bool __thiscall IVRSystem_014_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+uint32_t __thiscall IVROverlay_024_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_014_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-void __thiscall IVRSystem_014_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-const char * __thiscall IVRSystem_014_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-const char * __thiscall IVRSystem_014_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-bool __thiscall IVRSystem_014_CaptureInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-void __thiscall IVRSystem_014_ReleaseInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-bool __thiscall IVRSystem_014_IsInputFocusCapturedByAnotherProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-uint32_t __thiscall IVRSystem_014_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-EVRFirmwareError __thiscall IVRSystem_014_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRSystem_014_AcknowledgeQuit_Exiting(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-void __thiscall IVRSystem_014_AcknowledgeQuit_UserPrompt(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-void test_capi_thunks_IVRCompositor_018(void);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-void __thiscall IVRCompositor_018_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_018_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-EVRCompositorError __thiscall IVRCompositor_018_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-EVRCompositorError __thiscall IVRCompositor_018_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVRCompositorError __thiscall IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVRCompositorError __thiscall IVRCompositor_018_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVRCompositor_018_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-void __thiscall IVRCompositor_018_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-bool __thiscall IVRCompositor_018_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-uint32_t __thiscall IVRCompositor_018_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-float __thiscall IVRCompositor_018_GetFrameTimeRemaining(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVRCompositor_018_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-void __thiscall IVRCompositor_018_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-HmdColor_t *__thiscall IVRCompositor_018_GetCurrentFadeColor(void *_this, HmdColor_t *_r, bool bBackground);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-void __thiscall IVRCompositor_018_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-float __thiscall IVRCompositor_018_GetCurrentGridAlpha(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVRCompositorError __thiscall IVRCompositor_018_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
 
-void __thiscall IVRCompositor_018_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
 
-void __thiscall IVRCompositor_018_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_024_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_018_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_024_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_018_CompositorQuit(void *_this);
+bool __thiscall IVROverlay_024_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_018_IsFullscreen(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-uint32_t __thiscall IVRCompositor_018_GetCurrentSceneFocusProcess(void *_this);
+bool __thiscall IVROverlay_024_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-uint32_t __thiscall IVRCompositor_018_GetLastFrameRenderer(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-bool __thiscall IVRCompositor_018_CanRenderScene(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-void __thiscall IVRCompositor_018_ShowMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-void __thiscall IVRCompositor_018_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRCompositor_018_IsMirrorWindowVisible(void *_this);
+bool __thiscall IVROverlay_024_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void __thiscall IVRCompositor_018_CompositorDumpImages(void *_this);
+bool __thiscall IVROverlay_024_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_018_ShouldAppRenderWithLowResources(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-void __thiscall IVRCompositor_018_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVROverlayError __thiscall IVROverlay_024_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-void __thiscall IVRCompositor_018_ForceReconnectProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
 
-void __thiscall IVRCompositor_018_SuspendRendering(void *_this, bool bSuspend);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
 
-EVRCompositorError __thiscall IVRCompositor_018_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_024_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_018_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-bool __thiscall IVRCompositor_018_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_024_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_018_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
 
-void __thiscall IVRCompositor_018_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_024_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-void test_capi_thunks_IVROverlay_013(void);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-EVROverlayError __thiscall IVROverlay_013_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_024_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-EVROverlayError __thiscall IVROverlay_013_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
+EVROverlayError __thiscall IVROverlay_024_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-EVROverlayError __thiscall IVROverlay_013_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_024_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-EVROverlayError __thiscall IVROverlay_013_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVROverlay_024_IsDashboardVisible(void *_this);
 
-VROverlayHandle_t __thiscall IVROverlay_013_GetHighQualityOverlay(void *_this);
+bool __thiscall IVROverlay_024_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVROverlay_013_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_024_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-uint32_t __thiscall IVROverlay_013_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+EVROverlayError __thiscall IVROverlay_024_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+void __thiscall IVROverlay_024_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-const char * __thiscall IVROverlay_013_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+TrackedDeviceIndex_t __thiscall IVROverlay_024_GetPrimaryDashboardDevice(void *_this);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+EVROverlayError __thiscall IVROverlay_024_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-uint32_t __thiscall IVROverlay_013_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_024_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+uint32_t __thiscall IVROverlay_024_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+void __thiscall IVROverlay_024_HideKeyboard(void *_this);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+void __thiscall IVROverlay_024_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+void __thiscall IVROverlay_024_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+VRMessageOverlayResponse __thiscall IVROverlay_024_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+void __thiscall IVROverlay_024_CloseMessageOverlay(void *_this);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
+void test_capi_thunks_IVROverlay_025(void);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
+EVROverlayError __thiscall IVROverlay_025_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
+EVROverlayError __thiscall IVROverlay_025_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
+EVROverlayError __thiscall IVROverlay_025_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+uint32_t __thiscall IVROverlay_025_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+uint32_t __thiscall IVROverlay_025_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+const char * __thiscall IVROverlay_025_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+uint32_t __thiscall IVROverlay_025_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-EVROverlayError __thiscall IVROverlay_013_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-EVROverlayError __thiscall IVROverlay_013_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_025_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-bool __thiscall IVROverlay_013_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_025_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-EVROverlayError __thiscall IVROverlay_013_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-bool __thiscall IVROverlay_013_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-bool __thiscall IVROverlay_013_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVROverlay_013_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-bool __thiscall IVROverlay_013_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-VROverlayHandle_t __thiscall IVROverlay_013_GetGamepadFocusOverlay(void *_this);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-EVROverlayError __thiscall IVROverlay_013_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
 
-EVROverlayError __thiscall IVROverlay_013_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
 
-EVROverlayError __thiscall IVROverlay_013_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
 
-EVROverlayError __thiscall IVROverlay_013_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+EVROverlayError __thiscall IVROverlay_025_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_013_IsDashboardVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_025_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVROverlay_013_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVROverlay_025_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVROverlayError __thiscall IVROverlay_013_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+EVROverlayError __thiscall IVROverlay_025_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-EVROverlayError __thiscall IVROverlay_013_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+bool __thiscall IVROverlay_025_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVROverlay_013_ShowDashboard(void *_this, const char * pchOverlayToShow);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-TrackedDeviceIndex_t __thiscall IVROverlay_013_GetPrimaryDashboardDevice(void *_this);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-EVROverlayError __thiscall IVROverlay_013_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVROverlayError __thiscall IVROverlay_013_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-uint32_t __thiscall IVROverlay_013_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+bool __thiscall IVROverlay_025_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-void __thiscall IVROverlay_013_HideKeyboard(void *_this);
+bool __thiscall IVROverlay_025_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVROverlay_013_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-void __thiscall IVROverlay_013_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+EVROverlayError __thiscall IVROverlay_025_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-EVROverlayError __thiscall IVROverlay_013_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
 
-void test_capi_thunks_IVRCompositor_017(void);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
 
-void __thiscall IVRCompositor_017_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_025_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_017_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRCompositorError __thiscall IVRCompositor_017_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_025_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_017_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
 
-EVRCompositorError __thiscall IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_025_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVRCompositorError __thiscall IVRCompositor_017_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-void __thiscall IVRCompositor_017_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_025_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-void __thiscall IVRCompositor_017_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_025_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-bool __thiscall IVRCompositor_017_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_025_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-uint32_t __thiscall IVRCompositor_017_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames);
+bool __thiscall IVROverlay_025_IsDashboardVisible(void *_this);
 
-float __thiscall IVRCompositor_017_GetFrameTimeRemaining(void *_this);
+bool __thiscall IVROverlay_025_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_017_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVROverlayError __thiscall IVROverlay_025_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-void __thiscall IVRCompositor_017_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_025_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-void __thiscall IVRCompositor_017_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+void __thiscall IVROverlay_025_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-EVRCompositorError __thiscall IVRCompositor_017_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+TrackedDeviceIndex_t __thiscall IVROverlay_025_GetPrimaryDashboardDevice(void *_this);
 
-void __thiscall IVRCompositor_017_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_025_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-void __thiscall IVRCompositor_017_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_025_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-void __thiscall IVRCompositor_017_CompositorGoToBack(void *_this);
+uint32_t __thiscall IVROverlay_025_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-void __thiscall IVRCompositor_017_CompositorQuit(void *_this);
+void __thiscall IVROverlay_025_HideKeyboard(void *_this);
 
-bool __thiscall IVRCompositor_017_IsFullscreen(void *_this);
+void __thiscall IVROverlay_025_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-uint32_t __thiscall IVRCompositor_017_GetCurrentSceneFocusProcess(void *_this);
+void __thiscall IVROverlay_025_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-uint32_t __thiscall IVRCompositor_017_GetLastFrameRenderer(void *_this);
+VRMessageOverlayResponse __thiscall IVROverlay_025_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-bool __thiscall IVRCompositor_017_CanRenderScene(void *_this);
+void __thiscall IVROverlay_025_CloseMessageOverlay(void *_this);
 
-void __thiscall IVRCompositor_017_ShowMirrorWindow(void *_this);
+void test_capi_thunks_IVROverlay_026(void);
 
-void __thiscall IVRCompositor_017_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_026_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-bool __thiscall IVRCompositor_017_IsMirrorWindowVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_026_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVRCompositor_017_CompositorDumpImages(void *_this);
+EVROverlayError __thiscall IVROverlay_026_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRCompositor_017_ShouldAppRenderWithLowResources(void *_this);
+uint32_t __thiscall IVROverlay_026_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_017_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+uint32_t __thiscall IVROverlay_026_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_017_ForceReconnectProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-void __thiscall IVRCompositor_017_SuspendRendering(void *_this, bool bSuspend);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+const char * __thiscall IVROverlay_026_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-bool __thiscall IVRCompositor_017_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+uint32_t __thiscall IVROverlay_026_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_017_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-void __thiscall IVRCompositor_017_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-void test_capi_thunks_IVRSystem_012(void);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-void __thiscall IVRSystem_012_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-HmdMatrix44_t *__thiscall IVRSystem_012_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-void __thiscall IVRSystem_012_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-DistortionCoordinates_t *__thiscall IVRSystem_012_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-HmdMatrix34_t *__thiscall IVRSystem_012_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-bool __thiscall IVRSystem_012_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-int32_t __thiscall IVRSystem_012_GetD3D9AdapterIndex(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-void __thiscall IVRSystem_012_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVROverlayError __thiscall IVROverlay_026_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-bool __thiscall IVRSystem_012_IsDisplayOnDesktop(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-bool __thiscall IVRSystem_012_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-void __thiscall IVRSystem_012_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-void __thiscall IVRSystem_012_ResetSeatedZeroPose(void *_this);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-HmdMatrix34_t *__thiscall IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float fRadians);
 
-HmdMatrix34_t *__thiscall IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRadians);
 
-uint32_t __thiscall IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EDeviceActivityLevel __thiscall IVRSystem_012_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-void __thiscall IVRSystem_012_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_012_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-ETrackedControllerRole __thiscall IVRSystem_012_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-ETrackedDeviceClass __thiscall IVRSystem_012_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRSystem_012_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRSystem_012_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-float __thiscall IVRSystem_012_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-int32_t __thiscall IVRSystem_012_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-uint64_t __thiscall IVRSystem_012_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-HmdMatrix34_t *__thiscall IVRSystem_012_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-uint32_t __thiscall IVRSystem_012_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform);
 
-const char * __thiscall IVRSystem_012_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
 
-bool __thiscall IVRSystem_012_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
 
-bool __thiscall IVRSystem_012_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
 
-const char * __thiscall IVRSystem_012_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+EVROverlayError __thiscall IVROverlay_026_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_012_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
+EVROverlayError __thiscall IVROverlay_026_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_012_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+bool __thiscall IVROverlay_026_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-bool __thiscall IVRSystem_012_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+EVROverlayError __thiscall IVROverlay_026_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-void __thiscall IVRSystem_012_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVROverlayError __thiscall IVROverlay_026_WaitFrameSync(void *_this, uint32_t nTimeoutMs);
 
-const char * __thiscall IVRSystem_012_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+bool __thiscall IVROverlay_026_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-const char * __thiscall IVRSystem_012_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-bool __thiscall IVRSystem_012_CaptureInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-void __thiscall IVRSystem_012_ReleaseInputFocus(void *_this);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-bool __thiscall IVRSystem_012_IsInputFocusCapturedByAnotherProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-uint32_t __thiscall IVRSystem_012_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+bool __thiscall IVROverlay_026_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVRFirmwareError __thiscall IVRSystem_012_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+bool __thiscall IVROverlay_026_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRSystem_012_AcknowledgeQuit_Exiting(void *_this);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-void __thiscall IVRSystem_012_AcknowledgeQuit_UserPrompt(void *_this);
+EVROverlayError __thiscall IVROverlay_026_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-void test_capi_thunks_IVRCompositor_016(void);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
 
-void __thiscall IVRCompositor_016_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_016_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_026_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_016_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-EVRCompositorError __thiscall IVRCompositor_016_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVROverlayError __thiscall IVROverlay_026_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
 
-EVRCompositorError __thiscall IVRCompositor_016_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_026_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-void __thiscall IVRCompositor_016_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-void __thiscall IVRCompositor_016_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_026_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-bool __thiscall IVRCompositor_016_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_026_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-float __thiscall IVRCompositor_016_GetFrameTimeRemaining(void *_this);
+EVROverlayError __thiscall IVROverlay_026_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-void __thiscall IVRCompositor_016_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+bool __thiscall IVROverlay_026_IsDashboardVisible(void *_this);
 
-void __thiscall IVRCompositor_016_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+bool __thiscall IVROverlay_026_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_016_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_026_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-EVRCompositorError __thiscall IVRCompositor_016_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_026_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-void __thiscall IVRCompositor_016_ClearSkyboxOverride(void *_this);
+void __thiscall IVROverlay_026_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-void __thiscall IVRCompositor_016_CompositorBringToFront(void *_this);
+TrackedDeviceIndex_t __thiscall IVROverlay_026_GetPrimaryDashboardDevice(void *_this);
 
-void __thiscall IVRCompositor_016_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_026_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-void __thiscall IVRCompositor_016_CompositorQuit(void *_this);
+EVROverlayError __thiscall IVROverlay_026_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-bool __thiscall IVRCompositor_016_IsFullscreen(void *_this);
+uint32_t __thiscall IVROverlay_026_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-uint32_t __thiscall IVRCompositor_016_GetCurrentSceneFocusProcess(void *_this);
+void __thiscall IVROverlay_026_HideKeyboard(void *_this);
 
-uint32_t __thiscall IVRCompositor_016_GetLastFrameRenderer(void *_this);
+void __thiscall IVROverlay_026_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-bool __thiscall IVRCompositor_016_CanRenderScene(void *_this);
+void __thiscall IVROverlay_026_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-void __thiscall IVRCompositor_016_ShowMirrorWindow(void *_this);
+VRMessageOverlayResponse __thiscall IVROverlay_026_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-void __thiscall IVRCompositor_016_HideMirrorWindow(void *_this);
+void __thiscall IVROverlay_026_CloseMessageOverlay(void *_this);
 
-bool __thiscall IVRCompositor_016_IsMirrorWindowVisible(void *_this);
+void test_capi_thunks_IVROverlay_027(void);
 
-void __thiscall IVRCompositor_016_CompositorDumpImages(void *_this);
+EVROverlayError __thiscall IVROverlay_027_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
 
-bool __thiscall IVRCompositor_016_ShouldAppRenderWithLowResources(void *_this);
+EVROverlayError __thiscall IVROverlay_027_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle);
 
-void __thiscall IVRCompositor_016_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+EVROverlayError __thiscall IVROverlay_027_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_016_ForceReconnectProcess(void *_this);
+uint32_t __thiscall IVROverlay_027_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-void __thiscall IVRCompositor_016_SuspendRendering(void *_this, bool bSuspend);
+uint32_t __thiscall IVROverlay_027_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
 
-EVRCompositorError __thiscall IVRCompositor_016_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName);
 
-EVRCompositorError __thiscall IVRCompositor_016_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
 
-bool __thiscall IVRCompositor_016_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+const char * __thiscall IVROverlay_027_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
 
-void __thiscall IVRCompositor_016_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
 
-void __thiscall IVRCompositor_016_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+uint32_t __thiscall IVROverlay_027_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void test_capi_thunks_IVRSettings_001(void);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
 
-const char * __thiscall IVRSettings_001_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
 
-bool __thiscall IVRSettings_001_Sync(void *_this, bool bForce, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags);
 
-bool __thiscall IVRSettings_001_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bDefaultValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
 
-void __thiscall IVRSettings_001_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
 
-int32_t __thiscall IVRSettings_001_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nDefaultValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
 
-void __thiscall IVRSettings_001_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
 
-float __thiscall IVRSettings_001_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flDefaultValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect);
 
-void __thiscall IVRSettings_001_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect);
 
-void __thiscall IVRSettings_001_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, const char * pchDefaultValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder);
 
-void __thiscall IVRSettings_001_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder);
 
-void __thiscall IVRSettings_001_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
 
-void __thiscall IVRSettings_001_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
 
-void test_capi_thunks_IVRApplications_005(void);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature);
 
-EVRApplicationError __thiscall IVRApplications_005_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayCurvature(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature);
 
-EVRApplicationError __thiscall IVRApplications_005_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float fRadians);
 
-bool __thiscall IVRApplications_005_IsApplicationInstalled(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayPreCurvePitch(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRadians);
 
-uint32_t __thiscall IVRApplications_005_GetApplicationCount(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
 
-EVRApplicationError __thiscall IVRApplications_005_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
 
-EVRApplicationError __thiscall IVRApplications_005_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRApplicationError __thiscall IVRApplications_005_LaunchApplication(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
 
-EVRApplicationError __thiscall IVRApplications_005_LaunchTemplateApplication(void *_this, const char * pchTemplateAppKey, const char * pchNewAppKey, AppOverrideKeys_t * pKeys, uint32_t unKeys);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
 
-EVRApplicationError __thiscall IVRApplications_005_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-bool __thiscall IVRApplications_005_CancelApplicationLaunch(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
 
-EVRApplicationError __thiscall IVRApplications_005_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-uint32_t __thiscall IVRApplications_005_GetApplicationProcessId(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
 
-const char * __thiscall IVRApplications_005_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
 
-uint32_t __thiscall IVRApplications_005_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
 
-bool __thiscall IVRApplications_005_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformCursor(void *_this, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t * pvHotspot);
 
-uint64_t __thiscall IVRApplications_005_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTransformCursor(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvHotspot);
 
-EVRApplicationError __thiscall IVRApplications_005_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTransformProjection(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform, VROverlayProjection_t * pProjection, EVREye eEye);
 
-bool __thiscall IVRApplications_005_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationError __thiscall IVRApplications_005_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+EVROverlayError __thiscall IVROverlay_027_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationTransitionState __thiscall IVRApplications_005_GetTransitionState(void *_this);
+bool __thiscall IVROverlay_027_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRApplicationError __thiscall IVRApplications_005_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+EVROverlayError __thiscall IVROverlay_027_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
 
-const char * __thiscall IVRApplications_005_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+EVROverlayError __thiscall IVROverlay_027_WaitFrameSync(void *_this, uint32_t nTimeoutMs);
 
-bool __thiscall IVRApplications_005_IsQuitUserPromptRequested(void *_this);
+bool __thiscall IVROverlay_027_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVRApplicationError __thiscall IVRApplications_005_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
 
-void test_capi_thunks_IVRCompositor_015(void);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
 
-void __thiscall IVRCompositor_015_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_015_GetTrackingSpace(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
 
-EVRCompositorError __thiscall IVRCompositor_015_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVROverlay_027_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
 
-EVRCompositorError __thiscall IVRCompositor_015_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVROverlay_027_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-EVRCompositorError __thiscall IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize);
 
-EVRCompositorError __thiscall IVRCompositor_015_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVROverlayError __thiscall IVROverlay_027_TriggerLaserMouseHapticVibration(void *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude);
 
-void __thiscall IVRCompositor_015_ClearLastSubmittedFrame(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayCursor(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle);
 
-void __thiscall IVRCompositor_015_PostPresentHandoff(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvCursor);
 
-bool __thiscall IVRCompositor_015_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVROverlayError __thiscall IVROverlay_027_ClearOverlayCursorPositionOverride(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-float __thiscall IVRCompositor_015_GetFrameTimeRemaining(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
 
-void __thiscall IVRCompositor_015_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes);
+EVROverlayError __thiscall IVROverlay_027_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-void __thiscall IVRCompositor_015_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel);
 
-void __thiscall IVRCompositor_015_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVROverlayError __thiscall IVROverlay_027_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
 
-EVRCompositorError __thiscall IVRCompositor_015_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds);
 
-void __thiscall IVRCompositor_015_ClearSkyboxOverride(void *_this);
+EVROverlayError __thiscall IVROverlay_027_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
 
-void __thiscall IVRCompositor_015_CompositorBringToFront(void *_this);
+EVROverlayError __thiscall IVROverlay_027_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
 
-void __thiscall IVRCompositor_015_CompositorGoToBack(void *_this);
+EVROverlayError __thiscall IVROverlay_027_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
 
-void __thiscall IVRCompositor_015_CompositorQuit(void *_this);
+bool __thiscall IVROverlay_027_IsDashboardVisible(void *_this);
 
-bool __thiscall IVRCompositor_015_IsFullscreen(void *_this);
+bool __thiscall IVROverlay_027_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
 
-uint32_t __thiscall IVRCompositor_015_GetCurrentSceneFocusProcess(void *_this);
+EVROverlayError __thiscall IVROverlay_027_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
 
-uint32_t __thiscall IVRCompositor_015_GetLastFrameRenderer(void *_this);
+EVROverlayError __thiscall IVROverlay_027_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
 
-bool __thiscall IVRCompositor_015_CanRenderScene(void *_this);
+void __thiscall IVROverlay_027_ShowDashboard(void *_this, const char * pchOverlayToShow);
 
-void __thiscall IVRCompositor_015_ShowMirrorWindow(void *_this);
+TrackedDeviceIndex_t __thiscall IVROverlay_027_GetPrimaryDashboardDevice(void *_this);
 
-void __thiscall IVRCompositor_015_HideMirrorWindow(void *_this);
+EVROverlayError __thiscall IVROverlay_027_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-bool __thiscall IVRCompositor_015_IsMirrorWindowVisible(void *_this);
+EVROverlayError __thiscall IVROverlay_027_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, uint32_t unFlags, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, uint64_t uUserValue);
 
-void __thiscall IVRCompositor_015_CompositorDumpImages(void *_this);
+uint32_t __thiscall IVROverlay_027_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
 
-bool __thiscall IVRCompositor_015_ShouldAppRenderWithLowResources(void *_this);
+void __thiscall IVROverlay_027_HideKeyboard(void *_this);
 
-void __thiscall IVRCompositor_015_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
+void __thiscall IVROverlay_027_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
 
-void __thiscall IVRCompositor_015_ForceReconnectProcess(void *_this);
+void __thiscall IVROverlay_027_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
 
-void __thiscall IVRCompositor_015_SuspendRendering(void *_this, bool bSuspend);
+VRMessageOverlayResponse __thiscall IVROverlay_027_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text);
 
-EVRCompositorError __thiscall IVRCompositor_015_RequestScreenshot(void *_this, EVRScreenshotType type, const char * pchDestinationFileName, const char * pchVRDestinationFileName);
+void __thiscall IVROverlay_027_CloseMessageOverlay(void *_this);
 
-EVRScreenshotType __thiscall IVRCompositor_015_GetCurrentScreenshotType(void *_this);
+void test_capi_thunks_IVRRenderModels_001(void);
 
-EVRCompositorError __thiscall IVRCompositor_015_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView);
+bool __thiscall IVRRenderModels_001_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t * pRenderModel);
 
-EVRCompositorError __thiscall IVRCompositor_015_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle);
+void __thiscall IVRRenderModels_001_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
 
-bool __thiscall IVRCompositor_015_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle);
+uint32_t __thiscall IVRRenderModels_001_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
 
-void __thiscall IVRCompositor_015_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+uint32_t __thiscall IVRRenderModels_001_GetRenderModelCount(void *_this);
 
-void __thiscall IVRCompositor_015_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle);
+void test_capi_thunks_IVRRenderModels_002(void);
 
-void test_capi_thunks_IVROverlay_012(void);
+bool __thiscall IVRRenderModels_002_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
 
-EVROverlayError __thiscall IVROverlay_012_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+void __thiscall IVRRenderModels_002_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
 
-EVROverlayError __thiscall IVROverlay_012_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
+bool __thiscall IVRRenderModels_002_LoadTexture(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
 
-EVROverlayError __thiscall IVROverlay_012_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRRenderModels_002_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
 
-EVROverlayError __thiscall IVROverlay_012_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+uint32_t __thiscall IVRRenderModels_002_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
 
-VROverlayHandle_t __thiscall IVROverlay_012_GetHighQualityOverlay(void *_this);
+uint32_t __thiscall IVRRenderModels_002_GetRenderModelCount(void *_this);
 
-uint32_t __thiscall IVROverlay_012_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+uint32_t __thiscall IVRRenderModels_002_GetComponentCount(void *_this, const char * pchRenderModelName);
 
-uint32_t __thiscall IVROverlay_012_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+uint32_t __thiscall IVRRenderModels_002_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
 
-EVROverlayError __thiscall IVROverlay_012_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+uint64_t __thiscall IVRRenderModels_002_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-const char * __thiscall IVROverlay_012_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+uint32_t __thiscall IVRRenderModels_002_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
 
-EVROverlayError __thiscall IVROverlay_012_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
+bool __thiscall IVRRenderModels_002_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ComponentState_t * pComponentState);
 
-uint32_t __thiscall IVROverlay_012_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
-
-EVROverlayError __thiscall IVROverlay_012_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_012_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_012_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_012_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
-
-bool __thiscall IVROverlay_012_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_012_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_012_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-bool __thiscall IVROverlay_012_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_012_GetGamepadFocusOverlay(void *_this);
-
-EVROverlayError __thiscall IVROverlay_012_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
-
-EVROverlayError __thiscall IVROverlay_012_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_012_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-EVROverlayError __thiscall IVROverlay_012_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
-
-EVROverlayError __thiscall IVROverlay_012_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
-
-EVROverlayError __thiscall IVROverlay_012_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight);
-
-EVROverlayError __thiscall IVROverlay_012_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_012_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_012_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_012_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_012_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_012_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_012_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_012_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_012_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_012_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_012_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_012_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_012_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
-
-void test_capi_thunks_IVRTrackedCamera_002(void);
-
-const char * __thiscall IVRTrackedCamera_002_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraIntrinisics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
-
-EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
-
-void test_capi_thunks_IVRCompositor_014(void);
-
-void __thiscall IVRCompositor_014_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
-
-ETrackingUniverseOrigin __thiscall IVRCompositor_014_GetTrackingSpace(void *_this);
-
-EVRCompositorError __thiscall IVRCompositor_014_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-EVRCompositorError __thiscall IVRCompositor_014_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-EVRCompositorError __thiscall IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
-
-EVRCompositorError __thiscall IVRCompositor_014_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
-
-void __thiscall IVRCompositor_014_ClearLastSubmittedFrame(void *_this);
-
-void __thiscall IVRCompositor_014_PostPresentHandoff(void *_this);
-
-bool __thiscall IVRCompositor_014_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-float __thiscall IVRCompositor_014_GetFrameTimeRemaining(void *_this);
-
-void __thiscall IVRCompositor_014_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_014_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-EVRCompositorError __thiscall IVRCompositor_014_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
-
-void __thiscall IVRCompositor_014_ClearSkyboxOverride(void *_this);
-
-void __thiscall IVRCompositor_014_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_014_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_014_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_014_IsFullscreen(void *_this);
-
-uint32_t __thiscall IVRCompositor_014_GetCurrentSceneFocusProcess(void *_this);
-
-uint32_t __thiscall IVRCompositor_014_GetLastFrameRenderer(void *_this);
-
-bool __thiscall IVRCompositor_014_CanRenderScene(void *_this);
-
-void __thiscall IVRCompositor_014_ShowMirrorWindow(void *_this);
-
-void __thiscall IVRCompositor_014_HideMirrorWindow(void *_this);
-
-bool __thiscall IVRCompositor_014_IsMirrorWindowVisible(void *_this);
-
-void __thiscall IVRCompositor_014_CompositorDumpImages(void *_this);
-
-bool __thiscall IVRCompositor_014_ShouldAppRenderWithLowResources(void *_this);
-
-void __thiscall IVRCompositor_014_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
-
-void __thiscall IVRCompositor_014_ForceReconnectProcess(void *_this);
-
-void __thiscall IVRCompositor_014_SuspendRendering(void *_this, bool bSuspend);
-
-void test_capi_thunks_IVROverlay_011(void);
-
-EVROverlayError __thiscall IVROverlay_011_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_011_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_011_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_011_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_011_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID);
-
-uint32_t __thiscall IVROverlay_011_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
-
-EVROverlayError __thiscall IVROverlay_011_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_011_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
-
-bool __thiscall IVROverlay_011_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_011_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_011_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-bool __thiscall IVROverlay_011_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_011_GetGamepadFocusOverlay(void *_this);
-
-EVROverlayError __thiscall IVROverlay_011_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
-
-EVROverlayError __thiscall IVROverlay_011_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_011_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-EVROverlayError __thiscall IVROverlay_011_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_011_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, EGraphicsAPIConvention * pAPI, EColorSpace * pColorSpace);
-
-EVROverlayError __thiscall IVROverlay_011_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle);
-
-EVROverlayError __thiscall IVROverlay_011_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_011_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_011_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_011_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_011_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_011_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_011_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_011_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_011_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_011_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_011_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_011_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_011_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
-
-void test_capi_thunks_IVRCompositor_013(void);
-
-void __thiscall IVRCompositor_013_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
-
-ETrackingUniverseOrigin __thiscall IVRCompositor_013_GetTrackingSpace(void *_this);
-
-EVRCompositorError __thiscall IVRCompositor_013_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-EVRCompositorError __thiscall IVRCompositor_013_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-EVRCompositorError __thiscall IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
-
-EVRCompositorError __thiscall IVRCompositor_013_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
-
-void __thiscall IVRCompositor_013_ClearLastSubmittedFrame(void *_this);
-
-void __thiscall IVRCompositor_013_PostPresentHandoff(void *_this);
-
-bool __thiscall IVRCompositor_013_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-float __thiscall IVRCompositor_013_GetFrameTimeRemaining(void *_this);
-
-void __thiscall IVRCompositor_013_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_013_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-EVRCompositorError __thiscall IVRCompositor_013_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
-
-void __thiscall IVRCompositor_013_ClearSkyboxOverride(void *_this);
-
-void __thiscall IVRCompositor_013_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_013_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_013_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_013_IsFullscreen(void *_this);
-
-uint32_t __thiscall IVRCompositor_013_GetCurrentSceneFocusProcess(void *_this);
-
-uint32_t __thiscall IVRCompositor_013_GetLastFrameRenderer(void *_this);
-
-bool __thiscall IVRCompositor_013_CanRenderScene(void *_this);
-
-void __thiscall IVRCompositor_013_ShowMirrorWindow(void *_this);
-
-void __thiscall IVRCompositor_013_HideMirrorWindow(void *_this);
-
-bool __thiscall IVRCompositor_013_IsMirrorWindowVisible(void *_this);
-
-void __thiscall IVRCompositor_013_CompositorDumpImages(void *_this);
-
-bool __thiscall IVRCompositor_013_ShouldAppRenderWithLowResources(void *_this);
-
-void __thiscall IVRCompositor_013_ForceInterleavedReprojectionOn(void *_this, bool bOverride);
-
-void test_capi_thunks_IVRSystem_011(void);
-
-void __thiscall IVRSystem_011_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_011_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
-
-void __thiscall IVRSystem_011_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-DistortionCoordinates_t *__thiscall IVRSystem_011_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
-
-HmdMatrix34_t *__thiscall IVRSystem_011_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
-
-bool __thiscall IVRSystem_011_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_011_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_011_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
-
-bool __thiscall IVRSystem_011_IsDisplayOnDesktop(void *_this);
-
-bool __thiscall IVRSystem_011_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
-
-void __thiscall IVRSystem_011_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_011_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-HmdMatrix34_t *__thiscall IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-uint32_t __thiscall IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
-
-EDeviceActivityLevel __thiscall IVRSystem_011_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
-
-void __thiscall IVRSystem_011_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
-
-TrackedDeviceIndex_t __thiscall IVRSystem_011_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
-
-ETrackedControllerRole __thiscall IVRSystem_011_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-ETrackedDeviceClass __thiscall IVRSystem_011_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_011_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_011_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-float __thiscall IVRSystem_011_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_011_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_011_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_011_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_011_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_011_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
-
-bool __thiscall IVRSystem_011_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-bool __thiscall IVRSystem_011_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_011_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_011_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
-
-bool __thiscall IVRSystem_011_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
-
-bool __thiscall IVRSystem_011_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_011_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_011_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_011_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_011_CaptureInputFocus(void *_this);
-
-void __thiscall IVRSystem_011_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_011_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-uint32_t __thiscall IVRSystem_011_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
-
-EVRFirmwareError __thiscall IVRSystem_011_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-void __thiscall IVRSystem_011_AcknowledgeQuit_Exiting(void *_this);
-
-void __thiscall IVRSystem_011_AcknowledgeQuit_UserPrompt(void *_this);
-
-void __thiscall IVRSystem_011_PerformanceTestEnableCapture(void *_this, bool bEnable);
-
-void __thiscall IVRSystem_011_PerformanceTestReportFidelityLevelChange(void *_this, int nFidelityLevel);
-
-void test_capi_thunks_IVRApplications_004(void);
-
-EVRApplicationError __thiscall IVRApplications_004_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
-
-EVRApplicationError __thiscall IVRApplications_004_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
-
-bool __thiscall IVRApplications_004_IsApplicationInstalled(void *_this, const char * pchAppKey);
-
-uint32_t __thiscall IVRApplications_004_GetApplicationCount(void *_this);
-
-EVRApplicationError __thiscall IVRApplications_004_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationError __thiscall IVRApplications_004_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationError __thiscall IVRApplications_004_LaunchApplication(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_004_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
-
-bool __thiscall IVRApplications_004_CancelApplicationLaunch(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_004_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
-
-uint32_t __thiscall IVRApplications_004_GetApplicationProcessId(void *_this, const char * pchAppKey);
-
-const char * __thiscall IVRApplications_004_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
-
-uint32_t __thiscall IVRApplications_004_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
-
-bool __thiscall IVRApplications_004_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
-
-uint64_t __thiscall IVRApplications_004_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
-
-EVRApplicationError __thiscall IVRApplications_004_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
-
-bool __thiscall IVRApplications_004_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_004_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationTransitionState __thiscall IVRApplications_004_GetTransitionState(void *_this);
-
-EVRApplicationError __thiscall IVRApplications_004_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
-
-const char * __thiscall IVRApplications_004_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
-
-bool __thiscall IVRApplications_004_IsQuitUserPromptRequested(void *_this);
-
-EVRApplicationError __thiscall IVRApplications_004_LaunchInternalProcess(void *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory);
-
-void test_capi_thunks_IVROverlay_010(void);
-
-EVROverlayError __thiscall IVROverlay_010_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_010_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_010_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_010_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_010_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize);
-
-EVROverlayError __thiscall IVROverlay_010_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_010_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
-
-bool __thiscall IVROverlay_010_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-EVROverlayError __thiscall IVROverlay_010_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_010_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_010_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-bool __thiscall IVROverlay_010_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_010_GetGamepadFocusOverlay(void *_this);
-
-EVROverlayError __thiscall IVROverlay_010_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
-
-EVROverlayError __thiscall IVROverlay_010_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_010_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-EVROverlayError __thiscall IVROverlay_010_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_010_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_010_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_010_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_010_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_010_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_010_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-TrackedDeviceIndex_t __thiscall IVROverlay_010_GetPrimaryDashboardDevice(void *_this);
-
-EVROverlayError __thiscall IVROverlay_010_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_010_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_010_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_010_HideKeyboard(void *_this);
-
-void __thiscall IVROverlay_010_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
-
-void __thiscall IVROverlay_010_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+bool __thiscall IVRRenderModels_002_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
 void test_capi_thunks_IVRRenderModels_004(void);
 
@@ -5669,179 +5757,581 @@ bool __thiscall IVRRenderModels_004_GetComponentState(void *_this, const char * 
 
 bool __thiscall IVRRenderModels_004_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-void test_capi_thunks_IVRCompositor_012(void);
+void test_capi_thunks_IVRRenderModels_005(void);
 
-void __thiscall IVRCompositor_012_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+EVRRenderModelError __thiscall IVRRenderModels_005_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_012_GetTrackingSpace(void *_this);
+void __thiscall IVRRenderModels_005_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
 
-EVRCompositorError __thiscall IVRCompositor_012_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRRenderModelError __thiscall IVRRenderModels_005_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
 
-EVRCompositorError __thiscall IVRCompositor_012_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+void __thiscall IVRRenderModels_005_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
 
-EVRCompositorError __thiscall IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose);
+EVRRenderModelError __thiscall IVRRenderModels_005_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D);
 
-EVRCompositorError __thiscall IVRCompositor_012_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVRRenderModelError __thiscall IVRRenderModels_005_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture);
 
-void __thiscall IVRCompositor_012_ClearLastSubmittedFrame(void *_this);
+void __thiscall IVRRenderModels_005_FreeTextureD3D11(void *_this, void * pD3D11Texture2D);
 
-void __thiscall IVRCompositor_012_PostPresentHandoff(void *_this);
+uint32_t __thiscall IVRRenderModels_005_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
 
-bool __thiscall IVRCompositor_012_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+uint32_t __thiscall IVRRenderModels_005_GetRenderModelCount(void *_this);
 
-float __thiscall IVRCompositor_012_GetFrameTimeRemaining(void *_this);
+uint32_t __thiscall IVRRenderModels_005_GetComponentCount(void *_this, const char * pchRenderModelName);
 
-void __thiscall IVRCompositor_012_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+uint32_t __thiscall IVRRenderModels_005_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
 
-void __thiscall IVRCompositor_012_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+uint64_t __thiscall IVRRenderModels_005_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-EVRCompositorError __thiscall IVRCompositor_012_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+uint32_t __thiscall IVRRenderModels_005_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
 
-void __thiscall IVRCompositor_012_ClearSkyboxOverride(void *_this);
+bool __thiscall IVRRenderModels_005_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
 
-void __thiscall IVRCompositor_012_CompositorBringToFront(void *_this);
+bool __thiscall IVRRenderModels_005_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-void __thiscall IVRCompositor_012_CompositorGoToBack(void *_this);
+uint32_t __thiscall IVRRenderModels_005_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError);
 
-void __thiscall IVRCompositor_012_CompositorQuit(void *_this);
+uint32_t __thiscall IVRRenderModels_005_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError);
 
-bool __thiscall IVRCompositor_012_IsFullscreen(void *_this);
+const char * __thiscall IVRRenderModels_005_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error);
 
-uint32_t __thiscall IVRCompositor_012_GetCurrentSceneFocusProcess(void *_this);
+void test_capi_thunks_IVRRenderModels_006(void);
 
-uint32_t __thiscall IVRCompositor_012_GetLastFrameRenderer(void *_this);
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
 
-bool __thiscall IVRCompositor_012_CanRenderScene(void *_this);
+void __thiscall IVRRenderModels_006_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
 
-void __thiscall IVRCompositor_012_ShowMirrorWindow(void *_this);
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
 
-void __thiscall IVRCompositor_012_HideMirrorWindow(void *_this);
+void __thiscall IVRRenderModels_006_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
 
-bool __thiscall IVRCompositor_012_IsMirrorWindowVisible(void *_this);
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D);
 
-void __thiscall IVRCompositor_012_CompositorDumpImages(void *_this);
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture);
 
-bool __thiscall IVRCompositor_012_ShouldAppRenderWithLowResources(void *_this);
+void __thiscall IVRRenderModels_006_FreeTextureD3D11(void *_this, void * pD3D11Texture2D);
 
-void test_capi_thunks_IVRApplications_003(void);
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
 
-EVRApplicationError __thiscall IVRApplications_003_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelCount(void *_this);
 
-EVRApplicationError __thiscall IVRApplications_003_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+uint32_t __thiscall IVRRenderModels_006_GetComponentCount(void *_this, const char * pchRenderModelName);
 
-bool __thiscall IVRApplications_003_IsApplicationInstalled(void *_this, const char * pchAppKey);
+uint32_t __thiscall IVRRenderModels_006_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
 
-uint32_t __thiscall IVRApplications_003_GetApplicationCount(void *_this);
+uint64_t __thiscall IVRRenderModels_006_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-EVRApplicationError __thiscall IVRApplications_003_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+uint32_t __thiscall IVRRenderModels_006_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
 
-EVRApplicationError __thiscall IVRApplications_003_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+bool __thiscall IVRRenderModels_006_GetComponentStateForDevicePath(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
 
-EVRApplicationError __thiscall IVRApplications_003_LaunchApplication(void *_this, const char * pchAppKey);
+bool __thiscall IVRRenderModels_006_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState);
 
-EVRApplicationError __thiscall IVRApplications_003_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+bool __thiscall IVRRenderModels_006_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
 
-EVRApplicationError __thiscall IVRApplications_003_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError);
 
-uint32_t __thiscall IVRApplications_003_GetApplicationProcessId(void *_this, const char * pchAppKey);
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError);
 
-const char * __thiscall IVRApplications_003_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+const char * __thiscall IVRRenderModels_006_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error);
 
-uint32_t __thiscall IVRApplications_003_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+void test_capi_thunks_IVRResources_001(void);
 
-bool __thiscall IVRApplications_003_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+uint32_t __thiscall IVRResources_001_LoadSharedResource(void *_this, const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen);
 
-uint64_t __thiscall IVRApplications_003_GetApplicationPropertyUint64(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+uint32_t __thiscall IVRResources_001_GetResourceFullPath(void *_this, const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen);
 
-EVRApplicationError __thiscall IVRApplications_003_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+void test_capi_thunks_IVRScreenshots_001(void);
 
-bool __thiscall IVRApplications_003_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+EVRScreenshotError __thiscall IVRScreenshots_001_RequestScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename);
 
-EVRApplicationError __thiscall IVRApplications_003_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+EVRScreenshotError __thiscall IVRScreenshots_001_HookScreenshot(void *_this, EVRScreenshotType * pSupportedTypes, int numTypes);
 
-EVRApplicationTransitionState __thiscall IVRApplications_003_GetTransitionState(void *_this);
+EVRScreenshotType __thiscall IVRScreenshots_001_GetScreenshotPropertyType(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError);
 
-EVRApplicationError __thiscall IVRApplications_003_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+uint32_t __thiscall IVRScreenshots_001_GetScreenshotPropertyFilename(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError);
 
-const char * __thiscall IVRApplications_003_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+EVRScreenshotError __thiscall IVRScreenshots_001_UpdateScreenshotProgress(void *_this, ScreenshotHandle_t screenshotHandle, float flProgress);
 
-bool __thiscall IVRApplications_003_IsQuitUserPromptRequested(void *_this);
+EVRScreenshotError __thiscall IVRScreenshots_001_TakeStereoScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename);
 
-void test_capi_thunks_IVRCompositor_011(void);
+EVRScreenshotError __thiscall IVRScreenshots_001_SubmitScreenshot(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename);
 
-void __thiscall IVRCompositor_011_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+void test_capi_thunks_IVRSettings_001(void);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_011_GetTrackingSpace(void *_this);
+const char * __thiscall IVRSettings_001_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
 
-EVRCompositorError __thiscall IVRCompositor_011_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVRSettings_001_Sync(void *_this, bool bForce, EVRSettingsError * peError);
 
-EVRCompositorError __thiscall IVRCompositor_011_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+bool __thiscall IVRSettings_001_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bDefaultValue, EVRSettingsError * peError);
 
-EVRCompositorError __thiscall IVRCompositor_011_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+void __thiscall IVRSettings_001_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_ClearLastSubmittedFrame(void *_this);
+int32_t __thiscall IVRSettings_001_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nDefaultValue, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_PostPresentHandoff(void *_this);
+void __thiscall IVRSettings_001_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
 
-bool __thiscall IVRCompositor_011_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+float __thiscall IVRSettings_001_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flDefaultValue, EVRSettingsError * peError);
 
-float __thiscall IVRCompositor_011_GetFrameTimeRemaining(void *_this);
+void __thiscall IVRSettings_001_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+void __thiscall IVRSettings_001_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, const char * pchDefaultValue, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+void __thiscall IVRSettings_001_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
 
-EVRCompositorError __thiscall IVRCompositor_011_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+void __thiscall IVRSettings_001_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_ClearSkyboxOverride(void *_this);
+void __thiscall IVRSettings_001_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_CompositorBringToFront(void *_this);
+void test_capi_thunks_IVRSettings_002(void);
 
-void __thiscall IVRCompositor_011_CompositorGoToBack(void *_this);
+const char * __thiscall IVRSettings_002_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
 
-void __thiscall IVRCompositor_011_CompositorQuit(void *_this);
+bool __thiscall IVRSettings_002_Sync(void *_this, bool bForce, EVRSettingsError * peError);
 
-bool __thiscall IVRCompositor_011_IsFullscreen(void *_this);
+void __thiscall IVRSettings_002_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRCompositor_011_GetCurrentSceneFocusProcess(void *_this);
+void __thiscall IVRSettings_002_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRCompositor_011_GetLastFrameRenderer(void *_this);
+void __thiscall IVRSettings_002_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
 
-bool __thiscall IVRCompositor_011_CanRenderScene(void *_this);
+void __thiscall IVRSettings_002_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_ShowMirrorWindow(void *_this);
+bool __thiscall IVRSettings_002_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_HideMirrorWindow(void *_this);
+int32_t __thiscall IVRSettings_002_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-bool __thiscall IVRCompositor_011_IsMirrorWindowVisible(void *_this);
+float __thiscall IVRSettings_002_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-void __thiscall IVRCompositor_011_CompositorDumpImages(void *_this);
+void __thiscall IVRSettings_002_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError);
 
-void test_capi_thunks_IVRRenderModels_002(void);
+void __thiscall IVRSettings_002_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
 
-bool __thiscall IVRRenderModels_002_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel);
+void __thiscall IVRSettings_002_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-void __thiscall IVRRenderModels_002_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
+void test_capi_thunks_IVRSettings_003(void);
 
-bool __thiscall IVRRenderModels_002_LoadTexture(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture);
+const char * __thiscall IVRSettings_003_GetSettingsErrorNameFromEnum(void *_this, EVRSettingsError eError);
 
-void __thiscall IVRRenderModels_002_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture);
+void __thiscall IVRSettings_003_SetBool(void *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRRenderModels_002_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
+void __thiscall IVRSettings_003_SetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRRenderModels_002_GetRenderModelCount(void *_this);
+void __thiscall IVRSettings_003_SetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRRenderModels_002_GetComponentCount(void *_this, const char * pchRenderModelName);
+void __thiscall IVRSettings_003_SetString(void *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRRenderModels_002_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen);
+bool __thiscall IVRSettings_003_GetBool(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-uint64_t __thiscall IVRRenderModels_002_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName);
+int32_t __thiscall IVRSettings_003_GetInt32(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-uint32_t __thiscall IVRRenderModels_002_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen);
+float __thiscall IVRSettings_003_GetFloat(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-bool __thiscall IVRRenderModels_002_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ComponentState_t * pComponentState);
+void __thiscall IVRSettings_003_GetString(void *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError);
 
-bool __thiscall IVRRenderModels_002_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName);
+void __thiscall IVRSettings_003_RemoveSection(void *_this, const char * pchSection, EVRSettingsError * peError);
+
+void __thiscall IVRSettings_003_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
+
+void test_capi_thunks_IVRSystem_003(void);
+
+void __thiscall IVRSystem_003_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_003_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_003_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_003_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
+
+void __thiscall IVRSystem_003_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+DistortionCoordinates_t *__thiscall IVRSystem_003_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
+
+HmdMatrix34_t *__thiscall IVRSystem_003_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_003_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_003_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_003_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
+
+bool __thiscall IVRSystem_003_AttachToWindow(void *_this, void * hWnd);
+
+void __thiscall IVRSystem_003_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_003_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+bool __thiscall IVRSystem_003_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t * pRenderModel);
+
+void __thiscall IVRSystem_003_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
+
+TrackedDeviceClass __thiscall IVRSystem_003_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_003_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_003_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+float __thiscall IVRSystem_003_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_003_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_003_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_003_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_003_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_003_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
+
+bool __thiscall IVRSystem_003_PollNextEvent(void *_this, VREvent_t * pEvent);
+
+bool __thiscall IVRSystem_003_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_003_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_003_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_003_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+
+bool __thiscall IVRSystem_003_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_003_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_003_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_003_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *_this, Compositor_OverlaySettings * overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType);
+
+bool __thiscall IVRSystem_003_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_003_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_003_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+void test_capi_thunks_IVRSystem_004(void);
+
+void __thiscall IVRSystem_004_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_004_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_004_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_004_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
+
+void __thiscall IVRSystem_004_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+DistortionCoordinates_t *__thiscall IVRSystem_004_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
+
+HmdMatrix34_t *__thiscall IVRSystem_004_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_004_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_004_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_004_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
+
+bool __thiscall IVRSystem_004_AttachToWindow(void *_this, void * hWnd);
+
+void __thiscall IVRSystem_004_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_004_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+TrackedDeviceClass __thiscall IVRSystem_004_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_004_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_004_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+float __thiscall IVRSystem_004_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_004_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_004_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_004_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_004_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_004_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
+
+bool __thiscall IVRSystem_004_PollNextEvent(void *_this, VREvent_t * pEvent);
+
+bool __thiscall IVRSystem_004_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_004_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_004_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_004_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+
+bool __thiscall IVRSystem_004_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_004_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_004_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_004_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_004_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_004_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_004_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_004_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+void test_capi_thunks_IVRSystem_005(void);
+
+void __thiscall IVRSystem_005_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_005_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_005_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_005_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
+
+void __thiscall IVRSystem_005_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+DistortionCoordinates_t *__thiscall IVRSystem_005_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
+
+HmdMatrix34_t *__thiscall IVRSystem_005_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_005_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_005_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_005_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
+
+bool __thiscall IVRSystem_005_AttachToWindow(void *_this, void * hWnd);
+
+void __thiscall IVRSystem_005_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_005_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass(void *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+TrackedDeviceClass __thiscall IVRSystem_005_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_005_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_005_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+float __thiscall IVRSystem_005_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_005_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_005_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_005_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_005_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_005_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
+
+bool __thiscall IVRSystem_005_PollNextEvent(void *_this, VREvent_t * pEvent);
+
+bool __thiscall IVRSystem_005_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_005_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_005_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_005_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+
+bool __thiscall IVRSystem_005_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_005_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_005_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_005_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_005_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_005_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_005_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_005_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+void test_capi_thunks_IVRSystem_006(void);
+
+void __thiscall IVRSystem_006_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_006_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+void __thiscall IVRSystem_006_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_006_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
+
+void __thiscall IVRSystem_006_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+DistortionCoordinates_t *__thiscall IVRSystem_006_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
+
+HmdMatrix34_t *__thiscall IVRSystem_006_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_006_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_006_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_006_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
+
+bool __thiscall IVRSystem_006_AttachToWindow(void *_this, void * hWnd);
+
+void __thiscall IVRSystem_006_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_006_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass(void *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_006_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+TrackedDeviceClass __thiscall IVRSystem_006_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_006_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_006_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+float __thiscall IVRSystem_006_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_006_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_006_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_006_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_006_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_006_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
+
+bool __thiscall IVRSystem_006_PollNextEvent(void *_this, VREvent_t * pEvent);
+
+bool __thiscall IVRSystem_006_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_006_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_006_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
+
+bool __thiscall IVRSystem_006_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+
+bool __thiscall IVRSystem_006_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_006_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_006_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_006_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_006_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_006_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_006_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_006_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+VRFirmwareError __thiscall IVRSystem_006_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_006_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_006_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void test_capi_thunks_IVRSystem_009(void);
+
+void __thiscall IVRSystem_009_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_009_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
+
+void __thiscall IVRSystem_009_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+DistortionCoordinates_t *__thiscall IVRSystem_009_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
+
+HmdMatrix34_t *__thiscall IVRSystem_009_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_009_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_009_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_009_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+bool __thiscall IVRSystem_009_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_009_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_009_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_009_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_009_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_009_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+ETrackedDeviceClass __thiscall IVRSystem_009_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_009_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_009_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_009_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_009_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_009_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_009_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_009_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_009_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_009_PollNextEvent(void *_this, VREvent_t * pEvent);
+
+bool __thiscall IVRSystem_009_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_009_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_009_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_009_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+
+bool __thiscall IVRSystem_009_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_009_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_009_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_009_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_009_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_009_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_009_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_009_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_009_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_009_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_009_AcknowledgeQuit_UserPrompt(void *_this);
 
 void test_capi_thunks_IVRSystem_010(void);
 
@@ -5937,253 +6427,937 @@ void __thiscall IVRSystem_010_PerformanceTestEnableCapture(void *_this, bool bEn
 
 void __thiscall IVRSystem_010_PerformanceTestReportFidelityLevelChange(void *_this, int nFidelityLevel);
 
-void test_capi_thunks_IVRApplications_002(void);
+void test_capi_thunks_IVRSystem_011(void);
 
-EVRApplicationError __thiscall IVRApplications_002_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
+void __thiscall IVRSystem_011_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
 
-EVRApplicationError __thiscall IVRApplications_002_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
+HmdMatrix44_t *__thiscall IVRSystem_011_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
 
-bool __thiscall IVRApplications_002_IsApplicationInstalled(void *_this, const char * pchAppKey);
+void __thiscall IVRSystem_011_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
 
-uint32_t __thiscall IVRApplications_002_GetApplicationCount(void *_this);
+DistortionCoordinates_t *__thiscall IVRSystem_011_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
 
-EVRApplicationError __thiscall IVRApplications_002_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+HmdMatrix34_t *__thiscall IVRSystem_011_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
 
-EVRApplicationError __thiscall IVRApplications_002_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+bool __thiscall IVRSystem_011_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
 
-EVRApplicationError __thiscall IVRApplications_002_LaunchApplication(void *_this, const char * pchAppKey);
+int32_t __thiscall IVRSystem_011_GetD3D9AdapterIndex(void *_this);
 
-EVRApplicationError __thiscall IVRApplications_002_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
+void __thiscall IVRSystem_011_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
 
-EVRApplicationError __thiscall IVRApplications_002_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
+bool __thiscall IVRSystem_011_IsDisplayOnDesktop(void *_this);
 
-uint32_t __thiscall IVRApplications_002_GetApplicationProcessId(void *_this, const char * pchAppKey);
+bool __thiscall IVRSystem_011_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
 
-const char * __thiscall IVRApplications_002_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
+void __thiscall IVRSystem_011_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
 
-uint32_t __thiscall IVRApplications_002_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
+void __thiscall IVRSystem_011_ResetSeatedZeroPose(void *_this);
 
-bool __thiscall IVRApplications_002_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
+HmdMatrix34_t *__thiscall IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-EVRApplicationError __thiscall IVRApplications_002_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
+HmdMatrix34_t *__thiscall IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-bool __thiscall IVRApplications_002_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
+uint32_t __thiscall IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
 
-EVRApplicationError __thiscall IVRApplications_002_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
+EDeviceActivityLevel __thiscall IVRSystem_011_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
 
-EVRApplicationTransitionState __thiscall IVRApplications_002_GetTransitionState(void *_this);
+void __thiscall IVRSystem_011_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
 
-EVRApplicationError __thiscall IVRApplications_002_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
+TrackedDeviceIndex_t __thiscall IVRSystem_011_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
 
-const char * __thiscall IVRApplications_002_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
+ETrackedControllerRole __thiscall IVRSystem_011_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-bool __thiscall IVRApplications_002_IsQuitUserPromptRequested(void *_this);
+ETrackedDeviceClass __thiscall IVRSystem_011_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-void test_capi_thunks_IVRChaperoneSetup_004(void);
+bool __thiscall IVRSystem_011_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-bool __thiscall IVRChaperoneSetup_004_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile);
+bool __thiscall IVRSystem_011_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-void __thiscall IVRChaperoneSetup_004_RevertWorkingCopy(void *_this);
+float __thiscall IVRSystem_011_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-bool __thiscall IVRChaperoneSetup_004_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
+int32_t __thiscall IVRSystem_011_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-bool __thiscall IVRChaperoneSetup_004_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect);
+uint64_t __thiscall IVRSystem_011_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-bool __thiscall IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+HmdMatrix34_t *__thiscall IVRSystem_011_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-bool __thiscall IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
+uint32_t __thiscall IVRSystem_011_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
 
-bool __thiscall IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+const char * __thiscall IVRSystem_011_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
 
-bool __thiscall IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose);
+bool __thiscall IVRSystem_011_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVRChaperoneSetup_004_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ);
+bool __thiscall IVRSystem_011_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
 
-void __thiscall IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount);
+const char * __thiscall IVRSystem_011_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
 
-void __thiscall IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose);
+HiddenAreaMesh_t *__thiscall IVRSystem_011_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
 
-void __thiscall IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose);
+bool __thiscall IVRSystem_011_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
 
-void __thiscall IVRChaperoneSetup_004_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile);
+bool __thiscall IVRSystem_011_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
 
-bool __thiscall IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose);
+void __thiscall IVRSystem_011_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
 
-void __thiscall IVRChaperoneSetup_004_SetWorkingWallTagInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount);
+const char * __thiscall IVRSystem_011_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
 
-bool __thiscall IVRChaperoneSetup_004_GetLiveWallTagInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount);
+const char * __thiscall IVRSystem_011_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
 
-void test_capi_thunks_IVRCompositor_010(void);
+bool __thiscall IVRSystem_011_CaptureInputFocus(void *_this);
 
-void __thiscall IVRCompositor_010_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+void __thiscall IVRSystem_011_ReleaseInputFocus(void *_this);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_010_GetTrackingSpace(void *_this);
+bool __thiscall IVRSystem_011_IsInputFocusCapturedByAnotherProcess(void *_this);
 
-EVRCompositorError __thiscall IVRCompositor_010_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+uint32_t __thiscall IVRSystem_011_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
 
-EVRCompositorError __thiscall IVRCompositor_010_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRFirmwareError __thiscall IVRSystem_011_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-EVRCompositorError __thiscall IVRCompositor_010_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+void __thiscall IVRSystem_011_AcknowledgeQuit_Exiting(void *_this);
 
-void __thiscall IVRCompositor_010_ClearLastSubmittedFrame(void *_this);
+void __thiscall IVRSystem_011_AcknowledgeQuit_UserPrompt(void *_this);
 
-void __thiscall IVRCompositor_010_PostPresentHandoff(void *_this);
+void __thiscall IVRSystem_011_PerformanceTestEnableCapture(void *_this, bool bEnable);
 
-bool __thiscall IVRCompositor_010_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+void __thiscall IVRSystem_011_PerformanceTestReportFidelityLevelChange(void *_this, int nFidelityLevel);
 
-float __thiscall IVRCompositor_010_GetFrameTimeRemaining(void *_this);
+void test_capi_thunks_IVRSystem_012(void);
 
-void __thiscall IVRCompositor_010_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+void __thiscall IVRSystem_012_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
 
-void __thiscall IVRCompositor_010_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+HmdMatrix44_t *__thiscall IVRSystem_012_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
 
-EVRCompositorError __thiscall IVRCompositor_010_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+void __thiscall IVRSystem_012_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
 
-void __thiscall IVRCompositor_010_ClearSkyboxOverride(void *_this);
+DistortionCoordinates_t *__thiscall IVRSystem_012_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
 
-void __thiscall IVRCompositor_010_CompositorBringToFront(void *_this);
+HmdMatrix34_t *__thiscall IVRSystem_012_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
 
-void __thiscall IVRCompositor_010_CompositorGoToBack(void *_this);
+bool __thiscall IVRSystem_012_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
 
-void __thiscall IVRCompositor_010_CompositorQuit(void *_this);
+int32_t __thiscall IVRSystem_012_GetD3D9AdapterIndex(void *_this);
 
-bool __thiscall IVRCompositor_010_IsFullscreen(void *_this);
+void __thiscall IVRSystem_012_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
 
-uint32_t __thiscall IVRCompositor_010_GetCurrentSceneFocusProcess(void *_this);
+bool __thiscall IVRSystem_012_IsDisplayOnDesktop(void *_this);
 
-uint32_t __thiscall IVRCompositor_010_GetLastFrameRenderer(void *_this);
+bool __thiscall IVRSystem_012_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
 
-bool __thiscall IVRCompositor_010_CanRenderScene(void *_this);
+void __thiscall IVRSystem_012_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
 
-void __thiscall IVRCompositor_010_ShowMirrorWindow(void *_this);
+void __thiscall IVRSystem_012_ResetSeatedZeroPose(void *_this);
 
-void __thiscall IVRCompositor_010_HideMirrorWindow(void *_this);
+HmdMatrix34_t *__thiscall IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-bool __thiscall IVRCompositor_010_IsMirrorWindowVisible(void *_this);
+HmdMatrix34_t *__thiscall IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-void __thiscall IVRCompositor_010_CompositorDumpImages(void *_this);
+uint32_t __thiscall IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
 
-void test_capi_thunks_IVROverlay_008(void);
+EDeviceActivityLevel __thiscall IVRSystem_012_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
 
-EVROverlayError __thiscall IVROverlay_008_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
+void __thiscall IVRSystem_012_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
 
-EVROverlayError __thiscall IVROverlay_008_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
+TrackedDeviceIndex_t __thiscall IVRSystem_012_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
 
-EVROverlayError __thiscall IVROverlay_008_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+ETrackedControllerRole __thiscall IVRSystem_012_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_008_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+ETrackedDeviceClass __thiscall IVRSystem_012_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-VROverlayHandle_t __thiscall IVROverlay_008_GetHighQualityOverlay(void *_this);
+bool __thiscall IVRSystem_012_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-uint32_t __thiscall IVROverlay_008_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+bool __thiscall IVRSystem_012_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-uint32_t __thiscall IVROverlay_008_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
+float __thiscall IVRSystem_012_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
+int32_t __thiscall IVRSystem_012_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-const char * __thiscall IVROverlay_008_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
+uint64_t __thiscall IVRSystem_012_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
+HmdMatrix34_t *__thiscall IVRSystem_012_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
+uint32_t __thiscall IVRSystem_012_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
+const char * __thiscall IVRSystem_012_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
+bool __thiscall IVRSystem_012_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
+bool __thiscall IVRSystem_012_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
+const char * __thiscall IVRSystem_012_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
+HiddenAreaMesh_t *__thiscall IVRSystem_012_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
+bool __thiscall IVRSystem_012_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
+bool __thiscall IVRSystem_012_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
+void __thiscall IVRSystem_012_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
+const char * __thiscall IVRSystem_012_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
+const char * __thiscall IVRSystem_012_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+bool __thiscall IVRSystem_012_CaptureInputFocus(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
+void __thiscall IVRSystem_012_ReleaseInputFocus(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
+bool __thiscall IVRSystem_012_IsInputFocusCapturedByAnotherProcess(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+uint32_t __thiscall IVRSystem_012_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
+EVRFirmwareError __thiscall IVRSystem_012_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVRSystem_012_AcknowledgeQuit_Exiting(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
+void __thiscall IVRSystem_012_AcknowledgeQuit_UserPrompt(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void test_capi_thunks_IVRSystem_014(void);
 
-EVROverlayError __thiscall IVROverlay_008_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRSystem_014_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
 
-bool __thiscall IVROverlay_008_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
+HmdMatrix44_t *__thiscall IVRSystem_014_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
 
-EVROverlayError __thiscall IVROverlay_008_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform);
+void __thiscall IVRSystem_014_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
 
-bool __thiscall IVROverlay_008_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
+bool __thiscall IVRSystem_014_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
+HmdMatrix34_t *__thiscall IVRSystem_014_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
+bool __thiscall IVRSystem_014_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
 
-EVROverlayError __thiscall IVROverlay_008_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+int32_t __thiscall IVRSystem_014_GetD3D9AdapterIndex(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
+void __thiscall IVRSystem_014_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
 
-bool __thiscall IVROverlay_008_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
+bool __thiscall IVRSystem_014_IsDisplayOnDesktop(void *_this);
 
-bool __thiscall IVROverlay_008_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
+bool __thiscall IVRSystem_014_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
 
-bool __thiscall IVROverlay_008_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRSystem_014_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
 
-VROverlayHandle_t __thiscall IVROverlay_008_GetGamepadFocusOverlay(void *_this);
+void __thiscall IVRSystem_014_ResetSeatedZeroPose(void *_this);
 
-EVROverlayError __thiscall IVROverlay_008_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
+HmdMatrix34_t *__thiscall IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
+HmdMatrix34_t *__thiscall IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-EVROverlayError __thiscall IVROverlay_008_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
+uint32_t __thiscall IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
+EDeviceActivityLevel __thiscall IVRSystem_014_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
 
-EVROverlayError __thiscall IVROverlay_008_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
+void __thiscall IVRSystem_014_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
+TrackedDeviceIndex_t __thiscall IVRSystem_014_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
 
-EVROverlayError __thiscall IVROverlay_008_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
+ETrackedControllerRole __thiscall IVRSystem_014_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-EVROverlayError __thiscall IVROverlay_008_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
+ETrackedDeviceClass __thiscall IVRSystem_014_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-bool __thiscall IVROverlay_008_IsDashboardVisible(void *_this);
+bool __thiscall IVRSystem_014_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-bool __thiscall IVROverlay_008_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
+bool __thiscall IVRSystem_014_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
+float __thiscall IVRSystem_014_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
+int32_t __thiscall IVRSystem_014_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-void __thiscall IVROverlay_008_ShowDashboard(void *_this, const char * pchOverlayToShow);
+uint64_t __thiscall IVRSystem_014_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+HmdMatrix34_t *__thiscall IVRSystem_014_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-EVROverlayError __thiscall IVROverlay_008_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
+uint32_t __thiscall IVRSystem_014_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
 
-uint32_t __thiscall IVROverlay_008_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
+const char * __thiscall IVRSystem_014_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
 
-void __thiscall IVROverlay_008_HideKeyboard(void *_this);
+bool __thiscall IVRSystem_014_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-void __thiscall IVROverlay_008_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform);
+bool __thiscall IVRSystem_014_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
 
-void __thiscall IVROverlay_008_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect);
+const char * __thiscall IVRSystem_014_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_014_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_014_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_014_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_014_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_014_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_014_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_014_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_014_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_014_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_014_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_014_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_014_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_014_AcknowledgeQuit_UserPrompt(void *_this);
+
+void test_capi_thunks_IVRSystem_015(void);
+
+void __thiscall IVRSystem_015_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_015_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_015_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_015_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_015_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_015_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_015_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_015_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+bool __thiscall IVRSystem_015_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_015_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_015_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_015_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_015_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_015_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_015_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_015_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_015_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_015_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_015_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_015_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_015_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_015_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_015_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_015_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_015_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_015_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_015_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_015_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_015_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_015_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_015_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_015_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_015_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_015_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_015_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_015_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_015_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_015_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_015_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_015_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_015_AcknowledgeQuit_UserPrompt(void *_this);
+
+void test_capi_thunks_IVRSystem_016(void);
+
+void __thiscall IVRSystem_016_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_016_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_016_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_016_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_016_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_016_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_016_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_016_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_016_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType);
+
+bool __thiscall IVRSystem_016_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_016_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_016_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_016_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_016_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_016_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_016_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_016_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_016_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_016_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_016_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_016_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_016_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_016_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_016_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_016_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_016_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_016_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_016_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_016_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_016_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_016_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_016_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_016_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_016_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_016_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_016_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_016_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_016_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_016_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_016_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_016_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_016_AcknowledgeQuit_UserPrompt(void *_this);
+
+void test_capi_thunks_IVRSystem_017(void);
+
+void __thiscall IVRSystem_017_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_017_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_017_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_017_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_017_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_017_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_017_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_017_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_017_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_017_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_017_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_017_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_017_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_017_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_017_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_017_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_017_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_017_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_017_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_017_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_017_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_017_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_017_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_017_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_017_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_017_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_017_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_017_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_017_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_017_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_017_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_017_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_017_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_017_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_017_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_017_CaptureInputFocus(void *_this);
+
+void __thiscall IVRSystem_017_ReleaseInputFocus(void *_this);
+
+bool __thiscall IVRSystem_017_IsInputFocusCapturedByAnotherProcess(void *_this);
+
+uint32_t __thiscall IVRSystem_017_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_017_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_017_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_017_AcknowledgeQuit_UserPrompt(void *_this);
+
+void test_capi_thunks_IVRSystem_019(void);
+
+void __thiscall IVRSystem_019_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_019_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_019_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_019_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_019_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_019_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_019_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_019_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_019_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_019_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_019_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_019_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_019_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_019_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_019_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_019_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_019_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_019_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_019_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_019_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_019_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_019_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_019_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_019_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_019_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_019_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_019_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_019_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_019_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_019_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_019_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_019_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_019_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_019_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_019_IsInputAvailable(void *_this);
+
+bool __thiscall IVRSystem_019_IsSteamVRDrawingControllers(void *_this);
+
+bool __thiscall IVRSystem_019_ShouldApplicationPause(void *_this);
+
+bool __thiscall IVRSystem_019_ShouldApplicationReduceRenderingWork(void *_this);
+
+uint32_t __thiscall IVRSystem_019_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
+
+EVRFirmwareError __thiscall IVRSystem_019_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_019_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_019_AcknowledgeQuit_UserPrompt(void *_this);
+
+void test_capi_thunks_IVRSystem_020(void);
+
+void __thiscall IVRSystem_020_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_020_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_020_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_020_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_020_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_020_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_020_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_020_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_020_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_020_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_020_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_020_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_020_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_020_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_020_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_020_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_020_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_020_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_020_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_020_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_020_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_020_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_020_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_020_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_020_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_020_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_020_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_020_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_020_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_020_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_020_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_020_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_020_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_020_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_020_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_020_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_020_IsInputAvailable(void *_this);
+
+bool __thiscall IVRSystem_020_IsSteamVRDrawingControllers(void *_this);
+
+bool __thiscall IVRSystem_020_ShouldApplicationPause(void *_this);
+
+bool __thiscall IVRSystem_020_ShouldApplicationReduceRenderingWork(void *_this);
+
+EVRFirmwareError __thiscall IVRSystem_020_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_020_AcknowledgeQuit_Exiting(void *_this);
+
+void __thiscall IVRSystem_020_AcknowledgeQuit_UserPrompt(void *_this);
+
+uint32_t __thiscall IVRSystem_020_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+
+const char * __thiscall IVRSystem_020_GetRuntimeVersion(void *_this);
+
+void test_capi_thunks_IVRSystem_021(void);
+
+void __thiscall IVRSystem_021_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_021_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_021_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_021_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_021_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_021_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_021_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_021_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_021_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_021_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_021_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_021_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_021_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_021_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_021_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_021_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_021_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_021_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_021_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_021_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_021_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_021_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_021_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_021_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_021_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_021_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_021_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_021_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_021_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_021_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_021_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_021_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_021_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_021_IsInputAvailable(void *_this);
+
+bool __thiscall IVRSystem_021_IsSteamVRDrawingControllers(void *_this);
+
+bool __thiscall IVRSystem_021_ShouldApplicationPause(void *_this);
+
+bool __thiscall IVRSystem_021_ShouldApplicationReduceRenderingWork(void *_this);
+
+EVRFirmwareError __thiscall IVRSystem_021_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_021_AcknowledgeQuit_Exiting(void *_this);
+
+uint32_t __thiscall IVRSystem_021_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+
+const char * __thiscall IVRSystem_021_GetRuntimeVersion(void *_this);
+
+void test_capi_thunks_IVRSystem_022(void);
+
+void __thiscall IVRSystem_022_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_022_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_022_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_022_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_022_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_022_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_022_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_022_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_022_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_022_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_022_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_022_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+HmdMatrix34_t *__thiscall IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_022_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_022_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_022_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_022_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_022_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_022_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_022_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_022_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_022_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_022_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_022_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_022_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_022_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_022_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_022_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_022_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_022_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_022_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_022_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_022_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_022_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_022_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_022_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_022_IsInputAvailable(void *_this);
+
+bool __thiscall IVRSystem_022_IsSteamVRDrawingControllers(void *_this);
+
+bool __thiscall IVRSystem_022_ShouldApplicationPause(void *_this);
+
+bool __thiscall IVRSystem_022_ShouldApplicationReduceRenderingWork(void *_this);
+
+EVRFirmwareError __thiscall IVRSystem_022_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_022_AcknowledgeQuit_Exiting(void *_this);
+
+uint32_t __thiscall IVRSystem_022_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+
+const char * __thiscall IVRSystem_022_GetRuntimeVersion(void *_this);
 
 void test_capi_thunks_IVRTrackedCamera_001(void);
 
@@ -6223,1302 +7397,128 @@ bool __thiscall IVRTrackedCamera_001_GetCameraDistortion(void *_this, TrackedDev
 
 bool __thiscall IVRTrackedCamera_001_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-void test_capi_thunks_IVRCompositor_009(void);
+void test_capi_thunks_IVRTrackedCamera_002(void);
 
-void __thiscall IVRCompositor_009_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin);
+const char * __thiscall IVRTrackedCamera_002_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
 
-ETrackingUniverseOrigin __thiscall IVRCompositor_009_GetTrackingSpace(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
 
-EVRCompositorError __thiscall IVRCompositor_009_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
 
-EVRCompositorError __thiscall IVRCompositor_009_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraIntrinisics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
 
-EVRCompositorError __thiscall IVRCompositor_009_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-void __thiscall IVRCompositor_009_ClearLastSubmittedFrame(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
 
-void __thiscall IVRCompositor_009_PostPresentHandoff(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
 
-bool __thiscall IVRCompositor_009_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-float __thiscall IVRCompositor_009_GetFrameTimeRemaining(void *_this);
+void test_capi_thunks_IVRTrackedCamera_003(void);
 
-void __thiscall IVRCompositor_009_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
+const char * __thiscall IVRTrackedCamera_003_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
 
-void __thiscall IVRCompositor_009_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
 
-EVRCompositorError __thiscall IVRCompositor_009_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
 
-void __thiscall IVRCompositor_009_ClearSkyboxOverride(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
 
-void __thiscall IVRCompositor_009_CompositorBringToFront(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-void __thiscall IVRCompositor_009_CompositorGoToBack(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
 
-void __thiscall IVRCompositor_009_CompositorQuit(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
 
-bool __thiscall IVRCompositor_009_IsFullscreen(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-uint32_t __thiscall IVRCompositor_009_GetCurrentSceneFocusProcess(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
 
-uint32_t __thiscall IVRCompositor_009_GetLastFrameRenderer(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-bool __thiscall IVRCompositor_009_CanRenderScene(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-void __thiscall IVRCompositor_009_ShowMirrorWindow(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_003_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
 
-void __thiscall IVRCompositor_009_HideMirrorWindow(void *_this);
+void test_capi_thunks_IVRTrackedCamera_004(void);
 
-bool __thiscall IVRCompositor_009_IsMirrorWindowVisible(void *_this);
+const char * __thiscall IVRTrackedCamera_004_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
 
-void __thiscall IVRCompositor_009_CompositorDumpImages(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
 
-void test_capi_thunks_IVRSystem_009(void);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
 
-void __thiscall IVRSystem_009_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
 
-HmdMatrix44_t *__thiscall IVRSystem_009_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-void __thiscall IVRSystem_009_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
 
-DistortionCoordinates_t *__thiscall IVRSystem_009_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, EVREye eEye, float fU, float fV);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
 
-HmdMatrix34_t *__thiscall IVRSystem_009_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-bool __thiscall IVRSystem_009_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
 
-int32_t __thiscall IVRSystem_009_GetD3D9AdapterIndex(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-void __thiscall IVRSystem_009_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-bool __thiscall IVRSystem_009_IsDisplayOnDesktop(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_004_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
 
-bool __thiscall IVRSystem_009_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+void test_capi_thunks_IVRTrackedCamera_005(void);
 
-void __thiscall IVRSystem_009_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+const char * __thiscall IVRTrackedCamera_005_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
 
-void __thiscall IVRSystem_009_ResetSeatedZeroPose(void *_this);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
 
-HmdMatrix34_t *__thiscall IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
 
-HmdMatrix34_t *__thiscall IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
 
-uint32_t __thiscall IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-EDeviceActivityLevel __thiscall IVRSystem_009_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
 
-void __thiscall IVRSystem_009_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
 
-ETrackedDeviceClass __thiscall IVRSystem_009_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-bool __thiscall IVRSystem_009_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
 
-bool __thiscall IVRSystem_009_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-float __thiscall IVRSystem_009_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-int32_t __thiscall IVRSystem_009_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
 
-uint64_t __thiscall IVRSystem_009_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+void test_capi_thunks_IVRTrackedCamera_006(void);
 
-HmdMatrix34_t *__thiscall IVRSystem_009_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+const char * __thiscall IVRTrackedCamera_006_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError);
 
-uint32_t __thiscall IVRSystem_009_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera);
 
-const char * __thiscall IVRSystem_009_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize);
 
-bool __thiscall IVRSystem_009_PollNextEvent(void *_this, VREvent_t * pEvent);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter);
 
-bool __thiscall IVRSystem_009_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection);
 
-const char * __thiscall IVRSystem_009_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_009_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera);
 
-bool __thiscall IVRSystem_009_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-bool __thiscall IVRSystem_009_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight);
 
-void __thiscall IVRSystem_009_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-const char * __thiscall IVRSystem_009_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize);
 
-const char * __thiscall IVRSystem_009_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+EVRTrackedCameraError __thiscall IVRTrackedCamera_006_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId);
 
-bool __thiscall IVRSystem_009_CaptureInputFocus(void *_this);
+void __thiscall IVRTrackedCamera_006_SetCameraTrackingSpace(void *_this, ETrackingUniverseOrigin eUniverse);
 
-void __thiscall IVRSystem_009_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_009_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-uint32_t __thiscall IVRSystem_009_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
-
-EVRFirmwareError __thiscall IVRSystem_009_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-void __thiscall IVRSystem_009_AcknowledgeQuit_Exiting(void *_this);
-
-void __thiscall IVRSystem_009_AcknowledgeQuit_UserPrompt(void *_this);
-
-void test_capi_thunks_IVROverlay_007(void);
-
-EVROverlayError __thiscall IVROverlay_007_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_007_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_007_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_007_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_007_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-EVROverlayError __thiscall IVROverlay_007_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_007_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_007_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-EVROverlayError __thiscall IVROverlay_007_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_007_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_007_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-bool __thiscall IVROverlay_007_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_007_GetGamepadFocusOverlay(void *_this);
-
-EVROverlayError __thiscall IVROverlay_007_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo);
-
-EVROverlayError __thiscall IVROverlay_007_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture);
-
-EVROverlayError __thiscall IVROverlay_007_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-EVROverlayError __thiscall IVROverlay_007_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-EVROverlayError __thiscall IVROverlay_007_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_007_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_007_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-EVROverlayError __thiscall IVROverlay_007_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-EVROverlayError __thiscall IVROverlay_007_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_007_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-EVROverlayError __thiscall IVROverlay_007_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-EVROverlayError __thiscall IVROverlay_007_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue);
-
-uint32_t __thiscall IVROverlay_007_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_007_HideKeyboard(void *_this);
-
-void test_capi_thunks_IVRSystem_006(void);
-
-void __thiscall IVRSystem_006_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_006_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_006_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_006_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
-
-void __thiscall IVRSystem_006_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-DistortionCoordinates_t *__thiscall IVRSystem_006_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
-
-HmdMatrix34_t *__thiscall IVRSystem_006_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_006_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_006_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_006_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
-
-bool __thiscall IVRSystem_006_AttachToWindow(void *_this, void * hWnd);
-
-void __thiscall IVRSystem_006_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_006_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-HmdMatrix34_t *__thiscall IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-uint32_t __thiscall IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass(void *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
-
-EDeviceActivityLevel __thiscall IVRSystem_006_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
-
-TrackedDeviceClass __thiscall IVRSystem_006_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_006_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_006_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-float __thiscall IVRSystem_006_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_006_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_006_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_006_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_006_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_006_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
-
-bool __thiscall IVRSystem_006_PollNextEvent(void *_this, VREvent_t * pEvent);
-
-bool __thiscall IVRSystem_006_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_006_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_006_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_006_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
-
-bool __thiscall IVRSystem_006_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_006_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_006_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_006_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_006_CaptureInputFocus(void *_this);
-
-void __thiscall IVRSystem_006_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_006_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-uint32_t __thiscall IVRSystem_006_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
-
-VRFirmwareError __thiscall IVRSystem_006_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_006_IsDisplayOnDesktop(void *_this);
-
-bool __thiscall IVRSystem_006_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
-
-void test_capi_thunks_IVRApplications_001(void);
-
-EVRApplicationError __thiscall IVRApplications_001_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);
-
-EVRApplicationError __thiscall IVRApplications_001_RemoveApplicationManifest(void *_this, const char * pchApplicationManifestFullPath);
-
-bool __thiscall IVRApplications_001_IsApplicationInstalled(void *_this, const char * pchAppKey);
-
-uint32_t __thiscall IVRApplications_001_GetApplicationCount(void *_this);
-
-EVRApplicationError __thiscall IVRApplications_001_GetApplicationKeyByIndex(void *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationError __thiscall IVRApplications_001_GetApplicationKeyByProcessId(void *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationError __thiscall IVRApplications_001_LaunchApplication(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_001_LaunchDashboardOverlay(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_001_IdentifyApplication(void *_this, uint32_t unProcessId, const char * pchAppKey);
-
-uint32_t __thiscall IVRApplications_001_GetApplicationProcessId(void *_this, const char * pchAppKey);
-
-const char * __thiscall IVRApplications_001_GetApplicationsErrorNameFromEnum(void *_this, EVRApplicationError error);
-
-uint32_t __thiscall IVRApplications_001_GetApplicationPropertyString(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError);
-
-bool __thiscall IVRApplications_001_GetApplicationPropertyBool(void *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError);
-
-EVRApplicationError __thiscall IVRApplications_001_GetHomeApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationError __thiscall IVRApplications_001_SetHomeApplication(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_001_SetApplicationAutoLaunch(void *_this, const char * pchAppKey, bool bAutoLaunch);
-
-bool __thiscall IVRApplications_001_GetApplicationAutoLaunch(void *_this, const char * pchAppKey);
-
-EVRApplicationError __thiscall IVRApplications_001_GetStartingApplication(void *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen);
-
-EVRApplicationTransitionState __thiscall IVRApplications_001_GetTransitionState(void *_this);
-
-EVRApplicationError __thiscall IVRApplications_001_PerformApplicationPrelaunchCheck(void *_this, const char * pchAppKey);
-
-const char * __thiscall IVRApplications_001_GetApplicationsTransitionStateNameFromEnum(void *_this, EVRApplicationTransitionState state);
-
-void test_capi_thunks_IVRChaperone_002(void);
-
-ChaperoneCalibrationState __thiscall IVRChaperone_002_GetCalibrationState(void *_this);
-
-bool __thiscall IVRChaperone_002_GetSoftBoundsInfo(void *_this, ChaperoneSoftBoundsInfo_t * pInfo);
-
-bool __thiscall IVRChaperone_002_GetHardBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount);
-
-bool __thiscall IVRChaperone_002_GetSeatedBoundsInfo(void *_this, ChaperoneSeatedBoundsInfo_t * pInfo);
-
-void __thiscall IVRChaperone_002_ReloadInfo(void *_this);
-
-void __thiscall IVRChaperone_002_SetSceneColor(void *_this, HmdColor_t color);
-
-void __thiscall IVRChaperone_002_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors);
-
-bool __thiscall IVRChaperone_002_AreBoundsVisible(void *_this);
-
-void __thiscall IVRChaperone_002_ForceBoundsVisible(void *_this, bool bForce);
-
-void test_capi_thunks_IVRCompositor_008(void);
-
-uint32_t __thiscall IVRCompositor_008_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-void __thiscall IVRCompositor_008_SetVSync(void *_this, bool bVSync);
-
-bool __thiscall IVRCompositor_008_GetVSync(void *_this);
-
-void __thiscall IVRCompositor_008_SetGamma(void *_this, float fGamma);
-
-float __thiscall IVRCompositor_008_GetGamma(void *_this);
-
-VRCompositorError __thiscall IVRCompositor_008_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-VRCompositorError __thiscall IVRCompositor_008_Submit(void *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds, VRSubmitFlags_t nSubmitFlags);
-
-void __thiscall IVRCompositor_008_ClearLastSubmittedFrame(void *_this);
-
-bool __thiscall IVRCompositor_008_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-void __thiscall IVRCompositor_008_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_008_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-void __thiscall IVRCompositor_008_SetSkyboxOverride(void *_this, GraphicsAPIConvention eTextureType, void * pFront, void * pBack, void * pLeft, void * pRight, void * pTop, void * pBottom);
-
-void __thiscall IVRCompositor_008_ClearSkyboxOverride(void *_this);
-
-void __thiscall IVRCompositor_008_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_008_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_008_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_008_IsFullscreen(void *_this);
-
-void __thiscall IVRCompositor_008_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
-
-TrackingUniverseOrigin __thiscall IVRCompositor_008_GetTrackingSpace(void *_this);
-
-uint32_t __thiscall IVRCompositor_008_GetCurrentSceneFocusProcess(void *_this);
-
-bool __thiscall IVRCompositor_008_CanRenderScene(void *_this);
-
-void __thiscall IVRCompositor_008_ShowMirrorWindow(void *_this);
-
-void __thiscall IVRCompositor_008_HideMirrorWindow(void *_this);
-
-void __thiscall IVRCompositor_008_CompositorDumpImages(void *_this);
-
-float __thiscall IVRCompositor_008_GetFrameTimeRemaining(void *_this);
-
-uint32_t __thiscall IVRCompositor_008_GetLastFrameRenderer(void *_this);
-
-void test_capi_thunks_IVRNotifications_001(void);
-
-uint32_t __thiscall IVRNotifications_001_GetErrorString(void *_this, NotificationError_t error, char * pchBuffer, uint32_t unBufferSize);
-
-NotificationError_t __thiscall IVRNotifications_001_CreateNotification(void *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char * strType, const char * strText, const char * strCategory, NotificationBitmap * photo, VRNotificationId * notificationId);
-
-NotificationError_t __thiscall IVRNotifications_001_DismissNotification(void *_this, VRNotificationId notificationId);
-
-void test_capi_thunks_IVROverlay_005(void);
-
-VROverlayError __thiscall IVROverlay_005_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_005_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_005_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_005_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_005_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_005_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_005_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_005_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-VROverlayError __thiscall IVROverlay_005_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_005_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_005_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-bool __thiscall IVROverlay_005_IsFocusOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
-
-VROverlayError __thiscall IVROverlay_005_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-VROverlayError __thiscall IVROverlay_005_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-VROverlayError __thiscall IVROverlay_005_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_005_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_005_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_005_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-VROverlayError __thiscall IVROverlay_005_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_005_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-VROverlayError __thiscall IVROverlay_005_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode);
-
-uint32_t __thiscall IVROverlay_005_GetKeyboardText(void *_this, char * pchText, uint32_t cchText);
-
-void __thiscall IVROverlay_005_HideKeyboard(void *_this);
-
-void test_capi_thunks_IVRRenderModels_001(void);
-
-bool __thiscall IVRRenderModels_001_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t * pRenderModel);
-
-void __thiscall IVRRenderModels_001_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
-
-uint32_t __thiscall IVRRenderModels_001_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen);
-
-uint32_t __thiscall IVRRenderModels_001_GetRenderModelCount(void *_this);
-
-void test_capi_thunks_IVRSystem_005(void);
-
-void __thiscall IVRSystem_005_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_005_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_005_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_005_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
-
-void __thiscall IVRSystem_005_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-DistortionCoordinates_t *__thiscall IVRSystem_005_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
-
-HmdMatrix34_t *__thiscall IVRSystem_005_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_005_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_005_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_005_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
-
-bool __thiscall IVRSystem_005_AttachToWindow(void *_this, void * hWnd);
-
-void __thiscall IVRSystem_005_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_005_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-uint32_t __thiscall IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass(void *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
-
-TrackedDeviceClass __thiscall IVRSystem_005_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_005_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_005_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-float __thiscall IVRSystem_005_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_005_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_005_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_005_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_005_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_005_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
-
-bool __thiscall IVRSystem_005_PollNextEvent(void *_this, VREvent_t * pEvent);
-
-bool __thiscall IVRSystem_005_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_005_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_005_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_005_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
-
-bool __thiscall IVRSystem_005_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_005_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_005_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_005_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_005_CaptureInputFocus(void *_this);
-
-void __thiscall IVRSystem_005_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_005_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-uint32_t __thiscall IVRSystem_005_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
-
-void test_capi_thunks_IVRCompositor_007(void);
-
-uint32_t __thiscall IVRCompositor_007_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-void __thiscall IVRCompositor_007_SetVSync(void *_this, bool bVSync);
-
-bool __thiscall IVRCompositor_007_GetVSync(void *_this);
-
-void __thiscall IVRCompositor_007_SetGamma(void *_this, float fGamma);
-
-float __thiscall IVRCompositor_007_GetGamma(void *_this);
-
-VRCompositorError __thiscall IVRCompositor_007_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-VRCompositorError __thiscall IVRCompositor_007_Submit(void *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds);
-
-void __thiscall IVRCompositor_007_ClearLastSubmittedFrame(void *_this);
-
-bool __thiscall IVRCompositor_007_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-void __thiscall IVRCompositor_007_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_007_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-void __thiscall IVRCompositor_007_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_007_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_007_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_007_IsFullscreen(void *_this);
-
-void __thiscall IVRCompositor_007_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
-
-TrackingUniverseOrigin __thiscall IVRCompositor_007_GetTrackingSpace(void *_this);
-
-uint32_t __thiscall IVRCompositor_007_GetCurrentSceneFocusProcess(void *_this);
-
-bool __thiscall IVRCompositor_007_CanRenderScene(void *_this);
-
-void test_capi_thunks_IVROverlay_004(void);
-
-VROverlayError __thiscall IVROverlay_004_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_004_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_004_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_004_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_004_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_004_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_004_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_004_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-VROverlayError __thiscall IVROverlay_004_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_004_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_004_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
-
-VROverlayError __thiscall IVROverlay_004_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-VROverlayError __thiscall IVROverlay_004_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-VROverlayError __thiscall IVROverlay_004_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_004_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_004_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_004_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-VROverlayError __thiscall IVROverlay_004_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_004_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-void test_capi_thunks_IVROverlay_003(void);
-
-VROverlayError __thiscall IVROverlay_003_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_003_GetHighQualityOverlay(void *_this);
-
-uint32_t __thiscall IVROverlay_003_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-uint32_t __thiscall IVROverlay_003_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, VROverlayError * pError);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight);
-
-const char * __thiscall IVROverlay_003_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_003_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_003_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_003_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-VROverlayError __thiscall IVROverlay_003_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_003_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_003_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
-
-VROverlayError __thiscall IVROverlay_003_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-VROverlayError __thiscall IVROverlay_003_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-VROverlayError __thiscall IVROverlay_003_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_003_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_003_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_003_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-VROverlayError __thiscall IVROverlay_003_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void __thiscall IVROverlay_003_ShowDashboard(void *_this, const char * pchOverlayToShow);
-
-void test_capi_thunks_IVROverlay_002(void);
-
-VROverlayError __thiscall IVROverlay_002_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_002_GetHighQualityOverlay(void *_this);
-
-const char * __thiscall IVROverlay_002_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_002_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_002_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_002_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-VROverlayError __thiscall IVROverlay_002_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_002_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_002_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture);
-
-VROverlayError __thiscall IVROverlay_002_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-VROverlayError __thiscall IVROverlay_002_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-VROverlayError __thiscall IVROverlay_002_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle);
-
-bool __thiscall IVROverlay_002_IsDashboardVisible(void *_this);
-
-bool __thiscall IVROverlay_002_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_002_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-VROverlayError __thiscall IVROverlay_002_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void test_capi_thunks_IVRSystem_004(void);
-
-void __thiscall IVRSystem_004_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_004_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_004_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_004_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
-
-void __thiscall IVRSystem_004_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-DistortionCoordinates_t *__thiscall IVRSystem_004_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
-
-HmdMatrix34_t *__thiscall IVRSystem_004_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_004_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_004_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_004_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
-
-bool __thiscall IVRSystem_004_AttachToWindow(void *_this, void * hWnd);
-
-void __thiscall IVRSystem_004_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_004_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-TrackedDeviceClass __thiscall IVRSystem_004_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_004_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_004_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-float __thiscall IVRSystem_004_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_004_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_004_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_004_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_004_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_004_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
-
-bool __thiscall IVRSystem_004_PollNextEvent(void *_this, VREvent_t * pEvent);
-
-bool __thiscall IVRSystem_004_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_004_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_004_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_004_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
-
-bool __thiscall IVRSystem_004_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_004_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_004_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_004_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_004_CaptureInputFocus(void *_this);
-
-void __thiscall IVRSystem_004_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_004_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-uint32_t __thiscall IVRSystem_004_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize);
-
-void test_capi_thunks_IVRCompositor_006(void);
-
-uint32_t __thiscall IVRCompositor_006_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-void __thiscall IVRCompositor_006_SetVSync(void *_this, bool bVSync);
-
-bool __thiscall IVRCompositor_006_GetVSync(void *_this);
-
-void __thiscall IVRCompositor_006_SetGamma(void *_this, float fGamma);
-
-float __thiscall IVRCompositor_006_GetGamma(void *_this);
-
-void __thiscall IVRCompositor_006_SetGraphicsDevice(void *_this, Compositor_DeviceType eType, void * pDevice);
-
-VRCompositorError __thiscall IVRCompositor_006_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount);
-
-VRCompositorError __thiscall IVRCompositor_006_Submit(void *_this, Hmd_Eye eEye, void * pTexture, VRTextureBounds_t * pBounds);
-
-void __thiscall IVRCompositor_006_ClearLastSubmittedFrame(void *_this);
-
-bool __thiscall IVRCompositor_006_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-void __thiscall IVRCompositor_006_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_006_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-void __thiscall IVRCompositor_006_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_006_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_006_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_006_IsFullscreen(void *_this);
-
-void __thiscall IVRCompositor_006_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
-
-TrackingUniverseOrigin __thiscall IVRCompositor_006_GetTrackingSpace(void *_this);
-
-uint32_t __thiscall IVRCompositor_006_GetCurrentSceneFocusProcess(void *_this);
-
-bool __thiscall IVRCompositor_006_CanRenderScene(void *_this);
-
-void test_capi_thunks_IVROverlay_001(void);
-
-VROverlayError __thiscall IVROverlay_001_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_001_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_001_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_001_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayHandle_t __thiscall IVROverlay_001_GetHighQualityOverlay(void *_this);
-
-const char * __thiscall IVROverlay_001_GetOverlayErrorNameFromEnum(void *_this, VROverlayError error);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float fGamma);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayGamma(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfGamma);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, TrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayVisibility(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayVisibility * peOverlayVisibility);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayVisibility(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayVisibility eOverlayVisibility);
-
-VROverlayError __thiscall IVROverlay_001_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_001_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_001_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-bool __thiscall IVROverlay_001_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod);
-
-VROverlayError __thiscall IVROverlay_001_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale);
-
-bool __thiscall IVROverlay_001_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults);
-
-bool __thiscall IVROverlay_001_HandleControllerOverlayInteractionAsMouse(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void * pTexture);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth);
-
-VROverlayError __thiscall IVROverlay_001_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath);
-
-bool __thiscall IVROverlay_001_IsSystemOverlayVisible(void *_this);
-
-bool __thiscall IVROverlay_001_IsActiveSystemOverlay(void *_this, VROverlayHandle_t ulOverlayHandle);
-
-VROverlayError __thiscall IVROverlay_001_SetSystemOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId);
-
-VROverlayError __thiscall IVROverlay_001_GetSystemOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId);
-
-void test_capi_thunks_IVRSystem_003(void);
-
-void __thiscall IVRSystem_003_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_003_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
-
-void __thiscall IVRSystem_003_GetEyeOutputViewport(void *_this, Hmd_Eye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight);
-
-HmdMatrix44_t *__thiscall IVRSystem_003_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType);
-
-void __thiscall IVRSystem_003_GetProjectionRaw(void *_this, Hmd_Eye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
-
-DistortionCoordinates_t *__thiscall IVRSystem_003_ComputeDistortion(void *_this, DistortionCoordinates_t *_r, Hmd_Eye eEye, float fU, float fV);
-
-HmdMatrix34_t *__thiscall IVRSystem_003_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_003_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
-
-int32_t __thiscall IVRSystem_003_GetD3D9AdapterIndex(void *_this);
-
-void __thiscall IVRSystem_003_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex);
-
-bool __thiscall IVRSystem_003_AttachToWindow(void *_this, void * hWnd);
-
-void __thiscall IVRSystem_003_GetDeviceToAbsoluteTrackingPose(void *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
-
-void __thiscall IVRSystem_003_ResetSeatedZeroPose(void *_this);
-
-HmdMatrix34_t *__thiscall IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
-
-bool __thiscall IVRSystem_003_LoadRenderModel(void *_this, const char * pchRenderModelName, RenderModel_t * pRenderModel);
-
-void __thiscall IVRSystem_003_FreeRenderModel(void *_this, RenderModel_t * pRenderModel);
-
-TrackedDeviceClass __thiscall IVRSystem_003_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_003_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
-
-bool __thiscall IVRSystem_003_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-float __thiscall IVRSystem_003_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-int32_t __thiscall IVRSystem_003_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint64_t __thiscall IVRSystem_003_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-HmdMatrix34_t *__thiscall IVRSystem_003_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError * pError);
-
-uint32_t __thiscall IVRSystem_003_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, TrackedPropertyError * pError);
-
-const char * __thiscall IVRSystem_003_GetPropErrorNameFromEnum(void *_this, TrackedPropertyError error);
-
-bool __thiscall IVRSystem_003_PollNextEvent(void *_this, VREvent_t * pEvent);
-
-bool __thiscall IVRSystem_003_PollNextEventWithPose(void *_this, TrackingUniverseOrigin eOrigin, VREvent_t * pEvent, TrackedDevicePose_t * pTrackedDevicePose);
-
-const char * __thiscall IVRSystem_003_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
-
-HiddenAreaMesh_t *__thiscall IVRSystem_003_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, Hmd_Eye eEye);
-
-bool __thiscall IVRSystem_003_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState);
-
-bool __thiscall IVRSystem_003_GetControllerStateWithPose(void *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, TrackedDevicePose_t * pTrackedDevicePose);
-
-void __thiscall IVRSystem_003_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
-
-const char * __thiscall IVRSystem_003_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
-
-const char * __thiscall IVRSystem_003_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
-
-bool __thiscall IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *_this, Compositor_OverlaySettings * overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType);
-
-bool __thiscall IVRSystem_003_CaptureInputFocus(void *_this);
-
-void __thiscall IVRSystem_003_ReleaseInputFocus(void *_this);
-
-bool __thiscall IVRSystem_003_IsInputFocusCapturedByAnotherProcess(void *_this);
-
-void test_capi_thunks_IVRCompositor_005(void);
-
-uint32_t __thiscall IVRCompositor_005_GetLastError(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-void __thiscall IVRCompositor_005_SetVSync(void *_this, bool bVSync);
-
-bool __thiscall IVRCompositor_005_GetVSync(void *_this);
-
-void __thiscall IVRCompositor_005_SetGamma(void *_this, float fGamma);
-
-float __thiscall IVRCompositor_005_GetGamma(void *_this);
-
-void __thiscall IVRCompositor_005_SetGraphicsDevice(void *_this, Compositor_DeviceType eType, void * pDevice);
-
-void __thiscall IVRCompositor_005_WaitGetPoses(void *_this, TrackedDevicePose_t * pPoseArray, uint32_t unPoseArrayCount);
-
-void __thiscall IVRCompositor_005_Submit(void *_this, Hmd_Eye eEye, void * pTexture, Compositor_TextureBounds * pBounds);
-
-void __thiscall IVRCompositor_005_ClearLastSubmittedFrame(void *_this);
-
-void __thiscall IVRCompositor_005_GetOverlayDefaults(void *_this, Compositor_OverlaySettings * pSettings);
-
-void __thiscall IVRCompositor_005_SetOverlay(void *_this, void * pTexture, Compositor_OverlaySettings * pSettings);
-
-void __thiscall IVRCompositor_005_SetOverlayRaw(void *_this, void * buffer, uint32_t width, uint32_t height, uint32_t depth, Compositor_OverlaySettings * pSettings);
-
-void __thiscall IVRCompositor_005_SetOverlayFromFile(void *_this, const char * pchFilePath, Compositor_OverlaySettings * pSettings);
-
-void __thiscall IVRCompositor_005_ClearOverlay(void *_this);
-
-bool __thiscall IVRCompositor_005_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo);
-
-void __thiscall IVRCompositor_005_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground);
-
-void __thiscall IVRCompositor_005_FadeGrid(void *_this, float fSeconds, bool bFadeIn);
-
-void __thiscall IVRCompositor_005_CompositorBringToFront(void *_this);
-
-void __thiscall IVRCompositor_005_CompositorGoToBack(void *_this);
-
-void __thiscall IVRCompositor_005_CompositorQuit(void *_this);
-
-bool __thiscall IVRCompositor_005_IsFullscreen(void *_this);
-
-bool __thiscall IVRCompositor_005_ComputeOverlayIntersection(void *_this, Compositor_OverlaySettings * pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t * pvecIntersectionUV, HmdVector3_t * pvecIntersectionTrackingSpace);
-
-void __thiscall IVRCompositor_005_SetTrackingSpace(void *_this, TrackingUniverseOrigin eOrigin);
-
-TrackingUniverseOrigin __thiscall IVRCompositor_005_GetTrackingSpace(void *_this);
+ETrackingUniverseOrigin __thiscall IVRTrackedCamera_006_GetCameraTrackingSpace(void *_this);
