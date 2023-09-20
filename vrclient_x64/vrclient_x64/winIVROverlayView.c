@@ -23,7 +23,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_ReleaseOverlayView,
 DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_PostOverlayEvent, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_IsViewingPermitted, 12)
 
-uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
+uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, winVROverlayView_t_1267 *pOverlayView, uint32_t unOverlayViewSize)
 {
     struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params params =
     {
@@ -38,7 +38,7 @@ uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(struct w_steam_iface *_this, VROverlayView_t *pOverlayView)
+uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(struct w_steam_iface *_this, winVROverlayView_t_1267 *pOverlayView)
 {
     struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params params =
     {

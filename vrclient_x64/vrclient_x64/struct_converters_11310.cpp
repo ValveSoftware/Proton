@@ -126,6 +126,32 @@ void struct_CameraVideoStreamFrameHeader_t_11310_win_to_lin(const void *w, void 
 }
 
 #pragma pack(push, 8)
+struct winVROverlayView_t_11310 {
+    vr::VROverlayHandle_t overlayHandle;
+    vr::Texture_t texture __attribute__((aligned(4)));
+    vr::VRTextureBounds_t textureBounds __attribute__((aligned(4)));
+}  __attribute__ ((ms_struct));
+#pragma pack(pop)
+
+void struct_VROverlayView_t_11310_lin_to_win(void *l, void *w)
+{
+    struct winVROverlayView_t_11310 *win = (struct winVROverlayView_t_11310 *)w;
+    VROverlayView_t *lin = (VROverlayView_t *)l;
+    win->overlayHandle = lin->overlayHandle;
+    win->texture = lin->texture;
+    win->textureBounds = lin->textureBounds;
+}
+
+void struct_VROverlayView_t_11310_win_to_lin(const void *w, void *l)
+{
+    struct winVROverlayView_t_11310 *win = (struct winVROverlayView_t_11310 *)w;
+    VROverlayView_t *lin = (VROverlayView_t *)l;
+    lin->overlayHandle = win->overlayHandle;
+    lin->texture = win->texture;
+    lin->textureBounds = win->textureBounds;
+}
+
+#pragma pack(push, 8)
 struct winRenderModel_TextureMap_t_11310 {
     uint16_t unWidth;
     uint16_t unHeight;
@@ -352,6 +378,66 @@ void struct_InputSkeletalActionData_t_11310_win_to_lin(const void *w, void *l)
     InputSkeletalActionData_t *lin = (InputSkeletalActionData_t *)l;
     lin->bActive = win->bActive;
     lin->activeOrigin = win->activeOrigin;
+}
+
+#pragma pack(push, 8)
+struct winInputOriginInfo_t_11310 {
+    vr::VRInputValueHandle_t devicePath;
+    vr::TrackedDeviceIndex_t trackedDeviceIndex;
+    char rchRenderModelComponentName[128];
+}  __attribute__ ((ms_struct));
+#pragma pack(pop)
+
+void struct_InputOriginInfo_t_11310_lin_to_win(void *l, void *w, uint32_t sz)
+{
+    struct winInputOriginInfo_t_11310 *win = (struct winInputOriginInfo_t_11310 *)w;
+    InputOriginInfo_t *lin = (InputOriginInfo_t *)l;
+    win->devicePath = lin->devicePath;
+    win->trackedDeviceIndex = lin->trackedDeviceIndex;
+    memcpy(win->rchRenderModelComponentName, lin->rchRenderModelComponentName, sizeof(win->rchRenderModelComponentName));
+}
+
+void struct_InputOriginInfo_t_11310_win_to_lin(const void *w, void *l)
+{
+    struct winInputOriginInfo_t_11310 *win = (struct winInputOriginInfo_t_11310 *)w;
+    InputOriginInfo_t *lin = (InputOriginInfo_t *)l;
+    lin->devicePath = win->devicePath;
+    lin->trackedDeviceIndex = win->trackedDeviceIndex;
+    memcpy(lin->rchRenderModelComponentName, win->rchRenderModelComponentName, sizeof(lin->rchRenderModelComponentName));
+}
+
+#pragma pack(push, 8)
+struct winIVRSpatialAnchors_11310 {
+}  __attribute__ ((ms_struct));
+#pragma pack(pop)
+
+void struct_IVRSpatialAnchors_11310_lin_to_win(void *l, void *w)
+{
+    struct winIVRSpatialAnchors_11310 *win = (struct winIVRSpatialAnchors_11310 *)w;
+    IVRSpatialAnchors *lin = (IVRSpatialAnchors *)l;
+}
+
+void struct_IVRSpatialAnchors_11310_win_to_lin(const void *w, void *l)
+{
+    struct winIVRSpatialAnchors_11310 *win = (struct winIVRSpatialAnchors_11310 *)w;
+    IVRSpatialAnchors *lin = (IVRSpatialAnchors *)l;
+}
+
+#pragma pack(push, 8)
+struct winIVRDebug_11310 {
+}  __attribute__ ((ms_struct));
+#pragma pack(pop)
+
+void struct_IVRDebug_11310_lin_to_win(void *l, void *w)
+{
+    struct winIVRDebug_11310 *win = (struct winIVRDebug_11310 *)w;
+    IVRDebug *lin = (IVRDebug *)l;
+}
+
+void struct_IVRDebug_11310_win_to_lin(const void *w, void *l)
+{
+    struct winIVRDebug_11310 *win = (struct winIVRDebug_11310 *)w;
+    IVRDebug *lin = (IVRDebug *)l;
 }
 
 

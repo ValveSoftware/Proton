@@ -23,13 +23,23 @@ struct cppIVROverlayView_IVROverlayView_003
 void cppIVROverlayView_IVROverlayView_003_AcquireOverlayView( struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params *params )
 {
     struct cppIVROverlayView_IVROverlayView_003 *iface = (struct cppIVROverlayView_IVROverlayView_003 *)params->linux_side;
-    params->_ret = iface->AcquireOverlayView( params->ulOverlayHandle, params->pNativeDevice, params->pOverlayView, params->unOverlayViewSize );
+    VROverlayView_t lin_pOverlayView;
+    if (params->pOverlayView)
+        struct_VROverlayView_t_1267_win_to_lin( params->pOverlayView, &lin_pOverlayView );
+    params->_ret = iface->AcquireOverlayView( params->ulOverlayHandle, params->pNativeDevice, params->pOverlayView ? &lin_pOverlayView : nullptr, params->unOverlayViewSize );
+    if (params->pOverlayView)
+        struct_VROverlayView_t_1267_lin_to_win( &lin_pOverlayView, params->pOverlayView );
 }
 
 void cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView( struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params *params )
 {
     struct cppIVROverlayView_IVROverlayView_003 *iface = (struct cppIVROverlayView_IVROverlayView_003 *)params->linux_side;
-    params->_ret = iface->ReleaseOverlayView( params->pOverlayView );
+    VROverlayView_t lin_pOverlayView;
+    if (params->pOverlayView)
+        struct_VROverlayView_t_1267_win_to_lin( params->pOverlayView, &lin_pOverlayView );
+    params->_ret = iface->ReleaseOverlayView( params->pOverlayView ? &lin_pOverlayView : nullptr );
+    if (params->pOverlayView)
+        struct_VROverlayView_t_1267_lin_to_win( &lin_pOverlayView, params->pOverlayView );
 }
 
 void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent( struct cppIVROverlayView_IVROverlayView_003_PostOverlayEvent_params *params )

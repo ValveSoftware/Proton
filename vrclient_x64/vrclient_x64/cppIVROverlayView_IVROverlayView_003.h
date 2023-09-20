@@ -8,7 +8,7 @@ struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     VRNativeDevice_t *pNativeDevice;
-    VROverlayView_t *pOverlayView;
+    winVROverlayView_t_1267 *pOverlayView;
     uint32_t unOverlayViewSize;
 };
 extern void cppIVROverlayView_IVROverlayView_003_AcquireOverlayView( struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params *params );
@@ -17,7 +17,7 @@ struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayView_t *pOverlayView;
+    winVROverlayView_t_1267 *pOverlayView;
 };
 extern void cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView( struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params *params );
 

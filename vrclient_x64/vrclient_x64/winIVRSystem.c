@@ -378,7 +378,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_091 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_003_PollNextEvent_params params =
     {
@@ -390,7 +390,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_091 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_003_PollNextEventWithPose_params params =
     {
@@ -1003,7 +1003,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_092 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_004_PollNextEvent_params params =
     {
@@ -1015,7 +1015,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_092 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_004_PollNextEventWithPose_params params =
     {
@@ -1639,7 +1639,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_098 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_005_PollNextEvent_params params =
     {
@@ -1651,7 +1651,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_098 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_005_PollNextEventWithPose_params params =
     {
@@ -2306,7 +2306,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0910 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_006_PollNextEvent_params params =
     {
@@ -2318,7 +2318,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0910 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params params =
     {
@@ -3013,7 +3013,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0912 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_009_PollNextEvent_params params =
     {
@@ -3025,7 +3025,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0912 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_009_PollNextEventWithPose_params params =
     {
@@ -3745,7 +3745,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_this, VREvent_t *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0914 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_010_PollNextEvent_params params =
     {
@@ -3757,7 +3757,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0914 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_010_PollNextEventWithPose_params params =
     {

@@ -243,7 +243,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1015 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params params =
     {
@@ -602,7 +602,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1017 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1051,7 +1051,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1322 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1543,7 +1543,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1418 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2039,7 +2039,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1916 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2598,7 +2598,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1267 *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo_params params =
     {

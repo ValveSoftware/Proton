@@ -108,6 +108,44 @@ SDK_CLASSES = {klass: source for source, value in SDK_SOURCES.items()
 SDK_STRUCTS = {klass: source for source, value in SDK_SOURCES.items()
                for klass in value[1]}
 
+# these structs are manually confirmed to be equivalent
+EXEMPT_STRUCTS = {
+    "HmdColor_t",
+    "HmdMatrix33_t",
+    "HmdMatrix34_t",
+    "HmdMatrix44_t",
+    "HmdQuad_t",
+    "HmdQuaternion_t",
+    "HmdQuaternionf_t",
+    "HmdVector2_t",
+    "HmdVector3_t",
+    "HmdVector3d_t",
+    "HmdVector4_t",
+}
+
+# structs for which the size is important, either because of arrays or size parameters
+SIZED_STRUCTS = {
+    "CameraVideoStreamFrameHeader_t",
+    "Compositor_BenchmarkResults",
+    "Compositor_CumulativeStats",
+    "Compositor_StageRenderSettings",
+    "InputAnalogActionData_t",
+    "InputBindingInfo_t",
+    "InputDigitalActionData_t",
+    "InputOriginInfo_t",
+    "InputPoseActionData_t",
+    "InputSkeletalActionData_t",
+    "InputSkeletonActionData_t",
+    "Texture_t",
+    "TrackedDevicePose_t",
+    "VRActiveActionSet_t",
+    "VRBoneTransform_t",
+    "VRControllerState001_t",
+    "VREvent_t",
+    "VROverlayIntersectionMaskPrimitive_t",
+    "VROverlayView_t",
+}
+
 STRUCTS_NEXT_IS_SIZE = [
     "VREvent_t",
     "VRControllerState001_t",
@@ -204,12 +242,109 @@ MANUAL_METHODS = {
 def is_manual_method(klass, method, abi):
     version = re.search(r'(\d+)$', klass.version)
 
-    key = f'{klass.spelling}_{method.name}'
+    key = f'{klass.name}_{method.name}'
     needs_manual = MANUAL_METHODS.get(key, False)
 
     if callable(needs_manual) and version:
         return needs_manual(int(version[0]), abi)
     return needs_manual
+
+
+class Padding:
+    def __init__(self, offset, size):
+        self.offset = offset
+        self.size = size
+
+
+class Field:
+    def __init__(self, cursor, struct, type, offset, name=None):
+        self._cursor = cursor
+        self._type = type
+
+        self.name = cursor.spelling if not name else name
+        self.type = cursor.type
+        self.size = self.type.get_size()
+        self.offset = offset
+
+    def needs_conversion(self, other):
+        return self._type.needs_conversion(other._type)
+
+
+class BasicType:
+    def __init__(self, type, abi):
+        self._type = type.get_canonical()
+        self._abi = abi
+
+    def needs_conversion(self, other):
+        return False
+
+
+class Struct:
+    def __init__(self, sdkver, abi, cursor):
+        self._cursor = cursor
+        self._sdkver = sdkver
+        self._abi = abi
+        self._fields = None
+
+        self.name = canonical_typename(self._cursor)
+        self.name = self.name.removeprefix("vr::")
+        self.type = self._cursor.type.get_canonical()
+        self.size = self.type.get_size()
+        self.align = self.type.get_align()
+
+    @property
+    def padded_fields(self):
+        if self._fields: return self._fields
+
+        size, self._fields = 0, []
+        for cursor in self._cursor.get_children():
+            if cursor.kind == CursorKind.CXX_BASE_SPECIFIER \
+               and len(list(cursor.type.get_fields())) > 0:
+                base_type = Type(cursor.type, self._sdkver, self._abi)
+                self._fields += base_type.padded_fields
+                size = cursor.type.get_size()
+            break
+
+        for cursor in self.type.get_fields():
+            assert not cursor.is_bitfield()
+            offset = self.type.get_offset(cursor.spelling)
+            assert offset % 8 == 0
+            offset = offset // 8
+            # assert offset >= size or type(self) is Union
+
+            if size < offset: self._fields.append(Padding(size, offset - size))
+            field_type = Type(cursor.type, self._sdkver, self._abi)
+            self._fields.append(Field(cursor, self, field_type, offset))
+            size = max(size, offset + cursor.type.get_size())
+
+        if size < self.size: self._fields.append(Padding(size, self.size - size))
+        return self._fields
+
+    @property
+    def fields(self):
+        return [f for f in self.padded_fields if type(f) is not Padding]
+
+    def needs_conversion(self, other):
+        if self.name in SIZED_STRUCTS and self.size != other.size:
+            return True
+        if len(self.fields) != len(other.fields):
+            return True
+        if any([a.offset != b.offset or a.needs_conversion(b)
+               for a, b in zip(self.fields, other.fields)]):
+            return True
+
+        return False
+
+    def get_children(self):
+        return self._cursor.get_children()
+
+
+class Union(Struct):
+    def __init__(self, sdkver, abi, cursor):
+        super().__init__(sdkver, abi, cursor)
+
+    def needs_conversion(self, other):
+        return False # FIXME
 
 
 class Method:
@@ -248,16 +383,17 @@ class Destructor(Method):
 
 class Class:
     def __init__(self, sdkver, abi, cursor):
+        self._cursor = cursor
         self._sdkver = sdkver
         self._abi = abi
-
-        self._cursor = cursor
-
-        self.spelling = cursor.spelling
-        self.filename = SDK_CLASSES[self.spelling]
-        self.version = all_versions[sdkver][self.spelling]
-
         self._methods = None
+
+        self.name = cursor.spelling
+        self.filename = SDK_CLASSES.get(self.name, None)
+        versions = all_versions[sdkver]
+        self.version = versions.get(self.name, "")
+
+        self.type = self._cursor.type.get_canonical()
 
     @property
     def methods(self):
@@ -281,7 +417,12 @@ class Class:
 
     @property
     def full_name(self):
-        return f'{self.spelling}_{self.version}'
+        if len(self.version) == 0:
+            return self.name
+        return f'{self.name}_{self.version}'
+
+    def needs_conversion(self, other):
+        return self._abi[0] != other._abi[0]
 
     def write_definition(self, out, prefix):
         out(f'struct {prefix}{self.full_name}\n')
@@ -300,6 +441,25 @@ class Class:
 
     def get_children(self):
         return self._cursor.get_children()
+
+
+def Record(sdkver, abi, cursor):
+    if cursor.type.get_declaration().kind == CursorKind.UNION_DECL:
+        return Union(sdkver, abi, cursor)
+
+    method_kinds = (CursorKind.CXX_METHOD, CursorKind.DESTRUCTOR)
+    is_method = lambda c: c.kind in method_kinds and c.is_virtual_method()
+    for _ in filter(is_method, cursor.get_children()):
+        return Class(sdkver, abi, cursor)
+
+    return Struct(sdkver, abi, cursor)
+
+
+def Type(decl, sdkver, abi):
+    name = strip_ns(canonical_typename(decl))
+    if name not in all_structs:
+        return BasicType(decl, abi)
+    return all_structs[name][sdkver][abi]
 
 
 def display_sdkver(s):
@@ -441,6 +601,24 @@ def handle_method_cpp(method, classname, cppname, out):
     out(u'{\n')
     out(f'    struct {cppname} *iface = (struct {cppname} *)params->linux_side;\n')
 
+    params = list(zip(names[1:], method.get_arguments()))
+    for i, (name, param) in enumerate(params[:-1]):
+        if underlying_type(param).kind != TypeKind.RECORD:
+            continue
+        next_name, next_param = params[i + 1]
+        if not any(w in next_name.lower() for w in ('count', 'len', 'size', 'num')):
+            continue
+        assert strip_ns(underlying_typename(param)) in SIZED_STRUCTS | EXEMPT_STRUCTS
+
+    for i, (name, param) in enumerate(params[1:]):
+        if underlying_type(param).kind != TypeKind.RECORD:
+            continue
+        prev_name, prev_param = params[i - 1]
+        if not any(w in prev_name.lower() for w in ('count', 'len', 'size', 'num')):
+            continue
+        if strip_ns(underlying_typename(param)) not in SIZED_STRUCTS | EXEMPT_STRUCTS:
+            print('Warning:', strip_ns(underlying_typename(param)), name, 'following', prev_name)
+
     need_unwrap = {}
     need_output = {}
 
@@ -532,7 +710,7 @@ def handle_thiscall_wrapper(klass, method, out):
     size = 4 + sum(param_stack_size(p) for p in method.get_arguments())
     if returns_record: size += 4
 
-    name = f'win{klass.spelling}_{klass.version}_{method.name}'
+    name = f'win{klass.full_name}_{method.name}'
     out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
@@ -568,8 +746,8 @@ def handle_method_c(klass, method, winclassname, cppname, out):
         out(f'        .{name} = {name},\n')
     out(u'    };\n')
 
-    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.spelling}_{method.spelling}', {})
-    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
+    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
+    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
 
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
         out(f'    params.{name} = vrclient_dos_to_unix_path( {name} );\n')
@@ -611,7 +789,7 @@ def get_capi_thunk_params(method):
 
 
 def handle_class(klass):
-    cppname = f"cpp{klass.spelling}_{klass.version}"
+    cppname = f"cpp{klass.full_name}"
 
     with open(f"vrclient_x64/{cppname}.h", "w") as file:
         out = file.write
@@ -654,14 +832,14 @@ def handle_class(klass):
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
-            handle_method_cpp(method, klass.spelling, cppname, out)
+            handle_method_cpp(method, klass.name, cppname, out)
 
         out(u'#ifdef __cplusplus\n')
         out(u'}\n')
         out(u'#endif\n')
 
-    winclassname = f'win{klass.spelling}_{klass.version}'
-    with open(f'vrclient_x64/win{klass.spelling}.c', 'a') as file:
+    winclassname = f'win{klass.full_name}'
+    with open(f'vrclient_x64/win{klass.name}.c', 'a') as file:
         out = file.write
 
         out(f'#include "{cppname}.h"\n\n')
@@ -744,7 +922,7 @@ def handle_class(klass):
 
 
 def canonical_typename(cursor):
-    if type(cursor) is Cursor:
+    if type(cursor) in (Cursor, Struct):
         return canonical_typename(cursor.type)
 
     name = cursor.get_canonical().spelling
@@ -756,11 +934,13 @@ def underlying_typename(decl):
 
 
 def find_struct_abis(name):
-    records = all_records[sdkver]
-    missing = [name not in records[abi] for abi in ABIS]
-    assert all(missing) or not any(missing)
-    if any(missing): return None
-    return {abi: records[abi][name].type for abi in ABIS}
+    name = strip_ns(name)
+    if not name in all_structs:
+        return None
+    structs = all_structs[name]
+    if not sdkver in structs:
+        return None
+    return structs[sdkver]
 
 
 def struct_needs_conversion_nocache(struct):
@@ -769,35 +949,16 @@ def struct_needs_conversion_nocache(struct):
     abis = find_struct_abis(name)
     if abis is None:
         return False, False
-
-    names = {a: [f.spelling for f in abis[a].get_fields()]
-             for a in ABIS}
-    assert names['u32'] == names['u64']
-    assert names['u32'] == names['w32']
-    assert names['u32'] == names['w64']
-
-    offsets = {a: {f: abis[a].get_offset(f) for f in names[a]}
-               for a in ABIS}
-    if offsets['u32'] != offsets['w32']:
+    if abis['w32'].needs_conversion(abis['u32']):
         return True, False
-    if offsets['u64'] != offsets['w64']:
+    if abis['w64'].needs_conversion(abis['u64']):
         return True, False
 
-    types = {a: [f.type.get_canonical() for f in abis[a].get_fields()]
-             for a in ABIS}
-    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
-           for t in types['u32']):
-        return True, False
-    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
-           for t in types['u64']):
-        return True, False
-
-    assert abis['u32'].get_size() <= abis['w32'].get_size()
-    if abis['u32'].get_size() < abis['w32'].get_size():
+    assert abis['u32'].size <= abis['w32'].size
+    if abis['u32'].size < abis['w32'].size:
         return False, True
-
-    assert abis['u64'].get_size() <= abis['w64'].get_size()
-    if abis['u64'].get_size() < abis['w64'].get_size():
+    assert abis['u64'].size <= abis['w64'].size
+    if abis['u64'].size < abis['w64'].size:
         return False, True
 
     return False, False
@@ -805,6 +966,8 @@ def struct_needs_conversion_nocache(struct):
 
 def struct_needs_conversion(struct):
     name = canonical_typename(struct)
+    if name in EXEMPT_STRUCTS:
+        return False
 
     if not sdkver in struct_conversion_cache:
         struct_conversion_cache[sdkver] = {}
@@ -827,8 +990,9 @@ def get_field_attribute_str(field):
         return ""
     name = canonical_typename(ftype)
     abis = find_struct_abis(name)
-    align = abis['w32'].get_align()
-    return " __attribute__((aligned(" + str(align) + ")))"
+    if not abis:
+        return " __attribute__((aligned(8)))"
+    return f" __attribute__((aligned({abis['w32'].align})))"
 
 generated_struct_handlers = []
 cpp_files_need_close_brace = []
@@ -841,7 +1005,7 @@ WRAPPERS=3
 #need to convert these structs from their linux layout to the win32
 #layout.
 def handle_struct(sdkver, struct):
-    handler_name = "%s_%s" % (struct.displayname, display_sdkver(sdkver))
+    handler_name = "%s_%s" % (struct.name, display_sdkver(sdkver))
 
     if handler_name in generated_struct_handlers:
         # we already have a handler for the struct struct of this size
@@ -853,7 +1017,7 @@ def handle_struct(sdkver, struct):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
 
-    if strip_ns(struct.displayname) in SDK_STRUCTS:
+    if strip_ns(struct.name) in SDK_STRUCTS:
         which.add(WRAPPERS)
 
     if len(which) == 0:
@@ -895,7 +1059,7 @@ def handle_struct(sdkver, struct):
                     cppfile.write("    %s %s" % (m.type.spelling, m.displayname))
             cppfile.write(get_field_attribute_str(m) + ";\n")
     if WRAPPERS in which:
-        cppfile.write("\n    %s *linux_side;\n" % struct.displayname)
+        cppfile.write("\n    %s *linux_side;\n" % struct.name)
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack(pop)\n\n")
 
@@ -910,8 +1074,8 @@ def handle_struct(sdkver, struct):
                         struct_needs_conversion(m.type.get_canonical()):
                     cppfile.write("    struct_" + strip_ns(m.type.spelling) + "_" + display_sdkver(sdkver) + "_" + src + "_to_" + dst + \
                             "(&" + src + "->" + m.displayname + ", &" + dst + "->" + m.displayname + ");\n")
-                elif struct.displayname in STRUCTS_SIZE_FIELD and \
-                    m.displayname in STRUCTS_SIZE_FIELD[struct.displayname]:
+                elif struct.name in STRUCTS_SIZE_FIELD and \
+                    m.displayname in STRUCTS_SIZE_FIELD[struct.name]:
                         cppfile.write("    " + dst + "->" + m.displayname + " = sizeof(*" + dst + ");\n")
                 elif size and strip_ns(m.type.get_canonical().spelling) == "VREvent_Data_t":
                     #truncate variable-length data struct at the end of the parent struct
@@ -920,7 +1084,7 @@ def handle_struct(sdkver, struct):
                 else:
                     cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
 
-    if strip_ns(struct.displayname) in STRUCTS_NEXT_IS_SIZE:
+    if strip_ns(struct.name) in STRUCTS_NEXT_IS_SIZE:
         size_arg = "sz"
         size_arg_type = ", uint32_t sz"
     else:
@@ -931,7 +1095,7 @@ def handle_struct(sdkver, struct):
         hfile.write("extern void struct_%s_lin_to_win(void *l, void *w%s);\n" % (handler_name, size_arg_type))
         cppfile.write("void struct_%s_lin_to_win(void *l, void *w%s)\n{\n" % (handler_name, size_arg_type))
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
         dump_converter("lin", "win", size_arg)
         cppfile.write("}\n\n")
 
@@ -940,7 +1104,7 @@ def handle_struct(sdkver, struct):
         hfile.write("extern void struct_%s_win_to_lin(const void *w, void *l);\n" % handler_name)
         cppfile.write("void struct_%s_win_to_lin(const void *w, void *l)\n{\n" % handler_name)
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
         dump_converter("win", "lin", None)
         cppfile.write("}\n\n")
 
@@ -949,7 +1113,7 @@ def handle_struct(sdkver, struct):
 
         cppfile.write("struct win%s *struct_%s_wrap(void *l)\n{\n" % (handler_name, handler_name))
         cppfile.write("    struct win%s *win = (struct win%s *)malloc(sizeof(*win));\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
 
         dump_converter("lin", "win", None)
 
@@ -958,10 +1122,10 @@ def handle_struct(sdkver, struct):
 
         cppfile.write("}\n\n")
 
-        hfile.write("extern %s *struct_%s_unwrap(win%s *w);\n" % (struct.displayname, handler_name, handler_name))
+        hfile.write("extern %s *struct_%s_unwrap(win%s *w);\n" % (struct.name, handler_name, handler_name))
 
-        cppfile.write("struct %s *struct_%s_unwrap(win%s *w)\n{\n" % (struct.displayname, handler_name, handler_name))
-        cppfile.write("    %s *ret = w->linux_side;\n" % struct.displayname)
+        cppfile.write("struct %s *struct_%s_unwrap(win%s *w)\n{\n" % (struct.name, handler_name, handler_name))
+        cppfile.write("    %s *ret = w->linux_side;\n" % struct.name)
         cppfile.write("    free(w);\n")
         cppfile.write("    return ret;\n")
         cppfile.write("}\n\n")
@@ -1347,13 +1511,16 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         sdkver, abi, build = result
         if sdkver not in all_records: all_records[sdkver] = {}
         if sdkver not in tmp_classes: tmp_classes[sdkver] = {}
-        if sdkver not in all_structs: all_structs[sdkver] = {}
 
         versions = all_versions[sdkver]
 
-        records = enumerate_structs(build.cursor)
-        # reverse the order to favor definitions over declarations
-        records = dict(reversed([(c.type.spelling, c) for c in records]))
+        structs = enumerate_structs(build.cursor, vr_only=True)
+        structs = filter(lambda c: c.is_definition(), structs)
+        structs = filter(lambda c: c.type.get_canonical().kind == TypeKind.RECORD, structs)
+        structs = filter(lambda c: c.kind != CursorKind.TYPEDEF_DECL, structs)
+        structs = filter(lambda c: c.spelling not in SDK_CLASSES, structs)
+        structs = [Record(sdkver, abi, c) for c in structs]
+        structs = {c.name: c for c in structs}
 
         classes = enumerate_structs(build.cursor, vr_only=True)
         classes = filter(lambda c: c.is_definition(), classes)
@@ -1363,14 +1530,15 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         classes = [Class(sdkver, abi, c) for c in classes]
         classes = {c.version: c for c in classes}
 
-        structs = enumerate_structs(build.cursor, vr_only=True)
-        struct_kinds = (CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL)
-        structs = filter(lambda c: c.kind in struct_kinds, structs)
-        structs = {c.spelling: c for c in structs}
-
-        all_records[sdkver][abi] = records
+        all_records[sdkver][abi] = structs
         tmp_classes[sdkver][abi] = classes
-        all_structs[sdkver][abi] = structs
+
+        for name, struct in structs.items():
+            if name not in all_structs:
+                all_structs[name] = {}
+            if sdkver not in all_structs[name]:
+                all_structs[name][sdkver] = {}
+            all_structs[name][sdkver][abi] = struct
 
 for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
     all_classes.update(tmp_classes[sdkver]['u32'])
@@ -1379,7 +1547,7 @@ print('parsing SDKs... 100%')
 
 
 for klass in all_classes.values():
-    with open(f"vrclient_x64/win{klass.spelling}.c", "w") as file:
+    with open(f"vrclient_x64/win{klass.name}.c", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
@@ -1408,7 +1576,7 @@ for _, klass in sorted(all_classes.items()):
 
 
 for sdkver in SDK_VERSIONS:
-    generate(sdkver, all_structs[sdkver])
+    generate(sdkver, all_records[sdkver])
 
 
 for f in cpp_files_need_close_brace:
