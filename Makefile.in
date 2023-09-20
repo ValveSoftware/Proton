@@ -83,6 +83,7 @@ J = $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
 include $(SRC)/make/utility.mk
 include $(SRC)/make/rules-source.mk
 include $(SRC)/make/rules-common.mk
+include $(SRC)/make/rules-makedep.mk
 include $(SRC)/make/rules-meson.mk
 include $(SRC)/make/rules-cmake.mk
 include $(SRC)/make/rules-autoconf.mk
@@ -305,23 +306,12 @@ $(eval $(call rules-cmake,glslang,64))
 ## lsteamclient
 ##
 
-LSTEAMCLIENT_CFLAGS = -Wno-attributes
-LSTEAMCLIENT_CXXFLAGS = -Wno-attributes
-LSTEAMCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
-
-LSTEAMCLIENT_WINEMAKER_ARGS = \
-	-DSTEAM_API_EXPORTS \
-	-Dprivate=public \
-	-Dprotected=public
-
 LSTEAMCLIENT_DEPENDS = wine
 
 $(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
-$(eval $(call rules-winemaker,lsteamclient,32,lsteamclient.dll))
-$(eval $(call rules-winemaker,lsteamclient,64,lsteamclient.dll))
+$(eval $(call rules-makedep,lsteamclient,32))
+$(eval $(call rules-makedep,lsteamclient,64))
 
-
-##
 
 ##
 ## openxr
