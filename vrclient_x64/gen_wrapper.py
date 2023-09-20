@@ -69,39 +69,41 @@ SDK_VERSIONS = [
     "0.9.0",
 ]
 
-SDK_SOURCES = [
-    ("ivrclientcore.h",
+SDK_SOURCES = {
+    "ivrclientcore.h": [
         [ #classes
-        "IVRApplications",
-        "IVRChaperone",
-        "IVRChaperoneSetup",
-        "IVRCompositor",
-        "IVRControlPanel",
-        "IVRDriverManager",
-        "IVRExtendedDisplay",
-        "IVRNotifications",
-        "IVRInput",
-        "IVRIOBuffer",
-        "IVRMailbox",
-        "IVROverlay",
-        "IVRRenderModels",
-        "IVRResources",
-        "IVRScreenshots",
-        "IVRSettings",
-        "IVRSystem",
-        "IVRTrackedCamera",
-        "IVRHeadsetView",
-        "IVROverlayView",
-        "IVRClientCore",
+            "IVRApplications",
+            "IVRChaperone",
+            "IVRChaperoneSetup",
+            "IVRCompositor",
+            "IVRControlPanel",
+            "IVRDriverManager",
+            "IVRExtendedDisplay",
+            "IVRNotifications",
+            "IVRInput",
+            "IVRIOBuffer",
+            "IVRMailbox",
+            "IVROverlay",
+            "IVRRenderModels",
+            "IVRResources",
+            "IVRScreenshots",
+            "IVRSettings",
+            "IVRSystem",
+            "IVRTrackedCamera",
+            "IVRHeadsetView",
+            "IVROverlayView",
+            "IVRClientCore",
         ], [ #vrclient-allocated structs
-        "RenderModel_t",
-        "RenderModel_TextureMap_t",
-        ]
-    ),
-]
+            "RenderModel_t",
+            "RenderModel_TextureMap_t",
+        ],
+    ],
+}
 
-SDK_CLASSES = {klass: source for source, klasses in SDK_SOURCES.items()
-               for klass in klasses}
+SDK_CLASSES = {klass: source for source, value in SDK_SOURCES.items()
+               for klass in value[0]}
+SDK_STRUCTS = {klass: source for source, value in SDK_SOURCES.items()
+               for klass in value[1]}
 
 STRUCTS_NEXT_IS_SIZE = [
     "VREvent_t",
@@ -451,11 +453,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if param.type.kind == TypeKind.POINTER:
-                if strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
+                if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
                     do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
                 elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
-                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in system_structs:
+                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
                     do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
                 elif real_type.get_canonical().kind == TypeKind.RECORD and \
@@ -917,7 +919,7 @@ def handle_struct(sdkver, struct):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
 
-    if strip_ns(struct.displayname) in system_structs:
+    if strip_ns(struct.displayname) in SDK_STRUCTS:
         which.add(WRAPPERS)
 
     if len(which) == 0:
@@ -1352,7 +1354,8 @@ for sdkver in SDK_VERSIONS:
     if not has_vrclientcore:
         source = [f'#include "{sdkdir}/openvr.h"']
     else:
-        source = [f'#include "{sdkdir}/{file}"' for file, _, _ in SDK_SOURCES]
+        source = [f'#include "{sdkdir}/{file}"'
+                  for file in SDK_SOURCES.keys()]
 
     sources["source.cpp"] = "\n".join(source)
     windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
@@ -1383,9 +1386,6 @@ for sdkver in SDK_VERSIONS:
     for diag in diagnostics: print(diag)
     assert len(diagnostics) == 0
 
-    classes = sum([e for _, e, _ in SDK_SOURCES], [])
-    system_structs = sum([e for _, _, e in SDK_SOURCES], [])
-
     def enumerate_structs(cursor, vr_only=False):
         for child in cursor.get_children():
             if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
@@ -1401,7 +1401,7 @@ for sdkver in SDK_VERSIONS:
                                      in enumerate_structs(linux_build64.cursor)]))
 
     for child in enumerate_structs(linux_build32.cursor, vr_only=True):
-        if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
+        if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
             handle_class(sdkver, child)
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
