@@ -9,7 +9,7 @@ from clang.cindex import CursorKind, Index, Type, TypeKind
 import os
 import re
 
-sdk_versions = [
+SDK_VERSIONS = [
     "v1.26.7",
     "v1.23.7",
     "v1.16.8",
@@ -69,7 +69,7 @@ sdk_versions = [
     "0.9.0",
 ]
 
-files = [
+SDK_SOURCES = [
     ("ivrclientcore.h",
         [ #classes
         "IVRApplications",
@@ -100,31 +100,31 @@ files = [
     ),
 ]
 
-next_is_size_structs = [
-        "VREvent_t",
-        "VRControllerState001_t",
-        "InputAnalogActionData_t",
-        "InputDigitalActionData_t",
-        "InputPoseActionData_t",
-        "InputSkeletalActionData_t",
-        "CameraVideoStreamFrameHeader_t",
-        "Compositor_CumulativeStats",
-        "VRActiveActionSet_t",
-        "InputOriginInfo_t",
-        "InputBindingInfo_t",
+STRUCTS_NEXT_IS_SIZE = [
+    "VREvent_t",
+    "VRControllerState001_t",
+    "InputAnalogActionData_t",
+    "InputDigitalActionData_t",
+    "InputPoseActionData_t",
+    "InputSkeletalActionData_t",
+    "CameraVideoStreamFrameHeader_t",
+    "Compositor_CumulativeStats",
+    "VRActiveActionSet_t",
+    "InputOriginInfo_t",
+    "InputBindingInfo_t",
 ]
 
-unhandled_next_is_size_structs = [
-        "VROverlayIntersectionMaskPrimitive_t" # not next, but next-next uint32 is the size
+STRUCTS_NEXT_IS_SIZE_UNHANDLED = [
+    "VROverlayIntersectionMaskPrimitive_t" # not next, but next-next uint32 is the size
 ]
 
-struct_size_fields = {
-        "Compositor_OverlaySettings": ["size"],
-        "Compositor_FrameTiming": ["size", "m_nSize"],
-        "DriverDirectMode_FrameTiming": ["m_nSize"],
+STRUCTS_SIZE_FIELD = {
+    "Compositor_OverlaySettings": ["size"],
+    "Compositor_FrameTiming": ["size", "m_nSize"],
+    "DriverDirectMode_FrameTiming": ["m_nSize"],
 }
 
-path_conversions = [
+PATH_CONV = [
     {
         "parent_name": "SetActionManifestPath",
         "l2w_names":[],
@@ -380,7 +380,7 @@ def strip_ns(name):
     return name.replace("vr::","")
 
 def get_path_converter(parent):
-    for conv in path_conversions:
+    for conv in PATH_CONV:
         if conv["parent_name"] in parent.spelling:
             if None in conv["l2w_names"]:
                 return conv
@@ -463,7 +463,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     #preserve pointers
                     typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
                 elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                        strip_ns(real_type.spelling) in next_is_size_structs and \
+                        strip_ns(real_type.spelling) in STRUCTS_NEXT_IS_SIZE and \
                         struct_needs_size_adjustment(real_type.get_canonical()):
                     do_size_fixup = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
 
@@ -574,8 +574,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write(", %s" % param.spelling)
                 cpp.write("%s ? &lin : nullptr" % param.spelling)
                 if do_win_to_lin:
-                    assert(not do_win_to_lin[0] in unhandled_next_is_size_structs)
-                    if do_win_to_lin[0] in next_is_size_structs:
+                    assert(not do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE_UNHANDLED)
+                    if do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE:
                         next_is_size = True
             elif do_unwrap and do_unwrap[1] == param.spelling:
                 cfile.write(", %s" % param.spelling)
@@ -971,8 +971,8 @@ def handle_struct(sdkver, struct):
                         struct_needs_conversion(m.type.get_canonical()):
                     cppfile.write("    struct_" + strip_ns(m.type.spelling) + "_" + display_sdkver(sdkver) + "_" + src + "_to_" + dst + \
                             "(&" + src + "->" + m.displayname + ", &" + dst + "->" + m.displayname + ");\n")
-                elif struct.displayname in struct_size_fields and \
-                    m.displayname in struct_size_fields[struct.displayname]:
+                elif struct.displayname in STRUCTS_SIZE_FIELD and \
+                    m.displayname in STRUCTS_SIZE_FIELD[struct.displayname]:
                         cppfile.write("    " + dst + "->" + m.displayname + " = sizeof(*" + dst + ");\n")
                 elif size and strip_ns(m.type.get_canonical().spelling) == "VREvent_Data_t":
                     #truncate variable-length data struct at the end of the parent struct
@@ -981,7 +981,7 @@ def handle_struct(sdkver, struct):
                 else:
                     cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
 
-    if strip_ns(struct.displayname) in next_is_size_structs:
+    if strip_ns(struct.displayname) in STRUCTS_NEXT_IS_SIZE:
         size_arg = "sz"
         size_arg_type = ", uint32_t sz"
     else:
@@ -1327,7 +1327,7 @@ int main(void)
 
 
 prog = re.compile("^.*const\s*char.* \*?(\w*)_Version.*\"(.*)\"")
-for sdkver in sdk_versions:
+for sdkver in SDK_VERSIONS:
     print(f'parsing SDK version {sdkver}...')
     sdkdir = f'openvr_{sdkver}'
 
@@ -1349,7 +1349,7 @@ for sdkver in sdk_versions:
     if not has_vrclientcore:
         source = [f'#include "{sdkdir}/openvr.h"']
     else:
-        source = [f'#include "{sdkdir}/{file}"' for file, _, _ in files]
+        source = [f'#include "{sdkdir}/{file}"' for file, _, _ in SDK_SOURCES]
 
     sources["source.cpp"] = "\n".join(source)
     windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
@@ -1380,8 +1380,8 @@ for sdkver in sdk_versions:
     for diag in diagnostics: print(diag)
     assert len(diagnostics) == 0
 
-    classes = sum([e for _, e, _ in files], [])
-    system_structs = sum([e for _, _, e in files], [])
+    classes = sum([e for _, e, _ in SDK_SOURCES], [])
+    system_structs = sum([e for _, _, e in SDK_SOURCES], [])
 
     def enumerate_structs(cursor, vr_only=False):
         for child in cursor.get_children():
