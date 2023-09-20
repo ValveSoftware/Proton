@@ -251,8 +251,6 @@ all_records = {}
 all_sources = {}
 all_versions = {}
 
-class_versions = {}
-iface_versions = {}
 
 def get_params(f):
     return [p for p in f.get_children() if p.kind == CursorKind.PARM_DECL]
@@ -659,17 +657,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cfile.write("}\n\n")
     cpp.write("}\n\n")
 
-def get_iface_version(classname):
-    if classname in iface_versions.keys():
-        ver = iface_versions[classname]
-    else:
-        ver = "UNVERSIONED"
-    if classname in class_versions.keys() and ver in class_versions[classname]:
-        return (ver, True)
-    if not classname in class_versions.keys():
-        class_versions[classname] = []
-    class_versions[classname].append(ver)
-    return (ver, False)
 
 max_c_api_param_count = 0
 
@@ -685,16 +672,10 @@ def get_capi_thunk_params(method):
     is_4th_float = param_count >= 4 and param_types[3].spelling == "float"
     return "%s, %s, %s" % (param_count, toBOOL(has_float_params), toBOOL(is_4th_float))
 
-def handle_class(sdkver, classnode):
-    print("handle_class: " + classnode.displayname)
-    children = list(classnode.get_children())
-    if len(children) == 0:
-        return
-    (iface_version, already_generated) = get_iface_version(classnode.spelling)
-    if already_generated:
-        return
-    winname = "win%s" % classnode.spelling
-    cppname = "cpp%s_%s" % (classnode.spelling, iface_version)
+def handle_class(sdkver, klass, version):
+    print("handle_class: " + klass.displayname)
+    winname = "win%s" % klass.spelling
+    cppname = "cpp%s_%s" % (klass.spelling, version)
 
     file_exists = os.path.isfile("vrclient_x64/%s.c" % winname)
     cfile = open("vrclient_x64/%s.c" % winname, "a")
@@ -738,21 +719,21 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cpp_h = open("vrclient_x64/%s.h" % cppname, "w")
     cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
-    winclassname = "win%s_%s" % (classnode.spelling, iface_version)
+    winclassname = "win%s_%s" % (klass.spelling, version)
     cfile.write("#include \"%s.h\"\n\n" % cppname)
     cfile.write("typedef struct __%s {\n" % winclassname)
     cfile.write("    vtable_ptr *vtable;\n") # make sure to keep this first (flat API depends on it)
     cfile.write("    void *linux_side;\n")
     for classname_pattern, user_data_type, _ in method_overrides_data:
-        if classname_pattern in classnode.spelling:
+        if classname_pattern in klass.spelling:
             cfile.write("    %s user_data;\n" % user_data_type)
             break
     cfile.write("} %s;\n\n" % winclassname)
     methods = []
     method_names = []
-    for child in children:
+    for child in klass.get_children():
         if child.kind == CursorKind.CXX_METHOD:
-            handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, iface_version)
+            handle_method(cfile, klass.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, version)
             methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
@@ -775,7 +756,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("void destroy_%s(void *object)\n{\n" % winclassname)
     cfile.write("    TRACE(\"%p\\n\", object);\n")
     for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-        if user_data_destructor and classname_pattern in classnode.spelling:
+        if user_data_destructor and classname_pattern in klass.spelling:
             cfile.write("    struct __%s *win_object = object;\n" % winclassname)
             cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
             break
@@ -802,7 +783,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    %s *win_object = object;\n" % winclassname)
     cfile.write("    TRACE(\"%p\\n\", win_object);\n")
     for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-        if user_data_destructor and classname_pattern in classnode.spelling:
+        if user_data_destructor and classname_pattern in klass.spelling:
             cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
             break
     cfile.write("    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n")
@@ -821,8 +802,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     destructors.write("extern void destroy_%s_FnTable(void *);\n" % winclassname)
 
     constructors = open("vrclient_x64/win_constructors_table.dat", "a")
-    constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (iface_version, winclassname, winclassname))
-    constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
+    constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (version, winclassname, winclassname))
+    constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (version, winclassname, winclassname))
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
@@ -1404,18 +1385,14 @@ def generate(sdkver, records):
     global linux_structs64
     global windows_structs32
     global windows_structs64
-    global iface_versions
 
     print(f'generating SDK version {sdkver}...')
     linux_build32, linux_structs32 = records['u32']
     linux_build64, linux_structs64 = records['u64']
     windows_build32, windows_structs32 = records['w32']
     windows_build64, windows_structs64 = records['w64']
-    iface_versions = all_versions[sdkver]
 
     for child in enumerate_structs(linux_build32.cursor, vr_only=True):
-        if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
-            handle_class(sdkver, child)
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
 
@@ -1438,6 +1415,38 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         if sdkver not in all_records: all_records[sdkver] = {}
         all_records[sdkver][abi] = index
 print('parsing SDKs... 100%')
+
+
+all_classes = {}
+
+for i, sdkver in enumerate(SDK_VERSIONS):
+    print(f'enumerating classes... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
+    index, _ = all_records[sdkver]['u32']
+    versions = all_versions[sdkver]
+
+    classes = enumerate_structs(index.cursor, vr_only=True)
+    classes = filter(lambda c: c.is_definition(), classes)
+    classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
+    classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
+    classes = filter(lambda c: c.spelling in versions, classes)
+    classes = {versions[c.spelling]: (sdkver, c) for c in classes}
+
+    for k, v in classes.items():
+        if k not in all_classes:
+            all_classes[k] = v
+print('enumerating classes... 100%')
+
+
+for version, tuple in all_classes.items():
+    sdkver, klass = tuple
+
+    linux_build32, linux_structs32 = all_records[sdkver]['u32']
+    linux_build64, linux_structs64 = all_records[sdkver]['u64']
+    windows_build32, windows_structs32 = all_records[sdkver]['w32']
+    windows_build64, windows_structs64 = all_records[sdkver]['w64']
+
+    handle_class(sdkver, klass, version)
+
 
 for sdkver in SDK_VERSIONS:
     generate(sdkver, all_records[sdkver])
