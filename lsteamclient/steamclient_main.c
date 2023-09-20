@@ -48,12 +48,13 @@ static void * (WINAPI *p_NtCurrentTeb)(void);
 
 static void init_ntdll_so_funcs(void)
 {
+    static const WCHAR ntdllW[] = {'n','t','d','l','l','.','d','l','l',0};
     Dl_info info;
     UINT64 unix_funcs;
     unsigned int status;
     void *ntdll;
 
-    status = NtQueryVirtualMemory(GetCurrentProcess(), GetModuleHandleW(L"ntdll.dll"), (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
+    status = NtQueryVirtualMemory(GetCurrentProcess(), GetModuleHandleW(ntdllW), (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
             &unix_funcs, sizeof(unix_funcs), NULL);
     if (status)
     {
@@ -253,7 +254,7 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
             return 0;
         }
 
-        strncpy(dst, unix_path, PATH_MAX);
+        lstrcpynA(dst, unix_path, PATH_MAX);
 
         HeapFree(GetProcessHeap(), 0, unix_path);
     }else{
@@ -380,11 +381,12 @@ static void *get_mem_from_steamclient_dll(size_t size, unsigned int version, voi
 
     if (!alloc_base)
     {
+        static const WCHAR steamclientW[] = {'s','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
         const IMAGE_SECTION_HEADER *sec;
         const IMAGE_NT_HEADERS *nt;
         HMODULE mod;
 
-        if (!(mod = GetModuleHandleW(L"steamclient.dll")))
+        if (!(mod = GetModuleHandleW(steamclientW)))
         {
             /* That is steamclient64.dll for x64 but no known use cases on x64.*/
             WARN("Module not found, err %u.\n", GetLastError());
@@ -847,7 +849,7 @@ static int load_steamclient(void)
     snprintf(path, PATH_MAX, "%s/.steam/sdk32/steamclient.so", getenv("HOME"));
 #endif
     if (realpath(path, resolved_path)){
-        strncpy(path, resolved_path, PATH_MAX);
+        lstrcpynA(path, resolved_path, PATH_MAX);
         path[PATH_MAX - 1] = 0;
     }
 #endif

@@ -11,10 +11,13 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
+#pragma push_macro("strncpy")
+#undef strncpy
 #include "steamworks_sdk_144/steam_api.h"
 #include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
+#pragma pop_macro("strncpy")
 #include "steamclient_private.h"
 
 extern "C" {
