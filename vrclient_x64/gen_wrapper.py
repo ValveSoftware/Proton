@@ -818,26 +818,17 @@ def canonical_typename(cursor):
     return name.removeprefix("const ")
 
 
-windows_structs32 = {}
-def find_windows_struct(struct):
+def find_struct(struct, abi):
     name = canonical_typename(struct)
-    return windows_structs32.get(name, None)
+    ret = all_records[sdkver][abi][1].get(name, None)
+    return ret
 
-windows_structs64 = {}
-def find_windows64_struct(struct):
-    name = canonical_typename(struct)
-    return windows_structs64.get(name, None)
-
-linux_structs64 = {}
-def find_linux64_struct(struct):
-    name = canonical_typename(struct)
-    return linux_structs64.get(name, None)
 
 def struct_needs_conversion_nocache(struct):
     needs_size_adjustment = False
 
     #check 32-bit compat
-    windows_struct = find_windows_struct(struct)
+    windows_struct = find_struct(struct, 'w32')
     assert(not windows_struct is None) #must find windows_struct
     for field in struct.get_fields():
         if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
@@ -851,9 +842,9 @@ def struct_needs_conversion_nocache(struct):
         needs_size_adjustment = True
 
     #check 64-bit compat
-    windows_struct = find_windows64_struct(struct)
+    windows_struct = find_struct(struct, 'w64')
     assert(not windows_struct is None) #must find windows_struct
-    lin64_struct = find_linux64_struct(struct)
+    lin64_struct = find_struct(struct, 'u64')
     assert(not lin64_struct is None) #must find lin64_struct
     for field in lin64_struct.get_fields():
         if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
@@ -890,7 +881,7 @@ def get_field_attribute_str(field):
     ftype = field.type.get_canonical()
     if ftype.kind != TypeKind.RECORD:
         return ""
-    win_struct = find_windows_struct(ftype)
+    win_struct = find_struct(ftype, 'w32')
     align = win_struct.get_align()
     return " __attribute__((aligned(" + str(align) + ")))"
 
@@ -1390,18 +1381,8 @@ def load(sdkver):
 
 
 def generate(sdkver, records):
-    global linux_structs32
-    global linux_structs64
-    global windows_structs32
-    global windows_structs64
-
     print(f'generating SDK version {sdkver}...')
-    linux_build32, linux_structs32 = records['u32']
-    linux_build64, linux_structs64 = records['u64']
-    windows_build32, windows_structs32 = records['w32']
-    windows_build64, windows_structs64 = records['w64']
-
-    for child in enumerate_structs(linux_build32.cursor, vr_only=True):
+    for child in enumerate_structs(records['u32'][0].cursor, vr_only=True):
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
 
@@ -1446,12 +1427,6 @@ print('enumerating classes... 100%')
 
 for version, tuple in sorted(all_classes.items()):
     sdkver, klass = tuple
-
-    linux_build32, linux_structs32 = all_records[sdkver]['u32']
-    linux_build64, linux_structs64 = all_records[sdkver]['u64']
-    windows_build32, windows_structs32 = all_records[sdkver]['w32']
-    windows_build64, windows_structs64 = all_records[sdkver]['w64']
-
     handle_class(sdkver, klass, version)
 
 
