@@ -685,17 +685,11 @@ def get_path_converter(parent):
                     return conv
     return None
 
-class DummyWriter(object):
-    def write(self, s):
-        #noop
-        pass
 
 def to_c_bool(b):
     if b:
         return "1"
     return "0"
-
-dummy_writer = DummyWriter()
 
 
 def method_unique_name(method, existing_methods):
@@ -753,34 +747,15 @@ def handle_method_hpp(method_name, cppname, method, cpp_h):
     cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
 
 
-def handle_method(used_name, cfile, classname, winclassname, cppname, method, cpp):
+def handle_method_cpp(method_name, classname, cppname, method, cpp):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if returns_record:
-        parambytes = 8 #_this + return pointer
-    else:
-        parambytes = 4 #_this
-    for param in list(method.get_children()):
-        if param.kind == CursorKind.PARM_DECL:
-            if param.type.kind == TypeKind.LVALUEREFERENCE:
-                parambytes += 4
-            else:
-                parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
-    if method_needs_manual_handling(cppname, used_name):
-        cpp = dummy_writer #just don't write the cpp function
-    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{used_name}, {parambytes})\n")
     if method.result_type.spelling.startswith("ISteam"):
-        cfile.write(f"win{method.result_type.spelling} ")
         cpp.write("void *")
     elif returns_record:
-        cfile.write(f"{method.result_type.spelling} *")
         cpp.write(f"{method.result_type.spelling} ")
     else:
-        cfile.write(f"{method.result_type.spelling} ")
         cpp.write(f"{method.result_type.spelling} ")
-    cfile.write(f'__thiscall {winclassname}_{used_name}({winclassname} *_this')
-    cpp.write(f"{cppname}_{used_name}(void *linux_side")
-    if returns_record:
-        cfile.write(f", {method.result_type.spelling} *_r")
+    cpp.write(f"{cppname}_{method_name}(void *linux_side")
     unnamed = 'a'
     need_convert = []
     manual_convert = []
@@ -801,32 +776,11 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
             win_name = declspec(param, "")
 
             if param.spelling == "":
-                cfile.write(f", {win_name} _{unnamed}")
                 cpp.write(f", {win_name} _{unnamed}")
                 unnamed = chr(ord(unnamed) + 1)
             else:
-                cfile.write(f", {win_name} {param.spelling}")
                 cpp.write(f", {win_name} {param.spelling}")
-    cfile.write(")\n{\n")
     cpp.write(")\n{\n")
-
-    path_conv = get_path_converter(method)
-
-    if path_conv:
-        for i in range(len(path_conv["w2l_names"])):
-            if path_conv["w2l_arrays"][i]:
-                cfile.write(f"    const char **lin_{path_conv['w2l_names'][i]} = steamclient_dos_to_unix_stringlist({path_conv['w2l_names'][i]});\n")
-                # TODO
-                pass
-            else:
-                cfile.write(f"    char lin_{path_conv['w2l_names'][i]}[PATH_MAX];\n")
-                cfile.write(f"    steamclient_dos_path_to_unix_path({path_conv['w2l_names'][i]}, lin_{path_conv['w2l_names'][i]}, {to_c_bool(path_conv['w2l_urls'][i])});\n")
-        if None in path_conv["l2w_names"]:
-            cfile.write("    const char *path_result;\n")
-        elif path_conv["return_is_size"]:
-            cfile.write("    uint32 path_result;\n")
-        elif len(path_conv["l2w_names"]) > 0:
-            cfile.write(f"    {method.result_type.spelling} path_result;\n")
 
     for param in need_convert:
         if param.type.kind == TypeKind.POINTER:
@@ -849,17 +803,6 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
         else:
             cpp.write(f"    {param.spelling} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){param.spelling});\n")
 
-    cfile.write("    TRACE(\"%p\\n\", _this);\n")
-
-    if method.result_type.kind == TypeKind.VOID:
-        cfile.write("    ")
-    elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
-        cfile.write("    path_result = ")
-    elif returns_record:
-        cfile.write("    *_r = ")
-    else:
-        cfile.write("    return ")
-
     if method.result_type.kind == TypeKind.VOID:
         cpp.write("    ")
     elif len(need_convert) > 0:
@@ -871,17 +814,6 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
     if post_exec != None:
         cpp.write(post_exec + '(');
 
-    should_do_cb_wrap = "GetAPICallResult" in used_name
-    should_gen_wrapper = cpp != dummy_writer and \
-            (method.result_type.spelling.startswith("ISteam") or \
-             used_name.startswith("GetISteamGenericInterface"))
-
-    if should_do_cb_wrap:
-        cfile.write(f"do_cb_wrap(0, &{cppname}_{used_name}, _this->linux_side")
-    else:
-        if should_gen_wrapper:
-            cfile.write("create_win_interface(pchVersion,\n        ")
-        cfile.write(f"{cppname}_{used_name}(_this->linux_side")
     cpp.write(f"(({classname}*)linux_side)->{method.spelling}(")
     unnamed = 'a'
     first = True
@@ -892,35 +824,129 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
             else:
                 first = False
             if param.spelling == "":
-                cfile.write(f", _{unnamed}")
                 cpp.write(f"({param.type.spelling})_{unnamed}")
                 unnamed = chr(ord(unnamed) + 1)
             elif param.type.kind == TypeKind.POINTER and \
                     param.type.get_pointee().spelling in WRAPPED_CLASSES:
-                cfile.write(f", create_Linux{param.type.get_pointee().spelling}({param.spelling}, \"{winclassname}\")")
-                cpp.write(f"({param.type.spelling}){param.spelling}")
-            elif path_conv and param.spelling in path_conv["w2l_names"]:
-                cfile.write(f", {param.spelling} ? lin_{param.spelling} : NULL")
                 cpp.write(f"({param.type.spelling}){param.spelling}")
             elif param in need_convert:
-                cfile.write(f", {param.spelling}")
                 if param.type.kind != TypeKind.POINTER:
                     cpp.write(f"lin_{param.spelling}")
                 else:
                     cpp.write(f"&lin_{param.spelling}")
             elif param.type.kind == TypeKind.LVALUEREFERENCE:
-                cfile.write(f", {param.spelling}")
                 cpp.write(f"*{param.spelling}")
             else:
-                cfile.write(f", {param.spelling}")
                 cpp.write(f"({param.type.spelling}){param.spelling}")
+
+    if post_exec != None:
+        cpp.write(")")
+    cpp.write(");\n")
+    for param in need_convert:
+        if param.type.kind == TypeKind.POINTER:
+            if not "const " in param.type.spelling: #don't modify const arguments
+                real_type = param.type
+                while real_type.kind == TypeKind.POINTER:
+                    real_type = real_type.get_pointee()
+                cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{param.spelling}, {param.spelling});\n")
+        else:
+            cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{param.spelling}, &{param.spelling});\n")
+    if method.result_type.kind != TypeKind.VOID and \
+            len(need_convert) > 0:
+        cpp.write("    return retval;\n")
+    cpp.write("}\n\n")
+
+
+def handle_method_c(method_name, winclassname, cppname, method, cfile):
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+    if returns_record:
+        parambytes = 8 #_this + return pointer
+    else:
+        parambytes = 4 #_this
+    for param in list(method.get_children()):
+        if param.kind == CursorKind.PARM_DECL:
+            if param.type.kind == TypeKind.LVALUEREFERENCE:
+                parambytes += 4
+            else:
+                parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
+    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{method_name}, {parambytes})\n")
+    if method.result_type.spelling.startswith("ISteam"):
+        cfile.write(f"win{method.result_type.spelling} ")
+    elif returns_record:
+        cfile.write(f"{method.result_type.spelling} *")
+    else:
+        cfile.write(f"{method.result_type.spelling} ")
+    cfile.write(f'__thiscall {winclassname}_{method_name}({winclassname} *_this')
+    if returns_record:
+        cfile.write(f", {method.result_type.spelling} *_r")
+    unnamed = 'a'
+    for param in list(method.get_children()):
+        if param.kind == CursorKind.PARM_DECL:
+            win_name = declspec(param, "")
+            if param.spelling == "":
+                cfile.write(f", {win_name} _{unnamed}")
+                unnamed = chr(ord(unnamed) + 1)
+            else:
+                cfile.write(f", {win_name} {param.spelling}")
+    cfile.write(")\n{\n")
+
+    path_conv = get_path_converter(method)
+
+    if path_conv:
+        for i in range(len(path_conv["w2l_names"])):
+            if path_conv["w2l_arrays"][i]:
+                cfile.write(f"    const char **lin_{path_conv['w2l_names'][i]} = steamclient_dos_to_unix_stringlist({path_conv['w2l_names'][i]});\n")
+                # TODO
+                pass
+            else:
+                cfile.write(f"    char lin_{path_conv['w2l_names'][i]}[PATH_MAX];\n")
+                cfile.write(f"    steamclient_dos_path_to_unix_path({path_conv['w2l_names'][i]}, lin_{path_conv['w2l_names'][i]}, {to_c_bool(path_conv['w2l_urls'][i])});\n")
+        if None in path_conv["l2w_names"]:
+            cfile.write("    const char *path_result;\n")
+        elif path_conv["return_is_size"]:
+            cfile.write("    uint32 path_result;\n")
+        elif len(path_conv["l2w_names"]) > 0:
+            cfile.write(f"    {method.result_type.spelling} path_result;\n")
+
+    cfile.write("    TRACE(\"%p\\n\", _this);\n")
+
+    if method.result_type.kind == TypeKind.VOID:
+        cfile.write("    ")
+    elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
+        cfile.write("    path_result = ")
+    elif returns_record:
+        cfile.write("    *_r = ")
+    else:
+        cfile.write("    return ")
+
+    should_do_cb_wrap = "GetAPICallResult" in method_name
+    should_gen_wrapper = not method_needs_manual_handling(cppname, method_name) and \
+            (method.result_type.spelling.startswith("ISteam") or \
+             method_name.startswith("GetISteamGenericInterface"))
+
+    if should_do_cb_wrap:
+        cfile.write(f"do_cb_wrap(0, &{cppname}_{method_name}, _this->linux_side")
+    else:
+        if should_gen_wrapper:
+            cfile.write("create_win_interface(pchVersion,\n        ")
+        cfile.write(f"{cppname}_{method_name}(_this->linux_side")
+    unnamed = 'a'
+    for param in list(method.get_children()):
+        if param.kind == CursorKind.PARM_DECL:
+            if param.spelling == "":
+                cfile.write(f", _{unnamed}")
+                unnamed = chr(ord(unnamed) + 1)
+            elif param.type.kind == TypeKind.POINTER and \
+                    param.type.get_pointee().spelling in WRAPPED_CLASSES:
+                cfile.write(f", create_Linux{param.type.get_pointee().spelling}({param.spelling}, \"{winclassname}\")")
+            elif path_conv and param.spelling in path_conv["w2l_names"]:
+                cfile.write(f", {param.spelling} ? lin_{param.spelling} : NULL")
+            else:
+                cfile.write(f", {param.spelling}")
     if should_gen_wrapper:
         cfile.write(")")
 
     cfile.write(");\n")
-    if post_exec != None:
-        cpp.write(")")
-    cpp.write(");\n")
     if returns_record:
         cfile.write("    return _r;\n")
     if path_conv and len(path_conv["l2w_names"]) > 0:
@@ -935,19 +961,6 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
             if path_conv["w2l_arrays"][i]:
                 cfile.write(f"    steamclient_free_stringlist(lin_{path_conv['w2l_names'][i]});\n")
     cfile.write("}\n\n")
-    for param in need_convert:
-        if param.type.kind == TypeKind.POINTER:
-            if not "const " in param.type.spelling: #don't modify const arguments
-                real_type = param.type
-                while real_type.kind == TypeKind.POINTER:
-                    real_type = real_type.get_pointee()
-                cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{param.spelling}, {param.spelling});\n")
-        else:
-            cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{param.spelling}, &{param.spelling});\n")
-    if method.result_type.kind != TypeKind.VOID and \
-            len(need_convert) > 0:
-        cpp.write("    return retval;\n")
-    cpp.write("}\n\n")
 
 
 def handle_class(sdkver, klass, version, file):
@@ -1007,7 +1020,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
                 child.is_virtual_method():
             method_name = method_unique_name(child, methods)
             handle_method_hpp(method_name, cppname, child, cpp_h)
-            handle_method(method_name, cfile, klass.spelling, winclassname, cppname, child, cpp)
+            if not method_needs_manual_handling(cppname, method_name):
+                handle_method_cpp(method_name, klass.spelling, cppname, child, cpp)
+            handle_method_c(method_name, winclassname, cppname, child, cfile)
         elif child.kind == CursorKind.DESTRUCTOR:
             methods.append(handle_destructor(cfile, klass.spelling, winclassname, child))
 
