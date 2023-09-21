@@ -293,6 +293,7 @@ WRAPPED_CLASSES = [
     "ISteamNetworkingFakeUDPPort",
 ]
 
+all_classes = {}
 all_records = {}
 all_sources = {}
 all_versions = {}
@@ -612,7 +613,7 @@ def canonical_typename(cursor):
 
 def find_struct(struct, abi):
     name = canonical_typename(struct)
-    ret = all_records[sdkver][abi][1].get(name, None)
+    ret = all_records[sdkver][abi].get(name, None)
     return ret.type if ret else None
 
 
@@ -1249,7 +1250,7 @@ def handle_struct(sdkver, struct):
             cppfile.write("\n")
 
 
-def parse(sources, abi):
+def parse(sources, sdkver, abi):
     args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
     if abi[0] == 'w':
         args += ["-D_WIN32", "-U__linux__"]
@@ -1264,11 +1265,7 @@ def parse(sources, abi):
     for diag in diagnostics: print(diag)
     assert len(diagnostics) == 0
 
-    structs = build.cursor.get_children()
-    structs = [(child.spelling, child) for child in structs]
-    structs = dict(reversed(structs))
-
-    return build, structs
+    return sdkver, abi, build
 
 
 def load(sdkver):
@@ -1302,9 +1299,8 @@ def load(sdkver):
 
 def generate(sdkver, records):
     print(f'generating SDK version {sdkver}...')
-    for child in records['u32'][0].cursor.get_children():
-        if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
-            handle_struct(sdkver, child)
+    for child in records['u32'].values():
+        handle_struct(sdkver, child)
 
 
 for i, sdkver in enumerate(SDK_VERSIONS):
@@ -1312,37 +1308,43 @@ for i, sdkver in enumerate(SDK_VERSIONS):
     all_versions[sdkver], all_sources[sdkver] = load(sdkver)
 print('loading SDKs... 100%')
 
+
+tmp_classes = {}
+
 with concurrent.futures.ThreadPoolExecutor() as executor:
     arg0 = [sdkver for sdkver in SDK_VERSIONS for abi in ABIS]
     arg1 = [abi for sdkver in SDK_VERSIONS for abi in ABIS]
     def parse_map(sdkver, abi):
-        return sdkver, abi, parse(all_sources[sdkver], abi)
+        return parse(all_sources[sdkver], sdkver, abi)
 
     results = executor.map(parse_map, arg0, arg1)
     for i, result in enumerate(results):
         print(f'parsing SDKs... {i * 100 // len(arg0)}%', end='\r')
-        sdkver, abi, index = result
+        sdkver, abi, build = result
         if sdkver not in all_records: all_records[sdkver] = {}
-        all_records[sdkver][abi] = index
-print('parsing SDKs... 100%')
+        if sdkver not in tmp_classes: tmp_classes[sdkver] = {}
 
+        versions = all_versions[sdkver]
 
-all_classes = {}
+        records = build.cursor.get_children()
+        record_kinds = (CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL)
+        records = filter(lambda c: c.kind in record_kinds, records)
+        records = {canonical_typename(c): c for c in records}
+
+        classes = build.cursor.get_children()
+        classes = filter(lambda c: c.is_definition(), classes)
+        classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
+        classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
+        classes = filter(lambda c: c.spelling[1:].upper() in versions, classes)
+        classes = {versions[c.spelling[1:].upper()]: (sdkver, c) for c in classes}
+
+        all_records[sdkver][abi] = records
+        tmp_classes[sdkver][abi] = classes
 
 for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
-    print(f'enumerating classes... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
-    index, _ = all_records[sdkver]['u32']
-    versions = all_versions[sdkver]
+    all_classes.update(tmp_classes[sdkver]['u32'])
 
-    classes = index.cursor.get_children()
-    classes = filter(lambda c: c.is_definition(), classes)
-    classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
-    classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
-    classes = filter(lambda c: c.spelling[1:].upper() in versions, classes)
-    classes = {versions[c.spelling[1:].upper()]: (sdkver, c) for c in classes}
-
-    all_classes.update(classes)
-print('enumerating classes... 100%')
+print('parsing SDKs... 100%')
 
 
 for version, tuple in sorted(all_classes.items()):
