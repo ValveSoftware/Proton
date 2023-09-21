@@ -273,7 +273,7 @@ function parse_args() {
 }
 
 usage() {
-  "$1" "Usage: $0 { --no-proton-sdk | --proton-sdk-image=<image> --steam-runtime=<name> }"
+  "$1" "Usage: $0 { --no-proton-sdk | --proton-sdk-image=<image> }"
   "$1" "  Generate a Makefile for building Proton.  May be run from another directory to create"
   "$1" "  out-of-tree build directories (e.g. mkdir mybuild && cd mybuild && ../configure.sh)"
   "$1" ""
@@ -299,7 +299,6 @@ usage() {
   "$1" "                                for build steps that must be run in an SDK"
   "$1" "                                environment.  See README.md for instructions to"
   "$1" "                                create this image."
-  "$1" "    --steam-runtime=soldier  Name of the steam runtime release to build for (soldier, scout)."
   "$1" ""
   "$1" "    --no-proton-sdk  Do not automatically invoke any runtime SDK as part of the build."
   "$1" "                     Build steps may still be manually run in a runtime environment."
