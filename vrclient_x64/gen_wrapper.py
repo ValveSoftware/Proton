@@ -247,7 +247,9 @@ PATH_CONV = [
 struct_conversion_cache = {}
 struct_needs_size_adjustment_cache = {}
 
+all_classes = {}
 all_records = {}
+all_structs = {}
 all_sources = {}
 all_versions = {}
 
@@ -820,8 +822,8 @@ def canonical_typename(cursor):
 
 def find_struct(struct, abi):
     name = canonical_typename(struct)
-    ret = all_records[sdkver][abi][1].get(name, None)
-    return ret
+    ret = all_records[sdkver][abi].get(name, None)
+    return ret.type if ret else None
 
 
 def struct_needs_conversion_nocache(struct):
@@ -1329,7 +1331,7 @@ def enumerate_structs(cursor, vr_only=False):
             yield child
 
 
-def parse(sources, abi):
+def parse(sources, sdkver, abi):
     args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
     if abi[0] == 'w':
         args += ["-D_WIN32", "-U__linux__"]
@@ -1344,11 +1346,7 @@ def parse(sources, abi):
     for diag in diagnostics: print(diag)
     assert len(diagnostics) == 0
 
-    structs = enumerate_structs(build.cursor)
-    structs = [(child.type.spelling, child.type) for child in structs]
-    structs = dict(reversed(structs))
-
-    return build, structs
+    return sdkver, abi, build
 
 
 def load(sdkver):
@@ -1380,11 +1378,10 @@ def load(sdkver):
     return versions, sources
 
 
-def generate(sdkver, records):
+def generate(sdkver, structs):
     print(f'generating SDK version {sdkver}...')
-    for child in enumerate_structs(records['u32'][0].cursor, vr_only=True):
-        if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
-            handle_struct(sdkver, child)
+    for child in structs['u32'].values():
+        handle_struct(sdkver, child)
 
 
 for i, sdkver in enumerate(SDK_VERSIONS):
@@ -1392,37 +1389,49 @@ for i, sdkver in enumerate(SDK_VERSIONS):
     all_versions[sdkver], all_sources[sdkver] = load(sdkver)
 print(u'loading SDKs... 100%')
 
+
+tmp_classes = {}
+
 with concurrent.futures.ThreadPoolExecutor() as executor:
     arg0 = [sdkver for sdkver in SDK_VERSIONS for abi in ABIS]
     arg1 = [abi for sdkver in SDK_VERSIONS for abi in ABIS]
     def parse_map(sdkver, abi):
-        return sdkver, abi, parse(all_sources[sdkver], abi)
+        return parse(all_sources[sdkver], sdkver, abi)
 
     results = executor.map(parse_map, arg0, arg1)
     for i, result in enumerate(results):
         print(f'parsing SDKs... {i * 100 // len(arg0)}%', end='\r')
-        sdkver, abi, index = result
+        sdkver, abi, build = result
         if sdkver not in all_records: all_records[sdkver] = {}
-        all_records[sdkver][abi] = index
-print('parsing SDKs... 100%')
+        if sdkver not in tmp_classes: tmp_classes[sdkver] = {}
+        if sdkver not in all_structs: all_structs[sdkver] = {}
 
+        versions = all_versions[sdkver]
 
-all_classes = {}
+        records = enumerate_structs(build.cursor)
+        # reverse the order to favor definitions over declarations
+        records = dict(reversed([(c.type.spelling, c) for c in records]))
+
+        classes = enumerate_structs(build.cursor, vr_only=True)
+        classes = filter(lambda c: c.is_definition(), classes)
+        classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
+        classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
+        classes = filter(lambda c: c.spelling in versions, classes)
+        classes = {versions[c.spelling]: (sdkver, c) for c in classes}
+
+        structs = enumerate_structs(build.cursor, vr_only=True)
+        struct_kinds = (CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL)
+        structs = filter(lambda c: c.kind in struct_kinds, structs)
+        structs = {c.spelling: c for c in structs}
+
+        all_records[sdkver][abi] = records
+        tmp_classes[sdkver][abi] = classes
+        all_structs[sdkver][abi] = structs
 
 for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
-    print(f'enumerating classes... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
-    index, _ = all_records[sdkver]['u32']
-    versions = all_versions[sdkver]
+    all_classes.update(tmp_classes[sdkver]['u32'])
 
-    classes = enumerate_structs(index.cursor, vr_only=True)
-    classes = filter(lambda c: c.is_definition(), classes)
-    classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
-    classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
-    classes = filter(lambda c: c.spelling in versions, classes)
-    classes = {versions[c.spelling]: (sdkver, c) for c in classes}
-
-    all_classes.update(classes)
-print('enumerating classes... 100%')
+print('parsing SDKs... 100%')
 
 
 for version, tuple in sorted(all_classes.items()):
@@ -1431,7 +1440,7 @@ for version, tuple in sorted(all_classes.items()):
 
 
 for sdkver in SDK_VERSIONS:
-    generate(sdkver, all_records[sdkver])
+    generate(sdkver, all_structs[sdkver])
 
 
 for f in cpp_files_need_close_brace:
