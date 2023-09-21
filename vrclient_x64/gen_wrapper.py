@@ -5,7 +5,7 @@
 
 CLANG_PATH='/usr/lib/clang/15'
 
-from clang.cindex import CursorKind, Index, Type, TypeKind
+from clang.cindex import Cursor, CursorKind, Index, Type, TypeKind
 import concurrent.futures
 import os
 import re
@@ -468,15 +468,17 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
                 elif real_type.get_canonical().kind == TypeKind.RECORD and \
                         struct_needs_conversion(real_type.get_canonical()):
-                    do_win_to_lin = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
+                    real_name = canonical_typename(real_type)
+                    do_win_to_lin = (strip_ns(real_name), param.spelling)
                     if not real_type.is_const_qualified():
-                        do_lin_to_win = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
+                        do_lin_to_win = (strip_ns(real_name), param.spelling)
                     #preserve pointers
                     typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
                 elif real_type.get_canonical().kind == TypeKind.RECORD and \
                         strip_ns(real_type.spelling) in STRUCTS_NEXT_IS_SIZE and \
                         struct_needs_size_adjustment(real_type.get_canonical()):
-                    do_size_fixup = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
+                    real_name = canonical_typename(real_type)
+                    do_size_fixup = (strip_ns(real_name), param.spelling)
 
         if param.spelling == "":
             cfile.write(", %s _%s" % (typename, unnamed))
@@ -807,27 +809,31 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
-def strip_const(typename):
-    return typename.replace("const ", "", 1)
+
+def canonical_typename(cursor):
+    if type(cursor) is Cursor:
+        return canonical_typename(cursor.type)
+
+    name = cursor.get_canonical().spelling
+    return name.removeprefix("const ")
+
 
 windows_structs32 = {}
 def find_windows_struct(struct):
-    return windows_structs32.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return windows_structs32.get(name, None)
 
 windows_structs64 = {}
 def find_windows64_struct(struct):
-    return windows_structs64.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return windows_structs64.get(name, None)
 
 linux_structs64 = {}
 def find_linux64_struct(struct):
-    return linux_structs64.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return linux_structs64.get(name, None)
 
 def struct_needs_conversion_nocache(struct):
-#    if strip_const(struct.spelling) in exempt_structs:
-#        return False
-#    if strip_const(struct.spelling) in manually_handled_structs:
-#        return True
-
     needs_size_adjustment = False
 
     #check 32-bit compat
@@ -863,19 +869,22 @@ def struct_needs_conversion_nocache(struct):
     return False, needs_size_adjustment
 
 def struct_needs_conversion(struct):
+    name = canonical_typename(struct)
+
     if not sdkver in struct_conversion_cache:
         struct_conversion_cache[sdkver] = {}
         struct_needs_size_adjustment_cache[sdkver] = {}
 
-    if not strip_const(struct.spelling) in struct_conversion_cache[sdkver]:
-        struct_conversion_cache[sdkver][strip_const(struct.spelling)], \
-                struct_needs_size_adjustment_cache[sdkver][strip_const(struct.spelling)] = \
+    if not name in struct_conversion_cache[sdkver]:
+        struct_conversion_cache[sdkver][name], \
+                struct_needs_size_adjustment_cache[sdkver][name] = \
                 struct_needs_conversion_nocache(struct)
 
-    return struct_conversion_cache[sdkver][strip_const(struct.spelling)]
+    return struct_conversion_cache[sdkver][name]
 
 def struct_needs_size_adjustment(struct):
-    return not struct_needs_conversion(struct) and struct_needs_size_adjustment_cache[sdkver][strip_const(struct.spelling)]
+    name = canonical_typename(struct)
+    return not struct_needs_conversion(struct) and struct_needs_size_adjustment_cache[sdkver][name]
 
 def get_field_attribute_str(field):
     ftype = field.type.get_canonical()
