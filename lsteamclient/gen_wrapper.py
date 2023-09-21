@@ -5,7 +5,7 @@
 
 CLANG_PATH='/usr/lib/clang/15'
 
-from clang.cindex import CursorKind, Index, Type, TypeKind
+from clang.cindex import Cursor, CursorKind, Index, Type, TypeKind
 from collections import namedtuple
 import concurrent.futures
 import os
@@ -601,25 +601,35 @@ PATH_CONV = [
     },
 ]
 
-def strip_const(typename):
-    return typename.replace("const ", "", 1)
+
+def canonical_typename(cursor):
+    if type(cursor) is Cursor:
+        return canonical_typename(cursor.type)
+
+    name = cursor.get_canonical().spelling
+    return name.removeprefix("const ")
+
 
 windows_structs32 = {}
 def find_windows_struct(struct):
-    return windows_structs32.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return windows_structs32.get(name, None)
 
 windows_structs64 = {}
 def find_windows64_struct(struct):
-    return windows_structs64.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return windows_structs64.get(name, None)
 
 linux_structs64 = {}
 def find_linux64_struct(struct):
-    return linux_structs64.get(strip_const(struct.spelling), None)
+    name = canonical_typename(struct)
+    return linux_structs64.get(name, None)
 
 def struct_needs_conversion_nocache(struct):
-    if strip_const(struct.spelling) in EXEMPT_STRUCTS:
+    name = canonical_typename(struct)
+    if name in EXEMPT_STRUCTS:
         return False
-    if strip_const(struct.spelling) in MANUAL_STRUCTS:
+    if name in MANUAL_STRUCTS:
         return True
 
     #check 32-bit compat
@@ -653,11 +663,12 @@ def struct_needs_conversion_nocache(struct):
     return False
 
 def struct_needs_conversion(struct):
+    name = canonical_typename(struct)
     if not sdkver in struct_conversion_cache:
         struct_conversion_cache[sdkver] = {}
-    if not strip_const(struct.spelling) in struct_conversion_cache[sdkver]:
-        struct_conversion_cache[sdkver][strip_const(struct.spelling)] = struct_needs_conversion_nocache(struct)
-    return struct_conversion_cache[sdkver][strip_const(struct.spelling)]
+    if not name in struct_conversion_cache[sdkver]:
+        struct_conversion_cache[sdkver][name] = struct_needs_conversion_nocache(struct)
+    return struct_conversion_cache[sdkver][name]
 
 def handle_destructor(cfile, classname, winclassname, method):
     cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_destructor, 4)\n")
@@ -800,10 +811,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             real_type = param.type
             while real_type.kind == TypeKind.POINTER:
                 real_type = real_type.get_pointee()
-            assert(param.type.get_pointee().kind == TypeKind.RECORD or \
-                    strip_const(real_type.spelling) in MANUAL_STRUCTS)
-            cpp.write(f"    {strip_const(param.type.get_pointee().spelling)} lin_{param.spelling};\n")
-            cpp.write(f"    win_to_lin_struct_{strip_const(real_type.spelling)}_{sdkver}({param.spelling}, &lin_{param.spelling});\n")
+            real_name = canonical_typename(real_type)
+            assert(param.type.get_pointee().kind == TypeKind.RECORD or real_name in MANUAL_STRUCTS)
+            pointee_name = canonical_typename(param.type.get_pointee())
+            cpp.write(f"    {pointee_name} lin_{param.spelling};\n")
+            cpp.write(f"    win_to_lin_struct_{real_name}_{sdkver}({param.spelling}, &lin_{param.spelling});\n")
         else:
             #raw structs
             cpp.write(f"    {param.type.spelling} lin_{param.spelling};\n")
@@ -1015,7 +1027,7 @@ cb_table64 = {}
 def get_field_attribute_str(field):
     if field.type.kind != TypeKind.RECORD:
         return ""
-    win_struct = find_windows_struct(field.type)
+    win_struct = find_windows_struct(field)
     if win_struct is None:
         align = field.type.get_align()
     else:
@@ -1085,7 +1097,7 @@ def handle_struct(sdkver, struct):
         hfile.write(f"typedef struct win{struct_name} win{struct_name};\n")
         hfile.write(f"struct {struct.displayname};\n")
 
-        if strip_const(struct.spelling) in MANUAL_STRUCTS:
+        if canonical_typename(struct) in MANUAL_STRUCTS:
             hfile.write("#endif\n\n")
             return
 
@@ -1094,9 +1106,9 @@ def handle_struct(sdkver, struct):
         hfile.write("#endif\n\n")
     else:
         #for callbacks, we use the windows struct size in the cb dispatch switch
-        windows_struct = find_windows_struct(struct.type)
-        windows_struct64 = find_windows64_struct(struct.type)
-        struct64 = find_linux64_struct(struct.type)
+        windows_struct = find_windows_struct(struct)
+        windows_struct64 = find_windows64_struct(struct)
+        struct64 = find_linux64_struct(struct)
         struct_name = f"{struct.displayname}_{windows_struct.get_size()}"
         l2w_handler_name = f"cb_{struct_name}"
         if windows_struct64.get_size() != windows_struct.get_size():
