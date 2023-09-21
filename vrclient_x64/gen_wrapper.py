@@ -470,35 +470,19 @@ def handle_method_hpp(method_name, cppname, method, cpp_h):
     cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
 
 
-def handle_method(used_name, cfile, classname, winclassname, cppname, method, cpp, iface_version):
-    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if returns_record:
-        parambytes = 8 #_this + return pointer
-    else:
-        parambytes = 4 #_this
-    for param in get_params(method):
-        parambytes += param.type.get_size()
-    cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
+def handle_method_cpp(method_name, classname, cppname, method, cpp):
     if strip_ns(method.result_type.spelling).startswith("IVR"):
-        cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
         cpp.write("void *")
-    elif returns_record:
-        cfile.write("%s *" % strip_ns(method.result_type.spelling))
-        cpp.write("%s " % method.result_type.spelling)
     else:
-        cfile.write("%s " % strip_ns(method.result_type.spelling))
         cpp.write("%s " % method.result_type.spelling)
-    cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, used_name, winclassname))
-    cpp.write("%s_%s(void *linux_side" % (cppname, used_name))
-    if returns_record:
-        cfile.write(", %s *_r" % strip_ns(method.result_type.spelling))
+    cpp.write("%s_%s(void *linux_side" % (cppname, method_name))
     unnamed = 'a'
     do_lin_to_win = None
     do_win_to_lin = None
     do_size_fixup = None
     do_wrap = None
     do_unwrap = None
-    for param in get_params(method):
+    for param in method.get_arguments():
         if param.type.kind == TypeKind.POINTER and \
                 param.type.get_pointee().kind == TypeKind.UNEXPOSED:
             #unspecified function pointer
@@ -531,14 +515,145 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
                     do_size_fixup = (strip_ns(real_name), param.spelling)
 
         if param.spelling == "":
-            cfile.write(", %s _%s" % (typename, unnamed))
             cpp.write(", %s _%s" % (typename, unnamed))
             unnamed = chr(ord(unnamed) + 1)
         else:
-            cfile.write(", %s %s" % (typename, param.spelling))
             cpp.write(", %s %s" % (typename, param.spelling))
-    cfile.write(")\n{\n")
     cpp.write(")\n{\n")
+
+    if do_lin_to_win or do_win_to_lin:
+        if do_lin_to_win:
+            cpp.write("    %s lin;\n" % do_lin_to_win[0])
+        else:
+            cpp.write("    %s lin;\n" % do_win_to_lin[0])
+        if not method.result_type.kind == TypeKind.VOID:
+            cpp.write("    %s _ret;\n" % method.result_type.spelling)
+
+    if do_wrap:
+        cpp.write("    %s *lin;\n" % do_wrap[0])
+        if not method.result_type.kind == TypeKind.VOID:
+            cpp.write("    %s _ret;\n" % method.result_type.spelling)
+
+    if do_win_to_lin:
+        #XXX we should pass the struct size here
+        cpp.write("    if(%s)\n" % do_win_to_lin[1])
+        cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
+
+    if method.result_type.kind == TypeKind.VOID:
+        cpp.write("    ")
+    elif do_lin_to_win or do_win_to_lin or do_wrap:
+        cpp.write("    _ret = ")
+    else:
+        cpp.write("    return ")
+
+    cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
+    unnamed = 'a'
+    first = True
+    next_is_size = False
+    next_is_size_no_conv = False
+    convert_size_param = ""
+    for param in method.get_arguments():
+        if not first:
+            cpp.write(", ")
+        else:
+            first = False
+        if param.spelling == "":
+            cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
+            unnamed = chr(ord(unnamed) + 1)
+        else:
+            if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
+                    do_win_to_lin and do_win_to_lin[1] == param.spelling or \
+                    do_wrap and do_wrap[1] == param.spelling:
+                cpp.write("%s ? &lin : nullptr" % param.spelling)
+                if do_win_to_lin:
+                    assert(not do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE_UNHANDLED)
+                    if do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE:
+                        next_is_size = True
+            elif do_unwrap and do_unwrap[1] == param.spelling:
+                cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
+            elif do_size_fixup and do_size_fixup[1] == param.spelling:
+                next_is_size = True
+                next_is_size_no_conv = True
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+            elif next_is_size:
+                next_is_size = False
+                if next_is_size_no_conv and param.type.spelling == "uint32_t":
+                    cpp.write("std::min(%s, (uint32_t)sizeof(vr::%s))" % (param.spelling, do_size_fixup[0]))
+                    convert_size_param = ", " + param.spelling
+                elif param.type.spelling == "uint32_t":
+                    cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
+                    convert_size_param = ", " + param.spelling
+                else:
+                    cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+                    convert_size_param = ", -1"
+                next_is_size_no_conv = False
+            elif "&" in param.type.spelling:
+                cpp.write("*%s" % param.spelling)
+            else:
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+    cpp.write(");\n")
+    if do_lin_to_win:
+        if next_is_size and not convert_size_param:
+            convert_size_param = ", -1"
+        cpp.write("    if(%s)\n" % do_lin_to_win[1])
+        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
+    if do_lin_to_win or do_win_to_lin:
+        if not method.result_type.kind == TypeKind.VOID:
+            cpp.write("    return _ret;\n")
+    if do_wrap and not method.result_type.kind == TypeKind.VOID:
+            cpp.write("    if(_ret == 0)\n")
+            cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
+            cpp.write("    return _ret;\n")
+    cpp.write("}\n\n")
+
+
+def handle_method_c(used_name, classname, winclassname, cppname, method, iface_version, cfile):
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+    if returns_record:
+        parambytes = 8 #_this + return pointer
+    else:
+        parambytes = 4 #_this
+    for param in method.get_arguments():
+        parambytes += param.type.get_size()
+    cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
+    if strip_ns(method.result_type.spelling).startswith("IVR"):
+        cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
+    elif returns_record:
+        cfile.write("%s *" % strip_ns(method.result_type.spelling))
+    else:
+        cfile.write("%s " % strip_ns(method.result_type.spelling))
+    cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, used_name, winclassname))
+    if returns_record:
+        cfile.write(", %s *_r" % strip_ns(method.result_type.spelling))
+    unnamed = 'a'
+    for param in method.get_arguments():
+        if param.type.kind == TypeKind.POINTER and \
+                param.type.get_pointee().kind == TypeKind.UNEXPOSED:
+            #unspecified function pointer
+            typename = "void *"
+        else:
+            typename = param.type.spelling.split("::")[-1].replace("&", "*")
+            real_type = param.type;
+            while real_type.kind == TypeKind.POINTER:
+                real_type = real_type.get_pointee()
+            if param.type.kind == TypeKind.POINTER:
+                if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
+                    do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
+                    typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
+                elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
+                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
+                    do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
+                    typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
+                elif real_type.get_canonical().kind == TypeKind.RECORD and \
+                        struct_needs_conversion(real_type.get_canonical()):
+                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
+
+        if param.spelling == "":
+            cfile.write(", %s _%s" % (typename, unnamed))
+            unnamed = chr(ord(unnamed) + 1)
+        else:
+            cfile.write(", %s %s" % (typename, param.spelling))
+    cfile.write(")\n{\n")
 
     path_conv = get_path_converter(method)
 
@@ -558,44 +673,16 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
         elif len(path_conv["l2w_names"]) > 0:
             cfile.write("    %s path_result;\n" % method.result_type.spelling)
 
-    if do_lin_to_win or do_win_to_lin:
-        if do_lin_to_win:
-            cpp.write("    %s lin;\n" % do_lin_to_win[0])
-        else:
-            cpp.write("    %s lin;\n" % do_win_to_lin[0])
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    %s _ret;\n" % method.result_type.spelling)
-
-    if do_wrap:
-        cpp.write("    %s *lin;\n" % do_wrap[0])
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    %s _ret;\n" % method.result_type.spelling)
-
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
-
-    if do_win_to_lin:
-        #XXX we should pass the struct size here
-        cpp.write("    if(%s)\n" % do_win_to_lin[1])
-        cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
 
     if method.result_type.kind == TypeKind.VOID:
         cfile.write("    ")
-        cpp.write("    ")
     elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
         cfile.write("    path_result = ")
-        cpp.write("    return ")
     elif returns_record:
         cfile.write("    *_r = ")
-        cpp.write("    return ")
-    elif do_lin_to_win or do_win_to_lin:
-        cfile.write("    return ")
-        cpp.write("    _ret = ")
-    elif do_wrap:
-        cfile.write("    return ")
-        cpp.write("    _ret = ")
     else:
         cfile.write("    return ")
-        cpp.write("    return ")
 
     should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR")
     if should_gen_wrapper:
@@ -612,61 +699,19 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
     else:
         cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
 
-    cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
     unnamed = 'a'
     first = True
-    next_is_size = False
-    next_is_size_no_conv = False
-    convert_size_param = ""
-    for param in get_params(method):
-        if not first:
-            cpp.write(", ")
-        else:
+    for param in method.get_arguments():
+        if first:
             first = False
         if param.spelling == "":
             cfile.write(", _%s" % unnamed)
-            cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
             unnamed = chr(ord(unnamed) + 1)
         else:
-            if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
-                    do_win_to_lin and do_win_to_lin[1] == param.spelling or \
-                    do_wrap and do_wrap[1] == param.spelling:
-                cfile.write(", %s" % param.spelling)
-                cpp.write("%s ? &lin : nullptr" % param.spelling)
-                if do_win_to_lin:
-                    assert(not do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE_UNHANDLED)
-                    if do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE:
-                        next_is_size = True
-            elif do_unwrap and do_unwrap[1] == param.spelling:
-                cfile.write(", %s" % param.spelling)
-                cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
-            elif path_conv and param.spelling in path_conv["w2l_names"]:
+            if path_conv and param.spelling in path_conv["w2l_names"]:
                 cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))
-                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-            elif do_size_fixup and do_size_fixup[1] == param.spelling:
-                next_is_size = True
-                next_is_size_no_conv = True
-                cfile.write(", %s" % param.spelling)
-                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-            elif next_is_size:
-                cfile.write(", %s" % param.spelling)
-                next_is_size = False
-                if next_is_size_no_conv and param.type.spelling == "uint32_t":
-                    cpp.write("std::min(%s, (uint32_t)sizeof(vr::%s))" % (param.spelling, do_size_fixup[0]))
-                    convert_size_param = ", " + param.spelling
-                elif param.type.spelling == "uint32_t":
-                    cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
-                    convert_size_param = ", " + param.spelling
-                else:
-                    cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-                    convert_size_param = ", -1"
-                next_is_size_no_conv = False
-            elif "&" in param.type.spelling:
-                cfile.write(", %s" % param.spelling)
-                cpp.write("*%s" % param.spelling)
             else:
                 cfile.write(", %s" % param.spelling)
-                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
     if should_gen_wrapper:
         cfile.write(")")
     if is_method_overridden:
@@ -676,7 +721,6 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
                 cfile.write(", &_this->user_data")
                 break
     cfile.write(");\n")
-    cpp.write(");\n")
     if returns_record:
         cfile.write("    return _r;\n")
     if path_conv and len(path_conv["l2w_names"]) > 0:
@@ -691,20 +735,7 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
                 cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
-    if do_lin_to_win:
-        if next_is_size and not convert_size_param:
-            convert_size_param = ", -1"
-        cpp.write("    if(%s)\n" % do_lin_to_win[1])
-        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
-    if do_lin_to_win or do_win_to_lin:
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    return _ret;\n")
-    if do_wrap and not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    if(_ret == 0)\n")
-            cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
-            cpp.write("    return _ret;\n")
     cfile.write("}\n\n")
-    cpp.write("}\n\n")
 
 
 max_c_api_param_count = 0
@@ -784,7 +815,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
         if child.kind == CursorKind.CXX_METHOD:
             method_name = method_unique_name(child, method_names)
             handle_method_hpp(method_name, cppname, child, cpp_h)
-            handle_method(method_name, cfile, klass.spelling, winclassname, cppname, child, cpp, version)
+            handle_method_cpp(method_name, klass.spelling, cppname, child, cpp)
+            handle_method_c(method_name, klass.spelling, winclassname, cppname, child, version, cfile)
             methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
