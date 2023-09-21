@@ -611,10 +611,12 @@ def canonical_typename(cursor):
     return name.removeprefix("const ")
 
 
-def find_struct(struct, abi):
-    name = canonical_typename(struct)
-    ret = all_records[sdkver][abi].get(name, None)
-    return ret.type if ret else None
+def find_struct_abis(name):
+    records = all_records[sdkver]
+    missing = [name not in records[abi] for abi in ABIS]
+    assert all(missing) or not any(missing)
+    if any(missing): return None
+    return {abi: records[abi][name].type for abi in ABIS}
 
 
 def struct_needs_conversion_nocache(struct):
@@ -624,36 +626,36 @@ def struct_needs_conversion_nocache(struct):
     if name in MANUAL_STRUCTS:
         return True
 
-    #check 32-bit compat
-    windows_struct = find_struct(struct, 'w32')
-    if windows_struct is None:
-        print("Couldn't find windows struct for " + struct.spelling)
-    assert(not windows_struct is None) #must find windows_struct
-    for field in struct.get_fields():
-        if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True
-        if field.type.kind == TypeKind.RECORD and \
-                struct_needs_conversion(field.type):
-            return True
+    abis = find_struct_abis(name)
+    if abis is None:
+        return False
 
-    #check 64-bit compat
-    windows_struct = find_struct(struct, 'w64')
-    assert(not windows_struct is None) #must find windows_struct
-    lin64_struct = find_struct(struct, 'u64')
+    names = {a: [f.spelling for f in abis[a].get_fields()]
+             for a in ABIS}
+    assert names['u32'] == names['u64']
+    assert names['u32'] == names['w32']
+    assert names['u32'] == names['w64']
 
-    assert(not lin64_struct is None) #must find lin64_struct
-    for field in lin64_struct.get_fields():
-        if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True
-        if field.type.kind == TypeKind.RECORD and \
-                struct_needs_conversion(field.type):
-            return True
+    offsets = {a: {f: abis[a].get_offset(f) for f in names[a]}
+               for a in ABIS}
+    if offsets['u32'] != offsets['w32']:
+        return True
+    if offsets['u64'] != offsets['w64']:
+        return True
 
-    #check if any members need path conversion
-    path_conv = get_path_converter(struct)
-    if path_conv:
+    types = {a: [f.type.get_canonical() for f in abis[a].get_fields()]
+             for a in ABIS}
+    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
+           for t in types['u32']):
+        return True
+    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
+           for t in types['u64']):
+        return True
+
+    if get_path_converter(struct):
         return True
     return False
+
 
 def struct_needs_conversion(struct):
     name = canonical_typename(struct)
@@ -1018,14 +1020,9 @@ cb_table = {}
 cb_table64 = {}
 
 def get_field_attribute_str(field):
-    if field.type.kind != TypeKind.RECORD:
-        return ""
-    win_struct = find_struct(field, 'w32')
-    if win_struct is None:
-        align = field.type.get_align()
-    else:
-        align = win_struct.get_align()
-    return " __attribute__((aligned(" + str(align) + ")))"
+    if field.type.kind != TypeKind.RECORD: return ""
+    name = canonical_typename(field)
+    return f" __attribute__((aligned({find_struct_abis(name)['w32'].get_align()})))"
 
 #because of struct packing differences between win32 and linux, we
 #need to convert these structs from their linux layout to the win32
@@ -1099,14 +1096,14 @@ def handle_struct(sdkver, struct):
         hfile.write("#endif\n\n")
     else:
         #for callbacks, we use the windows struct size in the cb dispatch switch
-        windows_struct = find_struct(struct, 'w32')
-        windows_struct64 = find_struct(struct, 'w64')
-        struct64 = find_struct(struct, 'u64')
+        name = canonical_typename(struct)
+        abis = find_struct_abis(name)
+        size = {a: abis[a].get_size() for a in abis.keys()}
 
-        struct_name = f"{struct.displayname}_{windows_struct.get_size()}"
+        struct_name = f"{struct.displayname}_{size['w32']}"
         l2w_handler_name = f"cb_{struct_name}"
-        if windows_struct64.get_size() != windows_struct.get_size():
-            struct_name64 = f"{struct.displayname}_{windows_struct64.get_size()}"
+        if size['w64'] != size['w32']:
+            struct_name64 = f"{struct.displayname}_{size['w64']}"
             l2w_handler_name64 = f"cb_{struct_name64}"
         else:
             l2w_handler_name64 = None
@@ -1116,8 +1113,8 @@ def handle_struct(sdkver, struct):
         if not struct_needs_conversion(struct.type):
             return
 
-        cb_id = cb_num | (struct.type.get_size() << 16)
-        cb_id64 = cb_num | (struct64.get_size() << 16)
+        cb_id = cb_num | (size['u32'] << 16)
+        cb_id64 = cb_num | (size['u64'] << 16)
         if cb_id in generated_cb_ids:
             # either this cb changed name, or steam used the same ID for different structs
             return
@@ -1127,29 +1124,29 @@ def handle_struct(sdkver, struct):
         datfile = open("cb_converters.dat", "a")
         if l2w_handler_name64:
             datfile.write("#ifdef __i386__\n")
-            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {windows_struct.get_size()}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
+            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {size['w32']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
             datfile.write("#endif\n")
 
             datfile.write("#ifdef __x86_64__\n")
-            datfile.write(f"case 0x{cb_id64:08x}: win_msg->m_cubParam = {windows_struct64.get_size()}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name64}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
+            datfile.write(f"case 0x{cb_id64:08x}: win_msg->m_cubParam = {size['w64']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name64}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
             datfile.write("#endif\n")
         else:
-            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {windows_struct.get_size()}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
+            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {size['w32']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
 
         generated_cb_handlers.append(l2w_handler_name)
 
         if not cb_num in cb_table.keys():
             # latest SDK linux size, list of windows struct sizes and names
-            cb_table[cb_num] = (struct.type.get_size(), [])
+            cb_table[cb_num] = (size['u32'], [])
             if l2w_handler_name64:
-                cb_table64[cb_num] = (struct64.get_size(), [])
+                cb_table64[cb_num] = (size['u64'], [])
             else:
-                cb_table64[cb_num] = (struct.type.get_size(), [])
-        cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
+                cb_table64[cb_num] = (size['u32'], [])
+        cb_table[cb_num][1].append((size['w32'], struct_name))
         if l2w_handler_name64:
-            cb_table64[cb_num][1].append((windows_struct64.get_size(), struct_name64))
+            cb_table64[cb_num][1].append((size['w64'], struct_name64))
         else:
-            cb_table64[cb_num][1].append((windows_struct.get_size(), struct_name))
+            cb_table64[cb_num][1].append((size['w32'], struct_name))
 
         hfile = open("cb_converters.h", "a")
         hfile.write(f"struct {struct.displayname};\n")
