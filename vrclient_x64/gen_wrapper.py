@@ -820,46 +820,53 @@ def canonical_typename(cursor):
     return name.removeprefix("const ")
 
 
-def find_struct(struct, abi):
-    name = canonical_typename(struct)
-    ret = all_records[sdkver][abi].get(name, None)
-    return ret.type if ret else None
+def find_struct_abis(name):
+    records = all_records[sdkver]
+    missing = [name not in records[abi] for abi in ABIS]
+    assert all(missing) or not any(missing)
+    if any(missing): return None
+    return {abi: records[abi][name].type for abi in ABIS}
 
 
 def struct_needs_conversion_nocache(struct):
-    needs_size_adjustment = False
+    name = canonical_typename(struct)
 
-    #check 32-bit compat
-    windows_struct = find_struct(struct, 'w32')
-    assert(not windows_struct is None) #must find windows_struct
-    for field in struct.get_fields():
-        if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True, False
-        if field.type.get_canonical().kind == TypeKind.RECORD and \
-                struct_needs_conversion(field.type.get_canonical()):
-            return True, False
+    abis = find_struct_abis(name)
+    if abis is None:
+        return False, False
 
-    assert(struct.get_size() <= windows_struct.get_size())
-    if struct.get_size() < windows_struct.get_size():
-        needs_size_adjustment = True
+    names = {a: [f.spelling for f in abis[a].get_fields()]
+             for a in ABIS}
+    assert names['u32'] == names['u64']
+    assert names['u32'] == names['w32']
+    assert names['u32'] == names['w64']
 
-    #check 64-bit compat
-    windows_struct = find_struct(struct, 'w64')
-    assert(not windows_struct is None) #must find windows_struct
-    lin64_struct = find_struct(struct, 'u64')
-    assert(not lin64_struct is None) #must find lin64_struct
-    for field in lin64_struct.get_fields():
-        if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True, False
-        if field.type.get_canonical().kind == TypeKind.RECORD and \
-                struct_needs_conversion(field.type.get_canonical()):
-            return True, False
+    offsets = {a: {f: abis[a].get_offset(f) for f in names[a]}
+               for a in ABIS}
+    if offsets['u32'] != offsets['w32']:
+        return True, False
+    if offsets['u64'] != offsets['w64']:
+        return True, False
 
-    assert(lin64_struct.get_size() <= windows_struct.get_size())
-    if lin64_struct.get_size() < windows_struct.get_size():
-        needs_size_adjustment = True
+    types = {a: [f.type.get_canonical() for f in abis[a].get_fields()]
+             for a in ABIS}
+    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
+           for t in types['u32']):
+        return True, False
+    if any(t.kind == TypeKind.RECORD and struct_needs_conversion(t)
+           for t in types['u64']):
+        return True, False
 
-    return False, needs_size_adjustment
+    assert abis['u32'].get_size() <= abis['w32'].get_size()
+    if abis['u32'].get_size() < abis['w32'].get_size():
+        return False, True
+
+    assert abis['u64'].get_size() <= abis['w64'].get_size()
+    if abis['u64'].get_size() < abis['w64'].get_size():
+        return False, True
+
+    return False, False
+
 
 def struct_needs_conversion(struct):
     name = canonical_typename(struct)
@@ -883,8 +890,9 @@ def get_field_attribute_str(field):
     ftype = field.type.get_canonical()
     if ftype.kind != TypeKind.RECORD:
         return ""
-    win_struct = find_struct(ftype, 'w32')
-    align = win_struct.get_align()
+    name = canonical_typename(ftype)
+    abis = find_struct_abis(name)
+    align = abis['w32'].get_align()
     return " __attribute__((aligned(" + str(align) + ")))"
 
 generated_struct_handlers = []
