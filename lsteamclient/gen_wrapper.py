@@ -603,6 +603,22 @@ PATH_CONV = [
 ]
 
 
+class Class:
+    def __init__(self, sdkver, abi, cursor):
+        self._sdkver = sdkver
+        self._abi = abi
+
+        self._cursor = cursor
+
+        self.spelling = cursor.spelling
+        self.filename = SDK_CLASSES[self.spelling]
+        self.version = self.spelling[1:].upper()
+        self.version = all_versions[sdkver][self.version]
+
+    def get_children(self):
+        return self._cursor.get_children()
+
+
 def canonical_typename(cursor):
     if type(cursor) is Cursor:
         return canonical_typename(cursor.type)
@@ -943,12 +959,9 @@ def handle_method_c(method_name, winclassname, cppname, method, cfile):
     cfile.write("}\n\n")
 
 
-def handle_class(sdkver, klass, version, file):
-    winname = f"win{klass.spelling}"
-    cppname = f"cpp{klass.spelling}_{version}"
-
-    file_exists = os.path.isfile(f"{winname}.c")
-    cfile = open(f"{winname}.c", "a")
+def handle_class(klass):
+    file_exists = os.path.isfile(f"win{klass.spelling}.c")
+    cfile = open(f"win{klass.spelling}.c", "a")
     if not file_exists:
         cfile.write("""/* This file is auto-generated, do not edit. */
 #include <stdarg.h>
@@ -969,26 +982,27 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 """)
 
+    cppname = f"cpp{klass.spelling}_{klass.version}"
     cpp = open(f"{cppname}.cpp", "w")
     cpp.write("#include \"steam_defs.h\"\n")
     cpp.write("#pragma push_macro(\"__cdecl\")\n")
     cpp.write("#undef __cdecl\n")
     cpp.write("#define __cdecl\n")
-    cpp.write(f"#include \"steamworks_sdk_{sdkver}/steam_api.h\"\n")
-    if os.path.isfile(f"steamworks_sdk_{sdkver}/steamnetworkingtypes.h"):
-        cpp.write(f"#include \"steamworks_sdk_{sdkver}/steamnetworkingtypes.h\"\n")
-    if not file == "steam_api.h":
-        cpp.write(f"#include \"steamworks_sdk_{sdkver}/{file}\"\n")
+    cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/steam_api.h\"\n")
+    if os.path.isfile(f"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"):
+        cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h\"\n")
+    if klass.filename != "steam_api.h":
+        cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/{klass.filename}\"\n")
     cpp.write("#pragma pop_macro(\"__cdecl\")\n")
     cpp.write("#include \"steamclient_private.h\"\n")
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
-    cpp.write(f"#define SDKVER_{sdkver}\n")
+    cpp.write(f"#define SDKVER_{klass._sdkver}\n")
     cpp.write("#include \"struct_converters.h\"\n")
     cpp.write(f"#include \"{cppname}.h\"\n")
 
     cpp_h = open(f"{cppname}.h", "w")
 
-    winclassname = f"win{klass.spelling}_{version}"
+    winclassname = f"win{klass.spelling}_{klass.version}"
     cfile.write(f"#include \"{cppname}.h\"\n\n")
     cfile.write(f"typedef struct __{winclassname} {{\n")
     cfile.write("    vtable_ptr *vtable;\n")
@@ -1021,9 +1035,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     if klass.spelling in WRAPPED_CLASSES:
         cfile.write(f"    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n")
     else:
-        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{version}\");\n")
+        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{klass.version}\");\n")
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{version}\");\n")
+    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{klass.version}\");\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
 
@@ -1033,9 +1047,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     constructors.write(f"extern void *create_{winclassname}(void *);\n")
 
     constructors = open("win_constructors_table.dat", "a")
-    for alias in VERSION_ALIASES.get(version, []):
+    for alias in VERSION_ALIASES.get(klass.version, []):
         constructors.write(f"    {{\"{alias}\", &create_{winclassname}}}, /* alias */\n")
-    constructors.write(f"    {{\"{version}\", &create_{winclassname}}},\n")
+    constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}}},\n")
 
 
 generated_cb_handlers = []
@@ -1358,7 +1372,8 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
         classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
         classes = filter(lambda c: c.spelling[1:].upper() in versions, classes)
-        classes = {versions[c.spelling[1:].upper()]: (sdkver, c) for c in classes}
+        classes = [Class(sdkver, abi, c) for c in classes]
+        classes = {c.version: c for c in classes}
 
         all_records[sdkver][abi] = records
         tmp_classes[sdkver][abi] = classes
@@ -1369,9 +1384,9 @@ for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
 print('parsing SDKs... 100%')
 
 
-for version, tuple in sorted(all_classes.items()):
-    sdkver, klass = tuple
-    handle_class(sdkver, klass, version, SDK_CLASSES[klass.displayname])
+for _, klass in sorted(all_classes.items()):
+    sdkver = klass._sdkver
+    handle_class(klass)
 
 
 for sdkver in SDK_VERSIONS:
