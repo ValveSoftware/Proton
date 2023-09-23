@@ -1,3 +1,4 @@
+struct cppISteamMatchmakingServers_SteamMatchMakingServers001;
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList_params
 {
     void *linux_side;

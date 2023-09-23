@@ -1,3 +1,4 @@
+struct cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001;
 struct cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData_params
 {
     void *linux_side;

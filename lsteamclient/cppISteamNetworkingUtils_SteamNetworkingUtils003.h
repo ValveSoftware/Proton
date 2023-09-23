@@ -1,3 +1,4 @@
+struct cppISteamNetworkingUtils_SteamNetworkingUtils003;
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params
 {
     void *linux_side;

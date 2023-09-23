@@ -1,3 +1,4 @@
+struct cppISteamUtils_SteamUtils002;
 struct cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive_params
 {
     void *linux_side;

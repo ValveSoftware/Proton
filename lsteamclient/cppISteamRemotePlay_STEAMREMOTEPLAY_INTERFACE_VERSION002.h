@@ -1,3 +1,4 @@
+struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002;
 struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionCount_params
 {
     void *linux_side;

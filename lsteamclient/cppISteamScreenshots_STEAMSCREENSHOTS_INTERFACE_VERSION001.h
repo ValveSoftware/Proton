@@ -1,3 +1,4 @@
+struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001;
 struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params
 {
     void *linux_side;
