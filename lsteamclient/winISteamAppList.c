@@ -34,19 +34,19 @@ uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInsta
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(_this->linux_side);
 }
 
-uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t * pvecAppID, uint32 unMaxAppIDs)
+uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t *pvecAppID, uint32 unMaxAppIDs)
 {
     TRACE("%p\n", _this);
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(_this->linux_side, pvecAppID, unMaxAppIDs);
 }
 
-int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char * pchName, int cchNameMax)
+int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char *pchName, int cchNameMax)
 {
     TRACE("%p\n", _this);
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(_this->linux_side, nAppID, pchName, cchNameMax);
 }
 
-int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char * pchDirectory, int cchNameMax)
+int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char *pchDirectory, int cchNameMax)
 {
     uint32 path_result;
     TRACE("%p\n", _this);
