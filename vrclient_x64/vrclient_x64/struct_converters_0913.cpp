@@ -25,7 +25,7 @@ void struct_VRControllerState001_t_0913_lin_to_win(void *l, void *w, uint32_t sz
     memcpy(win->rAxis, lin->rAxis, sizeof(win->rAxis));
 }
 
-void struct_VRControllerState001_t_0913_win_to_lin(void *w, void *l)
+void struct_VRControllerState001_t_0913_win_to_lin(const void *w, void *l)
 {
     struct winVRControllerState001_t_0913 *win = (struct winVRControllerState001_t_0913 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;
@@ -74,7 +74,7 @@ void struct_CameraVideoStreamFrame_t_0913_lin_to_win(void *l, void *w)
     win->m_pImageData = lin->m_pImageData;
 }
 
-void struct_CameraVideoStreamFrame_t_0913_win_to_lin(void *w, void *l)
+void struct_CameraVideoStreamFrame_t_0913_win_to_lin(const void *w, void *l)
 {
     struct winCameraVideoStreamFrame_t_0913 *win = (struct winCameraVideoStreamFrame_t_0913 *)w;
     CameraVideoStreamFrame_t *lin = (CameraVideoStreamFrame_t *)l;
@@ -139,7 +139,7 @@ void struct_Compositor_FrameTiming_0913_lin_to_win(void *l, void *w)
     win->m_flCompositorUpdateCpuMs = lin->m_flCompositorUpdateCpuMs;
 }
 
-void struct_Compositor_FrameTiming_0913_win_to_lin(void *w, void *l)
+void struct_Compositor_FrameTiming_0913_win_to_lin(const void *w, void *l)
 {
     struct winCompositor_FrameTiming_0913 *win = (struct winCompositor_FrameTiming_0913 *)w;
     Compositor_FrameTiming *lin = (Compositor_FrameTiming *)l;
@@ -181,7 +181,7 @@ void struct_RenderModel_TextureMap_t_0913_lin_to_win(void *l, void *w)
     win->rubTextureMapData = lin->rubTextureMapData;
 }
 
-void struct_RenderModel_TextureMap_t_0913_win_to_lin(void *w, void *l)
+void struct_RenderModel_TextureMap_t_0913_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_TextureMap_t_0913 *win = (struct winRenderModel_TextureMap_t_0913 *)w;
     RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
@@ -231,7 +231,7 @@ void struct_RenderModel_t_0913_lin_to_win(void *l, void *w)
     win->diffuseTextureId = lin->diffuseTextureId;
 }
 
-void struct_RenderModel_t_0913_win_to_lin(void *w, void *l)
+void struct_RenderModel_t_0913_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_t_0913 *win = (struct winRenderModel_t_0913 *)w;
     RenderModel_t *lin = (RenderModel_t *)l;

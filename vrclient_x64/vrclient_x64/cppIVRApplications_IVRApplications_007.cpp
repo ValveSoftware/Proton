@@ -58,7 +58,7 @@ vr::EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchApplication
     return _ret;
 }
 
-vr::EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchTemplateApplication(void *linux_side, const char *pchTemplateAppKey, const char *pchNewAppKey, AppOverrideKeys_t *pKeys, uint32_t unKeys)
+vr::EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchTemplateApplication(void *linux_side, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     vr::EVRApplicationError _ret;
     _ret = ((IVRApplications*)linux_side)->LaunchTemplateApplication((const char *)pchTemplateAppKey, (const char *)pchNewAppKey, (const vr::AppOverrideKeys_t *)pKeys, (uint32_t)unKeys);

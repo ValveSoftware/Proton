@@ -42,7 +42,7 @@ vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedD
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_Submit(void *linux_side, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     vr::EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
@@ -109,7 +109,7 @@ float cppIVRCompositor_IVRCompositor_022_GetCurrentGridAlpha(void *linux_side)
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride(void *linux_side, Texture_t *pTextures, uint32_t unTextureCount)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     vr::EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);

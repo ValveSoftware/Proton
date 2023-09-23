@@ -1293,7 +1293,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchAppl
     return _ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(winIVRApplications_IVRApplications_005 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, AppOverrideKeys_t *pKeys, uint32_t unKeys)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(winIVRApplications_IVRApplications_005 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     EVRApplicationError _ret;
     TRACE("%p\n", _this);
@@ -1626,7 +1626,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchAppl
     return _ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(winIVRApplications_IVRApplications_006 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, AppOverrideKeys_t *pKeys, uint32_t unKeys)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(winIVRApplications_IVRApplications_006 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     EVRApplicationError _ret;
     TRACE("%p\n", _this);
@@ -2028,7 +2028,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchAppl
     return _ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(winIVRApplications_IVRApplications_007 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, AppOverrideKeys_t *pKeys, uint32_t unKeys)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(winIVRApplications_IVRApplications_007 *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     EVRApplicationError _ret;
     TRACE("%p\n", _this);

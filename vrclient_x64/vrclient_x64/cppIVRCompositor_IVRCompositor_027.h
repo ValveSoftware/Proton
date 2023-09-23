@@ -6,7 +6,7 @@ extern ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_027_GetTrackingSpa
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_WaitGetPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_GetLastPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(void *, TrackedDeviceIndex_t, TrackedDevicePose_t *, TrackedDevicePose_t *);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_Submit(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags);
+extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_Submit(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags);
 extern void cppIVRCompositor_IVRCompositor_027_ClearLastSubmittedFrame(void *);
 extern void cppIVRCompositor_IVRCompositor_027_PostPresentHandoff(void *);
 extern bool cppIVRCompositor_IVRCompositor_027_GetFrameTiming(void *, Compositor_FrameTiming *, uint32_t);
@@ -17,7 +17,7 @@ extern void cppIVRCompositor_IVRCompositor_027_FadeToColor(void *, float, float,
 extern HmdColor_t cppIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(void *, bool);
 extern void cppIVRCompositor_IVRCompositor_027_FadeGrid(void *, float, bool);
 extern float cppIVRCompositor_IVRCompositor_027_GetCurrentGridAlpha(void *);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride(void *, Texture_t *, uint32_t);
+extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride(void *, const Texture_t *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_027_ClearSkyboxOverride(void *);
 extern void cppIVRCompositor_IVRCompositor_027_CompositorBringToFront(void *);
 extern void cppIVRCompositor_IVRCompositor_027_CompositorGoToBack(void *);
@@ -47,7 +47,7 @@ extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_SubmitExplicitTimin
 extern bool cppIVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled(void *);
 extern bool cppIVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported(void *);
 extern bool cppIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading(void *);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async(void *, const char *, HmdMatrix34_t *, Compositor_StageRenderSettings *, uint32_t);
+extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async(void *, const char *, const HmdMatrix34_t *, const Compositor_StageRenderSettings *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_027_ClearStageOverride(void *);
 extern bool cppIVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults(void *, Compositor_BenchmarkResults *, uint32_t);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs(void *, uint32_t *, uint32_t *);

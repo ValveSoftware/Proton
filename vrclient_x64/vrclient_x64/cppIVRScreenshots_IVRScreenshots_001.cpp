@@ -16,7 +16,7 @@ vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(vo
     return _ret;
 }
 
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(void *linux_side, EVRScreenshotType *pSupportedTypes, int numTypes)
+vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(void *linux_side, const EVRScreenshotType *pSupportedTypes, int numTypes)
 {
     vr::EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->HookScreenshot((const vr::EVRScreenshotType *)pSupportedTypes, (int)numTypes);

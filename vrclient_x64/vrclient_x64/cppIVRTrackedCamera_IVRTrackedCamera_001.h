@@ -12,7 +12,7 @@ extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream(void *, Tra
 extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive(void *, TrackedDeviceIndex_t);
 extern float cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime(void *, TrackedDeviceIndex_t);
 extern const CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(void *, TrackedDeviceIndex_t);
-extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *, TrackedDeviceIndex_t, CameraVideoStreamFrame_t *);
+extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *, TrackedDeviceIndex_t, const CameraVideoStreamFrame_t *);
 extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure(void *, TrackedDeviceIndex_t, bool);
 extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream(void *, TrackedDeviceIndex_t);
 extern bool cppIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream(void *, TrackedDeviceIndex_t);

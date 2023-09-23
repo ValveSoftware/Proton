@@ -93,7 +93,7 @@ uint32_t cppIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName(void
     return _ret;
 }
 
-bool cppIVRRenderModels_IVRRenderModels_004_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool cppIVRRenderModels_IVRRenderModels_004_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     VRControllerState001_t lin;

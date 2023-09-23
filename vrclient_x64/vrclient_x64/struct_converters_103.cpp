@@ -25,7 +25,7 @@ void struct_VREvent_t_103_lin_to_win(void *l, void *w, uint32_t sz)
     memcpy(&win->data, &lin->data, sz - (((char*)&win->data) - ((char*)win)));
 }
 
-void struct_VREvent_t_103_win_to_lin(void *w, void *l)
+void struct_VREvent_t_103_win_to_lin(const void *w, void *l)
 {
     struct winVREvent_t_103 *win = (struct winVREvent_t_103 *)w;
     VREvent_t *lin = (VREvent_t *)l;
@@ -54,7 +54,7 @@ void struct_VRControllerState001_t_103_lin_to_win(void *l, void *w, uint32_t sz)
     memcpy(win->rAxis, lin->rAxis, sizeof(win->rAxis));
 }
 
-void struct_VRControllerState001_t_103_win_to_lin(void *w, void *l)
+void struct_VRControllerState001_t_103_win_to_lin(const void *w, void *l)
 {
     struct winVRControllerState001_t_103 *win = (struct winVRControllerState001_t_103 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;
@@ -121,7 +121,7 @@ void struct_Compositor_FrameTiming_103_lin_to_win(void *l, void *w)
     win->m_HmdPose = lin->m_HmdPose;
 }
 
-void struct_Compositor_FrameTiming_103_win_to_lin(void *w, void *l)
+void struct_Compositor_FrameTiming_103_win_to_lin(const void *w, void *l)
 {
     struct winCompositor_FrameTiming_103 *win = (struct winCompositor_FrameTiming_103 *)w;
     Compositor_FrameTiming *lin = (Compositor_FrameTiming *)l;
@@ -169,7 +169,7 @@ void struct_RenderModel_TextureMap_t_103_lin_to_win(void *l, void *w)
     win->rubTextureMapData = lin->rubTextureMapData;
 }
 
-void struct_RenderModel_TextureMap_t_103_win_to_lin(void *w, void *l)
+void struct_RenderModel_TextureMap_t_103_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_TextureMap_t_103 *win = (struct winRenderModel_TextureMap_t_103 *)w;
     RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
@@ -219,7 +219,7 @@ void struct_RenderModel_t_103_lin_to_win(void *l, void *w)
     win->diffuseTextureId = lin->diffuseTextureId;
 }
 
-void struct_RenderModel_t_103_win_to_lin(void *w, void *l)
+void struct_RenderModel_t_103_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_t_103 *win = (struct winRenderModel_t_103 *)w;
     RenderModel_t *lin = (RenderModel_t *)l;

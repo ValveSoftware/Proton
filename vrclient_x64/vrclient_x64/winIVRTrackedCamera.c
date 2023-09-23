@@ -132,7 +132,7 @@ const CameraVideoStreamFrame_t * __thiscall winIVRTrackedCamera_IVRTrackedCamera
     return _ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(winIVRTrackedCamera_IVRTrackedCamera_001 *_this, TrackedDeviceIndex_t nDeviceIndex, CameraVideoStreamFrame_t *pFrameImage)
+bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(winIVRTrackedCamera_IVRTrackedCamera_001 *_this, TrackedDeviceIndex_t nDeviceIndex, const CameraVideoStreamFrame_t *pFrameImage)
 {
     bool _ret;
     TRACE("%p\n", _this);

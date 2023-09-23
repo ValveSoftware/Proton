@@ -239,7 +239,7 @@ const char * cppIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum(void *
     return _ret;
 }
 
-bool cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *linux_side, Compositor_OverlaySettings *overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType)
+bool cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *linux_side, const Compositor_OverlaySettings *overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType)
 {
     bool _ret;
     _ret = ((IVRSystem*)linux_side)->HandleControllerOverlayInteractionAsMouse(*overlaySettings, (vr::HmdVector2_t)vecWindowClientPositionOnScreen, (vr::HmdVector2_t)vecWindowClientSize, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, (vr::EVRControllerEventOutputType)eOutputType);

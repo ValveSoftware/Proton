@@ -14,8 +14,8 @@ extern uint32_t cppIVRRenderModels_IVRRenderModels_006_GetComponentCount(void *,
 extern uint32_t cppIVRRenderModels_IVRRenderModels_006_GetComponentName(void *, const char *, uint32_t, char *, uint32_t);
 extern uint64_t cppIVRRenderModels_IVRRenderModels_006_GetComponentButtonMask(void *, const char *, const char *);
 extern uint32_t cppIVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName(void *, const char *, const char *, char *, uint32_t);
-extern bool cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(void *, const char *, const char *, VRInputValueHandle_t, RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t *);
-extern bool cppIVRRenderModels_IVRRenderModels_006_GetComponentState(void *, const char *, const char *, VRControllerState_t *, RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t *);
+extern bool cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(void *, const char *, const char *, VRInputValueHandle_t, const RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t *);
+extern bool cppIVRRenderModels_IVRRenderModels_006_GetComponentState(void *, const char *, const char *, const VRControllerState_t *, const RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t *);
 extern bool cppIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent(void *, const char *, const char *);
 extern uint32_t cppIVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL(void *, const char *, char *, uint32_t, EVRRenderModelError *);
 extern uint32_t cppIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath(void *, const char *, char *, uint32_t, EVRRenderModelError *);

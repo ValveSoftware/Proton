@@ -116,13 +116,13 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBo
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
@@ -340,13 +340,13 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBo
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
@@ -610,13 +610,13 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(w
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(_this->linux_side, pPointBuffer, unPointCount);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
