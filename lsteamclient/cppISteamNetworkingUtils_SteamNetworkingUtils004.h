@@ -1,4 +1,4 @@
-extern SteamNetworkingMessage_t * cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(void *, int);
+extern winSteamNetworkingMessage_t_158 * cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(void *, int);
 extern ESteamNetworkingAvailability cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus(void *, SteamRelayNetworkStatus_t *);
 extern float cppISteamNetworkingUtils_SteamNetworkingUtils004_GetLocalPingLocation(void *, SteamNetworkPingLocation_t *);
 extern int cppISteamNetworkingUtils_SteamNetworkingUtils004_EstimatePingTimeBetweenTwoLocations(void *, const SteamNetworkPingLocation_t *, const SteamNetworkPingLocation_t *);

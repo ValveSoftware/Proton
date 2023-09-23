@@ -107,7 +107,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking001_RequestLobbyList(winISt
     cppISteamMatchmaking_SteamMatchMaking001_RequestLobbyList(_this->linux_side, ulGameID, pFilters, nFilters);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking001 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking001 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -148,7 +148,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking001_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking001 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking001 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -319,7 +319,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking002_RequestLobbyList(winISt
     cppISteamMatchmaking_SteamMatchMaking002_RequestLobbyList(_this->linux_side);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking002 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking002 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking002_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -360,7 +360,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking002_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking002 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking002 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -559,7 +559,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlot
     cppISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlotsAvailableFilter(_this->linux_side);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -600,7 +600,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -844,7 +844,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListSlot
     cppISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListSlotsAvailableFilter(_this->linux_side);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking004 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking004 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking004_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -885,7 +885,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking004_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking004 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking004 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -1132,7 +1132,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNear
     cppISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNearValueFilter(_this->linux_side, pchKeyToMatch, nValueToBeCloseTo);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking005_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -1173,7 +1173,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking005_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -1280,7 +1280,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyType(winISteamM
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, CSteamID steamIDLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID *_ret, CSteamID steamIDLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking005_GetLobbyOwner(_this->linux_side, steamIDLobby);
@@ -1440,7 +1440,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNear
     cppISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNearValueFilter(_this->linux_side, pchKeyToMatch, nValueToBeCloseTo);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking006_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -1485,7 +1485,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking006_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -1584,7 +1584,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyType(winISteamM
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, CSteamID steamIDLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID *_ret, CSteamID steamIDLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking006_GetLobbyOwner(_this->linux_side, steamIDLobby);
@@ -1745,7 +1745,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListFilt
     cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListFilterSlotsAvailable(_this->linux_side, nSlotsAvailable);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -1790,7 +1790,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking007_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -1921,7 +1921,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyJoinable(winISt
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, CSteamID steamIDLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID *_ret, CSteamID steamIDLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner(_this->linux_side, steamIDLobby);
@@ -2110,7 +2110,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListResu
     cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListResultCountFilter(_this->linux_side, cMaxResults);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking008_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -2155,7 +2155,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking008_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -2286,7 +2286,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyJoinable(winISt
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, CSteamID steamIDLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID *_ret, CSteamID steamIDLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner(_this->linux_side, steamIDLobby);
@@ -2485,7 +2485,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListComp
     cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListCompatibleMembersFilter(_this->linux_side, steamIDLobby);
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, int iLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, int iLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking009_GetLobbyByIndex(_this->linux_side, iLobby);
@@ -2530,7 +2530,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking009_GetNumLobbyMembers(winIS
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, CSteamID steamIDLobby, int iMember)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
@@ -2661,7 +2661,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyJoinable(winISt
     return _ret;
 }
 
-CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, CSteamID steamIDLobby)
+CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyOwner(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID *_ret, CSteamID steamIDLobby)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamMatchmaking_SteamMatchMaking009_GetLobbyOwner(_this->linux_side, steamIDLobby);

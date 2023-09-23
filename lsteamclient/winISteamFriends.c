@@ -150,7 +150,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(winISteamFriends_SteamFriends001 *_this, CSteamID *_ret, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(winISteamFriends_SteamFriends001 *_this, CSteamID *_ret, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends001_GetFriendByIndex(_this->linux_side, iFriend);
@@ -374,7 +374,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends002_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -519,7 +519,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends002_GetClanByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetClanByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends002_GetClanByIndex(_this->linux_side, iClan);
@@ -558,7 +558,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -673,7 +673,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends003_GetFriendByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends003_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -744,7 +744,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends003_GetClanByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetClanByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends003_GetClanByIndex(_this->linux_side, iClan);
@@ -767,7 +767,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends003 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -892,7 +892,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends004_GetFriendByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends004_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -963,7 +963,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends004_GetClanByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetClanByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends004_GetClanByIndex(_this->linux_side, iClan);
@@ -986,7 +986,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends004_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends004 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends004_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -1115,7 +1115,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends005_GetFriendByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends005_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -1186,7 +1186,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends005_GetClanByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetClanByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends005_GetClanByIndex(_this->linux_side, iClan);
@@ -1209,7 +1209,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends005_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends005 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends005_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -1368,7 +1368,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends006_GetFriendByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends006_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -1439,7 +1439,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends006_GetClanByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetClanByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends006_GetClanByIndex(_this->linux_side, iClan);
@@ -1470,7 +1470,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends006_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends006 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends006_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -1639,7 +1639,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends007_GetFriendByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends007_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -1702,7 +1702,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends007_GetClanByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetClanByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends007_GetClanByIndex(_this->linux_side, iClan);
@@ -1733,7 +1733,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends007_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends007 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends007_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -1934,7 +1934,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends008_GetFriendByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends008_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -1997,7 +1997,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends008_GetClanByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends008_GetClanByIndex(_this->linux_side, iClan);
@@ -2028,7 +2028,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends008_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends008_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -2125,7 +2125,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends008_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends008_GetClanOwner(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOwner(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends008_GetClanOwner(_this->linux_side, steamIDClan);
@@ -2140,7 +2140,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends008_GetClanOfficerByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOfficerByIndex(winISteamFriends_SteamFriends008 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends008_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -2291,7 +2291,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetFriendByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -2354,7 +2354,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetClanByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetClanByIndex(_this->linux_side, iClan);
@@ -2385,7 +2385,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -2482,7 +2482,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends009_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetClanOwner(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOwner(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetClanOwner(_this->linux_side, steamIDClan);
@@ -2497,7 +2497,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetClanOfficerByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOfficerByIndex(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -2566,7 +2566,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends009_GetCoplayFriend(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetCoplayFriend(winISteamFriends_SteamFriends009 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends009_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -2750,7 +2750,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -2813,7 +2813,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetClanByIndex(_this->linux_side, iClan);
@@ -2860,7 +2860,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -2957,7 +2957,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanOwner(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOwner(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetClanOwner(_this->linux_side, steamIDClan);
@@ -2972,7 +2972,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -3041,7 +3041,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -3088,7 +3088,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends010_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -3347,7 +3347,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetFriendByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -3410,7 +3410,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetClanByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetClanByIndex(_this->linux_side, iClan);
@@ -3457,7 +3457,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -3554,7 +3554,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetClanOwner(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOwner(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetClanOwner(_this->linux_side, steamIDClan);
@@ -3569,7 +3569,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetClanOfficerByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOfficerByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -3644,7 +3644,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetCoplayFriend(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetCoplayFriend(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -3691,7 +3691,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends011_GetChatMemberByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetChatMemberByIndex(winISteamFriends_SteamFriends011 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends011_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -3980,7 +3980,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -4043,7 +4043,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetClanByIndex(_this->linux_side, iClan);
@@ -4090,7 +4090,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -4187,7 +4187,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanOwner(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOwner(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetClanOwner(_this->linux_side, steamIDClan);
@@ -4202,7 +4202,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -4277,7 +4277,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -4324,7 +4324,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends012_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -4613,7 +4613,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetFriendByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -4676,7 +4676,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetClanByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetClanByIndex(_this->linux_side, iClan);
@@ -4723,7 +4723,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -4820,7 +4820,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetClanOwner(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOwner(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetClanOwner(_this->linux_side, steamIDClan);
@@ -4835,7 +4835,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetClanOfficerByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOfficerByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -4910,7 +4910,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetCoplayFriend(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetCoplayFriend(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -4957,7 +4957,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends013_GetChatMemberByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetChatMemberByIndex(winISteamFriends_SteamFriends013 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends013_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -5247,7 +5247,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetFriendByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -5318,7 +5318,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetClanByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetClanByIndex(_this->linux_side, iClan);
@@ -5365,7 +5365,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -5462,7 +5462,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetClanOwner(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOwner(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetClanOwner(_this->linux_side, steamIDClan);
@@ -5477,7 +5477,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetClanOfficerByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOfficerByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -5552,7 +5552,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetCoplayFriend(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetCoplayFriend(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -5599,7 +5599,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends014_GetChatMemberByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetChatMemberByIndex(winISteamFriends_SteamFriends014 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends014_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -5898,7 +5898,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetFriendByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -6015,7 +6015,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetClanByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetClanByIndex(_this->linux_side, iClan);
@@ -6062,7 +6062,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -6159,7 +6159,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetClanOwner(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOwner(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetClanOwner(_this->linux_side, steamIDClan);
@@ -6174,7 +6174,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetClanOfficerByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOfficerByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -6249,7 +6249,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetCoplayFriend(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetCoplayFriend(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -6296,7 +6296,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends015_GetChatMemberByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetChatMemberByIndex(winISteamFriends_SteamFriends015 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends015_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
@@ -6627,7 +6627,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendCount(winISteamFriends_
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
@@ -6744,7 +6744,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanCount(winISteamFriends_St
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetClanByIndex(_this->linux_side, iClan);
@@ -6791,7 +6791,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendCountFromSource(winISte
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
@@ -6888,7 +6888,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_RequestClanOfficerLis
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanOwner(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOwner(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetClanOwner(_this->linux_side, steamIDClan);
@@ -6903,7 +6903,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanOfficerCount(winISteamFri
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
@@ -6978,7 +6978,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetCoplayFriendCount(winISteamFr
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, int iCoplayFriend)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetCoplayFriend(_this->linux_side, iCoplayFriend);
@@ -7025,7 +7025,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanChatMemberCount(winISteam
     return _ret;
 }
 
-CSteamID *__thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamFriends_SteamFriends017_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);

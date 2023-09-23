@@ -516,9 +516,9 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_destructor, 4)
 
-SteamNetworkingMessage_t * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(winISteamNetworkingUtils_SteamNetworkingUtils003 *_this, int cbAllocateBuffer)
+winSteamNetworkingMessage_t_152 * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(winISteamNetworkingUtils_SteamNetworkingUtils003 *_this, int cbAllocateBuffer)
 {
-    SteamNetworkingMessage_t * _ret;
+    winSteamNetworkingMessage_t_152 * _ret;
     TRACE("%p\n", _this);
     _ret = cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(_this->linux_side, cbAllocateBuffer);
     return _ret;
@@ -764,9 +764,9 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_destructor, 4)
 
-SteamNetworkingMessage_t * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(winISteamNetworkingUtils_SteamNetworkingUtils004 *_this, int cbAllocateBuffer)
+winSteamNetworkingMessage_t_158 * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(winISteamNetworkingUtils_SteamNetworkingUtils004 *_this, int cbAllocateBuffer)
 {
-    SteamNetworkingMessage_t * _ret;
+    winSteamNetworkingMessage_t_158 * _ret;
     TRACE("%p\n", _this);
     _ret = cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(_this->linux_side, cbAllocateBuffer);
     return _ret;

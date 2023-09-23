@@ -831,7 +831,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(win
     return _ret;
 }
 
-CSteamID *__thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(_this->linux_side);
@@ -1075,7 +1075,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(win
     return _ret;
 }
 
-CSteamID *__thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(_this->linux_side);
@@ -1343,7 +1343,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(win
     return _ret;
 }
 
-CSteamID *__thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(_this->linux_side);

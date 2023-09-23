@@ -41,14 +41,14 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned(void *linux_side)
 
 const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamApps*)linux_side)->GetCurrentGameLanguage();
     return (_ret);
 }
 
 const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamApps*)linux_side)->GetAvailableGameLanguages();
     return (_ret);
 }

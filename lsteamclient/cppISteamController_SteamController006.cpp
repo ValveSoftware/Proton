@@ -189,7 +189,7 @@ bool cppISteamController_SteamController006_ShowAnalogActionOrigins(void *linux_
 
 const char * cppISteamController_SteamController006_GetStringForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamController*)linux_side)->GetStringForActionOrigin((EControllerActionOrigin)eOrigin);
     return (_ret);
 }

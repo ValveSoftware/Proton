@@ -125,7 +125,7 @@ int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileCoun
 
 const char * cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileNameAndSize(void *linux_side, int iFile, int32 *pnFileSizeInBytes)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamRemoteStorage*)linux_side)->GetFileNameAndSize((int)iFile, (int32 *)pnFileSizeInBytes);
     return (_ret);
 }
