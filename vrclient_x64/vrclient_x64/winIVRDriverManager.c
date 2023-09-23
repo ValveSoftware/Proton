@@ -36,13 +36,13 @@ uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverCount(winI
     return cppIVRDriverManager_IVRDriverManager_001_GetDriverCount(_this->linux_side);
 }
 
-uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(winIVRDriverManager_IVRDriverManager_001 *_this, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize)
+uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(winIVRDriverManager_IVRDriverManager_001 *_this, DriverId_t nDriver, char *pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
     return cppIVRDriverManager_IVRDriverManager_001_GetDriverName(_this->linux_side, nDriver, pchValue, unBufferSize);
 }
 
-DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(winIVRDriverManager_IVRDriverManager_001 *_this, const char * pchDriverName)
+DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(winIVRDriverManager_IVRDriverManager_001 *_this, const char *pchDriverName)
 {
     TRACE("%p\n", _this);
     return cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->linux_side, pchDriverName);

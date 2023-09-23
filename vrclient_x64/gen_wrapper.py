@@ -666,44 +666,28 @@ def handle_thiscall_wrapper(klass, method, cfile):
 
 def handle_method_c(method, classname, winclassname, cppname, iface_version, cfile):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if strip_ns(method.result_type.spelling).startswith("IVR"):
-        cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
-    elif returns_record:
-        cfile.write("%s *" % strip_ns(method.result_type.spelling))
-    else:
-        cfile.write("%s " % strip_ns(method.result_type.spelling))
-    cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, method.name, winclassname))
-    if returns_record:
-        cfile.write(", %s *_r" % strip_ns(method.result_type.spelling))
-    unnamed = 'a'
-    for param in method.get_arguments():
-        if param.type.kind == TypeKind.POINTER and \
-                param.type.get_pointee().kind == TypeKind.UNEXPOSED:
-            #unspecified function pointer
-            typename = "void *"
-        else:
-            typename = param.type.spelling.split("::")[-1].replace("&", "*")
-            real_type = param.type;
-            while real_type.kind == TypeKind.POINTER:
-                real_type = real_type.get_pointee()
-            if param.type.kind == TypeKind.POINTER:
-                if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                    do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-                    typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
-                elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
-                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                    do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
-                    typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
-                elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                        struct_needs_conversion(real_type.get_canonical()):
-                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
 
-        if param.spelling == "":
-            cfile.write(", %s _%s" % (typename, unnamed))
-            unnamed = chr(ord(unnamed) + 1)
-        else:
-            cfile.write(", %s %s" % (typename, param.spelling))
-    cfile.write(")\n{\n")
+    ret = f'{strip_ns(method.result_type.spelling)} '
+    if ret.startswith("IVR"): ret = f'win{ret}'
+    elif returns_record: ret = f'{ret}*'
+
+    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+             for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
+
+    if returns_record:
+        params = [f'{ret}_r'] + params
+        names = ['_r'] + names
+
+    params = [f'{winclassname} *_this'] + params
+    names = ['_this'] + names
+
+    cfile.write(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
+    cfile.write("{\n")
+
+    if returns_record:
+        del params[1]
+        del names[1]
 
     path_conv = get_path_converter(method)
 
@@ -743,25 +727,23 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
         if method.name == methodname and classname_pattern in classname:
             fn_name = override_generator(cppname, method)
             if fn_name:
-                cfile.write("%s(%s_%s, _this->linux_side" % (fn_name, cppname, method.name))
+                cfile.write("%s(%s_%s, " % (fn_name, cppname, method.name))
                 is_method_overridden = True
                 break
     else:
-        cfile.write("%s_%s(_this->linux_side" % (cppname, method.name))
+        cfile.write("%s_%s(" % (cppname, method.name))
 
-    unnamed = 'a'
-    first = True
-    for param in method.get_arguments():
-        if first:
-            first = False
-        if param.spelling == "":
-            cfile.write(", _%s" % unnamed)
-            unnamed = chr(ord(unnamed) + 1)
-        else:
-            if path_conv and param.spelling in path_conv["w2l_names"]:
-                cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))
-            else:
-                cfile.write(", %s" % param.spelling)
+    def param_call(param, name):
+        if name == '_this': return '_this->linux_side'
+        if path_conv and name in path_conv["w2l_names"]: return f'{name} ? lin_{name} : NULL'
+        return name
+
+    params = ['_this'] + list(method.get_arguments())
+    cfile.write(", ".join([param_call(p, n) for p, n in zip(params, names)]))
+
+    if should_gen_wrapper:
+        cfile.write(")")
+
     if should_gen_wrapper:
         cfile.write(")")
     if is_method_overridden:
