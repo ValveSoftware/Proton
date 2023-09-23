@@ -11,7 +11,9 @@ extern "C" {
 #endif
 bool cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel(void *linux_side, const char *pchRenderModelName, winRenderModel_t_0910 *pRenderModel)
 {
-    return ((IVRRenderModels*)linux_side)->LoadRenderModel((const char *)pchRenderModelName, struct_RenderModel_t_0910_unwrap(pRenderModel));
+    bool _ret;
+    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel((const char *)pchRenderModelName, struct_RenderModel_t_0910_unwrap(pRenderModel));
+    return _ret;
 }
 
 void cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel(void *linux_side, winRenderModel_t_0910 *pRenderModel)
@@ -21,12 +23,16 @@ void cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel(void *linux_side, wi
 
 uint32_t cppIVRRenderModels_IVRRenderModels_001_GetRenderModelName(void *linux_side, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    return ((IVRRenderModels*)linux_side)->GetRenderModelName((uint32_t)unRenderModelIndex, (char *)pchRenderModelName, (uint32_t)unRenderModelNameLen);
+    uint32_t _ret;
+    _ret = ((IVRRenderModels*)linux_side)->GetRenderModelName((uint32_t)unRenderModelIndex, (char *)pchRenderModelName, (uint32_t)unRenderModelNameLen);
+    return _ret;
 }
 
 uint32_t cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount(void *linux_side)
 {
-    return ((IVRRenderModels*)linux_side)->GetRenderModelCount();
+    uint32_t _ret;
+    _ret = ((IVRRenderModels*)linux_side)->GetRenderModelCount();
+    return _ret;
 }
 
 #ifdef __cplusplus

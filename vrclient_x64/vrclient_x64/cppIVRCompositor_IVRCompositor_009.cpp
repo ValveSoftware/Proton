@@ -16,22 +16,30 @@ void cppIVRCompositor_IVRCompositor_009_SetTrackingSpace(void *linux_side, ETrac
 
 vr::ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_009_GetTrackingSpace(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetTrackingSpace();
+    vr::ETrackingUniverseOrigin _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
+    return _ret;
 }
 
 vr::EVRCompositorError cppIVRCompositor_IVRCompositor_009_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    return ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
+    vr::EVRCompositorError _ret;
+    _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
+    return _ret;
 }
 
 vr::EVRCompositorError cppIVRCompositor_IVRCompositor_009_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    return ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
+    vr::EVRCompositorError _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
+    return _ret;
 }
 
 vr::EVRCompositorError cppIVRCompositor_IVRCompositor_009_Submit(void *linux_side, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
-    return ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
+    vr::EVRCompositorError _ret;
+    _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame(void *linux_side)
@@ -46,8 +54,8 @@ void cppIVRCompositor_IVRCompositor_009_PostPresentHandoff(void *linux_side)
 
 bool cppIVRCompositor_IVRCompositor_009_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
 {
-    Compositor_FrameTiming lin;
     bool _ret;
+    Compositor_FrameTiming lin;
     if(pTiming)
         struct_Compositor_FrameTiming_0913_win_to_lin(pTiming, &lin);
     _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin : nullptr, (uint32_t)unFramesAgo);
@@ -58,7 +66,9 @@ bool cppIVRCompositor_IVRCompositor_009_GetFrameTiming(void *linux_side, winComp
 
 float cppIVRCompositor_IVRCompositor_009_GetFrameTimeRemaining(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetFrameTimeRemaining();
+    float _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetFrameTimeRemaining();
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_009_FadeToColor(void *linux_side, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
@@ -73,7 +83,9 @@ void cppIVRCompositor_IVRCompositor_009_FadeGrid(void *linux_side, float fSecond
 
 vr::EVRCompositorError cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride(void *linux_side, Texture_t *pTextures, uint32_t unTextureCount)
 {
-    return ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
+    vr::EVRCompositorError _ret;
+    _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_009_ClearSkyboxOverride(void *linux_side)
@@ -98,22 +110,30 @@ void cppIVRCompositor_IVRCompositor_009_CompositorQuit(void *linux_side)
 
 bool cppIVRCompositor_IVRCompositor_009_IsFullscreen(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->IsFullscreen();
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->IsFullscreen();
+    return _ret;
 }
 
 uint32_t cppIVRCompositor_IVRCompositor_009_GetCurrentSceneFocusProcess(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetCurrentSceneFocusProcess();
+    uint32_t _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetCurrentSceneFocusProcess();
+    return _ret;
 }
 
 uint32_t cppIVRCompositor_IVRCompositor_009_GetLastFrameRenderer(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetLastFrameRenderer();
+    uint32_t _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetLastFrameRenderer();
+    return _ret;
 }
 
 bool cppIVRCompositor_IVRCompositor_009_CanRenderScene(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->CanRenderScene();
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->CanRenderScene();
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_009_ShowMirrorWindow(void *linux_side)
@@ -128,7 +148,9 @@ void cppIVRCompositor_IVRCompositor_009_HideMirrorWindow(void *linux_side)
 
 bool cppIVRCompositor_IVRCompositor_009_IsMirrorWindowVisible(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->IsMirrorWindowVisible();
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->IsMirrorWindowVisible();
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_009_CompositorDumpImages(void *linux_side)
