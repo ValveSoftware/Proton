@@ -31,31 +31,31 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(_this->linux_side, pchFile);
@@ -67,13 +67,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -122,25 +122,25 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileSize(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists(_this->linux_side, pchFile);
@@ -152,13 +152,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -219,55 +219,55 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCHandle, 8)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileTimestamp(_this->linux_side, pchFile);
@@ -279,13 +279,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -315,13 +315,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -409,67 +409,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle, 8)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -481,13 +481,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -517,13 +517,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -622,67 +622,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_EnumerateUserSubscribedFiles, 8)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UnsubscribePublishedFile, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -694,13 +694,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -730,13 +730,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -754,13 +754,13 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishFile(_this->linux_side, pchFile, pchPreviewFile, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, SteamParamStringArray_t *pTags)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -918,67 +918,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -990,13 +990,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -1026,19 +1026,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -1056,7 +1056,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1072,7 +1072,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1080,7 +1080,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -1088,13 +1088,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -1106,7 +1106,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -1154,7 +1154,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -1178,13 +1178,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchVideoURL, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char *pchVideoURL, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -1204,7 +1204,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
@@ -1332,67 +1332,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -1404,13 +1404,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -1440,19 +1440,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -1470,7 +1470,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1486,7 +1486,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1494,7 +1494,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -1502,13 +1502,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -1520,7 +1520,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -1568,7 +1568,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -1592,13 +1592,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -1618,7 +1618,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
@@ -1750,49 +1750,49 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -1810,31 +1810,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -1846,13 +1846,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -1882,19 +1882,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead);
@@ -1912,7 +1912,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1928,7 +1928,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -1936,7 +1936,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -1944,13 +1944,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -1962,7 +1962,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -2010,7 +2010,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -2034,13 +2034,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -2060,7 +2060,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
@@ -2196,49 +2196,49 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -2256,31 +2256,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -2292,13 +2292,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -2328,19 +2328,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCDownload(_this->linux_side, hContent);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset);
@@ -2358,7 +2358,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -2374,7 +2374,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -2382,7 +2382,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -2390,13 +2390,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -2408,7 +2408,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -2456,7 +2456,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -2480,13 +2480,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -2506,7 +2506,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
@@ -2643,49 +2643,49 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -2703,31 +2703,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -2739,13 +2739,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -2775,19 +2775,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset);
@@ -2805,7 +2805,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -2821,7 +2821,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -2829,7 +2829,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -2837,13 +2837,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -2855,7 +2855,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -2903,7 +2903,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -2927,13 +2927,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -2953,13 +2953,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -3099,49 +3099,49 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -3159,31 +3159,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -3195,13 +3195,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -3231,19 +3231,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset);
@@ -3261,7 +3261,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -3277,7 +3277,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -3285,7 +3285,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -3293,13 +3293,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -3311,7 +3311,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -3359,7 +3359,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -3383,13 +3383,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -3409,13 +3409,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -3555,49 +3555,49 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -3615,31 +3615,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -3651,13 +3651,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -3687,19 +3687,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset, eAction);
@@ -3717,7 +3717,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -3733,7 +3733,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -3741,7 +3741,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -3749,13 +3749,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -3767,7 +3767,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -3815,7 +3815,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -3839,13 +3839,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -3865,13 +3865,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -4014,67 +4014,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, const void * pvData, uint32 cubData)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, const void *pvData, uint32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteAsync(_this->linux_side, pchFile, pvData, cubData);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, uint32 nOffset, uint32 cubToRead)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, uint32 nOffset, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync(_this->linux_side, pchFile, nOffset, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, SteamAPICall_t hReadCall, void * pvBuffer, uint32 cubToRead)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, SteamAPICall_t hReadCall, void *pvBuffer, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete(_this->linux_side, hReadCall, pvBuffer, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -4092,31 +4092,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -4128,13 +4128,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, int32 *pnTotalBytes, int32 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -4164,19 +4164,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset, eAction);
@@ -4194,7 +4194,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -4210,7 +4210,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -4218,7 +4218,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -4226,13 +4226,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -4244,7 +4244,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -4292,7 +4292,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -4316,13 +4316,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -4342,13 +4342,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -4494,67 +4494,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, const void * pvData, uint32 cubData)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, const void *pvData, uint32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteAsync(_this->linux_side, pchFile, pvData, cubData);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, uint32 nOffset, uint32 cubToRead)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, uint32 nOffset, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync(_this->linux_side, pchFile, nOffset, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, SteamAPICall_t hReadCall, void * pvBuffer, uint32 cubToRead)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, SteamAPICall_t hReadCall, void *pvBuffer, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete(_this->linux_side, hReadCall, pvBuffer, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -4572,31 +4572,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -4608,13 +4608,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, uint64 * pnTotalBytes, uint64 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, uint64 *pnTotalBytes, uint64 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -4644,19 +4644,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset, eAction);
@@ -4674,7 +4674,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -4690,7 +4690,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -4698,7 +4698,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -4706,13 +4706,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -4724,7 +4724,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -4772,7 +4772,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -4796,13 +4796,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -4822,13 +4822,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -4978,67 +4978,67 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch, 4)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite(_this->linux_side, pchFile, pvData, cubData);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, void *pvData, int32 cubDataToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, const void * pvData, uint32 cubData)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, const void *pvData, uint32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteAsync(_this->linux_side, pchFile, pvData, cubData);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, uint32 nOffset, uint32 cubToRead)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, uint32 nOffset, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync(_this->linux_side, pchFile, nOffset, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, SteamAPICall_t hReadCall, void * pvBuffer, uint32 cubToRead)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, SteamAPICall_t hReadCall, void *pvBuffer, uint32 cubToRead)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete(_this->linux_side, hReadCall, pvBuffer, cubToRead);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete(_this->linux_side, pchFile);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileShare(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileShare(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, ERemoteStoragePlatform eRemoteStoragePlatform)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms(_this->linux_side, pchFile, eRemoteStoragePlatform);
 }
 
-UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+UGCFileWriteStreamHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamOpen(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamOpen(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCFileWriteStreamHandle_t writeHandle, const void * pvData, int32 cubData)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCFileWriteStreamHandle_t writeHandle, const void *pvData, int32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk(_this->linux_side, writeHandle, pvData, cubData);
@@ -5056,31 +5056,31 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamCancel(_this->linux_side, writeHandle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists(_this->linux_side, pchFile);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted(_this->linux_side, pchFile);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileSize(_this->linux_side, pchFile);
 }
 
-int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+int64 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileTimestamp(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileTimestamp(_this->linux_side, pchFile);
 }
 
-ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile)
+ERemoteStoragePlatform __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetSyncPlatforms(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetSyncPlatforms(_this->linux_side, pchFile);
@@ -5092,13 +5092,13 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, int iFile, int32 * pnFileSizeInBytes)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, int iFile, int32 *pnFileSizeInBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, uint64 * pnTotalBytes, uint64 * puAvailableBytes)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, uint64 *pnTotalBytes, uint64 *puAvailableBytes)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
@@ -5128,19 +5128,19 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownload(_this->linux_side, hContent, unPriority);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, int32 * pnBytesDownloaded, int32 * pnBytesExpected)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, int32 *pnBytesDownloaded, int32 *pnBytesExpected)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress(_this->linux_side, hContent, pnBytesDownloaded, pnBytesExpected);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, AppId_t * pnAppID, char ** ppchName, int32 * pnFileSizeInBytes, CSteamID * pSteamIDOwner)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, AppId_t *pnAppID, char **ppchName, int32 *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails(_this->linux_side, hContent, pnAppID, ppchName, pnFileSizeInBytes, pSteamIDOwner);
 }
 
-int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, void * pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, void *pvData, int32 cubDataToRead, uint32 cOffset, EUGCReadAction eAction)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCRead(_this->linux_side, hContent, pvData, cubDataToRead, cOffset, eAction);
@@ -5158,7 +5158,7 @@ UGCHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSI
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetCachedUGCHandle(_this->linux_side, iCachedContent);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, const char *pchFile, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -5174,7 +5174,7 @@ PublishedFileUpdateHandle_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_CreatePublishedFileUpdateRequest(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchFile)
 {
     char lin_pchFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
@@ -5182,7 +5182,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -5190,13 +5190,13 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchTitle)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchTitle)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle(_this->linux_side, updateHandle, pchTitle);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription(_this->linux_side, updateHandle, pchDescription);
@@ -5208,7 +5208,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileVisibility(_this->linux_side, updateHandle, eVisibility);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t *pTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags(_this->linux_side, updateHandle, pTags);
@@ -5256,7 +5256,7 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UnsubscribePublishedFile(_this->linux_side, unPublishedFileId);
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchChangeDescription)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, PublishedFileUpdateHandle_t updateHandle, const char *pchChangeDescription)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription(_this->linux_side, updateHandle, pchChangeDescription);
@@ -5280,13 +5280,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUserPublishedItemVoteDetails(_this->linux_side, unPublishedFileId);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumerateUserSharedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t *pRequiredTags, SteamParamStringArray_t *pExcludedTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumerateUserSharedWorkshopFiles(_this->linux_side, steamId, unStartIndex, pRequiredTags, pExcludedTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, EWorkshopVideoProvider eVideoProvider, const char *pchVideoAccount, const char *pchVideoIdentifier, const char *pchPreviewFile, AppId_t nConsumerAppId, const char *pchTitle, const char *pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t *pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
@@ -5306,13 +5306,13 @@ SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VE
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumeratePublishedFilesByUserAction(_this->linux_side, eAction, unStartIndex);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumeratePublishedWorkshopFiles(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t *pTags, SteamParamStringArray_t *pUserTags)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EnumeratePublishedWorkshopFiles(_this->linux_side, eEnumerationType, unStartIndex, unCount, unDays, pTags, pUserTags);
 }
 
-SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
+SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, UGCHandle_t hContent, const char *pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
@@ -5326,7 +5326,7 @@ int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileChangeCount(_this->linux_side);
 }
 
-const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileChange(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, int iFile, ERemoteStorageLocalFileChange * pEChangeType, ERemoteStorageFilePathType * pEFilePathType)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileChange(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *_this, int iFile, ERemoteStorageLocalFileChange *pEChangeType, ERemoteStorageFilePathType *pEFilePathType)
 {
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileChange(_this->linux_side, iFile, pEChangeType, pEFilePathType);
