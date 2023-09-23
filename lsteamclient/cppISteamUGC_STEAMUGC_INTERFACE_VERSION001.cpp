@@ -26,7 +26,7 @@ SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest(vo
     return ((ISteamUGC*)linux_side)->SendQueryUGCRequest((UGCQueryHandle_t)handle);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(void *linux_side, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_128 * pDetails)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(void *linux_side, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_128 *pDetails)
 {
     SteamUGCDetails_t lin_pDetails;
     win_to_lin_struct_SteamUGCDetails_t_128(pDetails, &lin_pDetails);
@@ -40,12 +40,12 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCRequest(void *lin
     return ((ISteamUGC*)linux_side)->ReleaseQueryUGCRequest((UGCQueryHandle_t)handle);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(void *linux_side, UGCQueryHandle_t handle, const char * pTagName)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(void *linux_side, UGCQueryHandle_t handle, const char *pTagName)
 {
     return ((ISteamUGC*)linux_side)->AddRequiredTag((UGCQueryHandle_t)handle, (const char *)pTagName);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(void *linux_side, UGCQueryHandle_t handle, const char * pTagName)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(void *linux_side, UGCQueryHandle_t handle, const char *pTagName)
 {
     return ((ISteamUGC*)linux_side)->AddExcludedTag((UGCQueryHandle_t)handle, (const char *)pTagName);
 }
@@ -60,7 +60,7 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly(void *linux_s
     return ((ISteamUGC*)linux_side)->SetReturnTotalOnly((UGCQueryHandle_t)handle, (bool)bReturnTotalOnly);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter(void *linux_side, UGCQueryHandle_t handle, const char * pMatchCloudFileName)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter(void *linux_side, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
 {
     return ((ISteamUGC*)linux_side)->SetCloudFileNameFilter((UGCQueryHandle_t)handle, (const char *)pMatchCloudFileName);
 }
@@ -70,7 +70,7 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag(void *linux_side,
     return ((ISteamUGC*)linux_side)->SetMatchAnyTag((UGCQueryHandle_t)handle, (bool)bMatchAnyTag);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(void *linux_side, UGCQueryHandle_t handle, const char * pSearchText)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(void *linux_side, UGCQueryHandle_t handle, const char *pSearchText)
 {
     return ((ISteamUGC*)linux_side)->SetSearchText((UGCQueryHandle_t)handle, (const char *)pSearchText);
 }

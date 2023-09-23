@@ -11,7 +11,7 @@ extern "C" {
 #define SDKVER_134
 #include "struct_converters.h"
 #include "cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.h"
-bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(void *linux_side, const char * pchAbsolutePathToControllerConfigVDF)
+bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(void *linux_side, const char *pchAbsolutePathToControllerConfigVDF)
 {
     return ((ISteamController*)linux_side)->Init((const char *)pchAbsolutePathToControllerConfigVDF);
 }
@@ -26,7 +26,7 @@ void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(void *linux_
     ((ISteamController*)linux_side)->RunFrame();
 }
 
-bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(void *linux_side, uint32 unControllerIndex, SteamControllerState001_t * pState)
+bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(void *linux_side, uint32 unControllerIndex, SteamControllerState001_t *pState)
 {
     return ((ISteamController*)linux_side)->GetControllerState((uint32)unControllerIndex, (SteamControllerState001_t *)pState);
 }
@@ -36,7 +36,7 @@ void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(vo
     ((ISteamController*)linux_side)->TriggerHapticPulse((uint32)unControllerIndex, (ESteamControllerPad)eTargetPad, (unsigned short)usDurationMicroSec);
 }
 
-void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode(void *linux_side, const char * pchMode)
+void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode(void *linux_side, const char *pchMode)
 {
     ((ISteamController*)linux_side)->SetOverrideMode((const char *)pchMode);
 }

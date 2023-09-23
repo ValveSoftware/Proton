@@ -66,7 +66,7 @@ int cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(void *linux_side)
     return ((ISteamApps*)linux_side)->GetDLCCount();
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t * pAppID, bool * pbAvailable, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->BGetDLCDataByIndex((int)iDLC, (AppId_t *)pAppID, (bool *)pbAvailable, (char *)pchName, (int)cchNameBufferSize);
 }

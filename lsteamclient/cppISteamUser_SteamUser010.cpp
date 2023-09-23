@@ -26,7 +26,7 @@ CSteamID cppISteamUser_SteamUser010_GetSteamID(void *linux_side)
     return ((ISteamUser*)linux_side)->GetSteamID();
 }
 
-int cppISteamUser_SteamUser010_InitiateGameConnection(void *linux_side, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+int cppISteamUser_SteamUser010_InitiateGameConnection(void *linux_side, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
     return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
 }
@@ -36,7 +36,7 @@ void cppISteamUser_SteamUser010_TerminateGameConnection(void *linux_side, uint32
     ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
 }
 
-void cppISteamUser_SteamUser010_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
+void cppISteamUser_SteamUser010_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)
 {
     ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
 }

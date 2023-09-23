@@ -16,7 +16,7 @@ const char * cppISteamFriends_SteamFriends003_GetPersonaName(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetPersonaName();
 }
 
-void cppISteamFriends_SteamFriends003_SetPersonaName(void *linux_side, const char * pchPersonaName)
+void cppISteamFriends_SteamFriends003_SetPersonaName(void *linux_side, const char *pchPersonaName)
 {
     ((ISteamFriends*)linux_side)->SetPersonaName((const char *)pchPersonaName);
 }
@@ -56,7 +56,7 @@ int cppISteamFriends_SteamFriends003_GetFriendAvatar(void *linux_side, CSteamID 
     return ((ISteamFriends*)linux_side)->GetFriendAvatar((CSteamID)steamIDFriend);
 }
 
-bool cppISteamFriends_SteamFriends003_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, uint64 * pulGameID, uint32 * punGameIP, uint16 * pusGamePort, uint16 * pusQueryPort)
+bool cppISteamFriends_SteamFriends003_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
 {
     return ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (uint64 *)pulGameID, (uint32 *)punGameIP, (uint16 *)pusGamePort, (uint16 *)pusQueryPort);
 }
@@ -106,7 +106,7 @@ void cppISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(void *linux_side, C
     ((ISteamFriends*)linux_side)->SetInGameVoiceSpeaking((CSteamID)steamIDUser, (bool)bSpeaking);
 }
 
-void cppISteamFriends_SteamFriends003_ActivateGameOverlay(void *linux_side, const char * pchDialog)
+void cppISteamFriends_SteamFriends003_ActivateGameOverlay(void *linux_side, const char *pchDialog)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlay((const char *)pchDialog);
 }

@@ -36,27 +36,27 @@ CSteamID cppISteamUser_SteamUser007_GetSteamID(void *linux_side)
     return ((ISteamUser*)linux_side)->GetSteamID();
 }
 
-bool cppISteamUser_SteamUser007_SetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char * pchKey, const char * pchValue)
+bool cppISteamUser_SteamUser007_SetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
     return ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
 }
 
-bool cppISteamUser_SteamUser007_GetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char * pchKey, char * pchValue, int cbValue)
+bool cppISteamUser_SteamUser007_GetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
     return ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
 }
 
-bool cppISteamUser_SteamUser007_SetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char * pchKey, int iValue)
+bool cppISteamUser_SteamUser007_SetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
     return ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
 }
 
-bool cppISteamUser_SteamUser007_GetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char * pchKey, int * piValue)
+bool cppISteamUser_SteamUser007_GetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
     return ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
 }
 
-int cppISteamUser_SteamUser007_InitiateGameConnection(void *linux_side, void * pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void * pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey)
+int cppISteamUser_SteamUser007_InitiateGameConnection(void *linux_side, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void *pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey)
 {
     return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure, (void *)pvSteam2GetEncryptionKey, (int)cbSteam2GetEncryptionKey);
 }
@@ -66,7 +66,7 @@ void cppISteamUser_SteamUser007_TerminateGameConnection(void *linux_side, uint32
     ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
 }
 
-void cppISteamUser_SteamUser007_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
+void cppISteamUser_SteamUser007_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)
 {
     ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
 }

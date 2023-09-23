@@ -67,7 +67,7 @@ int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(void *linux_side)
     return ((ISteamApps*)linux_side)->GetDLCCount();
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t * pAppID, bool * pbAvailable, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->BGetDLCDataByIndex((int)iDLC, (AppId_t *)pAppID, (bool *)pbAvailable, (char *)pchName, (int)cchNameBufferSize);
 }
@@ -87,7 +87,7 @@ void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(v
     ((ISteamApps*)linux_side)->RequestAppProofOfPurchaseKey((AppId_t)nAppID);
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(void *linux_side, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(void *linux_side, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetCurrentBetaName((char *)pchName, (int)cchNameBufferSize);
 }
@@ -97,12 +97,12 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(void *linux
     return ((ISteamApps*)linux_side)->MarkContentCorrupt((bool)bMissingFilesOnly);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(void *linux_side, AppId_t appID, DepotId_t * pvecDepots, uint32 cMaxDepots)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(void *linux_side, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     return ((ISteamApps*)linux_side)->GetInstalledDepots((AppId_t)appID, (DepotId_t *)pvecDepots, (uint32)cMaxDepots);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(void *linux_side, AppId_t appID, char * pchFolder, uint32 cchFolderBufferSize)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(void *linux_side, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetAppInstallDir((AppId_t)appID, (char *)pchFolder, (uint32)cchFolderBufferSize);
 }
@@ -117,12 +117,12 @@ CSteamID cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(void *linux_si
     return ((ISteamApps*)linux_side)->GetAppOwner();
 }
 
-const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(void *linux_side, const char * pchKey)
+const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(void *linux_side, const char *pchKey)
 {
     return ((ISteamApps*)linux_side)->GetLaunchQueryParam((const char *)pchKey);
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(void *linux_side, AppId_t nAppID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(void *linux_side, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
 {
     return ((ISteamApps*)linux_side)->GetDlcDownloadProgress((AppId_t)nAppID, (uint64 *)punBytesDownloaded, (uint64 *)punBytesTotal);
 }
@@ -137,12 +137,12 @@ void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(
     ((ISteamApps*)linux_side)->RequestAllProofOfPurchaseKeys();
 }
 
-SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(void *linux_side, const char * pszFileName)
+SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(void *linux_side, const char *pszFileName)
 {
     return ((ISteamApps*)linux_side)->GetFileDetails((const char *)pszFileName);
 }
 
-int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *linux_side, char * pszCommandLine, int cubCommandLine)
+int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *linux_side, char *pszCommandLine, int cubCommandLine)
 {
     return ((ISteamApps*)linux_side)->GetLaunchCommandLine((char *)pszCommandLine, (int)cubCommandLine);
 }
@@ -152,7 +152,7 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing
     return ((ISteamApps*)linux_side)->BIsSubscribedFromFamilySharing();
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(void *linux_side, uint32 * punSecondsAllowed, uint32 * punSecondsPlayed)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(void *linux_side, uint32 *punSecondsAllowed, uint32 *punSecondsPlayed)
 {
     return ((ISteamApps*)linux_side)->BIsTimedTrial((uint32 *)punSecondsAllowed, (uint32 *)punSecondsPlayed);
 }

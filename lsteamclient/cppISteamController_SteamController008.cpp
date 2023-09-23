@@ -27,12 +27,12 @@ void cppISteamController_SteamController008_RunFrame(void *linux_side)
     ((ISteamController*)linux_side)->RunFrame();
 }
 
-int cppISteamController_SteamController008_GetConnectedControllers(void *linux_side, ControllerHandle_t * handlesOut)
+int cppISteamController_SteamController008_GetConnectedControllers(void *linux_side, ControllerHandle_t *handlesOut)
 {
     return ((ISteamController*)linux_side)->GetConnectedControllers((ControllerHandle_t *)handlesOut);
 }
 
-ControllerActionSetHandle_t cppISteamController_SteamController008_GetActionSetHandle(void *linux_side, const char * pszActionSetName)
+ControllerActionSetHandle_t cppISteamController_SteamController008_GetActionSetHandle(void *linux_side, const char *pszActionSetName)
 {
     return ((ISteamController*)linux_side)->GetActionSetHandle((const char *)pszActionSetName);
 }
@@ -62,12 +62,12 @@ void cppISteamController_SteamController008_DeactivateAllActionSetLayers(void *l
     ((ISteamController*)linux_side)->DeactivateAllActionSetLayers((ControllerHandle_t)controllerHandle);
 }
 
-int cppISteamController_SteamController008_GetActiveActionSetLayers(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t * handlesOut)
+int cppISteamController_SteamController008_GetActiveActionSetLayers(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t *handlesOut)
 {
     return ((ISteamController*)linux_side)->GetActiveActionSetLayers((ControllerHandle_t)controllerHandle, (ControllerActionSetHandle_t *)handlesOut);
 }
 
-ControllerDigitalActionHandle_t cppISteamController_SteamController008_GetDigitalActionHandle(void *linux_side, const char * pszActionName)
+ControllerDigitalActionHandle_t cppISteamController_SteamController008_GetDigitalActionHandle(void *linux_side, const char *pszActionName)
 {
     return ((ISteamController*)linux_side)->GetDigitalActionHandle((const char *)pszActionName);
 }
@@ -77,12 +77,12 @@ InputDigitalActionData_t cppISteamController_SteamController008_GetDigitalAction
     return ((ISteamController*)linux_side)->GetDigitalActionData((ControllerHandle_t)controllerHandle, (ControllerDigitalActionHandle_t)digitalActionHandle);
 }
 
-int cppISteamController_SteamController008_GetDigitalActionOrigins(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin * originsOut)
+int cppISteamController_SteamController008_GetDigitalActionOrigins(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
     return ((ISteamController*)linux_side)->GetDigitalActionOrigins((ControllerHandle_t)controllerHandle, (ControllerActionSetHandle_t)actionSetHandle, (ControllerDigitalActionHandle_t)digitalActionHandle, (EControllerActionOrigin *)originsOut);
 }
 
-ControllerAnalogActionHandle_t cppISteamController_SteamController008_GetAnalogActionHandle(void *linux_side, const char * pszActionName)
+ControllerAnalogActionHandle_t cppISteamController_SteamController008_GetAnalogActionHandle(void *linux_side, const char *pszActionName)
 {
     return ((ISteamController*)linux_side)->GetAnalogActionHandle((const char *)pszActionName);
 }
@@ -92,7 +92,7 @@ InputAnalogActionData_t cppISteamController_SteamController008_GetAnalogActionDa
     return ((ISteamController*)linux_side)->GetAnalogActionData((ControllerHandle_t)controllerHandle, (ControllerAnalogActionHandle_t)analogActionHandle);
 }
 
-int cppISteamController_SteamController008_GetAnalogActionOrigins(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin * originsOut)
+int cppISteamController_SteamController008_GetAnalogActionOrigins(void *linux_side, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
     return ((ISteamController*)linux_side)->GetAnalogActionOrigins((ControllerHandle_t)controllerHandle, (ControllerActionSetHandle_t)actionSetHandle, (ControllerAnalogActionHandle_t)analogActionHandle, (EControllerActionOrigin *)originsOut);
 }
@@ -167,7 +167,7 @@ EControllerActionOrigin cppISteamController_SteamController008_TranslateActionOr
     return ((ISteamController*)linux_side)->TranslateActionOrigin((ESteamInputType)eDestinationInputType, (EControllerActionOrigin)eSourceOrigin);
 }
 
-bool cppISteamController_SteamController008_GetControllerBindingRevision(void *linux_side, ControllerHandle_t controllerHandle, int * pMajor, int * pMinor)
+bool cppISteamController_SteamController008_GetControllerBindingRevision(void *linux_side, ControllerHandle_t controllerHandle, int *pMajor, int *pMinor)
 {
     return ((ISteamController*)linux_side)->GetControllerBindingRevision((ControllerHandle_t)controllerHandle, (int *)pMajor, (int *)pMinor);
 }

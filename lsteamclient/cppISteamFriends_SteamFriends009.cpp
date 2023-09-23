@@ -16,7 +16,7 @@ const char * cppISteamFriends_SteamFriends009_GetPersonaName(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetPersonaName();
 }
 
-void cppISteamFriends_SteamFriends009_SetPersonaName(void *linux_side, const char * pchPersonaName)
+void cppISteamFriends_SteamFriends009_SetPersonaName(void *linux_side, const char *pchPersonaName)
 {
     ((ISteamFriends*)linux_side)->SetPersonaName((const char *)pchPersonaName);
 }
@@ -51,7 +51,7 @@ const char * cppISteamFriends_SteamFriends009_GetFriendPersonaName(void *linux_s
     return ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
 }
 
-bool cppISteamFriends_SteamFriends009_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+bool cppISteamFriends_SteamFriends009_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     return ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (FriendGameInfo_t *)pFriendGameInfo);
 }
@@ -106,17 +106,17 @@ void cppISteamFriends_SteamFriends009_SetInGameVoiceSpeaking(void *linux_side, C
     ((ISteamFriends*)linux_side)->SetInGameVoiceSpeaking((CSteamID)steamIDUser, (bool)bSpeaking);
 }
 
-void cppISteamFriends_SteamFriends009_ActivateGameOverlay(void *linux_side, const char * pchDialog)
+void cppISteamFriends_SteamFriends009_ActivateGameOverlay(void *linux_side, const char *pchDialog)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlay((const char *)pchDialog);
 }
 
-void cppISteamFriends_SteamFriends009_ActivateGameOverlayToUser(void *linux_side, const char * pchDialog, CSteamID steamID)
+void cppISteamFriends_SteamFriends009_ActivateGameOverlayToUser(void *linux_side, const char *pchDialog, CSteamID steamID)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToUser((const char *)pchDialog, (CSteamID)steamID);
 }
 
-void cppISteamFriends_SteamFriends009_ActivateGameOverlayToWebPage(void *linux_side, const char * pchURL)
+void cppISteamFriends_SteamFriends009_ActivateGameOverlayToWebPage(void *linux_side, const char *pchURL)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToWebPage((const char *)pchURL);
 }
@@ -181,7 +181,7 @@ uint32 cppISteamFriends_SteamFriends009_GetUserRestrictions(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetUserRestrictions();
 }
 
-bool cppISteamFriends_SteamFriends009_SetRichPresence(void *linux_side, const char * pchKey, const char * pchValue)
+bool cppISteamFriends_SteamFriends009_SetRichPresence(void *linux_side, const char *pchKey, const char *pchValue)
 {
     return ((ISteamFriends*)linux_side)->SetRichPresence((const char *)pchKey, (const char *)pchValue);
 }
@@ -191,7 +191,7 @@ void cppISteamFriends_SteamFriends009_ClearRichPresence(void *linux_side)
     ((ISteamFriends*)linux_side)->ClearRichPresence();
 }
 
-const char * cppISteamFriends_SteamFriends009_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char * pchKey)
+const char * cppISteamFriends_SteamFriends009_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char *pchKey)
 {
     return ((ISteamFriends*)linux_side)->GetFriendRichPresence((CSteamID)steamIDFriend, (const char *)pchKey);
 }
@@ -206,7 +206,7 @@ const char * cppISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex(vo
     return ((ISteamFriends*)linux_side)->GetFriendRichPresenceKeyByIndex((CSteamID)steamIDFriend, (int)iKey);
 }
 
-bool cppISteamFriends_SteamFriends009_InviteUserToGame(void *linux_side, CSteamID steamIDFriend, const char * pchConnectString)
+bool cppISteamFriends_SteamFriends009_InviteUserToGame(void *linux_side, CSteamID steamIDFriend, const char *pchConnectString)
 {
     return ((ISteamFriends*)linux_side)->InviteUserToGame((CSteamID)steamIDFriend, (const char *)pchConnectString);
 }

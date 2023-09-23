@@ -66,7 +66,7 @@ int cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(void *linux_side)
     return ((ISteamApps*)linux_side)->GetDLCCount();
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t * pAppID, bool * pbAvailable, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->BGetDLCDataByIndex((int)iDLC, (AppId_t *)pAppID, (bool *)pbAvailable, (char *)pchName, (int)cchNameBufferSize);
 }
@@ -86,7 +86,7 @@ void cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(v
     ((ISteamApps*)linux_side)->RequestAppProofOfPurchaseKey((AppId_t)nAppID);
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(void *linux_side, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(void *linux_side, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetCurrentBetaName((char *)pchName, (int)cchNameBufferSize);
 }
@@ -96,12 +96,12 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(void *linux
     return ((ISteamApps*)linux_side)->MarkContentCorrupt((bool)bMissingFilesOnly);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(void *linux_side, AppId_t appID, DepotId_t * pvecDepots, uint32 cMaxDepots)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(void *linux_side, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     return ((ISteamApps*)linux_side)->GetInstalledDepots((AppId_t)appID, (DepotId_t *)pvecDepots, (uint32)cMaxDepots);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(void *linux_side, AppId_t appID, char * pchFolder, uint32 cchFolderBufferSize)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(void *linux_side, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetAppInstallDir((AppId_t)appID, (char *)pchFolder, (uint32)cchFolderBufferSize);
 }
@@ -116,12 +116,12 @@ CSteamID cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(void *linux_si
     return ((ISteamApps*)linux_side)->GetAppOwner();
 }
 
-const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(void *linux_side, const char * pchKey)
+const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(void *linux_side, const char *pchKey)
 {
     return ((ISteamApps*)linux_side)->GetLaunchQueryParam((const char *)pchKey);
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(void *linux_side, AppId_t nAppID, uint64 * punBytesDownloaded, uint64 * punBytesTotal)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(void *linux_side, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
 {
     return ((ISteamApps*)linux_side)->GetDlcDownloadProgress((AppId_t)nAppID, (uint64 *)punBytesDownloaded, (uint64 *)punBytesTotal);
 }
