@@ -13,19 +13,32 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamGameCoordinator_SteamGameCoordinator001.h"
+
+struct cppISteamGameCoordinator_SteamGameCoordinator001
+{
+#ifdef __cplusplus
+    virtual uint32_t SendMessage( uint32_t, const void *, uint32_t ) = 0;
+    virtual bool IsMessageAvailable( uint32_t * ) = 0;
+    virtual uint32_t RetrieveMessage( uint32_t *, void *, uint32_t, uint32_t * ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params *params )
 {
-    params->_ret = ((ISteamGameCoordinator*)params->linux_side)->SendMessage( (uint32)params->unMsgType, (const void *)params->pubData, (uint32)params->cubData );
+    struct cppISteamGameCoordinator_SteamGameCoordinator001 *iface = (struct cppISteamGameCoordinator_SteamGameCoordinator001 *)params->linux_side;
+    params->_ret = iface->SendMessage( params->unMsgType, params->pubData, params->cubData );
 }
 
 void cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable( struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params *params )
 {
-    params->_ret = ((ISteamGameCoordinator*)params->linux_side)->IsMessageAvailable( (uint32 *)params->pcubMsgSize );
+    struct cppISteamGameCoordinator_SteamGameCoordinator001 *iface = (struct cppISteamGameCoordinator_SteamGameCoordinator001 *)params->linux_side;
+    params->_ret = iface->IsMessageAvailable( params->pcubMsgSize );
 }
 
 void cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params *params )
 {
-    params->_ret = ((ISteamGameCoordinator*)params->linux_side)->RetrieveMessage( (uint32 *)params->punMsgType, (void *)params->pubDest, (uint32)params->cubDest, (uint32 *)params->pcubMsgSize );
+    struct cppISteamGameCoordinator_SteamGameCoordinator001 *iface = (struct cppISteamGameCoordinator_SteamGameCoordinator001 *)params->linux_side;
+    params->_ret = iface->RetrieveMessage( params->punMsgType, params->pubDest, params->cubDest, params->pcubMsgSize );
 }
 
 #ifdef __cplusplus

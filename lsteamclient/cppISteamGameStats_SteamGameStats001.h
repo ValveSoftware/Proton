@@ -1,3 +1,4 @@
+struct cppISteamGameStats_SteamGameStats001;
 struct cppISteamGameStats_SteamGameStats001_GetNewSession_params
 {
     void *linux_side;

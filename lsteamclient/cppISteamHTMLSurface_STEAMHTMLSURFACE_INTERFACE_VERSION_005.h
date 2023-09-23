@@ -1,3 +1,4 @@
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005;
 struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init_params
 {
     void *linux_side;

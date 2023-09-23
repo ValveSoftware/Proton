@@ -1,3 +1,4 @@
+struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002;
 struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest_params
 {
     void *linux_side;

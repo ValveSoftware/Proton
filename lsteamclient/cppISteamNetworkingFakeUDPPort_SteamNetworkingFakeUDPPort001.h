@@ -1,3 +1,4 @@
+struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001;
 struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamClient_SteamClient019;
 struct cppISteamClient_SteamClient019_CreateSteamPipe_params
 {
     void *linux_side;

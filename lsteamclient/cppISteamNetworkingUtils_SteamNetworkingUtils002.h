@@ -1,3 +1,4 @@
+struct cppISteamNetworkingUtils_SteamNetworkingUtils002;
 struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamGameServer_SteamGameServer012;
 struct cppISteamGameServer_SteamGameServer012_InitGameServer_params
 {
     void *linux_side;

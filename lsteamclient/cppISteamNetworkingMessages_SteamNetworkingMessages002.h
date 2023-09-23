@@ -1,3 +1,4 @@
+struct cppISteamNetworkingMessages_SteamNetworkingMessages002;
 struct cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params
 {
     void *linux_side;

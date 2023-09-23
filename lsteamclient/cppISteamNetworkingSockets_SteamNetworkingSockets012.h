@@ -1,3 +1,4 @@
+struct cppISteamNetworkingSockets_SteamNetworkingSockets012;
 struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP_params
 {
     void *linux_side;

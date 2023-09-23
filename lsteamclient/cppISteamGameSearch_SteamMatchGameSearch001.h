@@ -1,3 +1,4 @@
+struct cppISteamGameSearch_SteamMatchGameSearch001;
 struct cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params
 {
     void *linux_side;

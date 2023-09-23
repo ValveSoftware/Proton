@@ -1,3 +1,4 @@
+struct cppISteamMatchmaking_SteamMatchMaking005;
 struct cppISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamNetworkingUtils_SteamNetworkingUtils001;
 struct cppISteamNetworkingUtils_SteamNetworkingUtils001_GetLocalPingLocation_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamNetworking_SteamNetworking004;
 struct cppISteamNetworking_SteamNetworking004_SendP2PPacket_params
 {
     void *linux_side;

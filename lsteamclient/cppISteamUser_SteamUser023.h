@@ -1,3 +1,4 @@
+struct cppISteamUser_SteamUser023;
 struct cppISteamUser_SteamUser023_GetHSteamUser_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004;
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats_params
 {
     void *linux_side;

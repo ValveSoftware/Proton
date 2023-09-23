@@ -1,3 +1,4 @@
+struct cppISteamInput_SteamInput005;
 struct cppISteamInput_SteamInput005_Init_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamParties_SteamParties002;
 struct cppISteamParties_SteamParties002_GetNumActiveBeacons_params
 {
     void *linux_side;

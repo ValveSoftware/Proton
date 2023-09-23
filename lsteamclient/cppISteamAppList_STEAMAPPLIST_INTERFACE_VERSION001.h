@@ -1,3 +1,4 @@
+struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001;
 struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params
 {
     void *linux_side;

@@ -1,3 +1,4 @@
+struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005;
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest_params
 {
     void *linux_side;

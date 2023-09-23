@@ -471,6 +471,25 @@ class Class:
 
         return self._methods
 
+    @property
+    def full_name(self):
+        return f'{self.spelling}_{self.version}'
+
+    def write_definition(self, out, prefix):
+        out(f'struct {prefix}{self.full_name}\n')
+        out(u'{\n')
+        out(u'#ifdef __cplusplus\n')
+        for method in self.methods:
+            types = [declspec(p, "", prefix if prefix != "cpp" else None)
+                     for p in method.get_arguments()]
+            if type(method) is Destructor:
+                out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
+            else:
+                method_name = f'{declspec(method.result_type, "", None)} {method.spelling}'
+                out(f'    virtual {method_name}( {", ".join(types)} ) = 0;\n')
+        out(u'#endif /* __cplusplus */\n')
+        out(u'};\n\n')
+
     def get_children(self):
         return self._cursor.get_children()
 
@@ -558,8 +577,8 @@ def param_needs_conversion(decl):
            struct_needs_conversion(decl)
 
 
-def callconv(cursor):
-    if type(cursor) is not Cursor:
+def callconv(cursor, prefix):
+    if type(cursor) is not Cursor or prefix is None:
         return ''
     canon = cursor.type.get_canonical()
     if canon.kind != TypeKind.POINTER:
@@ -577,28 +596,28 @@ def callconv(cursor):
                 .replace('S_CALLTYPE', '__cdecl')
 
 
-def declspec_func(decl, name):
-    ret = declspec(decl.get_result(), "")
-    params = [declspec(a, "") for a in decl.argument_types()]
+def declspec_func(decl, name, prefix):
+    ret = declspec(decl.get_result(), "", prefix)
+    params = [declspec(a, "", prefix) for a in decl.argument_types()]
     params = ", ".join(params) if len(params) else "void"
     return f'{ret} ({name})({params})'
 
 
-def declspec(decl, name):
-    call = callconv(decl)
+def declspec(decl, name, prefix):
+    call = callconv(decl, prefix)
     if type(decl) is Cursor:
         decl = decl.type
     decl = decl.get_canonical()
 
     const = 'const ' if decl.is_const_qualified() else ''
     if decl.kind == TypeKind.FUNCTIONPROTO:
-        return declspec_func(decl, name)
+        return declspec_func(decl, name, prefix)
     if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
         decl = decl.get_pointee()
-        return declspec(decl, f"*{call}{const}{name}")
+        return declspec(decl, f"*{call}{const}{name}", prefix)
     if decl.kind == TypeKind.CONSTANTARRAY:
         decl, count = decl.element_type, decl.element_count
-        return declspec(decl, f"({const}{name})[{count}]")
+        return declspec(decl, f"({const}{name})[{count}]", prefix)
 
     if len(name):
         name = f' {name}'
@@ -608,7 +627,7 @@ def declspec(decl, name):
     if decl.kind == TypeKind.ENUM:
         return f'uint{decl.get_size() * 8}_t{name}'
 
-    if param_needs_conversion(decl):
+    if prefix == "win" and param_needs_conversion(decl):
         return f"win{decl.spelling}_{sdkver}{name}"
 
     type_name = decl.spelling.removeprefix("const ")
@@ -628,11 +647,11 @@ def handle_method_hpp(method, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*_ret" if returns_record else "_ret"
-    ret = f'{declspec(method.result_type, ret)}'
+    ret = f'{declspec(method.result_type, ret, "win")}'
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
 
     if method.result_type.kind != TypeKind.VOID:
         params = [ret] + params
@@ -663,6 +682,7 @@ def handle_method_cpp(method, classname, cppname, out):
 
     out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
     out(u'{\n')
+    out(f'    struct {cppname} *iface = (struct {cppname} *)params->linux_side;\n')
 
     need_output = {}
 
@@ -670,27 +690,27 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = underlying_typename(param)
 
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {type_name} lin_{name};\n')
+            out(f'    {declspec(param, f"lin_{name}", None)};\n')
             out(f'    win_to_lin_struct_{type_name}_{sdkver}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {type_name} *lin_{name};\n')
+            out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
             continue
 
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {type_name} lin_{name};\n')
+        out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
         out(f'    win_to_lin_struct_{type_name}_{sdkver}( params->{name}, &lin_{name} );\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            out(f'    {param.type.spelling} lin_{name} = manual_convert_{name}( params->{name} );\n')
+            out(f'    {declspec(param, f"lin_{name}", None)} = manual_convert_{name}( params->{name} );\n')
         else:
-            out(f'    {param.type.spelling} lin_{name} = ({param.type.spelling})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
+            out(f'    {declspec(param, f"lin_{name}", None)} = ({declspec(param, "", None)})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
 
     if returns_void:
         out(u'    ')
@@ -703,11 +723,12 @@ def handle_method_cpp(method, classname, cppname, out):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}lin_{name}"
         if name in manual_convert: return f"lin_{name}"
-        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*params->{name}'
-        return f"({param.type.spelling})params->{name}"
+        if underlying_type(param.type.get_canonical()).kind is TypeKind.FUNCTIONPROTO:
+            return f'({declspec(param, "", None)})params->{name}'
+        return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
-    out(f'(({classname}*)params->linux_side)->{method.spelling}( {", ".join(params)} );\n')
+    out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 
     for name, param in sorted(need_output.items()):
         type_name = underlying_typename(param)
@@ -729,7 +750,7 @@ def handle_thiscall_wrapper(klass, method, out):
     size = 4 + sum(param_stack_size(p) for p in method.get_arguments())
     if returns_record: size += 4
 
-    name = f'win{klass.spelling}_{klass.version}_{method.name}'
+    name = f'win{klass.full_name}_{method.name}'
     out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
@@ -738,15 +759,15 @@ def handle_method_c(method, winclassname, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*" if returns_record else ""
-    ret = f'{declspec(method.result_type, ret)} '
+    ret = f'{declspec(method.result_type, ret, "win")} '
 
     types = [p.type for p in method.get_arguments()]
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{declspec(method.result_type, "*_ret")}'] + params
+        params = [f'{declspec(method.result_type, "*_ret", "win")}'] + params
         types = [method.result_type] + types
         names = ['_ret'] + names
 
@@ -819,10 +840,12 @@ def handle_method_c(method, winclassname, cppname, out):
 
 
 def handle_class(klass):
-    cppname = f"cpp{klass.spelling}_{klass.version}"
+    cppname = f"cpp{klass.full_name}"
 
     with open(f"{cppname}.h", "w") as file:
         out = file.write
+
+        out(f'struct {cppname};\n')
 
         for method in klass.methods:
             if type(method) is Destructor:
@@ -848,7 +871,9 @@ def handle_class(klass):
         out(u'#endif\n')
         out(f'#define SDKVER_{klass._sdkver}\n')
         out(u'#include "struct_converters.h"\n')
-        out(f'#include "{cppname}.h"\n')
+        out(f'#include "{cppname}.h"\n\n')
+
+        klass.write_definition(out, "cpp")
 
         for method in klass.methods:
             if type(method) is Destructor:
@@ -861,7 +886,7 @@ def handle_class(klass):
         out(u'}\n')
         out(u'#endif\n')
 
-    winclassname = f"win{klass.spelling}_{klass.version}"
+    winclassname = f"win{klass.full_name}"
     with open(f"win{klass.spelling}.c", "a") as file:
         out = file.write
 

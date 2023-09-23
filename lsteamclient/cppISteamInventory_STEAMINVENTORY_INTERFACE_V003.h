@@ -1,3 +1,4 @@
+struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003;
 struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus_params
 {
     void *linux_side;
