@@ -420,6 +420,16 @@ def method_unique_name(method, existing_methods):
     return used_name
 
 
+def underlying_type(decl):
+    if type(decl) is Cursor:
+        decl = decl.type
+    decl = decl.get_canonical()
+    if decl.kind == TypeKind.LVALUEREFERENCE: return underlying_type(decl.get_pointee())
+    if decl.kind == TypeKind.CONSTANTARRAY: return underlying_type(decl.element_type)
+    if decl.kind == TypeKind.POINTER: return underlying_type(decl.get_pointee())
+    return decl
+
+
 def declspec(decl, name):
     if type(decl) is Cursor:
         decl = decl.type
@@ -483,7 +493,6 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
 
     do_lin_to_win = None
     do_win_to_lin = None
-    do_size_fixup = None
     do_wrap = None
     do_unwrap = None
     for param in method.get_arguments():
@@ -507,11 +516,6 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
                 do_win_to_lin = (strip_ns(real_name), param.spelling)
                 if not real_type.is_const_qualified():
                     do_lin_to_win = (strip_ns(real_name), param.spelling)
-            elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                    strip_ns(real_type.spelling) in STRUCTS_NEXT_IS_SIZE and \
-                    struct_needs_size_adjustment(real_type.get_canonical()):
-                real_name = canonical_typename(real_type)
-                do_size_fixup = (strip_ns(real_name), param.spelling)
 
     if do_lin_to_win or do_win_to_lin:
         if do_lin_to_win:
@@ -531,6 +535,28 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
         cpp.write("    if(%s)\n" % do_win_to_lin[1])
         cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
 
+
+    convert_size_param = ""
+    params = list(zip(names[1:], method.get_arguments()))
+    params += [(None, None)] # for next_name, next_param
+    for i, (name, param) in enumerate(params[:-1]):
+        real_type = underlying_type(param)
+        if strip_ns(real_type.spelling) not in STRUCTS_NEXT_IS_SIZE:
+            continue
+
+        next_name, next_param = params[i + 1]
+        if not next_param or next_param.type.spelling != "uint32_t":
+            convert_size_param = ', -1'
+        elif struct_needs_size_adjustment(real_type.get_canonical()):
+            real_name = real_type.spelling
+            cpp.write(f'    {next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
+            convert_size_param = f', {next_name}'
+        elif do_win_to_lin and do_win_to_lin[1] == name:
+            assert do_win_to_lin[0] not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
+            cpp.write(f'    {next_name} = {next_name} ? sizeof(lin) : 0;\n')
+            convert_size_param = f', {next_name}'
+
+
     if method.result_type.kind == TypeKind.VOID:
         cpp.write("    ")
     elif do_lin_to_win or do_win_to_lin or do_wrap:
@@ -541,9 +567,6 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
     unnamed = 'a'
     first = True
-    next_is_size = False
-    next_is_size_no_conv = False
-    convert_size_param = ""
     for param in method.get_arguments():
         if not first:
             cpp.write(", ")
@@ -557,36 +580,14 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
                     do_win_to_lin and do_win_to_lin[1] == param.spelling or \
                     do_wrap and do_wrap[1] == param.spelling:
                 cpp.write("%s ? &lin : nullptr" % param.spelling)
-                if do_win_to_lin:
-                    assert(not do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE_UNHANDLED)
-                    if do_win_to_lin[0] in STRUCTS_NEXT_IS_SIZE:
-                        next_is_size = True
             elif do_unwrap and do_unwrap[1] == param.spelling:
                 cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
-            elif do_size_fixup and do_size_fixup[1] == param.spelling:
-                next_is_size = True
-                next_is_size_no_conv = True
-                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-            elif next_is_size:
-                next_is_size = False
-                if next_is_size_no_conv and param.type.spelling == "uint32_t":
-                    cpp.write("std::min(%s, (uint32_t)sizeof(vr::%s))" % (param.spelling, do_size_fixup[0]))
-                    convert_size_param = ", " + param.spelling
-                elif param.type.spelling == "uint32_t":
-                    cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
-                    convert_size_param = ", " + param.spelling
-                else:
-                    cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-                    convert_size_param = ", -1"
-                next_is_size_no_conv = False
             elif "&" in param.type.spelling:
                 cpp.write("*%s" % param.spelling)
             else:
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
     cpp.write(");\n")
     if do_lin_to_win:
-        if next_is_size and not convert_size_param:
-            convert_size_param = ", -1"
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
         cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
     if do_lin_to_win or do_win_to_lin:
