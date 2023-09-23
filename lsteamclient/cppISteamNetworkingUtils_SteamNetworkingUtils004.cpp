@@ -124,7 +124,7 @@ ESteamNetworkingGetConfigValueResult cppISteamNetworkingUtils_SteamNetworkingUti
 
 const char * cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo(void *linux_side, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamNetworkingUtils*)linux_side)->GetConfigValueInfo((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigDataType *)pOutDataType, (ESteamNetworkingConfigScope *)pOutScope);
     return (_ret);
 }

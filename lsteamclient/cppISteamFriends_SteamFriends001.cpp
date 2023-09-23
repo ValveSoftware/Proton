@@ -13,7 +13,7 @@ extern "C" {
 #include "cppISteamFriends_SteamFriends001.h"
 const char * cppISteamFriends_SteamFriends001_GetPersonaName(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetPersonaName();
     return (_ret);
 }
@@ -79,7 +79,7 @@ bool cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(void *linux
 
 const char * cppISteamFriends_SteamFriends001_GetFriendPersonaName(void *linux_side, CSteamID steamIDFriend)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
     return (_ret);
 }
@@ -117,14 +117,14 @@ void cppISteamFriends_SteamFriends001_SetFriendRegValue(void *linux_side, CSteam
 
 const char * cppISteamFriends_SteamFriends001_GetFriendRegValue(void *linux_side, CSteamID steamIDFriend, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendRegValue((CSteamID)steamIDFriend, (const char *)pchKey);
     return (_ret);
 }
 
 const char * cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory(void *linux_side, CSteamID steamIDFriend, int iPersonaName)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaNameHistory((CSteamID)steamIDFriend, (int)iPersonaName);
     return (_ret);
 }

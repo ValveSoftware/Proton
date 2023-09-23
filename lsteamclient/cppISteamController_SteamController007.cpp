@@ -123,7 +123,7 @@ int cppISteamController_SteamController007_GetAnalogActionOrigins(void *linux_si
 
 const char * cppISteamController_SteamController007_GetStringForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamController*)linux_side)->GetStringForActionOrigin((EControllerActionOrigin)eOrigin);
     return (_ret);
 }
@@ -190,7 +190,7 @@ int cppISteamController_SteamController007_GetGamepadIndexForController(void *li
 
 const char * cppISteamController_SteamController007_GetStringForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamController*)linux_side)->GetStringForXboxOrigin((EXboxOrigin)eOrigin);
     return (_ret);
 }

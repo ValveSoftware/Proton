@@ -90,7 +90,7 @@ int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon(vo
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplayAttribute(void *linux_side, const char *pchName, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetAchievementDisplayAttribute((const char *)pchName, (const char *)pchKey);
     return (_ret);
 }
@@ -153,7 +153,7 @@ SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeader
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(void *linux_side, SteamLeaderboard_t hSteamLeaderboard)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetLeaderboardName((SteamLeaderboard_t)hSteamLeaderboard);
     return (_ret);
 }
