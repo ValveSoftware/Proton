@@ -780,7 +780,54 @@ def get_capi_thunk_params(method):
     is_4th_float = param_count >= 4 and param_types[3].spelling == "float"
     return "%s, %s, %s" % (param_count, toBOOL(has_float_params), toBOOL(is_4th_float))
 
+
 def handle_class(klass):
+    cppname = f"cpp{klass.spelling}_{klass.version}"
+
+    with open(f"vrclient_x64/{cppname}.h", "w") as file:
+        out = file.write
+
+        out(u'#ifdef __cplusplus\n')
+        out(u'extern "C" {\n')
+        out(u'#endif\n')
+
+        for method in klass.methods:
+            if type(method) is Destructor:
+                continue
+            handle_method_hpp(method, cppname, out)
+
+        out(u'#ifdef __cplusplus')
+        out(u'\n}')
+        out(u'\n#endif\n')
+
+    with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
+        out = file.write
+
+        out(u'#include "vrclient_private.h"\n')
+        out(u'#include "vrclient_defs.h"\n')
+        if os.path.isfile(f"openvr_{klass._sdkver}/ivrclientcore.h"):
+            out(f'#include "openvr_{klass._sdkver}/ivrclientcore.h"\n')
+        else:
+            out(f'#include "openvr_{klass._sdkver}/openvr.h"\n')
+        out(u'using namespace vr;\n')
+        out(u'extern "C" {\n')
+        out(u'#include "struct_converters.h"\n')
+        out(u'}\n')
+        out(f'#include "{cppname}.h"\n')
+        out(u'#ifdef __cplusplus\n')
+        out(u'extern "C" {\n')
+        out(u'#endif\n')
+
+        for method in klass.methods:
+            if type(method) is Destructor:
+                continue
+            handle_method_cpp(method, klass.spelling, cppname, out)
+
+        out(u'#ifdef __cplusplus\n')
+        out(u'}\n')
+        out(u'#endif\n')
+
+
     file_exists = os.path.isfile(f"vrclient_x64/win{klass.spelling}.c")
     cfile = open(f"vrclient_x64/win{klass.spelling}.c", "a")
     if not file_exists:
@@ -806,23 +853,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 """)
 
-    cppname = f"cpp{klass.spelling}_{klass.version}"
-    cpp = open("vrclient_x64/%s.cpp" % cppname, "w")
-    cpp.write("#include \"vrclient_private.h\"\n")
-    cpp.write("#include \"vrclient_defs.h\"\n")
-    if os.path.isfile("openvr_%s/ivrclientcore.h" % sdkver):
-        cpp.write("#include \"openvr_%s/ivrclientcore.h\"\n" % sdkver)
-    else:
-        cpp.write("#include \"openvr_%s/openvr.h\"\n" % sdkver)
-    cpp.write("using namespace vr;\n")
-    cpp.write("extern \"C\" {\n")
-    cpp.write("#include \"struct_converters.h\"\n")
-    cpp.write("}\n")
-    cpp.write("#include \"%s.h\"\n" % cppname)
-    cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
-
-    cpp_h = open("vrclient_x64/%s.h" % cppname, "w")
-    cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
     winclassname = f"win{klass.spelling}_{klass.version}"
     cfile.write("#include \"%s.h\"\n\n" % cppname)
@@ -838,16 +868,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     for method in klass.methods:
         handle_thiscall_wrapper(klass, method, cfile.write)
     cfile.write('\n')
-
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        handle_method_hpp(method, cppname, cpp_h.write)
-
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        handle_method_cpp(method, klass.spelling, cppname, cpp.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
@@ -909,9 +929,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n")
     cfile.write("    HeapFree(GetProcessHeap(), 0, win_object->vtable);\n")
     cfile.write("    HeapFree(GetProcessHeap(), 0, win_object);\n}\n\n")
-
-    cpp.write("#ifdef __cplusplus\n}\n#endif\n")
-    cpp_h.write("#ifdef __cplusplus\n}\n#endif\n")
 
     constructors = open("vrclient_x64/win_constructors.h", "a")
     constructors.write("extern void *create_%s(void *);\n" % winclassname)
