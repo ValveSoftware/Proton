@@ -11,69 +11,102 @@ extern "C" {
 #define SDKVER_102
 #include "struct_converters.h"
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003.h"
+
+struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003
+{
+#ifdef __cplusplus
+    virtual bool RequestCurrentStats(  ) = 0;
+    virtual bool GetStat( const char *, int32_t * ) = 0;
+    virtual bool GetStat( const char *, float * ) = 0;
+    virtual bool SetStat( const char *, int32_t ) = 0;
+    virtual bool SetStat( const char *, float ) = 0;
+    virtual bool UpdateAvgRateStat( const char *, float, double ) = 0;
+    virtual bool GetAchievement( const char *, bool * ) = 0;
+    virtual bool SetAchievement( const char * ) = 0;
+    virtual bool ClearAchievement( const char * ) = 0;
+    virtual bool StoreStats(  ) = 0;
+    virtual int32_t GetAchievementIcon( const char * ) = 0;
+    virtual const char * GetAchievementDisplayAttribute( const char *, const char * ) = 0;
+    virtual bool IndicateAchievementProgress( const char *, uint32_t, uint32_t ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->RequestCurrentStats(  );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->RequestCurrentStats(  );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->GetStat( (const char *)params->pchName, (int32 *)params->pData );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->GetStat( params->pchName, params->pData );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->GetStat( (const char *)params->pchName, (float *)params->pData );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->GetStat( params->pchName, params->pData );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->SetStat( (const char *)params->pchName, (int32)params->nData );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->SetStat( params->pchName, params->nData );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->SetStat( (const char *)params->pchName, (float)params->fData );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->SetStat( params->pchName, params->fData );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->UpdateAvgRateStat( (const char *)params->pchName, (float)params->flCountThisSession, (double)params->dSessionLength );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->UpdateAvgRateStat( params->pchName, params->flCountThisSession, params->dSessionLength );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievement( (const char *)params->pchName, (bool *)params->pbAchieved );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->GetAchievement( params->pchName, params->pbAchieved );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->SetAchievement( (const char *)params->pchName );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->SetAchievement( params->pchName );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->ClearAchievement( (const char *)params->pchName );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->ClearAchievement( params->pchName );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->StoreStats(  );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->StoreStats(  );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievementIcon( (const char *)params->pchName );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->GetAchievementIcon( params->pchName );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievementDisplayAttribute( (const char *)params->pchName, (const char *)params->pchKey );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->GetAchievementDisplayAttribute( params->pchName, params->pchKey );
 }
 
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress_params *params )
 {
-    params->_ret = ((ISteamUserStats*)params->linux_side)->IndicateAchievementProgress( (const char *)params->pchName, (uint32)params->nCurProgress, (uint32)params->nMaxProgress );
+    struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *iface = (struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *)params->linux_side;
+    params->_ret = iface->IndicateAchievementProgress( params->pchName, params->nCurProgress, params->nMaxProgress );
 }
 
 #ifdef __cplusplus

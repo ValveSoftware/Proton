@@ -1,3 +1,4 @@
+struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003;
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous_params
 {
     void *linux_side;

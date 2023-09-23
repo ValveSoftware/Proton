@@ -1,3 +1,4 @@
+struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011;
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite_params
 {
     void *linux_side;

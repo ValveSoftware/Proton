@@ -1,3 +1,4 @@
+struct cppISteamGameServerStats_SteamGameServerStats001;
 struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params
 {
     void *linux_side;

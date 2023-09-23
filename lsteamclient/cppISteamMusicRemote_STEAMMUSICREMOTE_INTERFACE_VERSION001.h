@@ -1,3 +1,4 @@
+struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001;
 struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote_params
 {
     void *linux_side;

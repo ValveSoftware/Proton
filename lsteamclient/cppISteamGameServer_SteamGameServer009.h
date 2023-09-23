@@ -1,3 +1,4 @@
+struct cppISteamGameServer_SteamGameServer009;
 struct cppISteamGameServer_SteamGameServer009_LogOn_params
 {
     void *linux_side;

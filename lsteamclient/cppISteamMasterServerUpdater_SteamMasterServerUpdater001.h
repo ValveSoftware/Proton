@@ -1,3 +1,4 @@
+struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001;
 struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params
 {
     void *linux_side;

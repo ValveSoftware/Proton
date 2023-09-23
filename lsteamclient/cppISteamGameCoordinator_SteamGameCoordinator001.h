@@ -1,3 +1,4 @@
+struct cppISteamGameCoordinator_SteamGameCoordinator001;
 struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params
 {
     void *linux_side;

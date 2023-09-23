@@ -1,3 +1,4 @@
+struct cppISteamNetworking_SteamNetworking001;
 struct cppISteamNetworking_SteamNetworking001_CreateListenSocket_params
 {
     void *linux_side;

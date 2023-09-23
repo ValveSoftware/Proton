@@ -1,3 +1,4 @@
+struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006;
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed_params
 {
     void *linux_side;

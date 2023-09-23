@@ -1,3 +1,4 @@
+struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION;
 struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params
 {
     void *linux_side;

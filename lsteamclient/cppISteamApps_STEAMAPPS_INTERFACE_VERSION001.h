@@ -1,3 +1,4 @@
+struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION001;
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData_params
 {
     void *linux_side;

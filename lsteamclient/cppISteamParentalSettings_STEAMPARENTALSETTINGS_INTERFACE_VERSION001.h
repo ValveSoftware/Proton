@@ -1,3 +1,4 @@
+struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001;
 struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled_params
 {
     void *linux_side;

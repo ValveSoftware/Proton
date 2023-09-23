@@ -1,3 +1,4 @@
+struct cppISteamController_SteamController003;
 struct cppISteamController_SteamController003_Init_params
 {
     void *linux_side;

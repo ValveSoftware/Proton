@@ -1,3 +1,4 @@
+struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001;
 struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params
 {
     void *linux_side;

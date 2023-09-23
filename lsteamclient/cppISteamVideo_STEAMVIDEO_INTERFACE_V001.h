@@ -1,3 +1,4 @@
+struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001;
 struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params
 {
     void *linux_side;

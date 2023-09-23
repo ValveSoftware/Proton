@@ -12,109 +12,158 @@ extern "C" {
 #define SDKVER_099x
 #include "struct_converters.h"
 #include "cppISteamGameServer_SteamGameServer002.h"
+
+struct cppISteamGameServer_SteamGameServer002
+{
+#ifdef __cplusplus
+    virtual void LogOn(  ) = 0;
+    virtual void LogOff(  ) = 0;
+    virtual bool BLoggedOn(  ) = 0;
+    virtual void GSSetSpawnCount( uint32_t ) = 0;
+    virtual bool GSGetSteam2GetEncryptionKeyToSendToNewClient( void *, uint32_t *, uint32_t ) = 0;
+    virtual bool GSSendSteam2UserConnect( uint32_t, const void *, uint32_t, uint32_t, uint16_t, const void *, uint32_t ) = 0;
+    virtual bool GSSendSteam3UserConnect( CSteamID, uint32_t, const void *, uint32_t ) = 0;
+    virtual bool GSRemoveUserConnect( uint32_t ) = 0;
+    virtual bool GSSendUserDisconnect( CSteamID, uint32_t ) = 0;
+    virtual bool GSSendUserStatusResponse( CSteamID, int32_t, int32_t ) = 0;
+    virtual bool Obsolete_GSSetStatus( int32_t, uint32_t, int32_t, int32_t, int32_t, int32_t, const char *, const char *, const char *, const char * ) = 0;
+    virtual bool GSUpdateStatus( int32_t, int32_t, int32_t, const char *, const char * ) = 0;
+    virtual bool BSecure(  ) = 0;
+    virtual CSteamID GetSteamID(  ) = 0;
+    virtual bool GSSetServerType( int32_t, uint32_t, uint32_t, uint32_t, const char *, const char * ) = 0;
+    virtual bool GSSetServerType2( int32_t, uint32_t, uint32_t, uint16_t, uint16_t, uint16_t, const char *, const char *, bool ) = 0;
+    virtual bool GSUpdateStatus2( int32_t, int32_t, int32_t, const char *, const char *, const char * ) = 0;
+    virtual bool GSCreateUnauthenticatedUser( CSteamID * ) = 0;
+    virtual bool GSSetUserData( CSteamID, const char *, uint32_t ) = 0;
+    virtual void GSUpdateSpectatorPort( uint16_t ) = 0;
+    virtual void GSSetGameType( const char * ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppISteamGameServer_SteamGameServer002_LogOn( struct cppISteamGameServer_SteamGameServer002_LogOn_params *params )
 {
-    ((ISteamGameServer*)params->linux_side)->LogOn(  );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    iface->LogOn(  );
 }
 
 void cppISteamGameServer_SteamGameServer002_LogOff( struct cppISteamGameServer_SteamGameServer002_LogOff_params *params )
 {
-    ((ISteamGameServer*)params->linux_side)->LogOff(  );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    iface->LogOff(  );
 }
 
 void cppISteamGameServer_SteamGameServer002_BLoggedOn( struct cppISteamGameServer_SteamGameServer002_BLoggedOn_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->BLoggedOn(  );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->BLoggedOn(  );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSetSpawnCount( struct cppISteamGameServer_SteamGameServer002_GSSetSpawnCount_params *params )
 {
-    ((ISteamGameServer*)params->linux_side)->GSSetSpawnCount( (uint32)params->ucSpawn );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    iface->GSSetSpawnCount( params->ucSpawn );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient( struct cppISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSGetSteam2GetEncryptionKeyToSendToNewClient( (void *)params->pvEncryptionKey, (uint32 *)params->pcbEncryptionKey, (uint32)params->cbMaxEncryptionKey );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSGetSteam2GetEncryptionKeyToSendToNewClient( params->pvEncryptionKey, params->pcbEncryptionKey, params->cbMaxEncryptionKey );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect( struct cppISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSendSteam2UserConnect( (uint32)params->unUserID, (const void *)params->pvRawKey, (uint32)params->unKeyLen, (uint32)params->unIPPublic, (uint16)params->usPort, (const void *)params->pvCookie, (uint32)params->cubCookie );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSendSteam2UserConnect( params->unUserID, params->pvRawKey, params->unKeyLen, params->unIPPublic, params->usPort, params->pvCookie, params->cubCookie );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect( struct cppISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSendSteam3UserConnect( (CSteamID)params->steamID, (uint32)params->unIPPublic, (const void *)params->pvCookie, (uint32)params->cubCookie );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSendSteam3UserConnect( params->steamID, params->unIPPublic, params->pvCookie, params->cubCookie );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSRemoveUserConnect( struct cppISteamGameServer_SteamGameServer002_GSRemoveUserConnect_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSRemoveUserConnect( (uint32)params->unUserID );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSRemoveUserConnect( params->unUserID );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSendUserDisconnect( struct cppISteamGameServer_SteamGameServer002_GSSendUserDisconnect_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSendUserDisconnect( (CSteamID)params->steamID, (uint32)params->unUserID );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSendUserDisconnect( params->steamID, params->unUserID );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSendUserStatusResponse( struct cppISteamGameServer_SteamGameServer002_GSSendUserStatusResponse_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSendUserStatusResponse( (CSteamID)params->steamID, (int)params->nSecondsConnected, (int)params->nSecondsSinceLast );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSendUserStatusResponse( params->steamID, params->nSecondsConnected, params->nSecondsSinceLast );
 }
 
 void cppISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus( struct cppISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->Obsolete_GSSetStatus( (int32)params->nAppIdServed, (uint32)params->unServerFlags, (int)params->cPlayers, (int)params->cPlayersMax, (int)params->cBotPlayers, (int)params->unGamePort, (const char *)params->pchServerName, (const char *)params->pchGameDir, (const char *)params->pchMapName, (const char *)params->pchVersion );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->Obsolete_GSSetStatus( params->nAppIdServed, params->unServerFlags, params->cPlayers, params->cPlayersMax, params->cBotPlayers, params->unGamePort, params->pchServerName, params->pchGameDir, params->pchMapName, params->pchVersion );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSUpdateStatus( struct cppISteamGameServer_SteamGameServer002_GSUpdateStatus_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSUpdateStatus( (int)params->cPlayers, (int)params->cPlayersMax, (int)params->cBotPlayers, (const char *)params->pchServerName, (const char *)params->pchMapName );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSUpdateStatus( params->cPlayers, params->cPlayersMax, params->cBotPlayers, params->pchServerName, params->pchMapName );
 }
 
 void cppISteamGameServer_SteamGameServer002_BSecure( struct cppISteamGameServer_SteamGameServer002_BSecure_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->BSecure(  );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->BSecure(  );
 }
 
 void cppISteamGameServer_SteamGameServer002_GetSteamID( struct cppISteamGameServer_SteamGameServer002_GetSteamID_params *params )
 {
-    *params->_ret = ((ISteamGameServer*)params->linux_side)->GetSteamID(  );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    *params->_ret = iface->GetSteamID(  );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSetServerType( struct cppISteamGameServer_SteamGameServer002_GSSetServerType_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSetServerType( (int32)params->nGameAppId, (uint32)params->unServerFlags, (uint32)params->unGameIP, (uint32)params->unGamePort, (const char *)params->pchGameDir, (const char *)params->pchVersion );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSetServerType( params->nGameAppId, params->unServerFlags, params->unGameIP, params->unGamePort, params->pchGameDir, params->pchVersion );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSetServerType2( struct cppISteamGameServer_SteamGameServer002_GSSetServerType2_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSetServerType2( (int32)params->nGameAppId, (uint32)params->unServerFlags, (uint32)params->unGameIP, (uint16)params->unGamePort, (uint16)params->unSpectatorPort, (uint16)params->usQueryPort, (const char *)params->pchGameDir, (const char *)params->pchVersion, (bool)params->bLANMode );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSetServerType2( params->nGameAppId, params->unServerFlags, params->unGameIP, params->unGamePort, params->unSpectatorPort, params->usQueryPort, params->pchGameDir, params->pchVersion, params->bLANMode );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSUpdateStatus2( struct cppISteamGameServer_SteamGameServer002_GSUpdateStatus2_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSUpdateStatus2( (int)params->cPlayers, (int)params->cPlayersMax, (int)params->cBotPlayers, (const char *)params->pchServerName, (const char *)params->pSpectatorServerName, (const char *)params->pchMapName );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSUpdateStatus2( params->cPlayers, params->cPlayersMax, params->cBotPlayers, params->pchServerName, params->pSpectatorServerName, params->pchMapName );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser( struct cppISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSCreateUnauthenticatedUser( (CSteamID *)params->pSteamID );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSCreateUnauthenticatedUser( params->pSteamID );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSetUserData( struct cppISteamGameServer_SteamGameServer002_GSSetUserData_params *params )
 {
-    params->_ret = ((ISteamGameServer*)params->linux_side)->GSSetUserData( (CSteamID)params->steamID, (const char *)params->pPlayerName, (uint32)params->nFrags );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    params->_ret = iface->GSSetUserData( params->steamID, params->pPlayerName, params->nFrags );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSUpdateSpectatorPort( struct cppISteamGameServer_SteamGameServer002_GSUpdateSpectatorPort_params *params )
 {
-    ((ISteamGameServer*)params->linux_side)->GSUpdateSpectatorPort( (uint16)params->unSpectatorPort );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    iface->GSUpdateSpectatorPort( params->unSpectatorPort );
 }
 
 void cppISteamGameServer_SteamGameServer002_GSSetGameType( struct cppISteamGameServer_SteamGameServer002_GSSetGameType_params *params )
 {
-    ((ISteamGameServer*)params->linux_side)->GSSetGameType( (const char *)params->pchType );
+    struct cppISteamGameServer_SteamGameServer002 *iface = (struct cppISteamGameServer_SteamGameServer002 *)params->linux_side;
+    iface->GSSetGameType( params->pchType );
 }
 
 #ifdef __cplusplus

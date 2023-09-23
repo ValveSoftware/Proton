@@ -1,3 +1,4 @@
+struct cppISteamFriends_SteamFriends017;
 struct cppISteamFriends_SteamFriends017_GetPersonaName_params
 {
     void *linux_side;
