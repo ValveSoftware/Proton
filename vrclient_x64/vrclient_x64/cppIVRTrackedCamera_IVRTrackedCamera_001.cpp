@@ -37,9 +37,9 @@ bool cppIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat(void *l
     return _ret;
 }
 
-vr::ECameraVideoStreamFormat cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat(void *linux_side, TrackedDeviceIndex_t nDeviceIndex)
+ECameraVideoStreamFormat cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat(void *linux_side, TrackedDeviceIndex_t nDeviceIndex)
 {
-    vr::ECameraVideoStreamFormat _ret;
+    ECameraVideoStreamFormat _ret;
     _ret = ((IVRTrackedCamera*)linux_side)->GetCameraVideoStreamFormat((vr::TrackedDeviceIndex_t)nDeviceIndex);
     return _ret;
 }
@@ -79,9 +79,9 @@ float cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime(void *l
     return _ret;
 }
 
-const vr::CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex)
+const CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex)
 {
-    const vr::CameraVideoStreamFrame_t * _ret;
+    const CameraVideoStreamFrame_t *_ret;
     _ret = ((IVRTrackedCamera*)linux_side)->GetVideoStreamFrame((vr::TrackedDeviceIndex_t)nDeviceIndex);
     return _ret;
 }

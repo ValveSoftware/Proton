@@ -9,23 +9,23 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(void *linux_side, ScreenshotHandle_t *pOutScreenshotHandle, EVRScreenshotType type, const char *pchPreviewFilename, const char *pchVRFilename)
+EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(void *linux_side, ScreenshotHandle_t *pOutScreenshotHandle, EVRScreenshotType type, const char *pchPreviewFilename, const char *pchVRFilename)
 {
-    vr::EVRScreenshotError _ret;
+    EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->RequestScreenshot((vr::ScreenshotHandle_t *)pOutScreenshotHandle, (vr::EVRScreenshotType)type, (const char *)pchPreviewFilename, (const char *)pchVRFilename);
     return _ret;
 }
 
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(void *linux_side, const EVRScreenshotType *pSupportedTypes, int numTypes)
+EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(void *linux_side, const EVRScreenshotType *pSupportedTypes, int numTypes)
 {
-    vr::EVRScreenshotError _ret;
+    EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->HookScreenshot((const vr::EVRScreenshotType *)pSupportedTypes, (int)numTypes);
     return _ret;
 }
 
-vr::EVRScreenshotType cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(void *linux_side, ScreenshotHandle_t screenshotHandle, EVRScreenshotError *pError)
+EVRScreenshotType cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(void *linux_side, ScreenshotHandle_t screenshotHandle, EVRScreenshotError *pError)
 {
-    vr::EVRScreenshotType _ret;
+    EVRScreenshotType _ret;
     _ret = ((IVRScreenshots*)linux_side)->GetScreenshotPropertyType((vr::ScreenshotHandle_t)screenshotHandle, (vr::EVRScreenshotError *)pError);
     return _ret;
 }
@@ -37,23 +37,23 @@ uint32_t cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(void
     return _ret;
 }
 
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(void *linux_side, ScreenshotHandle_t screenshotHandle, float flProgress)
+EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(void *linux_side, ScreenshotHandle_t screenshotHandle, float flProgress)
 {
-    vr::EVRScreenshotError _ret;
+    EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->UpdateScreenshotProgress((vr::ScreenshotHandle_t)screenshotHandle, (float)flProgress);
     return _ret;
 }
 
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(void *linux_side, ScreenshotHandle_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
+EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(void *linux_side, ScreenshotHandle_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
 {
-    vr::EVRScreenshotError _ret;
+    EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->TakeStereoScreenshot((vr::ScreenshotHandle_t *)pOutScreenshotHandle, (const char *)pchPreviewFilename, (const char *)pchVRFilename);
     return _ret;
 }
 
-vr::EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(void *linux_side, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
+EVRScreenshotError cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(void *linux_side, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
 {
-    vr::EVRScreenshotError _ret;
+    EVRScreenshotError _ret;
     _ret = ((IVRScreenshots*)linux_side)->SubmitScreenshot((vr::ScreenshotHandle_t)screenshotHandle, (vr::EVRScreenshotType)type, (const char *)pchSourcePreviewFilename, (const char *)pchSourceVRFilename);
     return _ret;
 }

@@ -526,7 +526,7 @@ def declspec(decl, name):
 
 
 def handle_method_hpp(method, cppname, cpp_h):
-    ret = f'{strip_ns(method.result_type.spelling)} '
+    ret = f'{declspec(method.result_type, "")} '
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
@@ -537,7 +537,7 @@ def handle_method_hpp(method, cppname, cpp_h):
 def handle_method_cpp(method, classname, cppname, cpp):
     returns_void = method.result_type.kind == TypeKind.VOID
 
-    ret = f'{method.result_type.spelling} '
+    ret = f'{declspec(method.result_type, "")} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
@@ -550,7 +550,7 @@ def handle_method_cpp(method, classname, cppname, cpp):
     cpp.write("{\n")
 
     if not returns_void:
-        cpp.write(f"    {ret}_ret;\n")
+        cpp.write(f'    {declspec(method.result_type, "_ret")};\n')
 
     do_lin_to_win = None
     do_win_to_lin = None
@@ -668,16 +668,15 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
-    ret = f'{strip_ns(method.result_type.spelling)} '
-    if ret.startswith("IVR"): ret = f'win{ret}'
-    elif returns_record: ret = f'{ret}*'
+    ret = "*" if returns_record else ""
+    ret = f'{declspec(method.result_type, ret)} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{ret}_ret'] + params
+        params = [f'{declspec(method.result_type, "*_ret")}'] + params
         names = ['_ret'] + names
 
     params = [f'{winclassname} *_this'] + params
