@@ -1007,6 +1007,49 @@ def handle_method_c(method, winclassname, cppname, out):
 
 
 def handle_class(klass):
+    cppname = f"cpp{klass.spelling}_{klass.version}"
+
+    with open(f"{cppname}.h", "w") as file:
+        out = file.write
+
+        for method in klass.methods:
+            if type(method) is Destructor:
+                continue
+            handle_method_hpp(method, cppname, out)
+
+    with open(f"{cppname}.cpp", "w") as file:
+        out = file.write
+
+        out(u'#include "steam_defs.h"\n')
+        out(u'#pragma push_macro("__cdecl")\n')
+        out(u'#undef __cdecl\n')
+        out(u'#define __cdecl\n')
+        out(f'#include "steamworks_sdk_{klass._sdkver}/steam_api.h"\n')
+        if os.path.isfile(f"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"):
+            out(f'#include "steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"\n')
+        if klass.filename != "steam_api.h":
+            out(f'#include "steamworks_sdk_{klass._sdkver}/{klass.filename}"\n')
+        out(u'#pragma pop_macro("__cdecl")\n')
+        out(u'#include "steamclient_private.h"\n')
+        out(u'#ifdef __cplusplus\n')
+        out(u'extern "C" {\n')
+        out(u'#endif\n')
+        out(f'#define SDKVER_{klass._sdkver}\n')
+        out(u'#include "struct_converters.h"\n')
+        out(f'#include "{cppname}.h"\n')
+
+        for method in klass.methods:
+            if type(method) is Destructor:
+                continue
+            if method_needs_manual_handling(cppname, method.spelling):
+                continue
+            handle_method_cpp(method, klass.spelling, cppname, out)
+
+        out(u'#ifdef __cplusplus\n')
+        out(u'}\n')
+        out(u'#endif\n')
+
+
     file_exists = os.path.isfile(f"win{klass.spelling}.c")
     cfile = open(f"win{klass.spelling}.c", "a")
     if not file_exists:
@@ -1029,26 +1072,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 """)
 
-    cppname = f"cpp{klass.spelling}_{klass.version}"
-    cpp = open(f"{cppname}.cpp", "w")
-    cpp.write("#include \"steam_defs.h\"\n")
-    cpp.write("#pragma push_macro(\"__cdecl\")\n")
-    cpp.write("#undef __cdecl\n")
-    cpp.write("#define __cdecl\n")
-    cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/steam_api.h\"\n")
-    if os.path.isfile(f"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"):
-        cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h\"\n")
-    if klass.filename != "steam_api.h":
-        cpp.write(f"#include \"steamworks_sdk_{klass._sdkver}/{klass.filename}\"\n")
-    cpp.write("#pragma pop_macro(\"__cdecl\")\n")
-    cpp.write("#include \"steamclient_private.h\"\n")
-    cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
-    cpp.write(f"#define SDKVER_{klass._sdkver}\n")
-    cpp.write("#include \"struct_converters.h\"\n")
-    cpp.write(f"#include \"{cppname}.h\"\n")
-
-    cpp_h = open(f"{cppname}.h", "w")
-
     winclassname = f"win{klass.spelling}_{klass.version}"
     cfile.write(f"#include \"{cppname}.h\"\n\n")
     cfile.write(f"typedef struct __{winclassname} {{\n")
@@ -1059,18 +1082,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     for method in klass.methods:
         handle_thiscall_wrapper(klass, method, cfile.write)
     cfile.write('\n')
-
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        handle_method_hpp(method, cppname, cpp_h.write)
-
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        if method_needs_manual_handling(cppname, method.spelling):
-            continue
-        handle_method_cpp(method, klass.spelling, cppname, cpp.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
@@ -1098,8 +1109,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, \"{klass.version}\");\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
-
-    cpp.write("#ifdef __cplusplus\n}\n#endif\n")
 
     constructors = open("win_constructors.h", "a")
     constructors.write(f"extern void *create_{winclassname}(void *);\n")
