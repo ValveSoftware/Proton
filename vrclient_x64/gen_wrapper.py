@@ -5,7 +5,7 @@
 
 CLANG_PATH='/usr/lib/clang/15'
 
-from clang.cindex import Cursor, CursorKind, Index, Type, TypeKind
+from clang.cindex import Cursor, CursorKind, Index, TypeKind
 import concurrent.futures
 import os
 import re
@@ -132,117 +132,43 @@ STRUCTS_SIZE_FIELD = {
     "DriverDirectMode_FrameTiming": ["m_nSize"],
 }
 
-PATH_CONV = [
-    {
-        "parent_name": "SetActionManifestPath",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchActionManifestPath"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "SetOverlayFromFile",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchFilePath"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "AddApplicationManifest",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchApplicationManifestFullPath"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "RemoveApplicationManifest",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchApplicationManifestFullPath"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "RequestScreenshot",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
-        "w2l_arrays": [False, False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "TakeStereoScreenshot",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
-        "w2l_arrays": [False, False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "SubmitScreenshot",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchSourcePreviewFilename", "pchSourceVRFilename"],
-        "w2l_arrays": [False, False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "GetScreenshotPropertyFilename",
-        "l2w_names":["pchFilename"],
-        "l2w_lens":["cchFilename"],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "return_is_size": True
-    },
-    {
-        "parent_name": "undoc23",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["a"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "undoc27",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["a"],
-        "w2l_arrays": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "SetStageOverride_Async",
-        "l2w_names":[],
-        "l2w_lens":[],
-        "w2l_names": ["pchRenderModelPath"],
-        "w2l_arrays": [False],
-        "return_is_size": False
+PATH_CONV_METHODS_UTOW = {
+    "IVRScreenshots_GetScreenshotPropertyFilename": {
+        "pchFilename": {"len": "cchFilename"},
+        "ret_size": True,
     },
 
-#    {#maybe?
-#        "parent_name": "GetRenderModelOriginalPath",
-#        "l2w_names":[pchOriginalPath],
-#        "l2w_lens":[unOriginalPathLen],
-#        "w2l_names": [],
-#        "w2l_arrays": [],
-#        "return_is_size": False
+# maybe?
+#    "IVRRenderModels_GetRenderModelOriginalPath": {
+#        "pchOriginalPath": {"len": unOriginalPathLen},
 #    },
-#    {#maybe?
-#        "parent_name": "GetResourceFullPath",
-#        "l2w_names":[pchPathBuffer],
-#        "l2w_lens":[unBufferLen],
-#        "w2l_names": [pchResourceTypeDirectory],
-#        "w2l_arrays": [False],
-#        "return_is_size": False
+#    "IVRResources_GetResourceFullPath": {
+#        "pchPathBuffer": {"len": unBufferLen},
 #    },
-    #IVRInput::GetInputSourceHandle
-    #IVRIOBuffer::Open
+#    IVRInput::GetInputSourceHandle
+#    IVRIOBuffer::Open
+#    TODO: LaunchInternalProcess, need steam cooperation
+}
 
-    #TODO: LaunchInternalProcess, need steam cooperation
-]
+PATH_CONV_METHODS_WTOU = {
+    "IVRInput_SetActionManifestPath": {"pchActionManifestPath"},
+    "IVRCompositor_SetOverlayFromFile": {"pchFilePath"},
+    "IVROverlay_SetOverlayFromFile": {"pchFilePath"},
+    "IVRApplications_AddApplicationManifest": {"pchApplicationManifestFullPath"},
+    "IVRApplications_RemoveApplicationManifest": {"pchApplicationManifestFullPath"},
+    "IVRScreenshots_RequestScreenshot": {"pchVRFilename", "pchPreviewFilename"},
+    "IVRScreenshots_TakeStereoScreenshot": {"pchVRFilename", "pchPreviewFilename"},
+    "IVRScreenshots_SubmitScreenshot": {"pchSourcePreviewFilename", "pchSourceVRFilename"},
+    "IVRControlPanel_undoc23": {"a"},
+    "IVRControlPanel_undoc27": {"a"},
+    "IVRCompositor_SetStageOverride_Async": {"pchRenderModelPath"},
+
+# maybe?
+#    "IVRResources_GetResourceFullPath": {"pchResourceTypeDirectory"},
+#    IVRInput::GetInputSourceHandle
+#    IVRIOBuffer::Open
+#    TODO: LaunchInternalProcess, need steam cooperation
+}
 
 struct_conversion_cache = {}
 struct_needs_size_adjustment_cache = {}
@@ -364,21 +290,6 @@ def display_sdkver(s):
 
 def strip_ns(name):
     return name.replace("vr::","")
-
-def get_path_converter(parent):
-    for conv in PATH_CONV:
-        if conv["parent_name"] in parent.spelling:
-            if None in conv["l2w_names"]:
-                return conv
-            if type(parent) == Type:
-                children = list(parent.get_fields())
-            else:
-                children = list(parent.get_children())
-            for child in children:
-                if child.spelling in conv["w2l_names"] or \
-                        child.spelling in conv["l2w_names"]:
-                    return conv
-    return None
 
 
 def underlying_type(decl):
@@ -599,17 +510,12 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     if not returns_record and not returns_void:
         out(f'    {ret}_ret;\n')
 
-    path_conv = get_path_converter(method)
+    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.spelling}_{method.spelling}', {})
+    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
 
-    if path_conv:
-        for i in range(len(path_conv["w2l_names"])):
-            if path_conv["w2l_arrays"][i]:
-                out(f'    const char **lin_{path_conv["w2l_names"][i]} = vrclient_dos_to_unix_stringlist({path_conv["w2l_names"][i]});\n')
-                # TODO
-                pass
-            else:
-                out(f'    char lin_{path_conv["w2l_names"][i]}[PATH_MAX];\n')
-                out(f'    vrclient_dos_path_to_unix_path({path_conv["w2l_names"][i]}, lin_{path_conv["w2l_names"][i]});\n')
+    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
+        out(f'    char lin_{name}[PATH_MAX];\n')
+        out(f'    vrclient_dos_path_to_unix_path({name}, lin_{name});\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -627,7 +533,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
 
     def param_call(param, name):
         if name == '_this': return '_this->u_iface'
-        if path_conv and name in path_conv["w2l_names"]: return f'{name} ? lin_{name} : NULL'
+        if name in path_conv_wtou: return f'{name} ? lin_{name} : NULL'
         return name
 
     params = ['_this'] + list(method.get_arguments())
@@ -635,17 +541,11 @@ def handle_method_c(klass, method, winclassname, cppname, out):
 
     out(u');\n')
 
-    if path_conv and len(path_conv["l2w_names"]) > 0:
-        for i in range(len(path_conv["l2w_names"])):
-            assert(path_conv["l2w_names"][i]) #otherwise, no name means string is in return value. needs special handling.
-            out(u'    ')
-            if path_conv["return_is_size"]:
-                out(u'_ret = ')
-            out(f'vrclient_unix_path_to_dos_path(_ret, {path_conv["l2w_names"][i]}, {path_conv["l2w_names"][i]}, {path_conv["l2w_lens"][i]});\n')
-    if path_conv:
-        for i in range(len(path_conv["w2l_names"])):
-            if path_conv["w2l_arrays"][i]:
-                out(f'    vrclient_free_stringlist(lin_{path_conv["w2l_names"][i]});\n')
+    for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
+        out(u'    ')
+        if "ret_size" in path_conv_utow:
+            out(u'_ret = ')
+        out(f'vrclient_unix_path_to_dos_path(_ret, {name}, {name}, {conv["len"]});\n')
 
     if not returns_void:
         out(u'    return _ret;\n')
