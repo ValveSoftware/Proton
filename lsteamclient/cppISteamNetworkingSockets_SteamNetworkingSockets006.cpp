@@ -214,14 +214,14 @@ EResult cppISteamNetworkingSockets_SteamNetworkingSockets006_GetGameCoordinatorS
     return (_ret);
 }
 
-HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(void *linux_side, ISteamNetworkingConnectionCustomSignaling *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
+HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(void *linux_side, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     HSteamNetConnection _ret;
     _ret = ((ISteamNetworkingSockets*)linux_side)->ConnectP2PCustomSignaling((ISteamNetworkingConnectionCustomSignaling *)pSignaling, (const SteamNetworkingIdentity *)pPeerIdentity, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
     return (_ret);
 }
 
-bool cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(void *linux_side, const void *pMsg, int cbMsg, ISteamNetworkingCustomSignalingRecvContext *pContext)
+bool cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(void *linux_side, const void *pMsg, int cbMsg, void /*ISteamNetworkingCustomSignalingRecvContext*/ *pContext)
 {
     bool _ret;
     _ret = ((ISteamNetworkingSockets*)linux_side)->ReceivedP2PCustomSignal((const void *)pMsg, (int)cbMsg, (ISteamNetworkingCustomSignalingRecvContext *)pContext);

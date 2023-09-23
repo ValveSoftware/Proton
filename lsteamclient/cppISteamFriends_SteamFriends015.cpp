@@ -13,7 +13,7 @@ extern "C" {
 #include "cppISteamFriends_SteamFriends015.h"
 const char * cppISteamFriends_SteamFriends015_GetPersonaName(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetPersonaName();
     return (_ret);
 }
@@ -62,7 +62,7 @@ EPersonaState cppISteamFriends_SteamFriends015_GetFriendPersonaState(void *linux
 
 const char * cppISteamFriends_SteamFriends015_GetFriendPersonaName(void *linux_side, CSteamID steamIDFriend)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
     return (_ret);
 }
@@ -76,7 +76,7 @@ bool cppISteamFriends_SteamFriends015_GetFriendGamePlayed(void *linux_side, CSte
 
 const char * cppISteamFriends_SteamFriends015_GetFriendPersonaNameHistory(void *linux_side, CSteamID steamIDFriend, int iPersonaName)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaNameHistory((CSteamID)steamIDFriend, (int)iPersonaName);
     return (_ret);
 }
@@ -90,7 +90,7 @@ int cppISteamFriends_SteamFriends015_GetFriendSteamLevel(void *linux_side, CStea
 
 const char * cppISteamFriends_SteamFriends015_GetPlayerNickname(void *linux_side, CSteamID steamIDPlayer)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetPlayerNickname((CSteamID)steamIDPlayer);
     return (_ret);
 }
@@ -111,7 +111,7 @@ FriendsGroupID_t cppISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex(void 
 
 const char * cppISteamFriends_SteamFriends015_GetFriendsGroupName(void *linux_side, FriendsGroupID_t friendsGroupID)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendsGroupName((FriendsGroupID_t)friendsGroupID);
     return (_ret);
 }
@@ -151,14 +151,14 @@ CSteamID cppISteamFriends_SteamFriends015_GetClanByIndex(void *linux_side, int i
 
 const char * cppISteamFriends_SteamFriends015_GetClanName(void *linux_side, CSteamID steamIDClan)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetClanName((CSteamID)steamIDClan);
     return (_ret);
 }
 
 const char * cppISteamFriends_SteamFriends015_GetClanTag(void *linux_side, CSteamID steamIDClan)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetClanTag((CSteamID)steamIDClan);
     return (_ret);
 }
@@ -310,7 +310,7 @@ void cppISteamFriends_SteamFriends015_ClearRichPresence(void *linux_side)
 
 const char * cppISteamFriends_SteamFriends015_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendRichPresence((CSteamID)steamIDFriend, (const char *)pchKey);
     return (_ret);
 }
@@ -324,7 +324,7 @@ int cppISteamFriends_SteamFriends015_GetFriendRichPresenceKeyCount(void *linux_s
 
 const char * cppISteamFriends_SteamFriends015_GetFriendRichPresenceKeyByIndex(void *linux_side, CSteamID steamIDFriend, int iKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendRichPresenceKeyByIndex((CSteamID)steamIDFriend, (int)iKey);
     return (_ret);
 }

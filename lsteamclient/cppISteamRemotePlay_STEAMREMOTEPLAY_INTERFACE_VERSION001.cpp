@@ -35,7 +35,7 @@ CSteamID cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionStea
 
 const char * cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName(void *linux_side, RemotePlaySessionID_t unSessionID)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamRemotePlay*)linux_side)->GetSessionClientName((RemotePlaySessionID_t)unSessionID);
     return (_ret);
 }

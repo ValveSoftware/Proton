@@ -20,7 +20,7 @@ uint32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats(void *
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName(void *linux_side, CGameID nGameID, uint32 iStat)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetStatName((CGameID)nGameID, (uint32)iStat);
     return (_ret);
 }
@@ -41,7 +41,7 @@ uint32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumAchievements
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementName(void *linux_side, CGameID nGameID, uint32 iAchievement)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetAchievementName((CGameID)nGameID, (uint32)iAchievement);
     return (_ret);
 }
@@ -125,7 +125,7 @@ int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementIcon(vo
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute(void *linux_side, CGameID nGameID, const char *pchName, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetAchievementDisplayAttribute((CGameID)nGameID, (const char *)pchName, (const char *)pchKey);
     return (_ret);
 }

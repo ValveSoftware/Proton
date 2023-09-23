@@ -33,7 +33,7 @@ extern SteamNetworkingPOPID cppISteamNetworkingSockets_SteamNetworkingSockets008
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets008_GetHostedDedicatedServerAddress(void *, SteamDatagramHostedAddress *);
 extern HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateHostedDedicatedServerListenSocket(void *, int, int, const SteamNetworkingConfigValue_t *);
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets008_GetGameCoordinatorServerLogin(void *, SteamDatagramGameCoordinatorServerLogin *, int *, void *);
-extern HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(void *, ISteamNetworkingConnectionCustomSignaling *, const SteamNetworkingIdentity *, int, const SteamNetworkingConfigValue_t *);
-extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(void *, const void *, int, ISteamNetworkingCustomSignalingRecvContext *);
+extern HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(void *, void /*ISteamNetworkingConnectionCustomSignaling*/ *, const SteamNetworkingIdentity *, int, const SteamNetworkingConfigValue_t *);
+extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(void *, const void *, int, void /*ISteamNetworkingCustomSignalingRecvContext*/ *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest(void *, int *, void *, SteamNetworkingErrMsg *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate(void *, const void *, int, SteamNetworkingErrMsg *);

@@ -41,7 +41,7 @@ uint32 cppISteamUtils_SteamUtils002_GetServerRealTime(void *linux_side)
 
 const char * cppISteamUtils_SteamUtils002_GetIPCountry(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUtils*)linux_side)->GetIPCountry();
     return (_ret);
 }

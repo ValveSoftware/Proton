@@ -93,7 +93,7 @@ bool __thiscall winISteamUser_SteamUser004_BConnected(winISteamUser_SteamUser004
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser004_GetSteamID(winISteamUser_SteamUser004 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser004_GetSteamID(winISteamUser_SteamUser004 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser004_GetSteamID(_this->linux_side);
@@ -373,7 +373,7 @@ bool __thiscall winISteamUser_SteamUser005_BConnected(winISteamUser_SteamUser005
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser005_GetSteamID(winISteamUser_SteamUser005 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser005_GetSteamID(winISteamUser_SteamUser005 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser005_GetSteamID(_this->linux_side);
@@ -721,7 +721,7 @@ bool __thiscall winISteamUser_SteamUser006_BLoggedOn(winISteamUser_SteamUser006 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser006_GetSteamID(winISteamUser_SteamUser006 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser006_GetSteamID(winISteamUser_SteamUser006 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser006_GetSteamID(_this->linux_side);
@@ -861,7 +861,7 @@ bool __thiscall winISteamUser_SteamUser007_BLoggedOn(winISteamUser_SteamUser007 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser007_GetSteamID(winISteamUser_SteamUser007 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser007_GetSteamID(winISteamUser_SteamUser007 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser007_GetSteamID(_this->linux_side);
@@ -990,7 +990,7 @@ bool __thiscall winISteamUser_SteamUser008_BLoggedOn(winISteamUser_SteamUser008 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser008_GetSteamID(winISteamUser_SteamUser008 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser008_GetSteamID(winISteamUser_SteamUser008 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser008_GetSteamID(_this->linux_side);
@@ -1081,7 +1081,7 @@ bool __thiscall winISteamUser_SteamUser009_BLoggedOn(winISteamUser_SteamUser009 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser009_GetSteamID(winISteamUser_SteamUser009 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser009_GetSteamID(winISteamUser_SteamUser009 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser009_GetSteamID(_this->linux_side);
@@ -1171,7 +1171,7 @@ bool __thiscall winISteamUser_SteamUser010_BLoggedOn(winISteamUser_SteamUser010 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser010_GetSteamID(winISteamUser_SteamUser010 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser010_GetSteamID(winISteamUser_SteamUser010 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser010_GetSteamID(_this->linux_side);
@@ -1259,7 +1259,7 @@ bool __thiscall winISteamUser_SteamUser011_BLoggedOn(winISteamUser_SteamUser011 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser011_GetSteamID(winISteamUser_SteamUser011 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser011_GetSteamID(winISteamUser_SteamUser011 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser011_GetSteamID(_this->linux_side);
@@ -1394,7 +1394,7 @@ bool __thiscall winISteamUser_SteamUser012_BLoggedOn(winISteamUser_SteamUser012 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser012_GetSteamID(winISteamUser_SteamUser012 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser012_GetSteamID(winISteamUser_SteamUser012 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser012_GetSteamID(_this->linux_side);
@@ -1571,7 +1571,7 @@ bool __thiscall winISteamUser_SteamUser013_BLoggedOn(winISteamUser_SteamUser013 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser013_GetSteamID(winISteamUser_SteamUser013 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser013_GetSteamID(winISteamUser_SteamUser013 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser013_GetSteamID(_this->linux_side);
@@ -1761,7 +1761,7 @@ bool __thiscall winISteamUser_SteamUser014_BLoggedOn(winISteamUser_SteamUser014 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser014_GetSteamID(winISteamUser_SteamUser014 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser014_GetSteamID(winISteamUser_SteamUser014 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser014_GetSteamID(_this->linux_side);
@@ -1986,7 +1986,7 @@ bool __thiscall winISteamUser_SteamUser015_BLoggedOn(winISteamUser_SteamUser015 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser015_GetSteamID(winISteamUser_SteamUser015 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser015_GetSteamID(winISteamUser_SteamUser015 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser015_GetSteamID(_this->linux_side);
@@ -2220,7 +2220,7 @@ bool __thiscall winISteamUser_SteamUser016_BLoggedOn(winISteamUser_SteamUser016 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser016_GetSteamID(winISteamUser_SteamUser016 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser016_GetSteamID(winISteamUser_SteamUser016 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser016_GetSteamID(_this->linux_side);
@@ -2456,7 +2456,7 @@ bool __thiscall winISteamUser_SteamUser017_BLoggedOn(winISteamUser_SteamUser017 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser017_GetSteamID(winISteamUser_SteamUser017 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser017_GetSteamID(winISteamUser_SteamUser017 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser017_GetSteamID(_this->linux_side);
@@ -2711,7 +2711,7 @@ bool __thiscall winISteamUser_SteamUser018_BLoggedOn(winISteamUser_SteamUser018 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser018_GetSteamID(winISteamUser_SteamUser018 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser018_GetSteamID(winISteamUser_SteamUser018 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser018_GetSteamID(_this->linux_side);
@@ -2979,7 +2979,7 @@ bool __thiscall winISteamUser_SteamUser019_BLoggedOn(winISteamUser_SteamUser019 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser019_GetSteamID(winISteamUser_SteamUser019 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser019_GetSteamID(winISteamUser_SteamUser019 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser019_GetSteamID(_this->linux_side);
@@ -3285,7 +3285,7 @@ bool __thiscall winISteamUser_SteamUser020_BLoggedOn(winISteamUser_SteamUser020 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser020_GetSteamID(winISteamUser_SteamUser020 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser020_GetSteamID(winISteamUser_SteamUser020 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser020_GetSteamID(_this->linux_side);
@@ -3610,7 +3610,7 @@ bool __thiscall winISteamUser_SteamUser021_BLoggedOn(winISteamUser_SteamUser021 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser021_GetSteamID(winISteamUser_SteamUser021 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser021_GetSteamID(winISteamUser_SteamUser021 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser021_GetSteamID(_this->linux_side);
@@ -3944,7 +3944,7 @@ bool __thiscall winISteamUser_SteamUser022_BLoggedOn(winISteamUser_SteamUser022 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser022_GetSteamID(winISteamUser_SteamUser022 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser022_GetSteamID(winISteamUser_SteamUser022 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser022_GetSteamID(_this->linux_side);
@@ -4279,7 +4279,7 @@ bool __thiscall winISteamUser_SteamUser023_BLoggedOn(winISteamUser_SteamUser023 
     return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser023_GetSteamID(winISteamUser_SteamUser023 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamUser_SteamUser023_GetSteamID(winISteamUser_SteamUser023 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamUser_SteamUser023_GetSteamID(_this->linux_side);

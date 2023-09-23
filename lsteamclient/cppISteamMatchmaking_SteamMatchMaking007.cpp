@@ -115,7 +115,7 @@ CSteamID cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex(void *li
 
 const char * cppISteamMatchmaking_SteamMatchMaking007_GetLobbyData(void *linux_side, CSteamID steamIDLobby, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamMatchmaking*)linux_side)->GetLobbyData((CSteamID)steamIDLobby, (const char *)pchKey);
     return (_ret);
 }
@@ -150,7 +150,7 @@ bool cppISteamMatchmaking_SteamMatchMaking007_DeleteLobbyData(void *linux_side, 
 
 const char * cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberData(void *linux_side, CSteamID steamIDLobby, CSteamID steamIDUser, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamMatchmaking*)linux_side)->GetLobbyMemberData((CSteamID)steamIDLobby, (CSteamID)steamIDUser, (const char *)pchKey);
     return (_ret);
 }

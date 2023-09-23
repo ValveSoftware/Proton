@@ -13,7 +13,7 @@ extern "C" {
 #include "cppISteamFriends_SteamFriends009.h"
 const char * cppISteamFriends_SteamFriends009_GetPersonaName(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetPersonaName();
     return (_ret);
 }
@@ -60,7 +60,7 @@ EPersonaState cppISteamFriends_SteamFriends009_GetFriendPersonaState(void *linux
 
 const char * cppISteamFriends_SteamFriends009_GetFriendPersonaName(void *linux_side, CSteamID steamIDFriend)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
     return (_ret);
 }
@@ -74,7 +74,7 @@ bool cppISteamFriends_SteamFriends009_GetFriendGamePlayed(void *linux_side, CSte
 
 const char * cppISteamFriends_SteamFriends009_GetFriendPersonaNameHistory(void *linux_side, CSteamID steamIDFriend, int iPersonaName)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaNameHistory((CSteamID)steamIDFriend, (int)iPersonaName);
     return (_ret);
 }
@@ -102,14 +102,14 @@ CSteamID cppISteamFriends_SteamFriends009_GetClanByIndex(void *linux_side, int i
 
 const char * cppISteamFriends_SteamFriends009_GetClanName(void *linux_side, CSteamID steamIDClan)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetClanName((CSteamID)steamIDClan);
     return (_ret);
 }
 
 const char * cppISteamFriends_SteamFriends009_GetClanTag(void *linux_side, CSteamID steamIDClan)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetClanTag((CSteamID)steamIDClan);
     return (_ret);
 }
@@ -247,7 +247,7 @@ void cppISteamFriends_SteamFriends009_ClearRichPresence(void *linux_side)
 
 const char * cppISteamFriends_SteamFriends009_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendRichPresence((CSteamID)steamIDFriend, (const char *)pchKey);
     return (_ret);
 }
@@ -261,7 +261,7 @@ int cppISteamFriends_SteamFriends009_GetFriendRichPresenceKeyCount(void *linux_s
 
 const char * cppISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex(void *linux_side, CSteamID steamIDFriend, int iKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamFriends*)linux_side)->GetFriendRichPresenceKeyByIndex((CSteamID)steamIDFriend, (int)iKey);
     return (_ret);
 }

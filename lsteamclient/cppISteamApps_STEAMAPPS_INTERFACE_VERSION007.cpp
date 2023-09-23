@@ -41,14 +41,14 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned(void *linux_side)
 
 const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamApps*)linux_side)->GetCurrentGameLanguage();
     return (_ret);
 }
 
 const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamApps*)linux_side)->GetAvailableGameLanguages();
     return (_ret);
 }
@@ -154,7 +154,7 @@ CSteamID cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(void *linux_si
 
 const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(void *linux_side, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamApps*)linux_side)->GetLaunchQueryParam((const char *)pchKey);
     return (_ret);
 }
