@@ -11,12 +11,16 @@ extern "C" {
 #endif
 uint32_t cppIVRResources_IVRResources_001_LoadSharedResource(void *linux_side, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
 {
-    return ((IVRResources*)linux_side)->LoadSharedResource((const char *)pchResourceName, (char *)pchBuffer, (uint32_t)unBufferLen);
+    uint32_t _ret;
+    _ret = ((IVRResources*)linux_side)->LoadSharedResource((const char *)pchResourceName, (char *)pchBuffer, (uint32_t)unBufferLen);
+    return _ret;
 }
 
 uint32_t cppIVRResources_IVRResources_001_GetResourceFullPath(void *linux_side, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
 {
-    return ((IVRResources*)linux_side)->GetResourceFullPath((const char *)pchResourceName, (const char *)pchResourceTypeDirectory, (char *)pchPathBuffer, (uint32_t)unBufferLen);
+    uint32_t _ret;
+    _ret = ((IVRResources*)linux_side)->GetResourceFullPath((const char *)pchResourceName, (const char *)pchResourceTypeDirectory, (char *)pchPathBuffer, (uint32_t)unBufferLen);
+    return _ret;
 }
 
 #ifdef __cplusplus

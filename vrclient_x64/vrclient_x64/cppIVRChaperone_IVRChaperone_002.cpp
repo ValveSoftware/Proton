@@ -11,22 +11,30 @@ extern "C" {
 #endif
 vr::ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_002_GetCalibrationState(void *linux_side)
 {
-    return ((IVRChaperone*)linux_side)->GetCalibrationState();
+    vr::ChaperoneCalibrationState _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetCalibrationState();
+    return _ret;
 }
 
 bool cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(void *linux_side, ChaperoneSoftBoundsInfo_t *pInfo)
 {
-    return ((IVRChaperone*)linux_side)->GetSoftBoundsInfo((vr::ChaperoneSoftBoundsInfo_t *)pInfo);
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetSoftBoundsInfo((vr::ChaperoneSoftBoundsInfo_t *)pInfo);
+    return _ret;
 }
 
 bool cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    return ((IVRChaperone*)linux_side)->GetHardBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetHardBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    return _ret;
 }
 
 bool cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo(void *linux_side, ChaperoneSeatedBoundsInfo_t *pInfo)
 {
-    return ((IVRChaperone*)linux_side)->GetSeatedBoundsInfo((vr::ChaperoneSeatedBoundsInfo_t *)pInfo);
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetSeatedBoundsInfo((vr::ChaperoneSeatedBoundsInfo_t *)pInfo);
+    return _ret;
 }
 
 void cppIVRChaperone_IVRChaperone_002_ReloadInfo(void *linux_side)
@@ -46,7 +54,9 @@ void cppIVRChaperone_IVRChaperone_002_GetBoundsColor(void *linux_side, HmdColor_
 
 bool cppIVRChaperone_IVRChaperone_002_AreBoundsVisible(void *linux_side)
 {
-    return ((IVRChaperone*)linux_side)->AreBoundsVisible();
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->AreBoundsVisible();
+    return _ret;
 }
 
 void cppIVRChaperone_IVRChaperone_002_ForceBoundsVisible(void *linux_side, bool bForce)

@@ -11,17 +11,23 @@ extern "C" {
 #endif
 vr::ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_003_GetCalibrationState(void *linux_side)
 {
-    return ((IVRChaperone*)linux_side)->GetCalibrationState();
+    vr::ChaperoneCalibrationState _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetCalibrationState();
+    return _ret;
 }
 
 bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize(void *linux_side, float *pSizeX, float *pSizeZ)
 {
-    return ((IVRChaperone*)linux_side)->GetPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
+    return _ret;
 }
 
 bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect(void *linux_side, HmdQuad_t *rect)
 {
-    return ((IVRChaperone*)linux_side)->GetPlayAreaRect((vr::HmdQuad_t *)rect);
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->GetPlayAreaRect((vr::HmdQuad_t *)rect);
+    return _ret;
 }
 
 void cppIVRChaperone_IVRChaperone_003_ReloadInfo(void *linux_side)
@@ -41,7 +47,9 @@ void cppIVRChaperone_IVRChaperone_003_GetBoundsColor(void *linux_side, HmdColor_
 
 bool cppIVRChaperone_IVRChaperone_003_AreBoundsVisible(void *linux_side)
 {
-    return ((IVRChaperone*)linux_side)->AreBoundsVisible();
+    bool _ret;
+    _ret = ((IVRChaperone*)linux_side)->AreBoundsVisible();
+    return _ret;
 }
 
 void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible(void *linux_side, bool bForce)

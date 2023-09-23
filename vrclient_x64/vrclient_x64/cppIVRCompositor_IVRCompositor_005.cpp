@@ -11,7 +11,9 @@ extern "C" {
 #endif
 uint32_t cppIVRCompositor_IVRCompositor_005_GetLastError(void *linux_side, char *pchBuffer, uint32_t unBufferSize)
 {
-    return ((IVRCompositor*)linux_side)->GetLastError((char *)pchBuffer, (uint32_t)unBufferSize);
+    uint32_t _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetLastError((char *)pchBuffer, (uint32_t)unBufferSize);
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_005_SetVSync(void *linux_side, bool bVSync)
@@ -21,7 +23,9 @@ void cppIVRCompositor_IVRCompositor_005_SetVSync(void *linux_side, bool bVSync)
 
 bool cppIVRCompositor_IVRCompositor_005_GetVSync(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetVSync();
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetVSync();
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_005_SetGamma(void *linux_side, float fGamma)
@@ -31,7 +35,9 @@ void cppIVRCompositor_IVRCompositor_005_SetGamma(void *linux_side, float fGamma)
 
 float cppIVRCompositor_IVRCompositor_005_GetGamma(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetGamma();
+    float _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetGamma();
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_005_SetGraphicsDevice(void *linux_side, Compositor_DeviceType eType, void *pDevice)
@@ -81,8 +87,8 @@ void cppIVRCompositor_IVRCompositor_005_ClearOverlay(void *linux_side)
 
 bool cppIVRCompositor_IVRCompositor_005_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_091 *pTiming, uint32_t unFramesAgo)
 {
-    Compositor_FrameTiming lin;
     bool _ret;
+    Compositor_FrameTiming lin;
     if(pTiming)
         struct_Compositor_FrameTiming_091_win_to_lin(pTiming, &lin);
     _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin : nullptr, (uint32_t)unFramesAgo);
@@ -118,12 +124,16 @@ void cppIVRCompositor_IVRCompositor_005_CompositorQuit(void *linux_side)
 
 bool cppIVRCompositor_IVRCompositor_005_IsFullscreen(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->IsFullscreen();
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->IsFullscreen();
+    return _ret;
 }
 
 bool cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(void *linux_side, Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
 {
-    return ((IVRCompositor*)linux_side)->ComputeOverlayIntersection((const vr::Compositor_OverlaySettings *)pSettings, (float)fAspectRatio, (vr::TrackingUniverseOrigin)eOrigin, (vr::HmdVector3_t)vSource, (vr::HmdVector3_t)vDirection, (vr::HmdVector2_t *)pvecIntersectionUV, (vr::HmdVector3_t *)pvecIntersectionTrackingSpace);
+    bool _ret;
+    _ret = ((IVRCompositor*)linux_side)->ComputeOverlayIntersection((const vr::Compositor_OverlaySettings *)pSettings, (float)fAspectRatio, (vr::TrackingUniverseOrigin)eOrigin, (vr::HmdVector3_t)vSource, (vr::HmdVector3_t)vDirection, (vr::HmdVector2_t *)pvecIntersectionUV, (vr::HmdVector3_t *)pvecIntersectionTrackingSpace);
+    return _ret;
 }
 
 void cppIVRCompositor_IVRCompositor_005_SetTrackingSpace(void *linux_side, TrackingUniverseOrigin eOrigin)
@@ -133,7 +143,9 @@ void cppIVRCompositor_IVRCompositor_005_SetTrackingSpace(void *linux_side, Track
 
 vr::TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_005_GetTrackingSpace(void *linux_side)
 {
-    return ((IVRCompositor*)linux_side)->GetTrackingSpace();
+    vr::TrackingUniverseOrigin _ret;
+    _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
+    return _ret;
 }
 
 #ifdef __cplusplus
