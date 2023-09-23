@@ -23,20 +23,21 @@ typedef struct __winISteamGameCoordinator_SteamGameCoordinator001 {
 } winISteamGameCoordinator_SteamGameCoordinator001;
 
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_SendMessage, 16)
+DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable, 8)
+DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage, 20)
+
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 unMsgType, const void * pubData, uint32 cubData)
 {
     TRACE("%p\n", _this);
     return cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(_this->linux_side, unMsgType, pubData, cubData);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable, 8)
 bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 * pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(_this->linux_side, pcubMsgSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage, 20)
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 * punMsgType, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
 {
     TRACE("%p\n", _this);

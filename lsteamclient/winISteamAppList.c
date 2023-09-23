@@ -23,27 +23,29 @@ typedef struct __winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 {
 } winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001;
 
 DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps, 4)
+DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps, 12)
+DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName, 16)
+DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir, 16)
+DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId, 8)
+
 uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps, 12)
 uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t * pvecAppID, uint32 unMaxAppIDs)
 {
     TRACE("%p\n", _this);
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(_this->linux_side, pvecAppID, unMaxAppIDs);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName, 16)
 int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char * pchName, int cchNameMax)
 {
     TRACE("%p\n", _this);
     return cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(_this->linux_side, nAppID, pchName, cchNameMax);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir, 16)
 int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID, char * pchDirectory, int cchNameMax)
 {
     uint32 path_result;
@@ -53,7 +55,6 @@ int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallD
     return path_result;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId, 8)
 int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);

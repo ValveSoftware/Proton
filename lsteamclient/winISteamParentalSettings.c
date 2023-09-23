@@ -23,41 +23,42 @@ typedef struct __winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSI
 } winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001;
 
 DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled, 4)
+DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked, 4)
+DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked, 8)
+DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList, 8)
+DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked, 8)
+DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList, 8)
+
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked, 4)
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked, 8)
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
     return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(_this->linux_side, nAppID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList, 8)
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
     return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(_this->linux_side, nAppID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked, 8)
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, EParentalFeature eFeature)
 {
     TRACE("%p\n", _this);
     return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(_this->linux_side, eFeature);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList, 8)
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, EParentalFeature eFeature)
 {
     TRACE("%p\n", _this);
