@@ -61,20 +61,26 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    return _ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
@@ -356,20 +362,26 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    return _ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle)
@@ -666,20 +678,26 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    return _ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle)
@@ -984,20 +1002,26 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    return _ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle)
@@ -1310,20 +1334,26 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(_this->linux_side);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+    return _ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *_this, HHTMLBrowser unBrowserHandle)

@@ -15,7 +15,9 @@ extern "C" {
 #include "cppISteamGameServer_SteamGameServer012.h"
 bool cppISteamGameServer_SteamGameServer012_InitGameServer(void *linux_side, uint32 unIP, uint16 usGamePort, uint16 usQueryPort, uint32 unFlags, AppId_t nGameAppId, const char *pchVersionString)
 {
-    return ((ISteamGameServer*)linux_side)->InitGameServer((uint32)unIP, (uint16)usGamePort, (uint16)usQueryPort, (uint32)unFlags, (AppId_t)nGameAppId, (const char *)pchVersionString);
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->InitGameServer((uint32)unIP, (uint16)usGamePort, (uint16)usQueryPort, (uint32)unFlags, (AppId_t)nGameAppId, (const char *)pchVersionString);
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_SetProduct(void *linux_side, const char *pszProduct)
@@ -55,22 +57,30 @@ void cppISteamGameServer_SteamGameServer012_LogOff(void *linux_side)
 
 bool cppISteamGameServer_SteamGameServer012_BLoggedOn(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 bool cppISteamGameServer_SteamGameServer012_BSecure(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->BSecure();
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->BSecure();
+    return (_ret);
 }
 
 CSteamID cppISteamGameServer_SteamGameServer012_GetSteamID(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamGameServer*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 bool cppISteamGameServer_SteamGameServer012_WasRestartRequested(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->WasRestartRequested();
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->WasRestartRequested();
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_SetMaxPlayerCount(void *linux_side, int cPlayersMax)
@@ -135,12 +145,16 @@ void cppISteamGameServer_SteamGameServer012_SetRegion(void *linux_side, const ch
 
 bool cppISteamGameServer_SteamGameServer012_SendUserConnectAndAuthenticate(void *linux_side, uint32 unIPClient, const void *pvAuthBlob, uint32 cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
-    return ((ISteamGameServer*)linux_side)->SendUserConnectAndAuthenticate((uint32)unIPClient, (const void *)pvAuthBlob, (uint32)cubAuthBlobSize, (CSteamID *)pSteamIDUser);
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->SendUserConnectAndAuthenticate((uint32)unIPClient, (const void *)pvAuthBlob, (uint32)cubAuthBlobSize, (CSteamID *)pSteamIDUser);
+    return (_ret);
 }
 
 CSteamID cppISteamGameServer_SteamGameServer012_CreateUnauthenticatedUserConnection(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->CreateUnauthenticatedUserConnection();
+    CSteamID _ret;
+    _ret = ((ISteamGameServer*)linux_side)->CreateUnauthenticatedUserConnection();
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_SendUserDisconnect(void *linux_side, CSteamID steamIDUser)
@@ -150,17 +164,23 @@ void cppISteamGameServer_SteamGameServer012_SendUserDisconnect(void *linux_side,
 
 bool cppISteamGameServer_SteamGameServer012_BUpdateUserData(void *linux_side, CSteamID steamIDUser, const char *pchPlayerName, uint32 uScore)
 {
-    return ((ISteamGameServer*)linux_side)->BUpdateUserData((CSteamID)steamIDUser, (const char *)pchPlayerName, (uint32)uScore);
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->BUpdateUserData((CSteamID)steamIDUser, (const char *)pchPlayerName, (uint32)uScore);
+    return (_ret);
 }
 
 HAuthTicket cppISteamGameServer_SteamGameServer012_GetAuthSessionTicket(void *linux_side, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
-    return ((ISteamGameServer*)linux_side)->GetAuthSessionTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    HAuthTicket _ret;
+    _ret = ((ISteamGameServer*)linux_side)->GetAuthSessionTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    return (_ret);
 }
 
 EBeginAuthSessionResult cppISteamGameServer_SteamGameServer012_BeginAuthSession(void *linux_side, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
-    return ((ISteamGameServer*)linux_side)->BeginAuthSession((const void *)pAuthTicket, (int)cbAuthTicket, (CSteamID)steamID);
+    EBeginAuthSessionResult _ret;
+    _ret = ((ISteamGameServer*)linux_side)->BeginAuthSession((const void *)pAuthTicket, (int)cbAuthTicket, (CSteamID)steamID);
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_EndAuthSession(void *linux_side, CSteamID steamID)
@@ -175,12 +195,16 @@ void cppISteamGameServer_SteamGameServer012_CancelAuthTicket(void *linux_side, H
 
 EUserHasLicenseForAppResult cppISteamGameServer_SteamGameServer012_UserHasLicenseForApp(void *linux_side, CSteamID steamID, AppId_t appID)
 {
-    return ((ISteamGameServer*)linux_side)->UserHasLicenseForApp((CSteamID)steamID, (AppId_t)appID);
+    EUserHasLicenseForAppResult _ret;
+    _ret = ((ISteamGameServer*)linux_side)->UserHasLicenseForApp((CSteamID)steamID, (AppId_t)appID);
+    return (_ret);
 }
 
 bool cppISteamGameServer_SteamGameServer012_RequestUserGroupStatus(void *linux_side, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
-    return ((ISteamGameServer*)linux_side)->RequestUserGroupStatus((CSteamID)steamIDUser, (CSteamID)steamIDGroup);
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->RequestUserGroupStatus((CSteamID)steamIDUser, (CSteamID)steamIDGroup);
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_GetGameplayStats(void *linux_side)
@@ -190,22 +214,30 @@ void cppISteamGameServer_SteamGameServer012_GetGameplayStats(void *linux_side)
 
 SteamAPICall_t cppISteamGameServer_SteamGameServer012_GetServerReputation(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->GetServerReputation();
+    SteamAPICall_t _ret;
+    _ret = ((ISteamGameServer*)linux_side)->GetServerReputation();
+    return (_ret);
 }
 
 uint32 cppISteamGameServer_SteamGameServer012_GetPublicIP(void *linux_side)
 {
-    return ((ISteamGameServer*)linux_side)->GetPublicIP();
+    uint32 _ret;
+    _ret = ((ISteamGameServer*)linux_side)->GetPublicIP();
+    return (_ret);
 }
 
 bool cppISteamGameServer_SteamGameServer012_HandleIncomingPacket(void *linux_side, const void *pData, int cbData, uint32 srcIP, uint16 srcPort)
 {
-    return ((ISteamGameServer*)linux_side)->HandleIncomingPacket((const void *)pData, (int)cbData, (uint32)srcIP, (uint16)srcPort);
+    bool _ret;
+    _ret = ((ISteamGameServer*)linux_side)->HandleIncomingPacket((const void *)pData, (int)cbData, (uint32)srcIP, (uint16)srcPort);
+    return (_ret);
 }
 
 int cppISteamGameServer_SteamGameServer012_GetNextOutgoingPacket(void *linux_side, void *pOut, int cbMaxOut, uint32 *pNetAdr, uint16 *pPort)
 {
-    return ((ISteamGameServer*)linux_side)->GetNextOutgoingPacket((void *)pOut, (int)cbMaxOut, (uint32 *)pNetAdr, (uint16 *)pPort);
+    int _ret;
+    _ret = ((ISteamGameServer*)linux_side)->GetNextOutgoingPacket((void *)pOut, (int)cbMaxOut, (uint32 *)pNetAdr, (uint16 *)pPort);
+    return (_ret);
 }
 
 void cppISteamGameServer_SteamGameServer012_EnableHeartbeats(void *linux_side, bool bActive)
@@ -225,12 +257,16 @@ void cppISteamGameServer_SteamGameServer012_ForceHeartbeat(void *linux_side)
 
 SteamAPICall_t cppISteamGameServer_SteamGameServer012_AssociateWithClan(void *linux_side, CSteamID steamIDClan)
 {
-    return ((ISteamGameServer*)linux_side)->AssociateWithClan((CSteamID)steamIDClan);
+    SteamAPICall_t _ret;
+    _ret = ((ISteamGameServer*)linux_side)->AssociateWithClan((CSteamID)steamIDClan);
+    return (_ret);
 }
 
 SteamAPICall_t cppISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility(void *linux_side, CSteamID steamIDNewPlayer)
 {
-    return ((ISteamGameServer*)linux_side)->ComputeNewPlayerCompatibility((CSteamID)steamIDNewPlayer);
+    SteamAPICall_t _ret;
+    _ret = ((ISteamGameServer*)linux_side)->ComputeNewPlayerCompatibility((CSteamID)steamIDNewPlayer);
+    return (_ret);
 }
 
 #ifdef __cplusplus

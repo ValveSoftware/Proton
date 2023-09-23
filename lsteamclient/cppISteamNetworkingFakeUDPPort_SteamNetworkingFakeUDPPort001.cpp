@@ -15,7 +15,9 @@ extern "C" {
 #include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
 EResult cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(void *linux_side, const SteamNetworkingIPAddr *remoteAddress, const void *pData, uint32 cbData, int nSendFlags)
 {
-    return ((ISteamNetworkingFakeUDPPort*)linux_side)->SendMessageToFakeIP(*remoteAddress, (const void *)pData, (uint32)cbData, (int)nSendFlags);
+    EResult _ret;
+    _ret = ((ISteamNetworkingFakeUDPPort*)linux_side)->SendMessageToFakeIP(*remoteAddress, (const void *)pData, (uint32)cbData, (int)nSendFlags);
+    return (_ret);
 }
 
 void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup(void *linux_side, const SteamNetworkingIPAddr *remoteAddress)

@@ -15,27 +15,37 @@ extern "C" {
 #include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
 EResult cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(void *linux_side, const SteamNetworkingIdentity *identityRemote, const void *pubData, uint32 cubData, int nSendFlags, int nRemoteChannel)
 {
-    return ((ISteamNetworkingMessages*)linux_side)->SendMessageToUser(*identityRemote, (const void *)pubData, (uint32)cubData, (int)nSendFlags, (int)nRemoteChannel);
+    EResult _ret;
+    _ret = ((ISteamNetworkingMessages*)linux_side)->SendMessageToUser(*identityRemote, (const void *)pubData, (uint32)cubData, (int)nSendFlags, (int)nRemoteChannel);
+    return (_ret);
 }
 
 bool cppISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(void *linux_side, const SteamNetworkingIdentity *identityRemote)
 {
-    return ((ISteamNetworkingMessages*)linux_side)->AcceptSessionWithUser(*identityRemote);
+    bool _ret;
+    _ret = ((ISteamNetworkingMessages*)linux_side)->AcceptSessionWithUser(*identityRemote);
+    return (_ret);
 }
 
 bool cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(void *linux_side, const SteamNetworkingIdentity *identityRemote)
 {
-    return ((ISteamNetworkingMessages*)linux_side)->CloseSessionWithUser(*identityRemote);
+    bool _ret;
+    _ret = ((ISteamNetworkingMessages*)linux_side)->CloseSessionWithUser(*identityRemote);
+    return (_ret);
 }
 
 bool cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(void *linux_side, const SteamNetworkingIdentity *identityRemote, int nLocalChannel)
 {
-    return ((ISteamNetworkingMessages*)linux_side)->CloseChannelWithUser(*identityRemote, (int)nLocalChannel);
+    bool _ret;
+    _ret = ((ISteamNetworkingMessages*)linux_side)->CloseChannelWithUser(*identityRemote, (int)nLocalChannel);
+    return (_ret);
 }
 
 ESteamNetworkingConnectionState cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(void *linux_side, const SteamNetworkingIdentity *identityRemote, SteamNetConnectionInfo_t *pConnectionInfo, SteamNetConnectionRealTimeStatus_t *pQuickStatus)
 {
-    return ((ISteamNetworkingMessages*)linux_side)->GetSessionConnectionInfo(*identityRemote, (SteamNetConnectionInfo_t *)pConnectionInfo, (SteamNetConnectionRealTimeStatus_t *)pQuickStatus);
+    ESteamNetworkingConnectionState _ret;
+    _ret = ((ISteamNetworkingMessages*)linux_side)->GetSessionConnectionInfo(*identityRemote, (SteamNetConnectionInfo_t *)pConnectionInfo, (SteamNetConnectionRealTimeStatus_t *)pQuickStatus);
+    return (_ret);
 }
 
 #ifdef __cplusplus

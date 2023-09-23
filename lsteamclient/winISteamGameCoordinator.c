@@ -28,20 +28,26 @@ DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_Retriev
 
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 unMsgType, const void *pubData, uint32 cubData)
 {
+    EGCResults _ret;
     TRACE("%p\n", _this);
-    return cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(_this->linux_side, unMsgType, pubData, cubData);
+    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(_this->linux_side, unMsgType, pubData, cubData);
+    return _ret;
 }
 
 bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 *pcubMsgSize)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(_this->linux_side, pcubMsgSize);
+    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(_this->linux_side, pcubMsgSize);
+    return _ret;
 }
 
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(winISteamGameCoordinator_SteamGameCoordinator001 *_this, uint32 *punMsgType, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
+    EGCResults _ret;
     TRACE("%p\n", _this);
-    return cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(_this->linux_side, punMsgType, pubDest, cubDest, pcubMsgSize);
+    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(_this->linux_side, punMsgType, pubDest, cubDest, pcubMsgSize);
+    return _ret;
 }
 
 extern vtable_ptr winISteamGameCoordinator_SteamGameCoordinator001_vtable;

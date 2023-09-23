@@ -43,7 +43,9 @@ void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServ
 
 gameserveritem_t * cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails(void *linux_side, EMatchMakingType eType, int iServer)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->GetServerDetails((EMatchMakingType)eType, (int)iServer);
+    gameserveritem_t * _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->GetServerDetails((EMatchMakingType)eType, (int)iServer);
+    return (_ret);
 }
 
 void cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery(void *linux_side, EMatchMakingType eType)
@@ -58,12 +60,16 @@ void cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery(void *l
 
 bool cppISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing(void *linux_side, EMatchMakingType eType)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->IsRefreshing((EMatchMakingType)eType);
+    bool _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->IsRefreshing((EMatchMakingType)eType);
+    return (_ret);
 }
 
 int cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount(void *linux_side, EMatchMakingType eType)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->GetServerCount((EMatchMakingType)eType);
+    int _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->GetServerCount((EMatchMakingType)eType);
+    return (_ret);
 }
 
 void cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(void *linux_side, EMatchMakingType eType, int iServer)
@@ -73,17 +79,23 @@ void cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(void *
 
 HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPingResponse *pRequestServersResponse)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->PingServer((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPingResponse *)pRequestServersResponse);
+    HServerQuery _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->PingServer((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPingResponse *)pRequestServersResponse);
+    return (_ret);
 }
 
 HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPlayersResponse *pRequestServersResponse)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->PlayerDetails((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPlayersResponse *)pRequestServersResponse);
+    HServerQuery _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->PlayerDetails((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPlayersResponse *)pRequestServersResponse);
+    return (_ret);
 }
 
 HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse *pRequestServersResponse)
 {
-    return ((ISteamMatchmakingServers*)linux_side)->ServerRules((uint32)unIP, (uint16)usPort, (ISteamMatchmakingRulesResponse *)pRequestServersResponse);
+    HServerQuery _ret;
+    _ret = ((ISteamMatchmakingServers*)linux_side)->ServerRules((uint32)unIP, (uint16)usPort, (ISteamMatchmakingRulesResponse *)pRequestServersResponse);
+    return (_ret);
 }
 
 void cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery(void *linux_side, HServerQuery hServerQuery)

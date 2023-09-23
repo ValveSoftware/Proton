@@ -13,17 +13,23 @@ extern "C" {
 #include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004.h"
 bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(void *linux_side)
 {
-    return ((ISteamHTMLSurface*)linux_side)->Init();
+    bool _ret;
+    _ret = ((ISteamHTMLSurface*)linux_side)->Init();
+    return (_ret);
 }
 
 bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(void *linux_side)
 {
-    return ((ISteamHTMLSurface*)linux_side)->Shutdown();
+    bool _ret;
+    _ret = ((ISteamHTMLSurface*)linux_side)->Shutdown();
+    return (_ret);
 }
 
 SteamAPICall_t cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(void *linux_side, const char *pchUserAgent, const char *pchUserCSS)
 {
-    return ((ISteamHTMLSurface*)linux_side)->CreateBrowser((const char *)pchUserAgent, (const char *)pchUserCSS);
+    SteamAPICall_t _ret;
+    _ret = ((ISteamHTMLSurface*)linux_side)->CreateBrowser((const char *)pchUserAgent, (const char *)pchUserCSS);
+    return (_ret);
 }
 
 void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser(void *linux_side, HHTMLBrowser unBrowserHandle)

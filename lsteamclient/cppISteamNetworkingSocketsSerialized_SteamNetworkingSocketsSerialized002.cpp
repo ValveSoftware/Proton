@@ -24,12 +24,16 @@ void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_Se
 
 SteamAPICall_t cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(void *linux_side)
 {
-    return ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCertAsync();
+    SteamAPICall_t _ret;
+    _ret = ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCertAsync();
+    return (_ret);
 }
 
 int cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(void *linux_side, void *buf, uint32 cbBuf)
 {
-    return ((ISteamNetworkingSocketsSerialized*)linux_side)->GetNetworkConfigJSON((void *)buf, (uint32)cbBuf);
+    int _ret;
+    _ret = ((ISteamNetworkingSocketsSerialized*)linux_side)->GetNetworkConfigJSON((void *)buf, (uint32)cbBuf);
+    return (_ret);
 }
 
 void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket(void *linux_side, const void *pTicket, uint32 cbTicket)
@@ -39,12 +43,16 @@ void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_Ca
 
 uint32 cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(void *linux_side)
 {
-    return ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCachedRelayTicketCount();
+    uint32 _ret;
+    _ret = ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCachedRelayTicketCount();
+    return (_ret);
 }
 
 int cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(void *linux_side, uint32 idxTicket, void *buf, uint32 cbBuf)
 {
-    return ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCachedRelayTicket((uint32)idxTicket, (void *)buf, (uint32)cbBuf);
+    int _ret;
+    _ret = ((ISteamNetworkingSocketsSerialized*)linux_side)->GetCachedRelayTicket((uint32)idxTicket, (void *)buf, (uint32)cbBuf);
+    return (_ret);
 }
 
 void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg(void *linux_side, const void *pMsg, uint32 cbMsg)

@@ -13,7 +13,9 @@ extern "C" {
 #include "cppISteamUser_SteamUser005.h"
 HSteamUser cppISteamUser_SteamUser005_GetHSteamUser(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetHSteamUser();
+    HSteamUser _ret;
+    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_LogOn(void *linux_side, CSteamID steamID)
@@ -28,32 +30,44 @@ void cppISteamUser_SteamUser005_LogOff(void *linux_side)
 
 bool cppISteamUser_SteamUser005_BLoggedOn(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 ELogonState cppISteamUser_SteamUser005_GetLogonState(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetLogonState();
+    ELogonState _ret;
+    _ret = ((ISteamUser*)linux_side)->GetLogonState();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_BConnected(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BConnected();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BConnected();
+    return (_ret);
 }
 
 CSteamID cppISteamUser_SteamUser005_GetSteamID(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamUser*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_IsVACBanned(void *linux_side, int nGameID)
 {
-    return ((ISteamUser*)linux_side)->IsVACBanned((int)nGameID);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->IsVACBanned((int)nGameID);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_RequireShowVACBannedMessage(void *linux_side, int nAppID)
 {
-    return ((ISteamUser*)linux_side)->RequireShowVACBannedMessage((int)nAppID);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->RequireShowVACBannedMessage((int)nAppID);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_AcknowledgeVACBanning(void *linux_side, int nAppID)
@@ -73,32 +87,44 @@ void cppISteamUser_SteamUser005_AddServerNetAddress(void *linux_side, uint32 unI
 
 bool cppISteamUser_SteamUser005_SetEmail(void *linux_side, const char *pchEmail)
 {
-    return ((ISteamUser*)linux_side)->SetEmail((const char *)pchEmail);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetEmail((const char *)pchEmail);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_SetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
-    return ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
-    return ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_SetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
-    return ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
-    return ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
+    return (_ret);
 }
 
 int cppISteamUser_SteamUser005_InitiateGameConnection(void *linux_side, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    int _ret;
+    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
@@ -113,7 +139,9 @@ void cppISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination(void *linux_side
 
 bool cppISteamUser_SteamUser005_IsPrimaryChatDestination(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->IsPrimaryChatDestination();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->IsPrimaryChatDestination();
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_RequestLegacyCDKey(void *linux_side, uint32 nAppID)
@@ -123,57 +151,79 @@ void cppISteamUser_SteamUser005_RequestLegacyCDKey(void *linux_side, uint32 nApp
 
 bool cppISteamUser_SteamUser005_SendGuestPassByEmail(void *linux_side, const char *pchEmailAccount, GID_t gidGuestPassID, bool bResending)
 {
-    return ((ISteamUser*)linux_side)->SendGuestPassByEmail((const char *)pchEmailAccount, (GID_t)gidGuestPassID, (bool)bResending);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SendGuestPassByEmail((const char *)pchEmailAccount, (GID_t)gidGuestPassID, (bool)bResending);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_SendGuestPassByAccountID(void *linux_side, uint32 uAccountID, GID_t gidGuestPassID, bool bResending)
 {
-    return ((ISteamUser*)linux_side)->SendGuestPassByAccountID((uint32)uAccountID, (GID_t)gidGuestPassID, (bool)bResending);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SendGuestPassByAccountID((uint32)uAccountID, (GID_t)gidGuestPassID, (bool)bResending);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_AckGuestPass(void *linux_side, const char *pchGuestPassCode)
 {
-    return ((ISteamUser*)linux_side)->AckGuestPass((const char *)pchGuestPassCode);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->AckGuestPass((const char *)pchGuestPassCode);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_RedeemGuestPass(void *linux_side, const char *pchGuestPassCode)
 {
-    return ((ISteamUser*)linux_side)->RedeemGuestPass((const char *)pchGuestPassCode);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->RedeemGuestPass((const char *)pchGuestPassCode);
+    return (_ret);
 }
 
 uint32 cppISteamUser_SteamUser005_GetGuestPassToGiveCount(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToGiveCount();
+    uint32 _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToGiveCount();
+    return (_ret);
 }
 
 uint32 cppISteamUser_SteamUser005_GetGuestPassToRedeemCount(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToRedeemCount();
+    uint32 _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToRedeemCount();
+    return (_ret);
 }
 
 RTime32 cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassLastUpdateTime();
+    RTime32 _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassLastUpdateTime();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetGuestPassToGiveInfo(void *linux_side, uint32 nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed, char *pchRecipientAddress, int cRecipientAddressSize)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToGiveInfo((uint32)nPassIndex, (GID_t *)pgidGuestPassID, (PackageId_t *)pnPackageID, (RTime32 *)pRTime32Created, (RTime32 *)pRTime32Expiration, (RTime32 *)pRTime32Sent, (RTime32 *)pRTime32Redeemed, (char *)pchRecipientAddress, (int)cRecipientAddressSize);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToGiveInfo((uint32)nPassIndex, (GID_t *)pgidGuestPassID, (PackageId_t *)pnPackageID, (RTime32 *)pRTime32Created, (RTime32 *)pRTime32Expiration, (RTime32 *)pRTime32Sent, (RTime32 *)pRTime32Redeemed, (char *)pchRecipientAddress, (int)cRecipientAddressSize);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo(void *linux_side, uint32 nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToRedeemInfo((uint32)nPassIndex, (GID_t *)pgidGuestPassID, (PackageId_t *)pnPackageID, (RTime32 *)pRTime32Created, (RTime32 *)pRTime32Expiration, (RTime32 *)pRTime32Sent, (RTime32 *)pRTime32Redeemed);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToRedeemInfo((uint32)nPassIndex, (GID_t *)pgidGuestPassID, (PackageId_t *)pnPackageID, (RTime32 *)pRTime32Created, (RTime32 *)pRTime32Expiration, (RTime32 *)pRTime32Sent, (RTime32 *)pRTime32Redeemed);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(void *linux_side, uint32 nPassIndex, char *pchSenderAddress, int cSenderAddressSize)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToRedeemSenderAddress((uint32)nPassIndex, (char *)pchSenderAddress, (int)cSenderAddressSize);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToRedeemSenderAddress((uint32)nPassIndex, (char *)pchSenderAddress, (int)cSenderAddressSize);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(void *linux_side, uint32 nPassIndex, char *pchSenderName, int cSenderNameSize)
 {
-    return ((ISteamUser*)linux_side)->GetGuestPassToRedeemSenderName((uint32)nPassIndex, (char *)pchSenderName, (int)cSenderNameSize);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetGuestPassToRedeemSenderName((uint32)nPassIndex, (char *)pchSenderName, (int)cSenderNameSize);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_AcknowledgeMessageByGID(void *linux_side, const char *pchMessageGID)
@@ -183,7 +233,9 @@ void cppISteamUser_SteamUser005_AcknowledgeMessageByGID(void *linux_side, const 
 
 bool cppISteamUser_SteamUser005_SetLanguage(void *linux_side, const char *pchLanguage)
 {
-    return ((ISteamUser*)linux_side)->SetLanguage((const char *)pchLanguage);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetLanguage((const char *)pchLanguage);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser005_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)

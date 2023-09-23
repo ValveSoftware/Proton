@@ -14,17 +14,23 @@ extern "C" {
 #include "cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001.h"
 bool cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(void *linux_side)
 {
-    return ((ISteamMusic*)linux_side)->BIsEnabled();
+    bool _ret;
+    _ret = ((ISteamMusic*)linux_side)->BIsEnabled();
+    return (_ret);
 }
 
 bool cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(void *linux_side)
 {
-    return ((ISteamMusic*)linux_side)->BIsPlaying();
+    bool _ret;
+    _ret = ((ISteamMusic*)linux_side)->BIsPlaying();
+    return (_ret);
 }
 
 AudioPlayback_Status cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus(void *linux_side)
 {
-    return ((ISteamMusic*)linux_side)->GetPlaybackStatus();
+    AudioPlayback_Status _ret;
+    _ret = ((ISteamMusic*)linux_side)->GetPlaybackStatus();
+    return (_ret);
 }
 
 void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Play(void *linux_side)
@@ -54,7 +60,9 @@ void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume(void *linux_side, 
 
 float cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(void *linux_side)
 {
-    return ((ISteamMusic*)linux_side)->GetVolume();
+    float _ret;
+    _ret = ((ISteamMusic*)linux_side)->GetVolume();
+    return (_ret);
 }
 
 #ifdef __cplusplus
