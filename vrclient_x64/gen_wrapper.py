@@ -382,6 +382,22 @@ method_overrides_data = [
     ("IVRClientCore", "struct client_core_data", None),
 ]
 
+
+class Class:
+    def __init__(self, sdkver, abi, cursor):
+        self._sdkver = sdkver
+        self._abi = abi
+
+        self._cursor = cursor
+
+        self.spelling = cursor.spelling
+        self.filename = SDK_CLASSES[self.spelling]
+        self.version = all_versions[sdkver][self.spelling]
+
+    def get_children(self):
+        return self._cursor.get_children()
+
+
 def display_sdkver(s):
     if s.startswith("v"):
         s = s[1:]
@@ -737,13 +753,9 @@ def get_capi_thunk_params(method):
     is_4th_float = param_count >= 4 and param_types[3].spelling == "float"
     return "%s, %s, %s" % (param_count, toBOOL(has_float_params), toBOOL(is_4th_float))
 
-def handle_class(sdkver, klass, version):
-    print("handle_class: " + klass.displayname)
-    winname = "win%s" % klass.spelling
-    cppname = "cpp%s_%s" % (klass.spelling, version)
-
-    file_exists = os.path.isfile("vrclient_x64/%s.c" % winname)
-    cfile = open("vrclient_x64/%s.c" % winname, "a")
+def handle_class(klass):
+    file_exists = os.path.isfile(f"vrclient_x64/win{klass.spelling}.c")
+    cfile = open(f"vrclient_x64/win{klass.spelling}.c", "a")
     if not file_exists:
         cfile.write("""/* This file is auto-generated, do not edit. */
 #include <stdarg.h>
@@ -767,6 +779,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 """)
 
+    cppname = f"cpp{klass.spelling}_{klass.version}"
     cpp = open("vrclient_x64/%s.cpp" % cppname, "w")
     cpp.write("#include \"vrclient_private.h\"\n")
     cpp.write("#include \"vrclient_defs.h\"\n")
@@ -784,7 +797,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cpp_h = open("vrclient_x64/%s.h" % cppname, "w")
     cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
-    winclassname = "win%s_%s" % (klass.spelling, version)
+    winclassname = f"win{klass.spelling}_{klass.version}"
     cfile.write("#include \"%s.h\"\n\n" % cppname)
     cfile.write("typedef struct __%s {\n" % winclassname)
     cfile.write("    vtable_ptr *vtable;\n") # make sure to keep this first (flat API depends on it)
@@ -801,7 +814,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             method_name = method_unique_name(child, method_names)
             handle_method_hpp(method_name, cppname, child, cpp_h)
             handle_method_cpp(method_name, klass.spelling, cppname, child, cpp)
-            handle_method_c(method_name, klass.spelling, winclassname, cppname, child, version, cfile)
+            handle_method_c(method_name, klass.spelling, winclassname, cppname, child, klass.version, cfile)
             methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
@@ -871,8 +884,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     destructors.write("extern void destroy_%s_FnTable(void *);\n" % winclassname)
 
     constructors = open("vrclient_x64/win_constructors_table.dat", "a")
-    constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (version, winclassname, winclassname))
-    constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (version, winclassname, winclassname))
+    constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}, &destroy_{winclassname}}},\n")
+    constructors.write(f"    {{\"FnTable:{klass.version}\", &create_{winclassname}_FnTable, &destroy_{winclassname}_FnTable}},\n")
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
@@ -1490,7 +1503,8 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         classes = filter(lambda c: c.kind == CursorKind.CLASS_DECL, classes)
         classes = filter(lambda c: c.spelling in SDK_CLASSES, classes)
         classes = filter(lambda c: c.spelling in versions, classes)
-        classes = {versions[c.spelling]: (sdkver, c) for c in classes}
+        classes = [Class(sdkver, abi, c) for c in classes]
+        classes = {c.version: c for c in classes}
 
         structs = enumerate_structs(build.cursor, vr_only=True)
         struct_kinds = (CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL)
@@ -1507,9 +1521,9 @@ for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
 print('parsing SDKs... 100%')
 
 
-for version, tuple in sorted(all_classes.items()):
-    sdkver, klass = tuple
-    handle_class(sdkver, klass, version)
+for _, klass in sorted(all_classes.items()):
+    sdkver = klass._sdkver
+    handle_class(klass)
 
 
 for sdkver in SDK_VERSIONS:
