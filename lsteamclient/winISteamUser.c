@@ -51,8 +51,10 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser004_RequestLegacyCDKey, 8)
 
 HSteamUser __thiscall winISteamUser_SteamUser004_GetHSteamUser(winISteamUser_SteamUser004 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser004_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser004_LogOn(winISteamUser_SteamUser004 *_this, CSteamID steamID)
@@ -69,39 +71,49 @@ void __thiscall winISteamUser_SteamUser004_LogOff(winISteamUser_SteamUser004 *_t
 
 bool __thiscall winISteamUser_SteamUser004_BLoggedOn(winISteamUser_SteamUser004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser004_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
 ELogonState __thiscall winISteamUser_SteamUser004_GetLogonState(winISteamUser_SteamUser004 *_this)
 {
+    ELogonState _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_GetLogonState(_this->linux_side);
+    _ret = cppISteamUser_SteamUser004_GetLogonState(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_BConnected(winISteamUser_SteamUser004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_BConnected(_this->linux_side);
+    _ret = cppISteamUser_SteamUser004_BConnected(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser004_GetSteamID(winISteamUser_SteamUser004 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser004_GetSteamID(winISteamUser_SteamUser004 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser004_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser004_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_IsVACBanned(winISteamUser_SteamUser004 *_this, int nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_IsVACBanned(_this->linux_side, nGameID);
+    _ret = cppISteamUser_SteamUser004_IsVACBanned(_this->linux_side, nGameID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_RequireShowVACBannedMessage(winISteamUser_SteamUser004 *_this, int nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_RequireShowVACBannedMessage(_this->linux_side, nGameID);
+    _ret = cppISteamUser_SteamUser004_RequireShowVACBannedMessage(_this->linux_side, nGameID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser004_AcknowledgeVACBanning(winISteamUser_SteamUser004 *_this, int nGameID)
@@ -112,8 +124,10 @@ void __thiscall winISteamUser_SteamUser004_AcknowledgeVACBanning(winISteamUser_S
 
 int __thiscall winISteamUser_SteamUser004_NClientGameIDAdd(winISteamUser_SteamUser004 *_this, int nGameID)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_NClientGameIDAdd(_this->linux_side, nGameID);
+    _ret = cppISteamUser_SteamUser004_NClientGameIDAdd(_this->linux_side, nGameID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser004_RemoveClientGame(winISteamUser_SteamUser004 *_this, int nClientGameID)
@@ -142,44 +156,58 @@ void __thiscall winISteamUser_SteamUser004_AddServerNetAddress(winISteamUser_Ste
 
 bool __thiscall winISteamUser_SteamUser004_SetEmail(winISteamUser_SteamUser004 *_this, const char *pchEmail)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_SetEmail(_this->linux_side, pchEmail);
+    _ret = cppISteamUser_SteamUser004_SetEmail(_this->linux_side, pchEmail);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser004_GetSteamGameConnectToken(winISteamUser_SteamUser004 *_this, void *pBlob, int cbMaxBlob)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_GetSteamGameConnectToken(_this->linux_side, pBlob, cbMaxBlob);
+    _ret = cppISteamUser_SteamUser004_GetSteamGameConnectToken(_this->linux_side, pBlob, cbMaxBlob);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_SetRegistryString(winISteamUser_SteamUser004 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    _ret = cppISteamUser_SteamUser004_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_GetRegistryString(winISteamUser_SteamUser004 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    _ret = cppISteamUser_SteamUser004_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_SetRegistryInt(winISteamUser_SteamUser004 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    _ret = cppISteamUser_SteamUser004_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser004_GetRegistryInt(winISteamUser_SteamUser004 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    _ret = cppISteamUser_SteamUser004_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser004_InitiateGameConnection(winISteamUser_SteamUser004 *_this, void *pBlob, int cbMaxBlob, CSteamID steamID, int nGameAppID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, nGameAppID, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser004_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, nGameAppID, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser004_TerminateGameConnection(winISteamUser_SteamUser004 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -196,8 +224,10 @@ void __thiscall winISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination(winIS
 
 bool __thiscall winISteamUser_SteamUser004_IsPrimaryChatDestination(winISteamUser_SteamUser004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser004_IsPrimaryChatDestination(_this->linux_side);
+    _ret = cppISteamUser_SteamUser004_IsPrimaryChatDestination(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser004_RequestLegacyCDKey(winISteamUser_SteamUser004 *_this, uint32 iAppID)
@@ -301,8 +331,10 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetAccountCreationTime, 8)
 
 HSteamUser __thiscall winISteamUser_SteamUser005_GetHSteamUser(winISteamUser_SteamUser005 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_LogOn(winISteamUser_SteamUser005 *_this, CSteamID steamID)
@@ -319,39 +351,49 @@ void __thiscall winISteamUser_SteamUser005_LogOff(winISteamUser_SteamUser005 *_t
 
 bool __thiscall winISteamUser_SteamUser005_BLoggedOn(winISteamUser_SteamUser005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
 ELogonState __thiscall winISteamUser_SteamUser005_GetLogonState(winISteamUser_SteamUser005 *_this)
 {
+    ELogonState _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetLogonState(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_GetLogonState(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_BConnected(winISteamUser_SteamUser005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_BConnected(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_BConnected(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser005_GetSteamID(winISteamUser_SteamUser005 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser005_GetSteamID(winISteamUser_SteamUser005 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser005_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser005_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_IsVACBanned(winISteamUser_SteamUser005 *_this, int nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_IsVACBanned(_this->linux_side, nGameID);
+    _ret = cppISteamUser_SteamUser005_IsVACBanned(_this->linux_side, nGameID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_RequireShowVACBannedMessage(winISteamUser_SteamUser005 *_this, int nAppID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_RequireShowVACBannedMessage(_this->linux_side, nAppID);
+    _ret = cppISteamUser_SteamUser005_RequireShowVACBannedMessage(_this->linux_side, nAppID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_AcknowledgeVACBanning(winISteamUser_SteamUser005 *_this, int nAppID)
@@ -374,38 +416,50 @@ void __thiscall winISteamUser_SteamUser005_AddServerNetAddress(winISteamUser_Ste
 
 bool __thiscall winISteamUser_SteamUser005_SetEmail(winISteamUser_SteamUser005 *_this, const char *pchEmail)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SetEmail(_this->linux_side, pchEmail);
+    _ret = cppISteamUser_SteamUser005_SetEmail(_this->linux_side, pchEmail);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_SetRegistryString(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    _ret = cppISteamUser_SteamUser005_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetRegistryString(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    _ret = cppISteamUser_SteamUser005_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_SetRegistryInt(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    _ret = cppISteamUser_SteamUser005_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetRegistryInt(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    _ret = cppISteamUser_SteamUser005_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser005_InitiateGameConnection(winISteamUser_SteamUser005 *_this, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser005_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_TerminateGameConnection(winISteamUser_SteamUser005 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -422,8 +476,10 @@ void __thiscall winISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination(winIS
 
 bool __thiscall winISteamUser_SteamUser005_IsPrimaryChatDestination(winISteamUser_SteamUser005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_IsPrimaryChatDestination(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_IsPrimaryChatDestination(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_RequestLegacyCDKey(winISteamUser_SteamUser005 *_this, uint32 nAppID)
@@ -434,68 +490,90 @@ void __thiscall winISteamUser_SteamUser005_RequestLegacyCDKey(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(winISteamUser_SteamUser005 *_this, const char *pchEmailAccount, GID_t gidGuestPassID, bool bResending)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SendGuestPassByEmail(_this->linux_side, pchEmailAccount, gidGuestPassID, bResending);
+    _ret = cppISteamUser_SteamUser005_SendGuestPassByEmail(_this->linux_side, pchEmailAccount, gidGuestPassID, bResending);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_SendGuestPassByAccountID(winISteamUser_SteamUser005 *_this, uint32 uAccountID, GID_t gidGuestPassID, bool bResending)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SendGuestPassByAccountID(_this->linux_side, uAccountID, gidGuestPassID, bResending);
+    _ret = cppISteamUser_SteamUser005_SendGuestPassByAccountID(_this->linux_side, uAccountID, gidGuestPassID, bResending);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_AckGuestPass(winISteamUser_SteamUser005 *_this, const char *pchGuestPassCode)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_AckGuestPass(_this->linux_side, pchGuestPassCode);
+    _ret = cppISteamUser_SteamUser005_AckGuestPass(_this->linux_side, pchGuestPassCode);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_RedeemGuestPass(winISteamUser_SteamUser005 *_this, const char *pchGuestPassCode)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_RedeemGuestPass(_this->linux_side, pchGuestPassCode);
+    _ret = cppISteamUser_SteamUser005_RedeemGuestPass(_this->linux_side, pchGuestPassCode);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveCount(winISteamUser_SteamUser005 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToGiveCount(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToGiveCount(_this->linux_side);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemCount(winISteamUser_SteamUser005 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToRedeemCount(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToRedeemCount(_this->linux_side);
+    return _ret;
 }
 
 RTime32 __thiscall winISteamUser_SteamUser005_GetGuestPassLastUpdateTime(winISteamUser_SteamUser005 *_this)
 {
+    RTime32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime(_this->linux_side);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveInfo(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed, char *pchRecipientAddress, int cRecipientAddressSize)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToGiveInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed, pchRecipientAddress, cRecipientAddressSize);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToGiveInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed, pchRecipientAddress, cRecipientAddressSize);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemInfo(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, GID_t *pgidGuestPassID, PackageId_t *pnPackageID, RTime32 *pRTime32Created, RTime32 *pRTime32Expiration, RTime32 *pRTime32Sent, RTime32 *pRTime32Redeemed)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, char *pchSenderAddress, int cSenderAddressSize)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(_this->linux_side, nPassIndex, pchSenderAddress, cSenderAddressSize);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(_this->linux_side, nPassIndex, pchSenderAddress, cSenderAddressSize);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, char *pchSenderName, int cSenderNameSize)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(_this->linux_side, nPassIndex, pchSenderName, cSenderNameSize);
+    _ret = cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(_this->linux_side, nPassIndex, pchSenderName, cSenderNameSize);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_AcknowledgeMessageByGID(winISteamUser_SteamUser005 *_this, const char *pchMessageGID)
@@ -506,8 +584,10 @@ void __thiscall winISteamUser_SteamUser005_AcknowledgeMessageByGID(winISteamUser
 
 bool __thiscall winISteamUser_SteamUser005_SetLanguage(winISteamUser_SteamUser005 *_this, const char *pchLanguage)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser005_SetLanguage(_this->linux_side, pchLanguage);
+    _ret = cppISteamUser_SteamUser005_SetLanguage(_this->linux_side, pchLanguage);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser005_TrackAppUsageEvent(winISteamUser_SteamUser005 *_this, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)
@@ -615,8 +695,10 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser006_TrackAppUsageEvent, 20)
 
 HSteamUser __thiscall winISteamUser_SteamUser006_GetHSteamUser(winISteamUser_SteamUser006 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser006_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser006_LogOn(winISteamUser_SteamUser006 *_this, CSteamID steamID)
@@ -633,45 +715,57 @@ void __thiscall winISteamUser_SteamUser006_LogOff(winISteamUser_SteamUser006 *_t
 
 bool __thiscall winISteamUser_SteamUser006_BLoggedOn(winISteamUser_SteamUser006 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser006_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser006_GetSteamID(winISteamUser_SteamUser006 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser006_GetSteamID(winISteamUser_SteamUser006 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser006_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser006_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser006_SetRegistryString(winISteamUser_SteamUser006 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    _ret = cppISteamUser_SteamUser006_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser006_GetRegistryString(winISteamUser_SteamUser006 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    _ret = cppISteamUser_SteamUser006_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser006_SetRegistryInt(winISteamUser_SteamUser006 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    _ret = cppISteamUser_SteamUser006_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser006_GetRegistryInt(winISteamUser_SteamUser006 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    _ret = cppISteamUser_SteamUser006_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser006_InitiateGameConnection(winISteamUser_SteamUser006 *_this, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser006_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser006_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser006_TerminateGameConnection(winISteamUser_SteamUser006 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -741,8 +835,10 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser007_RefreshSteam2Login, 4)
 
 HSteamUser __thiscall winISteamUser_SteamUser007_GetHSteamUser(winISteamUser_SteamUser007 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser007_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser007_LogOn(winISteamUser_SteamUser007 *_this, CSteamID steamID)
@@ -759,45 +855,57 @@ void __thiscall winISteamUser_SteamUser007_LogOff(winISteamUser_SteamUser007 *_t
 
 bool __thiscall winISteamUser_SteamUser007_BLoggedOn(winISteamUser_SteamUser007 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser007_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser007_GetSteamID(winISteamUser_SteamUser007 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser007_GetSteamID(winISteamUser_SteamUser007 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser007_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser007_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser007_SetRegistryString(winISteamUser_SteamUser007 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    _ret = cppISteamUser_SteamUser007_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser007_GetRegistryString(winISteamUser_SteamUser007 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    _ret = cppISteamUser_SteamUser007_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser007_SetRegistryInt(winISteamUser_SteamUser007 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    _ret = cppISteamUser_SteamUser007_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser007_GetRegistryInt(winISteamUser_SteamUser007 *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    _ret = cppISteamUser_SteamUser007_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser007_InitiateGameConnection(winISteamUser_SteamUser007 *_this, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void *pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser007_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure, pvSteam2GetEncryptionKey, cbSteam2GetEncryptionKey);
+    _ret = cppISteamUser_SteamUser007_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure, pvSteam2GetEncryptionKey, cbSteam2GetEncryptionKey);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser007_TerminateGameConnection(winISteamUser_SteamUser007 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -868,27 +976,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser008_RefreshSteam2Login, 4)
 
 HSteamUser __thiscall winISteamUser_SteamUser008_GetHSteamUser(winISteamUser_SteamUser008 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser008_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser008_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser008_BLoggedOn(winISteamUser_SteamUser008 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser008_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser008_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser008_GetSteamID(winISteamUser_SteamUser008 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser008_GetSteamID(winISteamUser_SteamUser008 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser008_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser008_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser008_InitiateGameConnection(winISteamUser_SteamUser008 *_this, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void *pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser008_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure, pvSteam2GetEncryptionKey, cbSteam2GetEncryptionKey);
+    _ret = cppISteamUser_SteamUser008_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure, pvSteam2GetEncryptionKey, cbSteam2GetEncryptionKey);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser008_TerminateGameConnection(winISteamUser_SteamUser008 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -953,27 +1067,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser009_RefreshSteam2Login, 4)
 
 HSteamUser __thiscall winISteamUser_SteamUser009_GetHSteamUser(winISteamUser_SteamUser009 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser009_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser009_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser009_BLoggedOn(winISteamUser_SteamUser009 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser009_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser009_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser009_GetSteamID(winISteamUser_SteamUser009 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser009_GetSteamID(winISteamUser_SteamUser009 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser009_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser009_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser009_InitiateGameConnection(winISteamUser_SteamUser009 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser009_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, gameID, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser009_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, gameID, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser009_TerminateGameConnection(winISteamUser_SteamUser009 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1037,27 +1157,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser010_TrackAppUsageEvent, 20)
 
 HSteamUser __thiscall winISteamUser_SteamUser010_GetHSteamUser(winISteamUser_SteamUser010 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser010_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser010_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser010_BLoggedOn(winISteamUser_SteamUser010 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser010_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser010_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser010_GetSteamID(winISteamUser_SteamUser010 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser010_GetSteamID(winISteamUser_SteamUser010 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser010_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser010_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser010_InitiateGameConnection(winISteamUser_SteamUser010 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser010_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser010_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser010_TerminateGameConnection(winISteamUser_SteamUser010 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1119,27 +1245,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_DecompressVoice, 24)
 
 HSteamUser __thiscall winISteamUser_SteamUser011_GetHSteamUser(winISteamUser_SteamUser011 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser011_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser011_BLoggedOn(winISteamUser_SteamUser011 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser011_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser011_GetSteamID(winISteamUser_SteamUser011 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser011_GetSteamID(winISteamUser_SteamUser011 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser011_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser011_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser011_InitiateGameConnection(winISteamUser_SteamUser011 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser011_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser011_TerminateGameConnection(winISteamUser_SteamUser011 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1156,11 +1288,11 @@ void __thiscall winISteamUser_SteamUser011_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser011_GetUserDataFolder(winISteamUser_SteamUser011 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser011_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser011_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser011_StartVoiceRecording(winISteamUser_SteamUser011 *_this)
@@ -1177,14 +1309,18 @@ void __thiscall winISteamUser_SteamUser011_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser011_GetCompressedVoice(winISteamUser_SteamUser011 *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_GetCompressedVoice(_this->linux_side, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser011_GetCompressedVoice(_this->linux_side, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser011_DecompressVoice(winISteamUser_SteamUser011 *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser011_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser011_vtable;
@@ -1244,27 +1380,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_UserHasLicenseForApp, 16)
 
 HSteamUser __thiscall winISteamUser_SteamUser012_GetHSteamUser(winISteamUser_SteamUser012 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser012_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser012_BLoggedOn(winISteamUser_SteamUser012 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser012_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser012_GetSteamID(winISteamUser_SteamUser012 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser012_GetSteamID(winISteamUser_SteamUser012 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser012_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser012_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser012_InitiateGameConnection(winISteamUser_SteamUser012 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser012_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser012_TerminateGameConnection(winISteamUser_SteamUser012 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1281,11 +1423,11 @@ void __thiscall winISteamUser_SteamUser012_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser012_GetUserDataFolder(winISteamUser_SteamUser012 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser012_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser012_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser012_StartVoiceRecording(winISteamUser_SteamUser012 *_this)
@@ -1302,26 +1444,34 @@ void __thiscall winISteamUser_SteamUser012_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser012_GetCompressedVoice(winISteamUser_SteamUser012 *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_GetCompressedVoice(_this->linux_side, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser012_GetCompressedVoice(_this->linux_side, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser012_DecompressVoice(winISteamUser_SteamUser012 *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser012_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser012_GetAuthSessionTicket(winISteamUser_SteamUser012 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser012_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser012_BeginAuthSession(winISteamUser_SteamUser012 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser012_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser012_EndAuthSession(winISteamUser_SteamUser012 *_this, CSteamID steamID)
@@ -1338,8 +1488,10 @@ void __thiscall winISteamUser_SteamUser012_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser012_UserHasLicenseForApp(winISteamUser_SteamUser012 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser012_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser012_vtable;
@@ -1405,27 +1557,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_UserHasLicenseForApp, 16)
 
 HSteamUser __thiscall winISteamUser_SteamUser013_GetHSteamUser(winISteamUser_SteamUser013 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser013_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser013_BLoggedOn(winISteamUser_SteamUser013 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser013_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser013_GetSteamID(winISteamUser_SteamUser013 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser013_GetSteamID(winISteamUser_SteamUser013 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser013_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser013_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser013_InitiateGameConnection(winISteamUser_SteamUser013 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser013_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser013_TerminateGameConnection(winISteamUser_SteamUser013 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1442,11 +1600,11 @@ void __thiscall winISteamUser_SteamUser013_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser013_GetUserDataFolder(winISteamUser_SteamUser013 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser013_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser013_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser013_StartVoiceRecording(winISteamUser_SteamUser013 *_this)
@@ -1463,32 +1621,42 @@ void __thiscall winISteamUser_SteamUser013_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser013_GetAvailableVoice(winISteamUser_SteamUser013 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    _ret = cppISteamUser_SteamUser013_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser013_GetVoice(winISteamUser_SteamUser013 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    _ret = cppISteamUser_SteamUser013_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser013_DecompressVoice(winISteamUser_SteamUser013 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser013_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser013_GetAuthSessionTicket(winISteamUser_SteamUser013 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser013_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser013_BeginAuthSession(winISteamUser_SteamUser013 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser013_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser013_EndAuthSession(winISteamUser_SteamUser013 *_this, CSteamID steamID)
@@ -1505,8 +1673,10 @@ void __thiscall winISteamUser_SteamUser013_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser013_UserHasLicenseForApp(winISteamUser_SteamUser013 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser013_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser013_vtable;
@@ -1577,27 +1747,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_GetEncryptedAppTicket, 16)
 
 HSteamUser __thiscall winISteamUser_SteamUser014_GetHSteamUser(winISteamUser_SteamUser014 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser014_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser014_BLoggedOn(winISteamUser_SteamUser014 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser014_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser014_GetSteamID(winISteamUser_SteamUser014 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser014_GetSteamID(winISteamUser_SteamUser014 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser014_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser014_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser014_InitiateGameConnection(winISteamUser_SteamUser014 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser014_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser014_TerminateGameConnection(winISteamUser_SteamUser014 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1614,11 +1790,11 @@ void __thiscall winISteamUser_SteamUser014_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser014_GetUserDataFolder(winISteamUser_SteamUser014 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser014_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser014_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser014_StartVoiceRecording(winISteamUser_SteamUser014 *_this)
@@ -1635,32 +1811,42 @@ void __thiscall winISteamUser_SteamUser014_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser014_GetAvailableVoice(winISteamUser_SteamUser014 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    _ret = cppISteamUser_SteamUser014_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser014_GetVoice(winISteamUser_SteamUser014 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    _ret = cppISteamUser_SteamUser014_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser014_DecompressVoice(winISteamUser_SteamUser014 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    _ret = cppISteamUser_SteamUser014_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser014_GetAuthSessionTicket(winISteamUser_SteamUser014 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser014_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser014_BeginAuthSession(winISteamUser_SteamUser014 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser014_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser014_EndAuthSession(winISteamUser_SteamUser014 *_this, CSteamID steamID)
@@ -1677,14 +1863,18 @@ void __thiscall winISteamUser_SteamUser014_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser014_UserHasLicenseForApp(winISteamUser_SteamUser014 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser014_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser014_BIsBehindNAT(winISteamUser_SteamUser014 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser014_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser014_AdvertiseGame(winISteamUser_SteamUser014 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -1695,14 +1885,18 @@ void __thiscall winISteamUser_SteamUser014_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser014_RequestEncryptedAppTicket(winISteamUser_SteamUser014 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser014_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser014_GetEncryptedAppTicket(winISteamUser_SteamUser014 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser014_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser014_vtable;
@@ -1778,27 +1972,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetEncryptedAppTicket, 16)
 
 HSteamUser __thiscall winISteamUser_SteamUser015_GetHSteamUser(winISteamUser_SteamUser015 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser015_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser015_BLoggedOn(winISteamUser_SteamUser015 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser015_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser015_GetSteamID(winISteamUser_SteamUser015 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser015_GetSteamID(winISteamUser_SteamUser015 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser015_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser015_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser015_InitiateGameConnection(winISteamUser_SteamUser015 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser015_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser015_TerminateGameConnection(winISteamUser_SteamUser015 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -1815,11 +2015,11 @@ void __thiscall winISteamUser_SteamUser015_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser015_GetUserDataFolder(winISteamUser_SteamUser015 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser015_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser015_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser015_StartVoiceRecording(winISteamUser_SteamUser015 *_this)
@@ -1836,38 +2036,50 @@ void __thiscall winISteamUser_SteamUser015_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser015_GetAvailableVoice(winISteamUser_SteamUser015 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    _ret = cppISteamUser_SteamUser015_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser015_GetVoice(winISteamUser_SteamUser015 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    _ret = cppISteamUser_SteamUser015_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser015_DecompressVoice(winISteamUser_SteamUser015 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser015_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser015_GetVoiceOptimalSampleRate(winISteamUser_SteamUser015 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser015_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser015_GetAuthSessionTicket(winISteamUser_SteamUser015 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser015_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser015_BeginAuthSession(winISteamUser_SteamUser015 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser015_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser015_EndAuthSession(winISteamUser_SteamUser015 *_this, CSteamID steamID)
@@ -1884,14 +2096,18 @@ void __thiscall winISteamUser_SteamUser015_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser015_UserHasLicenseForApp(winISteamUser_SteamUser015 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser015_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser015_BIsBehindNAT(winISteamUser_SteamUser015 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser015_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser015_AdvertiseGame(winISteamUser_SteamUser015 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -1902,14 +2118,18 @@ void __thiscall winISteamUser_SteamUser015_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser015_RequestEncryptedAppTicket(winISteamUser_SteamUser015 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser015_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser015_GetEncryptedAppTicket(winISteamUser_SteamUser015 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser015_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser015_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser015_vtable;
@@ -1986,27 +2206,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_GetEncryptedAppTicket, 16)
 
 HSteamUser __thiscall winISteamUser_SteamUser016_GetHSteamUser(winISteamUser_SteamUser016 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser016_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser016_BLoggedOn(winISteamUser_SteamUser016 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser016_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser016_GetSteamID(winISteamUser_SteamUser016 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser016_GetSteamID(winISteamUser_SteamUser016 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser016_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser016_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser016_InitiateGameConnection(winISteamUser_SteamUser016 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser016_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser016_TerminateGameConnection(winISteamUser_SteamUser016 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -2023,11 +2249,11 @@ void __thiscall winISteamUser_SteamUser016_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser016_GetUserDataFolder(winISteamUser_SteamUser016 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser016_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser016_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser016_StartVoiceRecording(winISteamUser_SteamUser016 *_this)
@@ -2044,38 +2270,50 @@ void __thiscall winISteamUser_SteamUser016_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser016_GetAvailableVoice(winISteamUser_SteamUser016 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser016_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser016_GetVoice(winISteamUser_SteamUser016 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser016_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser016_DecompressVoice(winISteamUser_SteamUser016 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser016_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser016_GetVoiceOptimalSampleRate(winISteamUser_SteamUser016 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser016_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser016_GetAuthSessionTicket(winISteamUser_SteamUser016 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser016_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser016_BeginAuthSession(winISteamUser_SteamUser016 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser016_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser016_EndAuthSession(winISteamUser_SteamUser016 *_this, CSteamID steamID)
@@ -2092,14 +2330,18 @@ void __thiscall winISteamUser_SteamUser016_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser016_UserHasLicenseForApp(winISteamUser_SteamUser016 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser016_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser016_BIsBehindNAT(winISteamUser_SteamUser016 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser016_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser016_AdvertiseGame(winISteamUser_SteamUser016 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -2110,14 +2352,18 @@ void __thiscall winISteamUser_SteamUser016_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser016_RequestEncryptedAppTicket(winISteamUser_SteamUser016 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser016_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser016_GetEncryptedAppTicket(winISteamUser_SteamUser016 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser016_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser016_vtable;
@@ -2196,27 +2442,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_GetPlayerSteamLevel, 4)
 
 HSteamUser __thiscall winISteamUser_SteamUser017_GetHSteamUser(winISteamUser_SteamUser017 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser017_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser017_BLoggedOn(winISteamUser_SteamUser017 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser017_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser017_GetSteamID(winISteamUser_SteamUser017 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser017_GetSteamID(winISteamUser_SteamUser017 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser017_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser017_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser017_InitiateGameConnection(winISteamUser_SteamUser017 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser017_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser017_TerminateGameConnection(winISteamUser_SteamUser017 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -2233,11 +2485,11 @@ void __thiscall winISteamUser_SteamUser017_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser017_GetUserDataFolder(winISteamUser_SteamUser017 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser017_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser017_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser017_StartVoiceRecording(winISteamUser_SteamUser017 *_this)
@@ -2254,38 +2506,50 @@ void __thiscall winISteamUser_SteamUser017_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser017_GetAvailableVoice(winISteamUser_SteamUser017 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser017_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser017_GetVoice(winISteamUser_SteamUser017 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser017_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser017_DecompressVoice(winISteamUser_SteamUser017 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser017_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser017_GetVoiceOptimalSampleRate(winISteamUser_SteamUser017 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser017_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser017_GetAuthSessionTicket(winISteamUser_SteamUser017 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser017_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser017_BeginAuthSession(winISteamUser_SteamUser017 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser017_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser017_EndAuthSession(winISteamUser_SteamUser017 *_this, CSteamID steamID)
@@ -2302,14 +2566,18 @@ void __thiscall winISteamUser_SteamUser017_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser017_UserHasLicenseForApp(winISteamUser_SteamUser017 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser017_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser017_BIsBehindNAT(winISteamUser_SteamUser017 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser017_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser017_AdvertiseGame(winISteamUser_SteamUser017 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -2320,26 +2588,34 @@ void __thiscall winISteamUser_SteamUser017_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser017_RequestEncryptedAppTicket(winISteamUser_SteamUser017 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser017_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser017_GetEncryptedAppTicket(winISteamUser_SteamUser017 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser017_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser017_GetGameBadgeLevel(winISteamUser_SteamUser017 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser017_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser017_GetPlayerSteamLevel(winISteamUser_SteamUser017 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser017_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser017_vtable;
@@ -2421,27 +2697,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_RequestStoreAuthURL, 8)
 
 HSteamUser __thiscall winISteamUser_SteamUser018_GetHSteamUser(winISteamUser_SteamUser018 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser018_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser018_BLoggedOn(winISteamUser_SteamUser018 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser018_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser018_GetSteamID(winISteamUser_SteamUser018 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser018_GetSteamID(winISteamUser_SteamUser018 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser018_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser018_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser018_InitiateGameConnection(winISteamUser_SteamUser018 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser018_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser018_TerminateGameConnection(winISteamUser_SteamUser018 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -2458,11 +2740,11 @@ void __thiscall winISteamUser_SteamUser018_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser018_GetUserDataFolder(winISteamUser_SteamUser018 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser018_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser018_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser018_StartVoiceRecording(winISteamUser_SteamUser018 *_this)
@@ -2479,38 +2761,50 @@ void __thiscall winISteamUser_SteamUser018_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser018_GetAvailableVoice(winISteamUser_SteamUser018 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser018_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser018_GetVoice(winISteamUser_SteamUser018 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser018_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten, nUncompressedVoiceDesiredSampleRate);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser018_DecompressVoice(winISteamUser_SteamUser018 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser018_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser018_GetVoiceOptimalSampleRate(winISteamUser_SteamUser018 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser018_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser018_GetAuthSessionTicket(winISteamUser_SteamUser018 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser018_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser018_BeginAuthSession(winISteamUser_SteamUser018 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser018_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser018_EndAuthSession(winISteamUser_SteamUser018 *_this, CSteamID steamID)
@@ -2527,14 +2821,18 @@ void __thiscall winISteamUser_SteamUser018_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser018_UserHasLicenseForApp(winISteamUser_SteamUser018 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser018_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser018_BIsBehindNAT(winISteamUser_SteamUser018 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser018_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser018_AdvertiseGame(winISteamUser_SteamUser018 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -2545,32 +2843,42 @@ void __thiscall winISteamUser_SteamUser018_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser018_RequestEncryptedAppTicket(winISteamUser_SteamUser018 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser018_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser018_GetEncryptedAppTicket(winISteamUser_SteamUser018 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser018_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser018_GetGameBadgeLevel(winISteamUser_SteamUser018 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser018_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser018_GetPlayerSteamLevel(winISteamUser_SteamUser018 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser018_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser018_RequestStoreAuthURL(winISteamUser_SteamUser018 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser018_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser018_vtable;
@@ -2657,27 +2965,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_BIsPhoneRequiringVerification
 
 HSteamUser __thiscall winISteamUser_SteamUser019_GetHSteamUser(winISteamUser_SteamUser019 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BLoggedOn(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser019_GetSteamID(winISteamUser_SteamUser019 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser019_GetSteamID(winISteamUser_SteamUser019 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser019_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser019_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser019_InitiateGameConnection(winISteamUser_SteamUser019 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser019_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser019_TerminateGameConnection(winISteamUser_SteamUser019 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -2694,11 +3008,11 @@ void __thiscall winISteamUser_SteamUser019_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser019_GetUserDataFolder(winISteamUser_SteamUser019 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser019_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser019_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser019_StartVoiceRecording(winISteamUser_SteamUser019 *_this)
@@ -2715,38 +3029,50 @@ void __thiscall winISteamUser_SteamUser019_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser019_GetAvailableVoice(winISteamUser_SteamUser019 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser019_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser019_GetVoice(winISteamUser_SteamUser019 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser019_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser019_DecompressVoice(winISteamUser_SteamUser019 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser019_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser019_GetVoiceOptimalSampleRate(winISteamUser_SteamUser019 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser019_GetAuthSessionTicket(winISteamUser_SteamUser019 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser019_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser019_BeginAuthSession(winISteamUser_SteamUser019 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser019_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser019_EndAuthSession(winISteamUser_SteamUser019 *_this, CSteamID steamID)
@@ -2763,14 +3089,18 @@ void __thiscall winISteamUser_SteamUser019_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser019_UserHasLicenseForApp(winISteamUser_SteamUser019 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser019_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BIsBehindNAT(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser019_AdvertiseGame(winISteamUser_SteamUser019 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -2781,56 +3111,74 @@ void __thiscall winISteamUser_SteamUser019_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser019_RequestEncryptedAppTicket(winISteamUser_SteamUser019 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser019_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_GetEncryptedAppTicket(winISteamUser_SteamUser019 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser019_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser019_GetGameBadgeLevel(winISteamUser_SteamUser019 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser019_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser019_GetPlayerSteamLevel(winISteamUser_SteamUser019 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser019_RequestStoreAuthURL(winISteamUser_SteamUser019 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser019_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BIsPhoneVerified(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BIsPhoneVerified(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BIsPhoneVerified(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BIsTwoFactorEnabled(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BIsTwoFactorEnabled(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BIsTwoFactorEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BIsPhoneIdentifying(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BIsPhoneIdentifying(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BIsPhoneIdentifying(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser019_BIsPhoneRequiringVerification(winISteamUser_SteamUser019 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_BIsPhoneRequiringVerification(_this->linux_side);
+    _ret = cppISteamUser_SteamUser019_BIsPhoneRequiringVerification(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser019_vtable;
@@ -2923,27 +3271,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser020_GetDurationControl, 4)
 
 HSteamUser __thiscall winISteamUser_SteamUser020_GetHSteamUser(winISteamUser_SteamUser020 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BLoggedOn(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser020_GetSteamID(winISteamUser_SteamUser020 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser020_GetSteamID(winISteamUser_SteamUser020 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser020_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser020_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser020_InitiateGameConnection(winISteamUser_SteamUser020 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser020_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser020_TerminateGameConnection(winISteamUser_SteamUser020 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -2960,11 +3314,11 @@ void __thiscall winISteamUser_SteamUser020_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser020_GetUserDataFolder(winISteamUser_SteamUser020 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser020_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser020_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser020_StartVoiceRecording(winISteamUser_SteamUser020 *_this)
@@ -2981,38 +3335,50 @@ void __thiscall winISteamUser_SteamUser020_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser020_GetAvailableVoice(winISteamUser_SteamUser020 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser020_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser020_GetVoice(winISteamUser_SteamUser020 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser020_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser020_DecompressVoice(winISteamUser_SteamUser020 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser020_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser020_GetVoiceOptimalSampleRate(winISteamUser_SteamUser020 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser020_GetAuthSessionTicket(winISteamUser_SteamUser020 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser020_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser020_BeginAuthSession(winISteamUser_SteamUser020 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser020_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser020_EndAuthSession(winISteamUser_SteamUser020 *_this, CSteamID steamID)
@@ -3029,14 +3395,18 @@ void __thiscall winISteamUser_SteamUser020_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser020_UserHasLicenseForApp(winISteamUser_SteamUser020 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser020_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BIsBehindNAT(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser020_AdvertiseGame(winISteamUser_SteamUser020 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -3047,68 +3417,90 @@ void __thiscall winISteamUser_SteamUser020_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser020_RequestEncryptedAppTicket(winISteamUser_SteamUser020 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser020_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_GetEncryptedAppTicket(winISteamUser_SteamUser020 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser020_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser020_GetGameBadgeLevel(winISteamUser_SteamUser020 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser020_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser020_GetPlayerSteamLevel(winISteamUser_SteamUser020 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser020_RequestStoreAuthURL(winISteamUser_SteamUser020 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser020_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BIsPhoneVerified(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BIsPhoneVerified(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BIsPhoneVerified(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BIsTwoFactorEnabled(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BIsTwoFactorEnabled(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BIsTwoFactorEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BIsPhoneIdentifying(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BIsPhoneIdentifying(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BIsPhoneIdentifying(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser020_BIsPhoneRequiringVerification(winISteamUser_SteamUser020 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_BIsPhoneRequiringVerification(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_BIsPhoneRequiringVerification(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetMarketEligibility(winISteamUser_SteamUser020 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetMarketEligibility(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_GetMarketEligibility(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetDurationControl(winISteamUser_SteamUser020 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser020_GetDurationControl(_this->linux_side);
+    _ret = cppISteamUser_SteamUser020_GetDurationControl(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser020_vtable;
@@ -3204,27 +3596,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_BSetDurationControlOnlineStat
 
 HSteamUser __thiscall winISteamUser_SteamUser021_GetHSteamUser(winISteamUser_SteamUser021 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BLoggedOn(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser021_GetSteamID(winISteamUser_SteamUser021 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser021_GetSteamID(winISteamUser_SteamUser021 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser021_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser021_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(winISteamUser_SteamUser021 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED(winISteamUser_SteamUser021 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -3241,11 +3639,11 @@ void __thiscall winISteamUser_SteamUser021_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser021_GetUserDataFolder(winISteamUser_SteamUser021 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser021_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser021_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser021_StartVoiceRecording(winISteamUser_SteamUser021 *_this)
@@ -3262,38 +3660,50 @@ void __thiscall winISteamUser_SteamUser021_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser021_GetAvailableVoice(winISteamUser_SteamUser021 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser021_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser021_GetVoice(winISteamUser_SteamUser021 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser021_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser021_DecompressVoice(winISteamUser_SteamUser021 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser021_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser021_GetVoiceOptimalSampleRate(winISteamUser_SteamUser021 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser021_GetAuthSessionTicket(winISteamUser_SteamUser021 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser021_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser021_BeginAuthSession(winISteamUser_SteamUser021 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser021_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser021_EndAuthSession(winISteamUser_SteamUser021 *_this, CSteamID steamID)
@@ -3310,14 +3720,18 @@ void __thiscall winISteamUser_SteamUser021_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser021_UserHasLicenseForApp(winISteamUser_SteamUser021 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser021_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BIsBehindNAT(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser021_AdvertiseGame(winISteamUser_SteamUser021 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -3328,74 +3742,98 @@ void __thiscall winISteamUser_SteamUser021_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser021_RequestEncryptedAppTicket(winISteamUser_SteamUser021 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser021_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_GetEncryptedAppTicket(winISteamUser_SteamUser021 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser021_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser021_GetGameBadgeLevel(winISteamUser_SteamUser021 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser021_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser021_GetPlayerSteamLevel(winISteamUser_SteamUser021 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser021_RequestStoreAuthURL(winISteamUser_SteamUser021 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser021_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BIsPhoneVerified(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BIsPhoneVerified(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BIsPhoneVerified(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BIsTwoFactorEnabled(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BIsTwoFactorEnabled(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BIsTwoFactorEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BIsPhoneIdentifying(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BIsPhoneIdentifying(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BIsPhoneIdentifying(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BIsPhoneRequiringVerification(winISteamUser_SteamUser021 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BIsPhoneRequiringVerification(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_BIsPhoneRequiringVerification(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetMarketEligibility(winISteamUser_SteamUser021 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetMarketEligibility(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_GetMarketEligibility(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetDurationControl(winISteamUser_SteamUser021 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_GetDurationControl(_this->linux_side);
+    _ret = cppISteamUser_SteamUser021_GetDurationControl(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser021_BSetDurationControlOnlineState(winISteamUser_SteamUser021 *_this, EDurationControlOnlineState eNewState)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    _ret = cppISteamUser_SteamUser021_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser021_vtable;
@@ -3492,27 +3930,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser022_BSetDurationControlOnlineStat
 
 HSteamUser __thiscall winISteamUser_SteamUser022_GetHSteamUser(winISteamUser_SteamUser022 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BLoggedOn(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser022_GetSteamID(winISteamUser_SteamUser022 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser022_GetSteamID(winISteamUser_SteamUser022 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser022_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser022_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser022_InitiateGameConnection_DEPRECATED(winISteamUser_SteamUser022 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser022_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser022_TerminateGameConnection_DEPRECATED(winISteamUser_SteamUser022 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -3529,11 +3973,11 @@ void __thiscall winISteamUser_SteamUser022_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser022_GetUserDataFolder(winISteamUser_SteamUser022 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser022_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser022_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser022_StartVoiceRecording(winISteamUser_SteamUser022 *_this)
@@ -3550,38 +3994,50 @@ void __thiscall winISteamUser_SteamUser022_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser022_GetAvailableVoice(winISteamUser_SteamUser022 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser022_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser022_GetVoice(winISteamUser_SteamUser022 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser022_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser022_DecompressVoice(winISteamUser_SteamUser022 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser022_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser022_GetVoiceOptimalSampleRate(winISteamUser_SteamUser022 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(winISteamUser_SteamUser022 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket, pSteamNetworkingIdentity);
+    _ret = cppISteamUser_SteamUser022_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket, pSteamNetworkingIdentity);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser022_BeginAuthSession(winISteamUser_SteamUser022 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser022_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser022_EndAuthSession(winISteamUser_SteamUser022 *_this, CSteamID steamID)
@@ -3598,14 +4054,18 @@ void __thiscall winISteamUser_SteamUser022_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser022_UserHasLicenseForApp(winISteamUser_SteamUser022 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser022_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BIsBehindNAT(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser022_AdvertiseGame(winISteamUser_SteamUser022 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -3616,74 +4076,98 @@ void __thiscall winISteamUser_SteamUser022_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser022_RequestEncryptedAppTicket(winISteamUser_SteamUser022 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser022_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_GetEncryptedAppTicket(winISteamUser_SteamUser022 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser022_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser022_GetGameBadgeLevel(winISteamUser_SteamUser022 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser022_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser022_GetPlayerSteamLevel(winISteamUser_SteamUser022 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser022_RequestStoreAuthURL(winISteamUser_SteamUser022 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser022_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BIsPhoneVerified(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BIsPhoneVerified(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BIsPhoneVerified(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BIsTwoFactorEnabled(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BIsTwoFactorEnabled(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BIsTwoFactorEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BIsPhoneIdentifying(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BIsPhoneIdentifying(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BIsPhoneIdentifying(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BIsPhoneRequiringVerification(winISteamUser_SteamUser022 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BIsPhoneRequiringVerification(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_BIsPhoneRequiringVerification(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetMarketEligibility(winISteamUser_SteamUser022 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetMarketEligibility(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_GetMarketEligibility(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetDurationControl(winISteamUser_SteamUser022 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_GetDurationControl(_this->linux_side);
+    _ret = cppISteamUser_SteamUser022_GetDurationControl(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser022_BSetDurationControlOnlineState(winISteamUser_SteamUser022 *_this, EDurationControlOnlineState eNewState)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser022_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    _ret = cppISteamUser_SteamUser022_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser022_vtable;
@@ -3781,27 +4265,33 @@ DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser023_BSetDurationControlOnlineStat
 
 HSteamUser __thiscall winISteamUser_SteamUser023_GetHSteamUser(winISteamUser_SteamUser023 *_this)
 {
+    HSteamUser _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetHSteamUser(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_GetHSteamUser(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BLoggedOn(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BLoggedOn(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BLoggedOn(_this->linux_side);
+    return _ret;
 }
 
-CSteamID *__thiscall winISteamUser_SteamUser023_GetSteamID(winISteamUser_SteamUser023 *_this, CSteamID *_r)
+CSteamID *__thiscall winISteamUser_SteamUser023_GetSteamID(winISteamUser_SteamUser023 *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_r = cppISteamUser_SteamUser023_GetSteamID(_this->linux_side);
-    return _r;
+    *_ret = cppISteamUser_SteamUser023_GetSteamID(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser023_InitiateGameConnection_DEPRECATED(winISteamUser_SteamUser023 *_this, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    _ret = cppISteamUser_SteamUser023_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser023_TerminateGameConnection_DEPRECATED(winISteamUser_SteamUser023 *_this, uint32 unIPServer, uint16 usPortServer)
@@ -3818,11 +4308,11 @@ void __thiscall winISteamUser_SteamUser023_TrackAppUsageEvent(winISteamUser_Stea
 
 bool __thiscall winISteamUser_SteamUser023_GetUserDataFolder(winISteamUser_SteamUser023 *_this, char *pchBuffer, int cubBuffer)
 {
-    bool path_result;
+    bool _ret;
     TRACE("%p\n", _this);
-    path_result = cppISteamUser_SteamUser023_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
-    return path_result;
+    _ret = cppISteamUser_SteamUser023_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(_ret, pchBuffer, pchBuffer, cubBuffer, 0);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser023_StartVoiceRecording(winISteamUser_SteamUser023 *_this)
@@ -3839,44 +4329,58 @@ void __thiscall winISteamUser_SteamUser023_StopVoiceRecording(winISteamUser_Stea
 
 EVoiceResult __thiscall winISteamUser_SteamUser023_GetAvailableVoice(winISteamUser_SteamUser023 *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser023_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser023_GetVoice(winISteamUser_SteamUser023 *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    _ret = cppISteamUser_SteamUser023_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed_Deprecated, pUncompressedDestBuffer_Deprecated, cbUncompressedDestBufferSize_Deprecated, nUncompressBytesWritten_Deprecated, nUncompressedVoiceDesiredSampleRate_Deprecated);
+    return _ret;
 }
 
 EVoiceResult __thiscall winISteamUser_SteamUser023_DecompressVoice(winISteamUser_SteamUser023 *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
+    EVoiceResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    _ret = cppISteamUser_SteamUser023_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUser_SteamUser023_GetVoiceOptimalSampleRate(winISteamUser_SteamUser023 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetVoiceOptimalSampleRate(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_GetVoiceOptimalSampleRate(_this->linux_side);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(winISteamUser_SteamUser023 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket, pSteamNetworkingIdentity);
+    _ret = cppISteamUser_SteamUser023_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket, pSteamNetworkingIdentity);
+    return _ret;
 }
 
 HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthTicketForWebApi(winISteamUser_SteamUser023 *_this, const char *pchIdentity)
 {
+    HAuthTicket _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetAuthTicketForWebApi(_this->linux_side, pchIdentity);
+    _ret = cppISteamUser_SteamUser023_GetAuthTicketForWebApi(_this->linux_side, pchIdentity);
+    return _ret;
 }
 
 EBeginAuthSessionResult __thiscall winISteamUser_SteamUser023_BeginAuthSession(winISteamUser_SteamUser023 *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
+    EBeginAuthSessionResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    _ret = cppISteamUser_SteamUser023_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser023_EndAuthSession(winISteamUser_SteamUser023 *_this, CSteamID steamID)
@@ -3893,14 +4397,18 @@ void __thiscall winISteamUser_SteamUser023_CancelAuthTicket(winISteamUser_SteamU
 
 EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser023_UserHasLicenseForApp(winISteamUser_SteamUser023 *_this, CSteamID steamID, AppId_t appID)
 {
+    EUserHasLicenseForAppResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    _ret = cppISteamUser_SteamUser023_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BIsBehindNAT(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BIsBehindNAT(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BIsBehindNAT(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamUser_SteamUser023_AdvertiseGame(winISteamUser_SteamUser023 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -3911,74 +4419,98 @@ void __thiscall winISteamUser_SteamUser023_AdvertiseGame(winISteamUser_SteamUser
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser023_RequestEncryptedAppTicket(winISteamUser_SteamUser023 *_this, void *pDataToInclude, int cbDataToInclude)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    _ret = cppISteamUser_SteamUser023_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_GetEncryptedAppTicket(winISteamUser_SteamUser023 *_this, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    _ret = cppISteamUser_SteamUser023_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser023_GetGameBadgeLevel(winISteamUser_SteamUser023 *_this, int nSeries, bool bFoil)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    _ret = cppISteamUser_SteamUser023_GetGameBadgeLevel(_this->linux_side, nSeries, bFoil);
+    return _ret;
 }
 
 int __thiscall winISteamUser_SteamUser023_GetPlayerSteamLevel(winISteamUser_SteamUser023 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetPlayerSteamLevel(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_GetPlayerSteamLevel(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser023_RequestStoreAuthURL(winISteamUser_SteamUser023 *_this, const char *pchRedirectURL)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    _ret = cppISteamUser_SteamUser023_RequestStoreAuthURL(_this->linux_side, pchRedirectURL);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BIsPhoneVerified(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BIsPhoneVerified(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BIsPhoneVerified(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BIsTwoFactorEnabled(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BIsTwoFactorEnabled(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BIsTwoFactorEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BIsPhoneIdentifying(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BIsPhoneIdentifying(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BIsPhoneIdentifying(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BIsPhoneRequiringVerification(winISteamUser_SteamUser023 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BIsPhoneRequiringVerification(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_BIsPhoneRequiringVerification(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetMarketEligibility(winISteamUser_SteamUser023 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetMarketEligibility(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_GetMarketEligibility(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetDurationControl(winISteamUser_SteamUser023 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_GetDurationControl(_this->linux_side);
+    _ret = cppISteamUser_SteamUser023_GetDurationControl(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUser_SteamUser023_BSetDurationControlOnlineState(winISteamUser_SteamUser023 *_this, EDurationControlOnlineState eNewState)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser023_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    _ret = cppISteamUser_SteamUser023_BSetDurationControlOnlineState(_this->linux_side, eNewState);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUser_SteamUser023_vtable;
