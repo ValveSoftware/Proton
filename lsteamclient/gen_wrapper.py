@@ -765,19 +765,19 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
+    need_convert = {n: p for n, p in zip(names, method.get_arguments())
+                    if param_needs_conversion(p)}
+    manual_convert = {n: p for n, p in zip(names, method.get_arguments())
+                      if underlying_type(p).spelling in MANUAL_TYPES
+                      or p.spelling in MANUAL_PARAMS}
+
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
     cpp.write(f'{ret}{cppname}_{method_name}({", ".join(params)})\n')
     cpp.write("{\n")
 
-    need_convert = [p for p in method.get_arguments()
-                    if param_needs_conversion(p)]
-    manual_convert = [p for p in method.get_arguments()
-                      if underlying_type(p).spelling in MANUAL_TYPES
-                      or p.spelling in MANUAL_PARAMS]
-
-    for param in need_convert:
+    for name, param in sorted(need_convert.items()):
         if param.type.kind == TypeKind.POINTER:
             #handle single pointers, but not double pointers
             real_type = param.type
@@ -786,17 +786,18 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
             real_name = canonical_typename(real_type)
             assert(param.type.get_pointee().kind == TypeKind.RECORD or real_name in MANUAL_STRUCTS)
             pointee_name = canonical_typename(param.type.get_pointee())
-            cpp.write(f"    {pointee_name} lin_{param.spelling};\n")
-            cpp.write(f"    win_to_lin_struct_{real_name}_{sdkver}({param.spelling}, &lin_{param.spelling});\n")
+            cpp.write(f"    {pointee_name} lin_{name};\n")
+            cpp.write(f"    win_to_lin_struct_{real_name}_{sdkver}({name}, &lin_{name});\n")
         else:
             #raw structs
-            cpp.write(f"    {param.type.spelling} lin_{param.spelling};\n")
-            cpp.write(f"    win_to_lin_struct_{param.type.spelling}_{sdkver}(&{param.spelling}, &lin_{param.spelling});\n")
-    for param in manual_convert:
-        if param.spelling in MANUAL_PARAMS:
-            cpp.write(f"    {param.spelling} = manual_convert_{param.spelling}({param.spelling});\n")
+            cpp.write(f"    {param.type.spelling} lin_{name};\n")
+            cpp.write(f"    win_to_lin_struct_{param.type.spelling}_{sdkver}(&{name}, &lin_{name});\n")
+
+    for name, param in sorted(manual_convert.items()):
+        if name in MANUAL_PARAMS:
+            cpp.write(f"    {name} = manual_convert_{name}({name});\n")
         else:
-            cpp.write(f"    {param.spelling} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){param.spelling});\n")
+            cpp.write(f"    {name} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){name});\n")
 
     if method.result_type.kind == TypeKind.VOID:
         cpp.write("    ")
@@ -809,41 +810,27 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     if post_exec != None:
         cpp.write(post_exec + '(');
 
-    cpp.write(f"(({classname}*)linux_side)->{method.spelling}(")
-    first = True
-    for i, param in enumerate(method.get_arguments()):
-        if param.kind == CursorKind.PARM_DECL:
-            if not first:
-                cpp.write(", ")
-            else:
-                first = False
-            if param.spelling == "":
-                cpp.write(f"({param.type.spelling})_{chr(0x61 + i)}")
-            elif param.type.kind == TypeKind.POINTER and \
-                    param.type.get_pointee().spelling in WRAPPED_CLASSES:
-                cpp.write(f"({param.type.spelling}){param.spelling}")
-            elif param in need_convert:
-                if param.type.kind != TypeKind.POINTER:
-                    cpp.write(f"lin_{param.spelling}")
-                else:
-                    cpp.write(f"&lin_{param.spelling}")
-            elif param.type.kind == TypeKind.LVALUEREFERENCE:
-                cpp.write(f"*{param.spelling}")
-            else:
-                cpp.write(f"({param.type.spelling}){param.spelling}")
+    def param_call(name, param):
+        pfx = '&' if param.type.kind == TypeKind.POINTER else ''
+        if name in need_convert: return f"{pfx}lin_{name}"
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*{name}'
+        return f"({param.type.spelling}){name}"
 
+    params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
+    cpp.write(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)}')
     if post_exec != None:
         cpp.write(")")
     cpp.write(");\n")
-    for param in need_convert:
+
+    for name, param in sorted(need_convert.items()):
         if param.type.kind == TypeKind.POINTER:
             if not "const " in param.type.spelling: #don't modify const arguments
                 real_type = param.type
                 while real_type.kind == TypeKind.POINTER:
                     real_type = real_type.get_pointee()
-                cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{param.spelling}, {param.spelling});\n")
+                cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{name}, {name});\n")
         else:
-            cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{param.spelling}, &{param.spelling});\n")
+            cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{name}, &{name});\n")
     if method.result_type.kind != TypeKind.VOID and \
             len(need_convert) > 0:
         cpp.write("    return retval;\n")
