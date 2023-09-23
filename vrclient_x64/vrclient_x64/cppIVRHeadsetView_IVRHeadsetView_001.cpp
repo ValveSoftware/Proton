@@ -14,7 +14,7 @@ void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(void *linux_side, u
     ((IVRHeadsetView*)linux_side)->SetHeadsetViewSize((uint32_t)nWidth, (uint32_t)nHeight);
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(void *linux_side, uint32_t * pnWidth, uint32_t * pnHeight)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(void *linux_side, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     ((IVRHeadsetView*)linux_side)->GetHeadsetViewSize((uint32_t *)pnWidth, (uint32_t *)pnHeight);
 }
@@ -49,7 +49,7 @@ void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(void *linux_s
     ((IVRHeadsetView*)linux_side)->SetHeadsetViewBlendRange((float)flStartPct, (float)flEndPct);
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(void *linux_side, float * pStartPct, float * pEndPct)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(void *linux_side, float *pStartPct, float *pEndPct)
 {
     ((IVRHeadsetView*)linux_side)->GetHeadsetViewBlendRange((float *)pStartPct, (float *)pEndPct);
 }

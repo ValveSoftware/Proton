@@ -19,12 +19,12 @@ void cppIVRClientCore_IVRClientCore_002_Cleanup(void *linux_side)
     ((IVRClientCore*)linux_side)->Cleanup();
 }
 
-vr::EVRInitError cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(void *linux_side, const char * pchInterfaceVersion)
+vr::EVRInitError cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(void *linux_side, const char *pchInterfaceVersion)
 {
     return ((IVRClientCore*)linux_side)->IsInterfaceVersionValid((const char *)pchInterfaceVersion);
 }
 
-void * cppIVRClientCore_IVRClientCore_002_GetGenericInterface(void *linux_side, const char * pchNameAndVersion, EVRInitError * peError)
+void * cppIVRClientCore_IVRClientCore_002_GetGenericInterface(void *linux_side, const char *pchNameAndVersion, EVRInitError *peError)
 {
     return ((IVRClientCore*)linux_side)->GetGenericInterface((const char *)pchNameAndVersion, (vr::EVRInitError *)peError);
 }

@@ -469,12 +469,18 @@ def handle_method_hpp(method_name, cppname, method, cpp_h):
 
 
 def handle_method_cpp(method_name, classname, cppname, method, cpp):
-    if strip_ns(method.result_type.spelling).startswith("IVR"):
-        cpp.write("void *")
-    else:
-        cpp.write("%s " % method.result_type.spelling)
-    cpp.write("%s_%s(void *linux_side" % (cppname, method_name))
-    unnamed = 'a'
+    ret = f'{method.result_type.spelling} '
+
+    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+             for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
+
+    names = ['linux_side'] + names
+    params = ['void *linux_side'] + params
+
+    cpp.write(f'{ret}{cppname}_{method_name}({", ".join(params)})\n')
+    cpp.write("{\n")
+
     do_lin_to_win = None
     do_win_to_lin = None
     do_size_fixup = None
@@ -484,40 +490,28 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
         if param.type.kind == TypeKind.POINTER and \
                 param.type.get_pointee().kind == TypeKind.UNEXPOSED:
             #unspecified function pointer
-            typename = "void *"
-        else:
-            typename = param.type.spelling.split("::")[-1].replace("&", "*")
-            real_type = param.type;
-            while real_type.kind == TypeKind.POINTER:
-                real_type = real_type.get_pointee()
-            if param.type.kind == TypeKind.POINTER:
-                if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                    do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-                    typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
-                elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
-                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                    do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
-                    typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
-                elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                        struct_needs_conversion(real_type.get_canonical()):
-                    real_name = canonical_typename(real_type)
-                    do_win_to_lin = (strip_ns(real_name), param.spelling)
-                    if not real_type.is_const_qualified():
-                        do_lin_to_win = (strip_ns(real_name), param.spelling)
-                    #preserve pointers
-                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
-                elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                        strip_ns(real_type.spelling) in STRUCTS_NEXT_IS_SIZE and \
-                        struct_needs_size_adjustment(real_type.get_canonical()):
-                    real_name = canonical_typename(real_type)
-                    do_size_fixup = (strip_ns(real_name), param.spelling)
+            continue
 
-        if param.spelling == "":
-            cpp.write(", %s _%s" % (typename, unnamed))
-            unnamed = chr(ord(unnamed) + 1)
-        else:
-            cpp.write(", %s %s" % (typename, param.spelling))
-    cpp.write(")\n{\n")
+        real_type = param.type;
+        while real_type.kind == TypeKind.POINTER:
+            real_type = real_type.get_pointee()
+        if param.type.kind == TypeKind.POINTER:
+            if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
+                do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
+            elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
+                    strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
+                do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
+            elif real_type.get_canonical().kind == TypeKind.RECORD and \
+                    struct_needs_conversion(real_type.get_canonical()):
+                real_name = canonical_typename(real_type)
+                do_win_to_lin = (strip_ns(real_name), param.spelling)
+                if not real_type.is_const_qualified():
+                    do_lin_to_win = (strip_ns(real_name), param.spelling)
+            elif real_type.get_canonical().kind == TypeKind.RECORD and \
+                    strip_ns(real_type.spelling) in STRUCTS_NEXT_IS_SIZE and \
+                    struct_needs_size_adjustment(real_type.get_canonical()):
+                real_name = canonical_typename(real_type)
+                do_size_fixup = (strip_ns(real_name), param.spelling)
 
     if do_lin_to_win or do_win_to_lin:
         if do_lin_to_win:
