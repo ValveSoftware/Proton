@@ -930,6 +930,11 @@ def handle_method_c(method, winclassname, cppname, cfile):
     if not returns_record and not returns_void:
         cfile.write(f'    {ret}_ret;\n')
 
+    should_gen_callback = "GetAPICallResult" in method.name
+    if should_gen_callback:
+        cfile.write("    int u_callback_len = cubCallback, w_callback_len = cubCallback;\n");
+        cfile.write("    void *u_callback, *w_callback = pCallback;\n")
+
     path_conv = get_path_converter(method)
 
     if path_conv:
@@ -944,6 +949,11 @@ def handle_method_c(method, winclassname, cppname, cfile):
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
+    if should_gen_callback:
+        cfile.write("    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;\n")
+        cfile.write("    cubCallback = u_callback_len;\n")
+        cfile.write("    pCallback = u_callback;\n\n")
+
     if returns_record:
         cfile.write(u'    *_ret = ')
     elif not returns_void:
@@ -951,17 +961,12 @@ def handle_method_c(method, winclassname, cppname, cfile):
     else:
         cfile.write(u'    ')
 
-    should_do_cb_wrap = "GetAPICallResult" in method.name
     should_gen_wrapper = not method_needs_manual_handling(cppname, method.name) and \
             (method.result_type.spelling.startswith("ISteam") or \
              method.name.startswith("GetISteamGenericInterface"))
-
-    if should_do_cb_wrap:
-        cfile.write(f"do_cb_wrap(0, &{cppname}_{method.name}, ")
-    else:
-        if should_gen_wrapper:
-            cfile.write("create_win_interface(pchVersion,\n        ")
-        cfile.write(f"{cppname}_{method.name}(")
+    if should_gen_wrapper:
+        cfile.write("create_win_interface(pchVersion,\n        ")
+    cfile.write(f"{cppname}_{method.name}(")
 
     def param_call(param, name):
         if name == '_this': return '_this->linux_side'
@@ -977,6 +982,14 @@ def handle_method_c(method, winclassname, cppname, cfile):
         cfile.write(")")
 
     cfile.write(");\n")
+
+    if should_gen_callback:
+        cfile.write("    if (_ret && u_callback != w_callback)\n")
+        cfile.write("    {\n")
+        cfile.write("        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);\n")
+        cfile.write("        HeapFree(GetProcessHeap(), 0, u_callback);\n")
+        cfile.write("    }\n\n")
+
     if path_conv and len(path_conv["l2w_names"]) > 0:
         for i in range(len(path_conv["l2w_names"])):
             cfile.write("    ")

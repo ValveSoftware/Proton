@@ -142,8 +142,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(winISteamUtils_SteamUtils002 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils002_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils002_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -312,8 +324,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(winISteamUtils_SteamUtils004 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils004_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils004_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -519,8 +543,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(winISteamUtils_SteamUtils005 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils005_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils005_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -775,8 +811,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(winISteamUtils_SteamUtils006 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils006_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils006_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -1050,8 +1098,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(winISteamUtils_SteamUtils007 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils007_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils007_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -1334,8 +1394,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(winISteamUtils_SteamUtils008 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils008_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils008_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -1640,8 +1712,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(winISteamUtils_SteamUtils009 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils009_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils009_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 
@@ -2002,8 +2086,20 @@ ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureRe
 bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(winISteamUtils_SteamUtils010 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
+    int u_callback_len = cubCallback, w_callback_len = cubCallback;
+    void *u_callback, *w_callback = pCallback;
     TRACE("%p\n", _this);
-    _ret = do_cb_wrap(0, &cppISteamUtils_SteamUtils010_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;
+    cubCallback = u_callback_len;
+    pCallback = u_callback;
+
+    _ret = cppISteamUtils_SteamUtils010_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    if (_ret && u_callback != w_callback)
+    {
+        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
+        HeapFree(GetProcessHeap(), 0, u_callback);
+    }
+
     return _ret;
 }
 

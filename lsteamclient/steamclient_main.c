@@ -1000,7 +1000,7 @@ static int get_callback_len(int cb)
     return 0;
 }
 
-static void *alloc_callback_wtou( int id, void *callback, int *callback_len )
+void *alloc_callback_wtou( int id, void *callback, int *callback_len )
 {
     int len;
 
@@ -1011,7 +1011,7 @@ static void *alloc_callback_wtou( int id, void *callback, int *callback_len )
     return callback;
 }
 
-static void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, void *callback, int callback_len )
+void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, void *callback, int callback_len )
 {
     switch (id)
     {
@@ -1019,35 +1019,26 @@ static void convert_callback_utow( int id, void *lin_callback, int lin_callback_
     }
 }
 
-bool do_cb_wrap( HSteamPipe pipe, bool (*cpp_func)( void *, SteamAPICall_t, void *, int, int, bool * ),
-                 void *linux_side, SteamAPICall_t call, void *callback, int callback_len, int id, bool *failed )
+bool CDECL Steam_GetAPICallResult( HSteamPipe pipe, SteamAPICall_t call, void *w_callback,
+                                   int w_callback_len, int id, bool *failed )
 {
-    int lin_callback_len = callback_len;
-    void *lin_callback;
+    int u_callback_len = w_callback_len;
+    void *u_callback;
     bool ret;
 
-    if (!(lin_callback = alloc_callback_wtou( id, callback, &lin_callback_len ))) return FALSE;
+    TRACE( "%u, x, %p, %u, %u, %p\n", pipe, w_callback, w_callback_len, id, failed );
 
-    if(!cpp_func){
-        if(!load_steamclient())
-            return 0;
-        ret = steamclient_GetAPICallResult(pipe, call, callback, callback_len, id, failed);
-    }else
-        ret = cpp_func(linux_side, call, callback, callback_len, id, failed);
+    if (!load_steamclient()) return FALSE;
 
-    if (ret && lin_callback != callback)
+    if (!(u_callback = alloc_callback_wtou( id, w_callback, &u_callback_len ))) return FALSE;
+    ret = steamclient_GetAPICallResult( pipe, call, u_callback, u_callback_len, id, failed );
+
+    if (ret && u_callback != w_callback)
     {
-        convert_callback_utow( id, lin_callback, lin_callback_len, callback, callback_len );
-        HeapFree( GetProcessHeap(), 0, lin_callback );
+        convert_callback_utow( id, u_callback, u_callback_len, w_callback, w_callback_len );
+        HeapFree( GetProcessHeap(), 0, u_callback );
     }
     return ret;
-}
-
-bool CDECL Steam_GetAPICallResult(HSteamPipe pipe, SteamAPICall_t call,
-        void *callback, int callback_len, int cb_expected, bool *failed)
-{
-    TRACE("%u, x, %p, %u, %u, %p\n", pipe, callback, callback_len, cb_expected, failed);
-    return do_cb_wrap(pipe, NULL, NULL, call, callback, callback_len, cb_expected, failed);
 }
 
 bool CDECL Steam_FreeLastCallback(HSteamPipe pipe)
