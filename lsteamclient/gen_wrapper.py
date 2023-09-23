@@ -1049,66 +1049,50 @@ def handle_class(klass):
         out(u'}\n')
         out(u'#endif\n')
 
-
-    file_exists = os.path.isfile(f"win{klass.spelling}.c")
-    cfile = open(f"win{klass.spelling}.c", "a")
-    if not file_exists:
-        cfile.write("""/* This file is auto-generated, do not edit. */
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "cxx.h"
-
-#include "steam_defs.h"
-
-#include "steamclient_private.h"
-
-#include "struct_converters.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-
-""")
-
     winclassname = f"win{klass.spelling}_{klass.version}"
-    cfile.write(f"#include \"{cppname}.h\"\n\n")
-    cfile.write(f"typedef struct __{winclassname} {{\n")
-    cfile.write("    vtable_ptr *vtable;\n")
-    cfile.write("    void *linux_side;\n")
-    cfile.write(f"}} {winclassname};\n\n")
+    with open(f"win{klass.spelling}.c", "a") as file:
+        out = file.write
 
-    for method in klass.methods:
-        handle_thiscall_wrapper(klass, method, cfile.write)
-    cfile.write('\n')
+        out(f'#include "{cppname}.h"\n\n')
+        out(f'typedef struct __{winclassname} {{\n')
+        out(u'    vtable_ptr *vtable;\n')
+        out(u'    void *linux_side;\n')
+        out(f'}} {winclassname};\n\n')
 
-    for method in klass.methods:
-        if type(method) is Destructor:
-            cfile.write(f"void __thiscall {winclassname}_{method.name}({winclassname} *_this)\n{{/* never called */}}\n\n")
+        for method in klass.methods:
+            handle_thiscall_wrapper(klass, method, out)
+        out('\n')
+
+        for method in klass.methods:
+            if type(method) is Destructor:
+                out(f'void __thiscall {winclassname}_{method.name}({winclassname} *_this)\n{{/* never called */}}\n\n')
+            else:
+                handle_method_c(method, winclassname, cppname, out)
+
+        out(f'extern vtable_ptr {winclassname}_vtable;\n')
+        out(u'\n')
+        out(u'#ifndef __GNUC__\n')
+        out(u'void __asm_dummy_vtables(void) {\n')
+        out(u'#endif\n')
+        out(f'    __ASM_VTABLE({winclassname},\n')
+        for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
+            out(f'        VTABLE_ADD_FUNC({winclassname}_{method.name})\n')
+        out(u'    );\n')
+        out(u'#ifndef __GNUC__\n')
+        out(u'}\n')
+        out(u'#endif\n')
+        out(u'\n')
+        out(f'{winclassname} *create_{winclassname}(void *linux_side)\n')
+        out(u'{\n')
+        if klass.spelling in WRAPPED_CLASSES:
+            out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n')
         else:
-            handle_method_c(method, winclassname, cppname, cfile.write)
-
-    cfile.write(f"extern vtable_ptr {winclassname}_vtable;\n\n")
-    cfile.write("#ifndef __GNUC__\n")
-    cfile.write("void __asm_dummy_vtables(void) {\n")
-    cfile.write("#endif\n")
-    cfile.write(f"    __ASM_VTABLE({winclassname},\n")
-    for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
-        cfile.write(f"        VTABLE_ADD_FUNC({winclassname}_{method.name})\n")
-    cfile.write("    );\n")
-    cfile.write("#ifndef __GNUC__\n")
-    cfile.write("}\n")
-    cfile.write("#endif\n\n")
-    cfile.write(f"{winclassname} *create_{winclassname}(void *linux_side)\n{{\n")
-    if klass.spelling in WRAPPED_CLASSES:
-        cfile.write(f"    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n")
-    else:
-        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{klass.version}\");\n")
-    cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, \"{klass.version}\");\n")
-    cfile.write("    r->linux_side = linux_side;\n")
-    cfile.write("    return r;\n}\n\n")
+            out(f'    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), "{klass.version}");\n')
+        out(u'    TRACE("-> %p\\n", r);\n')
+        out(f'    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, "{klass.version}");\n')
+        out(u'    r->linux_side = linux_side;\n')
+        out(u'    return r;\n')
+        out(u'}\n\n')
 
     constructors = open("win_constructors.h", "a")
     constructors.write(f"extern void *create_{winclassname}(void *);\n")
@@ -1449,6 +1433,29 @@ for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
     all_classes.update(tmp_classes[sdkver]['u32'])
 
 print('parsing SDKs... 100%')
+
+
+for klass in all_classes.values():
+    with open(f"win{klass.spelling}.c", "w") as file:
+        out = file.write
+
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include <stdarg.h>\n')
+        out(u'\n')
+        out(u'#include "windef.h"\n')
+        out(u'#include "winbase.h"\n')
+        out(u'#include "wine/debug.h"\n')
+        out(u'\n')
+        out(u'#include "cxx.h"\n')
+        out(u'\n')
+        out(u'#include "steam_defs.h"\n')
+        out(u'\n')
+        out(u'#include "steamclient_private.h"\n')
+        out(u'\n')
+        out(u'#include "struct_converters.h"\n')
+        out(u'\n')
+        out(u'WINE_DEFAULT_DEBUG_CHANNEL(steamclient);\n')
+        out(u'\n')
 
 
 for _, klass in sorted(all_classes.items()):
