@@ -11,7 +11,9 @@ extern "C" {
 #endif
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(void *linux_side, EChaperoneConfigFile configFile)
 {
-    return ((IVRChaperoneSetup*)linux_side)->CommitWorkingCopy((vr::EChaperoneConfigFile)configFile);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->CommitWorkingCopy((vr::EChaperoneConfigFile)configFile);
+    return _ret;
 }
 
 void cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(void *linux_side)
@@ -21,32 +23,44 @@ void cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(void *linux_si
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *linux_side, float *pSizeX, float *pSizeZ)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect(void *linux_side, HmdQuad_t *rect)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaRect((vr::HmdQuad_t *)rect);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaRect((vr::HmdQuad_t *)rect);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetLiveCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetWorkingSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetWorkingStandingZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatStandingZeroPoseToRawTrackingPose);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingStandingZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatStandingZeroPoseToRawTrackingPose);
+    return _ret;
 }
 
 void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *linux_side, float sizeX, float sizeZ)
@@ -76,7 +90,9 @@ void cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(void *linux_side,
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetLiveSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
+    return _ret;
 }
 
 void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *linux_side, uint8_t *pTagsBuffer, uint32_t unTagCount)
@@ -86,27 +102,37 @@ void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInf
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(void *linux_side, uint8_t *pTagsBuffer, uint32_t *punTagCount)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetLiveCollisionBoundsTagsInfo((uint8_t *)pTagsBuffer, (uint32_t *)punTagCount);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveCollisionBoundsTagsInfo((uint8_t *)pTagsBuffer, (uint32_t *)punTagCount);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
 {
-    return ((IVRChaperoneSetup*)linux_side)->SetWorkingPhysicalBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t)unQuadsCount);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->SetWorkingPhysicalBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t)unQuadsCount);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    return ((IVRChaperoneSetup*)linux_side)->GetLivePhysicalBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->GetLivePhysicalBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer(void *linux_side, char *pBuffer, uint32_t *pnBufferLength)
 {
-    return ((IVRChaperoneSetup*)linux_side)->ExportLiveToBuffer((char *)pBuffer, (uint32_t *)pnBufferLength);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->ExportLiveToBuffer((char *)pBuffer, (uint32_t *)pnBufferLength);
+    return _ret;
 }
 
 bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking(void *linux_side, const char *pBuffer, uint32_t nImportFlags)
 {
-    return ((IVRChaperoneSetup*)linux_side)->ImportFromBufferToWorking((const char *)pBuffer, (uint32_t)nImportFlags);
+    bool _ret;
+    _ret = ((IVRChaperoneSetup*)linux_side)->ImportFromBufferToWorking((const char *)pBuffer, (uint32_t)nImportFlags);
+    return _ret;
 }
 
 #ifdef __cplusplus

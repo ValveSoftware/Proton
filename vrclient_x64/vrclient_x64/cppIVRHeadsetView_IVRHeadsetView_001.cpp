@@ -26,7 +26,9 @@ void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(void *linux_side, H
 
 vr::HeadsetViewMode_t cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(void *linux_side)
 {
-    return ((IVRHeadsetView*)linux_side)->GetHeadsetViewMode();
+    vr::HeadsetViewMode_t _ret;
+    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewMode();
+    return _ret;
 }
 
 void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(void *linux_side, bool bCropped)
@@ -36,12 +38,16 @@ void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(void *linux_side
 
 bool cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(void *linux_side)
 {
-    return ((IVRHeadsetView*)linux_side)->GetHeadsetViewCropped();
+    bool _ret;
+    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewCropped();
+    return _ret;
 }
 
 float cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(void *linux_side)
 {
-    return ((IVRHeadsetView*)linux_side)->GetHeadsetViewAspectRatio();
+    float _ret;
+    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewAspectRatio();
+    return _ret;
 }
 
 void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(void *linux_side, float flStartPct, float flEndPct)

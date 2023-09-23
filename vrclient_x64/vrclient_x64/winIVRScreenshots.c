@@ -35,59 +35,71 @@ DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 2
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t *pOutScreenshotHandle, EVRScreenshotType type, const char *pchPreviewFilename, const char *pchVRFilename)
 {
+    EVRScreenshotError _ret;
     char lin_pchPreviewFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchPreviewFilename, lin_pchPreviewFilename);
     char lin_pchVRFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename);
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(_this->linux_side, pOutScreenshotHandle, type, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(_this->linux_side, pOutScreenshotHandle, type, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    return _ret;
 }
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, EVRScreenshotType *pSupportedTypes, int numTypes)
 {
+    EVRScreenshotError _ret;
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(_this->linux_side, pSupportedTypes, numTypes);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(_this->linux_side, pSupportedTypes, numTypes);
+    return _ret;
 }
 
 EVRScreenshotType __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError *pError)
 {
+    EVRScreenshotType _ret;
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(_this->linux_side, screenshotHandle, pError);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(_this->linux_side, screenshotHandle, pError);
+    return _ret;
 }
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char *pchFilename, uint32_t cchFilename, EVRScreenshotError *pError)
 {
-    uint32_t path_result;
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    path_result = cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(_this->linux_side, screenshotHandle, filenameType, pchFilename, cchFilename, pError);
-    path_result = vrclient_unix_path_to_dos_path(path_result, pchFilename, pchFilename, cchFilename);
-    return path_result;
+    _ret = cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(_this->linux_side, screenshotHandle, filenameType, pchFilename, cchFilename, pError);
+    _ret = vrclient_unix_path_to_dos_path(_ret, pchFilename, pchFilename, cchFilename);
+    return _ret;
 }
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, float flProgress)
 {
+    EVRScreenshotError _ret;
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(_this->linux_side, screenshotHandle, flProgress);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(_this->linux_side, screenshotHandle, flProgress);
+    return _ret;
 }
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
 {
+    EVRScreenshotError _ret;
     char lin_pchPreviewFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchPreviewFilename, lin_pchPreviewFilename);
     char lin_pchVRFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename);
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(_this->linux_side, pOutScreenshotHandle, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(_this->linux_side, pOutScreenshotHandle, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    return _ret;
 }
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
 {
+    EVRScreenshotError _ret;
     char lin_pchSourcePreviewFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchSourcePreviewFilename, lin_pchSourcePreviewFilename);
     char lin_pchSourceVRFilename[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchSourceVRFilename, lin_pchSourceVRFilename);
     TRACE("%p\n", _this);
-    return cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(_this->linux_side, screenshotHandle, type, pchSourcePreviewFilename ? lin_pchSourcePreviewFilename : NULL, pchSourceVRFilename ? lin_pchSourceVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(_this->linux_side, screenshotHandle, type, pchSourcePreviewFilename ? lin_pchSourcePreviewFilename : NULL, pchSourceVRFilename ? lin_pchSourceVRFilename : NULL);
+    return _ret;
 }
 
 extern vtable_ptr winIVRScreenshots_IVRScreenshots_001_vtable;

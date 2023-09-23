@@ -32,26 +32,34 @@ DEFINE_THISCALL_WRAPPER(winIVRDriverManager_IVRDriverManager_001_IsEnabled, 8)
 
 uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverCount(winIVRDriverManager_IVRDriverManager_001 *_this)
 {
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRDriverManager_IVRDriverManager_001_GetDriverCount(_this->linux_side);
+    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverCount(_this->linux_side);
+    return _ret;
 }
 
 uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(winIVRDriverManager_IVRDriverManager_001 *_this, DriverId_t nDriver, char *pchValue, uint32_t unBufferSize)
 {
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRDriverManager_IVRDriverManager_001_GetDriverName(_this->linux_side, nDriver, pchValue, unBufferSize);
+    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverName(_this->linux_side, nDriver, pchValue, unBufferSize);
+    return _ret;
 }
 
 DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(winIVRDriverManager_IVRDriverManager_001 *_this, const char *pchDriverName)
 {
+    DriverHandle_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->linux_side, pchDriverName);
+    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->linux_side, pchDriverName);
+    return _ret;
 }
 
 bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(winIVRDriverManager_IVRDriverManager_001 *_this, DriverId_t nDriver)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppIVRDriverManager_IVRDriverManager_001_IsEnabled(_this->linux_side, nDriver);
+    _ret = cppIVRDriverManager_IVRDriverManager_001_IsEnabled(_this->linux_side, nDriver);
+    return _ret;
 }
 
 extern vtable_ptr winIVRDriverManager_IVRDriverManager_001_vtable;

@@ -36,8 +36,10 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(winIVRClientCore_IVRClientCore_002 *_this, EVRApplicationType eApplicationType)
 {
+    EVRInitError _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_002_init(cppIVRClientCore_IVRClientCore_002_Init, _this->linux_side, eApplicationType, 2, &_this->user_data);
+    _ret = ivrclientcore_002_init(cppIVRClientCore_IVRClientCore_002_Init, _this->linux_side, eApplicationType, 2, &_this->user_data);
+    return _ret;
 }
 
 void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(winIVRClientCore_IVRClientCore_002 *_this)
@@ -48,32 +50,42 @@ void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(winIVRClientCore_IVRC
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_002 *_this, const char *pchInterfaceVersion)
 {
+    EVRInitError _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    _ret = cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    return _ret;
 }
 
 void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(winIVRClientCore_IVRClientCore_002 *_this, const char *pchNameAndVersion, EVRInitError *peError)
 {
+    void * _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_002_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 2, &_this->user_data);
+    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_002_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 2, &_this->user_data);
+    return _ret;
 }
 
 bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(winIVRClientCore_IVRClientCore_002 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->linux_side, 2, &_this->user_data);
+    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->linux_side, 2, &_this->user_data);
+    return _ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(winIVRClientCore_IVRClientCore_002 *_this, EVRInitError eError)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(_this->linux_side, eError);
+    return _ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(winIVRClientCore_IVRClientCore_002 *_this, EVRInitError eError)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(_this->linux_side, eError);
+    return _ret;
 }
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_002_vtable;
@@ -158,8 +170,10 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(winIVRClientCore_IVRClientCore_003 *_this, EVRApplicationType eApplicationType, const char *pStartupInfo)
 {
+    EVRInitError _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_init(cppIVRClientCore_IVRClientCore_003_Init, _this->linux_side, eApplicationType, pStartupInfo, 3, &_this->user_data);
+    _ret = ivrclientcore_init(cppIVRClientCore_IVRClientCore_003_Init, _this->linux_side, eApplicationType, pStartupInfo, 3, &_this->user_data);
+    return _ret;
 }
 
 void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(winIVRClientCore_IVRClientCore_003 *_this)
@@ -170,32 +184,42 @@ void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(winIVRClientCore_IVRC
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_003 *_this, const char *pchInterfaceVersion)
 {
+    EVRInitError _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    _ret = cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    return _ret;
 }
 
 void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(winIVRClientCore_IVRClientCore_003 *_this, const char *pchNameAndVersion, EVRInitError *peError)
 {
+    void * _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_003_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 3, &_this->user_data);
+    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_003_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 3, &_this->user_data);
+    return _ret;
 }
 
 bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(winIVRClientCore_IVRClientCore_003 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->linux_side, 3, &_this->user_data);
+    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->linux_side, 3, &_this->user_data);
+    return _ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(winIVRClientCore_IVRClientCore_003 *_this, EVRInitError eError)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(_this->linux_side, eError);
+    return _ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(winIVRClientCore_IVRClientCore_003 *_this, EVRInitError eError)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError(_this->linux_side, eError);
+    return _ret;
 }
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_003_vtable;

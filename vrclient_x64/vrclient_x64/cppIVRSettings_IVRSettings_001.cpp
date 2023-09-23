@@ -11,17 +11,23 @@ extern "C" {
 #endif
 const char * cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(void *linux_side, EVRSettingsError eError)
 {
-    return ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
+    const char * _ret;
+    _ret = ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
+    return _ret;
 }
 
 bool cppIVRSettings_IVRSettings_001_Sync(void *linux_side, bool bForce, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->Sync((bool)bForce, (vr::EVRSettingsError *)peError);
+    bool _ret;
+    _ret = ((IVRSettings*)linux_side)->Sync((bool)bForce, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 bool cppIVRSettings_IVRSettings_001_GetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, bool bDefaultValue, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetBool((const char *)pchSection, (const char *)pchSettingsKey, (bool)bDefaultValue, (vr::EVRSettingsError *)peError);
+    bool _ret;
+    _ret = ((IVRSettings*)linux_side)->GetBool((const char *)pchSection, (const char *)pchSettingsKey, (bool)bDefaultValue, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 void cppIVRSettings_IVRSettings_001_SetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
@@ -31,7 +37,9 @@ void cppIVRSettings_IVRSettings_001_SetBool(void *linux_side, const char *pchSec
 
 int32_t cppIVRSettings_IVRSettings_001_GetInt32(void *linux_side, const char *pchSection, const char *pchSettingsKey, int32_t nDefaultValue, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetInt32((const char *)pchSection, (const char *)pchSettingsKey, (int32_t)nDefaultValue, (vr::EVRSettingsError *)peError);
+    int32_t _ret;
+    _ret = ((IVRSettings*)linux_side)->GetInt32((const char *)pchSection, (const char *)pchSettingsKey, (int32_t)nDefaultValue, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 void cppIVRSettings_IVRSettings_001_SetInt32(void *linux_side, const char *pchSection, const char *pchSettingsKey, int32_t nValue, EVRSettingsError *peError)
@@ -41,7 +49,9 @@ void cppIVRSettings_IVRSettings_001_SetInt32(void *linux_side, const char *pchSe
 
 float cppIVRSettings_IVRSettings_001_GetFloat(void *linux_side, const char *pchSection, const char *pchSettingsKey, float flDefaultValue, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetFloat((const char *)pchSection, (const char *)pchSettingsKey, (float)flDefaultValue, (vr::EVRSettingsError *)peError);
+    float _ret;
+    _ret = ((IVRSettings*)linux_side)->GetFloat((const char *)pchSection, (const char *)pchSettingsKey, (float)flDefaultValue, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 void cppIVRSettings_IVRSettings_001_SetFloat(void *linux_side, const char *pchSection, const char *pchSettingsKey, float flValue, EVRSettingsError *peError)

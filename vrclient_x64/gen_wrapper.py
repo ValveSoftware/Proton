@@ -537,6 +537,8 @@ def handle_method_hpp(method, cppname, cpp_h):
 
 
 def handle_method_cpp(method, classname, cppname, cpp):
+    returns_void = method.result_type.kind == TypeKind.VOID
+
     ret = f'{method.result_type.spelling} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
@@ -548,6 +550,9 @@ def handle_method_cpp(method, classname, cppname, cpp):
 
     cpp.write(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
     cpp.write("{\n")
+
+    if not returns_void:
+        cpp.write(f"    {ret}_ret;\n")
 
     do_lin_to_win = None
     do_win_to_lin = None
@@ -580,13 +585,9 @@ def handle_method_cpp(method, classname, cppname, cpp):
             cpp.write("    %s lin;\n" % do_lin_to_win[0])
         else:
             cpp.write("    %s lin;\n" % do_win_to_lin[0])
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    %s _ret;\n" % method.result_type.spelling)
 
     if do_wrap:
         cpp.write("    %s *lin;\n" % do_wrap[0])
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    %s _ret;\n" % method.result_type.spelling)
 
     if do_win_to_lin:
         #XXX we should pass the struct size here
@@ -617,13 +618,10 @@ def handle_method_cpp(method, classname, cppname, cpp):
             convert_size_param = f', {next_name}'
             size_fixup[next_name] = True
 
-
-    if method.result_type.kind == TypeKind.VOID:
+    if returns_void:
         cpp.write("    ")
-    elif do_lin_to_win or do_win_to_lin or do_wrap:
-        cpp.write("    _ret = ")
     else:
-        cpp.write("    return ")
+        cpp.write("    _ret = ")
 
     params = []
     for name, param in zip(names[1:], method.get_arguments()):
@@ -645,13 +643,12 @@ def handle_method_cpp(method, classname, cppname, cpp):
     if do_lin_to_win:
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
         cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
-    if do_lin_to_win or do_win_to_lin:
-        if not method.result_type.kind == TypeKind.VOID:
-            cpp.write("    return _ret;\n")
-    if do_wrap and not method.result_type.kind == TypeKind.VOID:
+    if do_wrap and not returns_void:
             cpp.write("    if(_ret == 0)\n")
             cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
-            cpp.write("    return _ret;\n")
+
+    if not returns_void:
+        cpp.write(u'    return _ret;\n')
     cpp.write("}\n\n")
 
 
@@ -670,6 +667,7 @@ def handle_thiscall_wrapper(klass, method, cfile):
 
 
 def handle_method_c(method, classname, winclassname, cppname, iface_version, cfile):
+    returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = f'{strip_ns(method.result_type.spelling)} '
@@ -681,8 +679,8 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{ret}_r'] + params
-        names = ['_r'] + names
+        params = [f'{ret}_ret'] + params
+        names = ['_ret'] + names
 
     params = [f'{winclassname} *_this'] + params
     names = ['_this'] + names
@@ -693,6 +691,9 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
     if returns_record:
         del params[1]
         del names[1]
+
+    if not returns_record and not returns_void:
+        cfile.write(f'    {ret}_ret;\n')
 
     path_conv = get_path_converter(method)
 
@@ -705,23 +706,15 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
             else:
                 cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
                 cfile.write("    vrclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
-        if None in path_conv["l2w_names"]:
-            cfile.write("    const char *path_result;\n")
-        elif path_conv["return_is_size"]:
-            cfile.write("    uint32_t path_result;\n")
-        elif len(path_conv["l2w_names"]) > 0:
-            cfile.write("    %s path_result;\n" % method.result_type.spelling)
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
-    if method.result_type.kind == TypeKind.VOID:
-        cfile.write("    ")
-    elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
-        cfile.write("    path_result = ")
-    elif returns_record:
-        cfile.write("    *_r = ")
+    if returns_record:
+        cfile.write(u'    *_ret = ')
+    elif not returns_void:
+        cfile.write(u'    _ret = ')
     else:
-        cfile.write("    return ")
+        cfile.write(u'    ')
 
     should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR")
     if should_gen_wrapper:
@@ -758,20 +751,21 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
                 cfile.write(", &_this->user_data")
                 break
     cfile.write(");\n")
-    if returns_record:
-        cfile.write("    return _r;\n")
+
     if path_conv and len(path_conv["l2w_names"]) > 0:
         for i in range(len(path_conv["l2w_names"])):
             assert(path_conv["l2w_names"][i]) #otherwise, no name means string is in return value. needs special handling.
             cfile.write("    ")
             if path_conv["return_is_size"]:
-                cfile.write("path_result = ")
-            cfile.write("vrclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
-        cfile.write("    return path_result;\n")
+                cfile.write("_ret = ")
+            cfile.write("vrclient_unix_path_to_dos_path(_ret, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
                 cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
+
+    if not returns_void:
+        cfile.write(u'    return _ret;\n')
     cfile.write("}\n\n")
 
 
