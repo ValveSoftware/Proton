@@ -22,7 +22,7 @@ bool cppISteamInput_SteamInput006_Shutdown(void *linux_side)
     return ((ISteamInput*)linux_side)->Shutdown();
 }
 
-bool cppISteamInput_SteamInput006_SetInputActionManifestFilePath(void *linux_side, const char * pchInputActionManifestAbsolutePath)
+bool cppISteamInput_SteamInput006_SetInputActionManifestFilePath(void *linux_side, const char *pchInputActionManifestAbsolutePath)
 {
     return ((ISteamInput*)linux_side)->SetInputActionManifestFilePath((const char *)pchInputActionManifestAbsolutePath);
 }
@@ -42,7 +42,7 @@ bool cppISteamInput_SteamInput006_BNewDataAvailable(void *linux_side)
     return ((ISteamInput*)linux_side)->BNewDataAvailable();
 }
 
-int cppISteamInput_SteamInput006_GetConnectedControllers(void *linux_side, InputHandle_t * handlesOut)
+int cppISteamInput_SteamInput006_GetConnectedControllers(void *linux_side, InputHandle_t *handlesOut)
 {
     return ((ISteamInput*)linux_side)->GetConnectedControllers((InputHandle_t *)handlesOut);
 }
@@ -52,7 +52,7 @@ void cppISteamInput_SteamInput006_EnableDeviceCallbacks(void *linux_side)
     ((ISteamInput*)linux_side)->EnableDeviceCallbacks();
 }
 
-InputActionSetHandle_t cppISteamInput_SteamInput006_GetActionSetHandle(void *linux_side, const char * pszActionSetName)
+InputActionSetHandle_t cppISteamInput_SteamInput006_GetActionSetHandle(void *linux_side, const char *pszActionSetName)
 {
     return ((ISteamInput*)linux_side)->GetActionSetHandle((const char *)pszActionSetName);
 }
@@ -82,12 +82,12 @@ void cppISteamInput_SteamInput006_DeactivateAllActionSetLayers(void *linux_side,
     ((ISteamInput*)linux_side)->DeactivateAllActionSetLayers((InputHandle_t)inputHandle);
 }
 
-int cppISteamInput_SteamInput006_GetActiveActionSetLayers(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t * handlesOut)
+int cppISteamInput_SteamInput006_GetActiveActionSetLayers(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
 {
     return ((ISteamInput*)linux_side)->GetActiveActionSetLayers((InputHandle_t)inputHandle, (InputActionSetHandle_t *)handlesOut);
 }
 
-InputDigitalActionHandle_t cppISteamInput_SteamInput006_GetDigitalActionHandle(void *linux_side, const char * pszActionName)
+InputDigitalActionHandle_t cppISteamInput_SteamInput006_GetDigitalActionHandle(void *linux_side, const char *pszActionName)
 {
     return ((ISteamInput*)linux_side)->GetDigitalActionHandle((const char *)pszActionName);
 }
@@ -97,7 +97,7 @@ InputDigitalActionData_t cppISteamInput_SteamInput006_GetDigitalActionData(void 
     return ((ISteamInput*)linux_side)->GetDigitalActionData((InputHandle_t)inputHandle, (InputDigitalActionHandle_t)digitalActionHandle);
 }
 
-int cppISteamInput_SteamInput006_GetDigitalActionOrigins(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin * originsOut)
+int cppISteamInput_SteamInput006_GetDigitalActionOrigins(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
 {
     return ((ISteamInput*)linux_side)->GetDigitalActionOrigins((InputHandle_t)inputHandle, (InputActionSetHandle_t)actionSetHandle, (InputDigitalActionHandle_t)digitalActionHandle, (EInputActionOrigin *)originsOut);
 }
@@ -107,7 +107,7 @@ const char * cppISteamInput_SteamInput006_GetStringForDigitalActionName(void *li
     return ((ISteamInput*)linux_side)->GetStringForDigitalActionName((InputDigitalActionHandle_t)eActionHandle);
 }
 
-InputAnalogActionHandle_t cppISteamInput_SteamInput006_GetAnalogActionHandle(void *linux_side, const char * pszActionName)
+InputAnalogActionHandle_t cppISteamInput_SteamInput006_GetAnalogActionHandle(void *linux_side, const char *pszActionName)
 {
     return ((ISteamInput*)linux_side)->GetAnalogActionHandle((const char *)pszActionName);
 }
@@ -117,7 +117,7 @@ InputAnalogActionData_t cppISteamInput_SteamInput006_GetAnalogActionData(void *l
     return ((ISteamInput*)linux_side)->GetAnalogActionData((InputHandle_t)inputHandle, (InputAnalogActionHandle_t)analogActionHandle);
 }
 
-int cppISteamInput_SteamInput006_GetAnalogActionOrigins(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin * originsOut)
+int cppISteamInput_SteamInput006_GetAnalogActionOrigins(void *linux_side, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
 {
     return ((ISteamInput*)linux_side)->GetAnalogActionOrigins((InputHandle_t)inputHandle, (InputActionSetHandle_t)actionSetHandle, (InputAnalogActionHandle_t)analogActionHandle, (EInputActionOrigin *)originsOut);
 }
@@ -207,7 +207,7 @@ EInputActionOrigin cppISteamInput_SteamInput006_TranslateActionOrigin(void *linu
     return ((ISteamInput*)linux_side)->TranslateActionOrigin((ESteamInputType)eDestinationInputType, (EInputActionOrigin)eSourceOrigin);
 }
 
-bool cppISteamInput_SteamInput006_GetDeviceBindingRevision(void *linux_side, InputHandle_t inputHandle, int * pMajor, int * pMinor)
+bool cppISteamInput_SteamInput006_GetDeviceBindingRevision(void *linux_side, InputHandle_t inputHandle, int *pMajor, int *pMinor)
 {
     return ((ISteamInput*)linux_side)->GetDeviceBindingRevision((InputHandle_t)inputHandle, (int *)pMajor, (int *)pMinor);
 }
@@ -222,7 +222,7 @@ uint16 cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(void *l
     return ((ISteamInput*)linux_side)->GetSessionInputConfigurationSettings();
 }
 
-void cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(void *linux_side, InputHandle_t inputHandle, const ScePadTriggerEffectParam * pParam)
+void cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(void *linux_side, InputHandle_t inputHandle, const ScePadTriggerEffectParam *pParam)
 {
     ((ISteamInput*)linux_side)->SetDualSenseTriggerEffect((InputHandle_t)inputHandle, (const ScePadTriggerEffectParam *)pParam);
 }

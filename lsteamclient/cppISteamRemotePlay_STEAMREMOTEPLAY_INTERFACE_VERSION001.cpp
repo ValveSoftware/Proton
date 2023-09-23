@@ -37,7 +37,7 @@ ESteamDeviceFormFactor cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_
     return ((ISteamRemotePlay*)linux_side)->GetSessionClientFormFactor((RemotePlaySessionID_t)unSessionID);
 }
 
-bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(void *linux_side, RemotePlaySessionID_t unSessionID, int * pnResolutionX, int * pnResolutionY)
+bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(void *linux_side, RemotePlaySessionID_t unSessionID, int *pnResolutionX, int *pnResolutionY)
 {
     return ((ISteamRemotePlay*)linux_side)->BGetSessionClientResolution((RemotePlaySessionID_t)unSessionID, (int *)pnResolutionX, (int *)pnResolutionY);
 }
