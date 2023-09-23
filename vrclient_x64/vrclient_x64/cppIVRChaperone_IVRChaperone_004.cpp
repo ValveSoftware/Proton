@@ -14,12 +14,12 @@ vr::ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_004_GetCalibrationSta
     return ((IVRChaperone*)linux_side)->GetCalibrationState();
 }
 
-bool cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize(void *linux_side, float * pSizeX, float * pSizeZ)
+bool cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize(void *linux_side, float *pSizeX, float *pSizeZ)
 {
     return ((IVRChaperone*)linux_side)->GetPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
 }
 
-bool cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect(void *linux_side, HmdQuad_t * rect)
+bool cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect(void *linux_side, HmdQuad_t *rect)
 {
     return ((IVRChaperone*)linux_side)->GetPlayAreaRect((vr::HmdQuad_t *)rect);
 }
@@ -34,7 +34,7 @@ void cppIVRChaperone_IVRChaperone_004_SetSceneColor(void *linux_side, HmdColor_t
     ((IVRChaperone*)linux_side)->SetSceneColor((vr::HmdColor_t)color);
 }
 
-void cppIVRChaperone_IVRChaperone_004_GetBoundsColor(void *linux_side, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor)
+void cppIVRChaperone_IVRChaperone_004_GetBoundsColor(void *linux_side, HmdColor_t *pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
 {
     ((IVRChaperone*)linux_side)->GetBoundsColor((vr::HmdColor_t *)pOutputColorArray, (int)nNumOutputColors, (float)flCollisionBoundsFadeDistance, (vr::HmdColor_t *)pOutputCameraColor);
 }

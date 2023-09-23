@@ -9,7 +9,7 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint32_t cppIVRCompositor_IVRCompositor_008_GetLastError(void *linux_side, char * pchBuffer, uint32_t unBufferSize)
+uint32_t cppIVRCompositor_IVRCompositor_008_GetLastError(void *linux_side, char *pchBuffer, uint32_t unBufferSize)
 {
     return ((IVRCompositor*)linux_side)->GetLastError((char *)pchBuffer, (uint32_t)unBufferSize);
 }
@@ -34,12 +34,12 @@ float cppIVRCompositor_IVRCompositor_008_GetGamma(void *linux_side)
     return ((IVRCompositor*)linux_side)->GetGamma();
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_WaitGetPoses(void *linux_side, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     return ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds, VRSubmitFlags_t nSubmitFlags)
+vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
 {
     return ((IVRCompositor*)linux_side)->Submit((vr::Hmd_Eye)eEye, (vr::GraphicsAPIConvention)eTextureType, (void *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::VRSubmitFlags_t)nSubmitFlags);
 }
@@ -49,7 +49,7 @@ void cppIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(void *linux_side
     ((IVRCompositor*)linux_side)->ClearLastSubmittedFrame();
 }
 
-bool cppIVRCompositor_IVRCompositor_008_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0910 * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_008_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0910 *pTiming, uint32_t unFramesAgo)
 {
     Compositor_FrameTiming lin;
     bool _ret;
@@ -71,7 +71,7 @@ void cppIVRCompositor_IVRCompositor_008_FadeGrid(void *linux_side, float fSecond
     ((IVRCompositor*)linux_side)->FadeGrid((float)fSeconds, (bool)bFadeIn);
 }
 
-void cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride(void *linux_side, GraphicsAPIConvention eTextureType, void * pFront, void * pBack, void * pLeft, void * pRight, void * pTop, void * pBottom)
+void cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride(void *linux_side, GraphicsAPIConvention eTextureType, void *pFront, void *pBack, void *pLeft, void *pRight, void *pTop, void *pBottom)
 {
     ((IVRCompositor*)linux_side)->SetSkyboxOverride((vr::GraphicsAPIConvention)eTextureType, (void *)pFront, (void *)pBack, (void *)pLeft, (void *)pRight, (void *)pTop, (void *)pBottom);
 }

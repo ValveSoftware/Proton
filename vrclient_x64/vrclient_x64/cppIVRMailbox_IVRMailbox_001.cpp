@@ -9,7 +9,7 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc1(void *linux_side, const char * a, vrmb_typea * b)
+vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc1(void *linux_side, const char *a, vrmb_typea *b)
 {
     return ((IVRMailbox*)linux_side)->undoc1((const char *)a, (vr::vrmb_typea *)b);
 }
@@ -19,12 +19,12 @@ vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc2(void *linux_side, vrmb_typea 
     return ((IVRMailbox*)linux_side)->undoc2((vr::vrmb_typea)a);
 }
 
-vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc3(void *linux_side, vrmb_typea a, const char * b, const char * c)
+vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc3(void *linux_side, vrmb_typea a, const char *b, const char *c)
 {
     return ((IVRMailbox*)linux_side)->undoc3((vr::vrmb_typea)a, (const char *)b, (const char *)c);
 }
 
-vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc4(void *linux_side, vrmb_typea a, char * b, uint32_t c, uint32_t * d)
+vr::vrmb_typeb cppIVRMailbox_IVRMailbox_001_undoc4(void *linux_side, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
 {
     return ((IVRMailbox*)linux_side)->undoc4((vr::vrmb_typea)a, (char *)b, (uint32_t)c, (uint32_t *)d);
 }
