@@ -144,7 +144,7 @@ InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput001_GetDigitalAct
     return _ret;
 }
 
-InputDigitalActionData_t *__thiscall winISteamInput_SteamInput001_GetDigitalActionData(winISteamInput_SteamInput001 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput001_GetDigitalActionData(winISteamInput_SteamInput001 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput001_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
@@ -167,7 +167,7 @@ InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput001_GetAnalogActio
     return _ret;
 }
 
-InputAnalogActionData_t *__thiscall winISteamInput_SteamInput001_GetAnalogActionData(winISteamInput_SteamInput001 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput001_GetAnalogActionData(winISteamInput_SteamInput001 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput001_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
@@ -204,7 +204,7 @@ void __thiscall winISteamInput_SteamInput001_StopAnalogActionMomentum(winISteamI
     cppISteamInput_SteamInput001_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
 }
 
-InputMotionData_t *__thiscall winISteamInput_SteamInput001_GetMotionData(winISteamInput_SteamInput001 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput001_GetMotionData(winISteamInput_SteamInput001 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput001_GetMotionData(_this->linux_side, inputHandle);
@@ -499,7 +499,7 @@ InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput002_GetDigitalAct
     return _ret;
 }
 
-InputDigitalActionData_t *__thiscall winISteamInput_SteamInput002_GetDigitalActionData(winISteamInput_SteamInput002 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput002_GetDigitalActionData(winISteamInput_SteamInput002 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput002_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
@@ -522,7 +522,7 @@ InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput002_GetAnalogActio
     return _ret;
 }
 
-InputAnalogActionData_t *__thiscall winISteamInput_SteamInput002_GetAnalogActionData(winISteamInput_SteamInput002 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput002_GetAnalogActionData(winISteamInput_SteamInput002 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput002_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
@@ -559,7 +559,7 @@ void __thiscall winISteamInput_SteamInput002_StopAnalogActionMomentum(winISteamI
     cppISteamInput_SteamInput002_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
 }
 
-InputMotionData_t *__thiscall winISteamInput_SteamInput002_GetMotionData(winISteamInput_SteamInput002 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput002_GetMotionData(winISteamInput_SteamInput002 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput002_GetMotionData(_this->linux_side, inputHandle);
@@ -904,7 +904,7 @@ InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput005_GetDigitalAct
     return _ret;
 }
 
-InputDigitalActionData_t *__thiscall winISteamInput_SteamInput005_GetDigitalActionData(winISteamInput_SteamInput005 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput005_GetDigitalActionData(winISteamInput_SteamInput005 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput005_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
@@ -935,7 +935,7 @@ InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput005_GetAnalogActio
     return _ret;
 }
 
-InputAnalogActionData_t *__thiscall winISteamInput_SteamInput005_GetAnalogActionData(winISteamInput_SteamInput005 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput005_GetAnalogActionData(winISteamInput_SteamInput005 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput005_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
@@ -996,7 +996,7 @@ void __thiscall winISteamInput_SteamInput005_StopAnalogActionMomentum(winISteamI
     cppISteamInput_SteamInput005_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
 }
 
-InputMotionData_t *__thiscall winISteamInput_SteamInput005_GetMotionData(winISteamInput_SteamInput005 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput005_GetMotionData(winISteamInput_SteamInput005 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput005_GetMotionData(_this->linux_side, inputHandle);
@@ -1374,7 +1374,7 @@ InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput006_GetDigitalAct
     return _ret;
 }
 
-InputDigitalActionData_t *__thiscall winISteamInput_SteamInput006_GetDigitalActionData(winISteamInput_SteamInput006 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput006_GetDigitalActionData(winISteamInput_SteamInput006 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput006_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
@@ -1405,7 +1405,7 @@ InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput006_GetAnalogActio
     return _ret;
 }
 
-InputAnalogActionData_t *__thiscall winISteamInput_SteamInput006_GetAnalogActionData(winISteamInput_SteamInput006 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput006_GetAnalogActionData(winISteamInput_SteamInput006 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput006_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
@@ -1466,7 +1466,7 @@ void __thiscall winISteamInput_SteamInput006_StopAnalogActionMomentum(winISteamI
     cppISteamInput_SteamInput006_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
 }
 
-InputMotionData_t *__thiscall winISteamInput_SteamInput006_GetMotionData(winISteamInput_SteamInput006 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput006_GetMotionData(winISteamInput_SteamInput006 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
     *_ret = cppISteamInput_SteamInput006_GetMotionData(_this->linux_side, inputHandle);

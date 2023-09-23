@@ -791,12 +791,20 @@ def declspec(decl, name):
 
     if param_needs_conversion(decl):
         return f"win{decl.spelling}_{sdkver}{name}"
+
+    if decl.spelling.startswith('const '):
+        const, type_name = 'const ', decl.spelling[6:]
+    else:
+        const, type_name = '', decl.spelling
+
+    if type_name.startswith('ISteam'):
+        return f'{const}void /*{type_name}*/{name}'
+
     return f'{decl.spelling}{name}'
 
 
 def handle_method_hpp(method, cppname, cpp_h):
-    ret = f'{method.result_type.spelling} '
-    if ret.startswith("ISteam"): ret = 'void *'
+    ret = f'{declspec(method.result_type, "")} '
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
@@ -807,8 +815,7 @@ def handle_method_hpp(method, cppname, cpp_h):
 def handle_method_cpp(method, classname, cppname, cpp):
     returns_void = method.result_type.kind == TypeKind.VOID
 
-    ret = f'{method.result_type.spelling} '
-    if ret.startswith("ISteam"): ret = 'void *'
+    ret = f'{declspec(method.result_type, "")} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
@@ -827,7 +834,7 @@ def handle_method_cpp(method, classname, cppname, cpp):
     cpp.write("{\n")
 
     if not returns_void:
-        cpp.write(f"    {ret}_ret;\n")
+        cpp.write(f'    {declspec(method.result_type, "_ret")};\n')
 
     for name, param in sorted(need_convert.items()):
         if param.type.kind == TypeKind.POINTER:
@@ -899,16 +906,15 @@ def handle_method_c(method, winclassname, cppname, cfile):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
-    ret = f'{method.result_type.spelling} '
-    if ret.startswith("ISteam"): ret = f'win{ret}'
-    elif returns_record: ret = f'{ret}*'
+    ret = "*" if returns_record else ""
+    ret = f'{declspec(method.result_type, ret)} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{method.result_type.spelling} *_ret'] + params
+        params = [f'{declspec(method.result_type, "*_ret")}'] + params
         names = ['_ret'] + names
 
     params = [f'{winclassname} *_this'] + params

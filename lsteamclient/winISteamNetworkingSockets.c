@@ -962,7 +962,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetGameC
     return _ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets006 *_this, ISteamNetworkingConnectionCustomSignaling *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
+HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets006 *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     HSteamNetConnection _ret;
     TRACE("%p\n", _this);
@@ -970,7 +970,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return _ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets006 *_this, const void *pMsg, int cbMsg, ISteamNetworkingCustomSignalingRecvContext *pContext)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets006 *_this, const void *pMsg, int cbMsg, void /*ISteamNetworkingCustomSignalingRecvContext*/ *pContext)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -1360,7 +1360,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetGameC
     return _ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets008 *_this, ISteamNetworkingConnectionCustomSignaling *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
+HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets008 *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     HSteamNetConnection _ret;
     TRACE("%p\n", _this);
@@ -1368,7 +1368,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return _ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets008 *_this, const void *pMsg, int cbMsg, ISteamNetworkingCustomSignalingRecvContext *pContext)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets008 *_this, const void *pMsg, int cbMsg, void /*ISteamNetworkingCustomSignalingRecvContext*/ *pContext)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -1780,7 +1780,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetGameC
     return _ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets009 *_this, ISteamNetworkingConnectionSignaling *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
+HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets009 *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     HSteamNetConnection _ret;
     TRACE("%p\n", _this);
@@ -1788,7 +1788,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return _ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets009 *_this, const void *pMsg, int cbMsg, ISteamNetworkingSignalingRecvContext *pContext)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets009 *_this, const void *pMsg, int cbMsg, void /*ISteamNetworkingSignalingRecvContext*/ *pContext)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -2222,7 +2222,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetGameC
     return _ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, ISteamNetworkingConnectionSignaling *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
+HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     HSteamNetConnection _ret;
     TRACE("%p\n", _this);
@@ -2230,7 +2230,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return _ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, const void *pMsg, int cbMsg, ISteamNetworkingSignalingRecvContext *pContext)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, const void *pMsg, int cbMsg, void /*ISteamNetworkingSignalingRecvContext*/ *pContext)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -2296,9 +2296,9 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetRemot
     return _ret;
 }
 
-winISteamNetworkingFakeUDPPort * __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, int idxFakeServerPort)
+void /*ISteamNetworkingFakeUDPPort*/ * __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, int idxFakeServerPort)
 {
-    winISteamNetworkingFakeUDPPort * _ret;
+    void /*ISteamNetworkingFakeUDPPort*/ * _ret;
     TRACE("%p\n", _this);
     _ret = cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort(_this->linux_side, idxFakeServerPort);
     return _ret;

@@ -42,7 +42,7 @@ uint32 cppISteamUtils_SteamUtils010_GetServerRealTime(void *linux_side)
 
 const char * cppISteamUtils_SteamUtils010_GetIPCountry(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUtils*)linux_side)->GetIPCountry();
     return (_ret);
 }
@@ -170,7 +170,7 @@ bool cppISteamUtils_SteamUtils010_GetEnteredGamepadTextInput(void *linux_side, c
 
 const char * cppISteamUtils_SteamUtils010_GetSteamUILanguage(void *linux_side)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUtils*)linux_side)->GetSteamUILanguage();
     return (_ret);
 }

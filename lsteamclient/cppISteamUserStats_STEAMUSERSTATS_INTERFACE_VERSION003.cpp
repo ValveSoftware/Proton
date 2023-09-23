@@ -90,7 +90,7 @@ int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon(vo
 
 const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute(void *linux_side, const char *pchName, const char *pchKey)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamUserStats*)linux_side)->GetAchievementDisplayAttribute((const char *)pchName, (const char *)pchKey);
     return (_ret);
 }

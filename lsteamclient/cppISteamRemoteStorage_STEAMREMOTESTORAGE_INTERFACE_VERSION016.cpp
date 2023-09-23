@@ -147,7 +147,7 @@ int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileCoun
 
 const char * cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileNameAndSize(void *linux_side, int iFile, int32 *pnFileSizeInBytes)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamRemoteStorage*)linux_side)->GetFileNameAndSize((int)iFile, (int32 *)pnFileSizeInBytes);
     return (_ret);
 }
@@ -404,7 +404,7 @@ int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFil
 
 const char * cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileChange(void *linux_side, int iFile, ERemoteStorageLocalFileChange *pEChangeType, ERemoteStorageFilePathType *pEFilePathType)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((ISteamRemoteStorage*)linux_side)->GetLocalFileChange((int)iFile, (ERemoteStorageLocalFileChange *)pEChangeType, (ERemoteStorageFilePathType *)pEFilePathType);
     return (_ret);
 }
