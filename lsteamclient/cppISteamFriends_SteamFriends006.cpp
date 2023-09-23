@@ -16,7 +16,7 @@ const char * cppISteamFriends_SteamFriends006_GetPersonaName(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetPersonaName();
 }
 
-void cppISteamFriends_SteamFriends006_SetPersonaName(void *linux_side, const char * pchPersonaName)
+void cppISteamFriends_SteamFriends006_SetPersonaName(void *linux_side, const char *pchPersonaName)
 {
     ((ISteamFriends*)linux_side)->SetPersonaName((const char *)pchPersonaName);
 }
@@ -56,7 +56,7 @@ int cppISteamFriends_SteamFriends006_GetFriendAvatar(void *linux_side, CSteamID 
     return ((ISteamFriends*)linux_side)->GetFriendAvatar((CSteamID)steamIDFriend, (int)eAvatarSize);
 }
 
-bool cppISteamFriends_SteamFriends006_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+bool cppISteamFriends_SteamFriends006_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     return ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (FriendGameInfo_t *)pFriendGameInfo);
 }
@@ -111,17 +111,17 @@ void cppISteamFriends_SteamFriends006_SetInGameVoiceSpeaking(void *linux_side, C
     ((ISteamFriends*)linux_side)->SetInGameVoiceSpeaking((CSteamID)steamIDUser, (bool)bSpeaking);
 }
 
-void cppISteamFriends_SteamFriends006_ActivateGameOverlay(void *linux_side, const char * pchDialog)
+void cppISteamFriends_SteamFriends006_ActivateGameOverlay(void *linux_side, const char *pchDialog)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlay((const char *)pchDialog);
 }
 
-void cppISteamFriends_SteamFriends006_ActivateGameOverlayToUser(void *linux_side, const char * pchDialog, CSteamID steamID)
+void cppISteamFriends_SteamFriends006_ActivateGameOverlayToUser(void *linux_side, const char *pchDialog, CSteamID steamID)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToUser((const char *)pchDialog, (CSteamID)steamID);
 }
 
-void cppISteamFriends_SteamFriends006_ActivateGameOverlayToWebPage(void *linux_side, const char * pchURL)
+void cppISteamFriends_SteamFriends006_ActivateGameOverlayToWebPage(void *linux_side, const char *pchURL)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToWebPage((const char *)pchURL);
 }

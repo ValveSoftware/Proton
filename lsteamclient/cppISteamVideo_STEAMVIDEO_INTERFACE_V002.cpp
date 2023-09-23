@@ -17,7 +17,7 @@ void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(void *linux_side, AppI
     ((ISteamVideo*)linux_side)->GetVideoURL((AppId_t)unVideoAppID);
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(void *linux_side, int * pnNumViewers)
+bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(void *linux_side, int *pnNumViewers)
 {
     return ((ISteamVideo*)linux_side)->IsBroadcasting((int *)pnNumViewers);
 }
@@ -27,7 +27,7 @@ void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(void *linux_side, A
     ((ISteamVideo*)linux_side)->GetOPFSettings((AppId_t)unVideoAppID);
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(void *linux_side, AppId_t unVideoAppID, char * pchBuffer, int32 * pnBufferSize)
+bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(void *linux_side, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
 {
     return ((ISteamVideo*)linux_side)->GetOPFStringForApp((AppId_t)unVideoAppID, (char *)pchBuffer, (int32 *)pnBufferSize);
 }

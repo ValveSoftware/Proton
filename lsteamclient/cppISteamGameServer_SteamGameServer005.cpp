@@ -37,7 +37,7 @@ CSteamID cppISteamGameServer_SteamGameServer005_GetSteamID(void *linux_side)
     return ((ISteamGameServer*)linux_side)->GetSteamID();
 }
 
-bool cppISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate(void *linux_side, uint32 unIPClient, const void * pvAuthBlob, uint32 cubAuthBlobSize, CSteamID * pSteamIDUser)
+bool cppISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate(void *linux_side, uint32 unIPClient, const void *pvAuthBlob, uint32 cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     return ((ISteamGameServer*)linux_side)->SendUserConnectAndAuthenticate((uint32)unIPClient, (const void *)pvAuthBlob, (uint32)cubAuthBlobSize, (CSteamID *)pSteamIDUser);
 }
@@ -52,17 +52,17 @@ void cppISteamGameServer_SteamGameServer005_SendUserDisconnect(void *linux_side,
     ((ISteamGameServer*)linux_side)->SendUserDisconnect((CSteamID)steamIDUser);
 }
 
-bool cppISteamGameServer_SteamGameServer005_BUpdateUserData(void *linux_side, CSteamID steamIDUser, const char * pchPlayerName, uint32 uScore)
+bool cppISteamGameServer_SteamGameServer005_BUpdateUserData(void *linux_side, CSteamID steamIDUser, const char *pchPlayerName, uint32 uScore)
 {
     return ((ISteamGameServer*)linux_side)->BUpdateUserData((CSteamID)steamIDUser, (const char *)pchPlayerName, (uint32)uScore);
 }
 
-bool cppISteamGameServer_SteamGameServer005_BSetServerType(void *linux_side, uint32 unServerFlags, uint32 unGameIP, uint16 unGamePort, uint16 unSpectatorPort, uint16 usQueryPort, const char * pchGameDir, const char * pchVersion, bool bLANMode)
+bool cppISteamGameServer_SteamGameServer005_BSetServerType(void *linux_side, uint32 unServerFlags, uint32 unGameIP, uint16 unGamePort, uint16 unSpectatorPort, uint16 usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
 {
     return ((ISteamGameServer*)linux_side)->BSetServerType((uint32)unServerFlags, (uint32)unGameIP, (uint16)unGamePort, (uint16)unSpectatorPort, (uint16)usQueryPort, (const char *)pchGameDir, (const char *)pchVersion, (bool)bLANMode);
 }
 
-void cppISteamGameServer_SteamGameServer005_UpdateServerStatus(void *linux_side, int cPlayers, int cPlayersMax, int cBotPlayers, const char * pchServerName, const char * pSpectatorServerName, const char * pchMapName)
+void cppISteamGameServer_SteamGameServer005_UpdateServerStatus(void *linux_side, int cPlayers, int cPlayersMax, int cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName)
 {
     ((ISteamGameServer*)linux_side)->UpdateServerStatus((int)cPlayers, (int)cPlayersMax, (int)cBotPlayers, (const char *)pchServerName, (const char *)pSpectatorServerName, (const char *)pchMapName);
 }
@@ -72,12 +72,12 @@ void cppISteamGameServer_SteamGameServer005_UpdateSpectatorPort(void *linux_side
     ((ISteamGameServer*)linux_side)->UpdateSpectatorPort((uint16)unSpectatorPort);
 }
 
-void cppISteamGameServer_SteamGameServer005_SetGameType(void *linux_side, const char * pchGameType)
+void cppISteamGameServer_SteamGameServer005_SetGameType(void *linux_side, const char *pchGameType)
 {
     ((ISteamGameServer*)linux_side)->SetGameType((const char *)pchGameType);
 }
 
-bool cppISteamGameServer_SteamGameServer005_BGetUserAchievementStatus(void *linux_side, CSteamID steamID, const char * pchAchievementName)
+bool cppISteamGameServer_SteamGameServer005_BGetUserAchievementStatus(void *linux_side, CSteamID steamID, const char *pchAchievementName)
 {
     return ((ISteamGameServer*)linux_side)->BGetUserAchievementStatus((CSteamID)steamID, (const char *)pchAchievementName);
 }

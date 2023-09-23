@@ -66,7 +66,7 @@ int cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(void *linux_side)
     return ((ISteamApps*)linux_side)->GetDLCCount();
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t * pAppID, bool * pbAvailable, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(void *linux_side, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->BGetDLCDataByIndex((int)iDLC, (AppId_t *)pAppID, (bool *)pbAvailable, (char *)pchName, (int)cchNameBufferSize);
 }
@@ -86,7 +86,7 @@ void cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(v
     ((ISteamApps*)linux_side)->RequestAppProofOfPurchaseKey((AppId_t)nAppID);
 }
 
-bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(void *linux_side, char * pchName, int cchNameBufferSize)
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(void *linux_side, char *pchName, int cchNameBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetCurrentBetaName((char *)pchName, (int)cchNameBufferSize);
 }
@@ -96,12 +96,12 @@ bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(void *linux
     return ((ISteamApps*)linux_side)->MarkContentCorrupt((bool)bMissingFilesOnly);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(void *linux_side, DepotId_t * pvecDepots, uint32 cMaxDepots)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(void *linux_side, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     return ((ISteamApps*)linux_side)->GetInstalledDepots((DepotId_t *)pvecDepots, (uint32)cMaxDepots);
 }
 
-uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(void *linux_side, AppId_t appID, char * pchFolder, uint32 cchFolderBufferSize)
+uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(void *linux_side, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     return ((ISteamApps*)linux_side)->GetAppInstallDir((AppId_t)appID, (char *)pchFolder, (uint32)cchFolderBufferSize);
 }

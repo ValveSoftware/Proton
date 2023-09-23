@@ -12,7 +12,7 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamGameSearch_SteamMatchGameSearch001.h"
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(void *linux_side, const char * pchKeyToFind, const char * pchValuesToFind)
+EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(void *linux_side, const char *pchKeyToFind, const char *pchValuesToFind)
 {
     return ((ISteamGameSearch*)linux_side)->AddGameSearchParams((const char *)pchKeyToFind, (const char *)pchValuesToFind);
 }
@@ -37,7 +37,7 @@ EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame(v
     return ((ISteamGameSearch*)linux_side)->DeclineGame();
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(void *linux_side, CSteamID steamIDHost, char * pchConnectionDetails, int cubConnectionDetails)
+EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(void *linux_side, CSteamID steamIDHost, char *pchConnectionDetails, int cubConnectionDetails)
 {
     return ((ISteamGameSearch*)linux_side)->RetrieveConnectionDetails((CSteamID)steamIDHost, (char *)pchConnectionDetails, (int)cubConnectionDetails);
 }
@@ -47,12 +47,12 @@ EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch
     return ((ISteamGameSearch*)linux_side)->EndGameSearch();
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(void *linux_side, const char * pchKey, const char * pchValue)
+EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(void *linux_side, const char *pchKey, const char *pchValue)
 {
     return ((ISteamGameSearch*)linux_side)->SetGameHostParams((const char *)pchKey, (const char *)pchValue);
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(void *linux_side, const char * pchConnectionDetails, int cubConnectionDetails)
+EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(void *linux_side, const char *pchConnectionDetails, int cubConnectionDetails)
 {
     return ((ISteamGameSearch*)linux_side)->SetConnectionDetails((const char *)pchConnectionDetails, (int)cubConnectionDetails);
 }

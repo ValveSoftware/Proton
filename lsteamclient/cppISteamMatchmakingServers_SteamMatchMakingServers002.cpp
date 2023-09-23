@@ -12,32 +12,32 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestInternetServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList(void *linux_side, AppId_t iApp, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList(void *linux_side, AppId_t iApp, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestLANServerList((AppId_t)iApp, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestFriendsServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestFavoritesServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestHistoryServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
+HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestSpectatorServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
 }
@@ -77,17 +77,17 @@ void cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer(void *
     ((ISteamMatchmakingServers*)linux_side)->RefreshServer((HServerListRequest)hRequest, (int)iServer);
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
+HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPingResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->PingServer((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPingResponse *)pRequestServersResponse);
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
+HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingPlayersResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->PlayerDetails((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPlayersResponse *)pRequestServersResponse);
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
+HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(void *linux_side, uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse *pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->ServerRules((uint32)unIP, (uint16)usPort, (ISteamMatchmakingRulesResponse *)pRequestServersResponse);
 }
