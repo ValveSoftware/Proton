@@ -827,116 +827,100 @@ def handle_class(klass):
         out(u'}\n')
         out(u'#endif\n')
 
+    winclassname = f'win{klass.spelling}_{klass.version}'
+    with open(f'vrclient_x64/win{klass.spelling}.c', 'a') as file:
+        out = file.write
 
-    file_exists = os.path.isfile(f"vrclient_x64/win{klass.spelling}.c")
-    cfile = open(f"vrclient_x64/win{klass.spelling}.c", "a")
-    if not file_exists:
-        cfile.write("""/* This file is auto-generated, do not edit. */
-#include <stdarg.h>
-#include <stdint.h>
+        out(f'#include "{cppname}.h"\n\n')
+        out(f'typedef struct __{winclassname} {{\n')
+        out(u'    vtable_ptr *vtable;\n') # make sure to keep this first (flat API depends on it)
+        out(u'    void *linux_side;\n')
+        for classname_pattern, user_data_type, _ in method_overrides_data:
+            if classname_pattern in klass.spelling:
+                out(f'    {user_data_type} user_data;\n')
+                break
+        out(f'}} {winclassname};\n\n')
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
+        for method in klass.methods:
+            handle_thiscall_wrapper(klass, method, out)
+        out('\n')
 
-#include "cxx.h"
+        for method in klass.methods:
+            if type(method) is Destructor:
+                continue
+            else:
+                handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, out)
 
-#include "vrclient_defs.h"
+        out(f'extern vtable_ptr {winclassname}_vtable;\n\n')
+        out(u'#ifndef __GNUC__\n')
+        out(u'void __asm_dummy_vtables(void) {\n')
+        out(u'#endif\n')
+        out(f'    __ASM_VTABLE({winclassname},\n')
+        for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
+            out(f'        VTABLE_ADD_FUNC({winclassname}_{method.name})\n')
+        out(u'    );\n')
+        out(u'#ifndef __GNUC__\n')
+        out(u'}\n')
+        out(u'#endif\n\n')
+        out(f'{winclassname} *create_{winclassname}(void *linux_side)\n')
+        out(u'{\n')
+        out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof({winclassname}));\n')
+        out(u'    TRACE("-> %p\\n", r);\n')
+        out(f'    r->vtable = &{winclassname}_vtable;\n')
+        out(u'    r->linux_side = linux_side;\n')
+        out(u'    return r;\n')
+        out(u'}\n\n')
+        out(f'void destroy_{winclassname}(void *object)\n')
+        out(u'{\n')
+        out(u'    TRACE("%p\\n", object);\n')
+        for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
+            if user_data_destructor and classname_pattern in klass.spelling:
+                out(f'    struct __{winclassname} *win_object = object;\n')
+                out(f'    {user_data_destructor}(&win_object->user_data);\n')
+                break
+        out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
+        out(u'}\n\n')
 
-#include "vrclient_private.h"
-
-#include "struct_converters.h"
-
-#include "flatapi.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
-
-""")
-
-
-    winclassname = f"win{klass.spelling}_{klass.version}"
-    cfile.write("#include \"%s.h\"\n\n" % cppname)
-    cfile.write("typedef struct __%s {\n" % winclassname)
-    cfile.write("    vtable_ptr *vtable;\n") # make sure to keep this first (flat API depends on it)
-    cfile.write("    void *linux_side;\n")
-    for classname_pattern, user_data_type, _ in method_overrides_data:
-        if classname_pattern in klass.spelling:
-            cfile.write("    %s user_data;\n" % user_data_type)
-            break
-    cfile.write("} %s;\n\n" % winclassname)
-
-    for method in klass.methods:
-        handle_thiscall_wrapper(klass, method, cfile.write)
-    cfile.write('\n')
-
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        else:
-            handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, cfile.write)
-
-    cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
-    cfile.write("#ifndef __GNUC__\n")
-    cfile.write("void __asm_dummy_vtables(void) {\n")
-    cfile.write("#endif\n")
-    cfile.write("    __ASM_VTABLE(%s,\n" % winclassname)
-    for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
-        cfile.write(f"        VTABLE_ADD_FUNC({winclassname}_{method.name})\n")
-    cfile.write("    );\n")
-    cfile.write("#ifndef __GNUC__\n")
-    cfile.write("}\n")
-    cfile.write("#endif\n\n")
-    cfile.write("%s *create_%s(void *linux_side)\n{\n" % (winclassname, winclassname))
-    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(%s));\n" % (winclassname, winclassname))
-    cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write("    r->vtable = &%s_vtable;\n" % winclassname)
-    cfile.write("    r->linux_side = linux_side;\n")
-    cfile.write("    return r;\n}\n\n")
-    cfile.write("void destroy_%s(void *object)\n{\n" % winclassname)
-    cfile.write("    TRACE(\"%p\\n\", object);\n")
-    for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-        if user_data_destructor and classname_pattern in klass.spelling:
-            cfile.write("    struct __%s *win_object = object;\n" % winclassname)
-            cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
-            break
-    cfile.write("    HeapFree(GetProcessHeap(), 0, object);\n}\n\n")
-
-    # flat (FnTable) API
-    cfile.write("%s *create_%s_FnTable(void *linux_side)\n{\n" % (winclassname, winclassname))
-    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(%s));\n" % (winclassname, winclassname))
-    cfile.write("    struct thunk *thunks = alloc_thunks(%d);\n" % len(klass.methods))
-    cfile.write("    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, %d * sizeof(*vtable));\n" % len(klass.methods))
-    cfile.write("    int i;\n\n")
-    cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
-    for i, method in enumerate(klass.methods):
-        thunk_params = get_capi_thunk_params(method)
-        arguments = list(method.get_arguments())
-        global max_c_api_param_count
-        max_c_api_param_count = max(len(arguments), max_c_api_param_count)
-        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, method.name, thunk_params))
-    cfile.write("    for (i = 0; i < %d; i++)\n" % len(klass.methods))
-    cfile.write("        vtable[i] = &thunks[i];\n")
-    cfile.write("    r->linux_side = linux_side;\n")
-    cfile.write("    r->vtable = (void *)vtable;\n")
-    cfile.write("    return r;\n}\n\n")
-    cfile.write("void destroy_%s_FnTable(void *object)\n{\n" % winclassname)
-    cfile.write("    %s *win_object = object;\n" % winclassname)
-    cfile.write("    TRACE(\"%p\\n\", win_object);\n")
-    for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-        if user_data_destructor and classname_pattern in klass.spelling:
-            cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
-            break
-    cfile.write("    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n")
-    cfile.write("    HeapFree(GetProcessHeap(), 0, win_object->vtable);\n")
-    cfile.write("    HeapFree(GetProcessHeap(), 0, win_object);\n}\n\n")
+        # flat (FnTable) API
+        out(f'{winclassname} *create_{winclassname}_FnTable(void *linux_side)\n')
+        out(u'{\n')
+        out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof({winclassname}));\n')
+        out(f'    struct thunk *thunks = alloc_thunks({len(klass.methods)});\n')
+        out(f'    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, {len(klass.methods)} * sizeof(*vtable));\n')
+        out(u'    int i;\n\n')
+        out(u'    TRACE("-> %p, vtable %p, thunks %p\\n", r, vtable, thunks);\n')
+        for i, method in enumerate(klass.methods):
+            thunk_params = get_capi_thunk_params(method)
+            arguments = list(method.get_arguments())
+            global max_c_api_param_count
+            max_c_api_param_count = max(len(arguments), max_c_api_param_count)
+            out(f'    init_thunk(&thunks[{i}], r, {winclassname}_{method.name}, {thunk_params});\n')
+        out(f'    for (i = 0; i < {len(klass.methods)}; i++)\n')
+        out(u'        vtable[i] = &thunks[i];\n')
+        out(u'    r->linux_side = linux_side;\n')
+        out(u'    r->vtable = (void *)vtable;\n')
+        out(u'    return r;\n')
+        out(u'}\n\n')
+        out(f'void destroy_{winclassname}_FnTable(void *object)\n')
+        out(u'{\n')
+        out(f'    {winclassname} *win_object = object;\n')
+        out(u'    TRACE("%p\\n", win_object);\n')
+        for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
+            if user_data_destructor and classname_pattern in klass.spelling:
+                out(f'    {user_data_destructor}(&win_object->user_data);\n')
+                break
+        out(u'    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n')
+        out(u'    HeapFree(GetProcessHeap(), 0, win_object->vtable);\n')
+        out(u'    HeapFree(GetProcessHeap(), 0, win_object);\n')
+        out(u'}\n\n')
 
     constructors = open("vrclient_x64/win_constructors.h", "a")
-    constructors.write("extern void *create_%s(void *);\n" % winclassname)
-    constructors.write("extern void *create_%s_FnTable(void *);\n" % winclassname)
+    constructors.write(f'extern void *create_{winclassname}(void *);\n')
+    constructors.write(f'extern void *create_{winclassname}_FnTable(void *);\n')
 
     destructors = open("vrclient_x64/win_destructors.h", "a")
-    destructors.write("extern void destroy_%s(void *);\n" % winclassname)
-    destructors.write("extern void destroy_%s_FnTable(void *);\n" % winclassname)
+    destructors.write(f'extern void destroy_{winclassname}(void *);\n')
+    destructors.write(f'extern void destroy_{winclassname}_FnTable(void *);\n')
 
     constructors = open("vrclient_x64/win_constructors_table.dat", "a")
     constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}, &destroy_{winclassname}}},\n")
@@ -1574,6 +1558,32 @@ for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
     all_classes.update(tmp_classes[sdkver]['u32'])
 
 print('parsing SDKs... 100%')
+
+
+for klass in all_classes.values():
+    with open(f"vrclient_x64/win{klass.spelling}.c", "w") as file:
+        out = file.write
+
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include <stdarg.h>\n')
+        out(u'#include <stdint.h>\n')
+        out(u'\n')
+        out(u'#include "windef.h"\n')
+        out(u'#include "winbase.h"\n')
+        out(u'#include "wine/debug.h"\n')
+        out(u'\n')
+        out(u'#include "cxx.h"\n')
+        out(u'\n')
+        out(u'#include "vrclient_defs.h"\n')
+        out(u'\n')
+        out(u'#include "vrclient_private.h"\n')
+        out(u'\n')
+        out(u'#include "struct_converters.h"\n')
+        out(u'\n')
+        out(u'#include "flatapi.h"\n')
+        out(u'\n')
+        out(u'WINE_DEFAULT_DEBUG_CHANNEL(vrclient);\n')
+        out(u'\n')
 
 
 for _, klass in sorted(all_classes.items()):
