@@ -26,27 +26,28 @@ typedef struct __winIVRMailbox_IVRMailbox_001 {
 } winIVRMailbox_IVRMailbox_001;
 
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc1, 12)
+DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc2, 12)
+DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
+DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
+
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(winIVRMailbox_IVRMailbox_001 *_this, const char * a, vrmb_typea * b)
 {
     TRACE("%p\n", _this);
     return cppIVRMailbox_IVRMailbox_001_undoc1(_this->linux_side, a, b);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc2, 12)
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a)
 {
     TRACE("%p\n", _this);
     return cppIVRMailbox_IVRMailbox_001_undoc2(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a, const char * b, const char * c)
 {
     TRACE("%p\n", _this);
     return ivrmailbox_undoc3(cppIVRMailbox_IVRMailbox_001_undoc3, _this->linux_side, a, b, c, 1);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a, char * b, uint32_t c, uint32_t * d)
 {
     TRACE("%p\n", _this);

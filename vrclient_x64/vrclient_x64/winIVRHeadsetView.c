@@ -26,62 +26,63 @@ typedef struct __winIVRHeadsetView_IVRHeadsetView_001 {
 } winIVRHeadsetView_IVRHeadsetView_001;
 
 DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode, 8)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode, 4)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped, 8)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped, 4)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio, 4)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange, 12)
+DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange, 12)
+
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(winIVRHeadsetView_IVRHeadsetView_001 *_this, uint32_t nWidth, uint32_t nHeight)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(_this->linux_side, nWidth, nHeight);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize, 12)
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(winIVRHeadsetView_IVRHeadsetView_001 *_this, uint32_t * pnWidth, uint32_t * pnHeight)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode, 8)
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(winIVRHeadsetView_IVRHeadsetView_001 *_this, HeadsetViewMode_t eHeadsetViewMode)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(_this->linux_side, eHeadsetViewMode);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode, 4)
 HeadsetViewMode_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(winIVRHeadsetView_IVRHeadsetView_001 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped, 5)
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(winIVRHeadsetView_IVRHeadsetView_001 *_this, bool bCropped)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(_this->linux_side, bCropped);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped, 4)
 bool __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(winIVRHeadsetView_IVRHeadsetView_001 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio, 4)
 float __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(winIVRHeadsetView_IVRHeadsetView_001 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange, 12)
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(winIVRHeadsetView_IVRHeadsetView_001 *_this, float flStartPct, float flEndPct)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(_this->linux_side, flStartPct, flEndPct);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange, 12)
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(winIVRHeadsetView_IVRHeadsetView_001 *_this, float * pStartPct, float * pEndPct)
 {
     TRACE("%p\n", _this);
