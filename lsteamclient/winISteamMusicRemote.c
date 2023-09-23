@@ -55,7 +55,7 @@ DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry, 8)
 DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistDidChange, 4)
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char * pchName)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char *pchName)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(_this->linux_side, pchName);
@@ -79,13 +79,13 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActi
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess(_this->linux_side, bValue);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char * pchDisplayName)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char *pchDisplayName)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(_this->linux_side, pchDisplayName);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, void * pvBuffer, uint32 cbBufferLength)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, void *pvBuffer, uint32 cbBufferLength)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(_this->linux_side, pvBuffer, cbBufferLength);
@@ -163,7 +163,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Curre
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable(_this->linux_side, bAvailable);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char * pchText)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, const char *pchText)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(_this->linux_side, pchText);
@@ -175,7 +175,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Updat
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds(_this->linux_side, nValue);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, void * pvBuffer, uint32 cbBufferLength)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, void *pvBuffer, uint32 cbBufferLength)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(_this->linux_side, pvBuffer, cbBufferLength);
@@ -199,7 +199,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Reset
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntries(_this->linux_side);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, int nID, int nPosition, const char * pchEntryText)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, int nID, int nPosition, const char *pchEntryText)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(_this->linux_side, nID, nPosition, pchEntryText);
@@ -229,7 +229,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Reset
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEntries(_this->linux_side);
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, int nID, int nPosition, const char * pchEntryText)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, int nID, int nPosition, const char *pchEntryText)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(_this->linux_side, nID, nPosition, pchEntryText);

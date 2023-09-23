@@ -33,19 +33,19 @@ void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_Des
     cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort(_this->linux_side);
 }
 
-EResult __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, const SteamNetworkingIPAddr * remoteAddress, const void * pData, uint32 cbData, int nSendFlags)
+EResult __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, const SteamNetworkingIPAddr *remoteAddress, const void *pData, uint32 cbData, int nSendFlags)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(_this->linux_side, remoteAddress, pData, cbData, nSendFlags);
 }
 
-int __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, winSteamNetworkingMessage_t_158 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, winSteamNetworkingMessage_t_158 **ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(_this->linux_side, ppOutMessages, nMaxMessages);
 }
 
-void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, const SteamNetworkingIPAddr * remoteAddress)
+void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, const SteamNetworkingIPAddr *remoteAddress)
 {
     TRACE("%p\n", _this);
     cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup(_this->linux_side, remoteAddress);

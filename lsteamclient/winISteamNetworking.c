@@ -65,43 +65,43 @@ bool __thiscall winISteamNetworking_SteamNetworking001_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking001_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_SendDataOnSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking001_SendDataOnSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking001_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_IsDataAvailable(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking001_IsDataAvailable(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_RetrieveData(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking001_RetrieveData(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_GetSocketInfo(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking001_GetSocketInfo(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking001_GetListenSocketInfo(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, uint32 * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking001_GetListenSocketInfo(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);
@@ -191,43 +191,43 @@ bool __thiscall winISteamNetworking_SteamNetworking002_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking002_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_SendDataOnSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking002_SendDataOnSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking002_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking002_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_IsDataAvailable(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking002_IsDataAvailable(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_RetrieveData(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking002_RetrieveData(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_GetSocketInfo(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking002_GetSocketInfo(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking002_GetListenSocketInfo(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, uint32 * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking002_GetListenSocketInfo(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);
@@ -307,19 +307,19 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking003_SendP2PPacket(winISteamNetworking_SteamNetworking003 *_this, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType)
+bool __thiscall winISteamNetworking_SteamNetworking003_SendP2PPacket(winISteamNetworking_SteamNetworking003 *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_SendP2PPacket(_this->linux_side, steamIDRemote, pubData, cubData, eP2PSendType);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking003 *_this, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking003_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking003 *_this, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_IsP2PPacketAvailable(_this->linux_side, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_ReadP2PPacket(winISteamNetworking_SteamNetworking003 *_this, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, CSteamID * psteamIDRemote)
+bool __thiscall winISteamNetworking_SteamNetworking003_ReadP2PPacket(winISteamNetworking_SteamNetworking003 *_this, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, CSteamID *psteamIDRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_ReadP2PPacket(_this->linux_side, pubDest, cubDest, pcubMsgSize, psteamIDRemote);
@@ -337,7 +337,7 @@ bool __thiscall winISteamNetworking_SteamNetworking003_CloseP2PSessionWithUser(w
     return cppISteamNetworking_SteamNetworking003_CloseP2PSessionWithUser(_this->linux_side, steamIDRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_GetP2PSessionState(winISteamNetworking_SteamNetworking003 *_this, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
+bool __thiscall winISteamNetworking_SteamNetworking003_GetP2PSessionState(winISteamNetworking_SteamNetworking003 *_this, CSteamID steamIDRemote, P2PSessionState_t *pConnectionState)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
@@ -373,43 +373,43 @@ bool __thiscall winISteamNetworking_SteamNetworking003_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking003_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_SendDataOnSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking003_SendDataOnSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking003_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_IsDataAvailable(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking003_IsDataAvailable(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_RetrieveData(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking003_RetrieveData(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_GetSocketInfo(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking003_GetSocketInfo(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking003_GetListenSocketInfo(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, uint32 * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking003_GetListenSocketInfo(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);
@@ -495,19 +495,19 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking004_SendP2PPacket(winISteamNetworking_SteamNetworking004 *_this, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType, int nVirtualPort)
+bool __thiscall winISteamNetworking_SteamNetworking004_SendP2PPacket(winISteamNetworking_SteamNetworking004 *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nVirtualPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_SendP2PPacket(_this->linux_side, steamIDRemote, pubData, cubData, eP2PSendType, nVirtualPort);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking004 *_this, uint32 * pcubMsgSize, int nVirtualPort)
+bool __thiscall winISteamNetworking_SteamNetworking004_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking004 *_this, uint32 *pcubMsgSize, int nVirtualPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_IsP2PPacketAvailable(_this->linux_side, pcubMsgSize, nVirtualPort);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_ReadP2PPacket(winISteamNetworking_SteamNetworking004 *_this, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, CSteamID * psteamIDRemote, int nVirtualPort)
+bool __thiscall winISteamNetworking_SteamNetworking004_ReadP2PPacket(winISteamNetworking_SteamNetworking004 *_this, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, CSteamID *psteamIDRemote, int nVirtualPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_ReadP2PPacket(_this->linux_side, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nVirtualPort);
@@ -525,7 +525,7 @@ bool __thiscall winISteamNetworking_SteamNetworking004_CloseP2PSessionWithUser(w
     return cppISteamNetworking_SteamNetworking004_CloseP2PSessionWithUser(_this->linux_side, steamIDRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_GetP2PSessionState(winISteamNetworking_SteamNetworking004 *_this, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
+bool __thiscall winISteamNetworking_SteamNetworking004_GetP2PSessionState(winISteamNetworking_SteamNetworking004 *_this, CSteamID steamIDRemote, P2PSessionState_t *pConnectionState)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
@@ -561,43 +561,43 @@ bool __thiscall winISteamNetworking_SteamNetworking004_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking004_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_SendDataOnSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking004_SendDataOnSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking004_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking004_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_IsDataAvailable(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking004_IsDataAvailable(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_RetrieveData(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking004_RetrieveData(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_GetSocketInfo(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking004_GetSocketInfo(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking004_GetListenSocketInfo(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, uint32 * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking004_GetListenSocketInfo(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);
@@ -685,19 +685,19 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking005_SendP2PPacket(winISteamNetworking_SteamNetworking005 *_this, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking005_SendP2PPacket(winISteamNetworking_SteamNetworking005 *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_SendP2PPacket(_this->linux_side, steamIDRemote, pubData, cubData, eP2PSendType, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking005 *_this, uint32 * pcubMsgSize, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking005_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking005 *_this, uint32 *pcubMsgSize, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_IsP2PPacketAvailable(_this->linux_side, pcubMsgSize, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_ReadP2PPacket(winISteamNetworking_SteamNetworking005 *_this, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, CSteamID * psteamIDRemote, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking005_ReadP2PPacket(winISteamNetworking_SteamNetworking005 *_this, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, CSteamID *psteamIDRemote, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_ReadP2PPacket(_this->linux_side, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nChannel);
@@ -721,7 +721,7 @@ bool __thiscall winISteamNetworking_SteamNetworking005_CloseP2PChannelWithUser(w
     return cppISteamNetworking_SteamNetworking005_CloseP2PChannelWithUser(_this->linux_side, steamIDRemote, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_GetP2PSessionState(winISteamNetworking_SteamNetworking005 *_this, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
+bool __thiscall winISteamNetworking_SteamNetworking005_GetP2PSessionState(winISteamNetworking_SteamNetworking005 *_this, CSteamID steamIDRemote, P2PSessionState_t *pConnectionState)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
@@ -763,43 +763,43 @@ bool __thiscall winISteamNetworking_SteamNetworking005_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking005_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_SendDataOnSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking005_SendDataOnSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking005_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking005_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_IsDataAvailable(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking005_IsDataAvailable(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_RetrieveData(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking005_RetrieveData(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_GetSocketInfo(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, uint32 * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking005_GetSocketInfo(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking005_GetListenSocketInfo(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, uint32 * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking005_GetListenSocketInfo(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);
@@ -889,19 +889,19 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking006_SendP2PPacket(winISteamNetworking_SteamNetworking006 *_this, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking006_SendP2PPacket(winISteamNetworking_SteamNetworking006 *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_SendP2PPacket(_this->linux_side, steamIDRemote, pubData, cubData, eP2PSendType, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking006 *_this, uint32 * pcubMsgSize, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking006_IsP2PPacketAvailable(winISteamNetworking_SteamNetworking006 *_this, uint32 *pcubMsgSize, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_IsP2PPacketAvailable(_this->linux_side, pcubMsgSize, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_ReadP2PPacket(winISteamNetworking_SteamNetworking006 *_this, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, CSteamID * psteamIDRemote, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking006_ReadP2PPacket(winISteamNetworking_SteamNetworking006 *_this, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, CSteamID *psteamIDRemote, int nChannel)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_ReadP2PPacket(_this->linux_side, pubDest, cubDest, pcubMsgSize, psteamIDRemote, nChannel);
@@ -925,7 +925,7 @@ bool __thiscall winISteamNetworking_SteamNetworking006_CloseP2PChannelWithUser(w
     return cppISteamNetworking_SteamNetworking006_CloseP2PChannelWithUser(_this->linux_side, steamIDRemote, nChannel);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_GetP2PSessionState(winISteamNetworking_SteamNetworking006 *_this, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
+bool __thiscall winISteamNetworking_SteamNetworking006_GetP2PSessionState(winISteamNetworking_SteamNetworking006 *_this, CSteamID steamIDRemote, P2PSessionState_t *pConnectionState)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
@@ -967,43 +967,43 @@ bool __thiscall winISteamNetworking_SteamNetworking006_DestroyListenSocket(winIS
     return cppISteamNetworking_SteamNetworking006_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_SendDataOnSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
+bool __thiscall winISteamNetworking_SteamNetworking006_SendDataOnSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_SendDataOnSocket(_this->linux_side, hSocket, pubData, cubData, bReliable);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking006_IsDataAvailableOnSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_IsDataAvailableOnSocket(_this->linux_side, hSocket, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize)
+bool __thiscall winISteamNetworking_SteamNetworking006_RetrieveDataFromSocket(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_RetrieveDataFromSocket(_this->linux_side, hSocket, pubDest, cubDest, pcubMsgSize);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_IsDataAvailable(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking006_IsDataAvailable(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_IsDataAvailable(_this->linux_side, hListenSocket, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_RetrieveData(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, void * pubDest, uint32 cubDest, uint32 * pcubMsgSize, SNetSocket_t * phSocket)
+bool __thiscall winISteamNetworking_SteamNetworking006_RetrieveData(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_RetrieveData(_this->linux_side, hListenSocket, pubDest, cubDest, pcubMsgSize, phSocket);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_GetSocketInfo(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, CSteamID * pSteamIDRemote, int * peSocketStatus, SteamIPAddress_t * punIPRemote, uint16 * punPortRemote)
+bool __thiscall winISteamNetworking_SteamNetworking006_GetSocketInfo(winISteamNetworking_SteamNetworking006 *_this, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, SteamIPAddress_t *punIPRemote, uint16 *punPortRemote)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_GetSocketInfo(_this->linux_side, hSocket, pSteamIDRemote, peSocketStatus, punIPRemote, punPortRemote);
 }
 
-bool __thiscall winISteamNetworking_SteamNetworking006_GetListenSocketInfo(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, SteamIPAddress_t * pnIP, uint16 * pnPort)
+bool __thiscall winISteamNetworking_SteamNetworking006_GetListenSocketInfo(winISteamNetworking_SteamNetworking006 *_this, SNetListenSocket_t hListenSocket, SteamIPAddress_t *pnIP, uint16 *pnPort)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking006_GetListenSocketInfo(_this->linux_side, hListenSocket, pnIP, pnPort);

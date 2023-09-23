@@ -29,13 +29,13 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation, 12)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, void * pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(_this->linux_side, pubRGB, cubRGB, nWidth, nHeight);
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
@@ -57,7 +57,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots(_this->linux_side, bHook);
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, ScreenshotHandle hScreenshot, const char * pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(_this->linux_side, hScreenshot, pchLocation);
@@ -110,13 +110,13 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser, 16)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, void * pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(_this->linux_side, pubRGB, cubRGB, nWidth, nHeight);
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
@@ -138,7 +138,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots(_this->linux_side, bHook);
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, ScreenshotHandle hScreenshot, const char * pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(_this->linux_side, hScreenshot, pchLocation);
@@ -200,13 +200,13 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked, 4)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, void * pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(_this->linux_side, pubRGB, cubRGB, nWidth, nHeight);
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
@@ -228,7 +228,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots(_this->linux_side, bHook);
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, ScreenshotHandle hScreenshot, const char * pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(_this->linux_side, hScreenshot, pchLocation);
@@ -252,7 +252,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScr
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked(_this->linux_side);
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, EVRScreenshotType eType, const char * pchFilename, const char * pchVRFilename)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, EVRScreenshotType eType, const char *pchFilename, const char *pchVRFilename)
 {
     char lin_pchFilename[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
