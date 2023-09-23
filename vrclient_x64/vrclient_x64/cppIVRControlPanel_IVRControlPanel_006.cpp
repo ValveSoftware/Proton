@@ -23,9 +23,9 @@ uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc2(void *linux_side, uint32_
     return _ret;
 }
 
-vr::EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc3(void *linux_side, const char *a)
+EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc3(void *linux_side, const char *a)
 {
-    vr::EVRInitError _ret;
+    EVRInitError _ret;
     _ret = ((IVRControlPanel*)linux_side)->undoc3((const char *)a);
     return _ret;
 }
@@ -97,9 +97,9 @@ void cppIVRControlPanel_IVRControlPanel_006_undoc14(void *linux_side, EVRState a
     ((IVRControlPanel*)linux_side)->undoc14((vr::EVRState)a);
 }
 
-vr::EVRState cppIVRControlPanel_IVRControlPanel_006_undoc15(void *linux_side)
+EVRState cppIVRControlPanel_IVRControlPanel_006_undoc15(void *linux_side)
 {
-    vr::EVRState _ret;
+    EVRState _ret;
     _ret = ((IVRControlPanel*)linux_side)->undoc15();
     return _ret;
 }
@@ -116,9 +116,9 @@ bool cppIVRControlPanel_IVRControlPanel_006_undoc17(void *linux_side)
     return _ret;
 }
 
-vr::EVRApplicationError cppIVRControlPanel_IVRControlPanel_006_undoc18(void *linux_side)
+EVRApplicationError cppIVRControlPanel_IVRControlPanel_006_undoc18(void *linux_side)
 {
-    vr::EVRApplicationError _ret;
+    EVRApplicationError _ret;
     _ret = ((IVRControlPanel*)linux_side)->undoc18();
     return _ret;
 }
@@ -135,9 +135,9 @@ bool cppIVRControlPanel_IVRControlPanel_006_undoc20(void *linux_side)
     return _ret;
 }
 
-vr::EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc21(void *linux_side)
+EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc21(void *linux_side)
 {
-    vr::EVRInitError _ret;
+    EVRInitError _ret;
     _ret = ((IVRControlPanel*)linux_side)->undoc21();
     return _ret;
 }
@@ -175,9 +175,9 @@ uint64_t cppIVRControlPanel_IVRControlPanel_006_undoc26(void *linux_side)
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRControlPanel_IVRControlPanel_006_undoc27(void *linux_side, const char *a)
+EVRCompositorError cppIVRControlPanel_IVRControlPanel_006_undoc27(void *linux_side, const char *a)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRControlPanel*)linux_side)->undoc27((const char *)a);
     return _ret;
 }
