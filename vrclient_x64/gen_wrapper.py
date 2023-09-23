@@ -564,29 +564,21 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     else:
         cpp.write("    return ")
 
-    cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
-    unnamed = 'a'
-    first = True
-    for param in method.get_arguments():
-        if not first:
-            cpp.write(", ")
+    params = []
+    for name, param in zip(names[1:], method.get_arguments()):
+        if do_lin_to_win and do_lin_to_win[1] == name or \
+                do_win_to_lin and do_win_to_lin[1] == name or \
+                do_wrap and do_wrap[1] == name:
+            params.append("%s ? &lin : nullptr" % name)
+        elif do_unwrap and do_unwrap[1] == name:
+            params.append("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
+        elif "&" in param.type.spelling:
+            params.append("*%s" % name)
         else:
-            first = False
-        if param.spelling == "":
-            cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
-            unnamed = chr(ord(unnamed) + 1)
-        else:
-            if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
-                    do_win_to_lin and do_win_to_lin[1] == param.spelling or \
-                    do_wrap and do_wrap[1] == param.spelling:
-                cpp.write("%s ? &lin : nullptr" % param.spelling)
-            elif do_unwrap and do_unwrap[1] == param.spelling:
-                cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
-            elif "&" in param.type.spelling:
-                cpp.write("*%s" % param.spelling)
-            else:
-                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-    cpp.write(");\n")
+            params.append("(%s)%s" % (param.type.spelling, name))
+
+    cpp.write(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
+
     if do_lin_to_win:
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
         cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
