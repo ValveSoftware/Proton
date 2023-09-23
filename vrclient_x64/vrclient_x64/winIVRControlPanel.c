@@ -60,37 +60,37 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc1(winIVRControlP
     return cppIVRControlPanel_IVRControlPanel_006_undoc1(_this->linux_side);
 }
 
-uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc2(winIVRControlPanel_IVRControlPanel_006 *_this, uint32_t a, char * b, uint32_t c)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc2(winIVRControlPanel_IVRControlPanel_006 *_this, uint32_t a, char *b, uint32_t c)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc2(_this->linux_side, a, b, c);
 }
 
-EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
+EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc3(_this->linux_side, a);
 }
 
-uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc4(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc4(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc4(_this->linux_side, a);
 }
 
-uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc5(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, uint32_t b, char * c, uint32_t d)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc5(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a, uint32_t b, char *c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc5(_this->linux_side, a, b, c, d);
 }
 
-uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc6(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, const char * b, char * c, uint32_t d)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc6(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a, const char *b, char *c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc6(_this->linux_side, a, b, c, d);
 }
 
-uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc7(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, const char * b, char * c, uint32_t d)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc7(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a, const char *b, char *c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc7(_this->linux_side, a, b, c, d);
@@ -180,13 +180,13 @@ EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(winIVRCon
     return cppIVRControlPanel_IVRControlPanel_006_undoc21(_this->linux_side);
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(winIVRControlPanel_IVRControlPanel_006 *_this, WebConsoleHandle_t a, const char * b, uint32_t c, uint32_t d, const char * e)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(winIVRControlPanel_IVRControlPanel_006 *_this, WebConsoleHandle_t a, const char *b, uint32_t c, uint32_t d, const char *e)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc22(_this->linux_side, a, b, c, d, e);
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
+bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a)
 {
     char lin_a[PATH_MAX];
     vrclient_dos_path_to_unix_path(a, lin_a);
@@ -212,7 +212,7 @@ uint64_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc26(winIVRControl
     return cppIVRControlPanel_IVRControlPanel_006_undoc26(_this->linux_side);
 }
 
-EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
+EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(winIVRControlPanel_IVRControlPanel_006 *_this, const char *a)
 {
     char lin_a[PATH_MAX];
     vrclient_dos_path_to_unix_path(a, lin_a);
