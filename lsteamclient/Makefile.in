@@ -297,3 +297,4 @@ SOURCES = \
 	struct_converters_157.cpp \
 	struct_converters_158.cpp \
 	unix_steam_client_manual.cpp \
+	unixlib_generated.cpp \
