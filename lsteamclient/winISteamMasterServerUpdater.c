@@ -23,97 +23,98 @@ typedef struct __winISteamMasterServerUpdater_SteamMasterServerUpdater001 {
 } winISteamMasterServerUpdater_SteamMasterServerUpdater001;
 
 DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive, 8)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval, 8)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData, 32)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_ClearAllKeyValues, 4)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyValue, 12)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown, 4)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested, 4)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat, 4)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer, 8)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer, 8)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers, 4)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress, 16)
+
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, bool bActive)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive(_this->linux_side, bActive);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval, 8)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, int iHeartbeatInterval)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(_this->linux_side, iHeartbeatInterval);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket, 20)
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const void * pData, int cbData, uint32 srcIP, uint16 srcPort)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(_this->linux_side, pData, cbData, srcIP, srcPort);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket, 20)
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, void * pOut, int cbMaxOut, uint32 * pNetAdr, uint16 * pPort)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(_this->linux_side, pOut, cbMaxOut, pNetAdr, pPort);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData, 32)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, unsigned short nProtocolVersion, bool bDedicatedServer, const char * pRegionName, const char * pProductName, unsigned short nMaxReportedClients, bool bPasswordProtected, const char * pGameDescription)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(_this->linux_side, nProtocolVersion, bDedicatedServer, pRegionName, pProductName, nMaxReportedClients, bPasswordProtected, pGameDescription);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_ClearAllKeyValues, 4)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_ClearAllKeyValues(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_ClearAllKeyValues(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyValue, 12)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyValue(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const char * pKey, const char * pValue)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyValue(_this->linux_side, pKey, pValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown, 4)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested, 4)
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat, 4)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
     TRACE("%p\n", _this);
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer, 8)
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const char * pServerAddress)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(_this->linux_side, pServerAddress);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer, 8)
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const char * pServerAddress)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(_this->linux_side, pServerAddress);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers, 4)
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress, 16)
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, int iServer, char * pOut, int outBufferSize)
 {
     TRACE("%p\n", _this);
