@@ -26,34 +26,35 @@ typedef struct __winIVRIOBuffer_IVRIOBuffer_001 {
 } winIVRIOBuffer_IVRIOBuffer_001;
 
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Open, 24)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Close, 12)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Read, 24)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Write, 20)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer, 12)
+
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Open(winIVRIOBuffer_IVRIOBuffer_001 *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_001_Open(_this->linux_side, pchPath, mode, unElementSize, unElements, pulBuffer);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Close, 12)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Close(winIVRIOBuffer_IVRIOBuffer_001 *_this, IOBufferHandle_t ulBuffer)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_001_Close(_this->linux_side, ulBuffer);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Read, 24)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Read(winIVRIOBuffer_IVRIOBuffer_001 *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_001_Read(_this->linux_side, ulBuffer, pDst, unBytes, punRead);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Write, 20)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Write(winIVRIOBuffer_IVRIOBuffer_001 *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_001_Write(_this->linux_side, ulBuffer, pSrc, unBytes);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer, 12)
 PropertyContainerHandle_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer(winIVRIOBuffer_IVRIOBuffer_001 *_this, IOBufferHandle_t ulBuffer)
 {
     TRACE("%p\n", _this);
@@ -128,41 +129,42 @@ typedef struct __winIVRIOBuffer_IVRIOBuffer_002 {
 } winIVRIOBuffer_IVRIOBuffer_002;
 
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Open, 24)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Close, 12)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Read, 24)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Write, 20)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer, 12)
+DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_HasReaders, 12)
+
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Open(winIVRIOBuffer_IVRIOBuffer_002 *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_002_Open(_this->linux_side, pchPath, mode, unElementSize, unElements, pulBuffer);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Close, 12)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Close(winIVRIOBuffer_IVRIOBuffer_002 *_this, IOBufferHandle_t ulBuffer)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_002_Close(_this->linux_side, ulBuffer);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Read, 24)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Read(winIVRIOBuffer_IVRIOBuffer_002 *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_002_Read(_this->linux_side, ulBuffer, pDst, unBytes, punRead);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Write, 20)
 EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Write(winIVRIOBuffer_IVRIOBuffer_002 *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_002_Write(_this->linux_side, ulBuffer, pSrc, unBytes);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer, 12)
 PropertyContainerHandle_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(winIVRIOBuffer_IVRIOBuffer_002 *_this, IOBufferHandle_t ulBuffer)
 {
     TRACE("%p\n", _this);
     return cppIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(_this->linux_side, ulBuffer);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_HasReaders, 12)
 bool __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(winIVRIOBuffer_IVRIOBuffer_002 *_this, IOBufferHandle_t ulBuffer)
 {
     TRACE("%p\n", _this);

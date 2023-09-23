@@ -650,15 +650,22 @@ def handle_method_cpp(method, classname, cppname, cpp):
     cpp.write("}\n\n")
 
 
+def handle_thiscall_wrapper(klass, method, cfile):
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+
+    def param_stack_size(param):
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return 4
+        return ((param.type.get_size() + 3) // 4) * 4
+
+    size = 4 + sum(param_stack_size(p) for p in method.get_arguments())
+    if returns_record: size += 4
+
+    name = f'win{klass.spelling}_{klass.version}_{method.name}'
+    cfile.write(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
+
+
 def handle_method_c(method, classname, winclassname, cppname, iface_version, cfile):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if returns_record:
-        parambytes = 8 #_this + return pointer
-    else:
-        parambytes = 4 #_this
-    for param in method.get_arguments():
-        parambytes += param.type.get_size()
-    cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, method.name, parambytes))
     if strip_ns(method.result_type.spelling).startswith("IVR"):
         cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
     elif returns_record:
@@ -849,6 +856,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             cfile.write("    %s user_data;\n" % user_data_type)
             break
     cfile.write("} %s;\n\n" % winclassname)
+
+    for method in klass.methods:
+        handle_thiscall_wrapper(klass, method, cfile)
+    cfile.write('\n')
 
     for method in klass.methods:
         if type(method) is Destructor:

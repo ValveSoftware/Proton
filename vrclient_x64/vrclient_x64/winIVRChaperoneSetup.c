@@ -26,111 +26,112 @@ typedef struct __winIVRChaperoneSetup_IVRChaperoneSetup_004 {
 } winIVRChaperoneSetup_IVRChaperoneSetup_004;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo, 12)
+
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect(_this->linux_side, rect);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pmatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, float sizeX, float sizeZ)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize(_this->linux_side, sizeX, sizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, uint8_t * pTagsBuffer, uint32_t unTagCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo(_this->linux_side, pTagsBuffer, unTagCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo(winIVRChaperoneSetup_IVRChaperoneSetup_004 *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount)
 {
     TRACE("%p\n", _this);
@@ -227,139 +228,140 @@ typedef struct __winIVRChaperoneSetup_IVRChaperoneSetup_005 {
 } winIVRChaperoneSetup_IVRChaperoneSetup_005;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking, 12)
+
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect(_this->linux_side, rect);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pmatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, float sizeX, float sizeZ)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(_this->linux_side, sizeX, sizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, uint8_t * pTagsBuffer, uint32_t unTagCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(_this->linux_side, pTagsBuffer, unTagCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(_this->linux_side, pTagsBuffer, punTagCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, char * pBuffer, uint32_t * pnBufferLength)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer(_this->linux_side, pBuffer, pnBufferLength);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking(winIVRChaperoneSetup_IVRChaperoneSetup_005 *_this, const char * pBuffer, uint32_t nImportFlags)
 {
     TRACE("%p\n", _this);
@@ -464,139 +466,140 @@ typedef struct __winIVRChaperoneSetup_IVRChaperoneSetup_006 {
 } winIVRChaperoneSetup_IVRChaperoneSetup_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting, 4)
+
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect(_this->linux_side, rect);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pmatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, float sizeX, float sizeZ)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize(_this->linux_side, sizeX, sizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo(_this->linux_side, pQuadsBuffer, unQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter, 12)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdVector2_t * pPointBuffer, uint32_t unPointCount)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(_this->linux_side, pPointBuffer, unPointCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->linux_side, pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(_this->linux_side, pMatStandingZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk, 8)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, EChaperoneConfigFile configFile)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(_this->linux_side, configFile);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose, 8)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose(_this->linux_side, pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, char * pBuffer, uint32_t * pnBufferLength)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer(_this->linux_side, pBuffer, pnBufferLength);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking, 12)
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this, const char * pBuffer, uint32_t nImportFlags)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking(_this->linux_side, pBuffer, nImportFlags);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting, 4)
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this)
 {
     TRACE("%p\n", _this);

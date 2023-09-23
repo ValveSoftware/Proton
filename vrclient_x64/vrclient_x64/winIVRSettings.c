@@ -26,83 +26,84 @@ typedef struct __winIVRSettings_IVRSettings_001 {
 } winIVRSettings_IVRSettings_001;
 
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum, 8)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_Sync, 12)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetBool, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetBool, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetInt32, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetInt32, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetFloat, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetFloat, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetString, 28)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetString, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveSection, 12)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveKeyInSection, 16)
+
 const char * __thiscall winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(winIVRSettings_IVRSettings_001 *_this, EVRSettingsError eError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(_this->linux_side, eError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_Sync, 9)
 bool __thiscall winIVRSettings_IVRSettings_001_Sync(winIVRSettings_IVRSettings_001 *_this, bool bForce, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_001_Sync(_this->linux_side, bForce, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetBool, 17)
 bool __thiscall winIVRSettings_IVRSettings_001_GetBool(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, bool bDefaultValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_001_GetBool(_this->linux_side, pchSection, pchSettingsKey, bDefaultValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetBool, 17)
 void __thiscall winIVRSettings_IVRSettings_001_SetBool(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_SetBool(_this->linux_side, pchSection, pchSettingsKey, bValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetInt32, 20)
 int32_t __thiscall winIVRSettings_IVRSettings_001_GetInt32(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, int32_t nDefaultValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_001_GetInt32(_this->linux_side, pchSection, pchSettingsKey, nDefaultValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetInt32, 20)
 void __thiscall winIVRSettings_IVRSettings_001_SetInt32(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_SetInt32(_this->linux_side, pchSection, pchSettingsKey, nValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetFloat, 20)
 float __thiscall winIVRSettings_IVRSettings_001_GetFloat(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, float flDefaultValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_001_GetFloat(_this->linux_side, pchSection, pchSettingsKey, flDefaultValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetFloat, 20)
 void __thiscall winIVRSettings_IVRSettings_001_SetFloat(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_SetFloat(_this->linux_side, pchSection, pchSettingsKey, flValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetString, 28)
 void __thiscall winIVRSettings_IVRSettings_001_GetString(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, const char * pchDefaultValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_GetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, unValueLen, pchDefaultValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_SetString, 20)
 void __thiscall winIVRSettings_IVRSettings_001_SetString(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_SetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveSection, 12)
 void __thiscall winIVRSettings_IVRSettings_001_RemoveSection(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_001_RemoveSection(_this->linux_side, pchSection, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveKeyInSection, 16)
 void __thiscall winIVRSettings_IVRSettings_001_RemoveKeyInSection(winIVRSettings_IVRSettings_001 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
@@ -191,83 +192,84 @@ typedef struct __winIVRSettings_IVRSettings_002 {
 } winIVRSettings_IVRSettings_002;
 
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum, 8)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_Sync, 12)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetBool, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetInt32, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetFloat, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetString, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetBool, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetInt32, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetFloat, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetString, 24)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveSection, 12)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveKeyInSection, 16)
+
 const char * __thiscall winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(winIVRSettings_IVRSettings_002 *_this, EVRSettingsError eError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(_this->linux_side, eError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_Sync, 9)
 bool __thiscall winIVRSettings_IVRSettings_002_Sync(winIVRSettings_IVRSettings_002 *_this, bool bForce, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_002_Sync(_this->linux_side, bForce, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetBool, 17)
 void __thiscall winIVRSettings_IVRSettings_002_SetBool(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_SetBool(_this->linux_side, pchSection, pchSettingsKey, bValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetInt32, 20)
 void __thiscall winIVRSettings_IVRSettings_002_SetInt32(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_SetInt32(_this->linux_side, pchSection, pchSettingsKey, nValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetFloat, 20)
 void __thiscall winIVRSettings_IVRSettings_002_SetFloat(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_SetFloat(_this->linux_side, pchSection, pchSettingsKey, flValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetString, 20)
 void __thiscall winIVRSettings_IVRSettings_002_SetString(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_SetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetBool, 16)
 bool __thiscall winIVRSettings_IVRSettings_002_GetBool(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_002_GetBool(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetInt32, 16)
 int32_t __thiscall winIVRSettings_IVRSettings_002_GetInt32(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_002_GetInt32(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetFloat, 16)
 float __thiscall winIVRSettings_IVRSettings_002_GetFloat(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_002_GetFloat(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetString, 24)
 void __thiscall winIVRSettings_IVRSettings_002_GetString(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_GetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, unValueLen, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveSection, 12)
 void __thiscall winIVRSettings_IVRSettings_002_RemoveSection(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_002_RemoveSection(_this->linux_side, pchSection, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveKeyInSection, 16)
 void __thiscall winIVRSettings_IVRSettings_002_RemoveKeyInSection(winIVRSettings_IVRSettings_002 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
@@ -356,76 +358,77 @@ typedef struct __winIVRSettings_IVRSettings_003 {
 } winIVRSettings_IVRSettings_003;
 
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum, 8)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetBool, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetInt32, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetFloat, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetString, 20)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetBool, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetInt32, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetFloat, 16)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetString, 24)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveSection, 12)
+DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveKeyInSection, 16)
+
 const char * __thiscall winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(winIVRSettings_IVRSettings_003 *_this, EVRSettingsError eError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(_this->linux_side, eError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetBool, 17)
 void __thiscall winIVRSettings_IVRSettings_003_SetBool(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, bool bValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_SetBool(_this->linux_side, pchSection, pchSettingsKey, bValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetInt32, 20)
 void __thiscall winIVRSettings_IVRSettings_003_SetInt32(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, int32_t nValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_SetInt32(_this->linux_side, pchSection, pchSettingsKey, nValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetFloat, 20)
 void __thiscall winIVRSettings_IVRSettings_003_SetFloat(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, float flValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_SetFloat(_this->linux_side, pchSection, pchSettingsKey, flValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetString, 20)
 void __thiscall winIVRSettings_IVRSettings_003_SetString(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, const char * pchValue, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_SetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetBool, 16)
 bool __thiscall winIVRSettings_IVRSettings_003_GetBool(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_003_GetBool(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetInt32, 16)
 int32_t __thiscall winIVRSettings_IVRSettings_003_GetInt32(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_003_GetInt32(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetFloat, 16)
 float __thiscall winIVRSettings_IVRSettings_003_GetFloat(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     return cppIVRSettings_IVRSettings_003_GetFloat(_this->linux_side, pchSection, pchSettingsKey, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetString, 24)
 void __thiscall winIVRSettings_IVRSettings_003_GetString(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, char * pchValue, uint32_t unValueLen, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_GetString(_this->linux_side, pchSection, pchSettingsKey, pchValue, unValueLen, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveSection, 12)
 void __thiscall winIVRSettings_IVRSettings_003_RemoveSection(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);
     cppIVRSettings_IVRSettings_003_RemoveSection(_this->linux_side, pchSection, peError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveKeyInSection, 16)
 void __thiscall winIVRSettings_IVRSettings_003_RemoveKeyInSection(winIVRSettings_IVRSettings_003 *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError)
 {
     TRACE("%p\n", _this);

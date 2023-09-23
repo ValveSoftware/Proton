@@ -26,27 +26,28 @@ typedef struct __winIVROverlayView_IVROverlayView_003 {
 } winIVROverlayView_IVROverlayView_003;
 
 DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_AcquireOverlayView, 24)
+DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_ReleaseOverlayView, 8)
+DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_PostOverlayEvent, 16)
+DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_IsViewingPermitted, 12)
+
 EVROverlayError __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(winIVROverlayView_IVROverlayView_003 *_this, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t * pNativeDevice, VROverlayView_t * pOverlayView, uint32_t unOverlayViewSize)
 {
     TRACE("%p\n", _this);
     return cppIVROverlayView_IVROverlayView_003_AcquireOverlayView(_this->linux_side, ulOverlayHandle, pNativeDevice, pOverlayView, unOverlayViewSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_ReleaseOverlayView, 8)
 EVROverlayError __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(winIVROverlayView_IVROverlayView_003 *_this, VROverlayView_t * pOverlayView)
 {
     TRACE("%p\n", _this);
     return cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(_this->linux_side, pOverlayView);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_PostOverlayEvent, 16)
 void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(winIVROverlayView_IVROverlayView_003 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pvrEvent)
 {
     TRACE("%p\n", _this);
     cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(_this->linux_side, ulOverlayHandle, pvrEvent);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_IsViewingPermitted, 12)
 bool __thiscall winIVROverlayView_IVROverlayView_003_IsViewingPermitted(winIVROverlayView_IVROverlayView_003 *_this, VROverlayHandle_t ulOverlayHandle)
 {
     TRACE("%p\n", _this);
