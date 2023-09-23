@@ -26,62 +26,63 @@ typedef struct __winIVRChaperone_IVRChaperone_002 {
 } winIVRChaperone_IVRChaperone_002;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetCalibrationState, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ReloadInfo, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_SetSceneColor, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetBoundsColor, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_AreBoundsVisible, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 8)
+
 ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_002_GetCalibrationState(winIVRChaperone_IVRChaperone_002 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetCalibrationState(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, ChaperoneSoftBoundsInfo_t * pInfo)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(_this->linux_side, pInfo);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 12)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, ChaperoneSeatedBoundsInfo_t * pInfo)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo(_this->linux_side, pInfo);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ReloadInfo, 4)
 void __thiscall winIVRChaperone_IVRChaperone_002_ReloadInfo(winIVRChaperone_IVRChaperone_002 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_002_ReloadInfo(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_SetSceneColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_002_SetSceneColor(winIVRChaperone_IVRChaperone_002 *_this, HmdColor_t color)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_002_SetSceneColor(_this->linux_side, color);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetBoundsColor, 12)
 void __thiscall winIVRChaperone_IVRChaperone_002_GetBoundsColor(winIVRChaperone_IVRChaperone_002 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_002_GetBoundsColor(_this->linux_side, pOutputColorArray, nNumOutputColors);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_AreBoundsVisible, 4)
 bool __thiscall winIVRChaperone_IVRChaperone_002_AreBoundsVisible(winIVRChaperone_IVRChaperone_002 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_AreBoundsVisible(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 5)
 void __thiscall winIVRChaperone_IVRChaperone_002_ForceBoundsVisible(winIVRChaperone_IVRChaperone_002 *_this, bool bForce)
 {
     TRACE("%p\n", _this);
@@ -164,55 +165,56 @@ typedef struct __winIVRChaperone_IVRChaperone_003 {
 } winIVRChaperone_IVRChaperone_003;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetCalibrationState, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ReloadInfo, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_SetSceneColor, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetBoundsColor, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_AreBoundsVisible, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 8)
+
 ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_003_GetCalibrationState(winIVRChaperone_IVRChaperone_003 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_003_GetCalibrationState(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 12)
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaSize(winIVRChaperone_IVRChaperone_003 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaRect(winIVRChaperone_IVRChaperone_003 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect(_this->linux_side, rect);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ReloadInfo, 4)
 void __thiscall winIVRChaperone_IVRChaperone_003_ReloadInfo(winIVRChaperone_IVRChaperone_003 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_003_ReloadInfo(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_SetSceneColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_003_SetSceneColor(winIVRChaperone_IVRChaperone_003 *_this, HmdColor_t color)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_003_SetSceneColor(_this->linux_side, color);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetBoundsColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(winIVRChaperone_IVRChaperone_003 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_003_GetBoundsColor(_this->linux_side, pOutputColorArray, nNumOutputColors, flCollisionBoundsFadeDistance, pOutputCameraColor);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_AreBoundsVisible, 4)
 bool __thiscall winIVRChaperone_IVRChaperone_003_AreBoundsVisible(winIVRChaperone_IVRChaperone_003 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_003_AreBoundsVisible(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 5)
 void __thiscall winIVRChaperone_IVRChaperone_003_ForceBoundsVisible(winIVRChaperone_IVRChaperone_003 *_this, bool bForce)
 {
     TRACE("%p\n", _this);
@@ -293,62 +295,63 @@ typedef struct __winIVRChaperone_IVRChaperone_004 {
 } winIVRChaperone_IVRChaperone_004;
 
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetCalibrationState, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaRect, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ReloadInfo, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_SetSceneColor, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetBoundsColor, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_AreBoundsVisible, 4)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible, 8)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ResetZeroPose, 8)
+
 ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_004_GetCalibrationState(winIVRChaperone_IVRChaperone_004 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_004_GetCalibrationState(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize, 12)
 bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaSize(winIVRChaperone_IVRChaperone_004 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaRect, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaRect(winIVRChaperone_IVRChaperone_004 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect(_this->linux_side, rect);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ReloadInfo, 4)
 void __thiscall winIVRChaperone_IVRChaperone_004_ReloadInfo(winIVRChaperone_IVRChaperone_004 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_004_ReloadInfo(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_SetSceneColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_004_SetSceneColor(winIVRChaperone_IVRChaperone_004 *_this, HmdColor_t color)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_004_SetSceneColor(_this->linux_side, color);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetBoundsColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(winIVRChaperone_IVRChaperone_004 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_004_GetBoundsColor(_this->linux_side, pOutputColorArray, nNumOutputColors, flCollisionBoundsFadeDistance, pOutputCameraColor);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_AreBoundsVisible, 4)
 bool __thiscall winIVRChaperone_IVRChaperone_004_AreBoundsVisible(winIVRChaperone_IVRChaperone_004 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_004_AreBoundsVisible(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible, 5)
 void __thiscall winIVRChaperone_IVRChaperone_004_ForceBoundsVisible(winIVRChaperone_IVRChaperone_004 *_this, bool bForce)
 {
     TRACE("%p\n", _this);
     cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible(_this->linux_side, bForce);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ResetZeroPose, 8)
 void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(winIVRChaperone_IVRChaperone_004 *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin)
 {
     TRACE("%p\n", _this);

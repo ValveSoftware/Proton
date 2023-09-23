@@ -26,160 +26,166 @@ typedef struct __winIVRControlPanel_IVRControlPanel_006 {
 } winIVRControlPanel_IVRControlPanel_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc1, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc2, 16)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc3, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc4, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc5, 20)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc6, 20)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc7, 20)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc8, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc9, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc10, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc11, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc12, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc13, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc14, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc15, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc16, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc17, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc18, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc19, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc20, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc21, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc22, 28)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc23, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc24, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc25, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc26, 4)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc27, 8)
+DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc28, 12)
+
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc1(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc1(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc2, 16)
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc2(winIVRControlPanel_IVRControlPanel_006 *_this, uint32_t a, char * b, uint32_t c)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc2(_this->linux_side, a, b, c);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc3, 8)
 EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc3(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc4, 8)
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc4(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc4(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc5, 20)
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc5(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, uint32_t b, char * c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc5(_this->linux_side, a, b, c, d);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc6, 20)
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc6(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, const char * b, char * c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc6(_this->linux_side, a, b, c, d);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc7, 20)
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc7(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a, const char * b, char * c, uint32_t d)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc7(_this->linux_side, a, b, c, d);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc8, 8)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc8(winIVRControlPanel_IVRControlPanel_006 *_this, uint32_t a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc8(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc9, 4)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc9(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc9(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc10, 4)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc10(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc10(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc11, 8)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc11(winIVRControlPanel_IVRControlPanel_006 *_this, uint32_t a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc11(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc12, 4)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc12(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc12(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc13, 8)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc13(winIVRControlPanel_IVRControlPanel_006 *_this, TrackedDeviceIndex_t a)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc13(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc14, 8)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc14(winIVRControlPanel_IVRControlPanel_006 *_this, EVRState a)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc14(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc15, 4)
 EVRState __thiscall winIVRControlPanel_IVRControlPanel_006_undoc15(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc15(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc16, 5)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc16(winIVRControlPanel_IVRControlPanel_006 *_this, bool a)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc16(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc17, 4)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc17(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc17(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc18, 4)
 EVRApplicationError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc18(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc18(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc19, 5)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc19(winIVRControlPanel_IVRControlPanel_006 *_this, bool a)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc19(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc20, 4)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc20(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc20(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc21, 4)
 EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc21(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc22, 28)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(winIVRControlPanel_IVRControlPanel_006 *_this, WebConsoleHandle_t a, const char * b, uint32_t c, uint32_t d, const char * e)
 {
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc22(_this->linux_side, a, b, c, d, e);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc23, 8)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
 {
     char lin_a[PATH_MAX];
@@ -188,28 +194,24 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(winIVRControlPane
     return cppIVRControlPanel_IVRControlPanel_006_undoc23(_this->linux_side, a ? lin_a : NULL);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc24, 4)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc24(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc24(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc25, 5)
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc25(winIVRControlPanel_IVRControlPanel_006 *_this, bool a)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc25(_this->linux_side, a);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc26, 4)
 uint64_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc26(winIVRControlPanel_IVRControlPanel_006 *_this)
 {
     TRACE("%p\n", _this);
     return cppIVRControlPanel_IVRControlPanel_006_undoc26(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc27, 8)
 EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(winIVRControlPanel_IVRControlPanel_006 *_this, const char * a)
 {
     char lin_a[PATH_MAX];
@@ -218,7 +220,6 @@ EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(win
     return cppIVRControlPanel_IVRControlPanel_006_undoc27(_this->linux_side, a ? lin_a : NULL);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc28, 12)
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc28(winIVRControlPanel_IVRControlPanel_006 *_this, VROverlayHandle_t a)
 {
     TRACE("%p\n", _this);

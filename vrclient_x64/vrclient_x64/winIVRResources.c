@@ -26,13 +26,14 @@ typedef struct __winIVRResources_IVRResources_001 {
 } winIVRResources_IVRResources_001;
 
 DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_LoadSharedResource, 16)
+DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20)
+
 uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(winIVRResources_IVRResources_001 *_this, const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen)
 {
     TRACE("%p\n", _this);
     return cppIVRResources_IVRResources_001_LoadSharedResource(_this->linux_side, pchResourceName, pchBuffer, unBufferLen);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20)
 uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(winIVRResources_IVRResources_001 *_this, const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen)
 {
     TRACE("%p\n", _this);
