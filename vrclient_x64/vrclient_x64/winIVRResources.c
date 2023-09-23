@@ -30,14 +30,18 @@ DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20
 
 uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(winIVRResources_IVRResources_001 *_this, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
 {
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRResources_IVRResources_001_LoadSharedResource(_this->linux_side, pchResourceName, pchBuffer, unBufferLen);
+    _ret = cppIVRResources_IVRResources_001_LoadSharedResource(_this->linux_side, pchResourceName, pchBuffer, unBufferLen);
+    return _ret;
 }
 
 uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(winIVRResources_IVRResources_001 *_this, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
 {
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRResources_IVRResources_001_GetResourceFullPath(_this->linux_side, pchResourceName, pchResourceTypeDirectory, pchPathBuffer, unBufferLen);
+    _ret = cppIVRResources_IVRResources_001_GetResourceFullPath(_this->linux_side, pchResourceName, pchResourceTypeDirectory, pchPathBuffer, unBufferLen);
+    return _ret;
 }
 
 extern vtable_ptr winIVRResources_IVRResources_001_vtable;

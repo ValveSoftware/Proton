@@ -11,12 +11,16 @@ extern "C" {
 #endif
 vr::EVROverlayError cppIVROverlayView_IVROverlayView_003_AcquireOverlayView(void *linux_side, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
 {
-    return ((IVROverlayView*)linux_side)->AcquireOverlayView((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VRNativeDevice_t *)pNativeDevice, (vr::VROverlayView_t *)pOverlayView, (uint32_t)unOverlayViewSize);
+    vr::EVROverlayError _ret;
+    _ret = ((IVROverlayView*)linux_side)->AcquireOverlayView((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VRNativeDevice_t *)pNativeDevice, (vr::VROverlayView_t *)pOverlayView, (uint32_t)unOverlayViewSize);
+    return _ret;
 }
 
 vr::EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void *linux_side, VROverlayView_t *pOverlayView)
 {
-    return ((IVROverlayView*)linux_side)->ReleaseOverlayView((vr::VROverlayView_t *)pOverlayView);
+    vr::EVROverlayError _ret;
+    _ret = ((IVROverlayView*)linux_side)->ReleaseOverlayView((vr::VROverlayView_t *)pOverlayView);
+    return _ret;
 }
 
 void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, VREvent_t *pvrEvent)
@@ -29,7 +33,9 @@ void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VRO
 
 bool cppIVROverlayView_IVROverlayView_003_IsViewingPermitted(void *linux_side, VROverlayHandle_t ulOverlayHandle)
 {
-    return ((IVROverlayView*)linux_side)->IsViewingPermitted((vr::VROverlayHandle_t)ulOverlayHandle);
+    bool _ret;
+    _ret = ((IVROverlayView*)linux_side)->IsViewingPermitted((vr::VROverlayHandle_t)ulOverlayHandle);
+    return _ret;
 }
 
 #ifdef __cplusplus

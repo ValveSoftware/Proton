@@ -11,12 +11,16 @@ extern "C" {
 #endif
 const char * cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(void *linux_side, EVRSettingsError eError)
 {
-    return ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
+    const char * _ret;
+    _ret = ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
+    return _ret;
 }
 
 bool cppIVRSettings_IVRSettings_002_Sync(void *linux_side, bool bForce, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->Sync((bool)bForce, (vr::EVRSettingsError *)peError);
+    bool _ret;
+    _ret = ((IVRSettings*)linux_side)->Sync((bool)bForce, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 void cppIVRSettings_IVRSettings_002_SetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
@@ -41,17 +45,23 @@ void cppIVRSettings_IVRSettings_002_SetString(void *linux_side, const char *pchS
 
 bool cppIVRSettings_IVRSettings_002_GetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetBool((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    bool _ret;
+    _ret = ((IVRSettings*)linux_side)->GetBool((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 int32_t cppIVRSettings_IVRSettings_002_GetInt32(void *linux_side, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetInt32((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    int32_t _ret;
+    _ret = ((IVRSettings*)linux_side)->GetInt32((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 float cppIVRSettings_IVRSettings_002_GetFloat(void *linux_side, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    return ((IVRSettings*)linux_side)->GetFloat((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    float _ret;
+    _ret = ((IVRSettings*)linux_side)->GetFloat((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    return _ret;
 }
 
 void cppIVRSettings_IVRSettings_002_GetString(void *linux_side, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, EVRSettingsError *peError)

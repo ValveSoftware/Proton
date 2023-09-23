@@ -31,20 +31,26 @@ DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_001_DismissNotifica
 
 uint32_t __thiscall winIVRNotifications_IVRNotifications_001_GetErrorString(winIVRNotifications_IVRNotifications_001 *_this, NotificationError_t error, char *pchBuffer, uint32_t unBufferSize)
 {
+    uint32_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRNotifications_IVRNotifications_001_GetErrorString(_this->linux_side, error, pchBuffer, unBufferSize);
+    _ret = cppIVRNotifications_IVRNotifications_001_GetErrorString(_this->linux_side, error, pchBuffer, unBufferSize);
+    return _ret;
 }
 
 NotificationError_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(winIVRNotifications_IVRNotifications_001 *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, NotificationBitmap *photo, VRNotificationId *notificationId)
 {
+    NotificationError_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRNotifications_IVRNotifications_001_CreateNotification(_this->linux_side, ulOverlayHandle, ulUserValue, strType, strText, strCategory, photo, notificationId);
+    _ret = cppIVRNotifications_IVRNotifications_001_CreateNotification(_this->linux_side, ulOverlayHandle, ulUserValue, strType, strText, strCategory, photo, notificationId);
+    return _ret;
 }
 
 NotificationError_t __thiscall winIVRNotifications_IVRNotifications_001_DismissNotification(winIVRNotifications_IVRNotifications_001 *_this, VRNotificationId notificationId)
 {
+    NotificationError_t _ret;
     TRACE("%p\n", _this);
-    return cppIVRNotifications_IVRNotifications_001_DismissNotification(_this->linux_side, notificationId);
+    _ret = cppIVRNotifications_IVRNotifications_001_DismissNotification(_this->linux_side, notificationId);
+    return _ret;
 }
 
 extern vtable_ptr winIVRNotifications_IVRNotifications_001_vtable;
@@ -115,14 +121,18 @@ DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_RemoveNotificat
 
 EVRNotificationError __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(winIVRNotifications_IVRNotifications_002 *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char *pchText, EVRNotificationStyle style, NotificationBitmap_t *pImage, VRNotificationId *pNotificationId)
 {
+    EVRNotificationError _ret;
     TRACE("%p\n", _this);
-    return cppIVRNotifications_IVRNotifications_002_CreateNotification(_this->linux_side, ulOverlayHandle, ulUserValue, type, pchText, style, pImage, pNotificationId);
+    _ret = cppIVRNotifications_IVRNotifications_002_CreateNotification(_this->linux_side, ulOverlayHandle, ulUserValue, type, pchText, style, pImage, pNotificationId);
+    return _ret;
 }
 
 EVRNotificationError __thiscall winIVRNotifications_IVRNotifications_002_RemoveNotification(winIVRNotifications_IVRNotifications_002 *_this, VRNotificationId notificationId)
 {
+    EVRNotificationError _ret;
     TRACE("%p\n", _this);
-    return cppIVRNotifications_IVRNotifications_002_RemoveNotification(_this->linux_side, notificationId);
+    _ret = cppIVRNotifications_IVRNotifications_002_RemoveNotification(_this->linux_side, notificationId);
+    return _ret;
 }
 
 extern vtable_ptr winIVRNotifications_IVRNotifications_002_vtable;
