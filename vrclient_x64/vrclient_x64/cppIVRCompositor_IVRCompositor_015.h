@@ -6,7 +6,7 @@ extern ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_015_GetTrackingSpa
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_WaitGetPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_GetLastPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(void *, TrackedDeviceIndex_t, TrackedDevicePose_t *, TrackedDevicePose_t *);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_Submit(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags);
+extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_Submit(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags);
 extern void cppIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame(void *);
 extern void cppIVRCompositor_IVRCompositor_015_PostPresentHandoff(void *);
 extern bool cppIVRCompositor_IVRCompositor_015_GetFrameTiming(void *, Compositor_FrameTiming *, uint32_t);
@@ -14,7 +14,7 @@ extern float cppIVRCompositor_IVRCompositor_015_GetFrameTimeRemaining(void *);
 extern void cppIVRCompositor_IVRCompositor_015_GetCumulativeStats(void *, Compositor_CumulativeStats *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_015_FadeToColor(void *, float, float, float, float, float, bool);
 extern void cppIVRCompositor_IVRCompositor_015_FadeGrid(void *, float, bool);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride(void *, Texture_t *, uint32_t);
+extern EVRCompositorError cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride(void *, const Texture_t *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_015_ClearSkyboxOverride(void *);
 extern void cppIVRCompositor_IVRCompositor_015_CompositorBringToFront(void *);
 extern void cppIVRCompositor_IVRCompositor_015_CompositorGoToBack(void *);

@@ -35,7 +35,7 @@ extern bool cppIVRSystem_IVRSystem_003_GetControllerStateWithPose(void *, Tracki
 extern void cppIVRSystem_IVRSystem_003_TriggerHapticPulse(void *, TrackedDeviceIndex_t, uint32_t, unsigned short);
 extern const char * cppIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum(void *, EVRButtonId);
 extern const char * cppIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum(void *, EVRControllerAxisType);
-extern bool cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *, Compositor_OverlaySettings *, HmdVector2_t, HmdVector2_t, TrackedDeviceIndex_t, EVRControllerEventOutputType);
+extern bool cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(void *, const Compositor_OverlaySettings *, HmdVector2_t, HmdVector2_t, TrackedDeviceIndex_t, EVRControllerEventOutputType);
 extern bool cppIVRSystem_IVRSystem_003_CaptureInputFocus(void *);
 extern void cppIVRSystem_IVRSystem_003_ReleaseInputFocus(void *);
 extern bool cppIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess(void *);

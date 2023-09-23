@@ -78,12 +78,12 @@ void cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(void *linux_
     ((IVRChaperoneSetup*)linux_side)->SetWorkingPerimeter((vr::HmdVector2_t *)pPointBuffer, (uint32_t)unPointCount);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(void *linux_side, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
     ((IVRChaperoneSetup*)linux_side)->SetWorkingSeatedZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(void *linux_side, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
     ((IVRChaperoneSetup*)linux_side)->SetWorkingStandingZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)pMatStandingZeroPoseToRawTrackingPose);
 }

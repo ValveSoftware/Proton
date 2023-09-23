@@ -8,7 +8,7 @@ extern uint32_t cppIVRApplications_IVRApplications_007_GetApplicationCount(void 
 extern EVRApplicationError cppIVRApplications_IVRApplications_007_GetApplicationKeyByIndex(void *, uint32_t, char *, uint32_t);
 extern EVRApplicationError cppIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId(void *, uint32_t, char *, uint32_t);
 extern EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchApplication(void *, const char *);
-extern EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchTemplateApplication(void *, const char *, const char *, AppOverrideKeys_t *, uint32_t);
+extern EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchTemplateApplication(void *, const char *, const char *, const AppOverrideKeys_t *, uint32_t);
 extern EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType(void *, const char *, const char *);
 extern EVRApplicationError cppIVRApplications_IVRApplications_007_LaunchDashboardOverlay(void *, const char *);
 extern bool cppIVRApplications_IVRApplications_007_CancelApplicationLaunch(void *, const char *);

@@ -17,7 +17,7 @@ extern HmdMatrix34_t cppIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsol
 extern HmdMatrix34_t cppIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *);
 extern uint32_t cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass(void *, ETrackedDeviceClass, TrackedDeviceIndex_t *, uint32_t, TrackedDeviceIndex_t);
 extern EDeviceActivityLevel cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel(void *, TrackedDeviceIndex_t);
-extern void cppIVRSystem_IVRSystem_010_ApplyTransform(void *, TrackedDevicePose_t *, TrackedDevicePose_t *, HmdMatrix34_t *);
+extern void cppIVRSystem_IVRSystem_010_ApplyTransform(void *, TrackedDevicePose_t *, const TrackedDevicePose_t *, const HmdMatrix34_t *);
 extern TrackedDeviceIndex_t cppIVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole(void *, ETrackedControllerRole);
 extern ETrackedControllerRole cppIVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex(void *, TrackedDeviceIndex_t);
 extern ETrackedDeviceClass cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass(void *, TrackedDeviceIndex_t);

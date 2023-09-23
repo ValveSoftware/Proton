@@ -111,7 +111,7 @@ vr::EDeviceActivityLevel cppIVRSystem_IVRSystem_012_GetTrackedDeviceActivityLeve
     return _ret;
 }
 
-void cppIVRSystem_IVRSystem_012_ApplyTransform(void *linux_side, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void cppIVRSystem_IVRSystem_012_ApplyTransform(void *linux_side, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     ((IVRSystem*)linux_side)->ApplyTransform((vr::TrackedDevicePose_t *)pOutputPose, (const vr::TrackedDevicePose_t *)pTrackedDevicePose, (const vr::HmdMatrix34_t *)pTransform);
 }

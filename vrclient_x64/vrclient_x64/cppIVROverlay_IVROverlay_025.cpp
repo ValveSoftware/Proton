@@ -198,7 +198,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayTextureColorSpace(voi
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTextureBounds(void *linux_side, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTextureBounds(void *linux_side, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTextureBounds((vr::VROverlayHandle_t)ulOverlayHandle, (const vr::VRTextureBounds_t *)pOverlayTextureBounds);
@@ -219,7 +219,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayTransformType(void *l
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute(void *linux_side, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute(void *linux_side, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTransformAbsolute((vr::VROverlayHandle_t)ulOverlayHandle, (vr::ETrackingUniverseOrigin)eTrackingOrigin, (const vr::HmdMatrix34_t *)pmatTrackingOriginToOverlayTransform);
@@ -233,7 +233,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayTransformAbsolute(voi
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(void *linux_side, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(void *linux_side, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTransformTrackedDeviceRelative((vr::VROverlayHandle_t)ulOverlayHandle, (vr::TrackedDeviceIndex_t)unTrackedDevice, (const vr::HmdMatrix34_t *)pmatTrackedDeviceToOverlayTransform);
@@ -268,14 +268,14 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayTransformOverlayRelat
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformOverlayRelative(void *linux_side, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformOverlayRelative(void *linux_side, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTransformOverlayRelative((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VROverlayHandle_t)ulOverlayHandleParent, (const vr::HmdMatrix34_t *)pmatParentOverlayToOverlayTransform);
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformCursor(void *linux_side, VROverlayHandle_t ulCursorOverlayHandle, HmdVector2_t *pvHotspot)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformCursor(void *linux_side, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTransformCursor((vr::VROverlayHandle_t)ulCursorOverlayHandle, (const vr::HmdVector2_t *)pvHotspot);
@@ -289,7 +289,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayTransformCursor(void 
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformProjection(void *linux_side, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, VROverlayProjection_t *pProjection, EVREye eEye)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTransformProjection(void *linux_side, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, EVREye eEye)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTransformProjection((vr::VROverlayHandle_t)ulOverlayHandle, (vr::ETrackingUniverseOrigin)eTrackingOrigin, (const vr::HmdMatrix34_t *)pmatTrackingOriginToOverlayTransform, (const vr::VROverlayProjection_t *)pProjection, (vr::EVREye)eEye);
@@ -358,14 +358,14 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_GetOverlayMouseScale(void *linu
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayMouseScale(void *linux_side, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayMouseScale(void *linux_side, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayMouseScale((vr::VROverlayHandle_t)ulOverlayHandle, (const vr::HmdVector2_t *)pvecMouseScale);
     return _ret;
 }
 
-bool cppIVROverlay_IVROverlay_025_ComputeOverlayIntersection(void *linux_side, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool cppIVROverlay_IVROverlay_025_ComputeOverlayIntersection(void *linux_side, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     bool _ret;
     _ret = ((IVROverlay*)linux_side)->ComputeOverlayIntersection((vr::VROverlayHandle_t)ulOverlayHandle, (const vr::VROverlayIntersectionParams_t *)pParams, (vr::VROverlayIntersectionResults_t *)pResults);
@@ -400,7 +400,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayCursor(void *linux_si
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverride(void *linux_side, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvCursor)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverride(void *linux_side, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayCursorPositionOverride((vr::VROverlayHandle_t)ulOverlayHandle, (const vr::HmdVector2_t *)pvCursor);
@@ -414,7 +414,7 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_025_ClearOverlayCursorPositionOverr
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTexture(void *linux_side, VROverlayHandle_t ulOverlayHandle, Texture_t *pTexture)
+vr::EVROverlayError cppIVROverlay_IVROverlay_025_SetOverlayTexture(void *linux_side, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
 {
     vr::EVROverlayError _ret;
     _ret = ((IVROverlay*)linux_side)->SetOverlayTexture((vr::VROverlayHandle_t)ulOverlayHandle, (const vr::Texture_t *)pTexture);
@@ -536,7 +536,7 @@ void cppIVROverlay_IVROverlay_025_HideKeyboard(void *linux_side)
     ((IVROverlay*)linux_side)->HideKeyboard();
 }
 
-void cppIVROverlay_IVROverlay_025_SetKeyboardTransformAbsolute(void *linux_side, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToKeyboardTransform)
+void cppIVROverlay_IVROverlay_025_SetKeyboardTransformAbsolute(void *linux_side, ETrackingUniverseOrigin eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToKeyboardTransform)
 {
     ((IVROverlay*)linux_side)->SetKeyboardTransformAbsolute((vr::ETrackingUniverseOrigin)eTrackingOrigin, (const vr::HmdMatrix34_t *)pmatTrackingOriginToKeyboardTransform);
 }

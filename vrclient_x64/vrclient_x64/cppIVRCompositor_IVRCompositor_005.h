@@ -22,7 +22,7 @@ extern void cppIVRCompositor_IVRCompositor_005_CompositorBringToFront(void *);
 extern void cppIVRCompositor_IVRCompositor_005_CompositorGoToBack(void *);
 extern void cppIVRCompositor_IVRCompositor_005_CompositorQuit(void *);
 extern bool cppIVRCompositor_IVRCompositor_005_IsFullscreen(void *);
-extern bool cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(void *, Compositor_OverlaySettings *, float, TrackingUniverseOrigin, HmdVector3_t, HmdVector3_t, HmdVector2_t *, HmdVector3_t *);
+extern bool cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(void *, const Compositor_OverlaySettings *, float, TrackingUniverseOrigin, HmdVector3_t, HmdVector3_t, HmdVector2_t *, HmdVector3_t *);
 extern void cppIVRCompositor_IVRCompositor_005_SetTrackingSpace(void *, TrackingUniverseOrigin);
 extern TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_005_GetTrackingSpace(void *);
 #ifdef __cplusplus

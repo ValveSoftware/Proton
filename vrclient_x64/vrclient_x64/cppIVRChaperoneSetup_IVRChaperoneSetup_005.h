@@ -11,8 +11,8 @@ extern bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseT
 extern bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *, HmdMatrix34_t *);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *, float, float);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(void *, HmdQuad_t *, uint32_t);
-extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *, HmdMatrix34_t *);
-extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *, HmdMatrix34_t *);
+extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *, const HmdMatrix34_t *);
+extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *, const HmdMatrix34_t *);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(void *, EChaperoneConfigFile);
 extern bool cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *, HmdMatrix34_t *);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *, uint8_t *, uint32_t);

@@ -21,7 +21,7 @@ void struct_VRVulkanTextureArrayData_t_1237_lin_to_win(void *l, void *w)
     win->m_unArraySize = lin->m_unArraySize;
 }
 
-void struct_VRVulkanTextureArrayData_t_1237_win_to_lin(void *w, void *l)
+void struct_VRVulkanTextureArrayData_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winVRVulkanTextureArrayData_t_1237 *win = (struct winVRVulkanTextureArrayData_t_1237 *)w;
     VRVulkanTextureArrayData_t *lin = (VRVulkanTextureArrayData_t *)l;
@@ -48,7 +48,7 @@ void struct_VREvent_t_1237_lin_to_win(void *l, void *w, uint32_t sz)
     memcpy(&win->data, &lin->data, sz - (((char*)&win->data) - ((char*)win)));
 }
 
-void struct_VREvent_t_1237_win_to_lin(void *w, void *l)
+void struct_VREvent_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winVREvent_t_1237 *win = (struct winVREvent_t_1237 *)w;
     VREvent_t *lin = (VREvent_t *)l;
@@ -77,7 +77,7 @@ void struct_VRControllerState001_t_1237_lin_to_win(void *l, void *w, uint32_t sz
     memcpy(win->rAxis, lin->rAxis, sizeof(win->rAxis));
 }
 
-void struct_VRControllerState001_t_1237_win_to_lin(void *w, void *l)
+void struct_VRControllerState001_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winVRControllerState001_t_1237 *win = (struct winVRControllerState001_t_1237 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;
@@ -112,7 +112,7 @@ void struct_CameraVideoStreamFrameHeader_t_1237_lin_to_win(void *l, void *w, uin
     win->ulFrameExposureTime = lin->ulFrameExposureTime;
 }
 
-void struct_CameraVideoStreamFrameHeader_t_1237_win_to_lin(void *w, void *l)
+void struct_CameraVideoStreamFrameHeader_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winCameraVideoStreamFrameHeader_t_1237 *win = (struct winCameraVideoStreamFrameHeader_t_1237 *)w;
     CameraVideoStreamFrameHeader_t *lin = (CameraVideoStreamFrameHeader_t *)l;
@@ -148,7 +148,7 @@ void struct_RenderModel_TextureMap_t_1237_lin_to_win(void *l, void *w)
     win->unMipLevels = lin->unMipLevels;
 }
 
-void struct_RenderModel_TextureMap_t_1237_win_to_lin(void *w, void *l)
+void struct_RenderModel_TextureMap_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_TextureMap_t_1237 *win = (struct winRenderModel_TextureMap_t_1237 *)w;
     RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
@@ -202,7 +202,7 @@ void struct_RenderModel_t_1237_lin_to_win(void *l, void *w)
     win->diffuseTextureId = lin->diffuseTextureId;
 }
 
-void struct_RenderModel_t_1237_win_to_lin(void *w, void *l)
+void struct_RenderModel_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_t_1237 *win = (struct winRenderModel_t_1237 *)w;
     RenderModel_t *lin = (RenderModel_t *)l;
@@ -262,7 +262,7 @@ void struct_InputAnalogActionData_t_1237_lin_to_win(void *l, void *w, uint32_t s
     win->fUpdateTime = lin->fUpdateTime;
 }
 
-void struct_InputAnalogActionData_t_1237_win_to_lin(void *w, void *l)
+void struct_InputAnalogActionData_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winInputAnalogActionData_t_1237 *win = (struct winInputAnalogActionData_t_1237 *)w;
     InputAnalogActionData_t *lin = (InputAnalogActionData_t *)l;
@@ -298,7 +298,7 @@ void struct_InputDigitalActionData_t_1237_lin_to_win(void *l, void *w, uint32_t 
     win->fUpdateTime = lin->fUpdateTime;
 }
 
-void struct_InputDigitalActionData_t_1237_win_to_lin(void *w, void *l)
+void struct_InputDigitalActionData_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winInputDigitalActionData_t_1237 *win = (struct winInputDigitalActionData_t_1237 *)w;
     InputDigitalActionData_t *lin = (InputDigitalActionData_t *)l;
@@ -326,7 +326,7 @@ void struct_InputPoseActionData_t_1237_lin_to_win(void *l, void *w, uint32_t sz)
     win->pose = lin->pose;
 }
 
-void struct_InputPoseActionData_t_1237_win_to_lin(void *w, void *l)
+void struct_InputPoseActionData_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winInputPoseActionData_t_1237 *win = (struct winInputPoseActionData_t_1237 *)w;
     InputPoseActionData_t *lin = (InputPoseActionData_t *)l;
@@ -350,7 +350,7 @@ void struct_InputSkeletalActionData_t_1237_lin_to_win(void *l, void *w, uint32_t
     win->activeOrigin = lin->activeOrigin;
 }
 
-void struct_InputSkeletalActionData_t_1237_win_to_lin(void *w, void *l)
+void struct_InputSkeletalActionData_t_1237_win_to_lin(const void *w, void *l)
 {
     struct winInputSkeletalActionData_t_1237 *win = (struct winInputSkeletalActionData_t_1237 *)w;
     InputSkeletalActionData_t *lin = (InputSkeletalActionData_t *)l;
