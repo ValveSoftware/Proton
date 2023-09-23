@@ -31,38 +31,50 @@ DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFAC
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(_this->linux_side);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(_this->linux_side);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, AppId_t nAppID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(_this->linux_side, nAppID);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(_this->linux_side, nAppID);
+    return _ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, AppId_t nAppID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(_this->linux_side, nAppID);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(_this->linux_side, nAppID);
+    return _ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, EParentalFeature eFeature)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(_this->linux_side, eFeature);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(_this->linux_side, eFeature);
+    return _ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *_this, EParentalFeature eFeature)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(_this->linux_side, eFeature);
+    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(_this->linux_side, eFeature);
+    return _ret;
 }
 
 extern vtable_ptr winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable;

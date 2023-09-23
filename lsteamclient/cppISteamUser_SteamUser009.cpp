@@ -13,22 +13,30 @@ extern "C" {
 #include "cppISteamUser_SteamUser009.h"
 HSteamUser cppISteamUser_SteamUser009_GetHSteamUser(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetHSteamUser();
+    HSteamUser _ret;
+    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser009_BLoggedOn(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 CSteamID cppISteamUser_SteamUser009_GetSteamID(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamUser*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 int cppISteamUser_SteamUser009_InitiateGameConnection(void *linux_side, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    int _ret;
+    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser009_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)

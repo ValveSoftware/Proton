@@ -13,7 +13,9 @@ extern "C" {
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION001.h"
 int cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(void *linux_side, AppId_t nAppID, const char *pchKey, char *pchValue, int cchValueMax)
 {
-    return ((ISteamApps*)linux_side)->GetAppData((AppId_t)nAppID, (const char *)pchKey, (char *)pchValue, (int)cchValueMax);
+    int _ret;
+    _ret = ((ISteamApps*)linux_side)->GetAppData((AppId_t)nAppID, (const char *)pchKey, (char *)pchValue, (int)cchValueMax);
+    return (_ret);
 }
 
 #ifdef __cplusplus

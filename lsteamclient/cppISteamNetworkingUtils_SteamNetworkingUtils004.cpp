@@ -15,22 +15,30 @@ extern "C" {
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils004.h"
 ESteamNetworkingAvailability cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus(void *linux_side, SteamRelayNetworkStatus_t *pDetails)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetRelayNetworkStatus((SteamRelayNetworkStatus_t *)pDetails);
+    ESteamNetworkingAvailability _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetRelayNetworkStatus((SteamRelayNetworkStatus_t *)pDetails);
+    return (_ret);
 }
 
 float cppISteamNetworkingUtils_SteamNetworkingUtils004_GetLocalPingLocation(void *linux_side, SteamNetworkPingLocation_t *result)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetLocalPingLocation(*result);
+    float _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetLocalPingLocation(*result);
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_EstimatePingTimeBetweenTwoLocations(void *linux_side, const SteamNetworkPingLocation_t *location1, const SteamNetworkPingLocation_t *location2)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeBetweenTwoLocations(*location1, *location2);
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeBetweenTwoLocations(*location1, *location2);
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_EstimatePingTimeFromLocalHost(void *linux_side, const SteamNetworkPingLocation_t *remoteLocation)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeFromLocalHost(*remoteLocation);
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeFromLocalHost(*remoteLocation);
+    return (_ret);
 }
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils004_ConvertPingLocationToString(void *linux_side, const SteamNetworkPingLocation_t *location, char *pszBuf, int cchBufSize)
@@ -40,37 +48,51 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils004_ConvertPingLocationToStrin
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils004_ParsePingLocationString(void *linux_side, const char *pszString, SteamNetworkPingLocation_t *result)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->ParsePingLocationString((const char *)pszString, *result);
+    bool _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->ParsePingLocationString((const char *)pszString, *result);
+    return (_ret);
 }
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils004_CheckPingDataUpToDate(void *linux_side, float flMaxAgeSeconds)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->CheckPingDataUpToDate((float)flMaxAgeSeconds);
+    bool _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->CheckPingDataUpToDate((float)flMaxAgeSeconds);
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_GetPingToDataCenter(void *linux_side, SteamNetworkingPOPID popID, SteamNetworkingPOPID *pViaRelayPoP)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetPingToDataCenter((SteamNetworkingPOPID)popID, (SteamNetworkingPOPID *)pViaRelayPoP);
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetPingToDataCenter((SteamNetworkingPOPID)popID, (SteamNetworkingPOPID *)pViaRelayPoP);
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_GetDirectPingToPOP(void *linux_side, SteamNetworkingPOPID popID)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetDirectPingToPOP((SteamNetworkingPOPID)popID);
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetDirectPingToPOP((SteamNetworkingPOPID)popID);
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_GetPOPCount(void *linux_side)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetPOPCount();
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetPOPCount();
+    return (_ret);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils004_GetPOPList(void *linux_side, SteamNetworkingPOPID *list, int nListSz)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetPOPList((SteamNetworkingPOPID *)list, (int)nListSz);
+    int _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetPOPList((SteamNetworkingPOPID *)list, (int)nListSz);
+    return (_ret);
 }
 
 SteamNetworkingMicroseconds cppISteamNetworkingUtils_SteamNetworkingUtils004_GetLocalTimestamp(void *linux_side)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetLocalTimestamp();
+    SteamNetworkingMicroseconds _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetLocalTimestamp();
+    return (_ret);
 }
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(void *linux_side, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
@@ -81,27 +103,37 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(voi
 
 ESteamNetworkingFakeIPType cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType(void *linux_side, uint32 nIPv4)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetIPv4FakeIPType((uint32)nIPv4);
+    ESteamNetworkingFakeIPType _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetIPv4FakeIPType((uint32)nIPv4);
+    return (_ret);
 }
 
 EResult cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP(void *linux_side, const SteamNetworkingIPAddr *fakeIP, SteamNetworkingIdentity *pOutRealIdentity)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetRealIdentityForFakeIP(*fakeIP, (SteamNetworkingIdentity *)pOutRealIdentity);
+    EResult _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetRealIdentityForFakeIP(*fakeIP, (SteamNetworkingIdentity *)pOutRealIdentity);
+    return (_ret);
 }
 
 ESteamNetworkingGetConfigValueResult cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValue(void *linux_side, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType *pOutDataType, void *pResult, size_t *cbResult)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetConfigValue((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigScope)eScopeType, (intptr_t)scopeObj, (ESteamNetworkingConfigDataType *)pOutDataType, (void *)pResult, (size_t *)cbResult);
+    ESteamNetworkingGetConfigValueResult _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetConfigValue((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigScope)eScopeType, (intptr_t)scopeObj, (ESteamNetworkingConfigDataType *)pOutDataType, (void *)pResult, (size_t *)cbResult);
+    return (_ret);
 }
 
 const char * cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo(void *linux_side, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetConfigValueInfo((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigDataType *)pOutDataType, (ESteamNetworkingConfigScope *)pOutScope);
+    const char * _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->GetConfigValueInfo((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigDataType *)pOutDataType, (ESteamNetworkingConfigScope *)pOutScope);
+    return (_ret);
 }
 
 ESteamNetworkingConfigValue cppISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues(void *linux_side, ESteamNetworkingConfigValue eCurrent, bool bEnumerateDevVars)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->IterateGenericEditableConfigValues((ESteamNetworkingConfigValue)eCurrent, (bool)bEnumerateDevVars);
+    ESteamNetworkingConfigValue _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->IterateGenericEditableConfigValues((ESteamNetworkingConfigValue)eCurrent, (bool)bEnumerateDevVars);
+    return (_ret);
 }
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ToString(void *linux_side, const SteamNetworkingIPAddr *addr, char *buf, size_t cbBuf, bool bWithPort)
@@ -111,12 +143,16 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ToSt
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ParseString(void *linux_side, SteamNetworkingIPAddr *pAddr, const char *pszStr)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_ParseString((SteamNetworkingIPAddr *)pAddr, (const char *)pszStr);
+    bool _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_ParseString((SteamNetworkingIPAddr *)pAddr, (const char *)pszStr);
+    return (_ret);
 }
 
 ESteamNetworkingFakeIPType cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType(void *linux_side, const SteamNetworkingIPAddr *addr)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_GetFakeIPType(*addr);
+    ESteamNetworkingFakeIPType _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_GetFakeIPType(*addr);
+    return (_ret);
 }
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString(void *linux_side, const SteamNetworkingIdentity *identity, char *buf, size_t cbBuf)
@@ -126,7 +162,9 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_To
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString(void *linux_side, SteamNetworkingIdentity *pIdentity, const char *pszStr)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIdentity_ParseString((SteamNetworkingIdentity *)pIdentity, (const char *)pszStr);
+    bool _ret;
+    _ret = ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIdentity_ParseString((SteamNetworkingIdentity *)pIdentity, (const char *)pszStr);
+    return (_ret);
 }
 
 #ifdef __cplusplus

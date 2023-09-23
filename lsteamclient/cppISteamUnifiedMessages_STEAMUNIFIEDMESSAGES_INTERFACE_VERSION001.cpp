@@ -13,27 +13,37 @@ extern "C" {
 #include "cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.h"
 ClientUnifiedMessageHandle cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(void *linux_side, const char *pchServiceMethod, const void *pRequestBuffer, uint32 unRequestBufferSize, uint64 unContext)
 {
-    return ((ISteamUnifiedMessages*)linux_side)->SendMethod((const char *)pchServiceMethod, (const void *)pRequestBuffer, (uint32)unRequestBufferSize, (uint64)unContext);
+    ClientUnifiedMessageHandle _ret;
+    _ret = ((ISteamUnifiedMessages*)linux_side)->SendMethod((const char *)pchServiceMethod, (const void *)pRequestBuffer, (uint32)unRequestBufferSize, (uint64)unContext);
+    return (_ret);
 }
 
 bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(void *linux_side, ClientUnifiedMessageHandle hHandle, uint32 *punResponseSize, EResult *peResult)
 {
-    return ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseInfo((ClientUnifiedMessageHandle)hHandle, (uint32 *)punResponseSize, (EResult *)peResult);
+    bool _ret;
+    _ret = ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseInfo((ClientUnifiedMessageHandle)hHandle, (uint32 *)punResponseSize, (EResult *)peResult);
+    return (_ret);
 }
 
 bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(void *linux_side, ClientUnifiedMessageHandle hHandle, void *pResponseBuffer, uint32 unResponseBufferSize, bool bAutoRelease)
 {
-    return ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseData((ClientUnifiedMessageHandle)hHandle, (void *)pResponseBuffer, (uint32)unResponseBufferSize, (bool)bAutoRelease);
+    bool _ret;
+    _ret = ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseData((ClientUnifiedMessageHandle)hHandle, (void *)pResponseBuffer, (uint32)unResponseBufferSize, (bool)bAutoRelease);
+    return (_ret);
 }
 
 bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(void *linux_side, ClientUnifiedMessageHandle hHandle)
 {
-    return ((ISteamUnifiedMessages*)linux_side)->ReleaseMethod((ClientUnifiedMessageHandle)hHandle);
+    bool _ret;
+    _ret = ((ISteamUnifiedMessages*)linux_side)->ReleaseMethod((ClientUnifiedMessageHandle)hHandle);
+    return (_ret);
 }
 
 bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(void *linux_side, const char *pchServiceNotification, const void *pNotificationBuffer, uint32 unNotificationBufferSize)
 {
-    return ((ISteamUnifiedMessages*)linux_side)->SendNotification((const char *)pchServiceNotification, (const void *)pNotificationBuffer, (uint32)unNotificationBufferSize);
+    bool _ret;
+    _ret = ((ISteamUnifiedMessages*)linux_side)->SendNotification((const char *)pchServiceNotification, (const void *)pNotificationBuffer, (uint32)unNotificationBufferSize);
+    return (_ret);
 }
 
 #ifdef __cplusplus

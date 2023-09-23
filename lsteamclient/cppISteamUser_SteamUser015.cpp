@@ -13,22 +13,30 @@ extern "C" {
 #include "cppISteamUser_SteamUser015.h"
 HSteamUser cppISteamUser_SteamUser015_GetHSteamUser(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetHSteamUser();
+    HSteamUser _ret;
+    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser015_BLoggedOn(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 CSteamID cppISteamUser_SteamUser015_GetSteamID(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamUser*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 int cppISteamUser_SteamUser015_InitiateGameConnection(void *linux_side, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    int _ret;
+    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser015_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
@@ -43,7 +51,9 @@ void cppISteamUser_SteamUser015_TrackAppUsageEvent(void *linux_side, CGameID gam
 
 bool cppISteamUser_SteamUser015_GetUserDataFolder(void *linux_side, char *pchBuffer, int cubBuffer)
 {
-    return ((ISteamUser*)linux_side)->GetUserDataFolder((char *)pchBuffer, (int)cubBuffer);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetUserDataFolder((char *)pchBuffer, (int)cubBuffer);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser015_StartVoiceRecording(void *linux_side)
@@ -58,32 +68,44 @@ void cppISteamUser_SteamUser015_StopVoiceRecording(void *linux_side)
 
 EVoiceResult cppISteamUser_SteamUser015_GetAvailableVoice(void *linux_side, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
-    return ((ISteamUser*)linux_side)->GetAvailableVoice((uint32 *)pcbCompressed, (uint32 *)pcbUncompressed);
+    EVoiceResult _ret;
+    _ret = ((ISteamUser*)linux_side)->GetAvailableVoice((uint32 *)pcbCompressed, (uint32 *)pcbUncompressed);
+    return (_ret);
 }
 
 EVoiceResult cppISteamUser_SteamUser015_GetVoice(void *linux_side, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
-    return ((ISteamUser*)linux_side)->GetVoice((bool)bWantCompressed, (void *)pDestBuffer, (uint32)cbDestBufferSize, (uint32 *)nBytesWritten, (bool)bWantUncompressed, (void *)pUncompressedDestBuffer, (uint32)cbUncompressedDestBufferSize, (uint32 *)nUncompressBytesWritten);
+    EVoiceResult _ret;
+    _ret = ((ISteamUser*)linux_side)->GetVoice((bool)bWantCompressed, (void *)pDestBuffer, (uint32)cbDestBufferSize, (uint32 *)nBytesWritten, (bool)bWantUncompressed, (void *)pUncompressedDestBuffer, (uint32)cbUncompressedDestBufferSize, (uint32 *)nUncompressBytesWritten);
+    return (_ret);
 }
 
 EVoiceResult cppISteamUser_SteamUser015_DecompressVoice(void *linux_side, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
-    return ((ISteamUser*)linux_side)->DecompressVoice((const void *)pCompressed, (uint32)cbCompressed, (void *)pDestBuffer, (uint32)cbDestBufferSize, (uint32 *)nBytesWritten, (uint32)nDesiredSampleRate);
+    EVoiceResult _ret;
+    _ret = ((ISteamUser*)linux_side)->DecompressVoice((const void *)pCompressed, (uint32)cbCompressed, (void *)pDestBuffer, (uint32)cbDestBufferSize, (uint32 *)nBytesWritten, (uint32)nDesiredSampleRate);
+    return (_ret);
 }
 
 uint32 cppISteamUser_SteamUser015_GetVoiceOptimalSampleRate(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetVoiceOptimalSampleRate();
+    uint32 _ret;
+    _ret = ((ISteamUser*)linux_side)->GetVoiceOptimalSampleRate();
+    return (_ret);
 }
 
 HAuthTicket cppISteamUser_SteamUser015_GetAuthSessionTicket(void *linux_side, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
-    return ((ISteamUser*)linux_side)->GetAuthSessionTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    HAuthTicket _ret;
+    _ret = ((ISteamUser*)linux_side)->GetAuthSessionTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    return (_ret);
 }
 
 EBeginAuthSessionResult cppISteamUser_SteamUser015_BeginAuthSession(void *linux_side, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
-    return ((ISteamUser*)linux_side)->BeginAuthSession((const void *)pAuthTicket, (int)cbAuthTicket, (CSteamID)steamID);
+    EBeginAuthSessionResult _ret;
+    _ret = ((ISteamUser*)linux_side)->BeginAuthSession((const void *)pAuthTicket, (int)cbAuthTicket, (CSteamID)steamID);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser015_EndAuthSession(void *linux_side, CSteamID steamID)
@@ -98,12 +120,16 @@ void cppISteamUser_SteamUser015_CancelAuthTicket(void *linux_side, HAuthTicket h
 
 EUserHasLicenseForAppResult cppISteamUser_SteamUser015_UserHasLicenseForApp(void *linux_side, CSteamID steamID, AppId_t appID)
 {
-    return ((ISteamUser*)linux_side)->UserHasLicenseForApp((CSteamID)steamID, (AppId_t)appID);
+    EUserHasLicenseForAppResult _ret;
+    _ret = ((ISteamUser*)linux_side)->UserHasLicenseForApp((CSteamID)steamID, (AppId_t)appID);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser015_BIsBehindNAT(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BIsBehindNAT();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BIsBehindNAT();
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser015_AdvertiseGame(void *linux_side, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
@@ -113,12 +139,16 @@ void cppISteamUser_SteamUser015_AdvertiseGame(void *linux_side, CSteamID steamID
 
 SteamAPICall_t cppISteamUser_SteamUser015_RequestEncryptedAppTicket(void *linux_side, void *pDataToInclude, int cbDataToInclude)
 {
-    return ((ISteamUser*)linux_side)->RequestEncryptedAppTicket((void *)pDataToInclude, (int)cbDataToInclude);
+    SteamAPICall_t _ret;
+    _ret = ((ISteamUser*)linux_side)->RequestEncryptedAppTicket((void *)pDataToInclude, (int)cbDataToInclude);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser015_GetEncryptedAppTicket(void *linux_side, void *pTicket, int cbMaxTicket, uint32 *pcbTicket)
 {
-    return ((ISteamUser*)linux_side)->GetEncryptedAppTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetEncryptedAppTicket((void *)pTicket, (int)cbMaxTicket, (uint32 *)pcbTicket);
+    return (_ret);
 }
 
 #ifdef __cplusplus

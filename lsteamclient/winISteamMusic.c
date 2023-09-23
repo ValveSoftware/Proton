@@ -34,20 +34,26 @@ DEFINE_THISCALL_WRAPPER(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume
 
 bool __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(_this->linux_side);
+    _ret = cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(_this->linux_side);
+    _ret = cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(_this->linux_side);
+    return _ret;
 }
 
 AudioPlayback_Status __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *_this)
 {
+    AudioPlayback_Status _ret;
     TRACE("%p\n", _this);
-    return cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus(_this->linux_side);
+    _ret = cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Play(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *_this)
@@ -82,8 +88,10 @@ void __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume(winISte
 
 float __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *_this)
 {
+    float _ret;
     TRACE("%p\n", _this);
-    return cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(_this->linux_side);
+    _ret = cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtable;

@@ -24,12 +24,16 @@ void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterv
 
 bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(void *linux_side, const void *pData, int cbData, uint32 srcIP, uint16 srcPort)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->HandleIncomingPacket((const void *)pData, (int)cbData, (uint32)srcIP, (uint16)srcPort);
+    bool _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->HandleIncomingPacket((const void *)pData, (int)cbData, (uint32)srcIP, (uint16)srcPort);
+    return (_ret);
 }
 
 int cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(void *linux_side, void *pOut, int cbMaxOut, uint32 *pNetAdr, uint16 *pPort)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->GetNextOutgoingPacket((void *)pOut, (int)cbMaxOut, (uint32 *)pNetAdr, (uint16 *)pPort);
+    int _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->GetNextOutgoingPacket((void *)pOut, (int)cbMaxOut, (uint32 *)pNetAdr, (uint16 *)pPort);
+    return (_ret);
 }
 
 void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(void *linux_side, unsigned short nProtocolVersion, bool bDedicatedServer, const char *pRegionName, const char *pProductName, unsigned short nMaxReportedClients, bool bPasswordProtected, const char *pGameDescription)
@@ -54,7 +58,9 @@ void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown(voi
 
 bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(void *linux_side)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->WasRestartRequested();
+    bool _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->WasRestartRequested();
+    return (_ret);
 }
 
 void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat(void *linux_side)
@@ -64,22 +70,30 @@ void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat(voi
 
 bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(void *linux_side, const char *pServerAddress)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->AddMasterServer((const char *)pServerAddress);
+    bool _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->AddMasterServer((const char *)pServerAddress);
+    return (_ret);
 }
 
 bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(void *linux_side, const char *pServerAddress)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->RemoveMasterServer((const char *)pServerAddress);
+    bool _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->RemoveMasterServer((const char *)pServerAddress);
+    return (_ret);
 }
 
 int cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(void *linux_side)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->GetNumMasterServers();
+    int _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->GetNumMasterServers();
+    return (_ret);
 }
 
 int cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(void *linux_side, int iServer, char *pOut, int outBufferSize)
 {
-    return ((ISteamMasterServerUpdater*)linux_side)->GetMasterServerAddress((int)iServer, (char *)pOut, (int)outBufferSize);
+    int _ret;
+    _ret = ((ISteamMasterServerUpdater*)linux_side)->GetMasterServerAddress((int)iServer, (char *)pOut, (int)outBufferSize);
+    return (_ret);
 }
 
 #ifdef __cplusplus

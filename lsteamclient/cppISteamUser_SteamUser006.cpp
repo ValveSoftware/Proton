@@ -13,7 +13,9 @@ extern "C" {
 #include "cppISteamUser_SteamUser006.h"
 HSteamUser cppISteamUser_SteamUser006_GetHSteamUser(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetHSteamUser();
+    HSteamUser _ret;
+    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser006_LogOn(void *linux_side, CSteamID steamID)
@@ -28,37 +30,51 @@ void cppISteamUser_SteamUser006_LogOff(void *linux_side)
 
 bool cppISteamUser_SteamUser006_BLoggedOn(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 CSteamID cppISteamUser_SteamUser006_GetSteamID(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamUser*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser006_SetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
-    return ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser006_GetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
-    return ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser006_SetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
 {
-    return ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser006_GetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
 {
-    return ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
+    return (_ret);
 }
 
 int cppISteamUser_SteamUser006_InitiateGameConnection(void *linux_side, void *pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    int _ret;
+    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser006_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
