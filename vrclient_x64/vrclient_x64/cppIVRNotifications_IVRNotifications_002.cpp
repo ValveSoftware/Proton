@@ -9,7 +9,7 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVRNotificationError cppIVRNotifications_IVRNotifications_002_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char * pchText, EVRNotificationStyle style, NotificationBitmap_t * pImage, VRNotificationId * pNotificationId)
+vr::EVRNotificationError cppIVRNotifications_IVRNotifications_002_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char *pchText, EVRNotificationStyle style, NotificationBitmap_t *pImage, VRNotificationId *pNotificationId)
 {
     return ((IVRNotifications*)linux_side)->CreateNotification((vr::VROverlayHandle_t)ulOverlayHandle, (uint64_t)ulUserValue, (vr::EVRNotificationType)type, (const char *)pchText, (vr::EVRNotificationStyle)style, (const vr::NotificationBitmap_t *)pImage, (vr::VRNotificationId *)pNotificationId);
 }

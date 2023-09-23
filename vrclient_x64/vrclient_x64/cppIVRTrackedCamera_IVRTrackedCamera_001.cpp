@@ -14,12 +14,12 @@ bool cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera(void *linux_side, Tracke
     return ((IVRTrackedCamera*)linux_side)->HasCamera((vr::TrackedDeviceIndex_t)nDeviceIndex);
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, char * pBuffer, uint32_t nBufferLen)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, char *pBuffer, uint32_t nBufferLen)
 {
     return ((IVRTrackedCamera*)linux_side)->GetCameraFirmwareDescription((vr::TrackedDeviceIndex_t)nDeviceIndex, (char *)pBuffer, (uint32_t)nBufferLen);
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, ECameraVideoStreamFormat nVideoStreamFormat, uint32_t * pWidth, uint32_t * pHeight)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, ECameraVideoStreamFormat nVideoStreamFormat, uint32_t *pWidth, uint32_t *pHeight)
 {
     return ((IVRTrackedCamera*)linux_side)->GetCameraFrameDimensions((vr::TrackedDeviceIndex_t)nDeviceIndex, (vr::ECameraVideoStreamFormat)nVideoStreamFormat, (uint32_t *)pWidth, (uint32_t *)pHeight);
 }
@@ -64,7 +64,7 @@ const vr::CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_Ge
     return ((IVRTrackedCamera*)linux_side)->GetVideoStreamFrame((vr::TrackedDeviceIndex_t)nDeviceIndex);
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, CameraVideoStreamFrame_t * pFrameImage)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, CameraVideoStreamFrame_t *pFrameImage)
 {
     CameraVideoStreamFrame_t lin;
     bool _ret;
@@ -94,12 +94,12 @@ bool cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused(void *linux_si
     return ((IVRTrackedCamera*)linux_side)->IsVideoStreamPaused((vr::TrackedDeviceIndex_t)nDeviceIndex);
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, float flInputU, float flInputV, float * pflOutputU, float * pflOutputV)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, float flInputU, float flInputV, float *pflOutputU, float *pflOutputV)
 {
     return ((IVRTrackedCamera*)linux_side)->GetCameraDistortion((vr::TrackedDeviceIndex_t)nDeviceIndex, (float)flInputU, (float)flInputV, (float *)pflOutputU, (float *)pflOutputV);
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t * pProjection)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
     return ((IVRTrackedCamera*)linux_side)->GetCameraProjection((vr::TrackedDeviceIndex_t)nDeviceIndex, (float)flWidthPixels, (float)flHeightPixels, (float)flZNear, (float)flZFar, (vr::HmdMatrix44_t *)pProjection);
 }
