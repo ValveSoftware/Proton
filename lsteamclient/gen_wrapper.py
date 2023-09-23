@@ -603,6 +603,40 @@ PATH_CONV = [
 ]
 
 
+class Method:
+    def __init__(self, sdkver, abi, cursor, index, override):
+        self._sdkver = sdkver
+        self._abi = abi
+
+        self._cursor = cursor
+        self._index = index
+        self._override = override
+
+        self.result_type = cursor.result_type
+        self.spelling = cursor.spelling
+
+    @property
+    def name(self):
+        if self._override > 1: return f'{self.spelling}_{self._override}'
+        return self.spelling
+
+    def get_arguments(self):
+        return self._cursor.get_arguments()
+
+    def get_children(self):
+        return self._cursor.get_children()
+
+
+class Destructor(Method):
+    def __init__(self, sdkver, abi, cursor, index, override):
+        super().__init__(sdkver, abi, cursor, index, override)
+
+    @property
+    def name(self):
+        if self._override > 1: return f'destructor_{self._override}'
+        return 'destructor'
+
+
 class Class:
     def __init__(self, sdkver, abi, cursor):
         self._sdkver = sdkver
@@ -614,6 +648,28 @@ class Class:
         self.filename = SDK_CLASSES[self.spelling]
         self.version = self.spelling[1:].upper()
         self.version = all_versions[sdkver][self.version]
+
+        self._methods = None
+
+    @property
+    def methods(self):
+        if self._methods:
+            return self._methods
+
+        overrides = {}
+        is_method = lambda c: c.kind == CursorKind.CXX_METHOD and c.is_virtual_method()
+        in_vtable = lambda c: is_method(c) or c.kind == CursorKind.DESTRUCTOR
+
+        self._methods = []
+        for i, method in enumerate(filter(in_vtable, self._cursor.get_children())):
+            index, override = overrides.get(method.spelling, (i, 1))
+            overrides[method.spelling] = (index, override + 1)
+            if method.kind == CursorKind.DESTRUCTOR:
+                self._methods.append(Destructor(self._sdkver, self._abi, method, index, override))
+            else:
+                self._methods.append(Method(self._sdkver, self._abi, method, index, override))
+
+        return self._methods
 
     def get_children(self):
         return self._cursor.get_children()
@@ -681,10 +737,10 @@ def struct_needs_conversion(struct):
         struct_conversion_cache[sdkver][name] = struct_needs_conversion_nocache(struct)
     return struct_conversion_cache[sdkver][name]
 
-def handle_destructor(cfile, classname, winclassname, method):
+def handle_destructor(cfile, winclassname):
     cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_destructor, 4)\n")
     cfile.write(f"void __thiscall {winclassname}_destructor({winclassname} *_this)\n{{/* never called */}}\n\n")
-    return "destructor"
+
 
 def get_path_converter(parent):
     for conv in PATH_CONV:
@@ -706,20 +762,6 @@ def to_c_bool(b):
     if b:
         return "1"
     return "0"
-
-
-def method_unique_name(method, existing_methods):
-    used_name = method.spelling
-    if used_name in existing_methods:
-        number = 2
-        while used_name in existing_methods:
-            idx = existing_methods.index(used_name)
-            used_name = f"{method.spelling}_{number}"
-            number = number + 1
-        existing_methods.insert(idx, used_name)
-    else:
-        existing_methods.append(used_name)
-    return used_name
 
 
 def underlying_type(decl):
@@ -763,17 +805,17 @@ def declspec(decl, name):
     return f'{decl.spelling}{name}'
 
 
-def handle_method_hpp(method_name, cppname, method, cpp_h):
+def handle_method_hpp(method, cppname, cpp_h):
     ret = f'{method.result_type.spelling} '
     if ret.startswith("ISteam"): ret = 'void *'
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
 
-    cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
+    cpp_h.write(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
 
 
-def handle_method_cpp(method_name, classname, cppname, method, cpp):
+def handle_method_cpp(method, classname, cppname, cpp):
     ret = f'{method.result_type.spelling} '
     if ret.startswith("ISteam"): ret = 'void *'
 
@@ -790,7 +832,7 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
-    cpp.write(f'{ret}{cppname}_{method_name}({", ".join(params)})\n')
+    cpp.write(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
     cpp.write("{\n")
 
     for name, param in sorted(need_convert.items()):
@@ -853,7 +895,7 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     cpp.write("}\n\n")
 
 
-def handle_method_c(method_name, winclassname, cppname, method, cfile):
+def handle_method_c(method, winclassname, cppname, cfile):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -865,14 +907,14 @@ def handle_method_c(method_name, winclassname, cppname, method, cfile):
                 parambytes += 4
             else:
                 parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
-    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{method_name}, {parambytes})\n")
+    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{method.name}, {parambytes})\n")
     if method.result_type.spelling.startswith("ISteam"):
         cfile.write(f"win{method.result_type.spelling} ")
     elif returns_record:
         cfile.write(f"{method.result_type.spelling} *")
     else:
         cfile.write(f"{method.result_type.spelling} ")
-    cfile.write(f'__thiscall {winclassname}_{method_name}({winclassname} *_this')
+    cfile.write(f'__thiscall {winclassname}_{method.name}({winclassname} *_this')
     if returns_record:
         cfile.write(f", {method.result_type.spelling} *_r")
     unnamed = 'a'
@@ -915,17 +957,17 @@ def handle_method_c(method_name, winclassname, cppname, method, cfile):
     else:
         cfile.write("    return ")
 
-    should_do_cb_wrap = "GetAPICallResult" in method_name
-    should_gen_wrapper = not method_needs_manual_handling(cppname, method_name) and \
+    should_do_cb_wrap = "GetAPICallResult" in method.name
+    should_gen_wrapper = not method_needs_manual_handling(cppname, method.name) and \
             (method.result_type.spelling.startswith("ISteam") or \
-             method_name.startswith("GetISteamGenericInterface"))
+             method.name.startswith("GetISteamGenericInterface"))
 
     if should_do_cb_wrap:
-        cfile.write(f"do_cb_wrap(0, &{cppname}_{method_name}, _this->linux_side")
+        cfile.write(f"do_cb_wrap(0, &{cppname}_{method.name}, _this->linux_side")
     else:
         if should_gen_wrapper:
             cfile.write("create_win_interface(pchVersion,\n        ")
-        cfile.write(f"{cppname}_{method_name}(_this->linux_side")
+        cfile.write(f"{cppname}_{method.name}(_this->linux_side")
     unnamed = 'a'
     for param in list(method.get_children()):
         if param.kind == CursorKind.PARM_DECL:
@@ -1008,25 +1050,32 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("    vtable_ptr *vtable;\n")
     cfile.write("    void *linux_side;\n")
     cfile.write(f"}} {winclassname};\n\n")
-    methods = []
-    for child in klass.get_children():
-        if child.kind == CursorKind.CXX_METHOD and \
-                child.is_virtual_method():
-            method_name = method_unique_name(child, methods)
-            handle_method_hpp(method_name, cppname, child, cpp_h)
-            if not method_needs_manual_handling(cppname, method_name):
-                handle_method_cpp(method_name, klass.spelling, cppname, child, cpp)
-            handle_method_c(method_name, winclassname, cppname, child, cfile)
-        elif child.kind == CursorKind.DESTRUCTOR:
-            methods.append(handle_destructor(cfile, klass.spelling, winclassname, child))
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        handle_method_hpp(method, cppname, cpp_h)
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        if method_needs_manual_handling(cppname, method.spelling):
+            continue
+        handle_method_cpp(method, klass.spelling, cppname, cpp)
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            handle_destructor(cfile, winclassname)
+        else:
+            handle_method_c(method, winclassname, cppname, cfile)
 
     cfile.write(f"extern vtable_ptr {winclassname}_vtable;\n\n")
     cfile.write("#ifndef __GNUC__\n")
     cfile.write("void __asm_dummy_vtables(void) {\n")
     cfile.write("#endif\n")
     cfile.write(f"    __ASM_VTABLE({winclassname},\n")
-    for method in methods:
-        cfile.write(f"        VTABLE_ADD_FUNC({winclassname}_{method})\n")
+    for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
+        cfile.write(f"        VTABLE_ADD_FUNC({winclassname}_{method.name})\n")
     cfile.write("    );\n")
     cfile.write("#ifndef __GNUC__\n")
     cfile.write("}\n")
@@ -1037,7 +1086,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     else:
         cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{klass.version}\");\n")
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{klass.version}\");\n")
+    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, \"{klass.version}\");\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
 
