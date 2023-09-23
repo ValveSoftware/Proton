@@ -803,16 +803,16 @@ def declspec(decl, name):
     return f'{decl.spelling}{name}'
 
 
-def handle_method_hpp(method, cppname, cpp_h):
+def handle_method_hpp(method, cppname, out):
     ret = f'{declspec(method.result_type, "")} '
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
 
-    cpp_h.write(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
+    out(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
 
 
-def handle_method_cpp(method, classname, cppname, cpp):
+def handle_method_cpp(method, classname, cppname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
 
     ret = f'{declspec(method.result_type, "")} '
@@ -830,11 +830,11 @@ def handle_method_cpp(method, classname, cppname, cpp):
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
-    cpp.write(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
-    cpp.write("{\n")
+    out(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
+    out(u'{\n')
 
     if not returns_void:
-        cpp.write(f'    {declspec(method.result_type, "_ret")};\n')
+        out(f'    {declspec(method.result_type, "_ret")};\n')
 
     for name, param in sorted(need_convert.items()):
         if param.type.kind == TypeKind.POINTER:
@@ -845,23 +845,23 @@ def handle_method_cpp(method, classname, cppname, cpp):
             real_name = canonical_typename(real_type)
             assert(param.type.get_pointee().kind == TypeKind.RECORD or real_name in MANUAL_STRUCTS)
             pointee_name = canonical_typename(param.type.get_pointee())
-            cpp.write(f"    {pointee_name} lin_{name};\n")
-            cpp.write(f"    win_to_lin_struct_{real_name}_{sdkver}({name}, &lin_{name});\n")
+            out(f'    {pointee_name} lin_{name};\n')
+            out(f'    win_to_lin_struct_{real_name}_{sdkver}({name}, &lin_{name});\n')
         else:
             #raw structs
-            cpp.write(f"    {param.type.spelling} lin_{name};\n")
-            cpp.write(f"    win_to_lin_struct_{param.type.spelling}_{sdkver}(&{name}, &lin_{name});\n")
+            out(f'    {param.type.spelling} lin_{name};\n')
+            out(f'    win_to_lin_struct_{param.type.spelling}_{sdkver}(&{name}, &lin_{name});\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            cpp.write(f"    {name} = manual_convert_{name}({name});\n")
+            out(f'    {name} = manual_convert_{name}({name});\n')
         else:
-            cpp.write(f"    {name} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){name});\n")
+            out(f'    {name} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){name});\n')
 
     if returns_void:
-        cpp.write("    ")
+        out(u'    ')
     else:
-        cpp.write("    _ret = ")
+        out(u'    _ret = ')
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
@@ -870,7 +870,7 @@ def handle_method_cpp(method, classname, cppname, cpp):
         return f"({param.type.spelling}){name}"
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
-    cpp.write(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
+    out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
 
     for name, param in sorted(need_convert.items()):
         if param.type.kind == TypeKind.POINTER:
@@ -878,17 +878,17 @@ def handle_method_cpp(method, classname, cppname, cpp):
                 real_type = param.type
                 while real_type.kind == TypeKind.POINTER:
                     real_type = real_type.get_pointee()
-                cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{name}, {name});\n")
+                out(f'    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{name}, {name});\n')
         else:
-            cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{name}, &{name});\n")
+            out(f'    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{name}, &{name});\n')
 
     if method.result_type.kind != TypeKind.VOID:
         post_exec = post_execution_function(classname, method.spelling)
-        cpp.write(f'    return {post_exec}(_ret);\n')
-    cpp.write("}\n\n")
+        out(f'    return {post_exec}(_ret);\n')
+    out(u'}\n\n')
 
 
-def handle_thiscall_wrapper(klass, method, cfile):
+def handle_thiscall_wrapper(klass, method, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     def param_stack_size(param):
@@ -899,10 +899,10 @@ def handle_thiscall_wrapper(klass, method, cfile):
     if returns_record: size += 4
 
     name = f'win{klass.spelling}_{klass.version}_{method.name}'
-    cfile.write(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
+    out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
-def handle_method_c(method, winclassname, cppname, cfile):
+def handle_method_c(method, winclassname, cppname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -920,53 +920,53 @@ def handle_method_c(method, winclassname, cppname, cfile):
     params = [f'{winclassname} *_this'] + params
     names = ['_this'] + names
 
-    cfile.write(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
-    cfile.write("{\n")
+    out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
+    out(u'{\n')
 
     if returns_record:
         del params[1]
         del names[1]
 
     if not returns_record and not returns_void:
-        cfile.write(f'    {ret}_ret;\n')
+        out(f'    {ret}_ret;\n')
 
     should_gen_callback = "GetAPICallResult" in method.name
     if should_gen_callback:
-        cfile.write("    int u_callback_len = cubCallback, w_callback_len = cubCallback;\n");
-        cfile.write("    void *u_callback, *w_callback = pCallback;\n")
+        out(u'    int u_callback_len = cubCallback, w_callback_len = cubCallback;\n')
+        out(u'    void *u_callback, *w_callback = pCallback;\n')
 
     path_conv = get_path_converter(method)
 
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write(f"    const char **lin_{path_conv['w2l_names'][i]} = steamclient_dos_to_unix_stringlist({path_conv['w2l_names'][i]});\n")
+                out(f'    const char **lin_{path_conv["w2l_names"][i]} = steamclient_dos_to_unix_stringlist({path_conv["w2l_names"][i]});\n')
                 # TODO
                 pass
             else:
-                cfile.write(f"    char lin_{path_conv['w2l_names'][i]}[PATH_MAX];\n")
-                cfile.write(f"    steamclient_dos_path_to_unix_path({path_conv['w2l_names'][i]}, lin_{path_conv['w2l_names'][i]}, {int(path_conv['w2l_urls'][i])});\n")
+                out(f'    char lin_{path_conv["w2l_names"][i]}[PATH_MAX];\n')
+                out(f'    steamclient_dos_path_to_unix_path({path_conv["w2l_names"][i]}, lin_{path_conv["w2l_names"][i]}, {int(path_conv["w2l_urls"][i])});\n')
 
-    cfile.write("    TRACE(\"%p\\n\", _this);\n")
+    out(u'    TRACE("%p\\n", _this);\n')
 
     if should_gen_callback:
-        cfile.write("    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;\n")
-        cfile.write("    cubCallback = u_callback_len;\n")
-        cfile.write("    pCallback = u_callback;\n\n")
+        out(u'    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;\n')
+        out(u'    cubCallback = u_callback_len;\n')
+        out(u'    pCallback = u_callback;\n\n')
 
     if returns_record:
-        cfile.write(u'    *_ret = ')
+        out(u'    *_ret = ')
     elif not returns_void:
-        cfile.write(u'    _ret = ')
+        out(u'    _ret = ')
     else:
-        cfile.write(u'    ')
+        out(u'    ')
 
     should_gen_wrapper = not method_needs_manual_handling(cppname, method.name) and \
             (method.result_type.spelling.startswith("ISteam") or \
              method.name.startswith("GetISteamGenericInterface"))
     if should_gen_wrapper:
-        cfile.write("create_win_interface(pchVersion,\n        ")
-    cfile.write(f"{cppname}_{method.name}(")
+        out(u'create_win_interface(pchVersion,\n        ')
+    out(f'{cppname}_{method.name}(')
 
     def param_call(param, name):
         if name == '_this': return '_this->linux_side'
@@ -976,34 +976,34 @@ def handle_method_c(method, winclassname, cppname, cfile):
         return name
 
     params = ['_this'] + list(method.get_arguments())
-    cfile.write(", ".join([param_call(p, n) for p, n in zip(params, names)]))
+    out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
 
     if should_gen_wrapper:
-        cfile.write(")")
+        out(u')')
 
-    cfile.write(");\n")
+    out(u');\n')
 
     if should_gen_callback:
-        cfile.write("    if (_ret && u_callback != w_callback)\n")
-        cfile.write("    {\n")
-        cfile.write("        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);\n")
-        cfile.write("        HeapFree(GetProcessHeap(), 0, u_callback);\n")
-        cfile.write("    }\n\n")
+        out(u'    if (_ret && u_callback != w_callback)\n')
+        out(u'    {\n')
+        out(u'        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);\n')
+        out(u'        HeapFree(GetProcessHeap(), 0, u_callback);\n')
+        out(u'    }\n\n')
 
     if path_conv and len(path_conv["l2w_names"]) > 0:
         for i in range(len(path_conv["l2w_names"])):
-            cfile.write("    ")
+            out(u'    ')
             if path_conv["return_is_size"]:
-                cfile.write("_ret = ")
-            cfile.write(f"steamclient_unix_path_to_dos_path(_ret, {path_conv['l2w_names'][i]}, {path_conv['l2w_names'][i]}, {path_conv['l2w_lens'][i]}, {int(path_conv['l2w_urls'][i])});\n")
+                out(u'_ret = ')
+            out(f'steamclient_unix_path_to_dos_path(_ret, {path_conv["l2w_names"][i]}, {path_conv["l2w_names"][i]}, {path_conv["l2w_lens"][i]}, {int(path_conv["l2w_urls"][i])});\n')
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write(f"    steamclient_free_stringlist(lin_{path_conv['w2l_names'][i]});\n")
+                out(f'    steamclient_free_stringlist(lin_{path_conv["w2l_names"][i]});\n')
 
     if not returns_void:
-        cfile.write(u'    return _ret;\n')
-    cfile.write("}\n\n")
+        out(u'    return _ret;\n')
+    out(u'}\n\n')
 
 
 def handle_class(klass):
@@ -1057,26 +1057,26 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write(f"}} {winclassname};\n\n")
 
     for method in klass.methods:
-        handle_thiscall_wrapper(klass, method, cfile)
+        handle_thiscall_wrapper(klass, method, cfile.write)
     cfile.write('\n')
 
     for method in klass.methods:
         if type(method) is Destructor:
             continue
-        handle_method_hpp(method, cppname, cpp_h)
+        handle_method_hpp(method, cppname, cpp_h.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
             continue
         if method_needs_manual_handling(cppname, method.spelling):
             continue
-        handle_method_cpp(method, klass.spelling, cppname, cpp)
+        handle_method_cpp(method, klass.spelling, cppname, cpp.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
             cfile.write(f"void __thiscall {winclassname}_{method.name}({winclassname} *_this)\n{{/* never called */}}\n\n")
         else:
-            handle_method_c(method, winclassname, cppname, cfile)
+            handle_method_c(method, winclassname, cppname, cfile.write)
 
     cfile.write(f"extern vtable_ptr {winclassname}_vtable;\n\n")
     cfile.write("#ifndef __GNUC__\n")
