@@ -1081,6 +1081,7 @@ def default_compat_config():
                 "202990", #Call of Duty: Black Ops II - Multiplayer
                 "212910", #Call of Duty: Black Ops II - Zombies
                 "499100", #Dark Parables: The Exiled Prince Collector's Edition (499100)
+                "1404090", #Trivia Tricks
                 ]:
             ret.add("heapdelayfree")
 
