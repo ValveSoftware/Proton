@@ -13,62 +13,86 @@ extern "C" {
 #include "cppISteamNetworking_SteamNetworking001.h"
 SNetListenSocket_t cppISteamNetworking_SteamNetworking001_CreateListenSocket(void *linux_side, int nVirtualP2PPort, uint32 nIP, uint16 nPort)
 {
-    return ((ISteamNetworking*)linux_side)->CreateListenSocket((int)nVirtualP2PPort, (uint32)nIP, (uint16)nPort);
+    SNetListenSocket_t _ret;
+    _ret = ((ISteamNetworking*)linux_side)->CreateListenSocket((int)nVirtualP2PPort, (uint32)nIP, (uint16)nPort);
+    return (_ret);
 }
 
 SNetSocket_t cppISteamNetworking_SteamNetworking001_CreateP2PConnectionSocket(void *linux_side, CSteamID steamIDTarget, int nVirtualPort, int nTimeoutSec)
 {
-    return ((ISteamNetworking*)linux_side)->CreateP2PConnectionSocket((CSteamID)steamIDTarget, (int)nVirtualPort, (int)nTimeoutSec);
+    SNetSocket_t _ret;
+    _ret = ((ISteamNetworking*)linux_side)->CreateP2PConnectionSocket((CSteamID)steamIDTarget, (int)nVirtualPort, (int)nTimeoutSec);
+    return (_ret);
 }
 
 SNetSocket_t cppISteamNetworking_SteamNetworking001_CreateConnectionSocket(void *linux_side, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
-    return ((ISteamNetworking*)linux_side)->CreateConnectionSocket((uint32)nIP, (uint16)nPort, (int)nTimeoutSec);
+    SNetSocket_t _ret;
+    _ret = ((ISteamNetworking*)linux_side)->CreateConnectionSocket((uint32)nIP, (uint16)nPort, (int)nTimeoutSec);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_DestroySocket(void *linux_side, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
-    return ((ISteamNetworking*)linux_side)->DestroySocket((SNetSocket_t)hSocket, (bool)bNotifyRemoteEnd);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->DestroySocket((SNetSocket_t)hSocket, (bool)bNotifyRemoteEnd);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_DestroyListenSocket(void *linux_side, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
-    return ((ISteamNetworking*)linux_side)->DestroyListenSocket((SNetListenSocket_t)hSocket, (bool)bNotifyRemoteEnd);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->DestroyListenSocket((SNetListenSocket_t)hSocket, (bool)bNotifyRemoteEnd);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_SendDataOnSocket(void *linux_side, SNetSocket_t hSocket, void *pubData, uint32 cubData, bool bReliable)
 {
-    return ((ISteamNetworking*)linux_side)->SendDataOnSocket((SNetSocket_t)hSocket, (void *)pubData, (uint32)cubData, (bool)bReliable);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->SendDataOnSocket((SNetSocket_t)hSocket, (void *)pubData, (uint32)cubData, (bool)bReliable);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket(void *linux_side, SNetSocket_t hSocket, uint32 *pcubMsgSize)
 {
-    return ((ISteamNetworking*)linux_side)->IsDataAvailableOnSocket((SNetSocket_t)hSocket, (uint32 *)pcubMsgSize);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->IsDataAvailableOnSocket((SNetSocket_t)hSocket, (uint32 *)pcubMsgSize);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_RetrieveDataFromSocket(void *linux_side, SNetSocket_t hSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
-    return ((ISteamNetworking*)linux_side)->RetrieveDataFromSocket((SNetSocket_t)hSocket, (void *)pubDest, (uint32)cubDest, (uint32 *)pcubMsgSize);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->RetrieveDataFromSocket((SNetSocket_t)hSocket, (void *)pubDest, (uint32)cubDest, (uint32 *)pcubMsgSize);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_IsDataAvailable(void *linux_side, SNetListenSocket_t hListenSocket, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
-    return ((ISteamNetworking*)linux_side)->IsDataAvailable((SNetListenSocket_t)hListenSocket, (uint32 *)pcubMsgSize, (SNetSocket_t *)phSocket);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->IsDataAvailable((SNetListenSocket_t)hListenSocket, (uint32 *)pcubMsgSize, (SNetSocket_t *)phSocket);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_RetrieveData(void *linux_side, SNetListenSocket_t hListenSocket, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize, SNetSocket_t *phSocket)
 {
-    return ((ISteamNetworking*)linux_side)->RetrieveData((SNetListenSocket_t)hListenSocket, (void *)pubDest, (uint32)cubDest, (uint32 *)pcubMsgSize, (SNetSocket_t *)phSocket);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->RetrieveData((SNetListenSocket_t)hListenSocket, (void *)pubDest, (uint32)cubDest, (uint32 *)pcubMsgSize, (SNetSocket_t *)phSocket);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_GetSocketInfo(void *linux_side, SNetSocket_t hSocket, CSteamID *pSteamIDRemote, int *peSocketStatus, uint32 *punIPRemote, uint16 *punPortRemote)
 {
-    return ((ISteamNetworking*)linux_side)->GetSocketInfo((SNetSocket_t)hSocket, (CSteamID *)pSteamIDRemote, (int *)peSocketStatus, (uint32 *)punIPRemote, (uint16 *)punPortRemote);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->GetSocketInfo((SNetSocket_t)hSocket, (CSteamID *)pSteamIDRemote, (int *)peSocketStatus, (uint32 *)punIPRemote, (uint16 *)punPortRemote);
+    return (_ret);
 }
 
 bool cppISteamNetworking_SteamNetworking001_GetListenSocketInfo(void *linux_side, SNetListenSocket_t hListenSocket, uint32 *pnIP, uint16 *pnPort)
 {
-    return ((ISteamNetworking*)linux_side)->GetListenSocketInfo((SNetListenSocket_t)hListenSocket, (uint32 *)pnIP, (uint16 *)pnPort);
+    bool _ret;
+    _ret = ((ISteamNetworking*)linux_side)->GetListenSocketInfo((SNetListenSocket_t)hListenSocket, (uint32 *)pnIP, (uint16 *)pnPort);
+    return (_ret);
 }
 
 #ifdef __cplusplus

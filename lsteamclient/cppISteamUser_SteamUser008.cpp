@@ -13,17 +13,23 @@ extern "C" {
 #include "cppISteamUser_SteamUser008.h"
 HSteamUser cppISteamUser_SteamUser008_GetHSteamUser(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetHSteamUser();
+    HSteamUser _ret;
+    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
+    return (_ret);
 }
 
 bool cppISteamUser_SteamUser008_BLoggedOn(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->BLoggedOn();
+    bool _ret;
+    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
+    return (_ret);
 }
 
 CSteamID cppISteamUser_SteamUser008_GetSteamID(void *linux_side)
 {
-    return ((ISteamUser*)linux_side)->GetSteamID();
+    CSteamID _ret;
+    _ret = ((ISteamUser*)linux_side)->GetSteamID();
+    return (_ret);
 }
 
 void cppISteamUser_SteamUser008_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)

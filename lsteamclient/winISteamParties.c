@@ -37,44 +37,58 @@ DEFINE_THISCALL_WRAPPER(winISteamParties_SteamParties002_GetBeaconLocationData, 
 
 uint32 __thiscall winISteamParties_SteamParties002_GetNumActiveBeacons(winISteamParties_SteamParties002 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetNumActiveBeacons(_this->linux_side);
+    _ret = cppISteamParties_SteamParties002_GetNumActiveBeacons(_this->linux_side);
+    return _ret;
 }
 
 PartyBeaconID_t __thiscall winISteamParties_SteamParties002_GetBeaconByIndex(winISteamParties_SteamParties002 *_this, uint32 unIndex)
 {
+    PartyBeaconID_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetBeaconByIndex(_this->linux_side, unIndex);
+    _ret = cppISteamParties_SteamParties002_GetBeaconByIndex(_this->linux_side, unIndex);
+    return _ret;
 }
 
 bool __thiscall winISteamParties_SteamParties002_GetBeaconDetails(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeaconID, CSteamID *pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_158 *pLocation, char *pchMetadata, int cchMetadata)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetBeaconDetails(_this->linux_side, ulBeaconID, pSteamIDBeaconOwner, pLocation, pchMetadata, cchMetadata);
+    _ret = cppISteamParties_SteamParties002_GetBeaconDetails(_this->linux_side, ulBeaconID, pSteamIDBeaconOwner, pLocation, pchMetadata, cchMetadata);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamParties_SteamParties002_JoinParty(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeaconID)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_JoinParty(_this->linux_side, ulBeaconID);
+    _ret = cppISteamParties_SteamParties002_JoinParty(_this->linux_side, ulBeaconID);
+    return _ret;
 }
 
 bool __thiscall winISteamParties_SteamParties002_GetNumAvailableBeaconLocations(winISteamParties_SteamParties002 *_this, uint32 *puNumLocations)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations(_this->linux_side, puNumLocations);
+    _ret = cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations(_this->linux_side, puNumLocations);
+    return _ret;
 }
 
 bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_158 *pLocationList, uint32 uMaxNumLocations)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetAvailableBeaconLocations(_this->linux_side, pLocationList, uMaxNumLocations);
+    _ret = cppISteamParties_SteamParties002_GetAvailableBeaconLocations(_this->linux_side, pLocationList, uMaxNumLocations);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamParties_SteamParties002_CreateBeacon(winISteamParties_SteamParties002 *_this, uint32 unOpenSlots, winSteamPartyBeaconLocation_t_158 *pBeaconLocation, const char *pchConnectString, const char *pchMetadata)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_CreateBeacon(_this->linux_side, unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
+    _ret = cppISteamParties_SteamParties002_CreateBeacon(_this->linux_side, unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
+    return _ret;
 }
 
 void __thiscall winISteamParties_SteamParties002_OnReservationCompleted(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeacon, CSteamID steamIDUser)
@@ -91,20 +105,26 @@ void __thiscall winISteamParties_SteamParties002_CancelReservation(winISteamPart
 
 SteamAPICall_t __thiscall winISteamParties_SteamParties002_ChangeNumOpenSlots(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeacon, uint32 unOpenSlots)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_ChangeNumOpenSlots(_this->linux_side, ulBeacon, unOpenSlots);
+    _ret = cppISteamParties_SteamParties002_ChangeNumOpenSlots(_this->linux_side, ulBeacon, unOpenSlots);
+    return _ret;
 }
 
 bool __thiscall winISteamParties_SteamParties002_DestroyBeacon(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeacon)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_DestroyBeacon(_this->linux_side, ulBeacon);
+    _ret = cppISteamParties_SteamParties002_DestroyBeacon(_this->linux_side, ulBeacon);
+    return _ret;
 }
 
 bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_158 BeaconLocation, ESteamPartyBeaconLocationData eData, char *pchDataStringOut, int cchDataStringOut)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamParties_SteamParties002_GetBeaconLocationData(_this->linux_side, BeaconLocation, eData, pchDataStringOut, cchDataStringOut);
+    _ret = cppISteamParties_SteamParties002_GetBeaconLocationData(_this->linux_side, BeaconLocation, eData, pchDataStringOut, cchDataStringOut);
+    return _ret;
 }
 
 extern vtable_ptr winISteamParties_SteamParties002_vtable;

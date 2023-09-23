@@ -51,14 +51,18 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHear
 
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const void *pData, int cbData, uint32 srcIP, uint16 srcPort)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(_this->linux_side, pData, cbData, srcIP, srcPort);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(_this->linux_side, pData, cbData, srcIP, srcPort);
+    return _ret;
 }
 
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, void *pOut, int cbMaxOut, uint32 *pNetAdr, uint16 *pPort)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(_this->linux_side, pOut, cbMaxOut, pNetAdr, pPort);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(_this->linux_side, pOut, cbMaxOut, pNetAdr, pPort);
+    return _ret;
 }
 
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, unsigned short nProtocolVersion, bool bDedicatedServer, const char *pRegionName, const char *pProductName, unsigned short nMaxReportedClients, bool bPasswordProtected, const char *pGameDescription)
@@ -87,8 +91,10 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyS
 
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(_this->linux_side);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested(_this->linux_side);
+    return _ret;
 }
 
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
@@ -99,26 +105,34 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHe
 
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const char *pServerAddress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(_this->linux_side, pServerAddress);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer(_this->linux_side, pServerAddress);
+    return _ret;
 }
 
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const char *pServerAddress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(_this->linux_side, pServerAddress);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(_this->linux_side, pServerAddress);
+    return _ret;
 }
 
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(_this->linux_side);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, int iServer, char *pOut, int outBufferSize)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(_this->linux_side, iServer, pOut, outBufferSize);
+    _ret = cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(_this->linux_side, iServer, pOut, outBufferSize);
+    return _ret;
 }
 
 extern vtable_ptr winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtable;

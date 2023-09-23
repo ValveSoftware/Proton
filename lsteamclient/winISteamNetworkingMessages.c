@@ -31,38 +31,50 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_G
 
 EResult __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity *identityRemote, const void *pubData, uint32 cubData, int nSendFlags, int nRemoteChannel)
 {
+    EResult _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(_this->linux_side, identityRemote, pubData, cubData, nSendFlags, nRemoteChannel);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(_this->linux_side, identityRemote, pubData, cubData, nSendFlags, nRemoteChannel);
+    return _ret;
 }
 
 int __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, int nLocalChannel, winSteamNetworkingMessage_t_158 **ppOutMessages, int nMaxMessages)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(_this->linux_side, nLocalChannel, ppOutMessages, nMaxMessages);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(_this->linux_side, nLocalChannel, ppOutMessages, nMaxMessages);
+    return _ret;
 }
 
 bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity *identityRemote)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(_this->linux_side, identityRemote);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(_this->linux_side, identityRemote);
+    return _ret;
 }
 
 bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity *identityRemote)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(_this->linux_side, identityRemote);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(_this->linux_side, identityRemote);
+    return _ret;
 }
 
 bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity *identityRemote, int nLocalChannel)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(_this->linux_side, identityRemote, nLocalChannel);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(_this->linux_side, identityRemote, nLocalChannel);
+    return _ret;
 }
 
 ESteamNetworkingConnectionState __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity *identityRemote, SteamNetConnectionInfo_t *pConnectionInfo, SteamNetConnectionRealTimeStatus_t *pQuickStatus)
 {
+    ESteamNetworkingConnectionState _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(_this->linux_side, identityRemote, pConnectionInfo, pQuickStatus);
+    _ret = cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(_this->linux_side, identityRemote, pConnectionInfo, pQuickStatus);
+    return _ret;
 }
 
 extern vtable_ptr winISteamNetworkingMessages_SteamNetworkingMessages002_vtable;

@@ -45,14 +45,18 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
 
 SteamAPICall_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(_this->linux_side);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this, void *buf, uint32 cbBuf)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(_this->linux_side, buf, cbBuf);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(_this->linux_side, buf, cbBuf);
+    return _ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this, const void *pTicket, uint32 cbTicket)
@@ -63,14 +67,18 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
 
 uint32 __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(_this->linux_side);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this, uint32 idxTicket, void *buf, uint32 cbBuf)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(_this->linux_side, idxTicket, buf, cbBuf);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(_this->linux_side, idxTicket, buf, cbBuf);
+    return _ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *_this, const void *pMsg, uint32 cbMsg)
@@ -137,14 +145,18 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
 
 SteamAPICall_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync(_this->linux_side);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this, void *buf, uint32 cbBuf, const char *pszLauncherPartner)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON(_this->linux_side, buf, cbBuf, pszLauncherPartner);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON(_this->linux_side, buf, cbBuf, pszLauncherPartner);
+    return _ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this, const void *pTicket, uint32 cbTicket)
@@ -155,14 +167,18 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
 
 uint32 __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount(_this->linux_side);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this, uint32 idxTicket, void *buf, uint32 cbBuf)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket(_this->linux_side, idxTicket, buf, cbBuf);
+    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket(_this->linux_side, idxTicket, buf, cbBuf);
+    return _ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *_this, const void *pMsg, uint32 cbMsg)

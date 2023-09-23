@@ -13,12 +13,16 @@ extern "C" {
 #include "cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.h"
 bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(void *linux_side, const char *pchAbsolutePathToControllerConfigVDF)
 {
-    return ((ISteamController*)linux_side)->Init((const char *)pchAbsolutePathToControllerConfigVDF);
+    bool _ret;
+    _ret = ((ISteamController*)linux_side)->Init((const char *)pchAbsolutePathToControllerConfigVDF);
+    return (_ret);
 }
 
 bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown(void *linux_side)
 {
-    return ((ISteamController*)linux_side)->Shutdown();
+    bool _ret;
+    _ret = ((ISteamController*)linux_side)->Shutdown();
+    return (_ret);
 }
 
 void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(void *linux_side)
@@ -28,7 +32,9 @@ void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(void *linux_
 
 bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(void *linux_side, uint32 unControllerIndex, SteamControllerState001_t *pState)
 {
-    return ((ISteamController*)linux_side)->GetControllerState((uint32)unControllerIndex, (SteamControllerState001_t *)pState);
+    bool _ret;
+    _ret = ((ISteamController*)linux_side)->GetControllerState((uint32)unControllerIndex, (SteamControllerState001_t *)pState);
+    return (_ret);
 }
 
 void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(void *linux_side, uint32 unControllerIndex, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)

@@ -33,8 +33,10 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(winISteamVi
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(winISteamVideo_STEAMVIDEO_INTERFACE_V001 *_this, int *pnNumViewers)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(_this->linux_side, pnNumViewers);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(_this->linux_side, pnNumViewers);
+    return _ret;
 }
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable;
@@ -79,8 +81,10 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(winISteamVi
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, int *pnNumViewers)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(_this->linux_side, pnNumViewers);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(_this->linux_side, pnNumViewers);
+    return _ret;
 }
 
 void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, AppId_t unVideoAppID)
@@ -91,8 +95,10 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(winIStea
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(_this->linux_side, unVideoAppID, pchBuffer, pnBufferSize);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(_this->linux_side, unVideoAppID, pchBuffer, pnBufferSize);
+    return _ret;
 }
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable;

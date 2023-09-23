@@ -47,134 +47,178 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_G
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iStat)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(_this->linux_side, nGameID, iStat);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(_this->linux_side, nGameID, iStat);
+    return _ret;
 }
 
 ESteamUserStatType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    ESteamUserStatType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(_this->linux_side, nGameID);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iAchievement)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(_this->linux_side, nGameID, iAchievement);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(_this->linux_side, nGameID, iAchievement);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements(_this->linux_side, nGameID);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iAchievement)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName(_this->linux_side, nGameID, iAchievement);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName(_this->linux_side, nGameID, iAchievement);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(_this->linux_side, nGameID, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(_this->linux_side, nGameID, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(_this->linux_side, nGameID, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(_this->linux_side, nGameID, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(_this->linux_side, nGameID, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(_this->linux_side, nGameID, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(_this->linux_side, nGameID, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(_this->linux_side, nGameID, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(_this->linux_side, nGameID, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(_this->linux_side, nGameID, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(_this->linux_side, nGameID, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(_this->linux_side, nGameID, pchName, pchKey);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtable;
@@ -247,110 +291,146 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_I
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, uint32 iStat)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName(_this->linux_side, nGameID, iStat);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName(_this->linux_side, nGameID, iStat);
+    return _ret;
 }
 
 ESteamUserStatType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName)
 {
+    ESteamUserStatType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatType(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatType(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumAchievements(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumAchievements(_this->linux_side, nGameID);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, uint32 iAchievement)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementName(_this->linux_side, nGameID, iAchievement);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementName(_this->linux_side, nGameID, iAchievement);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(_this->linux_side, nGameID, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(_this->linux_side, nGameID, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2(_this->linux_side, nGameID, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2(_this->linux_side, nGameID, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(_this->linux_side, nGameID, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(_this->linux_side, nGameID, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2(_this->linux_side, nGameID, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2(_this->linux_side, nGameID, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat(_this->linux_side, nGameID, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat(_this->linux_side, nGameID, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats(_this->linux_side, nGameID);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats(_this->linux_side, nGameID);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementIcon(_this->linux_side, nGameID, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementIcon(_this->linux_side, nGameID, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute(_this->linux_side, nGameID, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute(_this->linux_side, nGameID, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *_this, CGameID nGameID, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress(_this->linux_side, nGameID, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress(_this->linux_side, nGameID, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_vtable;
@@ -414,80 +494,106 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_I
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_vtable;
@@ -550,104 +656,138 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_vtable;
@@ -724,164 +864,218 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_U
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, SteamLeaderboard_t hSteamLeaderboard, int32 nScore, int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_vtable;
@@ -969,170 +1163,226 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_vtable;
@@ -1223,182 +1473,242 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_vtable;
@@ -1492,188 +1802,250 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_111x *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_vtable;
@@ -1769,194 +2141,258 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int cUsers)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_113 *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_vtable;
@@ -2062,248 +2498,330 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int cUsers)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_119 *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, int iIteratorPrevious, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchName, float *pflPercent)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, int nHistoryDays)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchStatName, int64 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchStatName, double *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchStatName, int64 *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, const char *pchStatName, double *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_vtable;
@@ -2420,260 +2938,346 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumAchievements(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumAchievements(_this->linux_side);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, uint32 iAchievement)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementName(_this->linux_side, iAchievement);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementName(_this->linux_side, iAchievement);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int cUsers)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_148a *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, int iIteratorPrevious, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchName, float *pflPercent)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, int nHistoryDays)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchStatName, int64 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchStatName, double *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchStatName, int64 *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, const char *pchStatName, double *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_vtable;
@@ -2794,272 +3398,362 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats(_this->linux_side);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2(_this->linux_side, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2(_this->linux_side, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, int32 nData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(_this->linux_side, pchName, nData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(_this->linux_side, pchName, nData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, float fData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2(_this->linux_side, pchName, fData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2(_this->linux_side, pchName, fData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat(_this->linux_side, pchName, flCountThisSession, dSessionLength);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement(_this->linux_side, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement(_this->linux_side, pchName);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime(_this->linux_side, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementIcon(_this->linux_side, pchName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementIcon(_this->linux_side, pchName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, const char *pchKey)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementDisplayAttribute(_this->linux_side, pchName, pchKey);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress(_this->linux_side, pchName, nCurProgress, nMaxProgress);
+    return _ret;
 }
 
 uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this)
 {
+    uint32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumAchievements(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumAchievements(_this->linux_side);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, uint32 iAchievement)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementName(_this->linux_side, iAchievement);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementName(_this->linux_side, iAchievement);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, CSteamID steamIDUser)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats(_this->linux_side, steamIDUser);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32 *punUnlockTime)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, bool bAchievementsToo)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats(_this->linux_side, bAchievementsToo);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats(_this->linux_side, bAchievementsToo);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard(_this->linux_side, pchLeaderboardName, eLeaderboardSortMethod, eLeaderboardDisplayType);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchLeaderboardName)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard(_this->linux_side, pchLeaderboardName);
+    return _ret;
 }
 
 const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    const char * _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardSortMethod __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardSortMethod _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 ELeaderboardDisplayType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard)
 {
+    ELeaderboardDisplayType _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType(_this->linux_side, hSteamLeaderboard);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries(_this->linux_side, hSteamLeaderboard, eLeaderboardDataRequest, nRangeStart, nRangeEnd);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int cUsers)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers(_this->linux_side, hSteamLeaderboard, prgUsers, cUsers);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_158 *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore(_this->linux_side, hSteamLeaderboard, eLeaderboardUploadScoreMethod, nScore, pScoreDetails, cScoreDetailsCount);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC(_this->linux_side, hSteamLeaderboard, hUGC);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers(_this->linux_side);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages(_this->linux_side);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages(_this->linux_side);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo(_this->linux_side, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, int iIteratorPrevious, char *pchName, uint32 unNameBufLen, float *pflPercent, bool *pbAchieved)
 {
+    int _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo(_this->linux_side, iIteratorPrevious, pchName, unNameBufLen, pflPercent, pbAchieved);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, float *pflPercent)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent(_this->linux_side, pchName, pflPercent);
+    return _ret;
 }
 
 SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, int nHistoryDays)
 {
+    SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats(_this->linux_side, nHistoryDays);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchStatName, int64 *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchStatName, double *pData)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2(_this->linux_side, pchStatName, pData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchStatName, int64 *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 int32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchStatName, double *pData, uint32 cubData)
 {
+    int32 _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2(_this->linux_side, pchStatName, pData, cubData);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, int32 *pnMinProgress, int32 *pnMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits(_this->linux_side, pchName, pnMinProgress, pnMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits(_this->linux_side, pchName, pnMinProgress, pnMaxProgress);
+    return _ret;
 }
 
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *_this, const char *pchName, float *pfMinProgress, float *pfMaxProgress)
 {
+    bool _ret;
     TRACE("%p\n", _this);
-    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2(_this->linux_side, pchName, pfMinProgress, pfMaxProgress);
+    _ret = cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2(_this->linux_side, pchName, pfMinProgress, pfMaxProgress);
+    return _ret;
 }
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_vtable;
