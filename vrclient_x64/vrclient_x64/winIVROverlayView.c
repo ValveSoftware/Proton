@@ -46,7 +46,7 @@ EVROverlayError __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayVi
     return _ret;
 }
 
-void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(winIVROverlayView_IVROverlayView_003 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pvrEvent)
+void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(winIVROverlayView_IVROverlayView_003 *_this, VROverlayHandle_t ulOverlayHandle, const VREvent_t *pvrEvent)
 {
     TRACE("%p\n", _this);
     cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(_this->linux_side, ulOverlayHandle, pvrEvent);

@@ -100,14 +100,14 @@ uint32_t cppIVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName(void
     return _ret;
 }
 
-bool cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, VRInputValueHandle_t devicePath, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     _ret = ((IVRRenderModels*)linux_side)->GetComponentStateForDevicePath((const char *)pchRenderModelName, (const char *)pchComponentName, (vr::VRInputValueHandle_t)devicePath, (const vr::RenderModel_ControllerMode_State_t *)pState, (vr::RenderModel_ComponentState_t *)pComponentState);
     return _ret;
 }
 
-bool cppIVRRenderModels_IVRRenderModels_006_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool cppIVRRenderModels_IVRRenderModels_006_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     VRControllerState001_t lin;

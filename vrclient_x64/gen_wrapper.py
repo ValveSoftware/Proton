@@ -522,9 +522,7 @@ def declspec(decl, name):
         typename = typename.removeprefix("const ")
         typename = typename.removeprefix("vr::")
 
-    if decl.get_canonical().kind not in (TypeKind.RECORD, TypeKind.ENUM):
-        typename = f'{const}{typename}'
-    return f'{typename}{name}'
+    return f'{const}{typename}{name}'
 
 
 def handle_method_hpp(method, cppname, cpp_h):
@@ -1121,8 +1119,8 @@ def handle_struct(sdkver, struct):
 
     if WIN_TO_LIN in which:
         #XXX: should pass size param here, too
-        hfile.write("extern void struct_%s_win_to_lin(void *w, void *l);\n" % handler_name)
-        cppfile.write("void struct_%s_win_to_lin(void *w, void *l)\n{\n" % handler_name)
+        hfile.write("extern void struct_%s_win_to_lin(const void *w, void *l);\n" % handler_name)
+        cppfile.write("void struct_%s_win_to_lin(const void *w, void *l)\n{\n" % handler_name)
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
         dump_converter("win", "lin", None)

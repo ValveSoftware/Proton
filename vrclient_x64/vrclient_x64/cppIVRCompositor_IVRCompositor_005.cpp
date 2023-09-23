@@ -129,7 +129,7 @@ bool cppIVRCompositor_IVRCompositor_005_IsFullscreen(void *linux_side)
     return _ret;
 }
 
-bool cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(void *linux_side, Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
+bool cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(void *linux_side, const Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
 {
     bool _ret;
     _ret = ((IVRCompositor*)linux_side)->ComputeOverlayIntersection((const vr::Compositor_OverlaySettings *)pSettings, (float)fAspectRatio, (vr::TrackingUniverseOrigin)eOrigin, (vr::HmdVector3_t)vSource, (vr::HmdVector3_t)vDirection, (vr::HmdVector2_t *)pvecIntersectionUV, (vr::HmdVector3_t *)pvecIntersectionTrackingSpace);

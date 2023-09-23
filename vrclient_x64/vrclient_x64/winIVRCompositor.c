@@ -188,7 +188,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_005_IsFullscreen(winIVRCompositor
     return _ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(winIVRCompositor_IVRCompositor_005 *_this, Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
+bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(winIVRCompositor_IVRCompositor_005 *_this, const Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -637,7 +637,7 @@ VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_WaitGetPoses(win
     return _ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_Submit(winIVRCompositor_IVRCompositor_007 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, VRTextureBounds_t *pBounds)
+VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_Submit(winIVRCompositor_IVRCompositor_007 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds)
 {
     VRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -893,7 +893,7 @@ VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_WaitGetPoses(win
     return _ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_Submit(winIVRCompositor_IVRCompositor_008 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
+VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_Submit(winIVRCompositor_IVRCompositor_008 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
 {
     VRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1193,7 +1193,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_GetLastPoses(wi
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit(winIVRCompositor_IVRCompositor_009 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit(winIVRCompositor_IVRCompositor_009 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1241,7 +1241,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_009_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(winIVRCompositor_IVRCompositor_009 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(winIVRCompositor_IVRCompositor_009 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1491,7 +1491,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_GetLastPoses(wi
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit(winIVRCompositor_IVRCompositor_010 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit(winIVRCompositor_IVRCompositor_010 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1539,7 +1539,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_010_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(winIVRCompositor_IVRCompositor_010 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(winIVRCompositor_IVRCompositor_010 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1789,7 +1789,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_GetLastPoses(wi
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit(winIVRCompositor_IVRCompositor_011 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit(winIVRCompositor_IVRCompositor_011 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -1837,7 +1837,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_011_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(winIVRCompositor_IVRCompositor_011 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(winIVRCompositor_IVRCompositor_011 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2097,7 +2097,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit(winIVRCompositor_IVRCompositor_012 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit(winIVRCompositor_IVRCompositor_012 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2145,7 +2145,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_012_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(winIVRCompositor_IVRCompositor_012 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(winIVRCompositor_IVRCompositor_012 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2418,7 +2418,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit(winIVRCompositor_IVRCompositor_013 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit(winIVRCompositor_IVRCompositor_013 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2466,7 +2466,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_013_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(winIVRCompositor_IVRCompositor_013 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(winIVRCompositor_IVRCompositor_013 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2749,7 +2749,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit(winIVRCompositor_IVRCompositor_014 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit(winIVRCompositor_IVRCompositor_014 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -2797,7 +2797,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_014_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(winIVRCompositor_IVRCompositor_014 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(winIVRCompositor_IVRCompositor_014 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -3104,7 +3104,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit(winIVRCompositor_IVRCompositor_015 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit(winIVRCompositor_IVRCompositor_015 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -3158,7 +3158,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_015_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(winIVRCompositor_IVRCompositor_015 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(winIVRCompositor_IVRCompositor_015 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -3531,7 +3531,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit(winIVRCompositor_IVRCompositor_016 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit(winIVRCompositor_IVRCompositor_016 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -3585,7 +3585,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_016_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(winIVRCompositor_IVRCompositor_016 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(winIVRCompositor_IVRCompositor_016 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -3939,7 +3939,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit(winIVRCompositor_IVRCompositor_017 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit(winIVRCompositor_IVRCompositor_017 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -4001,7 +4001,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_FadeGrid(winIVRCompositor_IVR
     cppIVRCompositor_IVRCompositor_017_FadeGrid(_this->linux_side, fSeconds, bFadeIn);
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(winIVRCompositor_IVRCompositor_017 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(winIVRCompositor_IVRCompositor_017 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -4359,7 +4359,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit(winIVRCompositor_IVRCompositor_018 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit(winIVRCompositor_IVRCompositor_018 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -4436,7 +4436,7 @@ float __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(winIVRCompositor_IVRCompositor_018 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(winIVRCompositor_IVRCompositor_018 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -4800,7 +4800,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit(winIVRCompositor_IVRCompositor_019 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit(winIVRCompositor_IVRCompositor_019 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -4877,7 +4877,7 @@ float __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(winIVRCompositor_IVRCompositor_019 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(winIVRCompositor_IVRCompositor_019 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -5262,7 +5262,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit(winIVRCompositor_IVRCompositor_020 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit(winIVRCompositor_IVRCompositor_020 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -5339,7 +5339,7 @@ float __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(winIVRCompositor_IVRCompositor_020 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(winIVRCompositor_IVRCompositor_020 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -5734,7 +5734,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit(winIVRCompositor_IVRCompositor_021 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit(winIVRCompositor_IVRCompositor_021 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -5811,7 +5811,7 @@ float __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(winIVRCompositor_IVRCompositor_021 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(winIVRCompositor_IVRCompositor_021 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -6227,7 +6227,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit(winIVRCompositor_IVRCompositor_022 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit(winIVRCompositor_IVRCompositor_022 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -6304,7 +6304,7 @@ float __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(winIVRCompositor_IVRCompositor_022 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(winIVRCompositor_IVRCompositor_022 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -6752,7 +6752,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit(winIVRCompositor_IVRCompositor_024 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit(winIVRCompositor_IVRCompositor_024 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -6829,7 +6829,7 @@ float __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(winIVRCompositor_IVRCompositor_024 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(winIVRCompositor_IVRCompositor_024 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -7041,7 +7041,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverride_Async(winIVRCompositor_IVRCompositor_024 *_this, const char *pchRenderModelPath, HmdMatrix34_t *pTransform, Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverride_Async(winIVRCompositor_IVRCompositor_024 *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
     char lin_pchRenderModelPath[PATH_MAX];
@@ -7300,7 +7300,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit(winIVRCompositor_IVRCompositor_026 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit(winIVRCompositor_IVRCompositor_026 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -7377,7 +7377,7 @@ float __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(winIVRCompositor_IVRCompositor_026 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(winIVRCompositor_IVRCompositor_026 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -7589,7 +7589,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverride_Async(winIVRCompositor_IVRCompositor_026 *_this, const char *pchRenderModelPath, HmdMatrix34_t *pTransform, Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverride_Async(winIVRCompositor_IVRCompositor_026 *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
     char lin_pchRenderModelPath[PATH_MAX];
@@ -7878,7 +7878,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForT
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit(winIVRCompositor_IVRCompositor_027 *_this, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit(winIVRCompositor_IVRCompositor_027 *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -7955,7 +7955,7 @@ float __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentGridAlpha(winIVRCo
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(winIVRCompositor_IVRCompositor_027 *_this, Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(winIVRCompositor_IVRCompositor_027 *_this, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     EVRCompositorError _ret;
     TRACE("%p\n", _this);
@@ -8167,7 +8167,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading
     return _ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverride_Async(winIVRCompositor_IVRCompositor_027 *_this, const char *pchRenderModelPath, HmdMatrix34_t *pTransform, Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverride_Async(winIVRCompositor_IVRCompositor_027 *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
     char lin_pchRenderModelPath[PATH_MAX];

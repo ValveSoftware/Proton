@@ -47,7 +47,7 @@ vr::VRCompositorError cppIVRCompositor_IVRCompositor_007_WaitGetPoses(void *linu
     return _ret;
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_007_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, VRTextureBounds_t *pBounds)
+vr::VRCompositorError cppIVRCompositor_IVRCompositor_007_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds)
 {
     vr::VRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::Hmd_Eye)eEye, (vr::GraphicsAPIConvention)eTextureType, (void *)pTexture, (const vr::VRTextureBounds_t *)pBounds);

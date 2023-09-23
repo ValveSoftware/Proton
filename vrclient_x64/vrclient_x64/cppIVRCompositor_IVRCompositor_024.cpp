@@ -42,7 +42,7 @@ vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedD
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_Submit(void *linux_side, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     vr::EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
@@ -109,7 +109,7 @@ float cppIVRCompositor_IVRCompositor_024_GetCurrentGridAlpha(void *linux_side)
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride(void *linux_side, Texture_t *pTextures, uint32_t unTextureCount)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
 {
     vr::EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
@@ -291,7 +291,7 @@ bool cppIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading(void *linu
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async(void *linux_side, const char *pchRenderModelPath, HmdMatrix34_t *pTransform, Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async(void *linux_side, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     vr::EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->SetStageOverride_Async((const char *)pchRenderModelPath, (const vr::HmdMatrix34_t *)pTransform, (const vr::Compositor_StageRenderSettings *)pRenderSettings, (uint32_t)nSizeOfRenderSettings);

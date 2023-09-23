@@ -23,7 +23,7 @@ vr::EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void
     return _ret;
 }
 
-void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, VREvent_t *pvrEvent)
+void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, const VREvent_t *pvrEvent)
 {
     VREvent_t lin;
     if(pvrEvent)

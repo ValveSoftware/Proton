@@ -25,7 +25,7 @@ void struct_RenderModel_TextureMap_t_099_lin_to_win(void *l, void *w)
     win->rubTextureMapData = lin->rubTextureMapData;
 }
 
-void struct_RenderModel_TextureMap_t_099_win_to_lin(void *w, void *l)
+void struct_RenderModel_TextureMap_t_099_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_TextureMap_t_099 *win = (struct winRenderModel_TextureMap_t_099 *)w;
     RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
@@ -77,7 +77,7 @@ void struct_RenderModel_t_099_lin_to_win(void *l, void *w)
     struct_RenderModel_TextureMap_t_099_lin_to_win(&lin->diffuseTexture, &win->diffuseTexture);
 }
 
-void struct_RenderModel_t_099_win_to_lin(void *w, void *l)
+void struct_RenderModel_t_099_win_to_lin(const void *w, void *l)
 {
     struct winRenderModel_t_099 *win = (struct winRenderModel_t_099 *)w;
     RenderModel_t *lin = (RenderModel_t *)l;
@@ -129,7 +129,7 @@ void struct_VRControllerState001_t_099_lin_to_win(void *l, void *w, uint32_t sz)
     memcpy(win->rAxis, lin->rAxis, sizeof(win->rAxis));
 }
 
-void struct_VRControllerState001_t_099_win_to_lin(void *w, void *l)
+void struct_VRControllerState001_t_099_win_to_lin(const void *w, void *l)
 {
     struct winVRControllerState001_t_099 *win = (struct winVRControllerState001_t_099 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;
@@ -178,7 +178,7 @@ void struct_Compositor_FrameTiming_099_lin_to_win(void *l, void *w)
     win->m_flRunningStartMs = lin->m_flRunningStartMs;
 }
 
-void struct_Compositor_FrameTiming_099_win_to_lin(void *w, void *l)
+void struct_Compositor_FrameTiming_099_win_to_lin(const void *w, void *l)
 {
     struct winCompositor_FrameTiming_099 *win = (struct winCompositor_FrameTiming_099 *)w;
     Compositor_FrameTiming *lin = (Compositor_FrameTiming *)l;

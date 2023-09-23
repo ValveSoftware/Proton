@@ -29,7 +29,7 @@ extern EVRInputError cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(void *,
 extern EVRInputError cppIVRInput_IVRInput_010_GetActionBindingInfo(void *, VRActionHandle_t, InputBindingInfo_t *, uint32_t, uint32_t, uint32_t *);
 extern EVRInputError cppIVRInput_IVRInput_010_ShowActionOrigins(void *, VRActionSetHandle_t, VRActionHandle_t);
 extern EVRInputError cppIVRInput_IVRInput_010_ShowBindingsForActionSet(void *, VRActiveActionSet_t *, uint32_t, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_010_GetComponentStateForBinding(void *, const char *, const char *, InputBindingInfo_t *, uint32_t, uint32_t, RenderModel_ComponentState_t *);
+extern EVRInputError cppIVRInput_IVRInput_010_GetComponentStateForBinding(void *, const char *, const char *, const InputBindingInfo_t *, uint32_t, uint32_t, RenderModel_ComponentState_t *);
 extern bool cppIVRInput_IVRInput_010_IsUsingLegacyInput(void *);
 extern EVRInputError cppIVRInput_IVRInput_010_OpenBindingUI(void *, const char *, VRActionSetHandle_t, VRInputValueHandle_t, bool);
 extern EVRInputError cppIVRInput_IVRInput_010_GetBindingVariant(void *, VRInputValueHandle_t, char *, uint32_t);

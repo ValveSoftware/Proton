@@ -86,7 +86,7 @@ const vr::CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_Ge
     return _ret;
 }
 
-bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, CameraVideoStreamFrame_t *pFrameImage)
+bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, const CameraVideoStreamFrame_t *pFrameImage)
 {
     bool _ret;
     CameraVideoStreamFrame_t lin;

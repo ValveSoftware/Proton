@@ -716,7 +716,7 @@ struct submit_data
 
 void ivrcompositor_005_submit(
         void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
-        void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds,
+        void *linux_side, Hmd_Eye eye, const void *texture, Compositor_TextureBounds *bounds,
         unsigned int version)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
@@ -726,7 +726,7 @@ void ivrcompositor_005_submit(
 
 VRCompositorError ivrcompositor_006_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, void *, VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, void *texture, VRTextureBounds_t *bounds,
+        void *linux_side, Hmd_Eye eye, const void *texture, const VRTextureBounds_t *bounds,
         unsigned int version)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
@@ -735,8 +735,8 @@ VRCompositorError ivrcompositor_006_submit(
 }
 
 VRCompositorError ivrcompositor_007_submit(
-        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture, VRTextureBounds_t *bounds,
+        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, const VRTextureBounds_t *),
+        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, const void *texture, const VRTextureBounds_t *bounds,
         unsigned int version)
 {
     TRACE("%p, %#x, %#x, %p, %p\n", linux_side, eye, api, texture, bounds);
@@ -749,9 +749,9 @@ VRCompositorError ivrcompositor_007_submit(
 
 VRCompositorError ivrcompositor_008_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
-        VRTextureBounds_t *, VRSubmitFlags_t),
-        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture,
-        VRTextureBounds_t *bounds, VRSubmitFlags_t flags,
+        const VRTextureBounds_t *, VRSubmitFlags_t),
+        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, const void *texture,
+        const VRTextureBounds_t *bounds, VRSubmitFlags_t flags,
         unsigned int version)
 {
     TRACE("%p, %#x, %#x, %p, %p, %#x\n", linux_side, eye, api, texture, bounds, flags);
@@ -762,7 +762,7 @@ VRCompositorError ivrcompositor_008_submit(
     return cpp_func(linux_side, eye, api, texture, bounds, flags);
 }
 
-static Texture_t vrclient_translate_texture_dxvk(Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
+static Texture_t vrclient_translate_texture_dxvk(const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
         IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device, VkImageLayout *image_layout,
         VkImageCreateInfo *image_info)
 {
@@ -801,8 +801,8 @@ static Texture_t vrclient_translate_texture_dxvk(Texture_t *texture, struct VRVu
 }
 
 static EVROverlayError ivroverlay_set_overlay_texture_dxvk(
-                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
-                void *linux_side, VROverlayHandle_t overlayHandle, Texture_t *texture,
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, const Texture_t *),
+                void *linux_side, VROverlayHandle_t overlayHandle, const Texture_t *texture,
                 unsigned int version, IDXGIVkInteropSurface *dxvk_surface)
 {
     struct VRVulkanTextureData_t vkdata;
@@ -840,8 +840,8 @@ static EVROverlayError ivroverlay_set_overlay_texture_dxvk(
 }
 
 static EVRCompositorError ivrcompositor_submit_dxvk(
-        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        EVRCompositorError (*cpp_func)(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, const Texture_t *texture, const VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, IDXGIVkInteropSurface *dxvk_surface)
 {
     static const EVRSubmitFlags supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty;
@@ -892,8 +892,8 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
 }
 
 static EVROverlayError ivroverlay_set_overlay_texture_vulkan(
-                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
-                void *linux_side, VROverlayHandle_t overlay_handle, Texture_t *texture,
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, const Texture_t *),
+                void *linux_side, VROverlayHandle_t overlay_handle, const Texture_t *texture,
                 unsigned int version)
 {
     struct VRVulkanTextureData_t our_vkdata, *their_vkdata;
@@ -916,8 +916,8 @@ static EVROverlayError ivroverlay_set_overlay_texture_vulkan(
 }
 
 static EVRCompositorError ivrcompositor_submit_vulkan(
-        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        EVRCompositorError (*cpp_func)(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, const Texture_t *texture, const VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version)
 {
     struct VRVulkanTextureData_t our_depth_vkdata, *their_vkdata;
@@ -984,8 +984,8 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 }
 
 EVROverlayError ivroverlay_set_overlay_texture(
-                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
-                void *linux_side, VROverlayHandle_t overlayHandle, Texture_t *texture,
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, const Texture_t *),
+                void *linux_side, VROverlayHandle_t overlayHandle, const Texture_t *texture,
                 unsigned int version)
 {
     IUnknown *texture_iface;
@@ -1025,8 +1025,8 @@ EVROverlayError ivroverlay_set_overlay_texture(
 }
 
 EVROverlayError ivroverlay_005_set_overlay_texture(
-                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, GraphicsAPIConvention, void *),
-                void *linux_side, VROverlayHandle_t overlayHandle, GraphicsAPIConvention api, void *texture,
+                VROverlayError (*cpp_func)(void *, VROverlayHandle_t, GraphicsAPIConvention, void *),
+                void *linux_side, VROverlayHandle_t overlayHandle, GraphicsAPIConvention api, const void *texture,
                 unsigned int version)
 {
     /* hopefully no one actually uses this old interface... Vulkan support
@@ -1036,8 +1036,8 @@ EVROverlayError ivroverlay_005_set_overlay_texture(
 }
 
 EVROverlayError ivroverlay_001_set_overlay_texture(
-                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, void *),
-                void *linux_side, VROverlayHandle_t overlayHandle, void *texture,
+                VROverlayError (*cpp_func)(void *, VROverlayHandle_t, void *),
+                void *linux_side, VROverlayHandle_t overlayHandle, const void *texture,
                 unsigned int version)
 {
     /* probably no one actually uses this old interface... */
@@ -1046,8 +1046,8 @@ EVROverlayError ivroverlay_001_set_overlay_texture(
 }
 
 EVRCompositorError ivrcompositor_submit(
-        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        EVRCompositorError (*cpp_func)(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, const Texture_t *texture, const VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version)
 {
     IDXGIVkInteropSurface *dxvk_surface;
@@ -1105,8 +1105,8 @@ void ivrcompositor_008_set_skybox_override(
 }
 
 static EVRCompositorError ivrcompositor_set_skybox_override_d3d11(
-        EVRCompositorError (*cpp_func)(void *, Texture_t *textures, uint32_t count),
-        void *linux_side, Texture_t *textures, uint32_t count)
+        EVRCompositorError (*cpp_func)(void *, const Texture_t *textures, uint32_t count),
+        void *linux_side, const Texture_t *textures, uint32_t count)
 {
     struct VRVulkanTextureData_t vkdata[6];
     IDXGIVkInteropSurface *dxvk_surface;
@@ -1116,7 +1116,7 @@ static EVRCompositorError ivrcompositor_set_skybox_override_d3d11(
 
     for (i = 0; i < count; ++i)
     {
-        Texture_t *texture = &textures[i];
+        const Texture_t *texture = &textures[i];
         IUnknown *texture_iface;
 
         if (!texture->handle)
@@ -1181,8 +1181,8 @@ static EVRCompositorError ivrcompositor_set_skybox_override_d3d11(
 }
 
 EVRCompositorError ivrcompositor_set_skybox_override(
-        EVRCompositorError (*cpp_func)(void *, Texture_t *textures, uint32_t count),
-        void *linux_side, Texture_t *textures, uint32_t count,
+        EVRCompositorError (*cpp_func)(void *, const Texture_t *textures, uint32_t count),
+        void *linux_side, const Texture_t *textures, uint32_t count,
         unsigned int version)
 {
     TRACE("cpp_func %p, linux_side %p, textures %p, count %u, version %u.\n",

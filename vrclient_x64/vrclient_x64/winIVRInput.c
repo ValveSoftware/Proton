@@ -1838,7 +1838,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(winIV
     return _ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(winIVRInput_IVRInput_010 *_this, const char *pchRenderModelName, const char *pchComponentName, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
+EVRInputError __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(winIVRInput_IVRInput_010 *_this, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
 {
     EVRInputError _ret;
     TRACE("%p\n", _this);

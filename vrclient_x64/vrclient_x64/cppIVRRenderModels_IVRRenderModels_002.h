@@ -11,7 +11,7 @@ extern uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentCount(void *,
 extern uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentName(void *, const char *, uint32_t, char *, uint32_t);
 extern uint64_t cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask(void *, const char *, const char *);
 extern uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName(void *, const char *, const char *, char *, uint32_t);
-extern bool cppIVRRenderModels_IVRRenderModels_002_GetComponentState(void *, const char *, const char *, VRControllerState_t *, RenderModel_ComponentState_t *);
+extern bool cppIVRRenderModels_IVRRenderModels_002_GetComponentState(void *, const char *, const char *, const VRControllerState_t *, RenderModel_ComponentState_t *);
 extern bool cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(void *, const char *, const char *);
 #ifdef __cplusplus
 }
