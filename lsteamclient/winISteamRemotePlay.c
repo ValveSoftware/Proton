@@ -23,20 +23,25 @@ typedef struct __winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 {
 } winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001;
 
 DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount, 4)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID, 12)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution, 16)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite, 12)
+
 uint32 __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID, 8)
 RemotePlaySessionID_t __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, int iSessionIndex)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID(_this->linux_side, iSessionIndex);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID, 12)
 CSteamID *__thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, CSteamID *_r, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
@@ -44,28 +49,24 @@ CSteamID *__thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_Ge
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName, 8)
 const char * __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName(_this->linux_side, unSessionID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor, 8)
 ESteamDeviceFormFactor __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor(_this->linux_side, unSessionID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution, 16)
 bool __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, RemotePlaySessionID_t unSessionID, int * pnResolutionX, int * pnResolutionY)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(_this->linux_side, unSessionID, pnResolutionX, pnResolutionY);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite, 12)
 bool __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *_this, CSteamID steamIDFriend)
 {
     TRACE("%p\n", _this);
@@ -107,20 +108,26 @@ typedef struct __winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 {
 } winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002;
 
 DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionCount, 4)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionID, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionSteamID, 12)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientName, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientFormFactor, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution, 16)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether, 8)
+DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite, 12)
+
 uint32 __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionCount(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionCount(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionID, 8)
 RemotePlaySessionID_t __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionID(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, int iSessionIndex)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionID(_this->linux_side, iSessionIndex);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionSteamID, 12)
 CSteamID *__thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionSteamID(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, CSteamID *_r, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
@@ -128,35 +135,30 @@ CSteamID *__thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_Ge
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientName, 8)
 const char * __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientName(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientName(_this->linux_side, unSessionID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientFormFactor, 8)
 ESteamDeviceFormFactor __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientFormFactor(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, RemotePlaySessionID_t unSessionID)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientFormFactor(_this->linux_side, unSessionID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution, 16)
 bool __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, RemotePlaySessionID_t unSessionID, int * pnResolutionX, int * pnResolutionY)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution(_this->linux_side, unSessionID, pnResolutionX, pnResolutionY);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether, 8)
 bool __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, bool bShowOverlay)
 {
     TRACE("%p\n", _this);
     return cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether(_this->linux_side, bShowOverlay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite, 12)
 bool __thiscall winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002 *_this, CSteamID steamIDFriend)
 {
     TRACE("%p\n", _this);

@@ -23,97 +23,98 @@ typedef struct __winISteamGameSearch_SteamMatchGameSearch001 {
 } winISteamGameSearch_SteamMatchGameSearch001;
 
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_AcceptGame, 4)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_DeclineGame, 4)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch, 4)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame, 16)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame, 4)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult, 24)
+DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGame, 12)
+
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(winISteamGameSearch_SteamMatchGameSearch001 *_this, const char * pchKeyToFind, const char * pchValuesToFind)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(_this->linux_side, pchKeyToFind, pchValuesToFind);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby, 20)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(winISteamGameSearch_SteamMatchGameSearch001 *_this, CSteamID steamIDLobby, int nPlayerMin, int nPlayerMax)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(_this->linux_side, steamIDLobby, nPlayerMin, nPlayerMax);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo, 12)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(winISteamGameSearch_SteamMatchGameSearch001 *_this, int nPlayerMin, int nPlayerMax)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(_this->linux_side, nPlayerMin, nPlayerMax);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_AcceptGame, 4)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AcceptGame(winISteamGameSearch_SteamMatchGameSearch001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_DeclineGame, 4)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_DeclineGame(winISteamGameSearch_SteamMatchGameSearch001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails, 20)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(winISteamGameSearch_SteamMatchGameSearch001 *_this, CSteamID steamIDHost, char * pchConnectionDetails, int cubConnectionDetails)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(_this->linux_side, steamIDHost, pchConnectionDetails, cubConnectionDetails);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch, 4)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(winISteamGameSearch_SteamMatchGameSearch001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams, 12)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(winISteamGameSearch_SteamMatchGameSearch001 *_this, const char * pchKey, const char * pchValue)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(_this->linux_side, pchKey, pchValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails, 12)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(winISteamGameSearch_SteamMatchGameSearch001 *_this, const char * pchConnectionDetails, int cubConnectionDetails)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(_this->linux_side, pchConnectionDetails, cubConnectionDetails);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame, 16)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(winISteamGameSearch_SteamMatchGameSearch001 *_this, int nPlayerMin, int nPlayerMax, int nMaxTeamSize)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(_this->linux_side, nPlayerMin, nPlayerMax, nMaxTeamSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart, 12)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(winISteamGameSearch_SteamMatchGameSearch001 *_this, uint64 ullUniqueGameID)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(_this->linux_side, ullUniqueGameID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame, 4)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(winISteamGameSearch_SteamMatchGameSearch001 *_this)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult, 24)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(winISteamGameSearch_SteamMatchGameSearch001 *_this, uint64 ullUniqueGameID, CSteamID steamIDPlayer, EPlayerResult_t EPlayerResult)
 {
     TRACE("%p\n", _this);
     return cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(_this->linux_side, ullUniqueGameID, steamIDPlayer, EPlayerResult);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGame, 12)
 EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGame(winISteamGameSearch_SteamMatchGameSearch001 *_this, uint64 ullUniqueGameID)
 {
     TRACE("%p\n", _this);

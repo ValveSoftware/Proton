@@ -10,7 +10,6 @@ from collections import namedtuple
 import concurrent.futures
 import os
 import re
-import math
 
 SDK_VERSIONS = [
     "158",
@@ -737,10 +736,6 @@ def struct_needs_conversion(struct):
         struct_conversion_cache[sdkver][name] = struct_needs_conversion_nocache(struct)
     return struct_conversion_cache[sdkver][name]
 
-def handle_destructor(cfile, winclassname):
-    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_destructor, 4)\n")
-    cfile.write(f"void __thiscall {winclassname}_destructor({winclassname} *_this)\n{{/* never called */}}\n\n")
-
 
 def get_path_converter(parent):
     for conv in PATH_CONV:
@@ -895,19 +890,22 @@ def handle_method_cpp(method, classname, cppname, cpp):
     cpp.write("}\n\n")
 
 
+def handle_thiscall_wrapper(klass, method, cfile):
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+
+    def param_stack_size(param):
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return 4
+        return ((param.type.get_size() + 3) // 4) * 4
+
+    size = 4 + sum(param_stack_size(p) for p in method.get_arguments())
+    if returns_record: size += 4
+
+    name = f'win{klass.spelling}_{klass.version}_{method.name}'
+    cfile.write(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
+
+
 def handle_method_c(method, winclassname, cppname, cfile):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if returns_record:
-        parambytes = 8 #_this + return pointer
-    else:
-        parambytes = 4 #_this
-    for param in list(method.get_children()):
-        if param.kind == CursorKind.PARM_DECL:
-            if param.type.kind == TypeKind.LVALUEREFERENCE:
-                parambytes += 4
-            else:
-                parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
-    cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{method.name}, {parambytes})\n")
     if method.result_type.spelling.startswith("ISteam"):
         cfile.write(f"win{method.result_type.spelling} ")
     elif returns_record:
@@ -1052,6 +1050,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write(f"}} {winclassname};\n\n")
 
     for method in klass.methods:
+        handle_thiscall_wrapper(klass, method, cfile)
+    cfile.write('\n')
+
+    for method in klass.methods:
         if type(method) is Destructor:
             continue
         handle_method_hpp(method, cppname, cpp_h)
@@ -1065,7 +1067,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
     for method in klass.methods:
         if type(method) is Destructor:
-            handle_destructor(cfile, winclassname)
+            cfile.write(f"void __thiscall {winclassname}_{method.name}({winclassname} *_this)\n{{/* never called */}}\n\n")
         else:
             handle_method_c(method, winclassname, cppname, cfile)
 

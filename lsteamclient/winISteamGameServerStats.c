@@ -23,69 +23,70 @@ typedef struct __winISteamGameServerStats_SteamGameServerStats001 {
 } winISteamGameServerStats_SteamGameServerStats001;
 
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_RequestUserStats, 12)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserStat, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserStat, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2, 20)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat, 28)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement, 16)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement, 16)
+DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_StoreUserStats, 12)
+
 SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUserStats(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(_this->linux_side, steamIDUser);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserStat, 20)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, int32 * pData)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2, 20)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, float * pData)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement, 20)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, bool * pbAchieved)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserStat, 20)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, int32 nData)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_SetUserStat(_this->linux_side, steamIDUser, pchName, nData);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2, 20)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, float fData)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(_this->linux_side, steamIDUser, pchName, fData);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat, 28)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName, float flCountThisSession, double dSessionLength)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(_this->linux_side, steamIDUser, pchName, flCountThisSession, dSessionLength);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement, 16)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(_this->linux_side, steamIDUser, pchName);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement, 16)
 bool __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char * pchName)
 {
     TRACE("%p\n", _this);
     return cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(_this->linux_side, steamIDUser, pchName);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_StoreUserStats, 12)
 SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserStats(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser)
 {
     TRACE("%p\n", _this);
