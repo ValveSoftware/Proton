@@ -214,7 +214,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentRenderMod
     return _ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(winIVRRenderModels_IVRRenderModels_002 *_this, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
+bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(winIVRRenderModels_IVRRenderModels_002 *_this, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -416,7 +416,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentRenderMod
     return _ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(winIVRRenderModels_IVRRenderModels_004 *_this, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(winIVRRenderModels_IVRRenderModels_004 *_this, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -634,7 +634,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentRenderMod
     return _ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(winIVRRenderModels_IVRRenderModels_005 *_this, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(winIVRRenderModels_IVRRenderModels_005 *_this, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -885,7 +885,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentRenderMod
     return _ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(winIVRRenderModels_IVRRenderModels_006 *_this, const char *pchRenderModelName, const char *pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(winIVRRenderModels_IVRRenderModels_006 *_this, const char *pchRenderModelName, const char *pchComponentName, VRInputValueHandle_t devicePath, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -893,7 +893,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevic
     return _ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(winIVRRenderModels_IVRRenderModels_006 *_this, const char *pchRenderModelName, const char *pchComponentName, VRControllerState_t *pControllerState, RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(winIVRRenderModels_IVRRenderModels_006 *_this, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
     TRACE("%p\n", _this);

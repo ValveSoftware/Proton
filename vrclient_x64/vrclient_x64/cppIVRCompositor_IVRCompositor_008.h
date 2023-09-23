@@ -7,7 +7,7 @@ extern bool cppIVRCompositor_IVRCompositor_008_GetVSync(void *);
 extern void cppIVRCompositor_IVRCompositor_008_SetGamma(void *, float);
 extern float cppIVRCompositor_IVRCompositor_008_GetGamma(void *);
 extern VRCompositorError cppIVRCompositor_IVRCompositor_008_WaitGetPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
-extern VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *, Hmd_Eye, GraphicsAPIConvention, void *, VRTextureBounds_t *, VRSubmitFlags_t);
+extern VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *, Hmd_Eye, GraphicsAPIConvention, void *, const VRTextureBounds_t *, VRSubmitFlags_t);
 extern void cppIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(void *);
 extern bool cppIVRCompositor_IVRCompositor_008_GetFrameTiming(void *, winCompositor_FrameTiming_0910 *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_008_FadeToColor(void *, float, float, float, float, float, bool);

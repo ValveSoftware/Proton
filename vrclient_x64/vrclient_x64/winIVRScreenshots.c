@@ -45,7 +45,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreen
     return _ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, EVRScreenshotType *pSupportedTypes, int numTypes)
+EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, const EVRScreenshotType *pSupportedTypes, int numTypes)
 {
     EVRScreenshotError _ret;
     TRACE("%p\n", _this);

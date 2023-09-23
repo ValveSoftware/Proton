@@ -236,7 +236,7 @@ vr::EVRInputError cppIVRInput_IVRInput_010_ShowBindingsForActionSet(void *linux_
     return _ret;
 }
 
-vr::EVRInputError cppIVRInput_IVRInput_010_GetComponentStateForBinding(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
+vr::EVRInputError cppIVRInput_IVRInput_010_GetComponentStateForBinding(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
 {
     vr::EVRInputError _ret;
     _ret = ((IVRInput*)linux_side)->GetComponentStateForBinding((const char *)pchRenderModelName, (const char *)pchComponentName, (const vr::InputBindingInfo_t *)pOriginInfo, (uint32_t)unBindingInfoSize, (uint32_t)unBindingInfoCount, (vr::RenderModel_ComponentState_t *)pComponentState);

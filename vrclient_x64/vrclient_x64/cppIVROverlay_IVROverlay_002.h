@@ -17,12 +17,12 @@ extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayGamma(void *, VROve
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayGamma(void *, VROverlayHandle_t, float *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayWidthInMeters(void *, VROverlayHandle_t, float);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayWidthInMeters(void *, VROverlayHandle_t, float *);
-extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTextureBounds(void *, VROverlayHandle_t, VRTextureBounds_t *);
+extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTextureBounds(void *, VROverlayHandle_t, const VRTextureBounds_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayTextureBounds(void *, VROverlayHandle_t, VRTextureBounds_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayTransformType(void *, VROverlayHandle_t, VROverlayTransformType *);
-extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute(void *, VROverlayHandle_t, TrackingUniverseOrigin, HmdMatrix34_t *);
+extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute(void *, VROverlayHandle_t, TrackingUniverseOrigin, const HmdMatrix34_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute(void *, VROverlayHandle_t, TrackingUniverseOrigin *, HmdMatrix34_t *);
-extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(void *, VROverlayHandle_t, TrackedDeviceIndex_t, HmdMatrix34_t *);
+extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(void *, VROverlayHandle_t, TrackedDeviceIndex_t, const HmdMatrix34_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDeviceRelative(void *, VROverlayHandle_t, TrackedDeviceIndex_t *, HmdMatrix34_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_ShowOverlay(void *, VROverlayHandle_t);
 extern VROverlayError cppIVROverlay_IVROverlay_002_HideOverlay(void *, VROverlayHandle_t);
@@ -31,8 +31,8 @@ extern bool cppIVROverlay_IVROverlay_002_PollNextOverlayEvent(void *, VROverlayH
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayInputMethod(void *, VROverlayHandle_t, VROverlayInputMethod *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayInputMethod(void *, VROverlayHandle_t, VROverlayInputMethod);
 extern VROverlayError cppIVROverlay_IVROverlay_002_GetOverlayMouseScale(void *, VROverlayHandle_t, HmdVector2_t *);
-extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayMouseScale(void *, VROverlayHandle_t, HmdVector2_t *);
-extern bool cppIVROverlay_IVROverlay_002_ComputeOverlayIntersection(void *, VROverlayHandle_t, VROverlayIntersectionParams_t *, VROverlayIntersectionResults_t *);
+extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayMouseScale(void *, VROverlayHandle_t, const HmdVector2_t *);
+extern bool cppIVROverlay_IVROverlay_002_ComputeOverlayIntersection(void *, VROverlayHandle_t, const VROverlayIntersectionParams_t *, VROverlayIntersectionResults_t *);
 extern bool cppIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse(void *, VROverlayHandle_t, TrackedDeviceIndex_t);
 extern VROverlayError cppIVROverlay_IVROverlay_002_SetOverlayTexture(void *, VROverlayHandle_t, GraphicsAPIConvention, void *);
 extern VROverlayError cppIVROverlay_IVROverlay_002_ClearOverlayTexture(void *, VROverlayHandle_t);

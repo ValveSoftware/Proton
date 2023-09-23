@@ -312,7 +312,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFrom
     return _ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(winIVRSystem_IVRSystem_003 *_this, Compositor_OverlaySettings *overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType)
+bool __thiscall winIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse(winIVRSystem_IVRSystem_003 *_this, const Compositor_OverlaySettings *overlaySettings, HmdVector2_t vecWindowClientPositionOnScreen, HmdVector2_t vecWindowClientSize, TrackedDeviceIndex_t unControllerDeviceIndex, EVRControllerEventOutputType eOutputType)
 {
     bool _ret;
     TRACE("%p\n", _this);
@@ -1997,7 +1997,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_009_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_009_ApplyTransform(winIVRSystem_IVRSystem_009 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_009_ApplyTransform(winIVRSystem_IVRSystem_009 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_009_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -2494,7 +2494,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_010_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_ApplyTransform(winIVRSystem_IVRSystem_010 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_010_ApplyTransform(winIVRSystem_IVRSystem_010 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_010_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -3027,7 +3027,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_011_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_ApplyTransform(winIVRSystem_IVRSystem_011 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_011_ApplyTransform(winIVRSystem_IVRSystem_011 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_011_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -3558,7 +3558,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_012_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_012_ApplyTransform(winIVRSystem_IVRSystem_012 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_012_ApplyTransform(winIVRSystem_IVRSystem_012 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_012_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -4074,7 +4074,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_014_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_014_ApplyTransform(winIVRSystem_IVRSystem_014 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_014_ApplyTransform(winIVRSystem_IVRSystem_014 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_014_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -4590,7 +4590,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_015_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_015_ApplyTransform(winIVRSystem_IVRSystem_015 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_015_ApplyTransform(winIVRSystem_IVRSystem_015 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_015_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -5113,7 +5113,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_016_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_016_ApplyTransform(winIVRSystem_IVRSystem_016 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_016_ApplyTransform(winIVRSystem_IVRSystem_016 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_016_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -5638,7 +5638,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_017_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_017_ApplyTransform(winIVRSystem_IVRSystem_017 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_017_ApplyTransform(winIVRSystem_IVRSystem_017 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_017_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -6165,7 +6165,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_019_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_019_ApplyTransform(winIVRSystem_IVRSystem_019 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_019_ApplyTransform(winIVRSystem_IVRSystem_019 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_019_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -6715,7 +6715,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_020_ApplyTransform(winIVRSystem_IVRSystem_020 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_020_ApplyTransform(winIVRSystem_IVRSystem_020 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_020_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -7274,7 +7274,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_021_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_021_ApplyTransform(winIVRSystem_IVRSystem_021 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_021_ApplyTransform(winIVRSystem_IVRSystem_021 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_021_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
@@ -7818,7 +7818,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_022_GetTrackedDeviceActiv
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_022_ApplyTransform(winIVRSystem_IVRSystem_022 *_this, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pTrackedDevicePose, HmdMatrix34_t *pTransform)
+void __thiscall winIVRSystem_IVRSystem_022_ApplyTransform(winIVRSystem_IVRSystem_022 *_this, TrackedDevicePose_t *pOutputPose, const TrackedDevicePose_t *pTrackedDevicePose, const HmdMatrix34_t *pTransform)
 {
     TRACE("%p\n", _this);
     cppIVRSystem_IVRSystem_022_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
