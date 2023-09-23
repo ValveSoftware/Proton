@@ -12,7 +12,7 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001.h"
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(void *linux_side, const char * pchName)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(void *linux_side, const char *pchName)
 {
     return ((ISteamMusicRemote*)linux_side)->RegisterSteamMusicRemote((const char *)pchName);
 }
@@ -32,12 +32,12 @@ bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSucce
     return ((ISteamMusicRemote*)linux_side)->BActivationSuccess((bool)bValue);
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(void *linux_side, const char * pchDisplayName)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(void *linux_side, const char *pchDisplayName)
 {
     return ((ISteamMusicRemote*)linux_side)->SetDisplayName((const char *)pchDisplayName);
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(void *linux_side, void * pvBuffer, uint32 cbBufferLength)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(void *linux_side, void *pvBuffer, uint32 cbBufferLength)
 {
     return ((ISteamMusicRemote*)linux_side)->SetPNGIcon_64x64((void *)pvBuffer, (uint32)cbBufferLength);
 }
@@ -102,7 +102,7 @@ bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAv
     return ((ISteamMusicRemote*)linux_side)->CurrentEntryIsAvailable((bool)bAvailable);
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(void *linux_side, const char * pchText)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(void *linux_side, const char *pchText)
 {
     return ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryText((const char *)pchText);
 }
@@ -112,7 +112,7 @@ bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEnt
     return ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryElapsedSeconds((int)nValue);
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(void *linux_side, void * pvBuffer, uint32 cbBufferLength)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(void *linux_side, void *pvBuffer, uint32 cbBufferLength)
 {
     return ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryCoverArt((void *)pvBuffer, (uint32)cbBufferLength);
 }
@@ -132,7 +132,7 @@ bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntrie
     return ((ISteamMusicRemote*)linux_side)->ResetQueueEntries();
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(void *linux_side, int nID, int nPosition, const char * pchEntryText)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(void *linux_side, int nID, int nPosition, const char *pchEntryText)
 {
     return ((ISteamMusicRemote*)linux_side)->SetQueueEntry((int)nID, (int)nPosition, (const char *)pchEntryText);
 }
@@ -157,7 +157,7 @@ bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEnt
     return ((ISteamMusicRemote*)linux_side)->ResetPlaylistEntries();
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(void *linux_side, int nID, int nPosition, const char * pchEntryText)
+bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(void *linux_side, int nID, int nPosition, const char *pchEntryText)
 {
     return ((ISteamMusicRemote*)linux_side)->SetPlaylistEntry((int)nID, (int)nPosition, (const char *)pchEntryText);
 }

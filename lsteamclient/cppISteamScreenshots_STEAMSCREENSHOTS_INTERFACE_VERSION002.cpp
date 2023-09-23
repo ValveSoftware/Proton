@@ -11,12 +11,12 @@ extern "C" {
 #define SDKVER_137
 #include "struct_converters.h"
 #include "cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002.h"
-ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(void *linux_side, void * pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(void *linux_side, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
     return ((ISteamScreenshots*)linux_side)->WriteScreenshot((void *)pubRGB, (uint32)cubRGB, (int)nWidth, (int)nHeight);
 }
 
-ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(void *linux_side, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(void *linux_side, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
     return ((ISteamScreenshots*)linux_side)->AddScreenshotToLibrary((const char *)pchFilename, (const char *)pchThumbnailFilename, (int)nWidth, (int)nHeight);
 }
@@ -31,7 +31,7 @@ void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots(
     ((ISteamScreenshots*)linux_side)->HookScreenshots((bool)bHook);
 }
 
-bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(void *linux_side, ScreenshotHandle hScreenshot, const char * pchLocation)
+bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(void *linux_side, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
     return ((ISteamScreenshots*)linux_side)->SetLocation((ScreenshotHandle)hScreenshot, (const char *)pchLocation);
 }

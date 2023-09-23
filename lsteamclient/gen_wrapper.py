@@ -706,7 +706,17 @@ def method_unique_name(method, existing_methods):
     return used_name
 
 
+def underlying_type(decl):
+    if type(decl) is Cursor:
+        decl = decl.type
+    if decl.kind == TypeKind.LVALUEREFERENCE: return underlying_type(decl.get_pointee())
+    if decl.kind == TypeKind.CONSTANTARRAY: return underlying_type(decl.element_type)
+    if decl.kind == TypeKind.POINTER: return underlying_type(decl.get_pointee())
+    return decl
+
+
 def param_needs_conversion(decl):
+    decl = underlying_type(decl)
     return decl.spelling not in WRAPPED_CLASSES and \
            decl.kind == TypeKind.RECORD and \
            struct_needs_conversion(decl)
@@ -748,39 +758,24 @@ def handle_method_hpp(method_name, cppname, method, cpp_h):
 
 
 def handle_method_cpp(method_name, classname, cppname, method, cpp):
-    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    if method.result_type.spelling.startswith("ISteam"):
-        cpp.write("void *")
-    elif returns_record:
-        cpp.write(f"{method.result_type.spelling} ")
-    else:
-        cpp.write(f"{method.result_type.spelling} ")
-    cpp.write(f"{cppname}_{method_name}(void *linux_side")
-    unnamed = 'a'
-    need_convert = []
-    manual_convert = []
-    for param in list(method.get_children()):
-        if param.kind == CursorKind.PARM_DECL:
-            real_type = param.type
-            while real_type.kind == TypeKind.POINTER:
-                real_type = real_type.get_pointee()
-            if real_type.kind == TypeKind.RECORD and \
-                    not real_type.spelling in WRAPPED_CLASSES and \
-                    struct_needs_conversion(real_type):
-                need_convert.append(param)
-            elif real_type.spelling in MANUAL_TYPES:
-                manual_convert.append(param)
-            elif param.spelling in MANUAL_PARAMS:
-                manual_convert.append(param)
+    ret = f'{method.result_type.spelling} '
+    if ret.startswith("ISteam"): ret = 'void *'
 
-            win_name = declspec(param, "")
+    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+             for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
-            if param.spelling == "":
-                cpp.write(f", {win_name} _{unnamed}")
-                unnamed = chr(ord(unnamed) + 1)
-            else:
-                cpp.write(f", {win_name} {param.spelling}")
-    cpp.write(")\n{\n")
+    names = ['linux_side'] + names
+    params = ['void *linux_side'] + params
+
+    cpp.write(f'{ret}{cppname}_{method_name}({", ".join(params)})\n')
+    cpp.write("{\n")
+
+    need_convert = [p for p in method.get_arguments()
+                    if param_needs_conversion(p)]
+    manual_convert = [p for p in method.get_arguments()
+                      if underlying_type(p).spelling in MANUAL_TYPES
+                      or p.spelling in MANUAL_PARAMS]
 
     for param in need_convert:
         if param.type.kind == TypeKind.POINTER:
@@ -815,17 +810,15 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
         cpp.write(post_exec + '(');
 
     cpp.write(f"(({classname}*)linux_side)->{method.spelling}(")
-    unnamed = 'a'
     first = True
-    for param in list(method.get_children()):
+    for i, param in enumerate(method.get_arguments()):
         if param.kind == CursorKind.PARM_DECL:
             if not first:
                 cpp.write(", ")
             else:
                 first = False
             if param.spelling == "":
-                cpp.write(f"({param.type.spelling})_{unnamed}")
-                unnamed = chr(ord(unnamed) + 1)
+                cpp.write(f"({param.type.spelling})_{chr(0x61 + i)}")
             elif param.type.kind == TypeKind.POINTER and \
                     param.type.get_pointee().spelling in WRAPPED_CLASSES:
                 cpp.write(f"({param.type.spelling}){param.spelling}")

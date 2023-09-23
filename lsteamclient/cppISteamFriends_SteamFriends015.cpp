@@ -16,7 +16,7 @@ const char * cppISteamFriends_SteamFriends015_GetPersonaName(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetPersonaName();
 }
 
-SteamAPICall_t cppISteamFriends_SteamFriends015_SetPersonaName(void *linux_side, const char * pchPersonaName)
+SteamAPICall_t cppISteamFriends_SteamFriends015_SetPersonaName(void *linux_side, const char *pchPersonaName)
 {
     return ((ISteamFriends*)linux_side)->SetPersonaName((const char *)pchPersonaName);
 }
@@ -51,7 +51,7 @@ const char * cppISteamFriends_SteamFriends015_GetFriendPersonaName(void *linux_s
     return ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
 }
 
-bool cppISteamFriends_SteamFriends015_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+bool cppISteamFriends_SteamFriends015_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     return ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (FriendGameInfo_t *)pFriendGameInfo);
 }
@@ -91,7 +91,7 @@ int cppISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(void *linux_sid
     return ((ISteamFriends*)linux_side)->GetFriendsGroupMembersCount((FriendsGroupID_t)friendsGroupID);
 }
 
-void cppISteamFriends_SteamFriends015_GetFriendsGroupMembersList(void *linux_side, FriendsGroupID_t friendsGroupID, CSteamID * pOutSteamIDMembers, int nMembersCount)
+void cppISteamFriends_SteamFriends015_GetFriendsGroupMembersList(void *linux_side, FriendsGroupID_t friendsGroupID, CSteamID *pOutSteamIDMembers, int nMembersCount)
 {
     ((ISteamFriends*)linux_side)->GetFriendsGroupMembersList((FriendsGroupID_t)friendsGroupID, (CSteamID *)pOutSteamIDMembers, (int)nMembersCount);
 }
@@ -121,12 +121,12 @@ const char * cppISteamFriends_SteamFriends015_GetClanTag(void *linux_side, CStea
     return ((ISteamFriends*)linux_side)->GetClanTag((CSteamID)steamIDClan);
 }
 
-bool cppISteamFriends_SteamFriends015_GetClanActivityCounts(void *linux_side, CSteamID steamIDClan, int * pnOnline, int * pnInGame, int * pnChatting)
+bool cppISteamFriends_SteamFriends015_GetClanActivityCounts(void *linux_side, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
 {
     return ((ISteamFriends*)linux_side)->GetClanActivityCounts((CSteamID)steamIDClan, (int *)pnOnline, (int *)pnInGame, (int *)pnChatting);
 }
 
-SteamAPICall_t cppISteamFriends_SteamFriends015_DownloadClanActivityCounts(void *linux_side, CSteamID * psteamIDClans, int cClansToRequest)
+SteamAPICall_t cppISteamFriends_SteamFriends015_DownloadClanActivityCounts(void *linux_side, CSteamID *psteamIDClans, int cClansToRequest)
 {
     return ((ISteamFriends*)linux_side)->DownloadClanActivityCounts((CSteamID *)psteamIDClans, (int)cClansToRequest);
 }
@@ -151,17 +151,17 @@ void cppISteamFriends_SteamFriends015_SetInGameVoiceSpeaking(void *linux_side, C
     ((ISteamFriends*)linux_side)->SetInGameVoiceSpeaking((CSteamID)steamIDUser, (bool)bSpeaking);
 }
 
-void cppISteamFriends_SteamFriends015_ActivateGameOverlay(void *linux_side, const char * pchDialog)
+void cppISteamFriends_SteamFriends015_ActivateGameOverlay(void *linux_side, const char *pchDialog)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlay((const char *)pchDialog);
 }
 
-void cppISteamFriends_SteamFriends015_ActivateGameOverlayToUser(void *linux_side, const char * pchDialog, CSteamID steamID)
+void cppISteamFriends_SteamFriends015_ActivateGameOverlayToUser(void *linux_side, const char *pchDialog, CSteamID steamID)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToUser((const char *)pchDialog, (CSteamID)steamID);
 }
 
-void cppISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage(void *linux_side, const char * pchURL)
+void cppISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage(void *linux_side, const char *pchURL)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayToWebPage((const char *)pchURL);
 }
@@ -226,7 +226,7 @@ uint32 cppISteamFriends_SteamFriends015_GetUserRestrictions(void *linux_side)
     return ((ISteamFriends*)linux_side)->GetUserRestrictions();
 }
 
-bool cppISteamFriends_SteamFriends015_SetRichPresence(void *linux_side, const char * pchKey, const char * pchValue)
+bool cppISteamFriends_SteamFriends015_SetRichPresence(void *linux_side, const char *pchKey, const char *pchValue)
 {
     return ((ISteamFriends*)linux_side)->SetRichPresence((const char *)pchKey, (const char *)pchValue);
 }
@@ -236,7 +236,7 @@ void cppISteamFriends_SteamFriends015_ClearRichPresence(void *linux_side)
     ((ISteamFriends*)linux_side)->ClearRichPresence();
 }
 
-const char * cppISteamFriends_SteamFriends015_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char * pchKey)
+const char * cppISteamFriends_SteamFriends015_GetFriendRichPresence(void *linux_side, CSteamID steamIDFriend, const char *pchKey)
 {
     return ((ISteamFriends*)linux_side)->GetFriendRichPresence((CSteamID)steamIDFriend, (const char *)pchKey);
 }
@@ -256,7 +256,7 @@ void cppISteamFriends_SteamFriends015_RequestFriendRichPresence(void *linux_side
     ((ISteamFriends*)linux_side)->RequestFriendRichPresence((CSteamID)steamIDFriend);
 }
 
-bool cppISteamFriends_SteamFriends015_InviteUserToGame(void *linux_side, CSteamID steamIDFriend, const char * pchConnectString)
+bool cppISteamFriends_SteamFriends015_InviteUserToGame(void *linux_side, CSteamID steamIDFriend, const char *pchConnectString)
 {
     return ((ISteamFriends*)linux_side)->InviteUserToGame((CSteamID)steamIDFriend, (const char *)pchConnectString);
 }
@@ -301,12 +301,12 @@ CSteamID cppISteamFriends_SteamFriends015_GetChatMemberByIndex(void *linux_side,
     return ((ISteamFriends*)linux_side)->GetChatMemberByIndex((CSteamID)steamIDClan, (int)iUser);
 }
 
-bool cppISteamFriends_SteamFriends015_SendClanChatMessage(void *linux_side, CSteamID steamIDClanChat, const char * pchText)
+bool cppISteamFriends_SteamFriends015_SendClanChatMessage(void *linux_side, CSteamID steamIDClanChat, const char *pchText)
 {
     return ((ISteamFriends*)linux_side)->SendClanChatMessage((CSteamID)steamIDClanChat, (const char *)pchText);
 }
 
-int cppISteamFriends_SteamFriends015_GetClanChatMessage(void *linux_side, CSteamID steamIDClanChat, int iMessage, void * prgchText, int cchTextMax, EChatEntryType * peChatEntryType, CSteamID * psteamidChatter)
+int cppISteamFriends_SteamFriends015_GetClanChatMessage(void *linux_side, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *peChatEntryType, CSteamID *psteamidChatter)
 {
     return ((ISteamFriends*)linux_side)->GetClanChatMessage((CSteamID)steamIDClanChat, (int)iMessage, (void *)prgchText, (int)cchTextMax, (EChatEntryType *)peChatEntryType, (CSteamID *)psteamidChatter);
 }
@@ -336,12 +336,12 @@ bool cppISteamFriends_SteamFriends015_SetListenForFriendsMessages(void *linux_si
     return ((ISteamFriends*)linux_side)->SetListenForFriendsMessages((bool)bInterceptEnabled);
 }
 
-bool cppISteamFriends_SteamFriends015_ReplyToFriendMessage(void *linux_side, CSteamID steamIDFriend, const char * pchMsgToSend)
+bool cppISteamFriends_SteamFriends015_ReplyToFriendMessage(void *linux_side, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     return ((ISteamFriends*)linux_side)->ReplyToFriendMessage((CSteamID)steamIDFriend, (const char *)pchMsgToSend);
 }
 
-int cppISteamFriends_SteamFriends015_GetFriendMessage(void *linux_side, CSteamID steamIDFriend, int iMessageID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+int cppISteamFriends_SteamFriends015_GetFriendMessage(void *linux_side, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
 {
     return ((ISteamFriends*)linux_side)->GetFriendMessage((CSteamID)steamIDFriend, (int)iMessageID, (void *)pvData, (int)cubData, (EChatEntryType *)peChatEntryType);
 }

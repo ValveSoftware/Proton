@@ -16,7 +16,7 @@ void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(void *linux_side, AppI
     ((ISteamVideo*)linux_side)->GetVideoURL((AppId_t)unVideoAppID);
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(void *linux_side, int * pnNumViewers)
+bool cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(void *linux_side, int *pnNumViewers)
 {
     return ((ISteamVideo*)linux_side)->IsBroadcasting((int *)pnNumViewers);
 }

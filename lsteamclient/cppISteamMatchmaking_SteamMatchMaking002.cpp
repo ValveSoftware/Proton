@@ -16,7 +16,7 @@ int cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGameCount(void *linux_si
     return ((ISteamMatchmaking*)linux_side)->GetFavoriteGameCount();
 }
 
-bool cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(void *linux_side, int iGame, AppId_t * pnAppID, uint32 * pnIP, uint16 * pnConnPort, uint16 * pnQueryPort, uint32 * punFlags, uint32 * pRTime32LastPlayedOnServer)
+bool cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(void *linux_side, int iGame, AppId_t *pnAppID, uint32 *pnIP, uint16 *pnConnPort, uint16 *pnQueryPort, uint32 *punFlags, uint32 *pRTime32LastPlayedOnServer)
 {
     return ((ISteamMatchmaking*)linux_side)->GetFavoriteGame((int)iGame, (AppId_t *)pnAppID, (uint32 *)pnIP, (uint16 *)pnConnPort, (uint16 *)pnQueryPort, (uint32 *)punFlags, (uint32 *)pRTime32LastPlayedOnServer);
 }
@@ -71,32 +71,32 @@ CSteamID cppISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberByIndex(void *li
     return ((ISteamMatchmaking*)linux_side)->GetLobbyMemberByIndex((CSteamID)steamIDLobby, (int)iMember);
 }
 
-const char * cppISteamMatchmaking_SteamMatchMaking002_GetLobbyData(void *linux_side, CSteamID steamIDLobby, const char * pchKey)
+const char * cppISteamMatchmaking_SteamMatchMaking002_GetLobbyData(void *linux_side, CSteamID steamIDLobby, const char *pchKey)
 {
     return ((ISteamMatchmaking*)linux_side)->GetLobbyData((CSteamID)steamIDLobby, (const char *)pchKey);
 }
 
-bool cppISteamMatchmaking_SteamMatchMaking002_SetLobbyData(void *linux_side, CSteamID steamIDLobby, const char * pchKey, const char * pchValue)
+bool cppISteamMatchmaking_SteamMatchMaking002_SetLobbyData(void *linux_side, CSteamID steamIDLobby, const char *pchKey, const char *pchValue)
 {
     return ((ISteamMatchmaking*)linux_side)->SetLobbyData((CSteamID)steamIDLobby, (const char *)pchKey, (const char *)pchValue);
 }
 
-const char * cppISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberData(void *linux_side, CSteamID steamIDLobby, CSteamID steamIDUser, const char * pchKey)
+const char * cppISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberData(void *linux_side, CSteamID steamIDLobby, CSteamID steamIDUser, const char *pchKey)
 {
     return ((ISteamMatchmaking*)linux_side)->GetLobbyMemberData((CSteamID)steamIDLobby, (CSteamID)steamIDUser, (const char *)pchKey);
 }
 
-void cppISteamMatchmaking_SteamMatchMaking002_SetLobbyMemberData(void *linux_side, CSteamID steamIDLobby, const char * pchKey, const char * pchValue)
+void cppISteamMatchmaking_SteamMatchMaking002_SetLobbyMemberData(void *linux_side, CSteamID steamIDLobby, const char *pchKey, const char *pchValue)
 {
     ((ISteamMatchmaking*)linux_side)->SetLobbyMemberData((CSteamID)steamIDLobby, (const char *)pchKey, (const char *)pchValue);
 }
 
-bool cppISteamMatchmaking_SteamMatchMaking002_SendLobbyChatMsg(void *linux_side, CSteamID steamIDLobby, const void * pvMsgBody, int cubMsgBody)
+bool cppISteamMatchmaking_SteamMatchMaking002_SendLobbyChatMsg(void *linux_side, CSteamID steamIDLobby, const void *pvMsgBody, int cubMsgBody)
 {
     return ((ISteamMatchmaking*)linux_side)->SendLobbyChatMsg((CSteamID)steamIDLobby, (const void *)pvMsgBody, (int)cubMsgBody);
 }
 
-int cppISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry(void *linux_side, CSteamID steamIDLobby, int iChatID, CSteamID * pSteamIDUser, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+int cppISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry(void *linux_side, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
 {
     return ((ISteamMatchmaking*)linux_side)->GetLobbyChatEntry((CSteamID)steamIDLobby, (int)iChatID, (CSteamID *)pSteamIDUser, (void *)pvData, (int)cubData, (EChatEntryType *)peChatEntryType);
 }

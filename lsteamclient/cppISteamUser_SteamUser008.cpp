@@ -31,7 +31,7 @@ void cppISteamUser_SteamUser008_TerminateGameConnection(void *linux_side, uint32
     ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
 }
 
-void cppISteamUser_SteamUser008_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
+void cppISteamUser_SteamUser008_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)
 {
     ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
 }
