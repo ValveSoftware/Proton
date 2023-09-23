@@ -40,7 +40,8 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetDigitalActionData(void *linux_side
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputDigitalActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
     if(pActionData)
         struct_InputDigitalActionData_t_1015_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -52,7 +53,8 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetAnalogActionData(void *linux_side,
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputAnalogActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
     if(pActionData)
         struct_InputAnalogActionData_t_1015_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -64,7 +66,8 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetPoseActionData(void *linux_side, V
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputPoseActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetPoseActionData((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetPoseActionData((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
     if(pActionData)
         struct_InputPoseActionData_t_1015_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -109,7 +112,8 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetOriginLocalizedName(void *linux_si
 
 vr::EVRInputError cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(void *linux_side, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
-    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, std::min(unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t)));
+    unOriginInfoSize = std::min(unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t));
+    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, (uint32_t)unOriginInfoSize);
 }
 
 vr::EVRInputError cppIVRInput_IVRInput_003_ShowActionOrigins(void *linux_side, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)

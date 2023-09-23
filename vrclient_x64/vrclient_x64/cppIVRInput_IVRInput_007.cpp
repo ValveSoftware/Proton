@@ -40,7 +40,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetDigitalActionData(void *linux_side
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputDigitalActionData_t_1916_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0, (vr::VRInputValueHandle_t)ulRestrictToDevice);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize, (vr::VRInputValueHandle_t)ulRestrictToDevice);
     if(pActionData)
         struct_InputDigitalActionData_t_1916_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -52,7 +53,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetAnalogActionData(void *linux_side,
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputAnalogActionData_t_1916_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0, (vr::VRInputValueHandle_t)ulRestrictToDevice);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize, (vr::VRInputValueHandle_t)ulRestrictToDevice);
     if(pActionData)
         struct_InputAnalogActionData_t_1916_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -64,7 +66,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(void *
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputPoseActionData_t_1916_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetPoseActionDataRelativeToNow((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0, (vr::VRInputValueHandle_t)ulRestrictToDevice);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetPoseActionDataRelativeToNow((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize, (vr::VRInputValueHandle_t)ulRestrictToDevice);
     if(pActionData)
         struct_InputPoseActionData_t_1916_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -76,7 +79,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(void *l
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputPoseActionData_t_1916_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetPoseActionDataForNextFrame((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0, (vr::VRInputValueHandle_t)ulRestrictToDevice);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetPoseActionDataForNextFrame((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize, (vr::VRInputValueHandle_t)ulRestrictToDevice);
     if(pActionData)
         struct_InputPoseActionData_t_1916_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -88,7 +92,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetSkeletalActionData(void *linux_sid
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputSkeletalActionData_t_1916_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetSkeletalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
+    unActionDataSize = unActionDataSize ? sizeof(lin) : 0;
+    _ret = ((IVRInput*)linux_side)->GetSkeletalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
     if(pActionData)
         struct_InputSkeletalActionData_t_1916_lin_to_win(&lin, pActionData, unActionDataSize);
     return _ret;
@@ -156,7 +161,8 @@ vr::EVRInputError cppIVRInput_IVRInput_007_GetOriginLocalizedName(void *linux_si
 
 vr::EVRInputError cppIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(void *linux_side, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
-    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, std::min(unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t)));
+    unOriginInfoSize = std::min(unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t));
+    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, (uint32_t)unOriginInfoSize);
 }
 
 vr::EVRInputError cppIVRInput_IVRInput_007_GetActionBindingInfo(void *linux_side, VRActionHandle_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
