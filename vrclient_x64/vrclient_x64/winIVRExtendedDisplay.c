@@ -29,19 +29,19 @@ DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBo
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport, 24)
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, 12)
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     TRACE("%p\n", _this);
     cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(_this->linux_side, pnX, pnY, pnWidth, pnHeight);
 }
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     TRACE("%p\n", _this);
     cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
     cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);

@@ -41,7 +41,7 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(winIVRHe
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(_this->linux_side, nWidth, nHeight);
 }
 
-void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(winIVRHeadsetView_IVRHeadsetView_001 *_this, uint32_t * pnWidth, uint32_t * pnHeight)
+void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(winIVRHeadsetView_IVRHeadsetView_001 *_this, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(_this->linux_side, pnWidth, pnHeight);
@@ -83,7 +83,7 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(wi
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(_this->linux_side, flStartPct, flEndPct);
 }
 
-void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(winIVRHeadsetView_IVRHeadsetView_001 *_this, float * pStartPct, float * pEndPct)
+void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(winIVRHeadsetView_IVRHeadsetView_001 *_this, float *pStartPct, float *pEndPct)
 {
     TRACE("%p\n", _this);
     cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(_this->linux_side, pStartPct, pEndPct);
