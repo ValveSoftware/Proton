@@ -4415,7 +4415,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_018_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_018 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_018 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -4856,7 +4856,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_019_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_019 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_019 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -5318,7 +5318,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_020_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_020 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_020 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -5790,7 +5790,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_021_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_021 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_021 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -6283,7 +6283,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_022_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_022 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_022 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -6808,7 +6808,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_024_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_024 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_024 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -7356,7 +7356,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_026_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_026 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_026 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(_this->linux_side, bBackground);
@@ -7934,7 +7934,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_FadeToColor(winIVRCompositor_
     cppIVRCompositor_IVRCompositor_027_FadeToColor(_this->linux_side, fSeconds, fRed, fGreen, fBlue, fAlpha, bBackground);
 }
 
-HmdColor_t *__thiscall winIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_027 *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(winIVRCompositor_IVRCompositor_027 *_this, HmdColor_t *_ret, bool bBackground)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(_this->linux_side, bBackground);

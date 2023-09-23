@@ -82,7 +82,7 @@ void __thiscall winIVRSystem_IVRSystem_003_GetEyeOutputViewport(winIVRSystem_IVR
     cppIVRSystem_IVRSystem_003_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_003_GetProjectionMatrix(winIVRSystem_IVRSystem_003 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_003_GetProjectionMatrix(winIVRSystem_IVRSystem_003 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -95,14 +95,14 @@ void __thiscall winIVRSystem_IVRSystem_003_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_003_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_003_ComputeDistortion(winIVRSystem_IVRSystem_003 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_003_ComputeDistortion(winIVRSystem_IVRSystem_003 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_003_GetEyeToHeadTransform(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetEyeToHeadTransform(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -151,7 +151,7 @@ void __thiscall winIVRSystem_IVRSystem_003_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_003_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -220,7 +220,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_003 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -267,7 +267,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(winIVRSystem_IVRSystem_003 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(winIVRSystem_IVRSystem_003 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -530,7 +530,7 @@ void __thiscall winIVRSystem_IVRSystem_004_GetEyeOutputViewport(winIVRSystem_IVR
     cppIVRSystem_IVRSystem_004_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_004_GetProjectionMatrix(winIVRSystem_IVRSystem_004 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_004_GetProjectionMatrix(winIVRSystem_IVRSystem_004 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -543,14 +543,14 @@ void __thiscall winIVRSystem_IVRSystem_004_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_004_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_004_ComputeDistortion(winIVRSystem_IVRSystem_004 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_004_ComputeDistortion(winIVRSystem_IVRSystem_004 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_004_GetEyeToHeadTransform(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetEyeToHeadTransform(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -599,7 +599,7 @@ void __thiscall winIVRSystem_IVRSystem_004_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_004_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -654,7 +654,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_004 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -701,7 +701,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(winIVRSystem_IVRSystem_004 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(winIVRSystem_IVRSystem_004 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_004_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -961,7 +961,7 @@ void __thiscall winIVRSystem_IVRSystem_005_GetEyeOutputViewport(winIVRSystem_IVR
     cppIVRSystem_IVRSystem_005_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_005_GetProjectionMatrix(winIVRSystem_IVRSystem_005 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_005_GetProjectionMatrix(winIVRSystem_IVRSystem_005 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -974,14 +974,14 @@ void __thiscall winIVRSystem_IVRSystem_005_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_005_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_005_ComputeDistortion(winIVRSystem_IVRSystem_005 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_005_ComputeDistortion(winIVRSystem_IVRSystem_005 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_005_GetEyeToHeadTransform(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetEyeToHeadTransform(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -1030,7 +1030,7 @@ void __thiscall winIVRSystem_IVRSystem_005_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_005_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -1093,7 +1093,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_005 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -1140,7 +1140,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(winIVRSystem_IVRSystem_005 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(winIVRSystem_IVRSystem_005 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -1407,7 +1407,7 @@ void __thiscall winIVRSystem_IVRSystem_006_GetEyeOutputViewport(winIVRSystem_IVR
     cppIVRSystem_IVRSystem_006_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_006_GetProjectionMatrix(winIVRSystem_IVRSystem_006 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_006_GetProjectionMatrix(winIVRSystem_IVRSystem_006 *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -1420,14 +1420,14 @@ void __thiscall winIVRSystem_IVRSystem_006_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_006_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_006_ComputeDistortion(winIVRSystem_IVRSystem_006 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_006_ComputeDistortion(winIVRSystem_IVRSystem_006 *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_006_GetEyeToHeadTransform(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetEyeToHeadTransform(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -1476,14 +1476,14 @@ void __thiscall winIVRSystem_IVRSystem_006_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_006_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -1554,7 +1554,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_006 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -1601,7 +1601,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(winIVRSystem_IVRSystem_006 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(winIVRSystem_IVRSystem_006 *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_006_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -1890,7 +1890,7 @@ void __thiscall winIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_009_GetProjectionMatrix(winIVRSystem_IVRSystem_009 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_009_GetProjectionMatrix(winIVRSystem_IVRSystem_009 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -1903,14 +1903,14 @@ void __thiscall winIVRSystem_IVRSystem_009_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_009_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_009_ComputeDistortion(winIVRSystem_IVRSystem_009 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_009_ComputeDistortion(winIVRSystem_IVRSystem_009 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_009_GetEyeToHeadTransform(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetEyeToHeadTransform(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -1967,14 +1967,14 @@ void __thiscall winIVRSystem_IVRSystem_009_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_009_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -2051,7 +2051,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_009 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -2098,7 +2098,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(winIVRSystem_IVRSystem_009 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(winIVRSystem_IVRSystem_009 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_009_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -2387,7 +2387,7 @@ void __thiscall winIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_010_GetProjectionMatrix(winIVRSystem_IVRSystem_010 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_010_GetProjectionMatrix(winIVRSystem_IVRSystem_010 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -2400,14 +2400,14 @@ void __thiscall winIVRSystem_IVRSystem_010_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_010_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_010_ComputeDistortion(winIVRSystem_IVRSystem_010 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_010_ComputeDistortion(winIVRSystem_IVRSystem_010 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_010_GetEyeToHeadTransform(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetEyeToHeadTransform(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -2464,14 +2464,14 @@ void __thiscall winIVRSystem_IVRSystem_010_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_010_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -2564,7 +2564,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_010 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -2611,7 +2611,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(winIVRSystem_IVRSystem_010 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(winIVRSystem_IVRSystem_010 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -2920,7 +2920,7 @@ void __thiscall winIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_011_GetProjectionMatrix(winIVRSystem_IVRSystem_011 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_011_GetProjectionMatrix(winIVRSystem_IVRSystem_011 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -2933,14 +2933,14 @@ void __thiscall winIVRSystem_IVRSystem_011_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_011_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_011_ComputeDistortion(winIVRSystem_IVRSystem_011 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_011_ComputeDistortion(winIVRSystem_IVRSystem_011 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_011_GetEyeToHeadTransform(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetEyeToHeadTransform(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -2997,14 +2997,14 @@ void __thiscall winIVRSystem_IVRSystem_011_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_011_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -3097,7 +3097,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_011 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -3144,7 +3144,7 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(winIVRSystem_IVRSystem_011 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(winIVRSystem_IVRSystem_011 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -3451,7 +3451,7 @@ void __thiscall winIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_012_GetProjectionMatrix(winIVRSystem_IVRSystem_012 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_012_GetProjectionMatrix(winIVRSystem_IVRSystem_012 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -3464,14 +3464,14 @@ void __thiscall winIVRSystem_IVRSystem_012_GetProjectionRaw(winIVRSystem_IVRSyst
     cppIVRSystem_IVRSystem_012_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
 }
 
-DistortionCoordinates_t *__thiscall winIVRSystem_IVRSystem_012_ComputeDistortion(winIVRSystem_IVRSystem_012 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_012_ComputeDistortion(winIVRSystem_IVRSystem_012 *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_ComputeDistortion(_this->linux_side, eEye, fU, fV);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_012_GetEyeToHeadTransform(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetEyeToHeadTransform(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -3528,14 +3528,14 @@ void __thiscall winIVRSystem_IVRSystem_012_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_012_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -3628,7 +3628,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_012 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -3675,7 +3675,7 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(winIVRSystem_IVRSystem_012 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(winIVRSystem_IVRSystem_012 *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_012_GetHiddenAreaMesh(_this->linux_side, eEye);
@@ -3966,7 +3966,7 @@ void __thiscall winIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_014_GetProjectionMatrix(winIVRSystem_IVRSystem_014 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_014_GetProjectionMatrix(winIVRSystem_IVRSystem_014 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ, eProjType);
@@ -3987,7 +3987,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_014_GetEyeToHeadTransform(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetEyeToHeadTransform(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -4044,14 +4044,14 @@ void __thiscall winIVRSystem_IVRSystem_014_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_014_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -4144,7 +4144,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_014 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -4191,7 +4191,7 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(winIVRSystem_IVRSystem_014 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(winIVRSystem_IVRSystem_014 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_014_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -4482,7 +4482,7 @@ void __thiscall winIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_015_GetProjectionMatrix(winIVRSystem_IVRSystem_015 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_015_GetProjectionMatrix(winIVRSystem_IVRSystem_015 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -4503,7 +4503,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_015_GetEyeToHeadTransform(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetEyeToHeadTransform(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -4560,14 +4560,14 @@ void __thiscall winIVRSystem_IVRSystem_015_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_015_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -4660,7 +4660,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_015 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -4707,7 +4707,7 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(winIVRSystem_IVRSystem_015 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(winIVRSystem_IVRSystem_015 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_015_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -4999,7 +4999,7 @@ void __thiscall winIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_016_GetProjectionMatrix(winIVRSystem_IVRSystem_016 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_016_GetProjectionMatrix(winIVRSystem_IVRSystem_016 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -5020,7 +5020,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_016_GetEyeToHeadTransform(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetEyeToHeadTransform(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -5083,14 +5083,14 @@ void __thiscall winIVRSystem_IVRSystem_016_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_016_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -5183,7 +5183,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_016 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -5230,7 +5230,7 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(winIVRSystem_IVRSystem_016 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(winIVRSystem_IVRSystem_016 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_016_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -5524,7 +5524,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_017_GetProjectionMatrix(winIVRSystem_IVRSystem_017 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_017_GetProjectionMatrix(winIVRSystem_IVRSystem_017 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -5545,7 +5545,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_017_GetEyeToHeadTransform(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetEyeToHeadTransform(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -5608,14 +5608,14 @@ void __thiscall winIVRSystem_IVRSystem_017_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_017_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -5708,7 +5708,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_017 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -5755,7 +5755,7 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(winIVRSystem_IVRSystem_017 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(winIVRSystem_IVRSystem_017 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_017_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -6051,7 +6051,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_019_GetProjectionMatrix(winIVRSystem_IVRSystem_019 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_019_GetProjectionMatrix(winIVRSystem_IVRSystem_019 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -6072,7 +6072,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_019_GetEyeToHeadTransform(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetEyeToHeadTransform(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -6135,14 +6135,14 @@ void __thiscall winIVRSystem_IVRSystem_019_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_019_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -6235,7 +6235,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_019 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -6290,7 +6290,7 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(winIVRSystem_IVRSystem_019 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(winIVRSystem_IVRSystem_019 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_019_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -6601,7 +6601,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(winIVRSystem_IVRSystem_020 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(winIVRSystem_IVRSystem_020 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -6622,7 +6622,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetEyeToHeadTransform(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetEyeToHeadTransform(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -6685,14 +6685,14 @@ void __thiscall winIVRSystem_IVRSystem_020_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_020_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -6785,7 +6785,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -6840,7 +6840,7 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(winIVRSystem_IVRSystem_020 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(winIVRSystem_IVRSystem_020 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_020_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -7160,7 +7160,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_021_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_021_GetProjectionMatrix(winIVRSystem_IVRSystem_021 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_021_GetProjectionMatrix(winIVRSystem_IVRSystem_021 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -7181,7 +7181,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_021_GetEyeToHeadTransform(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetEyeToHeadTransform(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -7244,14 +7244,14 @@ void __thiscall winIVRSystem_IVRSystem_021_ResetSeatedZeroPose(winIVRSystem_IVRS
     cppIVRSystem_IVRSystem_021_ResetSeatedZeroPose(_this->linux_side);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -7344,7 +7344,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_021_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_021 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -7399,7 +7399,7 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(winIVRSystem_IVRSystem_021 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(winIVRSystem_IVRSystem_021 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_021_GetHiddenAreaMesh(_this->linux_side, eEye, type);
@@ -7710,7 +7710,7 @@ void __thiscall winIVRSystem_IVRSystem_022_GetRecommendedRenderTargetSize(winIVR
     cppIVRSystem_IVRSystem_022_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
 }
 
-HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_022_GetProjectionMatrix(winIVRSystem_IVRSystem_022 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_022_GetProjectionMatrix(winIVRSystem_IVRSystem_022 *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
@@ -7731,7 +7731,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_ComputeDistortion(winIVRSystem_IVRSys
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_022_GetEyeToHeadTransform(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetEyeToHeadTransform(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret, EVREye eEye)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetEyeToHeadTransform(_this->linux_side, eEye);
@@ -7788,14 +7788,14 @@ void __thiscall winIVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose(winIV
     cppIVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose(_this->linux_side, eOrigin, fPredictedSecondsToPhotonsFromNow, pTrackedDevicePoseArray, unTrackedDevicePoseArrayCount);
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
@@ -7888,7 +7888,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_022_GetUint64TrackedDeviceProperty(wi
     return _ret;
 }
 
-HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_022 *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
@@ -7943,7 +7943,7 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum(winI
     return _ret;
 }
 
-HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(winIVRSystem_IVRSystem_022 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(winIVRSystem_IVRSystem_022 *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
 {
     TRACE("%p\n", _this);
     *_ret = cppIVRSystem_IVRSystem_022_GetHiddenAreaMesh(_this->linux_side, eEye, type);

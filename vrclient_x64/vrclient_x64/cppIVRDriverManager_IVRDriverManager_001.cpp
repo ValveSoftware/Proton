@@ -23,9 +23,9 @@ uint32_t cppIVRDriverManager_IVRDriverManager_001_GetDriverName(void *linux_side
     return _ret;
 }
 
-vr::DriverHandle_t cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(void *linux_side, const char *pchDriverName)
+DriverHandle_t cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(void *linux_side, const char *pchDriverName)
 {
-    vr::DriverHandle_t _ret;
+    DriverHandle_t _ret;
     _ret = ((IVRDriverManager*)linux_side)->GetDriverHandle((const char *)pchDriverName);
     return _ret;
 }

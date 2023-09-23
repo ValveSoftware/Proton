@@ -24,9 +24,9 @@ void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(void *linux_side, H
     ((IVRHeadsetView*)linux_side)->SetHeadsetViewMode((vr::HeadsetViewMode_t)eHeadsetViewMode);
 }
 
-vr::HeadsetViewMode_t cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(void *linux_side)
+HeadsetViewMode_t cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(void *linux_side)
 {
-    vr::HeadsetViewMode_t _ret;
+    HeadsetViewMode_t _ret;
     _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewMode();
     return _ret;
 }

@@ -14,37 +14,37 @@ void cppIVRCompositor_IVRCompositor_018_SetTrackingSpace(void *linux_side, ETrac
     ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::ETrackingUniverseOrigin)eOrigin);
 }
 
-vr::ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_018_GetTrackingSpace(void *linux_side)
+ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_018_GetTrackingSpace(void *linux_side)
 {
-    vr::ETrackingUniverseOrigin _ret;
+    ETrackingUniverseOrigin _ret;
     _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetLastPoseForTrackedDeviceIndex((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDevicePose_t *)pOutputPose, (vr::TrackedDevicePose_t *)pOutputGamePose);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
     return _ret;
 }
@@ -90,9 +90,9 @@ void cppIVRCompositor_IVRCompositor_018_FadeToColor(void *linux_side, float fSec
     ((IVRCompositor*)linux_side)->FadeToColor((float)fSeconds, (float)fRed, (float)fGreen, (float)fBlue, (float)fAlpha, (bool)bBackground);
 }
 
-vr::HmdColor_t cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(void *linux_side, bool bBackground)
+HmdColor_t cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(void *linux_side, bool bBackground)
 {
-    vr::HmdColor_t _ret;
+    HmdColor_t _ret;
     _ret = ((IVRCompositor*)linux_side)->GetCurrentFadeColor((bool)bBackground);
     return _ret;
 }
@@ -109,9 +109,9 @@ float cppIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha(void *linux_side)
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
     return _ret;
 }
@@ -208,16 +208,16 @@ void cppIVRCompositor_IVRCompositor_018_SuspendRendering(void *linux_side, bool 
     ((IVRCompositor*)linux_side)->SuspendRendering((bool)bSuspend);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11(void *linux_side, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11(void *linux_side, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetMirrorTextureD3D11((vr::EVREye)eEye, (void *)pD3D11DeviceOrResource, (void **)ppD3D11ShaderResourceView);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(void *linux_side, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(void *linux_side, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetMirrorTextureGL((vr::EVREye)eEye, (vr::glUInt_t *)pglTextureId, (vr::glSharedTextureHandle_t *)pglSharedTextureHandle);
     return _ret;
 }

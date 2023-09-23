@@ -16,16 +16,16 @@ uint32_t cppIVRNotifications_IVRNotifications_001_GetErrorString(void *linux_sid
     return _ret;
 }
 
-vr::NotificationError_t cppIVRNotifications_IVRNotifications_001_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, VRNotificationId *notificationId)
+NotificationError_t cppIVRNotifications_IVRNotifications_001_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, VRNotificationId *notificationId)
 {
-    vr::NotificationError_t _ret;
+    NotificationError_t _ret;
     _ret = ((IVRNotifications*)linux_side)->CreateNotification((vr::VROverlayHandle_t)ulOverlayHandle, (uint64_t)ulUserValue, (const char *)strType, (const char *)strText, (const char *)strCategory, (const vr::NotificationBitmap *)photo, (vr::VRNotificationId *)notificationId);
     return _ret;
 }
 
-vr::NotificationError_t cppIVRNotifications_IVRNotifications_001_DismissNotification(void *linux_side, VRNotificationId notificationId)
+NotificationError_t cppIVRNotifications_IVRNotifications_001_DismissNotification(void *linux_side, VRNotificationId notificationId)
 {
-    vr::NotificationError_t _ret;
+    NotificationError_t _ret;
     _ret = ((IVRNotifications*)linux_side)->DismissNotification((vr::VRNotificationId)notificationId);
     return _ret;
 }
