@@ -40,16 +40,16 @@ float cppIVRCompositor_IVRCompositor_008_GetGamma(void *linux_side)
     return _ret;
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+VRCompositorError cppIVRCompositor_IVRCompositor_008_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::VRCompositorError _ret;
+    VRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
+VRCompositorError cppIVRCompositor_IVRCompositor_008_Submit(void *linux_side, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
 {
-    vr::VRCompositorError _ret;
+    VRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::Hmd_Eye)eEye, (vr::GraphicsAPIConvention)eTextureType, (void *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::VRSubmitFlags_t)nSubmitFlags);
     return _ret;
 }
@@ -118,9 +118,9 @@ void cppIVRCompositor_IVRCompositor_008_SetTrackingSpace(void *linux_side, Track
     ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::TrackingUniverseOrigin)eOrigin);
 }
 
-vr::TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_008_GetTrackingSpace(void *linux_side)
+TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_008_GetTrackingSpace(void *linux_side)
 {
-    vr::TrackingUniverseOrigin _ret;
+    TrackingUniverseOrigin _ret;
     _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
     return _ret;
 }

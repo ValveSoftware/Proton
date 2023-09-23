@@ -9,16 +9,16 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVROverlayError cppIVROverlayView_IVROverlayView_003_AcquireOverlayView(void *linux_side, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
+EVROverlayError cppIVROverlayView_IVROverlayView_003_AcquireOverlayView(void *linux_side, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
 {
-    vr::EVROverlayError _ret;
+    EVROverlayError _ret;
     _ret = ((IVROverlayView*)linux_side)->AcquireOverlayView((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VRNativeDevice_t *)pNativeDevice, (vr::VROverlayView_t *)pOverlayView, (uint32_t)unOverlayViewSize);
     return _ret;
 }
 
-vr::EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void *linux_side, VROverlayView_t *pOverlayView)
+EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void *linux_side, VROverlayView_t *pOverlayView)
 {
-    vr::EVROverlayError _ret;
+    EVROverlayError _ret;
     _ret = ((IVROverlayView*)linux_side)->ReleaseOverlayView((vr::VROverlayView_t *)pOverlayView);
     return _ret;
 }

@@ -9,9 +9,9 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_004_GetCalibrationState(void *linux_side)
+ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_004_GetCalibrationState(void *linux_side)
 {
-    vr::ChaperoneCalibrationState _ret;
+    ChaperoneCalibrationState _ret;
     _ret = ((IVRChaperone*)linux_side)->GetCalibrationState();
     return _ret;
 }

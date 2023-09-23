@@ -11,7 +11,7 @@ extern "C" {
 #endif
 const char * cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(void *linux_side, EVRSettingsError eError)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
     return _ret;
 }

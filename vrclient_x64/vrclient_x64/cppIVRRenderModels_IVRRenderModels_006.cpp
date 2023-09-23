@@ -9,9 +9,9 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(void *linux_side, const char *pchRenderModelName, winRenderModel_t_1267 **ppRenderModel)
+EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(void *linux_side, const char *pchRenderModelName, winRenderModel_t_1267 **ppRenderModel)
 {
-    vr::EVRRenderModelError _ret;
+    EVRRenderModelError _ret;
     RenderModel_t *lin;
     _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, ppRenderModel ? &lin : nullptr);
     if(_ret == 0)
@@ -24,9 +24,9 @@ void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(void *linux_side, wi
     ((IVRRenderModels*)linux_side)->FreeRenderModel(struct_RenderModel_t_1267_unwrap(pRenderModel));
 }
 
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_1267 **ppTexture)
+EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_1267 **ppTexture)
 {
-    vr::EVRRenderModelError _ret;
+    EVRRenderModelError _ret;
     RenderModel_TextureMap_t *lin;
     _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, ppTexture ? &lin : nullptr);
     if(_ret == 0)
@@ -39,16 +39,16 @@ void cppIVRRenderModels_IVRRenderModels_006_FreeTexture(void *linux_side, winRen
     ((IVRRenderModels*)linux_side)->FreeTexture(struct_RenderModel_TextureMap_t_1267_unwrap(pTexture));
 }
 
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(void *linux_side, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D)
+EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(void *linux_side, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D)
 {
-    vr::EVRRenderModelError _ret;
+    EVRRenderModelError _ret;
     _ret = ((IVRRenderModels*)linux_side)->LoadTextureD3D11_Async((vr::TextureID_t)textureId, (void *)pD3D11Device, (void **)ppD3D11Texture2D);
     return _ret;
 }
 
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *linux_side, TextureID_t textureId, void *pDstTexture)
+EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *linux_side, TextureID_t textureId, void *pDstTexture)
 {
-    vr::EVRRenderModelError _ret;
+    EVRRenderModelError _ret;
     _ret = ((IVRRenderModels*)linux_side)->LoadIntoTextureD3D11_Async((vr::TextureID_t)textureId, (void *)pDstTexture);
     return _ret;
 }
@@ -140,7 +140,7 @@ uint32_t cppIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath(void 
 
 const char * cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum(void *linux_side, EVRRenderModelError error)
 {
-    const char * _ret;
+    const char *_ret;
     _ret = ((IVRRenderModels*)linux_side)->GetRenderModelErrorNameFromEnum((vr::EVRRenderModelError)error);
     return _ret;
 }

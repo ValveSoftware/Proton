@@ -141,9 +141,9 @@ void cppIVRCompositor_IVRCompositor_005_SetTrackingSpace(void *linux_side, Track
     ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::TrackingUniverseOrigin)eOrigin);
 }
 
-vr::TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_005_GetTrackingSpace(void *linux_side)
+TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_005_GetTrackingSpace(void *linux_side)
 {
-    vr::TrackingUniverseOrigin _ret;
+    TrackingUniverseOrigin _ret;
     _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
     return _ret;
 }

@@ -14,37 +14,37 @@ void cppIVRCompositor_IVRCompositor_014_SetTrackingSpace(void *linux_side, ETrac
     ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::ETrackingUniverseOrigin)eOrigin);
 }
 
-vr::ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_014_GetTrackingSpace(void *linux_side)
+ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_014_GetTrackingSpace(void *linux_side)
 {
-    vr::ETrackingUniverseOrigin _ret;
+    ETrackingUniverseOrigin _ret;
     _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_014_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_014_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_014_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_014_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+EVRCompositorError cppIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->GetLastPoseForTrackedDeviceIndex((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDevicePose_t *)pOutputPose, (vr::TrackedDevicePose_t *)pOutputGamePose);
     return _ret;
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_014_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+EVRCompositorError cppIVRCompositor_IVRCompositor_014_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
     return _ret;
 }
@@ -83,9 +83,9 @@ void cppIVRCompositor_IVRCompositor_014_FadeGrid(void *linux_side, float fSecond
     ((IVRCompositor*)linux_side)->FadeGrid((float)fSeconds, (bool)bFadeIn);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
+EVRCompositorError cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
 {
-    vr::EVRCompositorError _ret;
+    EVRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
     return _ret;
 }

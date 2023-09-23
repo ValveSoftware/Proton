@@ -45,16 +45,16 @@ void cppIVRCompositor_IVRCompositor_006_SetGraphicsDevice(void *linux_side, Comp
     ((IVRCompositor*)linux_side)->SetGraphicsDevice((vr::Compositor_DeviceType)eType, (void *)pDevice);
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+VRCompositorError cppIVRCompositor_IVRCompositor_006_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
-    vr::VRCompositorError _ret;
+    VRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
     return _ret;
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_Submit(void *linux_side, Hmd_Eye eEye, void *pTexture, VRTextureBounds_t *pBounds)
+VRCompositorError cppIVRCompositor_IVRCompositor_006_Submit(void *linux_side, Hmd_Eye eEye, void *pTexture, VRTextureBounds_t *pBounds)
 {
-    vr::VRCompositorError _ret;
+    VRCompositorError _ret;
     _ret = ((IVRCompositor*)linux_side)->Submit((vr::Hmd_Eye)eEye, (void *)pTexture, (vr::VRTextureBounds_t *)pBounds);
     return _ret;
 }
@@ -113,9 +113,9 @@ void cppIVRCompositor_IVRCompositor_006_SetTrackingSpace(void *linux_side, Track
     ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::TrackingUniverseOrigin)eOrigin);
 }
 
-vr::TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_006_GetTrackingSpace(void *linux_side)
+TrackingUniverseOrigin cppIVRCompositor_IVRCompositor_006_GetTrackingSpace(void *linux_side)
 {
-    vr::TrackingUniverseOrigin _ret;
+    TrackingUniverseOrigin _ret;
     _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
     return _ret;
 }
