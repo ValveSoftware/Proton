@@ -9,7 +9,7 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVRInitError cppIVRClientCore_IVRClientCore_003_Init(void *linux_side, EVRApplicationType eApplicationType, const char * pStartupInfo)
+vr::EVRInitError cppIVRClientCore_IVRClientCore_003_Init(void *linux_side, EVRApplicationType eApplicationType, const char *pStartupInfo)
 {
     return ((IVRClientCore*)linux_side)->Init((vr::EVRApplicationType)eApplicationType, (const char *)pStartupInfo);
 }
@@ -19,12 +19,12 @@ void cppIVRClientCore_IVRClientCore_003_Cleanup(void *linux_side)
     ((IVRClientCore*)linux_side)->Cleanup();
 }
 
-vr::EVRInitError cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(void *linux_side, const char * pchInterfaceVersion)
+vr::EVRInitError cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(void *linux_side, const char *pchInterfaceVersion)
 {
     return ((IVRClientCore*)linux_side)->IsInterfaceVersionValid((const char *)pchInterfaceVersion);
 }
 
-void * cppIVRClientCore_IVRClientCore_003_GetGenericInterface(void *linux_side, const char * pchNameAndVersion, EVRInitError * peError)
+void * cppIVRClientCore_IVRClientCore_003_GetGenericInterface(void *linux_side, const char *pchNameAndVersion, EVRInitError *peError)
 {
     return ((IVRClientCore*)linux_side)->GetGenericInterface((const char *)pchNameAndVersion, (vr::EVRInitError *)peError);
 }

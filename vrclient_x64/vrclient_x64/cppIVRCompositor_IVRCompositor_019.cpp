@@ -19,22 +19,22 @@ vr::ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_019_GetTrackingSpace(
     return ((IVRCompositor*)linux_side)->GetTrackingSpace();
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_WaitGetPoses(void *linux_side, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     return ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetLastPoses(void *linux_side, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     return ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     return ((IVRCompositor*)linux_side)->GetLastPoseForTrackedDeviceIndex((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDevicePose_t *)pOutputPose, (vr::TrackedDevicePose_t *)pOutputGamePose);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_Submit(void *linux_side, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_Submit(void *linux_side, EVREye eEye, Texture_t *pTexture, VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
 {
     return ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
 }
@@ -49,12 +49,12 @@ void cppIVRCompositor_IVRCompositor_019_PostPresentHandoff(void *linux_side)
     ((IVRCompositor*)linux_side)->PostPresentHandoff();
 }
 
-bool cppIVRCompositor_IVRCompositor_019_GetFrameTiming(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_019_GetFrameTiming(void *linux_side, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
 {
     return ((IVRCompositor*)linux_side)->GetFrameTiming((vr::Compositor_FrameTiming *)pTiming, (uint32_t)unFramesAgo);
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_019_GetFrameTimings(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t nFrames)
+uint32_t cppIVRCompositor_IVRCompositor_019_GetFrameTimings(void *linux_side, Compositor_FrameTiming *pTiming, uint32_t nFrames)
 {
     return ((IVRCompositor*)linux_side)->GetFrameTimings((vr::Compositor_FrameTiming *)pTiming, (uint32_t)nFrames);
 }
@@ -64,7 +64,7 @@ float cppIVRCompositor_IVRCompositor_019_GetFrameTimeRemaining(void *linux_side)
     return ((IVRCompositor*)linux_side)->GetFrameTimeRemaining();
 }
 
-void cppIVRCompositor_IVRCompositor_019_GetCumulativeStats(void *linux_side, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes)
+void cppIVRCompositor_IVRCompositor_019_GetCumulativeStats(void *linux_side, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
 {
     ((IVRCompositor*)linux_side)->GetCumulativeStats((vr::Compositor_CumulativeStats *)pStats, (uint32_t)nStatsSizeInBytes);
 }
@@ -89,7 +89,7 @@ float cppIVRCompositor_IVRCompositor_019_GetCurrentGridAlpha(void *linux_side)
     return ((IVRCompositor*)linux_side)->GetCurrentGridAlpha();
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride(void *linux_side, Texture_t * pTextures, uint32_t unTextureCount)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride(void *linux_side, Texture_t *pTextures, uint32_t unTextureCount)
 {
     return ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
 }
@@ -174,12 +174,12 @@ void cppIVRCompositor_IVRCompositor_019_SuspendRendering(void *linux_side, bool 
     ((IVRCompositor*)linux_side)->SuspendRendering((bool)bSuspend);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11(void *linux_side, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11(void *linux_side, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     return ((IVRCompositor*)linux_side)->GetMirrorTextureD3D11((vr::EVREye)eEye, (void *)pD3D11DeviceOrResource, (void **)ppD3D11ShaderResourceView);
 }
 
-vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetMirrorTextureGL(void *linux_side, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle)
+vr::EVRCompositorError cppIVRCompositor_IVRCompositor_019_GetMirrorTextureGL(void *linux_side, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
 {
     return ((IVRCompositor*)linux_side)->GetMirrorTextureGL((vr::EVREye)eEye, (vr::glUInt_t *)pglTextureId, (vr::glSharedTextureHandle_t *)pglSharedTextureHandle);
 }
@@ -199,12 +199,12 @@ void cppIVRCompositor_IVRCompositor_019_UnlockGLSharedTextureForAccess(void *lin
     ((IVRCompositor*)linux_side)->UnlockGLSharedTextureForAccess((vr::glSharedTextureHandle_t)glSharedTextureHandle);
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensionsRequired(void *linux_side, char * pchValue, uint32_t unBufferSize)
+uint32_t cppIVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensionsRequired(void *linux_side, char *pchValue, uint32_t unBufferSize)
 {
     return ((IVRCompositor*)linux_side)->GetVulkanInstanceExtensionsRequired((char *)pchValue, (uint32_t)unBufferSize);
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(void *linux_side, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
+uint32_t cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(void *linux_side, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
 {
     return ((IVRCompositor*)linux_side)->GetVulkanDeviceExtensionsRequired((VkPhysicalDevice_T *)pPhysicalDevice, (char *)pchValue, (uint32_t)unBufferSize);
 }

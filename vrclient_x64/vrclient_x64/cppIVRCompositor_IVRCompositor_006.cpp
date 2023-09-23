@@ -9,7 +9,7 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint32_t cppIVRCompositor_IVRCompositor_006_GetLastError(void *linux_side, char * pchBuffer, uint32_t unBufferSize)
+uint32_t cppIVRCompositor_IVRCompositor_006_GetLastError(void *linux_side, char *pchBuffer, uint32_t unBufferSize)
 {
     return ((IVRCompositor*)linux_side)->GetLastError((char *)pchBuffer, (uint32_t)unBufferSize);
 }
@@ -34,17 +34,17 @@ float cppIVRCompositor_IVRCompositor_006_GetGamma(void *linux_side)
     return ((IVRCompositor*)linux_side)->GetGamma();
 }
 
-void cppIVRCompositor_IVRCompositor_006_SetGraphicsDevice(void *linux_side, Compositor_DeviceType eType, void * pDevice)
+void cppIVRCompositor_IVRCompositor_006_SetGraphicsDevice(void *linux_side, Compositor_DeviceType eType, void *pDevice)
 {
     ((IVRCompositor*)linux_side)->SetGraphicsDevice((vr::Compositor_DeviceType)eType, (void *)pDevice);
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_WaitGetPoses(void *linux_side, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     return ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
 }
 
-vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_Submit(void *linux_side, Hmd_Eye eEye, void * pTexture, VRTextureBounds_t * pBounds)
+vr::VRCompositorError cppIVRCompositor_IVRCompositor_006_Submit(void *linux_side, Hmd_Eye eEye, void *pTexture, VRTextureBounds_t *pBounds)
 {
     return ((IVRCompositor*)linux_side)->Submit((vr::Hmd_Eye)eEye, (void *)pTexture, (vr::VRTextureBounds_t *)pBounds);
 }
@@ -54,7 +54,7 @@ void cppIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame(void *linux_side
     ((IVRCompositor*)linux_side)->ClearLastSubmittedFrame();
 }
 
-bool cppIVRCompositor_IVRCompositor_006_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_092 * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_006_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_092 *pTiming, uint32_t unFramesAgo)
 {
     Compositor_FrameTiming lin;
     bool _ret;

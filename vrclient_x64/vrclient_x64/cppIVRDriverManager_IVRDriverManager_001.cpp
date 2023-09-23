@@ -14,12 +14,12 @@ uint32_t cppIVRDriverManager_IVRDriverManager_001_GetDriverCount(void *linux_sid
     return ((IVRDriverManager*)linux_side)->GetDriverCount();
 }
 
-uint32_t cppIVRDriverManager_IVRDriverManager_001_GetDriverName(void *linux_side, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize)
+uint32_t cppIVRDriverManager_IVRDriverManager_001_GetDriverName(void *linux_side, DriverId_t nDriver, char *pchValue, uint32_t unBufferSize)
 {
     return ((IVRDriverManager*)linux_side)->GetDriverName((vr::DriverId_t)nDriver, (char *)pchValue, (uint32_t)unBufferSize);
 }
 
-vr::DriverHandle_t cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(void *linux_side, const char * pchDriverName)
+vr::DriverHandle_t cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(void *linux_side, const char *pchDriverName)
 {
     return ((IVRDriverManager*)linux_side)->GetDriverHandle((const char *)pchDriverName);
 }
