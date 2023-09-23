@@ -5,7 +5,7 @@
 
 CLANG_PATH='/usr/lib/clang/15'
 
-from clang.cindex import Cursor, CursorKind, Index, Type, TypeKind
+from clang.cindex import Cursor, CursorKind, Index, TypeKind
 from collections import namedtuple
 import concurrent.futures
 import os
@@ -297,309 +297,110 @@ all_records = {}
 all_sources = {}
 all_versions = {}
 
-PATH_CONV = [
-    {
-        "parent_name": "GetAppInstallDir",
-        "l2w_names": ["pchDirectory"],
-        "l2w_lens": ["cchNameMax"],
-        "l2w_urls": [False],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": True
+PATH_CONV_METHODS_UTOW = {
+    "ISteamAppList_GetAppInstallDir": {
+        "pchDirectory": {"len": "cchNameMax", "url": False},
+        "ret_size": True,
     },
-    {
-        "parent_name": "GetAppInstallDir",
-        "l2w_names": ["pchFolder"],
-        "l2w_lens": ["cchFolderBufferSize"],
-        "l2w_urls": [False],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": True
+    "ISteamApps_GetAppInstallDir": {
+        "pchFolder": {"len": "cchFolderBufferSize", "url": False},
+        "ret_size": True,
     },
-    {
-        "parent_name": "GetFileDetails",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszFileName"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": True
+    "ISteamUGC_GetQueryUGCAdditionalPreview": {
+        "pchURLOrVideoID": {"len": "cchURLSize", "url": True},
+    },
+    "ISteamUGC_GetItemInstallInfo": {
+        "pchFolder": {"len": "cchFolderSize", "url": False},
+    },
+    "ISteamUser_GetUserDataFolder": {
+        "pchBuffer": {"len": "cubBuffer", "url": False},
+    },
+}
+
+PATH_CONV_METHODS_WTOU = {
+    "ISteamApps_GetFileDetails": {
+        "pszFileName": {"array": False, "url": False},
     },
     ### ISteamGameServer::SetModDir - "Just the folder name, not the whole path. I.e. "Spacewar"."
-    {
-        "parent_name": "LoadURL",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchURL"],
-        "w2l_arrays": [False],
-        "w2l_urls": [True],
-        "return_is_size": False
+    "ISteamHTMLSurface_LoadURL": {
+        "pchURL": {"array": False, "url": True},
     },
-    {
-        "parent_name": "FileLoadDialogResponse",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchSelectedFiles"],
-        "w2l_arrays": [True],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "ISteamHTMLSurface_FileLoadDialogResponse": {
+        "pchSelectedFiles": {"array": True, "url": False},
     },
-    {
-        "parent_name": "HTML_StartRequest_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamRemoteStorage_PublishWorkshopFile": {
+        "pchFile": {"array": False, "url": False},
+        "pchPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_URLChanged_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamRemoteStorage_UpdatePublishedFileFile": {
+        "pchFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_FinishedRequest_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamRemoteStorage_UpdatePublishedFilePreviewFile": {
+        "pchPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_OpenLinkInNewTab_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamRemoteStorage_PublishVideo": {
+        "pchPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_LinkAtPosition_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamScreenshots_AddScreenshotToLibrary": {
+        "pchFilename": {"array": False, "url": False},
+        "pchThumbnailFilename": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_FileOpenDialog_t",
-        "l2w_names": ["pchInitialFile"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamScreenshots_AddVRScreenshotToLibrary": {
+        "pchFilename": {"array": False, "url": False},
+        "pchVRFilename": {"array": False, "url": False},
     },
-    {
-        "parent_name": "HTML_NewWindow_t",
-        "l2w_names": ["pchURL"],
-        "l2w_lens": [None],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamRemoteStorage_UGCDownloadToLocation": {
+        "pchLocation": {"array": False, "url": False},
     },
-    {
-        "parent_name": "PublishWorkshopFile",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchFile", "pchPreviewFile"],
-        "w2l_arrays": [False, False],
-        "w2l_urls": [False, False],
-        "return_is_size": False
+    "ISteamUGC_SetItemContent": {
+        "pszContentFolder": {"array": False, "url": False},
     },
-    {
-        "parent_name": "UpdatePublishedFileFile",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "ISteamUGC_SetItemPreview": {
+        "pszPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "UpdatePublishedFilePreviewFile",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchPreviewFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "ISteamUGC_AddItemPreviewFile": {
+        "pszPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "PublishVideo",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchPreviewFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "ISteamUGC_UpdateItemPreviewFile": {
+        "pszPreviewFile": {"array": False, "url": False},
     },
-    {
-        "parent_name": "AddScreenshotToLibrary",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchFilename", "pchThumbnailFilename"],
-        "w2l_arrays": [False, False],
-        "w2l_urls": [False, False],
-        "return_is_size": False
+    "ISteamUGC_BInitWorkshopForGameServer": {
+        "pszFolder": {"array": False, "url": False},
     },
-    {
-        "parent_name": "AddVRScreenshotToLibrary",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchFilename", "pchVRFilename"],
-        "w2l_arrays": [False, False],
-        "w2l_urls": [False, False],
-        "return_is_size": False
+    "ISteamUtils_CheckFileSignature": {
+        "szFileName": {"array": False, "url": False},
     },
-    {
-        "parent_name": "UGCDownloadToLocation",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchLocation"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "ISteamController_Init": {
+        "pchAbsolutePathToControllerConfigVDF": {"array": False, "url": False},
     },
-    {
-        "parent_name": "GetQueryUGCAdditionalPreview",
-        "l2w_names": ["pchURLOrVideoID"],
-        "l2w_lens": ["cchURLSize"],
-        "l2w_urls": [True],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "ISteamInput_SetInputActionManifestFilePath": {
+        "pchInputActionManifestAbsolutePath": {"array": False, "url": False},
     },
-    {
-        "parent_name": "SetItemContent",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszContentFolder"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+}
+
+PATH_CONV_STRUCTS = {
+    "HTML_StartRequest_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "SetItemPreview",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszPreviewFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "HTML_URLChanged_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "AddItemPreviewFile",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszPreviewFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "HTML_FinishedRequest_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "UpdateItemPreviewFile",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszPreviewFile"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "HTML_OpenLinkInNewTab_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "GetItemInstallInfo",
-        "l2w_names": ["pchFolder"],
-        "l2w_lens": ["cchFolderSize"],
-        "l2w_urls": [False],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "HTML_LinkAtPosition_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "BInitWorkshopForGameServer",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pszFolder"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
+    "HTML_FileOpenDialog_t": {
+        "pchInitialFile": True,
     },
-    {
-        "parent_name": "GetUserDataFolder",
-        "l2w_names": ["pchBuffer"],
-        "l2w_lens": ["cubBuffer"],
-        "l2w_urls": [False],
-        "w2l_names": [],
-        "w2l_arrays": [],
-        "w2l_urls": [],
-        "return_is_size": False
+    "HTML_NewWindow_t": {
+        "pchURL": True,
     },
-    {
-        "parent_name": "CheckFileSignature",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["szFileName"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "Init",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchAbsolutePathToControllerConfigVDF"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
-    },
-    {
-        "parent_name": "SetInputActionManifestFilePath",
-        "l2w_names": [],
-        "l2w_lens": [],
-        "l2w_urls": [],
-        "w2l_names": ["pchInputActionManifestAbsolutePath"],
-        "w2l_arrays": [False],
-        "w2l_urls": [False],
-        "return_is_size": False
-    },
-]
+}
 
 
 class Method:
@@ -723,7 +524,7 @@ def struct_needs_conversion_nocache(struct):
            for t in types['u64']):
         return True
 
-    if get_path_converter(struct):
+    if struct.spelling in PATH_CONV_STRUCTS:
         return True
     return False
 
@@ -735,22 +536,6 @@ def struct_needs_conversion(struct):
     if not name in struct_conversion_cache[sdkver]:
         struct_conversion_cache[sdkver][name] = struct_needs_conversion_nocache(struct)
     return struct_conversion_cache[sdkver][name]
-
-
-def get_path_converter(parent):
-    for conv in PATH_CONV:
-        if conv["parent_name"] in parent.spelling:
-            if None in conv["l2w_names"]:
-                return conv
-            if type(parent) == Type:
-                children = list(parent.get_fields())
-            else:
-                children = list(parent.get_children())
-            for child in children:
-                if child.spelling in conv["w2l_names"] or \
-                        child.spelling in conv["l2w_names"]:
-                    return conv
-    return None
 
 
 def underlying_type(decl):
@@ -935,17 +720,16 @@ def handle_method_c(method, winclassname, cppname, out):
         out(u'    int u_callback_len = cubCallback, w_callback_len = cubCallback;\n')
         out(u'    void *u_callback, *w_callback = pCallback;\n')
 
-    path_conv = get_path_converter(method)
+    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.spelling}_{method.spelling}', {})
+    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
 
-    if path_conv:
-        for i in range(len(path_conv["w2l_names"])):
-            if path_conv["w2l_arrays"][i]:
-                out(f'    const char **lin_{path_conv["w2l_names"][i]} = steamclient_dos_to_unix_stringlist({path_conv["w2l_names"][i]});\n')
-                # TODO
-                pass
-            else:
-                out(f'    char lin_{path_conv["w2l_names"][i]}[PATH_MAX];\n')
-                out(f'    steamclient_dos_path_to_unix_path({path_conv["w2l_names"][i]}, lin_{path_conv["w2l_names"][i]}, {int(path_conv["w2l_urls"][i])});\n')
+    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
+        if conv['array']:
+            out(f'    const char **lin_{name} = steamclient_dos_to_unix_stringlist({name});\n')
+            # TODO
+        else:
+            out(f'    char lin_{name}[PATH_MAX];\n')
+            out(f'    steamclient_dos_path_to_unix_path({name}, lin_{name}, {int(conv["url"])});\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -972,7 +756,7 @@ def handle_method_c(method, winclassname, cppname, out):
         if name == '_this': return '_this->u_iface'
         iface = param.type.get_pointee().spelling if param.type.kind == TypeKind.POINTER else None
         if iface in WRAPPED_CLASSES: return f'create_Linux{iface}({name}, "{winclassname}")'
-        if path_conv and name in path_conv["w2l_names"]: return f'{name} ? lin_{name} : NULL'
+        if name in path_conv_wtou: return f'{name} ? lin_{name} : NULL'
         return name
 
     params = ['_this'] + list(method.get_arguments())
@@ -990,16 +774,15 @@ def handle_method_c(method, winclassname, cppname, out):
         out(u'        HeapFree(GetProcessHeap(), 0, u_callback);\n')
         out(u'    }\n\n')
 
-    if path_conv and len(path_conv["l2w_names"]) > 0:
-        for i in range(len(path_conv["l2w_names"])):
-            out(u'    ')
-            if path_conv["return_is_size"]:
-                out(u'_ret = ')
-            out(f'steamclient_unix_path_to_dos_path(_ret, {path_conv["l2w_names"][i]}, {path_conv["l2w_names"][i]}, {path_conv["l2w_lens"][i]}, {int(path_conv["l2w_urls"][i])});\n')
-    if path_conv:
-        for i in range(len(path_conv["w2l_names"])):
-            if path_conv["w2l_arrays"][i]:
-                out(f'    steamclient_free_stringlist(lin_{path_conv["w2l_names"][i]});\n')
+    for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
+        out(u'    ')
+        if "ret_size" in path_conv_utow:
+            out(u'_ret = ')
+        out(f'steamclient_unix_path_to_dos_path(_ret, {name}, {name}, {conv["len"]}, {int(conv["url"])});\n')
+
+    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
+        if conv["array"]:
+            out(f'    steamclient_free_stringlist(lin_{name});\n')
 
     if not returns_void:
         out(u'    return _ret;\n')
@@ -1275,7 +1058,7 @@ def handle_struct(sdkver, struct):
         cppfile.write("#include \"struct_converters.h\"\n")
         cpp_files_need_close_brace.append(cppname)
 
-    path_conv = get_path_converter(struct.type)
+    path_conv_fields = PATH_CONV_STRUCTS.get(struct.type.spelling, {})
 
     def handle_field(m, src, dst):
         if m.kind == CursorKind.FIELD_DECL:
@@ -1286,12 +1069,8 @@ def handle_struct(sdkver, struct):
             elif m.type.kind == TypeKind.RECORD and \
                     struct_needs_conversion(m.type):
                 cppfile.write(f"    {src}_to_{dst}_struct_{m.type.spelling}_{sdkver}(&{src}->{m.displayname}, &{dst}->{m.displayname});\n")
-            elif path_conv and m.displayname in path_conv["l2w_names"]:
-                for i in range(len(path_conv["l2w_names"])):
-                    if path_conv["l2w_names"][i] == m.displayname:
-                        url = path_conv["l2w_urls"][i]
-                        break
-                cppfile.write(f"    steamclient_unix_path_to_dos_path(1, {src}->{m.displayname}, g_tmppath, sizeof(g_tmppath), {int(url)});\n")
+            elif m.displayname in path_conv_fields:
+                cppfile.write(f"    steamclient_unix_path_to_dos_path(1, {src}->{m.displayname}, g_tmppath, sizeof(g_tmppath), 1);\n")
                 cppfile.write(f"    {dst}->{m.displayname} = g_tmppath;\n")
             else:
                 cppfile.write(f"    {dst}->{m.displayname} = {src}->{m.displayname};\n")
