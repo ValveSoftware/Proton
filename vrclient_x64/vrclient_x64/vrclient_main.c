@@ -214,17 +214,17 @@ static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_
 #include "win_constructors.h"
 #include "win_destructors.h"
 
-typedef void (*pfn_dtor)(void *);
+typedef void (*pfn_dtor)(struct w_steam_iface *);
 
 static const struct {
     const char *iface_version;
-    void *(*ctor)(void *);
-    void (*dtor)(void *);
+    struct w_steam_iface *(*ctor)(void *);
+    void (*dtor)(struct w_steam_iface *);
 } constructors[] = {
 #include "win_constructors_table.dat"
 };
 
-void *create_win_interface(const char *name, void *linux_side)
+struct w_steam_iface *create_win_interface(const char *name, void *linux_side)
 {
     unsigned int i;
 
@@ -569,9 +569,9 @@ void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *
         unsigned int version, struct client_core_data *user_data)
 {
     const char *cpp_name_and_version = name_and_version;
+    struct w_steam_iface *win_object;
     struct generic_interface *iface;
     pfn_dtor destructor;
-    void *win_object;
     void *object;
 
     TRACE("%p, %p, %p\n", linux_side, name_and_version, error);

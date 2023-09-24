@@ -679,7 +679,7 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
         params = [f'{declspec(method.result_type, "*_ret")}'] + params
         names = ['_ret'] + names
 
-    params = [f'{winclassname} *_this'] + params
+    params = ['struct w_steam_iface *_this'] + params
     names = ['_this'] + names
 
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
@@ -725,7 +725,7 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
         out(f'{cppname}_{method.name}(')
 
     def param_call(param, name):
-        if name == '_this': return '_this->linux_side'
+        if name == '_this': return '_this->u_iface'
         if path_conv and name in path_conv["w2l_names"]: return f'{name} ? lin_{name} : NULL'
         return name
 
@@ -823,14 +823,6 @@ def handle_class(klass):
         out = file.write
 
         out(f'#include "{cppname}.h"\n\n')
-        out(f'typedef struct __{winclassname} {{\n')
-        out(u'    vtable_ptr *vtable;\n') # make sure to keep this first (flat API depends on it)
-        out(u'    void *linux_side;\n')
-        for classname_pattern, user_data_type, _ in method_overrides_data:
-            if classname_pattern in klass.spelling:
-                out(f'    {user_data_type} user_data;\n')
-                break
-        out(f'}} {winclassname};\n\n')
 
         for method in klass.methods:
             handle_thiscall_wrapper(klass, method, out)
@@ -853,29 +845,28 @@ def handle_class(klass):
         out(u'#ifndef __GNUC__\n')
         out(u'}\n')
         out(u'#endif\n\n')
-        out(f'{winclassname} *create_{winclassname}(void *linux_side)\n')
+        out(f'struct w_steam_iface *create_{winclassname}(void *u_iface)\n')
         out(u'{\n')
-        out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof({winclassname}));\n')
+        out(u'    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));\n')
         out(u'    TRACE("-> %p\\n", r);\n')
         out(f'    r->vtable = &{winclassname}_vtable;\n')
-        out(u'    r->linux_side = linux_side;\n')
+        out(u'    r->u_iface = u_iface;\n')
         out(u'    return r;\n')
         out(u'}\n\n')
-        out(f'void destroy_{winclassname}(void *object)\n')
+        out(f'void destroy_{winclassname}(struct w_steam_iface *object)\n')
         out(u'{\n')
         out(u'    TRACE("%p\\n", object);\n')
         for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
             if user_data_destructor and classname_pattern in klass.spelling:
-                out(f'    struct __{winclassname} *win_object = object;\n')
-                out(f'    {user_data_destructor}(&win_object->user_data);\n')
+                out(f'    {user_data_destructor}(&object->user_data);\n')
                 break
         out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
         out(u'}\n\n')
 
         # flat (FnTable) API
-        out(f'{winclassname} *create_{winclassname}_FnTable(void *linux_side)\n')
+        out(f'struct w_steam_iface *create_{winclassname}_FnTable(void *u_iface)\n')
         out(u'{\n')
-        out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof({winclassname}));\n')
+        out(u'    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));\n')
         out(f'    struct thunk *thunks = alloc_thunks({len(klass.methods)});\n')
         out(f'    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, {len(klass.methods)} * sizeof(*vtable));\n')
         out(u'    int i;\n\n')
@@ -888,30 +879,29 @@ def handle_class(klass):
             out(f'    init_thunk(&thunks[{i}], r, {winclassname}_{method.name}, {thunk_params});\n')
         out(f'    for (i = 0; i < {len(klass.methods)}; i++)\n')
         out(u'        vtable[i] = &thunks[i];\n')
-        out(u'    r->linux_side = linux_side;\n')
+        out(u'    r->u_iface = u_iface;\n')
         out(u'    r->vtable = (void *)vtable;\n')
         out(u'    return r;\n')
         out(u'}\n\n')
-        out(f'void destroy_{winclassname}_FnTable(void *object)\n')
+        out(f'void destroy_{winclassname}_FnTable(struct w_steam_iface *object)\n')
         out(u'{\n')
-        out(f'    {winclassname} *win_object = object;\n')
-        out(u'    TRACE("%p\\n", win_object);\n')
+        out(u'    TRACE("%p\\n", object);\n')
         for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
             if user_data_destructor and classname_pattern in klass.spelling:
-                out(f'    {user_data_destructor}(&win_object->user_data);\n')
+                out(f'    {user_data_destructor}(&object->user_data);\n')
                 break
-        out(u'    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n')
-        out(u'    HeapFree(GetProcessHeap(), 0, win_object->vtable);\n')
-        out(u'    HeapFree(GetProcessHeap(), 0, win_object);\n')
+        out(u'    VirtualFree(object->vtable[0], 0, MEM_RELEASE);\n')
+        out(u'    HeapFree(GetProcessHeap(), 0, object->vtable);\n')
+        out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
         out(u'}\n\n')
 
     constructors = open("vrclient_x64/win_constructors.h", "a")
-    constructors.write(f'extern void *create_{winclassname}(void *);\n')
-    constructors.write(f'extern void *create_{winclassname}_FnTable(void *);\n')
+    constructors.write(f'extern struct w_steam_iface *create_{winclassname}(void *);\n')
+    constructors.write(f'extern struct w_steam_iface *create_{winclassname}_FnTable(void *);\n')
 
     destructors = open("vrclient_x64/win_destructors.h", "a")
-    destructors.write(f'extern void destroy_{winclassname}(void *);\n')
-    destructors.write(f'extern void destroy_{winclassname}_FnTable(void *);\n')
+    destructors.write(f'extern void destroy_{winclassname}(struct w_steam_iface *);\n')
+    destructors.write(f'extern void destroy_{winclassname}_FnTable(struct w_steam_iface *);\n')
 
     constructors = open("vrclient_x64/win_constructors_table.dat", "a")
     constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}, &destroy_{winclassname}}},\n")
@@ -1562,8 +1552,6 @@ for klass in all_classes.values():
         out(u'#include "windef.h"\n')
         out(u'#include "winbase.h"\n')
         out(u'#include "wine/debug.h"\n')
-        out(u'\n')
-        out(u'#include "cxx.h"\n')
         out(u'\n')
         out(u'#include "vrclient_defs.h"\n')
         out(u'\n')
