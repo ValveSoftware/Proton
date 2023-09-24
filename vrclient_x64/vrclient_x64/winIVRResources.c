@@ -6,8 +6,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "vrclient_defs.h"
 
 #include "vrclient_private.h"
@@ -20,27 +18,22 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRResources_IVRResources_001.h"
 
-typedef struct __winIVRResources_IVRResources_001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winIVRResources_IVRResources_001;
-
 DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_LoadSharedResource, 16)
 DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20)
 
-uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(winIVRResources_IVRResources_001 *_this, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
+uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(struct w_steam_iface *_this, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
 {
     uint32_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRResources_IVRResources_001_LoadSharedResource(_this->linux_side, pchResourceName, pchBuffer, unBufferLen);
+    _ret = cppIVRResources_IVRResources_001_LoadSharedResource(_this->u_iface, pchResourceName, pchBuffer, unBufferLen);
     return _ret;
 }
 
-uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(winIVRResources_IVRResources_001 *_this, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
+uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(struct w_steam_iface *_this, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
 {
     uint32_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRResources_IVRResources_001_GetResourceFullPath(_this->linux_side, pchResourceName, pchResourceTypeDirectory, pchPathBuffer, unBufferLen);
+    _ret = cppIVRResources_IVRResources_001_GetResourceFullPath(_this->u_iface, pchResourceName, pchResourceTypeDirectory, pchPathBuffer, unBufferLen);
     return _ret;
 }
 
@@ -57,24 +50,24 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001(void *linux_side)
+struct w_steam_iface *create_winIVRResources_IVRResources_001(void *u_iface)
 {
-    winIVRResources_IVRResources_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRResources_IVRResources_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRResources_IVRResources_001_vtable;
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
-void destroy_winIVRResources_IVRResources_001(void *object)
+void destroy_winIVRResources_IVRResources_001(struct w_steam_iface *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001_FnTable(void *linux_side)
+struct w_steam_iface *create_winIVRResources_IVRResources_001_FnTable(void *u_iface)
 {
-    winIVRResources_IVRResources_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRResources_IVRResources_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     struct thunk *thunks = alloc_thunks(2);
     struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 2 * sizeof(*vtable));
     int i;
@@ -84,17 +77,16 @@ winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001_FnTabl
     init_thunk(&thunks[1], r, winIVRResources_IVRResources_001_GetResourceFullPath, 4, FALSE, FALSE);
     for (i = 0; i < 2; i++)
         vtable[i] = &thunks[i];
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     r->vtable = (void *)vtable;
     return r;
 }
 
-void destroy_winIVRResources_IVRResources_001_FnTable(void *object)
+void destroy_winIVRResources_IVRResources_001_FnTable(struct w_steam_iface *object)
 {
-    winIVRResources_IVRResources_001 *win_object = object;
-    TRACE("%p\n", win_object);
-    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
-    HeapFree(GetProcessHeap(), 0, win_object->vtable);
-    HeapFree(GetProcessHeap(), 0, win_object);
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
