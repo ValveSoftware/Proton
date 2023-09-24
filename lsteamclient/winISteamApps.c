@@ -1341,10 +1341,10 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPu
 SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(struct w_steam_iface *_this, const char *pszFileName)
 {
     SteamAPICall_t _ret;
-    char lin_pszFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pszFileName, lin_pszFileName, 0);
+    const char *u_pszFileName = steamclient_dos_to_unix_path( pszFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->u_iface, pszFileName ? lin_pszFileName : NULL);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->u_iface, pszFileName ? u_pszFileName : NULL);
+    steamclient_free_path( u_pszFileName );
     return _ret;
 }
 

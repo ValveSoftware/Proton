@@ -25,10 +25,10 @@ DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Se
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struct w_steam_iface *_this, const char *pchAbsolutePathToControllerConfigVDF)
 {
     bool _ret;
-    char lin_pchAbsolutePathToControllerConfigVDF[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchAbsolutePathToControllerConfigVDF, lin_pchAbsolutePathToControllerConfigVDF, 0);
+    const char *u_pchAbsolutePathToControllerConfigVDF = steamclient_dos_to_unix_path( pchAbsolutePathToControllerConfigVDF, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->u_iface, pchAbsolutePathToControllerConfigVDF ? lin_pchAbsolutePathToControllerConfigVDF : NULL);
+    _ret = cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->u_iface, pchAbsolutePathToControllerConfigVDF ? u_pchAbsolutePathToControllerConfigVDF : NULL);
+    steamclient_free_path( u_pchAbsolutePathToControllerConfigVDF );
     return _ret;
 }
 
