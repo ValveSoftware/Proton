@@ -1,40 +1,32 @@
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#pragma push_macro("__cdecl")
-#undef __cdecl
-#pragma push_macro("strncpy")
-#undef strncpy
-#include "steamworks_sdk_150/steam_api.h"
-#include "steamworks_sdk_150/isteamnetworkingsockets.h"
-#include "steamworks_sdk_150/isteamnetworkingutils.h"
-#include "steamworks_sdk_150/steamnetworkingtypes.h"
-#pragma pop_macro("__cdecl")
-#pragma pop_macro("strncpy")
-
 extern "C" {
-#define SDKVER_150
-#include "struct_converters.h"
 #include "cb_converters.h"
 
+#define SDKVER_157
 #define SDK_VERSION 1500
 #include "steamclient_manual_common.h"
-
-typedef winSteamNetworkingMessage_t_150 winSteamNetworkingMessage_t_152;
-typedef winSteamNetworkingMessage_t_150 winSteamNetworkingMessage_t_158;
-typedef struct SteamNetConnectionRealTimeStatus_t SteamNetConnectionRealTimeStatus_t;
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets009.h"
-#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
-#include "cppISteamNetworkingUtils_SteamNetworkingUtils003.h"
-#include "cppISteamInput_SteamInput001.h"
-#include "cppISteamController_SteamController007.h"
 }
+
+#pragma push_macro( "__cdecl" )
+#undef __cdecl
+#pragma push_macro( "strncpy" )
+#undef strncpy
+typedef struct SteamNetConnectionRealTimeStatus_t SteamNetConnectionRealTimeStatus_t;
+typedef struct winSteamNetworkingMessage_t winSteamNetworkingMessage_t_158;
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets009.hpp"
+#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.hpp"
+#include "cppISteamNetworkingUtils_SteamNetworkingUtils003.hpp"
+#include "cppISteamInput_SteamInput001.hpp"
+#include "cppISteamController_SteamController007.hpp"
+#pragma pop_macro( "__cdecl" )
+#pragma pop_macro( "strncpy" )
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params *params )
 {
-    ISteamNetworkingSockets *iface = (ISteamNetworkingSockets *)params->linux_side;
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *)params->linux_side;
     SteamNetworkingMessage_t *lin_ppOutMessages[params->nMaxMessages];
     params->_ret = iface->ReceiveMessagesOnConnection( params->hConn, lin_ppOutMessages, params->nMaxMessages );
     lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, lin_ppOutMessages,
@@ -43,7 +35,7 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConne
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params *params )
 {
-    ISteamNetworkingSockets *iface = (ISteamNetworkingSockets *)params->linux_side;
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *)params->linux_side;
     SteamNetworkingMessage_t *lin_ppOutMessages[params->nMaxMessages];
     params->_ret = iface->ReceiveMessagesOnPollGroup( params->hPollGroup, lin_ppOutMessages, params->nMaxMessages );
     lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, lin_ppOutMessages,
@@ -53,7 +45,7 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollG
 void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages_params *params )
 {
 #define MAX_SEND_MESSAGES 64
-    ISteamNetworkingSockets *iface = (ISteamNetworkingSockets *)params->linux_side;
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets009 *)params->linux_side;
     /* use the stack to avoid heap allocation */
     struct SteamNetworkingMessage_t *lin_msgs[MAX_SEND_MESSAGES];
     int i;
@@ -70,7 +62,7 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( struct c
         for (i = 0; i < params->nMessages && i < MAX_SEND_MESSAGES; ++i)
             lin_msgs[i] = (SteamNetworkingMessage_t *)network_message_win_to_lin( params->pMessages[i] );
 
-        iface->SendMessages( i, lin_msgs, (int64 *)params->pOutMessageNumberOrResult );
+        iface->SendMessages( i, lin_msgs, params->pOutMessageNumberOrResult );
 
         params->nMessages -= i;
         params->pMessages += i;
@@ -80,7 +72,7 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( struct c
 
 void cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params *params )
 {
-    ISteamNetworkingMessages *iface = (ISteamNetworkingMessages *)params->linux_side;
+    struct cppISteamNetworkingMessages_SteamNetworkingMessages002 *iface = (struct cppISteamNetworkingMessages_SteamNetworkingMessages002 *)params->linux_side;
     SteamNetworkingMessage_t *lin_ppOutMessages[params->nMaxMessages];
     params->_ret = iface->ReceiveMessagesOnChannel( params->nLocalChannel, lin_ppOutMessages, params->nMaxMessages );
     lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, lin_ppOutMessages,
@@ -148,32 +140,35 @@ void lin_SteamNetworkingMessagesSessionFailed(SteamNetworkingMessagesSessionFail
         fn(dat);
 }
 
+void cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params *params )
+{
+    struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *iface = (struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *)params->linux_side;
+    params->_ret = (winSteamNetworkingMessage_t_152 *)iface->AllocateMessage( params->cbAllocateBuffer );
+    params->_ret = (winSteamNetworkingMessage_t_152 *)network_message_lin_to_win( params->_ret );
+}
+
 void cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params *params )
 {
-    ISteamNetworkingUtils *iface = (ISteamNetworkingUtils *)params->linux_side;
+    struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *iface = (struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *)params->linux_side;
     void *lin_fn; /* api requires passing pointer-to-pointer */
 
     switch (params->eValue)
     {
 
-#define CASE( x, y )                                                                                           \
-    case k_ESteamNetworkingConfig_Callback_##x:                                                                \
-        if (!params->pArg)                                                                                     \
-        {                                                                                                      \
-            params->_ret = iface->SetConfigValue( (ESteamNetworkingConfigValue)params->eValue,                  \
-                                                 (ESteamNetworkingConfigScope)params->eScopeType,              \
-                                                 params->scopeObj,                                             \
-                                                 (ESteamNetworkingConfigDataType)params->eDataType, NULL );    \
-        }                                                                                                      \
-        else                                                                                                   \
-        {                                                                                                      \
-            if (*(void **)params->pArg == NULL) lin_fn = NULL;                                                 \
-            else lin_fn = (void *)&lin_##y;                                                                    \
-            params->_ret = iface->SetConfigValue( (ESteamNetworkingConfigValue)params->eValue,                  \
-                                                 (ESteamNetworkingConfigScope)params->eScopeType,              \
-                                                 params->scopeObj,                                             \
-                                                 (ESteamNetworkingConfigDataType)params->eDataType, &lin_fn ); \
-            if (params->_ret) win_##y = *(win_Fn##y *)params->pArg;                                             \
+#define CASE( x, y )                                                                               \
+    case k_ESteamNetworkingConfig_Callback_##x:                                                    \
+        if (!params->pArg)                                                                         \
+        {                                                                                          \
+            params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,              \
+                                                  params->scopeObj, params->eDataType, NULL );     \
+        }                                                                                          \
+        else                                                                                       \
+        {                                                                                          \
+            if (*(void **)params->pArg == NULL) lin_fn = NULL;                                     \
+            else lin_fn = (void *)&lin_##y;                                                        \
+            params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,              \
+                                                  params->scopeObj, params->eDataType, &lin_fn );  \
+            if (params->_ret) win_##y = *(win_Fn##y *)params->pArg;                                \
         }
 
         CASE( ConnectionStatusChanged, SteamNetConnectionStatusChanged )
@@ -185,37 +180,35 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( struct cpp
 #undef CASE
 
     default:
-        params->_ret = iface->SetConfigValue( (ESteamNetworkingConfigValue)params->eValue,
-                                             (ESteamNetworkingConfigScope)params->eScopeType, params->scopeObj,
-                                             (ESteamNetworkingConfigDataType)params->eDataType,
-                                             params->pArg );
+        params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType, params->scopeObj,
+                                              params->eDataType, params->pArg );
     }
 }
 
 void cppISteamInput_SteamInput001_GetGlyphForActionOrigin( struct cppISteamInput_SteamInput001_GetGlyphForActionOrigin_params *params )
 {
-    ISteamInput *iface = (ISteamInput *)params->linux_side;
-    params->_ret = iface->GetGlyphForActionOrigin( (EInputActionOrigin)params->eOrigin );
+    struct cppISteamInput_SteamInput001 *iface = (struct cppISteamInput_SteamInput001 *)params->linux_side;
+    params->_ret = iface->GetGlyphForActionOrigin( params->eOrigin );
     params->_ret = steamclient_isteaminput_getglyph( params->eOrigin, params->_ret );
 }
 
 void cppISteamInput_SteamInput001_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput001_GetGlyphForXboxOrigin_params *params )
 {
-    ISteamInput *iface = (ISteamInput *)params->linux_side;
-    params->_ret = iface->GetGlyphForXboxOrigin( (EXboxOrigin)params->eOrigin );
+    struct cppISteamInput_SteamInput001 *iface = (struct cppISteamInput_SteamInput001 *)params->linux_side;
+    params->_ret = iface->GetGlyphForXboxOrigin( params->eOrigin );
     params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
 }
 
 void cppISteamController_SteamController007_GetGlyphForActionOrigin( struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params *params )
 {
-    ISteamController *iface = (ISteamController *)params->linux_side;
-    params->_ret = iface->GetGlyphForActionOrigin( (EControllerActionOrigin)params->eOrigin );
+    struct cppISteamController_SteamController007 *iface = (struct cppISteamController_SteamController007 *)params->linux_side;
+    params->_ret = iface->GetGlyphForActionOrigin( params->eOrigin );
     params->_ret = steamclient_isteamcontroller_getglyph( params->eOrigin, params->_ret );
 }
 
 void cppISteamController_SteamController007_GetGlyphForXboxOrigin( struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params *params )
 {
-    ISteamController *iface = (ISteamController *)params->linux_side;
-    params->_ret = iface->GetGlyphForXboxOrigin( (EXboxOrigin)params->eOrigin );
+    struct cppISteamController_SteamController007 *iface = (struct cppISteamController_SteamController007 *)params->linux_side;
+    params->_ret = iface->GetGlyphForXboxOrigin( params->eOrigin );
     params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
 }
