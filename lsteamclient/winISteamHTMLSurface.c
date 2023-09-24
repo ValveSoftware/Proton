@@ -84,10 +84,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Remo
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    char lin_pchURL[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
+    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
+    steamclient_free_path( u_pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
@@ -248,10 +248,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDi
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
-    steamclient_free_stringlist(lin_pchSelectedFiles);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
+    steamclient_free_path_array( u_pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
@@ -380,10 +380,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Remo
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    char lin_pchURL[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
+    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
+    steamclient_free_path( u_pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
@@ -556,10 +556,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDi
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
-    steamclient_free_stringlist(lin_pchSelectedFiles);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
+    steamclient_free_path_array( u_pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
@@ -691,10 +691,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Remo
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    char lin_pchURL[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
+    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
+    steamclient_free_path( u_pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
@@ -873,10 +873,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDi
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
-    steamclient_free_stringlist(lin_pchSelectedFiles);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
+    steamclient_free_path_array( u_pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
@@ -1010,10 +1010,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Remo
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    char lin_pchURL[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
+    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
+    steamclient_free_path( u_pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
@@ -1198,10 +1198,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDi
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
-    steamclient_free_stringlist(lin_pchSelectedFiles);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
+    steamclient_free_path_array( u_pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
@@ -1337,10 +1337,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Remo
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    char lin_pchURL[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
+    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
+    steamclient_free_path( u_pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
@@ -1531,10 +1531,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDi
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
-    steamclient_free_stringlist(lin_pchSelectedFiles);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
+    steamclient_free_path_array( u_pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;
