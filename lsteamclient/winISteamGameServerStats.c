@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -16,11 +14,6 @@
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
-
-typedef struct __winISteamGameServerStats_SteamGameServerStats001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamGameServerStats_SteamGameServerStats001;
 
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_RequestUserStats, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_GetUserStat, 20)
@@ -33,83 +26,83 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUser
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement, 16)
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_StoreUserStats, 12)
 
-SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUserStats(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser)
+SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(_this->u_iface, steamIDUser);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserStat(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserStat(_this->u_iface, steamIDUser, pchName, pData);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(_this->linux_side, steamIDUser, pchName, pData);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(_this->u_iface, steamIDUser, pchName, pData);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(_this->u_iface, steamIDUser, pchName, pbAchieved);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, int32 nData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32 nData)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserStat(_this->linux_side, steamIDUser, pchName, nData);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserStat(_this->u_iface, steamIDUser, pchName, nData);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, float fData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float fData)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(_this->linux_side, steamIDUser, pchName, fData);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(_this->u_iface, steamIDUser, pchName, fData);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName, float flCountThisSession, double dSessionLength)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(_this->linux_side, steamIDUser, pchName, flCountThisSession, dSessionLength);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(_this->u_iface, steamIDUser, pchName, flCountThisSession, dSessionLength);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(_this->linux_side, steamIDUser, pchName);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(_this->u_iface, steamIDUser, pchName);
     return _ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser, const char *pchName)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(_this->linux_side, steamIDUser, pchName);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(_this->u_iface, steamIDUser, pchName);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserStats(winISteamGameServerStats_SteamGameServerStats001 *_this, CSteamID steamIDUser)
+SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats(_this->linux_side, steamIDUser);
+    _ret = cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats(_this->u_iface, steamIDUser);
     return _ret;
 }
 
@@ -134,12 +127,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamGameServerStats_SteamGameServerStats001 *create_winISteamGameServerStats_SteamGameServerStats001(void *linux_side)
+struct w_steam_iface *create_winISteamGameServerStats_SteamGameServerStats001(void *u_iface)
 {
-    winISteamGameServerStats_SteamGameServerStats001 *r = alloc_mem_for_iface(sizeof(winISteamGameServerStats_SteamGameServerStats001), "SteamGameServerStats001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamGameServerStats001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamGameServerStats_SteamGameServerStats001_vtable, 10, "SteamGameServerStats001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 

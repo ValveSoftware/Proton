@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -17,18 +15,13 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001.h"
 
-typedef struct __winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001;
-
 DEFINE_THISCALL_WRAPPER(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData, 32)
 
-uint32 __thiscall winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *_this, uint32 nAppID, void *pvBuffer, uint32 cbBufferLength, uint32 *piAppId, uint32 *piSteamId, uint32 *piSignature, uint32 *pcbSignature)
+uint32 __thiscall winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(struct w_steam_iface *_this, uint32 nAppID, void *pvBuffer, uint32 cbBufferLength, uint32 *piAppId, uint32 *piSteamId, uint32 *piSignature, uint32 *pcbSignature)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(_this->linux_side, nAppID, pvBuffer, cbBufferLength, piAppId, piSteamId, piSignature, pcbSignature);
+    _ret = cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(_this->u_iface, nAppID, pvBuffer, cbBufferLength, piAppId, piSteamId, piSignature, pcbSignature);
     return _ret;
 }
 
@@ -44,12 +37,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001(void *linux_side)
+struct w_steam_iface *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001(void *u_iface)
 {
-    winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001), "STEAMAPPTICKET_INTERFACE_VERSION001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPTICKET_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable, 1, "STEAMAPPTICKET_INTERFACE_VERSION001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 

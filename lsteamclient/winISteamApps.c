@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -17,18 +15,13 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION001.h"
 
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION001;
-
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData, 20)
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *_this, AppId_t nAppID, const char *pchKey, char *pchValue, int cchValueMax)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(struct w_steam_iface *_this, AppId_t nAppID, const char *pchKey, char *pchValue, int cchValueMax)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(_this->linux_side, nAppID, pchKey, pchValue, cchValueMax);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(_this->u_iface, nAppID, pchKey, pchValue, cchValueMax);
     return _ret;
 }
 
@@ -44,21 +37,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION001), "STEAMAPPS_INTERFACE_VERSION001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtable, 1, "STEAMAPPS_INTERFACE_VERSION001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION002.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION002 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION002;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence, 4)
@@ -68,59 +56,59 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentG
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
@@ -142,21 +130,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION002), "STEAMAPPS_INTERFACE_VERSION002");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtable, 7, "STEAMAPPS_INTERFACE_VERSION002");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION003.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION003 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION003;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence, 4)
@@ -167,67 +150,67 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailabl
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp, 8)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
@@ -250,21 +233,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION003(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION003(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION003), "STEAMAPPS_INTERFACE_VERSION003");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtable, 8, "STEAMAPPS_INTERFACE_VERSION003");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION004.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION004 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION004;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence, 4)
@@ -281,112 +259,112 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCData
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC, 8)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, AppId_t nAppID)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(_this->u_iface, nAppID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWeekend(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWeekend(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWeekend(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWeekend(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(struct w_steam_iface *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(_this->linux_side, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(_this->u_iface, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(_this->u_iface, nAppID);
 }
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable;
@@ -414,21 +392,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION004), "STEAMAPPS_INTERFACE_VERSION004");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable, 14, "STEAMAPPS_INTERFACE_VERSION004");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION005.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION005 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION005;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence, 4)
@@ -451,158 +424,158 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalle
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir, 16)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t nAppID)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(_this->u_iface, nAppID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedFromFreeWeekend(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedFromFreeWeekend(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedFromFreeWeekend(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedFromFreeWeekend(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(struct w_steam_iface *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(_this->linux_side, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(_this->u_iface, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(_this->u_iface, nAppID);
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(struct w_steam_iface *_this, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(_this->u_iface, pchName, cchNameBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, bool bMissingFilesOnly)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(struct w_steam_iface *_this, bool bMissingFilesOnly)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(_this->linux_side, bMissingFilesOnly);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(_this->u_iface, bMissingFilesOnly);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, DepotId_t *pvecDepots, uint32 cMaxDepots)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(struct w_steam_iface *_this, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(_this->linux_side, pvecDepots, cMaxDepots);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(_this->u_iface, pvecDepots, cMaxDepots);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(_this->u_iface, appID, pchFolder, cchFolderBufferSize);
     _ret = steamclient_unix_path_to_dos_path(_ret, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(_this->u_iface, appID);
     return _ret;
 }
 
@@ -637,21 +610,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION005(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION005(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION005), "STEAMAPPS_INTERFACE_VERSION005");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtable, 20, "STEAMAPPS_INTERFACE_VERSION005");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION006.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION006 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION006;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence, 4)
@@ -676,173 +644,173 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInsta
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner, 8)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t nAppID)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(_this->u_iface, nAppID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedFromFreeWeekend(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedFromFreeWeekend(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedFromFreeWeekend(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedFromFreeWeekend(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(struct w_steam_iface *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(_this->linux_side, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(_this->u_iface, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(_this->u_iface, nAppID);
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(struct w_steam_iface *_this, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(_this->u_iface, pchName, cchNameBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, bool bMissingFilesOnly)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(struct w_steam_iface *_this, bool bMissingFilesOnly)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(_this->linux_side, bMissingFilesOnly);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(_this->u_iface, bMissingFilesOnly);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(_this->linux_side, appID, pvecDepots, cMaxDepots);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(_this->u_iface, appID, pvecDepots, cMaxDepots);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(_this->u_iface, appID, pchFolder, cchFolderBufferSize);
     _ret = steamclient_unix_path_to_dos_path(_ret, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(struct w_steam_iface *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(_this->linux_side);
+    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, const char *pchKey)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam(struct w_steam_iface *_this, const char *pchKey)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam(_this->linux_side, pchKey);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam(_this->u_iface, pchKey);
     return _ret;
 }
 
@@ -879,21 +847,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION006), "STEAMAPPS_INTERFACE_VERSION006");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtable, 22, "STEAMAPPS_INTERFACE_VERSION006");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION007.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION007 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION007;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence, 4)
@@ -920,189 +883,189 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQu
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress, 16)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId, 4)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t nAppID)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(_this->u_iface, nAppID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedFromFreeWeekend(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedFromFreeWeekend(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedFromFreeWeekend(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedFromFreeWeekend(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(struct w_steam_iface *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(_this->linux_side, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(_this->u_iface, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(_this->u_iface, nAppID);
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(struct w_steam_iface *_this, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(_this->u_iface, pchName, cchNameBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, bool bMissingFilesOnly)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(struct w_steam_iface *_this, bool bMissingFilesOnly)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(_this->linux_side, bMissingFilesOnly);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(_this->u_iface, bMissingFilesOnly);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(_this->linux_side, appID, pvecDepots, cMaxDepots);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(_this->u_iface, appID, pvecDepots, cMaxDepots);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(_this->u_iface, appID, pchFolder, cchFolderBufferSize);
     _ret = steamclient_unix_path_to_dos_path(_ret, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(struct w_steam_iface *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(_this->linux_side);
+    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, const char *pchKey)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(struct w_steam_iface *_this, const char *pchKey)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(_this->linux_side, pchKey);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(_this->u_iface, pchKey);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(struct w_steam_iface *_this, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(_this->linux_side, nAppID, punBytesDownloaded, punBytesTotal);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(_this->u_iface, nAppID, punBytesDownloaded, punBytesTotal);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(_this->u_iface);
     return _ret;
 }
 
@@ -1141,21 +1104,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION007), "STEAMAPPS_INTERFACE_VERSION007");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtable, 24, "STEAMAPPS_INTERFACE_VERSION007");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION008.h"
-
-typedef struct __winISteamApps_STEAMAPPS_INTERFACE_VERSION008 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamApps_STEAMAPPS_INTERFACE_VERSION008;
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence, 4)
@@ -1188,237 +1146,237 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscrib
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial, 12)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext, 8)
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsVACBanned(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsVACBanned(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsVACBanned(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsVACBanned(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentGameLanguage(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentGameLanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentGameLanguage(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentGameLanguage(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailableGameLanguages(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailableGameLanguages(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailableGameLanguages(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailableGameLanguages(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(_this->u_iface, appID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(_this->u_iface, nAppID);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFreeWeekend(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFreeWeekend(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFreeWeekend(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFreeWeekend(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(struct w_steam_iface *_this, int iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(_this->linux_side, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(_this->u_iface, iDLC, pAppID, pbAvailable, pchName, cchNameBufferSize);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(_this->u_iface, nAppID);
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(_this->linux_side, nAppID);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(_this->u_iface, nAppID);
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, char *pchName, int cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(struct w_steam_iface *_this, char *pchName, int cchNameBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(_this->u_iface, pchName, cchNameBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, bool bMissingFilesOnly)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(struct w_steam_iface *_this, bool bMissingFilesOnly)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(_this->linux_side, bMissingFilesOnly);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(_this->u_iface, bMissingFilesOnly);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32 cMaxDepots)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(_this->linux_side, appID, pvecDepots, cMaxDepots);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(_this->u_iface, appID, pvecDepots, cMaxDepots);
     return _ret;
 }
 
-uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
+uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32 cchFolderBufferSize)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(_this->u_iface, appID, pchFolder, cchFolderBufferSize);
     _ret = steamclient_unix_path_to_dos_path(_ret, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(_this->linux_side, appID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(_this->u_iface, appID);
     return _ret;
 }
 
-CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, CSteamID *_ret)
+CSteamID * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(struct w_steam_iface *_this, CSteamID *_ret)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(_this->linux_side);
+    *_ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppOwner(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, const char *pchKey)
+const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(struct w_steam_iface *_this, const char *pchKey)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(_this->linux_side, pchKey);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam(_this->u_iface, pchKey);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(struct w_steam_iface *_this, AppId_t nAppID, uint64 *punBytesDownloaded, uint64 *punBytesTotal)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(_this->linux_side, nAppID, punBytesDownloaded, punBytesTotal);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(_this->u_iface, nAppID, punBytesDownloaded, punBytesTotal);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId(struct w_steam_iface *_this)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(_this->linux_side);
+    cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(_this->u_iface);
 }
 
-SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, const char *pszFileName)
+SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(struct w_steam_iface *_this, const char *pszFileName)
 {
     SteamAPICall_t _ret;
     char lin_pszFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(pszFileName, lin_pszFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->linux_side, pszFileName ? lin_pszFileName : NULL);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->u_iface, pszFileName ? lin_pszFileName : NULL);
     return _ret;
 }
 
-int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, char *pszCommandLine, int cubCommandLine)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(struct w_steam_iface *_this, char *pszCommandLine, int cubCommandLine)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(_this->linux_side, pszCommandLine, cubCommandLine);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(_this->u_iface, pszCommandLine, cubCommandLine);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(_this->linux_side);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, uint32 *punSecondsAllowed, uint32 *punSecondsPlayed)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(struct w_steam_iface *_this, uint32 *punSecondsAllowed, uint32 *punSecondsPlayed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(_this->linux_side, punSecondsAllowed, punSecondsPlayed);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(_this->u_iface, punSecondsAllowed, punSecondsPlayed);
     return _ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(struct w_steam_iface *_this, AppId_t nAppID)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(_this->linux_side, nAppID);
+    _ret = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(_this->u_iface, nAppID);
     return _ret;
 }
 
@@ -1463,12 +1421,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *linux_side)
+struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *u_iface)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION008), "STEAMAPPS_INTERFACE_VERSION008");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 30, "STEAMAPPS_INTERFACE_VERSION008");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 

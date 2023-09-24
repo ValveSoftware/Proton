@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -16,11 +14,6 @@
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamGameStats_SteamGameStats001.h"
-
-typedef struct __winISteamGameStats_SteamGameStats001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamGameStats_SteamGameStats001;
 
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_GetNewSession, 24)
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_EndSession, 20)
@@ -36,107 +29,107 @@ DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddRowAttributeFloa
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddSessionAttributeInt64, 24)
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddRowAttributeInt64, 24)
 
-SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_GetNewSession(winISteamGameStats_SteamGameStats001 *_this, int8 nAccountType, uint64 ulAccountID, int32 nAppID, RTime32 rtTimeStarted)
+SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_GetNewSession(struct w_steam_iface *_this, int8 nAccountType, uint64 ulAccountID, int32 nAppID, RTime32 rtTimeStarted)
 {
     SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_GetNewSession(_this->linux_side, nAccountType, ulAccountID, nAppID, rtTimeStarted);
+    _ret = cppISteamGameStats_SteamGameStats001_GetNewSession(_this->u_iface, nAccountType, ulAccountID, nAppID, rtTimeStarted);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_EndSession(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID, RTime32 rtTimeEnded, int nReasonCode)
+SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_EndSession(struct w_steam_iface *_this, uint64 ulSessionID, RTime32 rtTimeEnded, int nReasonCode)
 {
     SteamAPICall_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_EndSession(_this->linux_side, ulSessionID, rtTimeEnded, nReasonCode);
+    _ret = cppISteamGameStats_SteamGameStats001_EndSession(_this->u_iface, ulSessionID, rtTimeEnded, nReasonCode);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID, const char *pstrName, int32 nData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt(struct w_steam_iface *_this, uint64 ulSessionID, const char *pstrName, int32 nData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt(_this->linux_side, ulSessionID, pstrName, nData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt(_this->u_iface, ulSessionID, pstrName, nData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeString(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID, const char *pstrName, const char *pstrData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeString(struct w_steam_iface *_this, uint64 ulSessionID, const char *pstrName, const char *pstrData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeString(_this->linux_side, ulSessionID, pstrName, pstrData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeString(_this->u_iface, ulSessionID, pstrName, pstrData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeFloat(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID, const char *pstrName, float fData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeFloat(struct w_steam_iface *_this, uint64 ulSessionID, const char *pstrName, float fData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat(_this->linux_side, ulSessionID, pstrName, fData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat(_this->u_iface, ulSessionID, pstrName, fData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddNewRow(winISteamGameStats_SteamGameStats001 *_this, uint64 *pulRowID, uint64 ulSessionID, const char *pstrTableName)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddNewRow(struct w_steam_iface *_this, uint64 *pulRowID, uint64 ulSessionID, const char *pstrTableName)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddNewRow(_this->linux_side, pulRowID, ulSessionID, pstrTableName);
+    _ret = cppISteamGameStats_SteamGameStats001_AddNewRow(_this->u_iface, pulRowID, ulSessionID, pstrTableName);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_CommitRow(winISteamGameStats_SteamGameStats001 *_this, uint64 ulRowID)
+EResult __thiscall winISteamGameStats_SteamGameStats001_CommitRow(struct w_steam_iface *_this, uint64 ulRowID)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_CommitRow(_this->linux_side, ulRowID);
+    _ret = cppISteamGameStats_SteamGameStats001_CommitRow(_this->u_iface, ulRowID);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_CommitOutstandingRows(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID)
+EResult __thiscall winISteamGameStats_SteamGameStats001_CommitOutstandingRows(struct w_steam_iface *_this, uint64 ulSessionID)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_CommitOutstandingRows(_this->linux_side, ulSessionID);
+    _ret = cppISteamGameStats_SteamGameStats001_CommitOutstandingRows(_this->u_iface, ulSessionID);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt(winISteamGameStats_SteamGameStats001 *_this, uint64 ulRowID, const char *pstrName, int32 nData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt(struct w_steam_iface *_this, uint64 ulRowID, const char *pstrName, int32 nData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeInt(_this->linux_side, ulRowID, pstrName, nData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeInt(_this->u_iface, ulRowID, pstrName, nData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAtributeString(winISteamGameStats_SteamGameStats001 *_this, uint64 ulRowID, const char *pstrName, const char *pstrData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAtributeString(struct w_steam_iface *_this, uint64 ulRowID, const char *pstrName, const char *pstrData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddRowAtributeString(_this->linux_side, ulRowID, pstrName, pstrData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddRowAtributeString(_this->u_iface, ulRowID, pstrName, pstrData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeFloat(winISteamGameStats_SteamGameStats001 *_this, uint64 ulRowID, const char *pstrName, float fData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeFloat(struct w_steam_iface *_this, uint64 ulRowID, const char *pstrName, float fData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat(_this->linux_side, ulRowID, pstrName, fData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat(_this->u_iface, ulRowID, pstrName, fData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(winISteamGameStats_SteamGameStats001 *_this, uint64 ulSessionID, const char *pstrName, int64 llData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(struct w_steam_iface *_this, uint64 ulSessionID, const char *pstrName, int64 llData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(_this->linux_side, ulSessionID, pstrName, llData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(_this->u_iface, ulSessionID, pstrName, llData);
     return _ret;
 }
 
-EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt64(winISteamGameStats_SteamGameStats001 *_this, uint64 ulRowID, const char *pstrName, int64 llData)
+EResult __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt64(struct w_steam_iface *_this, uint64 ulRowID, const char *pstrName, int64 llData)
 {
     EResult _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64(_this->linux_side, ulRowID, pstrName, llData);
+    _ret = cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64(_this->u_iface, ulRowID, pstrName, llData);
     return _ret;
 }
 
@@ -164,12 +157,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamGameStats_SteamGameStats001 *create_winISteamGameStats_SteamGameStats001(void *linux_side)
+struct w_steam_iface *create_winISteamGameStats_SteamGameStats001(void *u_iface)
 {
-    winISteamGameStats_SteamGameStats001 *r = alloc_mem_for_iface(sizeof(winISteamGameStats_SteamGameStats001), "SteamGameStats001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamGameStats001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamGameStats_SteamGameStats001_vtable, 13, "SteamGameStats001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 

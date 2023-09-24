@@ -1,5 +1,11 @@
 /* TODO these should be generated */
 
+#ifndef __cplusplus
+#include "cxx.h"
+#else
+typedef void (*vtable_ptr)(void);
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,11 +46,17 @@ typedef struct __winISteamRemotePlay winISteamRemotePlay;
 typedef struct __winISteamNetworkingFakeUDPPort winISteamNetworkingFakeUDPPort;
 typedef struct __winX winX;
 
+struct w_steam_iface
+{
+    vtable_ptr *vtable;
+    void *u_iface;
+};
+
 struct SteamInputActionEvent_t;
 typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
 void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
 
-void *create_win_interface(const char *name, void *linux_side);
+struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);
 bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url);
 const char **steamclient_dos_to_unix_stringlist(const char **src);

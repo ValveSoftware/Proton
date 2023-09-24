@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -17,25 +15,20 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V001.h"
 
-typedef struct __winISteamVideo_STEAMVIDEO_INTERFACE_V001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamVideo_STEAMVIDEO_INTERFACE_V001;
-
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting, 8)
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(winISteamVideo_STEAMVIDEO_INTERFACE_V001 *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(_this->linux_side, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(_this->u_iface, unVideoAppID);
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(winISteamVideo_STEAMVIDEO_INTERFACE_V001 *_this, int *pnNumViewers)
+bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(struct w_steam_iface *_this, int *pnNumViewers)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(_this->linux_side, pnNumViewers);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(_this->u_iface, pnNumViewers);
     return _ret;
 }
 
@@ -52,52 +45,47 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamVideo_STEAMVIDEO_INTERFACE_V001 *create_winISteamVideo_STEAMVIDEO_INTERFACE_V001(void *linux_side)
+struct w_steam_iface *create_winISteamVideo_STEAMVIDEO_INTERFACE_V001(void *u_iface)
 {
-    winISteamVideo_STEAMVIDEO_INTERFACE_V001 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V001), "STEAMVIDEO_INTERFACE_V001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMVIDEO_INTERFACE_V001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable, 2, "STEAMVIDEO_INTERFACE_V001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V002.h"
-
-typedef struct __winISteamVideo_STEAMVIDEO_INTERFACE_V002 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamVideo_STEAMVIDEO_INTERFACE_V002;
 
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings, 8)
 DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp, 16)
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(_this->linux_side, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(_this->u_iface, unVideoAppID);
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, int *pnNumViewers)
+bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(struct w_steam_iface *_this, int *pnNumViewers)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(_this->linux_side, pnNumViewers);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(_this->u_iface, pnNumViewers);
     return _ret;
 }
 
-void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, AppId_t unVideoAppID)
+void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(_this->linux_side, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(_this->u_iface, unVideoAppID);
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(winISteamVideo_STEAMVIDEO_INTERFACE_V002 *_this, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
+bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(_this->linux_side, unVideoAppID, pchBuffer, pnBufferSize);
+    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(_this->u_iface, unVideoAppID, pchBuffer, pnBufferSize);
     return _ret;
 }
 
@@ -116,12 +104,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamVideo_STEAMVIDEO_INTERFACE_V002 *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *linux_side)
+struct w_steam_iface *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *u_iface)
 {
-    winISteamVideo_STEAMVIDEO_INTERFACE_V002 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V002), "STEAMVIDEO_INTERFACE_V002");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMVIDEO_INTERFACE_V002");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable, 4, "STEAMVIDEO_INTERFACE_V002");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
