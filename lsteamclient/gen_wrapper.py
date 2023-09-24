@@ -725,11 +725,9 @@ def handle_method_c(method, winclassname, cppname, out):
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
         if conv['array']:
-            out(f'    const char **lin_{name} = steamclient_dos_to_unix_stringlist({name});\n')
-            # TODO
+            out(f'    const char **u_{name} = steamclient_dos_to_unix_path_array( {name} );\n')
         else:
-            out(f'    char lin_{name}[PATH_MAX];\n')
-            out(f'    steamclient_dos_path_to_unix_path({name}, lin_{name}, {int(conv["url"])});\n')
+            out(f'    const char *u_{name} = steamclient_dos_to_unix_path( {name}, {int(conv["url"])} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -756,7 +754,7 @@ def handle_method_c(method, winclassname, cppname, out):
         if name == '_this': return '_this->u_iface'
         iface = param.type.get_pointee().spelling if param.type.kind == TypeKind.POINTER else None
         if iface in WRAPPED_CLASSES: return f'create_Linux{iface}({name}, "{winclassname}")'
-        if name in path_conv_wtou: return f'{name} ? lin_{name} : NULL'
+        if name in path_conv_wtou: return f'{name} ? u_{name} : NULL'
         return name
 
     params = ['_this'] + list(method.get_arguments())
@@ -782,7 +780,9 @@ def handle_method_c(method, winclassname, cppname, out):
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
         if conv["array"]:
-            out(f'    steamclient_free_stringlist(lin_{name});\n')
+            out(f'    steamclient_free_path_array( u_{name} );\n')
+        else:
+            out(f'    steamclient_free_path( u_{name} );\n')
 
     if not returns_void:
         out(u'    return _ret;\n')

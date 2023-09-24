@@ -782,10 +782,10 @@ bool __thiscall winISteamInput_SteamInput005_Shutdown(struct w_steam_iface *_thi
 bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     bool _ret;
-    char lin_pchInputActionManifestAbsolutePath[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchInputActionManifestAbsolutePath, lin_pchInputActionManifestAbsolutePath, 0);
+    const char *u_pchInputActionManifestAbsolutePath = steamclient_dos_to_unix_path( pchInputActionManifestAbsolutePath, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
+    _ret = cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? u_pchInputActionManifestAbsolutePath : NULL);
+    steamclient_free_path( u_pchInputActionManifestAbsolutePath );
     return _ret;
 }
 
@@ -1247,10 +1247,10 @@ bool __thiscall winISteamInput_SteamInput006_Shutdown(struct w_steam_iface *_thi
 bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     bool _ret;
-    char lin_pchInputActionManifestAbsolutePath[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchInputActionManifestAbsolutePath, lin_pchInputActionManifestAbsolutePath, 0);
+    const char *u_pchInputActionManifestAbsolutePath = steamclient_dos_to_unix_path( pchInputActionManifestAbsolutePath, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
+    _ret = cppISteamInput_SteamInput006_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? u_pchInputActionManifestAbsolutePath : NULL);
+    steamclient_free_path( u_pchInputActionManifestAbsolutePath );
     return _ret;
 }
 

@@ -582,10 +582,10 @@ bool __thiscall winISteamUtils_SteamUtils005_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils005_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
@@ -845,10 +845,10 @@ bool __thiscall winISteamUtils_SteamUtils006_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils006_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
@@ -1127,10 +1127,10 @@ bool __thiscall winISteamUtils_SteamUtils007_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils007_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
@@ -1418,10 +1418,10 @@ bool __thiscall winISteamUtils_SteamUtils008_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils008_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
@@ -1731,10 +1731,10 @@ bool __thiscall winISteamUtils_SteamUtils009_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils009_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
@@ -2100,10 +2100,10 @@ bool __thiscall winISteamUtils_SteamUtils010_BOverlayNeedsPresent(struct w_steam
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
-    char lin_szFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
+    const char *u_szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils010_CheckFileSignature(_this->u_iface, szFileName ? u_szFileName : NULL);
+    steamclient_free_path( u_szFileName );
     return _ret;
 }
 
