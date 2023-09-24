@@ -6,8 +6,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "vrclient_defs.h"
 
 #include "vrclient_private.h"
@@ -20,12 +18,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRClientCore_IVRClientCore_002.h"
 
-typedef struct __winIVRClientCore_IVRClientCore_002 {
-    vtable_ptr *vtable;
-    void *linux_side;
-    struct client_core_data user_data;
-} winIVRClientCore_IVRClientCore_002;
-
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_Init, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_Cleanup, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid, 8)
@@ -34,57 +26,57 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 8)
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(winIVRClientCore_IVRClientCore_002 *_this, EVRApplicationType eApplicationType)
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType)
 {
     EVRInitError _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_002_init(cppIVRClientCore_IVRClientCore_002_Init, _this->linux_side, eApplicationType, 2, &_this->user_data);
+    _ret = ivrclientcore_002_init(cppIVRClientCore_IVRClientCore_002_Init, _this->u_iface, eApplicationType, 2, &_this->user_data);
     return _ret;
 }
 
-void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(winIVRClientCore_IVRClientCore_002 *_this)
+void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_002_Cleanup, _this->linux_side, 2, &_this->user_data);
+    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_002_Cleanup, _this->u_iface, 2, &_this->user_data);
 }
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_002 *_this, const char *pchInterfaceVersion)
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
     EVRInitError _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    _ret = cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->u_iface, pchInterfaceVersion);
     return _ret;
 }
 
-void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(winIVRClientCore_IVRClientCore_002 *_this, const char *pchNameAndVersion, EVRInitError *peError)
+void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError)
 {
     void * _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_002_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 2, &_this->user_data);
+    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_002_GetGenericInterface, _this->u_iface, pchNameAndVersion, peError, 2, &_this->user_data);
     return _ret;
 }
 
-bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(winIVRClientCore_IVRClientCore_002 *_this)
+bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->linux_side, 2, &_this->user_data);
+    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->u_iface, 2, &_this->user_data);
     return _ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(winIVRClientCore_IVRClientCore_002 *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(_this->u_iface, eError);
     return _ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(winIVRClientCore_IVRClientCore_002 *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(_this->u_iface, eError);
     return _ret;
 }
 
@@ -106,24 +98,24 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002(void *linux_side)
+struct w_steam_iface *create_winIVRClientCore_IVRClientCore_002(void *u_iface)
 {
-    winIVRClientCore_IVRClientCore_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_002));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRClientCore_IVRClientCore_002_vtable;
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
-void destroy_winIVRClientCore_IVRClientCore_002(void *object)
+void destroy_winIVRClientCore_IVRClientCore_002(struct w_steam_iface *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002_FnTable(void *linux_side)
+struct w_steam_iface *create_winIVRClientCore_IVRClientCore_002_FnTable(void *u_iface)
 {
-    winIVRClientCore_IVRClientCore_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_002));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     struct thunk *thunks = alloc_thunks(7);
     struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 7 * sizeof(*vtable));
     int i;
@@ -138,27 +130,20 @@ winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002_Fn
     init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 1, FALSE, FALSE);
     for (i = 0; i < 7; i++)
         vtable[i] = &thunks[i];
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     r->vtable = (void *)vtable;
     return r;
 }
 
-void destroy_winIVRClientCore_IVRClientCore_002_FnTable(void *object)
+void destroy_winIVRClientCore_IVRClientCore_002_FnTable(struct w_steam_iface *object)
 {
-    winIVRClientCore_IVRClientCore_002 *win_object = object;
-    TRACE("%p\n", win_object);
-    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
-    HeapFree(GetProcessHeap(), 0, win_object->vtable);
-    HeapFree(GetProcessHeap(), 0, win_object);
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRClientCore_IVRClientCore_003.h"
-
-typedef struct __winIVRClientCore_IVRClientCore_003 {
-    vtable_ptr *vtable;
-    void *linux_side;
-    struct client_core_data user_data;
-} winIVRClientCore_IVRClientCore_003;
 
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_Init, 12)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_Cleanup, 4)
@@ -168,57 +153,57 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 8)
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(winIVRClientCore_IVRClientCore_003 *_this, EVRApplicationType eApplicationType, const char *pStartupInfo)
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo)
 {
     EVRInitError _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_init(cppIVRClientCore_IVRClientCore_003_Init, _this->linux_side, eApplicationType, pStartupInfo, 3, &_this->user_data);
+    _ret = ivrclientcore_init(cppIVRClientCore_IVRClientCore_003_Init, _this->u_iface, eApplicationType, pStartupInfo, 3, &_this->user_data);
     return _ret;
 }
 
-void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(winIVRClientCore_IVRClientCore_003 *_this)
+void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_003_Cleanup, _this->linux_side, 3, &_this->user_data);
+    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_003_Cleanup, _this->u_iface, 3, &_this->user_data);
 }
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_003 *_this, const char *pchInterfaceVersion)
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
     EVRInitError _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
+    _ret = cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->u_iface, pchInterfaceVersion);
     return _ret;
 }
 
-void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(winIVRClientCore_IVRClientCore_003 *_this, const char *pchNameAndVersion, EVRInitError *peError)
+void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError)
 {
     void * _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_003_GetGenericInterface, _this->linux_side, pchNameAndVersion, peError, 3, &_this->user_data);
+    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_003_GetGenericInterface, _this->u_iface, pchNameAndVersion, peError, 3, &_this->user_data);
     return _ret;
 }
 
-bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(winIVRClientCore_IVRClientCore_003 *_this)
+bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->linux_side, 3, &_this->user_data);
+    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->u_iface, 3, &_this->user_data);
     return _ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(winIVRClientCore_IVRClientCore_003 *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(_this->u_iface, eError);
     return _ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(winIVRClientCore_IVRClientCore_003 *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError(_this->linux_side, eError);
+    _ret = cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError(_this->u_iface, eError);
     return _ret;
 }
 
@@ -240,24 +225,24 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003(void *linux_side)
+struct w_steam_iface *create_winIVRClientCore_IVRClientCore_003(void *u_iface)
 {
-    winIVRClientCore_IVRClientCore_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_003));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRClientCore_IVRClientCore_003_vtable;
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
-void destroy_winIVRClientCore_IVRClientCore_003(void *object)
+void destroy_winIVRClientCore_IVRClientCore_003(struct w_steam_iface *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003_FnTable(void *linux_side)
+struct w_steam_iface *create_winIVRClientCore_IVRClientCore_003_FnTable(void *u_iface)
 {
-    winIVRClientCore_IVRClientCore_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_003));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     struct thunk *thunks = alloc_thunks(7);
     struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 7 * sizeof(*vtable));
     int i;
@@ -272,17 +257,16 @@ winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003_Fn
     init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 1, FALSE, FALSE);
     for (i = 0; i < 7; i++)
         vtable[i] = &thunks[i];
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     r->vtable = (void *)vtable;
     return r;
 }
 
-void destroy_winIVRClientCore_IVRClientCore_003_FnTable(void *object)
+void destroy_winIVRClientCore_IVRClientCore_003_FnTable(struct w_steam_iface *object)
 {
-    winIVRClientCore_IVRClientCore_003 *win_object = object;
-    TRACE("%p\n", win_object);
-    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
-    HeapFree(GetProcessHeap(), 0, win_object->vtable);
-    HeapFree(GetProcessHeap(), 0, win_object);
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

@@ -1,6 +1,12 @@
 #include <stdint.h>
 #include <linux/limits.h>
 
+#ifndef __cplusplus
+#include "cxx.h"
+#else
+typedef void (*vtable_ptr)(void);
+#endif
+
 #if __cplusplus
 extern "C" {
 #endif
@@ -44,7 +50,6 @@ typedef struct __winISteamContentServer winISteamContentServer;
 typedef struct __winX winX;
 typedef struct __winX winX;
 
-void *create_win_interface(const char *name, void *linux_side);
 unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes);
 void *create_LinuxMatchmakingServerListResponse(void *win);
 
@@ -52,18 +57,30 @@ void *create_LinuxMatchmakingServerListResponse(void *win);
 typedef struct ID3D11Device ID3D11Device;
 typedef struct IDXGIVkInteropDevice IDXGIVkInteropDevice;
 
-struct generic_interface
-{
-    void *object;
-    void (*dtor)(void *);
-};
-
 struct client_core_data
 {
     CRITICAL_SECTION critical_section;
     struct generic_interface *created_interfaces;
     SIZE_T created_interface_count;
     SIZE_T created_interfaces_size;
+};
+
+struct w_steam_iface
+{
+    vtable_ptr *vtable;
+    void *u_iface;
+    union
+    {
+        struct client_core_data user_data; /* for IVRClientCore */
+    };
+};
+
+struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
+
+struct generic_interface
+{
+    struct w_steam_iface *object;
+    void (*dtor)(struct w_steam_iface *);
 };
 
 bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, unsigned int version,
