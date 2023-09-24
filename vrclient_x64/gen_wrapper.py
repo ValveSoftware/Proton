@@ -383,6 +383,40 @@ method_overrides_data = [
 ]
 
 
+class Method:
+    def __init__(self, sdkver, abi, cursor, index, override):
+        self._sdkver = sdkver
+        self._abi = abi
+
+        self._cursor = cursor
+        self._index = index
+        self._override = override
+
+        self.result_type = cursor.result_type
+        self.spelling = cursor.spelling
+
+    @property
+    def name(self):
+        if self._override > 1: return f'{self.spelling}_{self._override}'
+        return self.spelling
+
+    def get_arguments(self):
+        return self._cursor.get_arguments()
+
+    def get_children(self):
+        return self._cursor.get_children()
+
+
+class Destructor(Method):
+    def __init__(self, sdkver, abi, cursor, index, override):
+        super().__init__(sdkver, abi, cursor, index, override)
+
+    @property
+    def name(self):
+        if self._override > 1: return f'destructor_{self._override}'
+        return 'destructor'
+
+
 class Class:
     def __init__(self, sdkver, abi, cursor):
         self._sdkver = sdkver
@@ -393,6 +427,28 @@ class Class:
         self.spelling = cursor.spelling
         self.filename = SDK_CLASSES[self.spelling]
         self.version = all_versions[sdkver][self.spelling]
+
+        self._methods = None
+
+    @property
+    def methods(self):
+        if self._methods:
+            return self._methods
+
+        overrides = {}
+        is_method = lambda c: c.kind == CursorKind.CXX_METHOD and c.is_virtual_method()
+        in_vtable = lambda c: is_method(c) or c.kind == CursorKind.DESTRUCTOR
+
+        self._methods = []
+        for i, method in enumerate(filter(in_vtable, self._cursor.get_children())):
+            index, override = overrides.get(method.spelling, (i, 1))
+            overrides[method.spelling] = (index, override + 1)
+            if method.kind == CursorKind.DESTRUCTOR:
+                self._methods.append(Destructor(self._sdkver, self._abi, method, index, override))
+            else:
+                self._methods.append(Method(self._sdkver, self._abi, method, index, override))
+
+        return self._methods
 
     def get_children(self):
         return self._cursor.get_children()
@@ -420,20 +476,6 @@ def get_path_converter(parent):
                         child.spelling in conv["l2w_names"]:
                     return conv
     return None
-
-
-def method_unique_name(method, existing_methods):
-    used_name = method.spelling
-    if used_name in existing_methods:
-        number = 2
-        while used_name in existing_methods:
-            idx = existing_methods.index(used_name)
-            used_name = f"{method.spelling}_{number}"
-            number = number + 1
-        existing_methods.insert(idx, used_name)
-    else:
-        existing_methods.append(used_name)
-    return used_name
 
 
 def underlying_type(decl):
@@ -485,16 +527,16 @@ def declspec(decl, name):
     return f'{typename}{name}'
 
 
-def handle_method_hpp(method_name, cppname, method, cpp_h):
+def handle_method_hpp(method, cppname, cpp_h):
     ret = f'{strip_ns(method.result_type.spelling)} '
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
 
-    cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
+    cpp_h.write(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
 
 
-def handle_method_cpp(method_name, classname, cppname, method, cpp):
+def handle_method_cpp(method, classname, cppname, cpp):
     ret = f'{method.result_type.spelling} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
@@ -504,7 +546,7 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
-    cpp.write(f'{ret}{cppname}_{method_name}({", ".join(params)})\n')
+    cpp.write(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
     cpp.write("{\n")
 
     do_lin_to_win = None
@@ -608,7 +650,7 @@ def handle_method_cpp(method_name, classname, cppname, method, cpp):
     cpp.write("}\n\n")
 
 
-def handle_method_c(used_name, classname, winclassname, cppname, method, iface_version, cfile):
+def handle_method_c(method, classname, winclassname, cppname, iface_version, cfile):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -616,14 +658,14 @@ def handle_method_c(used_name, classname, winclassname, cppname, method, iface_v
         parambytes = 4 #_this
     for param in method.get_arguments():
         parambytes += param.type.get_size()
-    cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
+    cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, method.name, parambytes))
     if strip_ns(method.result_type.spelling).startswith("IVR"):
         cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
     elif returns_record:
         cfile.write("%s *" % strip_ns(method.result_type.spelling))
     else:
         cfile.write("%s " % strip_ns(method.result_type.spelling))
-    cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, used_name, winclassname))
+    cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, method.name, winclassname))
     if returns_record:
         cfile.write(", %s *_r" % strip_ns(method.result_type.spelling))
     unnamed = 'a'
@@ -691,14 +733,14 @@ def handle_method_c(used_name, classname, winclassname, cppname, method, iface_v
 
     is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
-        if used_name == methodname and classname_pattern in classname:
+        if method.name == methodname and classname_pattern in classname:
             fn_name = override_generator(cppname, method)
             if fn_name:
-                cfile.write("%s(%s_%s, _this->linux_side" % (fn_name, cppname, used_name))
+                cfile.write("%s(%s_%s, _this->linux_side" % (fn_name, cppname, method.name))
                 is_method_overridden = True
                 break
     else:
-        cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
+        cfile.write("%s_%s(_this->linux_side" % (cppname, method.name))
 
     unnamed = 'a'
     first = True
@@ -807,23 +849,30 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             cfile.write("    %s user_data;\n" % user_data_type)
             break
     cfile.write("} %s;\n\n" % winclassname)
-    methods = []
-    method_names = []
-    for child in klass.get_children():
-        if child.kind == CursorKind.CXX_METHOD:
-            method_name = method_unique_name(child, method_names)
-            handle_method_hpp(method_name, cppname, child, cpp_h)
-            handle_method_cpp(method_name, klass.spelling, cppname, child, cpp)
-            handle_method_c(method_name, klass.spelling, winclassname, cppname, child, klass.version, cfile)
-            methods.append(child)
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        handle_method_hpp(method, cppname, cpp_h)
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        handle_method_cpp(method, klass.spelling, cppname, cpp)
+
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        else:
+            handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, cfile)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
     cfile.write("void __asm_dummy_vtables(void) {\n")
     cfile.write("#endif\n")
     cfile.write("    __ASM_VTABLE(%s,\n" % winclassname)
-    for method in method_names:
-        cfile.write("        VTABLE_ADD_FUNC(%s_%s)\n" % (winclassname, method))
+    for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
+        cfile.write(f"        VTABLE_ADD_FUNC({winclassname}_{method.name})\n")
     cfile.write("    );\n")
     cfile.write("#ifndef __GNUC__\n")
     cfile.write("}\n")
@@ -846,17 +895,17 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     # flat (FnTable) API
     cfile.write("%s *create_%s_FnTable(void *linux_side)\n{\n" % (winclassname, winclassname))
     cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(%s));\n" % (winclassname, winclassname))
-    cfile.write("    struct thunk *thunks = alloc_thunks(%d);\n" % len(methods))
-    cfile.write("    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, %d * sizeof(*vtable));\n" % len(methods))
+    cfile.write("    struct thunk *thunks = alloc_thunks(%d);\n" % len(klass.methods))
+    cfile.write("    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, %d * sizeof(*vtable));\n" % len(klass.methods))
     cfile.write("    int i;\n\n")
     cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
-    for i in range(len(methods)):
-        thunk_params = get_capi_thunk_params(methods[i])
-        arguments = list(methods[i].get_arguments())
+    for i, method in enumerate(klass.methods):
+        thunk_params = get_capi_thunk_params(method)
+        arguments = list(method.get_arguments())
         global max_c_api_param_count
         max_c_api_param_count = max(len(arguments), max_c_api_param_count)
-        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, method_names[i], thunk_params))
-    cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
+        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, method.name, thunk_params))
+    cfile.write("    for (i = 0; i < %d; i++)\n" % len(klass.methods))
     cfile.write("        vtable[i] = &thunks[i];\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    r->vtable = (void *)vtable;\n")
@@ -887,7 +936,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}, &destroy_{winclassname}}},\n")
     constructors.write(f"    {{\"FnTable:{klass.version}\", &create_{winclassname}_FnTable, &destroy_{winclassname}_FnTable}},\n")
 
-    generate_c_api_thunk_tests(winclassname, methods, method_names)
+    generate_c_api_thunk_tests(winclassname, klass.methods)
 
 
 def canonical_typename(cursor):
@@ -1232,9 +1281,9 @@ extern void call_flat_method_f(void);
 
         f.write("#endif\n")
 
-def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, method):
+def generate_c_api_method_test(f, header, thunks_c, class_name, method):
     thunk_params = get_capi_thunk_params(method)
-    f.write("\n    init_thunk(t, this_ptr_value, %s_%s, %s);\n" % (class_name, method_name, thunk_params))
+    f.write("\n    init_thunk(t, this_ptr_value, %s_%s, %s);\n" % (class_name, method.name, thunk_params))
     f.write("    ")
     header.write("\n")
     thunks_c.write("\n")
@@ -1249,9 +1298,9 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
         header.write("%s " % strip_ns(method.result_type.spelling))
         thunks_c.write("%s " % strip_ns(method.result_type.spelling))
     first_param = True
-    f.write('(__stdcall *capi_%s_%s)(' % (class_name, method_name))
-    header.write('__thiscall %s_%s(void *_this' % (class_name, method_name))
-    thunks_c.write('__thiscall %s_%s(void *_this' % (class_name, method_name))
+    f.write('(__stdcall *capi_%s_%s)(' % (class_name, method.name))
+    header.write('__thiscall %s_%s(void *_this' % (class_name, method.name))
+    thunks_c.write('__thiscall %s_%s(void *_this' % (class_name, method.name))
     if returns_record:
         f.write("%s *_r" % strip_ns(method.result_type.spelling))
         first_param = False
@@ -1311,11 +1360,11 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
 
     parameter_checks = []
     def add_parameter_check(typename, value):
-        parameter_checks.append("check_%s_parameter(\"%s_%s\", %s)" % (typename, class_name, method_name, value))
+        parameter_checks.append("check_%s_parameter(\"%s_%s\", %s)" % (typename, class_name, method.name, value))
     add_parameter_check("ptr", "this_ptr_value")
     f.write("\n")
     f.write("    clear_parameters();\n")
-    f.write("    capi_%s_%s(" % (class_name, method_name))
+    f.write("    capi_%s_%s(" % (class_name, method.name))
     first_param = True
     if returns_record:
         f.write("data_ptr_value")
@@ -1349,7 +1398,7 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
     for c in parameter_checks:
         f.write("    %s;\n" % c)
 
-def generate_c_api_thunk_tests(winclassname, methods, method_names):
+def generate_c_api_thunk_tests(winclassname, methods):
     class_name = re.sub(r'^win[A-Za-z]+_', '', winclassname)
 
     filename = "tests/capi_thunks_autogen.h"
@@ -1388,8 +1437,8 @@ def generate_c_api_thunk_tests(winclassname, methods, method_names):
 """)
         f.write("\nvoid test_capi_thunks_%s(void)\n{\n" % class_name)
         f.write("    struct thunk *t = alloc_thunks(1);\n");
-        for i in range(len(methods)):
-            generate_c_api_method_test(f, header, thunks_c, class_name, method_names[i], methods[i])
+        for method in methods:
+            generate_c_api_method_test(f, header, thunks_c, class_name, method)
         f.write("    VirtualFree(t, 0, MEM_RELEASE);\n")
         f.write("}\n")
 
