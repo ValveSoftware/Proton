@@ -254,9 +254,6 @@ all_sources = {}
 all_versions = {}
 
 
-def get_params(f):
-    return [p for p in f.get_children() if p.kind == CursorKind.PARM_DECL]
-
 def ivrclientcore_is_hmd_present(cppname, method):
     return "ivrclientcore_is_hmd_present"
 
@@ -272,7 +269,8 @@ def ivrclientcore_cleanup(cppname, method):
     return "ivrclientcore_cleanup"
 
 def ivrsystem_get_dxgi_output_info(cppname, method):
-    param_count = len(get_params(method))
+    arguments = list(method.get_arguments())
+    param_count = len(arguments)
     return {
         1: "get_dxgi_output_info",
         2: "get_dxgi_output_info2"
@@ -744,7 +742,7 @@ def get_capi_thunk_params(method):
     def toBOOL(x):
         return "TRUE" if x else "FALSE"
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-    param_types = [x.type for x in get_params(method)]
+    param_types = [x.type for x in method.get_arguments()]
     if returns_record:
         param_types.insert(0, method.result_type)
     param_count = len(param_types)
@@ -854,8 +852,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
     for i in range(len(methods)):
         thunk_params = get_capi_thunk_params(methods[i])
+        arguments = list(methods[i].get_arguments())
         global max_c_api_param_count
-        max_c_api_param_count = max(len(get_params(methods[i])), max_c_api_param_count)
+        max_c_api_param_count = max(len(arguments), max_c_api_param_count)
         cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, method_names[i], thunk_params))
     cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
     cfile.write("        vtable[i] = &thunks[i];\n")
@@ -1259,7 +1258,7 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
         header.write(", %s *_r" % strip_ns(method.result_type.spelling))
         thunks_c.write(", %s *_r" % strip_ns(method.result_type.spelling))
 
-    for param in get_params(method):
+    for param in method.get_arguments():
         if param.type.kind == TypeKind.POINTER \
                 and param.type.get_pointee().kind == TypeKind.UNEXPOSED:
             typename = "void *"
@@ -1303,7 +1302,7 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
     thunks_c.write("    push_ptr_parameter(_this);\n")
     if returns_record:
         thunks_c.write("    push_ptr_parameter(_r);\n")
-    for param in get_params(method):
+    for param in method.get_arguments():
         typename = get_param_typename(param)
         thunks_c.write("    push_%s_parameter(%s);\n" % (typename, param.spelling))
     if method.result_type.kind != TypeKind.VOID:
@@ -1322,7 +1321,7 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
         f.write("data_ptr_value")
         first_param = False
         add_parameter_check("ptr", "data_ptr_value")
-    for i, param in enumerate(get_params(method)):
+    for i, param in enumerate(method.get_arguments()):
         i += 1
         typename = get_param_typename(param)
         if typename == "ptr":
