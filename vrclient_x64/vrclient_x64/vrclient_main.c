@@ -95,13 +95,15 @@ unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, ch
 
 #define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
 
-/* returns non-zero on success, zero on failure */
-bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
+char *vrclient_dos_to_unix_path( const char *src )
 {
-    *dst = 0;
+    char buffer[4096], *dst = buffer;
+    uint32_t len;
 
-    if(!src || !*src)
-        return 0;
+    if (!src) return NULL;
+
+    *dst = 0;
+    if (*src) goto done;
 
     if(IS_ABSOLUTE(src)){
         /* absolute path, use wine conversion */
@@ -111,12 +113,12 @@ bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
 
         r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
         if(r == 0)
-            return 0;
+            return NULL;
 
         unix_path = wine_get_unix_file_name(srcW);
         if(!unix_path){
             WARN("Unable to convert DOS filename to unix: %s\n", src);
-            return 0;
+            return NULL;
         }
 
         if (!realpath(unix_path, dst))
@@ -141,7 +143,16 @@ bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
         *d = 0;
     }
 
-    return 1;
+done:
+    len = strlen( buffer );
+    if (!(dst = HeapAlloc( GetProcessHeap(), 0, len + 1 ))) return NULL;
+    memcpy( dst, buffer, len );
+    return dst;
+}
+
+void vrclient_free_path( const char *path )
+{
+    HeapFree( GetProcessHeap(), 0, (char *)path );
 }
 
 static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)

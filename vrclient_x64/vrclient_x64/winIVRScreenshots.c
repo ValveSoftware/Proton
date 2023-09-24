@@ -29,12 +29,12 @@ DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 2
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t *pOutScreenshotHandle, EVRScreenshotType type, const char *pchPreviewFilename, const char *pchVRFilename)
 {
     EVRScreenshotError _ret;
-    char lin_pchPreviewFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchPreviewFilename, lin_pchPreviewFilename);
-    char lin_pchVRFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename);
+    const char *u_pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
+    const char *u_pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
-    _ret = cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(_this->u_iface, pOutScreenshotHandle, type, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(_this->u_iface, pOutScreenshotHandle, type, u_pchPreviewFilename, u_pchVRFilename);
+    vrclient_free_path( u_pchPreviewFilename );
+    vrclient_free_path( u_pchVRFilename );
     return _ret;
 }
 
@@ -74,24 +74,24 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreens
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
 {
     EVRScreenshotError _ret;
-    char lin_pchPreviewFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchPreviewFilename, lin_pchPreviewFilename);
-    char lin_pchVRFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename);
+    const char *u_pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
+    const char *u_pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
-    _ret = cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(_this->u_iface, pOutScreenshotHandle, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(_this->u_iface, pOutScreenshotHandle, u_pchPreviewFilename, u_pchVRFilename);
+    vrclient_free_path( u_pchPreviewFilename );
+    vrclient_free_path( u_pchVRFilename );
     return _ret;
 }
 
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
 {
     EVRScreenshotError _ret;
-    char lin_pchSourcePreviewFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchSourcePreviewFilename, lin_pchSourcePreviewFilename);
-    char lin_pchSourceVRFilename[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchSourceVRFilename, lin_pchSourceVRFilename);
+    const char *u_pchSourcePreviewFilename = vrclient_dos_to_unix_path( pchSourcePreviewFilename );
+    const char *u_pchSourceVRFilename = vrclient_dos_to_unix_path( pchSourceVRFilename );
     TRACE("%p\n", _this);
-    _ret = cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(_this->u_iface, screenshotHandle, type, pchSourcePreviewFilename ? lin_pchSourcePreviewFilename : NULL, pchSourceVRFilename ? lin_pchSourceVRFilename : NULL);
+    _ret = cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(_this->u_iface, screenshotHandle, type, u_pchSourcePreviewFilename, u_pchSourceVRFilename);
+    vrclient_free_path( u_pchSourcePreviewFilename );
+    vrclient_free_path( u_pchSourceVRFilename );
     return _ret;
 }
 

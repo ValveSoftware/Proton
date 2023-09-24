@@ -123,10 +123,10 @@ void __thiscall winIVRCompositor_IVRCompositor_005_SetOverlayRaw(struct w_steam_
 
 void __thiscall winIVRCompositor_IVRCompositor_005_SetOverlayFromFile(struct w_steam_iface *_this, const char *pchFilePath, Compositor_OverlaySettings *pSettings)
 {
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile(_this->u_iface, pchFilePath ? lin_pchFilePath : NULL, pSettings);
+    cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile(_this->u_iface, u_pchFilePath, pSettings);
+    vrclient_free_path( u_pchFilePath );
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_005_ClearOverlay(struct w_steam_iface *_this)
@@ -6614,10 +6614,10 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
-    char lin_pchRenderModelPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchRenderModelPath, lin_pchRenderModelPath);
+    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async(_this->u_iface, pchRenderModelPath ? lin_pchRenderModelPath : NULL, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    _ret = cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async(_this->u_iface, u_pchRenderModelPath, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    vrclient_free_path( u_pchRenderModelPath );
     return _ret;
 }
 
@@ -7128,10 +7128,10 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
-    char lin_pchRenderModelPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchRenderModelPath, lin_pchRenderModelPath);
+    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRCompositor_IVRCompositor_026_SetStageOverride_Async(_this->u_iface, pchRenderModelPath ? lin_pchRenderModelPath : NULL, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    _ret = cppIVRCompositor_IVRCompositor_026_SetStageOverride_Async(_this->u_iface, u_pchRenderModelPath, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    vrclient_free_path( u_pchRenderModelPath );
     return _ret;
 }
 
@@ -7678,10 +7678,10 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     EVRCompositorError _ret;
-    char lin_pchRenderModelPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchRenderModelPath, lin_pchRenderModelPath);
+    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async(_this->u_iface, pchRenderModelPath ? lin_pchRenderModelPath : NULL, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    _ret = cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async(_this->u_iface, u_pchRenderModelPath, pTransform, pRenderSettings, nSizeOfRenderSettings);
+    vrclient_free_path( u_pchRenderModelPath );
     return _ret;
 }
 

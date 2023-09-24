@@ -14,7 +14,8 @@ extern "C" {
 char *json_convert_paths(const char *input);
 char *json_convert_startup_info(const char *startup_info);
 
-bool vrclient_dos_path_to_unix_path(const char *src, char *dst);
+char *vrclient_dos_to_unix_path( const char *src );
+void vrclient_free_path( const char *path );
 
 #if __cplusplus
 }

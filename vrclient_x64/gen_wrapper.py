@@ -514,8 +514,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
 
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
-        out(f'    char lin_{name}[PATH_MAX];\n')
-        out(f'    vrclient_dos_path_to_unix_path({name}, lin_{name});\n')
+        out(f'    const char *u_{name} = vrclient_dos_to_unix_path( {name} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -533,7 +532,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
 
     def param_call(param, name):
         if name == '_this': return '_this->u_iface'
-        if name in path_conv_wtou: return f'{name} ? lin_{name} : NULL'
+        if name in path_conv_wtou: return f'u_{name}'
         return name
 
     params = ['_this'] + list(method.get_arguments())
@@ -546,6 +545,9 @@ def handle_method_c(klass, method, winclassname, cppname, out):
         if "ret_size" in path_conv_utow:
             out(u'_ret = ')
         out(f'vrclient_unix_path_to_dos_path(_ret, {name}, {name}, {conv["len"]});\n')
+
+    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
+        out(f'    vrclient_free_path( u_{name} );\n')
 
     if not returns_void:
         out(u'    return _ret;\n')
