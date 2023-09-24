@@ -851,6 +851,13 @@ def handle_method_c(method, winclassname, cppname, out):
 def handle_class(klass):
     cppname = f"cpp{klass.full_name}"
 
+    ext = "cpp"
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        if method_needs_manual_handling(cppname, method.name):
+            ext = "hpp"
+
     with open(f"{cppname}.h", "w") as file:
         out = file.write
 
@@ -861,7 +868,7 @@ def handle_class(klass):
                 continue
             handle_method_hpp(method, cppname, out)
 
-    with open(f"{cppname}.cpp", "w") as file:
+    with open(f"{cppname}.{ext}", "w") as file:
         out = file.write
 
         out(u'#include "steam_defs.h"\n')
@@ -1293,13 +1300,23 @@ for _, klass in sorted(all_classes.items()):
     handle_class(klass)
 
 
+with open('struct_converters.h', 'w') as file:
+    out = file.write
+
+    out(u'#ifndef __STRUCT_CONVERTERS_H\n')
+    out(u'#define __STRUCT_CONVERTERS_H\n')
+
 for sdkver in SDK_VERSIONS:
     generate(sdkver, all_records[sdkver])
-
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
     m.write("\n}\n")
+
+with open('struct_converters.h', 'a') as file:
+    out = file.write
+
+    out(u'#endif /* __STRUCT_CONVERTERS_H */\n')
 
 getapifile = open("cb_getapi_table.dat", "w")
 cbsizefile = open("cb_getapi_sizes.dat", "w")
