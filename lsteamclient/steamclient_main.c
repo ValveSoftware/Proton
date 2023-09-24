@@ -216,20 +216,21 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
 
 #define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
 
-/* returns non-zero on success, zero on failure */
-bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
+const char *steamclient_dos_to_unix_path( const char *src, int is_url )
 {
     static const char file_prot[] = "file://";
+    char buffer[4096], *dst = buffer;
+    uint32_t len;
+
+    if (!src) return NULL;
 
     *dst = 0;
-
-    if(!src || !*src)
-        return 0;
+    if (!*src) goto done;
 
     if(is_url){
         if(strncmp(src, file_prot, 7) != 0){
             strcpy(dst, src);
-            return 1;
+            goto done;
         }
 
         src += 7;
@@ -245,12 +246,12 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
 
         r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
         if(r == 0)
-            return 0;
+            return NULL;
 
         unix_path = wine_get_unix_file_name(srcW);
         if(!unix_path){
             WARN("Unable to convert DOS filename to unix: %s\n", src);
-            return 0;
+            return NULL;
         }
 
         lstrcpynA(dst, unix_path, PATH_MAX);
@@ -271,10 +272,19 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
         *d = 0;
     }
 
-    return 1;
+done:
+    len = strlen( buffer );
+    if (!(dst = HeapAlloc( GetProcessHeap(), 0, len + 1 ))) return NULL;
+    memcpy( dst, buffer, len + 1 );
+    return dst;
 }
 
-const char **steamclient_dos_to_unix_stringlist(const char **src)
+void steamclient_free_path( const char *path )
+{
+    HeapFree( GetProcessHeap(), 0, (char *)path );
+}
+
+const char **steamclient_dos_to_unix_path_array( const char **src )
 {
     size_t len;
     const char **s;
@@ -313,14 +323,12 @@ const char **steamclient_dos_to_unix_stringlist(const char **src)
     return (const char **)out;
 }
 
-void steamclient_free_stringlist(const char **out)
+void steamclient_free_path_array( const char **path_array )
 {
-    if(out){
-        const char **o;
-        for(o = out; *o; o++)
-            HeapFree(GetProcessHeap(), 0, (char *)*o);
-        HeapFree(GetProcessHeap(), 0, out);
-    }
+    const char **path;
+    if (!path_array) return;
+    for (path = path_array; *path; path++) HeapFree( GetProcessHeap(), 0, *(char **)path );
+    HeapFree( GetProcessHeap(), 0, path_array );
 }
 
 static BYTE *alloc_start, *alloc_end;

@@ -58,9 +58,12 @@ void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
 
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);
-bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url);
-const char **steamclient_dos_to_unix_stringlist(const char **src);
-void steamclient_free_stringlist(const char **out);
+
+extern const char *steamclient_dos_to_unix_path( const char *src, int is_url );
+extern void steamclient_free_path( const char *path_array );
+extern const char **steamclient_dos_to_unix_path_array( const char **src_array );
+extern void steamclient_free_path_array( const char **path_array );
+
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_xbox(int origin, const char *lin_path);
