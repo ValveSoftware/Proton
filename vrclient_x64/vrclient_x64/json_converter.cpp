@@ -115,10 +115,10 @@ char *json_convert_paths(const char *input)
 
 char *json_convert_startup_info(const char *startup_info)
 {
-    char dst_path[PATH_MAX];
     std::string src_path;
     Json::Reader reader;
     Json::Value root;
+    char *dst_path;
     size_t len;
     char *ret;
 
@@ -131,7 +131,7 @@ char *json_convert_startup_info(const char *startup_info)
     src_path = root["action_manifest_path"].asString();
     WINE_TRACE("action_manifest_path %s.\n", src_path.c_str());
 
-    if (!vrclient_dos_path_to_unix_path(src_path.c_str(), dst_path))
+    if (!(dst_path = vrclient_dos_to_unix_path(src_path.c_str())))
     {
         WINE_ERR("error converting path %s.\n", src_path.c_str());
         return NULL;
@@ -146,6 +146,8 @@ char *json_convert_startup_info(const char *startup_info)
     ret = (char *)malloc(contents.length() + 1);
     len = contents.copy(ret, contents.length());
     ret[len] = 0;
+
+    vrclient_free_path(dst_path);
 
     return ret;
 }

@@ -39,10 +39,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_ShowBindingsForActionSet, 24)
 EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_003_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_003_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 
@@ -281,10 +281,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_ShowBindingsForActionSet, 24)
 EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_004_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_004_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 
@@ -534,10 +534,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_IsUsingLegacyInput, 4)
 EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_005_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_005_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 
@@ -858,10 +858,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_IsUsingLegacyInput, 4)
 EVRInputError __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_006_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_006_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 
@@ -1194,10 +1194,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_OpenBindingUI, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_007_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_007_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 
@@ -1554,10 +1554,10 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_GetBindingVariant, 20)
 EVRInputError __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     EVRInputError _ret;
-    char lin_pchActionManifestPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRInput_IVRInput_010_SetActionManifestPath(_this->u_iface, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
+    _ret = cppIVRInput_IVRInput_010_SetActionManifestPath(_this->u_iface, u_pchActionManifestPath);
+    vrclient_free_path( u_pchActionManifestPath );
     return _ret;
 }
 

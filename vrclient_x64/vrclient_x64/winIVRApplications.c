@@ -43,20 +43,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_GetApplicationsTr
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_001_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_001_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_001_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_001_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -329,20 +329,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_IsQuitUserPromptR
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_002_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_002_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_002_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_002_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -606,20 +606,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_IsQuitUserPromptR
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_003_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_003_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_003_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_003_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -895,20 +895,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_LaunchInternalPro
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_004_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_004_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_004_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_004_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -1205,20 +1205,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_LaunchInternalPro
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_005_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_005_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_005_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_005_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -1532,20 +1532,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_GetCurrentScenePr
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_006_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_006_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_006_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_006_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
@@ -1928,20 +1928,20 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetCurrentScenePr
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_007_AddApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+    _ret = cppIVRApplications_IVRApplications_007_AddApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath, bTemporary);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     EVRApplicationError _ret;
-    char lin_pchApplicationManifestFullPath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
-    _ret = cppIVRApplications_IVRApplications_007_RemoveApplicationManifest(_this->u_iface, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+    _ret = cppIVRApplications_IVRApplications_007_RemoveApplicationManifest(_this->u_iface, u_pchApplicationManifestFullPath);
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return _ret;
 }
 
