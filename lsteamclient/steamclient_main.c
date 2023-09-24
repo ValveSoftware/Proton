@@ -638,7 +638,7 @@ uint32 manual_convert_nNativeKeyCode(uint32 win_vk)
 
 static const struct {
     const char *iface_version;
-    void *(*ctor)(void *);
+    struct w_steam_iface *(*ctor)(void *);
 } constructors[] = {
 #include "win_constructors_table.dat"
 };
@@ -647,30 +647,30 @@ struct steamclient_interface
 {
     struct list entry;
     const char *name;
-    void *linux_side;
-    void *interface;
+    void *u_iface;
+    struct w_steam_iface *w_iface;
 };
 
 static struct list steamclient_interfaces = LIST_INIT(steamclient_interfaces);
 
-void *create_win_interface(const char *name, void *linux_side)
+struct w_steam_iface *create_win_interface(const char *name, void *u_iface)
 {
     struct steamclient_interface *e;
-    void *ret = NULL;
+    struct w_steam_iface *ret = NULL;
     int i;
 
     TRACE("trying to create %s\n", name);
 
-    if (!linux_side)
+    if (!u_iface)
         return NULL;
 
     EnterCriticalSection(&steamclient_cs);
 
     LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)
     {
-        if (e->linux_side == linux_side && !strcmp(e->name, name))
+        if (e->u_iface == u_iface && !strcmp(e->name, name))
         {
-            ret = e->interface;
+            ret = e->w_iface;
             TRACE("-> %p\n", ret);
             goto done;
         }
@@ -680,9 +680,8 @@ void *create_win_interface(const char *name, void *linux_side)
     {
         if (!strcmp(name, constructors[i].iface_version))
         {
-            ret = constructors[i].ctor(linux_side);
-            if (allocated_from_steamclient_dll(ret)
-                    || allocated_from_steamclient_dll(*(void **)ret) /* vtable */)
+            ret = constructors[i].ctor(u_iface);
+            if (allocated_from_steamclient_dll(ret) || allocated_from_steamclient_dll(ret->vtable))
             {
                 /* Don't cache interfaces allocated from steamclient.dll space.
                  * steamclient may get reloaded by the app, miss the previous
@@ -692,8 +691,8 @@ void *create_win_interface(const char *name, void *linux_side)
 
             e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
             e->name = constructors[i].iface_version;
-            e->linux_side = linux_side;
-            e->interface = ret;
+            e->u_iface = u_iface;
+            e->w_iface = ret;
             list_add_tail(&steamclient_interfaces, &e->entry);
 
             break;
