@@ -713,10 +713,6 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
     else:
         out(u'    ')
 
-    should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR")
-    if should_gen_wrapper:
-        out(u'create_win_interface(pchNameAndVersion,\n        ')
-
     is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
         if method.name == methodname and classname_pattern in classname:
@@ -736,11 +732,6 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
     params = ['_this'] + list(method.get_arguments())
     out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
 
-    if should_gen_wrapper:
-        out(u')')
-
-    if should_gen_wrapper:
-        out(u')')
     if is_method_overridden:
         out(f', {iface_version[iface_version.find("_") + 1:].lstrip("0")}')
         for classname_pattern, user_data_type, _ in method_overrides_data:
