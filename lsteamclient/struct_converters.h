@@ -1,3 +1,5 @@
+#ifndef __STRUCT_CONVERTERS_H
+#define __STRUCT_CONVERTERS_H
 #if defined(SDKVER_158) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winSteamPartyBeaconLocation_t_158 {
@@ -3256,3 +3258,4 @@ extern void win_to_lin_struct_LeaderboardEntry_t_111x(const struct winLeaderboar
 extern void lin_to_win_struct_LeaderboardEntry_t_111x(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_111x *w);
 #endif
 
+#endif /* __STRUCT_CONVERTERS_H */
