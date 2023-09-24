@@ -210,10 +210,10 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(struct w_steam_if
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_iface *_this, const char *a)
 {
     bool _ret;
-    char lin_a[PATH_MAX];
-    vrclient_dos_path_to_unix_path(a, lin_a);
+    const char *u_a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc23(_this->u_iface, a ? lin_a : NULL);
+    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc23(_this->u_iface, u_a);
+    vrclient_free_path( u_a );
     return _ret;
 }
 
@@ -244,10 +244,10 @@ uint64_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc26(struct w_stea
 EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_steam_iface *_this, const char *a)
 {
     EVRCompositorError _ret;
-    char lin_a[PATH_MAX];
-    vrclient_dos_path_to_unix_path(a, lin_a);
+    const char *u_a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc27(_this->u_iface, a ? lin_a : NULL);
+    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc27(_this->u_iface, u_a);
+    vrclient_free_path( u_a );
     return _ret;
 }
 
