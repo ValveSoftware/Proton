@@ -6,8 +6,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "vrclient_defs.h"
 
 #include "vrclient_private.h"
@@ -20,31 +18,26 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRExtendedDisplay_IVRExtendedDisplay_001.h"
 
-typedef struct __winIVRExtendedDisplay_IVRExtendedDisplay_001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winIVRExtendedDisplay_IVRExtendedDisplay_001;
-
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds, 20)
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport, 24)
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, 12)
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(struct w_steam_iface *_this, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(_this->linux_side, pnX, pnY, pnWidth, pnHeight);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(_this->u_iface, pnX, pnY, pnWidth, pnHeight);
 }
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(struct w_steam_iface *_this, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(_this->linux_side, eEye, pnX, pnY, pnWidth, pnHeight);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(_this->u_iface, eEye, pnX, pnY, pnWidth, pnHeight);
 }
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(winIVRExtendedDisplay_IVRExtendedDisplay_001 *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(_this->u_iface, pnAdapterIndex, pnAdapterOutputIndex);
 }
 
 extern vtable_ptr winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;
@@ -61,24 +54,24 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *linux_side)
+struct w_steam_iface *create_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *u_iface)
 {
-    winIVRExtendedDisplay_IVRExtendedDisplay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRExtendedDisplay_IVRExtendedDisplay_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
-void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *object)
+void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001(struct w_steam_iface *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(void *linux_side)
+struct w_steam_iface *create_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(void *u_iface)
 {
-    winIVRExtendedDisplay_IVRExtendedDisplay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRExtendedDisplay_IVRExtendedDisplay_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     struct thunk *thunks = alloc_thunks(3);
     struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 3 * sizeof(*vtable));
     int i;
@@ -89,17 +82,16 @@ winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVREx
     init_thunk(&thunks[2], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, 2, FALSE, FALSE);
     for (i = 0; i < 3; i++)
         vtable[i] = &thunks[i];
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     r->vtable = (void *)vtable;
     return r;
 }
 
-void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(void *object)
+void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(struct w_steam_iface *object)
 {
-    winIVRExtendedDisplay_IVRExtendedDisplay_001 *win_object = object;
-    TRACE("%p\n", win_object);
-    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
-    HeapFree(GetProcessHeap(), 0, win_object->vtable);
-    HeapFree(GetProcessHeap(), 0, win_object);
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

@@ -6,8 +6,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "vrclient_defs.h"
 
 #include "vrclient_private.h"
@@ -20,45 +18,40 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRMailbox_IVRMailbox_001.h"
 
-typedef struct __winIVRMailbox_IVRMailbox_001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winIVRMailbox_IVRMailbox_001;
-
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc1, 12)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc2, 12)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(winIVRMailbox_IVRMailbox_001 *_this, const char *a, vrmb_typea *b)
+vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *_this, const char *a, vrmb_typea *b)
 {
     vrmb_typeb _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc1(_this->linux_side, a, b);
+    _ret = cppIVRMailbox_IVRMailbox_001_undoc1(_this->u_iface, a, b);
     return _ret;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a)
+vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_this, vrmb_typea a)
 {
     vrmb_typeb _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc2(_this->linux_side, a);
+    _ret = cppIVRMailbox_IVRMailbox_001_undoc2(_this->u_iface, a);
     return _ret;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a, const char *b, const char *c)
+vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c)
 {
     vrmb_typeb _ret;
     TRACE("%p\n", _this);
-    _ret = ivrmailbox_undoc3(cppIVRMailbox_IVRMailbox_001_undoc3, _this->linux_side, a, b, c, 1);
+    _ret = ivrmailbox_undoc3(cppIVRMailbox_IVRMailbox_001_undoc3, _this->u_iface, a, b, c, 1);
     return _ret;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
+vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
 {
     vrmb_typeb _ret;
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc4(_this->linux_side, a, b, c, d);
+    _ret = cppIVRMailbox_IVRMailbox_001_undoc4(_this->u_iface, a, b, c, d);
     return _ret;
 }
 
@@ -77,24 +70,24 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winIVRMailbox_IVRMailbox_001 *create_winIVRMailbox_IVRMailbox_001(void *linux_side)
+struct w_steam_iface *create_winIVRMailbox_IVRMailbox_001(void *u_iface)
 {
-    winIVRMailbox_IVRMailbox_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRMailbox_IVRMailbox_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRMailbox_IVRMailbox_001_vtable;
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
-void destroy_winIVRMailbox_IVRMailbox_001(void *object)
+void destroy_winIVRMailbox_IVRMailbox_001(struct w_steam_iface *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-winIVRMailbox_IVRMailbox_001 *create_winIVRMailbox_IVRMailbox_001_FnTable(void *linux_side)
+struct w_steam_iface *create_winIVRMailbox_IVRMailbox_001_FnTable(void *u_iface)
 {
-    winIVRMailbox_IVRMailbox_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRMailbox_IVRMailbox_001));
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
     struct thunk *thunks = alloc_thunks(4);
     struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 4 * sizeof(*vtable));
     int i;
@@ -106,17 +99,16 @@ winIVRMailbox_IVRMailbox_001 *create_winIVRMailbox_IVRMailbox_001_FnTable(void *
     init_thunk(&thunks[3], r, winIVRMailbox_IVRMailbox_001_undoc4, 4, FALSE, FALSE);
     for (i = 0; i < 4; i++)
         vtable[i] = &thunks[i];
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     r->vtable = (void *)vtable;
     return r;
 }
 
-void destroy_winIVRMailbox_IVRMailbox_001_FnTable(void *object)
+void destroy_winIVRMailbox_IVRMailbox_001_FnTable(struct w_steam_iface *object)
 {
-    winIVRMailbox_IVRMailbox_001 *win_object = object;
-    TRACE("%p\n", win_object);
-    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
-    HeapFree(GetProcessHeap(), 0, win_object->vtable);
-    HeapFree(GetProcessHeap(), 0, win_object);
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
