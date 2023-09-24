@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -16,11 +14,6 @@
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamInput_SteamInput001.h"
-
-typedef struct __winISteamInput_SteamInput001 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamInput_SteamInput001;
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_Init, 4)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_Shutdown, 4)
@@ -58,260 +51,260 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetDeviceBindingRevision, 20)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetRemotePlaySessionID, 12)
 
-bool __thiscall winISteamInput_SteamInput001_Init(winISteamInput_SteamInput001 *_this)
+bool __thiscall winISteamInput_SteamInput001_Init(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_Init(_this->linux_side);
+    _ret = cppISteamInput_SteamInput001_Init(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput001_Shutdown(winISteamInput_SteamInput001 *_this)
+bool __thiscall winISteamInput_SteamInput001_Shutdown(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_Shutdown(_this->linux_side);
+    _ret = cppISteamInput_SteamInput001_Shutdown(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput001_RunFrame(winISteamInput_SteamInput001 *_this)
+void __thiscall winISteamInput_SteamInput001_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_RunFrame(_this->linux_side);
+    cppISteamInput_SteamInput001_RunFrame(_this->u_iface);
 }
 
-int __thiscall winISteamInput_SteamInput001_GetConnectedControllers(winISteamInput_SteamInput001 *_this, InputHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput001_GetConnectedControllers(struct w_steam_iface *_this, InputHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetConnectedControllers(_this->linux_side, handlesOut);
+    _ret = cppISteamInput_SteamInput001_GetConnectedControllers(_this->u_iface, handlesOut);
     return _ret;
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput001_GetActionSetHandle(winISteamInput_SteamInput001 *_this, const char *pszActionSetName)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput001_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetActionSetHandle(_this->linux_side, pszActionSetName);
+    _ret = cppISteamInput_SteamInput001_GetActionSetHandle(_this->u_iface, pszActionSetName);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput001_ActivateActionSet(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
+void __thiscall winISteamInput_SteamInput001_ActivateActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_ActivateActionSet(_this->linux_side, inputHandle, actionSetHandle);
+    cppISteamInput_SteamInput001_ActivateActionSet(_this->u_iface, inputHandle, actionSetHandle);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput001_GetCurrentActionSet(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput001_GetCurrentActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetCurrentActionSet(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput001_GetCurrentActionSet(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput001_ActivateActionSetLayer(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput001_ActivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_ActivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput001_ActivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput001_DeactivateActionSetLayer(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput001_DeactivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_DeactivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput001_DeactivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput001_DeactivateAllActionSetLayers(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+void __thiscall winISteamInput_SteamInput001_DeactivateAllActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_DeactivateAllActionSetLayers(_this->linux_side, inputHandle);
+    cppISteamInput_SteamInput001_DeactivateAllActionSetLayers(_this->u_iface, inputHandle);
 }
 
-int __thiscall winISteamInput_SteamInput001_GetActiveActionSetLayers(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput001_GetActiveActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetActiveActionSetLayers(_this->linux_side, inputHandle, handlesOut);
+    _ret = cppISteamInput_SteamInput001_GetActiveActionSetLayers(_this->u_iface, inputHandle, handlesOut);
     return _ret;
 }
 
-InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput001_GetDigitalActionHandle(winISteamInput_SteamInput001 *_this, const char *pszActionName)
+InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput001_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputDigitalActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetDigitalActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput001_GetDigitalActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputDigitalActionData_t * __thiscall winISteamInput_SteamInput001_GetDigitalActionData(winISteamInput_SteamInput001 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput001_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput001_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
+    *_ret = cppISteamInput_SteamInput001_GetDigitalActionData(_this->u_iface, inputHandle, digitalActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput001_GetDigitalActionOrigins(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput001_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetDigitalActionOrigins(_this->linux_side, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput001_GetDigitalActionOrigins(_this->u_iface, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
     return _ret;
 }
 
-InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput001_GetAnalogActionHandle(winISteamInput_SteamInput001 *_this, const char *pszActionName)
+InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput001_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputAnalogActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetAnalogActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput001_GetAnalogActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputAnalogActionData_t * __thiscall winISteamInput_SteamInput001_GetAnalogActionData(winISteamInput_SteamInput001 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput001_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput001_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
+    *_ret = cppISteamInput_SteamInput001_GetAnalogActionData(_this->u_iface, inputHandle, analogActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetAnalogActionOrigins(_this->linux_side, inputHandle, actionSetHandle, analogActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput001_GetAnalogActionOrigins(_this->u_iface, inputHandle, actionSetHandle, analogActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(winISteamInput_SteamInput001 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput001_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetStringForActionOrigin(winISteamInput_SteamInput001 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetStringForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput001_GetStringForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput001_StopAnalogActionMomentum(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
+void __thiscall winISteamInput_SteamInput001_StopAnalogActionMomentum(struct w_steam_iface *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
+    cppISteamInput_SteamInput001_StopAnalogActionMomentum(_this->u_iface, inputHandle, eAction);
 }
 
-InputMotionData_t * __thiscall winISteamInput_SteamInput001_GetMotionData(winISteamInput_SteamInput001 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput001_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput001_GetMotionData(_this->linux_side, inputHandle);
+    *_ret = cppISteamInput_SteamInput001_GetMotionData(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput001_TriggerVibration(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
+void __thiscall winISteamInput_SteamInput001_TriggerVibration(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_TriggerVibration(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed);
+    cppISteamInput_SteamInput001_TriggerVibration(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput001_SetLEDColor(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput001_SetLEDColor(struct w_steam_iface *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_SetLEDColor(_this->linux_side, inputHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamInput_SteamInput001_SetLEDColor(_this->u_iface, inputHandle, nColorR, nColorG, nColorB, nFlags);
 }
 
-void __thiscall winISteamInput_SteamInput001_TriggerHapticPulse(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput001_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_TriggerHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec);
+    cppISteamInput_SteamInput001_TriggerHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec);
 }
 
-void __thiscall winISteamInput_SteamInput001_TriggerRepeatedHapticPulse(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput001_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_TriggerRepeatedHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamInput_SteamInput001_TriggerRepeatedHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-bool __thiscall winISteamInput_SteamInput001_ShowBindingPanel(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+bool __thiscall winISteamInput_SteamInput001_ShowBindingPanel(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_ShowBindingPanel(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput001_ShowBindingPanel(_this->u_iface, inputHandle);
     return _ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput001_GetInputTypeForHandle(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+ESteamInputType __thiscall winISteamInput_SteamInput001_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     ESteamInputType _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetInputTypeForHandle(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput001_GetInputTypeForHandle(_this->u_iface, inputHandle);
     return _ret;
 }
 
-InputHandle_t __thiscall winISteamInput_SteamInput001_GetControllerForGamepadIndex(winISteamInput_SteamInput001 *_this, int nIndex)
+InputHandle_t __thiscall winISteamInput_SteamInput001_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
     InputHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetControllerForGamepadIndex(_this->linux_side, nIndex);
+    _ret = cppISteamInput_SteamInput001_GetControllerForGamepadIndex(_this->u_iface, nIndex);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput001_GetGamepadIndexForController(winISteamInput_SteamInput001 *_this, InputHandle_t ulinputHandle)
+int __thiscall winISteamInput_SteamInput001_GetGamepadIndexForController(struct w_steam_iface *_this, InputHandle_t ulinputHandle)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetGamepadIndexForController(_this->linux_side, ulinputHandle);
+    _ret = cppISteamInput_SteamInput001_GetGamepadIndexForController(_this->u_iface, ulinputHandle);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(winISteamInput_SteamInput001 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetStringForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput001_GetStringForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(winISteamInput_SteamInput001 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetGlyphForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput001_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(_this->linux_side, inputHandle, eOrigin);
+    _ret = cppISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(_this->u_iface, inputHandle, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput001_TranslateActionOrigin(winISteamInput_SteamInput001 *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput001_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
+    _ret = cppISteamInput_SteamInput001_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput001_GetDeviceBindingRevision(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
+bool __thiscall winISteamInput_SteamInput001_GetDeviceBindingRevision(struct w_steam_iface *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetDeviceBindingRevision(_this->linux_side, inputHandle, pMajor, pMinor);
+    _ret = cppISteamInput_SteamInput001_GetDeviceBindingRevision(_this->u_iface, inputHandle, pMajor, pMinor);
     return _ret;
 }
 
-uint32 __thiscall winISteamInput_SteamInput001_GetRemotePlaySessionID(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+uint32 __thiscall winISteamInput_SteamInput001_GetRemotePlaySessionID(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput001_GetRemotePlaySessionID(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput001_GetRemotePlaySessionID(_this->u_iface, inputHandle);
     return _ret;
 }
 
@@ -361,21 +354,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamInput_SteamInput001 *create_winISteamInput_SteamInput001(void *linux_side)
+struct w_steam_iface *create_winISteamInput_SteamInput001(void *u_iface)
 {
-    winISteamInput_SteamInput001 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput001), "SteamInput001");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamInput001");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamInput_SteamInput001_vtable, 35, "SteamInput001");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamInput_SteamInput002.h"
-
-typedef struct __winISteamInput_SteamInput002 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamInput_SteamInput002;
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_Init, 4)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_Shutdown, 4)
@@ -413,260 +401,260 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetDeviceBindingRevision, 20)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetRemotePlaySessionID, 12)
 
-bool __thiscall winISteamInput_SteamInput002_Init(winISteamInput_SteamInput002 *_this)
+bool __thiscall winISteamInput_SteamInput002_Init(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_Init(_this->linux_side);
+    _ret = cppISteamInput_SteamInput002_Init(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput002_Shutdown(winISteamInput_SteamInput002 *_this)
+bool __thiscall winISteamInput_SteamInput002_Shutdown(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_Shutdown(_this->linux_side);
+    _ret = cppISteamInput_SteamInput002_Shutdown(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput002_RunFrame(winISteamInput_SteamInput002 *_this)
+void __thiscall winISteamInput_SteamInput002_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_RunFrame(_this->linux_side);
+    cppISteamInput_SteamInput002_RunFrame(_this->u_iface);
 }
 
-int __thiscall winISteamInput_SteamInput002_GetConnectedControllers(winISteamInput_SteamInput002 *_this, InputHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput002_GetConnectedControllers(struct w_steam_iface *_this, InputHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetConnectedControllers(_this->linux_side, handlesOut);
+    _ret = cppISteamInput_SteamInput002_GetConnectedControllers(_this->u_iface, handlesOut);
     return _ret;
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput002_GetActionSetHandle(winISteamInput_SteamInput002 *_this, const char *pszActionSetName)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput002_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetActionSetHandle(_this->linux_side, pszActionSetName);
+    _ret = cppISteamInput_SteamInput002_GetActionSetHandle(_this->u_iface, pszActionSetName);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput002_ActivateActionSet(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
+void __thiscall winISteamInput_SteamInput002_ActivateActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_ActivateActionSet(_this->linux_side, inputHandle, actionSetHandle);
+    cppISteamInput_SteamInput002_ActivateActionSet(_this->u_iface, inputHandle, actionSetHandle);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput002_GetCurrentActionSet(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput002_GetCurrentActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetCurrentActionSet(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput002_GetCurrentActionSet(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput002_ActivateActionSetLayer(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput002_ActivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_ActivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput002_ActivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput002_DeactivateActionSetLayer(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput002_DeactivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_DeactivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput002_DeactivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput002_DeactivateAllActionSetLayers(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle)
+void __thiscall winISteamInput_SteamInput002_DeactivateAllActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_DeactivateAllActionSetLayers(_this->linux_side, inputHandle);
+    cppISteamInput_SteamInput002_DeactivateAllActionSetLayers(_this->u_iface, inputHandle);
 }
 
-int __thiscall winISteamInput_SteamInput002_GetActiveActionSetLayers(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput002_GetActiveActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetActiveActionSetLayers(_this->linux_side, inputHandle, handlesOut);
+    _ret = cppISteamInput_SteamInput002_GetActiveActionSetLayers(_this->u_iface, inputHandle, handlesOut);
     return _ret;
 }
 
-InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput002_GetDigitalActionHandle(winISteamInput_SteamInput002 *_this, const char *pszActionName)
+InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput002_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputDigitalActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetDigitalActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput002_GetDigitalActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputDigitalActionData_t * __thiscall winISteamInput_SteamInput002_GetDigitalActionData(winISteamInput_SteamInput002 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput002_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput002_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
+    *_ret = cppISteamInput_SteamInput002_GetDigitalActionData(_this->u_iface, inputHandle, digitalActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput002_GetDigitalActionOrigins(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput002_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetDigitalActionOrigins(_this->linux_side, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput002_GetDigitalActionOrigins(_this->u_iface, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
     return _ret;
 }
 
-InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput002_GetAnalogActionHandle(winISteamInput_SteamInput002 *_this, const char *pszActionName)
+InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput002_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputAnalogActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetAnalogActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput002_GetAnalogActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputAnalogActionData_t * __thiscall winISteamInput_SteamInput002_GetAnalogActionData(winISteamInput_SteamInput002 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput002_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput002_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
+    *_ret = cppISteamInput_SteamInput002_GetAnalogActionData(_this->u_iface, inputHandle, analogActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetAnalogActionOrigins(_this->linux_side, inputHandle, actionSetHandle, analogActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput002_GetAnalogActionOrigins(_this->u_iface, inputHandle, actionSetHandle, analogActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(winISteamInput_SteamInput002 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput002_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetStringForActionOrigin(winISteamInput_SteamInput002 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetStringForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput002_GetStringForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput002_StopAnalogActionMomentum(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
+void __thiscall winISteamInput_SteamInput002_StopAnalogActionMomentum(struct w_steam_iface *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
+    cppISteamInput_SteamInput002_StopAnalogActionMomentum(_this->u_iface, inputHandle, eAction);
 }
 
-InputMotionData_t * __thiscall winISteamInput_SteamInput002_GetMotionData(winISteamInput_SteamInput002 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput002_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput002_GetMotionData(_this->linux_side, inputHandle);
+    *_ret = cppISteamInput_SteamInput002_GetMotionData(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput002_TriggerVibration(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
+void __thiscall winISteamInput_SteamInput002_TriggerVibration(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_TriggerVibration(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed);
+    cppISteamInput_SteamInput002_TriggerVibration(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput002_SetLEDColor(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput002_SetLEDColor(struct w_steam_iface *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_SetLEDColor(_this->linux_side, inputHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamInput_SteamInput002_SetLEDColor(_this->u_iface, inputHandle, nColorR, nColorG, nColorB, nFlags);
 }
 
-void __thiscall winISteamInput_SteamInput002_TriggerHapticPulse(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput002_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_TriggerHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec);
+    cppISteamInput_SteamInput002_TriggerHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec);
 }
 
-void __thiscall winISteamInput_SteamInput002_TriggerRepeatedHapticPulse(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput002_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_TriggerRepeatedHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamInput_SteamInput002_TriggerRepeatedHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-bool __thiscall winISteamInput_SteamInput002_ShowBindingPanel(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle)
+bool __thiscall winISteamInput_SteamInput002_ShowBindingPanel(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_ShowBindingPanel(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput002_ShowBindingPanel(_this->u_iface, inputHandle);
     return _ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput002_GetInputTypeForHandle(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle)
+ESteamInputType __thiscall winISteamInput_SteamInput002_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     ESteamInputType _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetInputTypeForHandle(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput002_GetInputTypeForHandle(_this->u_iface, inputHandle);
     return _ret;
 }
 
-InputHandle_t __thiscall winISteamInput_SteamInput002_GetControllerForGamepadIndex(winISteamInput_SteamInput002 *_this, int nIndex)
+InputHandle_t __thiscall winISteamInput_SteamInput002_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
     InputHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetControllerForGamepadIndex(_this->linux_side, nIndex);
+    _ret = cppISteamInput_SteamInput002_GetControllerForGamepadIndex(_this->u_iface, nIndex);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput002_GetGamepadIndexForController(winISteamInput_SteamInput002 *_this, InputHandle_t ulinputHandle)
+int __thiscall winISteamInput_SteamInput002_GetGamepadIndexForController(struct w_steam_iface *_this, InputHandle_t ulinputHandle)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetGamepadIndexForController(_this->linux_side, ulinputHandle);
+    _ret = cppISteamInput_SteamInput002_GetGamepadIndexForController(_this->u_iface, ulinputHandle);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(winISteamInput_SteamInput002 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetStringForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput002_GetStringForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(winISteamInput_SteamInput002 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetGlyphForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput002_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(_this->linux_side, inputHandle, eOrigin);
+    _ret = cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(_this->u_iface, inputHandle, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput002_TranslateActionOrigin(winISteamInput_SteamInput002 *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput002_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
+    _ret = cppISteamInput_SteamInput002_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput002_GetDeviceBindingRevision(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
+bool __thiscall winISteamInput_SteamInput002_GetDeviceBindingRevision(struct w_steam_iface *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetDeviceBindingRevision(_this->linux_side, inputHandle, pMajor, pMinor);
+    _ret = cppISteamInput_SteamInput002_GetDeviceBindingRevision(_this->u_iface, inputHandle, pMajor, pMinor);
     return _ret;
 }
 
-uint32 __thiscall winISteamInput_SteamInput002_GetRemotePlaySessionID(winISteamInput_SteamInput002 *_this, InputHandle_t inputHandle)
+uint32 __thiscall winISteamInput_SteamInput002_GetRemotePlaySessionID(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput002_GetRemotePlaySessionID(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput002_GetRemotePlaySessionID(_this->u_iface, inputHandle);
     return _ret;
 }
 
@@ -716,21 +704,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamInput_SteamInput002 *create_winISteamInput_SteamInput002(void *linux_side)
+struct w_steam_iface *create_winISteamInput_SteamInput002(void *u_iface)
 {
-    winISteamInput_SteamInput002 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput002), "SteamInput002");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamInput002");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamInput_SteamInput002_vtable, 35, "SteamInput002");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamInput_SteamInput005.h"
-
-typedef struct __winISteamInput_SteamInput005 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamInput_SteamInput005;
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_Init, 8)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_Shutdown, 4)
@@ -780,350 +763,350 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetDeviceBindingRevision, 2
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetRemotePlaySessionID, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetSessionInputConfigurationSettings, 4)
 
-bool __thiscall winISteamInput_SteamInput005_Init(winISteamInput_SteamInput005 *_this, bool bExplicitlyCallRunFrame)
+bool __thiscall winISteamInput_SteamInput005_Init(struct w_steam_iface *_this, bool bExplicitlyCallRunFrame)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_Init(_this->linux_side, bExplicitlyCallRunFrame);
+    _ret = cppISteamInput_SteamInput005_Init(_this->u_iface, bExplicitlyCallRunFrame);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_Shutdown(winISteamInput_SteamInput005 *_this)
+bool __thiscall winISteamInput_SteamInput005_Shutdown(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_Shutdown(_this->linux_side);
+    _ret = cppISteamInput_SteamInput005_Shutdown(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(winISteamInput_SteamInput005 *_this, const char *pchInputActionManifestAbsolutePath)
+bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     bool _ret;
     char lin_pchInputActionManifestAbsolutePath[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchInputActionManifestAbsolutePath, lin_pchInputActionManifestAbsolutePath, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->linux_side, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
+    _ret = cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_RunFrame(winISteamInput_SteamInput005 *_this, bool bReservedValue)
+void __thiscall winISteamInput_SteamInput005_RunFrame(struct w_steam_iface *_this, bool bReservedValue)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_RunFrame(_this->linux_side, bReservedValue);
+    cppISteamInput_SteamInput005_RunFrame(_this->u_iface, bReservedValue);
 }
 
-bool __thiscall winISteamInput_SteamInput005_BWaitForData(winISteamInput_SteamInput005 *_this, bool bWaitForever, uint32 unTimeout)
+bool __thiscall winISteamInput_SteamInput005_BWaitForData(struct w_steam_iface *_this, bool bWaitForever, uint32 unTimeout)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_BWaitForData(_this->linux_side, bWaitForever, unTimeout);
+    _ret = cppISteamInput_SteamInput005_BWaitForData(_this->u_iface, bWaitForever, unTimeout);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_BNewDataAvailable(winISteamInput_SteamInput005 *_this)
+bool __thiscall winISteamInput_SteamInput005_BNewDataAvailable(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_BNewDataAvailable(_this->linux_side);
+    _ret = cppISteamInput_SteamInput005_BNewDataAvailable(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetConnectedControllers(winISteamInput_SteamInput005 *_this, InputHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput005_GetConnectedControllers(struct w_steam_iface *_this, InputHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetConnectedControllers(_this->linux_side, handlesOut);
+    _ret = cppISteamInput_SteamInput005_GetConnectedControllers(_this->u_iface, handlesOut);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_EnableDeviceCallbacks(winISteamInput_SteamInput005 *_this)
+void __thiscall winISteamInput_SteamInput005_EnableDeviceCallbacks(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_EnableDeviceCallbacks(_this->linux_side);
+    cppISteamInput_SteamInput005_EnableDeviceCallbacks(_this->u_iface);
 }
 
-void __thiscall winISteamInput_SteamInput005_EnableActionEventCallbacks(winISteamInput_SteamInput005 *_this, SteamInputActionEventCallbackPointer pCallback)
+void __thiscall winISteamInput_SteamInput005_EnableActionEventCallbacks(struct w_steam_iface *_this, SteamInputActionEventCallbackPointer pCallback)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_EnableActionEventCallbacks(_this->linux_side, pCallback);
+    cppISteamInput_SteamInput005_EnableActionEventCallbacks(_this->u_iface, pCallback);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput005_GetActionSetHandle(winISteamInput_SteamInput005 *_this, const char *pszActionSetName)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput005_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetActionSetHandle(_this->linux_side, pszActionSetName);
+    _ret = cppISteamInput_SteamInput005_GetActionSetHandle(_this->u_iface, pszActionSetName);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_ActivateActionSet(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
+void __thiscall winISteamInput_SteamInput005_ActivateActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_ActivateActionSet(_this->linux_side, inputHandle, actionSetHandle);
+    cppISteamInput_SteamInput005_ActivateActionSet(_this->u_iface, inputHandle, actionSetHandle);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput005_GetCurrentActionSet(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput005_GetCurrentActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetCurrentActionSet(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput005_GetCurrentActionSet(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_ActivateActionSetLayer(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput005_ActivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_ActivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput005_ActivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput005_DeactivateActionSetLayer(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput005_DeactivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_DeactivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput005_DeactivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput005_DeactivateAllActionSetLayers(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle)
+void __thiscall winISteamInput_SteamInput005_DeactivateAllActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_DeactivateAllActionSetLayers(_this->linux_side, inputHandle);
+    cppISteamInput_SteamInput005_DeactivateAllActionSetLayers(_this->u_iface, inputHandle);
 }
 
-int __thiscall winISteamInput_SteamInput005_GetActiveActionSetLayers(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput005_GetActiveActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetActiveActionSetLayers(_this->linux_side, inputHandle, handlesOut);
+    _ret = cppISteamInput_SteamInput005_GetActiveActionSetLayers(_this->u_iface, inputHandle, handlesOut);
     return _ret;
 }
 
-InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput005_GetDigitalActionHandle(winISteamInput_SteamInput005 *_this, const char *pszActionName)
+InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput005_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputDigitalActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetDigitalActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput005_GetDigitalActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputDigitalActionData_t * __thiscall winISteamInput_SteamInput005_GetDigitalActionData(winISteamInput_SteamInput005 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput005_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput005_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
+    *_ret = cppISteamInput_SteamInput005_GetDigitalActionData(_this->u_iface, inputHandle, digitalActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetDigitalActionOrigins(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput005_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetDigitalActionOrigins(_this->linux_side, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput005_GetDigitalActionOrigins(_this->u_iface, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForDigitalActionName(winISteamInput_SteamInput005 *_this, InputDigitalActionHandle_t eActionHandle)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForDigitalActionName(struct w_steam_iface *_this, InputDigitalActionHandle_t eActionHandle)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetStringForDigitalActionName(_this->linux_side, eActionHandle);
+    _ret = cppISteamInput_SteamInput005_GetStringForDigitalActionName(_this->u_iface, eActionHandle);
     return _ret;
 }
 
-InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput005_GetAnalogActionHandle(winISteamInput_SteamInput005 *_this, const char *pszActionName)
+InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput005_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputAnalogActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetAnalogActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput005_GetAnalogActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputAnalogActionData_t * __thiscall winISteamInput_SteamInput005_GetAnalogActionData(winISteamInput_SteamInput005 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput005_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput005_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
+    *_ret = cppISteamInput_SteamInput005_GetAnalogActionData(_this->u_iface, inputHandle, analogActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetAnalogActionOrigins(_this->linux_side, inputHandle, actionSetHandle, analogActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput005_GetAnalogActionOrigins(_this->u_iface, inputHandle, actionSetHandle, analogActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(winISteamInput_SteamInput005 *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(_this->linux_side, eOrigin, eSize, unFlags);
+    _ret = cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(_this->u_iface, eOrigin, eSize, unFlags);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(winISteamInput_SteamInput005 *_this, EInputActionOrigin eOrigin, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, uint32 unFlags)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(_this->linux_side, eOrigin, unFlags);
+    _ret = cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(_this->u_iface, eOrigin, unFlags);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(winISteamInput_SteamInput005 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForActionOrigin(winISteamInput_SteamInput005 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetStringForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput005_GetStringForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForAnalogActionName(winISteamInput_SteamInput005 *_this, InputAnalogActionHandle_t eActionHandle)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForAnalogActionName(struct w_steam_iface *_this, InputAnalogActionHandle_t eActionHandle)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetStringForAnalogActionName(_this->linux_side, eActionHandle);
+    _ret = cppISteamInput_SteamInput005_GetStringForAnalogActionName(_this->u_iface, eActionHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_StopAnalogActionMomentum(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
+void __thiscall winISteamInput_SteamInput005_StopAnalogActionMomentum(struct w_steam_iface *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
+    cppISteamInput_SteamInput005_StopAnalogActionMomentum(_this->u_iface, inputHandle, eAction);
 }
 
-InputMotionData_t * __thiscall winISteamInput_SteamInput005_GetMotionData(winISteamInput_SteamInput005 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput005_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput005_GetMotionData(_this->linux_side, inputHandle);
+    *_ret = cppISteamInput_SteamInput005_GetMotionData(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_TriggerVibration(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
+void __thiscall winISteamInput_SteamInput005_TriggerVibration(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_TriggerVibration(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed);
+    cppISteamInput_SteamInput005_TriggerVibration(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput005_TriggerVibrationExtended(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed, unsigned short usLeftTriggerSpeed, unsigned short usRightTriggerSpeed)
+void __thiscall winISteamInput_SteamInput005_TriggerVibrationExtended(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed, unsigned short usLeftTriggerSpeed, unsigned short usRightTriggerSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_TriggerVibrationExtended(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed, usLeftTriggerSpeed, usRightTriggerSpeed);
+    cppISteamInput_SteamInput005_TriggerVibrationExtended(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed, usLeftTriggerSpeed, usRightTriggerSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput005_TriggerSimpleHapticEvent(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
+void __thiscall winISteamInput_SteamInput005_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_TriggerSimpleHapticEvent(_this->linux_side, inputHandle, eHapticLocation, nIntensity, nGainDB, nOtherIntensity, nOtherGainDB);
+    cppISteamInput_SteamInput005_TriggerSimpleHapticEvent(_this->u_iface, inputHandle, eHapticLocation, nIntensity, nGainDB, nOtherIntensity, nOtherGainDB);
 }
 
-void __thiscall winISteamInput_SteamInput005_SetLEDColor(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput005_SetLEDColor(struct w_steam_iface *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_SetLEDColor(_this->linux_side, inputHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamInput_SteamInput005_SetLEDColor(_this->u_iface, inputHandle, nColorR, nColorG, nColorB, nFlags);
 }
 
-void __thiscall winISteamInput_SteamInput005_Legacy_TriggerHapticPulse(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput005_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec);
+    cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec);
 }
 
-void __thiscall winISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-bool __thiscall winISteamInput_SteamInput005_ShowBindingPanel(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle)
+bool __thiscall winISteamInput_SteamInput005_ShowBindingPanel(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_ShowBindingPanel(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput005_ShowBindingPanel(_this->u_iface, inputHandle);
     return _ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput005_GetInputTypeForHandle(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle)
+ESteamInputType __thiscall winISteamInput_SteamInput005_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     ESteamInputType _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetInputTypeForHandle(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput005_GetInputTypeForHandle(_this->u_iface, inputHandle);
     return _ret;
 }
 
-InputHandle_t __thiscall winISteamInput_SteamInput005_GetControllerForGamepadIndex(winISteamInput_SteamInput005 *_this, int nIndex)
+InputHandle_t __thiscall winISteamInput_SteamInput005_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
     InputHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetControllerForGamepadIndex(_this->linux_side, nIndex);
+    _ret = cppISteamInput_SteamInput005_GetControllerForGamepadIndex(_this->u_iface, nIndex);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetGamepadIndexForController(winISteamInput_SteamInput005 *_this, InputHandle_t ulinputHandle)
+int __thiscall winISteamInput_SteamInput005_GetGamepadIndexForController(struct w_steam_iface *_this, InputHandle_t ulinputHandle)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetGamepadIndexForController(_this->linux_side, ulinputHandle);
+    _ret = cppISteamInput_SteamInput005_GetGamepadIndexForController(_this->u_iface, ulinputHandle);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(winISteamInput_SteamInput005 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetStringForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput005_GetStringForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(winISteamInput_SteamInput005 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetGlyphForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput005_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(_this->linux_side, inputHandle, eOrigin);
+    _ret = cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(_this->u_iface, inputHandle, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput005_TranslateActionOrigin(winISteamInput_SteamInput005 *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput005_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
+    _ret = cppISteamInput_SteamInput005_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_GetDeviceBindingRevision(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
+bool __thiscall winISteamInput_SteamInput005_GetDeviceBindingRevision(struct w_steam_iface *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetDeviceBindingRevision(_this->linux_side, inputHandle, pMajor, pMinor);
+    _ret = cppISteamInput_SteamInput005_GetDeviceBindingRevision(_this->u_iface, inputHandle, pMajor, pMinor);
     return _ret;
 }
 
-uint32 __thiscall winISteamInput_SteamInput005_GetRemotePlaySessionID(winISteamInput_SteamInput005 *_this, InputHandle_t inputHandle)
+uint32 __thiscall winISteamInput_SteamInput005_GetRemotePlaySessionID(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetRemotePlaySessionID(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput005_GetRemotePlaySessionID(_this->u_iface, inputHandle);
     return _ret;
 }
 
-uint16 __thiscall winISteamInput_SteamInput005_GetSessionInputConfigurationSettings(winISteamInput_SteamInput005 *_this)
+uint16 __thiscall winISteamInput_SteamInput005_GetSessionInputConfigurationSettings(struct w_steam_iface *_this)
 {
     uint16 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput005_GetSessionInputConfigurationSettings(_this->linux_side);
+    _ret = cppISteamInput_SteamInput005_GetSessionInputConfigurationSettings(_this->u_iface);
     return _ret;
 }
 
@@ -1185,21 +1168,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamInput_SteamInput005 *create_winISteamInput_SteamInput005(void *linux_side)
+struct w_steam_iface *create_winISteamInput_SteamInput005(void *u_iface)
 {
-    winISteamInput_SteamInput005 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput005), "SteamInput005");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamInput005");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamInput_SteamInput005_vtable, 47, "SteamInput005");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamInput_SteamInput006.h"
-
-typedef struct __winISteamInput_SteamInput006 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamInput_SteamInput006;
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_Init, 8)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_Shutdown, 4)
@@ -1250,357 +1228,357 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_GetRemotePlaySessionID, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_GetSessionInputConfigurationSettings, 4)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_SetDualSenseTriggerEffect, 16)
 
-bool __thiscall winISteamInput_SteamInput006_Init(winISteamInput_SteamInput006 *_this, bool bExplicitlyCallRunFrame)
+bool __thiscall winISteamInput_SteamInput006_Init(struct w_steam_iface *_this, bool bExplicitlyCallRunFrame)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_Init(_this->linux_side, bExplicitlyCallRunFrame);
+    _ret = cppISteamInput_SteamInput006_Init(_this->u_iface, bExplicitlyCallRunFrame);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_Shutdown(winISteamInput_SteamInput006 *_this)
+bool __thiscall winISteamInput_SteamInput006_Shutdown(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_Shutdown(_this->linux_side);
+    _ret = cppISteamInput_SteamInput006_Shutdown(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(winISteamInput_SteamInput006 *_this, const char *pchInputActionManifestAbsolutePath)
+bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     bool _ret;
     char lin_pchInputActionManifestAbsolutePath[PATH_MAX];
     steamclient_dos_path_to_unix_path(pchInputActionManifestAbsolutePath, lin_pchInputActionManifestAbsolutePath, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_SetInputActionManifestFilePath(_this->linux_side, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
+    _ret = cppISteamInput_SteamInput006_SetInputActionManifestFilePath(_this->u_iface, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_RunFrame(winISteamInput_SteamInput006 *_this, bool bReservedValue)
+void __thiscall winISteamInput_SteamInput006_RunFrame(struct w_steam_iface *_this, bool bReservedValue)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_RunFrame(_this->linux_side, bReservedValue);
+    cppISteamInput_SteamInput006_RunFrame(_this->u_iface, bReservedValue);
 }
 
-bool __thiscall winISteamInput_SteamInput006_BWaitForData(winISteamInput_SteamInput006 *_this, bool bWaitForever, uint32 unTimeout)
+bool __thiscall winISteamInput_SteamInput006_BWaitForData(struct w_steam_iface *_this, bool bWaitForever, uint32 unTimeout)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_BWaitForData(_this->linux_side, bWaitForever, unTimeout);
+    _ret = cppISteamInput_SteamInput006_BWaitForData(_this->u_iface, bWaitForever, unTimeout);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_BNewDataAvailable(winISteamInput_SteamInput006 *_this)
+bool __thiscall winISteamInput_SteamInput006_BNewDataAvailable(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_BNewDataAvailable(_this->linux_side);
+    _ret = cppISteamInput_SteamInput006_BNewDataAvailable(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetConnectedControllers(winISteamInput_SteamInput006 *_this, InputHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput006_GetConnectedControllers(struct w_steam_iface *_this, InputHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetConnectedControllers(_this->linux_side, handlesOut);
+    _ret = cppISteamInput_SteamInput006_GetConnectedControllers(_this->u_iface, handlesOut);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_EnableDeviceCallbacks(winISteamInput_SteamInput006 *_this)
+void __thiscall winISteamInput_SteamInput006_EnableDeviceCallbacks(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_EnableDeviceCallbacks(_this->linux_side);
+    cppISteamInput_SteamInput006_EnableDeviceCallbacks(_this->u_iface);
 }
 
-void __thiscall winISteamInput_SteamInput006_EnableActionEventCallbacks(winISteamInput_SteamInput006 *_this, SteamInputActionEventCallbackPointer pCallback)
+void __thiscall winISteamInput_SteamInput006_EnableActionEventCallbacks(struct w_steam_iface *_this, SteamInputActionEventCallbackPointer pCallback)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_EnableActionEventCallbacks(_this->linux_side, pCallback);
+    cppISteamInput_SteamInput006_EnableActionEventCallbacks(_this->u_iface, pCallback);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput006_GetActionSetHandle(winISteamInput_SteamInput006 *_this, const char *pszActionSetName)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput006_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetActionSetHandle(_this->linux_side, pszActionSetName);
+    _ret = cppISteamInput_SteamInput006_GetActionSetHandle(_this->u_iface, pszActionSetName);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_ActivateActionSet(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
+void __thiscall winISteamInput_SteamInput006_ActivateActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_ActivateActionSet(_this->linux_side, inputHandle, actionSetHandle);
+    cppISteamInput_SteamInput006_ActivateActionSet(_this->u_iface, inputHandle, actionSetHandle);
 }
 
-InputActionSetHandle_t __thiscall winISteamInput_SteamInput006_GetCurrentActionSet(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle)
+InputActionSetHandle_t __thiscall winISteamInput_SteamInput006_GetCurrentActionSet(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     InputActionSetHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetCurrentActionSet(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput006_GetCurrentActionSet(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_ActivateActionSetLayer(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput006_ActivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_ActivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput006_ActivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput006_DeactivateActionSetLayer(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
+void __thiscall winISteamInput_SteamInput006_DeactivateActionSetLayer(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetLayerHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_DeactivateActionSetLayer(_this->linux_side, inputHandle, actionSetLayerHandle);
+    cppISteamInput_SteamInput006_DeactivateActionSetLayer(_this->u_iface, inputHandle, actionSetLayerHandle);
 }
 
-void __thiscall winISteamInput_SteamInput006_DeactivateAllActionSetLayers(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle)
+void __thiscall winISteamInput_SteamInput006_DeactivateAllActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_DeactivateAllActionSetLayers(_this->linux_side, inputHandle);
+    cppISteamInput_SteamInput006_DeactivateAllActionSetLayers(_this->u_iface, inputHandle);
 }
 
-int __thiscall winISteamInput_SteamInput006_GetActiveActionSetLayers(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
+int __thiscall winISteamInput_SteamInput006_GetActiveActionSetLayers(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t *handlesOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetActiveActionSetLayers(_this->linux_side, inputHandle, handlesOut);
+    _ret = cppISteamInput_SteamInput006_GetActiveActionSetLayers(_this->u_iface, inputHandle, handlesOut);
     return _ret;
 }
 
-InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput006_GetDigitalActionHandle(winISteamInput_SteamInput006 *_this, const char *pszActionName)
+InputDigitalActionHandle_t __thiscall winISteamInput_SteamInput006_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputDigitalActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetDigitalActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput006_GetDigitalActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputDigitalActionData_t * __thiscall winISteamInput_SteamInput006_GetDigitalActionData(winISteamInput_SteamInput006 *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput006_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, InputHandle_t inputHandle, InputDigitalActionHandle_t digitalActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput006_GetDigitalActionData(_this->linux_side, inputHandle, digitalActionHandle);
+    *_ret = cppISteamInput_SteamInput006_GetDigitalActionData(_this->u_iface, inputHandle, digitalActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetDigitalActionOrigins(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput006_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetDigitalActionOrigins(_this->linux_side, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput006_GetDigitalActionOrigins(_this->u_iface, inputHandle, actionSetHandle, digitalActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForDigitalActionName(winISteamInput_SteamInput006 *_this, InputDigitalActionHandle_t eActionHandle)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForDigitalActionName(struct w_steam_iface *_this, InputDigitalActionHandle_t eActionHandle)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetStringForDigitalActionName(_this->linux_side, eActionHandle);
+    _ret = cppISteamInput_SteamInput006_GetStringForDigitalActionName(_this->u_iface, eActionHandle);
     return _ret;
 }
 
-InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput006_GetAnalogActionHandle(winISteamInput_SteamInput006 *_this, const char *pszActionName)
+InputAnalogActionHandle_t __thiscall winISteamInput_SteamInput006_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
     InputAnalogActionHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetAnalogActionHandle(_this->linux_side, pszActionName);
+    _ret = cppISteamInput_SteamInput006_GetAnalogActionHandle(_this->u_iface, pszActionName);
     return _ret;
 }
 
-InputAnalogActionData_t * __thiscall winISteamInput_SteamInput006_GetAnalogActionData(winISteamInput_SteamInput006 *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput006_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, InputHandle_t inputHandle, InputAnalogActionHandle_t analogActionHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput006_GetAnalogActionData(_this->linux_side, inputHandle, analogActionHandle);
+    *_ret = cppISteamInput_SteamInput006_GetAnalogActionData(_this->u_iface, inputHandle, analogActionHandle);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetAnalogActionOrigins(_this->linux_side, inputHandle, actionSetHandle, analogActionHandle, originsOut);
+    _ret = cppISteamInput_SteamInput006_GetAnalogActionOrigins(_this->u_iface, inputHandle, actionSetHandle, analogActionHandle, originsOut);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(winISteamInput_SteamInput006 *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(_this->linux_side, eOrigin, eSize, unFlags);
+    _ret = cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(_this->u_iface, eOrigin, eSize, unFlags);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(winISteamInput_SteamInput006 *_this, EInputActionOrigin eOrigin, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, uint32 unFlags)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(_this->linux_side, eOrigin, unFlags);
+    _ret = cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(_this->u_iface, eOrigin, unFlags);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(winISteamInput_SteamInput006 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForActionOrigin(winISteamInput_SteamInput006 *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetStringForActionOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput006_GetStringForActionOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForAnalogActionName(winISteamInput_SteamInput006 *_this, InputAnalogActionHandle_t eActionHandle)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForAnalogActionName(struct w_steam_iface *_this, InputAnalogActionHandle_t eActionHandle)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetStringForAnalogActionName(_this->linux_side, eActionHandle);
+    _ret = cppISteamInput_SteamInput006_GetStringForAnalogActionName(_this->u_iface, eActionHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_StopAnalogActionMomentum(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
+void __thiscall winISteamInput_SteamInput006_StopAnalogActionMomentum(struct w_steam_iface *_this, InputHandle_t inputHandle, InputAnalogActionHandle_t eAction)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_StopAnalogActionMomentum(_this->linux_side, inputHandle, eAction);
+    cppISteamInput_SteamInput006_StopAnalogActionMomentum(_this->u_iface, inputHandle, eAction);
 }
 
-InputMotionData_t * __thiscall winISteamInput_SteamInput006_GetMotionData(winISteamInput_SteamInput006 *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
+InputMotionData_t * __thiscall winISteamInput_SteamInput006_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, InputHandle_t inputHandle)
 {
     TRACE("%p\n", _this);
-    *_ret = cppISteamInput_SteamInput006_GetMotionData(_this->linux_side, inputHandle);
+    *_ret = cppISteamInput_SteamInput006_GetMotionData(_this->u_iface, inputHandle);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_TriggerVibration(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
+void __thiscall winISteamInput_SteamInput006_TriggerVibration(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_TriggerVibration(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed);
+    cppISteamInput_SteamInput006_TriggerVibration(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput006_TriggerVibrationExtended(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed, unsigned short usLeftTriggerSpeed, unsigned short usRightTriggerSpeed)
+void __thiscall winISteamInput_SteamInput006_TriggerVibrationExtended(struct w_steam_iface *_this, InputHandle_t inputHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed, unsigned short usLeftTriggerSpeed, unsigned short usRightTriggerSpeed)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_TriggerVibrationExtended(_this->linux_side, inputHandle, usLeftSpeed, usRightSpeed, usLeftTriggerSpeed, usRightTriggerSpeed);
+    cppISteamInput_SteamInput006_TriggerVibrationExtended(_this->u_iface, inputHandle, usLeftSpeed, usRightSpeed, usLeftTriggerSpeed, usRightTriggerSpeed);
 }
 
-void __thiscall winISteamInput_SteamInput006_TriggerSimpleHapticEvent(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
+void __thiscall winISteamInput_SteamInput006_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_TriggerSimpleHapticEvent(_this->linux_side, inputHandle, eHapticLocation, nIntensity, nGainDB, nOtherIntensity, nOtherGainDB);
+    cppISteamInput_SteamInput006_TriggerSimpleHapticEvent(_this->u_iface, inputHandle, eHapticLocation, nIntensity, nGainDB, nOtherIntensity, nOtherGainDB);
 }
 
-void __thiscall winISteamInput_SteamInput006_SetLEDColor(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput006_SetLEDColor(struct w_steam_iface *_this, InputHandle_t inputHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_SetLEDColor(_this->linux_side, inputHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamInput_SteamInput006_SetLEDColor(_this->u_iface, inputHandle, nColorR, nColorG, nColorB, nFlags);
 }
 
-void __thiscall winISteamInput_SteamInput006_Legacy_TriggerHapticPulse(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput006_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec);
+    cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec);
 }
 
-void __thiscall winISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(_this->linux_side, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(_this->u_iface, inputHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-bool __thiscall winISteamInput_SteamInput006_ShowBindingPanel(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle)
+bool __thiscall winISteamInput_SteamInput006_ShowBindingPanel(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_ShowBindingPanel(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput006_ShowBindingPanel(_this->u_iface, inputHandle);
     return _ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput006_GetInputTypeForHandle(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle)
+ESteamInputType __thiscall winISteamInput_SteamInput006_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     ESteamInputType _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetInputTypeForHandle(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput006_GetInputTypeForHandle(_this->u_iface, inputHandle);
     return _ret;
 }
 
-InputHandle_t __thiscall winISteamInput_SteamInput006_GetControllerForGamepadIndex(winISteamInput_SteamInput006 *_this, int nIndex)
+InputHandle_t __thiscall winISteamInput_SteamInput006_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
     InputHandle_t _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetControllerForGamepadIndex(_this->linux_side, nIndex);
+    _ret = cppISteamInput_SteamInput006_GetControllerForGamepadIndex(_this->u_iface, nIndex);
     return _ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetGamepadIndexForController(winISteamInput_SteamInput006 *_this, InputHandle_t ulinputHandle)
+int __thiscall winISteamInput_SteamInput006_GetGamepadIndexForController(struct w_steam_iface *_this, InputHandle_t ulinputHandle)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetGamepadIndexForController(_this->linux_side, ulinputHandle);
+    _ret = cppISteamInput_SteamInput006_GetGamepadIndexForController(_this->u_iface, ulinputHandle);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(winISteamInput_SteamInput006 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetStringForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput006_GetStringForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(winISteamInput_SteamInput006 *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetGlyphForXboxOrigin(_this->linux_side, eOrigin);
+    _ret = cppISteamInput_SteamInput006_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(_this->linux_side, inputHandle, eOrigin);
+    _ret = cppISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(_this->u_iface, inputHandle, eOrigin);
     return _ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput006_TranslateActionOrigin(winISteamInput_SteamInput006 *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+EInputActionOrigin __thiscall winISteamInput_SteamInput006_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
 {
     EInputActionOrigin _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
+    _ret = cppISteamInput_SteamInput006_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
     return _ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_GetDeviceBindingRevision(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
+bool __thiscall winISteamInput_SteamInput006_GetDeviceBindingRevision(struct w_steam_iface *_this, InputHandle_t inputHandle, int *pMajor, int *pMinor)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetDeviceBindingRevision(_this->linux_side, inputHandle, pMajor, pMinor);
+    _ret = cppISteamInput_SteamInput006_GetDeviceBindingRevision(_this->u_iface, inputHandle, pMajor, pMinor);
     return _ret;
 }
 
-uint32 __thiscall winISteamInput_SteamInput006_GetRemotePlaySessionID(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle)
+uint32 __thiscall winISteamInput_SteamInput006_GetRemotePlaySessionID(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetRemotePlaySessionID(_this->linux_side, inputHandle);
+    _ret = cppISteamInput_SteamInput006_GetRemotePlaySessionID(_this->u_iface, inputHandle);
     return _ret;
 }
 
-uint16 __thiscall winISteamInput_SteamInput006_GetSessionInputConfigurationSettings(winISteamInput_SteamInput006 *_this)
+uint16 __thiscall winISteamInput_SteamInput006_GetSessionInputConfigurationSettings(struct w_steam_iface *_this)
 {
     uint16 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(_this->linux_side);
+    _ret = cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_SetDualSenseTriggerEffect(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, const ScePadTriggerEffectParam *pParam)
+void __thiscall winISteamInput_SteamInput006_SetDualSenseTriggerEffect(struct w_steam_iface *_this, InputHandle_t inputHandle, const ScePadTriggerEffectParam *pParam)
 {
     TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(_this->linux_side, inputHandle, pParam);
+    cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(_this->u_iface, inputHandle, pParam);
 }
 
 extern vtable_ptr winISteamInput_SteamInput006_vtable;
@@ -1662,12 +1640,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamInput_SteamInput006 *create_winISteamInput_SteamInput006(void *linux_side)
+struct w_steam_iface *create_winISteamInput_SteamInput006(void *u_iface)
 {
-    winISteamInput_SteamInput006 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput006), "SteamInput006");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamInput006");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamInput_SteamInput006_vtable, 48, "SteamInput006");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 

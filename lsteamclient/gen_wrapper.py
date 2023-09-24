@@ -917,7 +917,7 @@ def handle_method_c(method, winclassname, cppname, out):
         params = [f'{declspec(method.result_type, "*_ret")}'] + params
         names = ['_ret'] + names
 
-    params = [f'{winclassname} *_this'] + params
+    params = ['struct w_steam_iface *_this'] + params
     names = ['_this'] + names
 
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
@@ -969,7 +969,7 @@ def handle_method_c(method, winclassname, cppname, out):
     out(f'{cppname}_{method.name}(')
 
     def param_call(param, name):
-        if name == '_this': return '_this->linux_side'
+        if name == '_this': return '_this->u_iface'
         iface = param.type.get_pointee().spelling if param.type.kind == TypeKind.POINTER else None
         if iface in WRAPPED_CLASSES: return f'create_Linux{iface}({name}, "{winclassname}")'
         if path_conv and name in path_conv["w2l_names"]: return f'{name} ? lin_{name} : NULL'
@@ -1053,11 +1053,8 @@ def handle_class(klass):
     with open(f"win{klass.spelling}.c", "a") as file:
         out = file.write
 
-        out(f'#include "{cppname}.h"\n\n')
-        out(f'typedef struct __{winclassname} {{\n')
-        out(u'    vtable_ptr *vtable;\n')
-        out(u'    void *linux_side;\n')
-        out(f'}} {winclassname};\n\n')
+        out(f'#include "{cppname}.h"\n')
+        out(u'\n')
 
         for method in klass.methods:
             handle_thiscall_wrapper(klass, method, out)
@@ -1065,7 +1062,7 @@ def handle_class(klass):
 
         for method in klass.methods:
             if type(method) is Destructor:
-                out(f'void __thiscall {winclassname}_{method.name}({winclassname} *_this)\n{{/* never called */}}\n\n')
+                out(f'void __thiscall {winclassname}_{method.name}(struct w_steam_iface *_this)\n{{/* never called */}}\n\n')
             else:
                 handle_method_c(method, winclassname, cppname, out)
 
@@ -1082,20 +1079,20 @@ def handle_class(klass):
         out(u'}\n')
         out(u'#endif\n')
         out(u'\n')
-        out(f'{winclassname} *create_{winclassname}(void *linux_side)\n')
+        out(f'struct w_steam_iface *create_{winclassname}(void *u_iface)\n')
         out(u'{\n')
         if klass.spelling in WRAPPED_CLASSES:
-            out(f'    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n')
+            out(u'    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), 0, sizeof(struct w_steam_iface));\n')
         else:
-            out(f'    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), "{klass.version}");\n')
+            out(f'    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "{klass.version}");\n')
         out(u'    TRACE("-> %p\\n", r);\n')
         out(f'    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, "{klass.version}");\n')
-        out(u'    r->linux_side = linux_side;\n')
+        out(u'    r->u_iface = u_iface;\n')
         out(u'    return r;\n')
         out(u'}\n\n')
 
     constructors = open("win_constructors.h", "a")
-    constructors.write(f"extern void *create_{winclassname}(void *);\n")
+    constructors.write(f"extern struct w_steam_iface *create_{winclassname}(void *);\n")
 
     constructors = open("win_constructors_table.dat", "a")
     for alias in VERSION_ALIASES.get(klass.version, []):
@@ -1445,8 +1442,6 @@ for klass in all_classes.values():
         out(u'#include "windef.h"\n')
         out(u'#include "winbase.h"\n')
         out(u'#include "wine/debug.h"\n')
-        out(u'\n')
-        out(u'#include "cxx.h"\n')
         out(u'\n')
         out(u'#include "steam_defs.h"\n')
         out(u'\n')
