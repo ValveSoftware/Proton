@@ -336,10 +336,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(struct w_st
 VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     VROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_001_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_001_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -834,10 +834,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayRaw(struct w_st
 VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     VROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_002_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_002_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -1372,10 +1372,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayRaw(struct w_st
 VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     VROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_003_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_003_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -1942,10 +1942,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayRaw(struct w_st
 VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     VROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_004_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_004_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -2528,10 +2528,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayRaw(struct w_st
 VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     VROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_005_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_005_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -3181,10 +3181,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_007_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_007_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -3863,10 +3863,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_008_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_008_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -4582,10 +4582,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_010_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_010_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -5335,10 +5335,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_011_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_011_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -6113,10 +6113,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_012_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_012_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -6938,10 +6938,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_013_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_013_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -7783,10 +7783,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_014_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_014_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -8694,10 +8694,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_016_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_016_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -9641,10 +9641,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_017_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_017_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -10583,10 +10583,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_018_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_018_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -11523,10 +11523,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_019_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_019_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -12445,10 +12445,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_020_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_020_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -13327,10 +13327,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_021_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_021_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -14271,10 +14271,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_022_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_022_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -15175,10 +15175,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_024_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_024_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -16080,10 +16080,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_025_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_025_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -17014,10 +17014,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_026_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_026_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
@@ -17936,10 +17936,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayRaw(struct w_s
 EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
 {
     EVROverlayError _ret;
-    char lin_pchFilePath[PATH_MAX];
-    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
-    _ret = cppIVROverlay_IVROverlay_027_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+    _ret = cppIVROverlay_IVROverlay_027_SetOverlayFromFile(_this->u_iface, ulOverlayHandle, u_pchFilePath);
+    vrclient_free_path( u_pchFilePath );
     return _ret;
 }
 
