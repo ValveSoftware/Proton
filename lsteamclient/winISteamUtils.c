@@ -5,8 +5,6 @@
 #include "winbase.h"
 #include "wine/debug.h"
 
-#include "cxx.h"
-
 #include "steam_defs.h"
 
 #include "steamclient_private.h"
@@ -16,11 +14,6 @@
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamUtils_SteamUtils002.h"
-
-typedef struct __winISteamUtils_SteamUtils002 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils002;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_GetSecondsSinceComputerActive, 4)
@@ -37,109 +30,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_IsAPICallCompleted, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_GetAPICallFailureReason, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_GetAPICallResult, 28)
 
-uint32 __thiscall winISteamUtils_SteamUtils002_GetSecondsSinceAppActive(winISteamUtils_SteamUtils002 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils002_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils002 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils002_GetConnectedUniverse(winISteamUtils_SteamUtils002 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils002_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils002_GetServerRealTime(winISteamUtils_SteamUtils002 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils002_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils002_GetIPCountry(winISteamUtils_SteamUtils002 *_this)
+const char * __thiscall winISteamUtils_SteamUtils002_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_GetImageSize(winISteamUtils_SteamUtils002 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils002_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils002_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_GetImageRGBA(winISteamUtils_SteamUtils002 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils002_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils002_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_GetCSERIPPort(winISteamUtils_SteamUtils002 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils002_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils002_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils002_GetCurrentBatteryPower(winISteamUtils_SteamUtils002 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils002_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils002_GetAppID(winISteamUtils_SteamUtils002 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils002_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils002_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils002_SetOverlayNotificationPosition(winISteamUtils_SteamUtils002 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils002_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(winISteamUtils_SteamUtils002 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils002_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(winISteamUtils_SteamUtils002 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils002_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils002_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(winISteamUtils_SteamUtils002 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -149,7 +142,7 @@ bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils002_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils002_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -184,21 +177,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils002 *create_winISteamUtils_SteamUtils002(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils002(void *u_iface)
 {
-    winISteamUtils_SteamUtils002 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils002), "SteamUtils002");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils002");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils002_vtable, 14, "SteamUtils002");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils004.h"
-
-typedef struct __winISteamUtils_SteamUtils004 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils004;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_GetSecondsSinceComputerActive, 4)
@@ -219,109 +207,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_GetIPCCallCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_SetWarningMessageHook, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_IsOverlayEnabled, 4)
 
-uint32 __thiscall winISteamUtils_SteamUtils004_GetSecondsSinceAppActive(winISteamUtils_SteamUtils004 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils004_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils004 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils004_GetConnectedUniverse(winISteamUtils_SteamUtils004 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils004_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils004_GetServerRealTime(winISteamUtils_SteamUtils004 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils004_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils004_GetIPCountry(winISteamUtils_SteamUtils004 *_this)
+const char * __thiscall winISteamUtils_SteamUtils004_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_GetImageSize(winISteamUtils_SteamUtils004 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils004_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils004_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_GetImageRGBA(winISteamUtils_SteamUtils004 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils004_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils004_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_GetCSERIPPort(winISteamUtils_SteamUtils004 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils004_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils004_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils004_GetCurrentBatteryPower(winISteamUtils_SteamUtils004 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils004_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils004_GetAppID(winISteamUtils_SteamUtils004 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils004_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils004_SetOverlayNotificationPosition(winISteamUtils_SteamUtils004 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils004_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(winISteamUtils_SteamUtils004 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils004_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(winISteamUtils_SteamUtils004 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils004_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(winISteamUtils_SteamUtils004 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -331,7 +319,7 @@ bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils004_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils004_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -341,31 +329,31 @@ bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils004_RunFrame(winISteamUtils_SteamUtils004 *_this)
+void __thiscall winISteamUtils_SteamUtils004_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils004_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils004_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils004_GetIPCCallCount(winISteamUtils_SteamUtils004 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils004_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils004_SetWarningMessageHook(winISteamUtils_SteamUtils004 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils004_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils004_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils004_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_IsOverlayEnabled(winISteamUtils_SteamUtils004 *_this)
+bool __thiscall winISteamUtils_SteamUtils004_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils004_IsOverlayEnabled(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils004_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
@@ -398,21 +386,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils004 *create_winISteamUtils_SteamUtils004(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils004(void *u_iface)
 {
-    winISteamUtils_SteamUtils004 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils004), "SteamUtils004");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils004");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils004_vtable, 18, "SteamUtils004");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils005.h"
-
-typedef struct __winISteamUtils_SteamUtils005 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils005;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_GetSecondsSinceComputerActive, 4)
@@ -438,109 +421,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_ShowGamepadTextInput, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_GetEnteredGamepadTextLength, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_GetEnteredGamepadTextInput, 12)
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetSecondsSinceAppActive(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils005_GetConnectedUniverse(winISteamUtils_SteamUtils005 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils005_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetServerRealTime(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils005_GetIPCountry(winISteamUtils_SteamUtils005 *_this)
+const char * __thiscall winISteamUtils_SteamUtils005_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetImageSize(winISteamUtils_SteamUtils005 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils005_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils005_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetImageRGBA(winISteamUtils_SteamUtils005 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils005_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils005_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetCSERIPPort(winISteamUtils_SteamUtils005 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils005_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils005_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils005_GetCurrentBatteryPower(winISteamUtils_SteamUtils005 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils005_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetAppID(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils005_SetOverlayNotificationPosition(winISteamUtils_SteamUtils005 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils005_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(winISteamUtils_SteamUtils005 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils005_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(winISteamUtils_SteamUtils005 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils005_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(winISteamUtils_SteamUtils005 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -550,7 +533,7 @@ bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils005_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils005_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -560,73 +543,73 @@ bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils005_RunFrame(winISteamUtils_SteamUtils005 *_this)
+void __thiscall winISteamUtils_SteamUtils005_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils005_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils005_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetIPCCallCount(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils005_SetWarningMessageHook(winISteamUtils_SteamUtils005 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils005_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils005_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils005_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_IsOverlayEnabled(winISteamUtils_SteamUtils005 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils005_BOverlayNeedsPresent(winISteamUtils_SteamUtils005 *_this)
+bool __thiscall winISteamUtils_SteamUtils005_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(winISteamUtils_SteamUtils005 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils005_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils005_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils005_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_ShowGamepadTextInput(winISteamUtils_SteamUtils005 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
+bool __thiscall winISteamUtils_SteamUtils005_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax);
+    _ret = cppISteamUtils_SteamUtils005_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils005_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils005 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils005_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils005_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils005 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
@@ -664,21 +647,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils005 *create_winISteamUtils_SteamUtils005(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils005(void *u_iface)
 {
-    winISteamUtils_SteamUtils005 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils005), "SteamUtils005");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils005");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils005_vtable, 23, "SteamUtils005");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils006.h"
-
-typedef struct __winISteamUtils_SteamUtils006 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils006;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_GetSecondsSinceComputerActive, 4)
@@ -706,109 +684,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_GetEnteredGamepadTextInput,
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_GetSteamUILanguage, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_IsSteamRunningInVR, 4)
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetSecondsSinceAppActive(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils006_GetConnectedUniverse(winISteamUtils_SteamUtils006 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils006_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetServerRealTime(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils006_GetIPCountry(winISteamUtils_SteamUtils006 *_this)
+const char * __thiscall winISteamUtils_SteamUtils006_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetImageSize(winISteamUtils_SteamUtils006 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils006_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils006_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetImageRGBA(winISteamUtils_SteamUtils006 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils006_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils006_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetCSERIPPort(winISteamUtils_SteamUtils006 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils006_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils006_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils006_GetCurrentBatteryPower(winISteamUtils_SteamUtils006 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils006_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetAppID(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils006_SetOverlayNotificationPosition(winISteamUtils_SteamUtils006 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils006_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils006_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils006_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(winISteamUtils_SteamUtils006 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils006_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(winISteamUtils_SteamUtils006 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils006_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(winISteamUtils_SteamUtils006 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -818,7 +796,7 @@ bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils006_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils006_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -828,89 +806,89 @@ bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils006_RunFrame(winISteamUtils_SteamUtils006 *_this)
+void __thiscall winISteamUtils_SteamUtils006_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils006_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils006_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetIPCCallCount(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils006_SetWarningMessageHook(winISteamUtils_SteamUtils006 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils006_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils006_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils006_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_IsOverlayEnabled(winISteamUtils_SteamUtils006 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils006_BOverlayNeedsPresent(winISteamUtils_SteamUtils006 *_this)
+bool __thiscall winISteamUtils_SteamUtils006_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(winISteamUtils_SteamUtils006 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils006_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils006_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils006_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_ShowGamepadTextInput(winISteamUtils_SteamUtils006 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
+bool __thiscall winISteamUtils_SteamUtils006_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax);
+    _ret = cppISteamUtils_SteamUtils006_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils006_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils006 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils006_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils006 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils006_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils006_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils006_GetSteamUILanguage(winISteamUtils_SteamUtils006 *_this)
+const char * __thiscall winISteamUtils_SteamUtils006_GetSteamUILanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_GetSteamUILanguage(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_GetSteamUILanguage(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_IsSteamRunningInVR(winISteamUtils_SteamUtils006 *_this)
+bool __thiscall winISteamUtils_SteamUtils006_IsSteamRunningInVR(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils006_IsSteamRunningInVR(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils006_IsSteamRunningInVR(_this->u_iface);
     return _ret;
 }
 
@@ -950,21 +928,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils006 *create_winISteamUtils_SteamUtils006(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils006(void *u_iface)
 {
-    winISteamUtils_SteamUtils006 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils006), "SteamUtils006");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils006");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils006_vtable, 25, "SteamUtils006");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils007.h"
-
-typedef struct __winISteamUtils_SteamUtils007 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils007;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_GetSecondsSinceComputerActive, 4)
@@ -993,109 +966,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_GetSteamUILanguage, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_IsSteamRunningInVR, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_SetOverlayNotificationInset, 12)
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetSecondsSinceAppActive(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils007_GetConnectedUniverse(winISteamUtils_SteamUtils007 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils007_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetServerRealTime(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils007_GetIPCountry(winISteamUtils_SteamUtils007 *_this)
+const char * __thiscall winISteamUtils_SteamUtils007_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetImageSize(winISteamUtils_SteamUtils007 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils007_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils007_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetImageRGBA(winISteamUtils_SteamUtils007 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils007_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils007_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetCSERIPPort(winISteamUtils_SteamUtils007 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils007_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils007_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils007_GetCurrentBatteryPower(winISteamUtils_SteamUtils007 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils007_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetAppID(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationPosition(winISteamUtils_SteamUtils007 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils007_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils007_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(winISteamUtils_SteamUtils007 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils007_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(winISteamUtils_SteamUtils007 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils007_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(winISteamUtils_SteamUtils007 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -1105,7 +1078,7 @@ bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils007_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils007_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -1115,96 +1088,96 @@ bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_RunFrame(winISteamUtils_SteamUtils007 *_this)
+void __thiscall winISteamUtils_SteamUtils007_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils007_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils007_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetIPCCallCount(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_SetWarningMessageHook(winISteamUtils_SteamUtils007 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils007_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils007_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils007_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_IsOverlayEnabled(winISteamUtils_SteamUtils007 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils007_BOverlayNeedsPresent(winISteamUtils_SteamUtils007 *_this)
+bool __thiscall winISteamUtils_SteamUtils007_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(winISteamUtils_SteamUtils007 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils007_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils007_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils007_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_ShowGamepadTextInput(winISteamUtils_SteamUtils007 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils007_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+    _ret = cppISteamUtils_SteamUtils007_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils007_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils007 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils007_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils007 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils007_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils007_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils007_GetSteamUILanguage(winISteamUtils_SteamUtils007 *_this)
+const char * __thiscall winISteamUtils_SteamUtils007_GetSteamUILanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_GetSteamUILanguage(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_GetSteamUILanguage(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_IsSteamRunningInVR(winISteamUtils_SteamUtils007 *_this)
+bool __thiscall winISteamUtils_SteamUtils007_IsSteamRunningInVR(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils007_IsSteamRunningInVR(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils007_IsSteamRunningInVR(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationInset(winISteamUtils_SteamUtils007 *_this, int nHorizontalInset, int nVerticalInset)
+void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationInset(struct w_steam_iface *_this, int nHorizontalInset, int nVerticalInset)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils007_SetOverlayNotificationInset(_this->linux_side, nHorizontalInset, nVerticalInset);
+    cppISteamUtils_SteamUtils007_SetOverlayNotificationInset(_this->u_iface, nHorizontalInset, nVerticalInset);
 }
 
 extern vtable_ptr winISteamUtils_SteamUtils007_vtable;
@@ -1244,21 +1217,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils007 *create_winISteamUtils_SteamUtils007(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils007(void *u_iface)
 {
-    winISteamUtils_SteamUtils007 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils007), "SteamUtils007");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils007");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils007_vtable, 26, "SteamUtils007");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils008.h"
-
-typedef struct __winISteamUtils_SteamUtils008 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils008;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_GetSecondsSinceComputerActive, 4)
@@ -1289,109 +1257,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_SetOverlayNotificationInset
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_IsSteamInBigPictureMode, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_StartVRDashboard, 4)
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetSecondsSinceAppActive(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils008_GetConnectedUniverse(winISteamUtils_SteamUtils008 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils008_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetServerRealTime(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils008_GetIPCountry(winISteamUtils_SteamUtils008 *_this)
+const char * __thiscall winISteamUtils_SteamUtils008_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetImageSize(winISteamUtils_SteamUtils008 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils008_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils008_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetImageRGBA(winISteamUtils_SteamUtils008 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils008_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils008_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetCSERIPPort(winISteamUtils_SteamUtils008 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils008_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils008_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils008_GetCurrentBatteryPower(winISteamUtils_SteamUtils008 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils008_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetAppID(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationPosition(winISteamUtils_SteamUtils008 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils008_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils008_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(winISteamUtils_SteamUtils008 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils008_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(winISteamUtils_SteamUtils008 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils008_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(winISteamUtils_SteamUtils008 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -1401,7 +1369,7 @@ bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils008_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils008_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -1411,110 +1379,110 @@ bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_RunFrame(winISteamUtils_SteamUtils008 *_this)
+void __thiscall winISteamUtils_SteamUtils008_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils008_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils008_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetIPCCallCount(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_SetWarningMessageHook(winISteamUtils_SteamUtils008 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils008_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils008_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils008_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_IsOverlayEnabled(winISteamUtils_SteamUtils008 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils008_BOverlayNeedsPresent(winISteamUtils_SteamUtils008 *_this)
+bool __thiscall winISteamUtils_SteamUtils008_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(winISteamUtils_SteamUtils008 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils008_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils008_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils008_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_ShowGamepadTextInput(winISteamUtils_SteamUtils008 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils008_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+    _ret = cppISteamUtils_SteamUtils008_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils008_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils008 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils008_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils008 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils008_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils008_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils008_GetSteamUILanguage(winISteamUtils_SteamUtils008 *_this)
+const char * __thiscall winISteamUtils_SteamUtils008_GetSteamUILanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_GetSteamUILanguage(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_GetSteamUILanguage(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_IsSteamRunningInVR(winISteamUtils_SteamUtils008 *_this)
+bool __thiscall winISteamUtils_SteamUtils008_IsSteamRunningInVR(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_IsSteamRunningInVR(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_IsSteamRunningInVR(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationInset(winISteamUtils_SteamUtils008 *_this, int nHorizontalInset, int nVerticalInset)
+void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationInset(struct w_steam_iface *_this, int nHorizontalInset, int nVerticalInset)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils008_SetOverlayNotificationInset(_this->linux_side, nHorizontalInset, nVerticalInset);
+    cppISteamUtils_SteamUtils008_SetOverlayNotificationInset(_this->u_iface, nHorizontalInset, nVerticalInset);
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_IsSteamInBigPictureMode(winISteamUtils_SteamUtils008 *_this)
+bool __thiscall winISteamUtils_SteamUtils008_IsSteamInBigPictureMode(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils008_IsSteamInBigPictureMode(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils008_IsSteamInBigPictureMode(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_StartVRDashboard(winISteamUtils_SteamUtils008 *_this)
+void __thiscall winISteamUtils_SteamUtils008_StartVRDashboard(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils008_StartVRDashboard(_this->linux_side);
+    cppISteamUtils_SteamUtils008_StartVRDashboard(_this->u_iface);
 }
 
 extern vtable_ptr winISteamUtils_SteamUtils008_vtable;
@@ -1556,21 +1524,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils008 *create_winISteamUtils_SteamUtils008(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils008(void *u_iface)
 {
-    winISteamUtils_SteamUtils008 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils008), "SteamUtils008");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils008");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils008_vtable, 28, "SteamUtils008");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils009.h"
-
-typedef struct __winISteamUtils_SteamUtils009 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils009;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_GetSecondsSinceComputerActive, 4)
@@ -1607,109 +1570,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_InitFilterText, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_FilterText, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_GetIPv6ConnectivityState, 8)
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetSecondsSinceAppActive(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils009_GetConnectedUniverse(winISteamUtils_SteamUtils009 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils009_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetServerRealTime(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils009_GetIPCountry(winISteamUtils_SteamUtils009 *_this)
+const char * __thiscall winISteamUtils_SteamUtils009_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetImageSize(winISteamUtils_SteamUtils009 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils009_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils009_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetImageRGBA(winISteamUtils_SteamUtils009 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils009_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils009_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetCSERIPPort(winISteamUtils_SteamUtils009 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils009_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils009_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils009_GetCurrentBatteryPower(winISteamUtils_SteamUtils009 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils009_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetAppID(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationPosition(winISteamUtils_SteamUtils009 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils009_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(winISteamUtils_SteamUtils009 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils009_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(winISteamUtils_SteamUtils009 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils009_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(winISteamUtils_SteamUtils009 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -1719,7 +1682,7 @@ bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils009_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils009_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -1729,155 +1692,155 @@ bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_RunFrame(winISteamUtils_SteamUtils009 *_this)
+void __thiscall winISteamUtils_SteamUtils009_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils009_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetIPCCallCount(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetWarningMessageHook(winISteamUtils_SteamUtils009 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils009_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils009_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsOverlayEnabled(winISteamUtils_SteamUtils009 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils009_BOverlayNeedsPresent(winISteamUtils_SteamUtils009 *_this)
+bool __thiscall winISteamUtils_SteamUtils009_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(winISteamUtils_SteamUtils009 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils009_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils009_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils009_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_ShowGamepadTextInput(winISteamUtils_SteamUtils009 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils009_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+    _ret = cppISteamUtils_SteamUtils009_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils009_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils009 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils009_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils009 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils009_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils009_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils009_GetSteamUILanguage(winISteamUtils_SteamUtils009 *_this)
+const char * __thiscall winISteamUtils_SteamUtils009_GetSteamUILanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetSteamUILanguage(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_GetSteamUILanguage(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsSteamRunningInVR(winISteamUtils_SteamUtils009 *_this)
+bool __thiscall winISteamUtils_SteamUtils009_IsSteamRunningInVR(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsSteamRunningInVR(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_IsSteamRunningInVR(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationInset(winISteamUtils_SteamUtils009 *_this, int nHorizontalInset, int nVerticalInset)
+void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationInset(struct w_steam_iface *_this, int nHorizontalInset, int nVerticalInset)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_SetOverlayNotificationInset(_this->linux_side, nHorizontalInset, nVerticalInset);
+    cppISteamUtils_SteamUtils009_SetOverlayNotificationInset(_this->u_iface, nHorizontalInset, nVerticalInset);
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsSteamInBigPictureMode(winISteamUtils_SteamUtils009 *_this)
+bool __thiscall winISteamUtils_SteamUtils009_IsSteamInBigPictureMode(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsSteamInBigPictureMode(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_IsSteamInBigPictureMode(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_StartVRDashboard(winISteamUtils_SteamUtils009 *_this)
+void __thiscall winISteamUtils_SteamUtils009_StartVRDashboard(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_StartVRDashboard(_this->linux_side);
+    cppISteamUtils_SteamUtils009_StartVRDashboard(_this->u_iface);
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(winISteamUtils_SteamUtils009 *_this)
+bool __thiscall winISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(winISteamUtils_SteamUtils009 *_this, bool bEnabled)
+void __thiscall winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(struct w_steam_iface *_this, bool bEnabled)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(_this->linux_side, bEnabled);
+    cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(_this->u_iface, bEnabled);
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsSteamChinaLauncher(winISteamUtils_SteamUtils009 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_IsSteamChinaLauncher(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils009_InitFilterText(winISteamUtils_SteamUtils009 *_this)
+bool __thiscall winISteamUtils_SteamUtils009_IsSteamChinaLauncher(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_InitFilterText(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils009_IsSteamChinaLauncher(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamUtils_SteamUtils009_FilterText(winISteamUtils_SteamUtils009 *_this, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText, const char *pchInputMessage, bool bLegalOnly)
+bool __thiscall winISteamUtils_SteamUtils009_InitFilterText(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils009_InitFilterText(_this->u_iface);
+    return _ret;
+}
+
+int __thiscall winISteamUtils_SteamUtils009_FilterText(struct w_steam_iface *_this, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText, const char *pchInputMessage, bool bLegalOnly)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_FilterText(_this->linux_side, pchOutFilteredText, nByteSizeOutFilteredText, pchInputMessage, bLegalOnly);
+    _ret = cppISteamUtils_SteamUtils009_FilterText(_this->u_iface, pchOutFilteredText, nByteSizeOutFilteredText, pchInputMessage, bLegalOnly);
     return _ret;
 }
 
-ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(winISteamUtils_SteamUtils009 *_this, ESteamIPv6ConnectivityProtocol eProtocol)
+ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(struct w_steam_iface *_this, ESteamIPv6ConnectivityProtocol eProtocol)
 {
     ESteamIPv6ConnectivityState _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState(_this->linux_side, eProtocol);
+    _ret = cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState(_this->u_iface, eProtocol);
     return _ret;
 }
 
@@ -1926,21 +1889,16 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils009 *create_winISteamUtils_SteamUtils009(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils009(void *u_iface)
 {
-    winISteamUtils_SteamUtils009 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils009), "SteamUtils009");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils009");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils009_vtable, 34, "SteamUtils009");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
 #include "cppISteamUtils_SteamUtils010.h"
-
-typedef struct __winISteamUtils_SteamUtils010 {
-    vtable_ptr *vtable;
-    void *linux_side;
-} winISteamUtils_SteamUtils010;
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_GetSecondsSinceAppActive, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_GetSecondsSinceComputerActive, 4)
@@ -1981,109 +1939,109 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInpu
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_SetGameLauncherMode, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput, 4)
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceAppActive(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceComputerActive(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceComputerActive(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetSecondsSinceComputerActive(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetSecondsSinceComputerActive(_this->u_iface);
     return _ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils010_GetConnectedUniverse(winISteamUtils_SteamUtils010 *_this)
+EUniverse __thiscall winISteamUtils_SteamUtils010_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     EUniverse _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetConnectedUniverse(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetConnectedUniverse(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetServerRealTime(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetServerRealTime(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetServerRealTime(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetServerRealTime(_this->u_iface);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils010_GetIPCountry(winISteamUtils_SteamUtils010 *_this)
+const char * __thiscall winISteamUtils_SteamUtils010_GetIPCountry(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetIPCountry(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetIPCountry(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetImageSize(winISteamUtils_SteamUtils010 *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+bool __thiscall winISteamUtils_SteamUtils010_GetImageSize(struct w_steam_iface *_this, int iImage, uint32 *pnWidth, uint32 *pnHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetImageSize(_this->linux_side, iImage, pnWidth, pnHeight);
+    _ret = cppISteamUtils_SteamUtils010_GetImageSize(_this->u_iface, iImage, pnWidth, pnHeight);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetImageRGBA(winISteamUtils_SteamUtils010 *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
+bool __thiscall winISteamUtils_SteamUtils010_GetImageRGBA(struct w_steam_iface *_this, int iImage, uint8 *pubDest, int nDestBufferSize)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetImageRGBA(_this->linux_side, iImage, pubDest, nDestBufferSize);
+    _ret = cppISteamUtils_SteamUtils010_GetImageRGBA(_this->u_iface, iImage, pubDest, nDestBufferSize);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetCSERIPPort(winISteamUtils_SteamUtils010 *_this, uint32 *unIP, uint16 *usPort)
+bool __thiscall winISteamUtils_SteamUtils010_GetCSERIPPort(struct w_steam_iface *_this, uint32 *unIP, uint16 *usPort)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetCSERIPPort(_this->linux_side, unIP, usPort);
+    _ret = cppISteamUtils_SteamUtils010_GetCSERIPPort(_this->u_iface, unIP, usPort);
     return _ret;
 }
 
-uint8 __thiscall winISteamUtils_SteamUtils010_GetCurrentBatteryPower(winISteamUtils_SteamUtils010 *_this)
+uint8 __thiscall winISteamUtils_SteamUtils010_GetCurrentBatteryPower(struct w_steam_iface *_this)
 {
     uint8 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetCurrentBatteryPower(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetCurrentBatteryPower(_this->u_iface);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetAppID(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetAppID(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetAppID(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetAppID(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationPosition(winISteamUtils_SteamUtils010 *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition(_this->linux_side, eNotificationPosition);
+    cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition(_this->u_iface, eNotificationPosition);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(winISteamUtils_SteamUtils010 *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsAPICallCompleted(_this->linux_side, hSteamAPICall, pbFailed);
+    _ret = cppISteamUtils_SteamUtils010_IsAPICallCompleted(_this->u_iface, hSteamAPICall, pbFailed);
     return _ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(winISteamUtils_SteamUtils010 *_this, SteamAPICall_t hSteamAPICall)
+ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     ESteamAPICallFailure _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetAPICallFailureReason(_this->linux_side, hSteamAPICall);
+    _ret = cppISteamUtils_SteamUtils010_GetAPICallFailureReason(_this->u_iface, hSteamAPICall);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(winISteamUtils_SteamUtils010 *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
 {
     bool _ret;
     int u_callback_len = cubCallback, w_callback_len = cubCallback;
@@ -2093,7 +2051,7 @@ bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(winISteamUtils_Ste
     cubCallback = u_callback_len;
     pCallback = u_callback;
 
-    _ret = cppISteamUtils_SteamUtils010_GetAPICallResult(_this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    _ret = cppISteamUtils_SteamUtils010_GetAPICallResult(_this->u_iface, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
     if (_ret && u_callback != w_callback)
     {
         convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);
@@ -2103,185 +2061,185 @@ bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(winISteamUtils_Ste
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_RunFrame(winISteamUtils_SteamUtils010 *_this)
+void __thiscall winISteamUtils_SteamUtils010_RunFrame(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_RunFrame(_this->linux_side);
+    cppISteamUtils_SteamUtils010_RunFrame(_this->u_iface);
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetIPCCallCount(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetIPCCallCount(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetIPCCallCount(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetIPCCallCount(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetWarningMessageHook(winISteamUtils_SteamUtils010 *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamUtils_SteamUtils010_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_SetWarningMessageHook(_this->linux_side, pFunction);
+    cppISteamUtils_SteamUtils010_SetWarningMessageHook(_this->u_iface, pFunction);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsOverlayEnabled(winISteamUtils_SteamUtils010 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsOverlayEnabled(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils010_BOverlayNeedsPresent(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_IsOverlayEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_BOverlayNeedsPresent(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_IsOverlayEnabled(_this->u_iface);
     return _ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(winISteamUtils_SteamUtils010 *_this, const char *szFileName)
+bool __thiscall winISteamUtils_SteamUtils010_BOverlayNeedsPresent(struct w_steam_iface *_this)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils010_BOverlayNeedsPresent(_this->u_iface);
+    return _ret;
+}
+
+SteamAPICall_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     SteamAPICall_t _ret;
     char lin_szFileName[PATH_MAX];
     steamclient_dos_path_to_unix_path(szFileName, lin_szFileName, 0);
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
+    _ret = cppISteamUtils_SteamUtils010_CheckFileSignature(_this->u_iface, szFileName ? lin_szFileName : NULL);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_ShowGamepadTextInput(winISteamUtils_SteamUtils010 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils010_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_ShowGamepadTextInput(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
+    _ret = cppISteamUtils_SteamUtils010_ShowGamepadTextInput(_this->u_iface, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText);
     return _ret;
 }
 
-uint32 __thiscall winISteamUtils_SteamUtils010_GetEnteredGamepadTextLength(winISteamUtils_SteamUtils010 *_this)
+uint32 __thiscall winISteamUtils_SteamUtils010_GetEnteredGamepadTextLength(struct w_steam_iface *_this)
 {
     uint32 _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetEnteredGamepadTextLength(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetEnteredGamepadTextLength(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetEnteredGamepadTextInput(winISteamUtils_SteamUtils010 *_this, char *pchText, uint32 cchText)
+bool __thiscall winISteamUtils_SteamUtils010_GetEnteredGamepadTextInput(struct w_steam_iface *_this, char *pchText, uint32 cchText)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetEnteredGamepadTextInput(_this->linux_side, pchText, cchText);
+    _ret = cppISteamUtils_SteamUtils010_GetEnteredGamepadTextInput(_this->u_iface, pchText, cchText);
     return _ret;
 }
 
-const char * __thiscall winISteamUtils_SteamUtils010_GetSteamUILanguage(winISteamUtils_SteamUtils010 *_this)
+const char * __thiscall winISteamUtils_SteamUtils010_GetSteamUILanguage(struct w_steam_iface *_this)
 {
     const char * _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetSteamUILanguage(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_GetSteamUILanguage(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningInVR(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningInVR(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsSteamRunningInVR(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_IsSteamRunningInVR(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationInset(winISteamUtils_SteamUtils010 *_this, int nHorizontalInset, int nVerticalInset)
+void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationInset(struct w_steam_iface *_this, int nHorizontalInset, int nVerticalInset)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_SetOverlayNotificationInset(_this->linux_side, nHorizontalInset, nVerticalInset);
+    cppISteamUtils_SteamUtils010_SetOverlayNotificationInset(_this->u_iface, nHorizontalInset, nVerticalInset);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsSteamInBigPictureMode(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_IsSteamInBigPictureMode(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsSteamInBigPictureMode(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_IsSteamInBigPictureMode(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_StartVRDashboard(winISteamUtils_SteamUtils010 *_this)
+void __thiscall winISteamUtils_SteamUtils010_StartVRDashboard(struct w_steam_iface *_this)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_StartVRDashboard(_this->linux_side);
+    cppISteamUtils_SteamUtils010_StartVRDashboard(_this->u_iface);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsVRHeadsetStreamingEnabled(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_IsVRHeadsetStreamingEnabled(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsVRHeadsetStreamingEnabled(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_IsVRHeadsetStreamingEnabled(_this->u_iface);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetVRHeadsetStreamingEnabled(winISteamUtils_SteamUtils010 *_this, bool bEnabled)
+void __thiscall winISteamUtils_SteamUtils010_SetVRHeadsetStreamingEnabled(struct w_steam_iface *_this, bool bEnabled)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_SetVRHeadsetStreamingEnabled(_this->linux_side, bEnabled);
+    cppISteamUtils_SteamUtils010_SetVRHeadsetStreamingEnabled(_this->u_iface, bEnabled);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsSteamChinaLauncher(winISteamUtils_SteamUtils010 *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsSteamChinaLauncher(_this->linux_side);
-    return _ret;
-}
-
-bool __thiscall winISteamUtils_SteamUtils010_InitFilterText(winISteamUtils_SteamUtils010 *_this, uint32 unFilterOptions)
+bool __thiscall winISteamUtils_SteamUtils010_IsSteamChinaLauncher(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_InitFilterText(_this->linux_side, unFilterOptions);
+    _ret = cppISteamUtils_SteamUtils010_IsSteamChinaLauncher(_this->u_iface);
     return _ret;
 }
 
-int __thiscall winISteamUtils_SteamUtils010_FilterText(winISteamUtils_SteamUtils010 *_this, ETextFilteringContext eContext, CSteamID sourceSteamID, const char *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText)
+bool __thiscall winISteamUtils_SteamUtils010_InitFilterText(struct w_steam_iface *_this, uint32 unFilterOptions)
+{
+    bool _ret;
+    TRACE("%p\n", _this);
+    _ret = cppISteamUtils_SteamUtils010_InitFilterText(_this->u_iface, unFilterOptions);
+    return _ret;
+}
+
+int __thiscall winISteamUtils_SteamUtils010_FilterText(struct w_steam_iface *_this, ETextFilteringContext eContext, CSteamID sourceSteamID, const char *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText)
 {
     int _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_FilterText(_this->linux_side, eContext, sourceSteamID, pchInputMessage, pchOutFilteredText, nByteSizeOutFilteredText);
+    _ret = cppISteamUtils_SteamUtils010_FilterText(_this->u_iface, eContext, sourceSteamID, pchInputMessage, pchOutFilteredText, nByteSizeOutFilteredText);
     return _ret;
 }
 
-ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils010_GetIPv6ConnectivityState(winISteamUtils_SteamUtils010 *_this, ESteamIPv6ConnectivityProtocol eProtocol)
+ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils010_GetIPv6ConnectivityState(struct w_steam_iface *_this, ESteamIPv6ConnectivityProtocol eProtocol)
 {
     ESteamIPv6ConnectivityState _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState(_this->linux_side, eProtocol);
+    _ret = cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState(_this->u_iface, eProtocol);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(_this->u_iface);
     return _ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(winISteamUtils_SteamUtils010 *_this, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
+bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(struct w_steam_iface *_this, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(_this->linux_side, eKeyboardMode, nTextFieldXPosition, nTextFieldYPosition, nTextFieldWidth, nTextFieldHeight);
+    _ret = cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(_this->u_iface, eKeyboardMode, nTextFieldXPosition, nTextFieldYPosition, nTextFieldWidth, nTextFieldHeight);
     return _ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetGameLauncherMode(winISteamUtils_SteamUtils010 *_this, bool bLauncherMode)
+void __thiscall winISteamUtils_SteamUtils010_SetGameLauncherMode(struct w_steam_iface *_this, bool bLauncherMode)
 {
     TRACE("%p\n", _this);
-    cppISteamUtils_SteamUtils010_SetGameLauncherMode(_this->linux_side, bLauncherMode);
+    cppISteamUtils_SteamUtils010_SetGameLauncherMode(_this->u_iface, bLauncherMode);
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(winISteamUtils_SteamUtils010 *_this)
+bool __thiscall winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(struct w_steam_iface *_this)
 {
     bool _ret;
     TRACE("%p\n", _this);
-    _ret = cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(_this->linux_side);
+    _ret = cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(_this->u_iface);
     return _ret;
 }
 
@@ -2334,12 +2292,12 @@ void __asm_dummy_vtables(void) {
 }
 #endif
 
-winISteamUtils_SteamUtils010 *create_winISteamUtils_SteamUtils010(void *linux_side)
+struct w_steam_iface *create_winISteamUtils_SteamUtils010(void *u_iface)
 {
-    winISteamUtils_SteamUtils010 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils010), "SteamUtils010");
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils010");
     TRACE("-> %p\n", r);
     r->vtable = alloc_vtable(&winISteamUtils_SteamUtils010_vtable, 38, "SteamUtils010");
-    r->linux_side = linux_side;
+    r->u_iface = u_iface;
     return r;
 }
 
