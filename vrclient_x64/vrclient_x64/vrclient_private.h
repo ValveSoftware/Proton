@@ -65,6 +65,29 @@ struct client_core_data
     SIZE_T created_interfaces_size;
 };
 
+struct compositor_data
+{
+    ID3D11Device *d3d11_device;
+    IDXGIVkInteropDevice *dxvk_device;
+    BOOL d3d11_explicit_handoff, handoff_called;
+    void *client_core_linux_side;
+
+#ifndef __x86_64__
+    /* Digital action state change fixup hack. */
+    struct
+    {
+        VRActionHandle_t action;
+        VRInputValueHandle_t origin;
+        LARGE_INTEGER update_qpf_time;
+        BOOL previous_state;
+    } digital_actions_state[128];
+    unsigned int digital_action_count;
+    LARGE_INTEGER qpf_freq;
+#endif
+};
+
+extern struct compositor_data compositor_data;
+
 struct w_steam_iface
 {
     vtable_ptr *vtable;
