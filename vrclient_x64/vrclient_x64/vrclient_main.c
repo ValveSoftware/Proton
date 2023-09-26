@@ -714,57 +714,6 @@ struct submit_data
     EVRSubmitFlags flags;
 };
 
-static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int gl_depth_texture,
-        const void *data, unsigned int data_size)
-{
-    const struct submit_data *submit_data = data;
-    VRTextureBounds_t bounds = submit_data->bounds;
-    VRTextureWithPoseAndDepth_t texture_both;
-    VRTextureWithDepth_t texture_depth;
-    VRTextureWithPose_t texture_pose;
-    VRCompositorError error = 0;
-    Texture_t texture;
-    void *tex;
-
-    TRACE("texture %u, depth_texture %u, data {%p, %u}\n",
-            gl_texture, gl_depth_texture, data, data_size);
-
-    switch (submit_data->flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-    {
-    case 0:
-        texture = submit_data->texture;
-        texture.handle = (void *)(UINT_PTR)gl_texture;
-        texture.eType = TextureType_OpenGL;
-        tex = &texture;
-        break;
-    case Submit_TextureWithPose:
-        texture_pose = submit_data->texture_pose;
-        texture_pose.texture.handle = (void *)(UINT_PTR)gl_texture;
-        texture_pose.texture.eType = TextureType_OpenGL;
-        tex = &texture_pose;
-        break;
-    case Submit_TextureWithDepth:
-        texture_depth = submit_data->texture_depth;
-        texture_depth.texture.handle = (void *)(UINT_PTR)gl_texture;
-        texture_depth.texture.eType = TextureType_OpenGL;
-        texture_depth.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
-        tex = &texture_depth;
-        break;
-    case Submit_TextureWithPose | Submit_TextureWithDepth:
-        texture_both = submit_data->texture_both;
-        texture_both.texture.handle = (void *)(UINT_PTR)gl_texture;
-        texture_both.texture.eType = TextureType_OpenGL;
-        texture_both.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
-        tex = &texture_both;
-        break;
-    }
-
-    error = submit_data->submit(submit_data->linux_side, submit_data->eye,
-            tex, &bounds, submit_data->flags);
-    if (error)
-        WARN("error %#x\n", error);
-}
-
 void ivrcompositor_005_submit(
         void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
         void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds,
@@ -977,7 +926,7 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
     VRTextureWithDepth_t our_depth;
     VRTextureWithPose_t our_pose;
     Texture_t our_texture;
-    void *tex;
+    void *tex = texture;
 
     load_vk_unwrappers();
 
@@ -1042,11 +991,14 @@ EVROverlayError ivroverlay_set_overlay_texture(
     IUnknown *texture_iface;
     HRESULT hr;
 
-    TRACE("%p, overlayHandle = %#x, texture = %p\n", linux_side, overlayHandle, texture);
+    TRACE("%p, overlayHandle = %s, texture = %p\n", linux_side, wine_dbgstr_longlong(overlayHandle), texture);
 
     switch (texture->eType)
     {
         case TextureType_DirectX:
+        {
+            IDXGIVkInteropSurface *dxvk_surface;
+
             TRACE("D3D11\n");
 
             if (!texture->handle) {
@@ -1056,13 +1008,14 @@ EVROverlayError ivroverlay_set_overlay_texture(
 
             texture_iface = texture->handle;
 
-            IDXGIVkInteropSurface *dxvk_surface;
             if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface, &IID_IDXGIVkInteropSurface, (void **)&dxvk_surface))) {
                 return ivroverlay_set_overlay_texture_dxvk(cpp_func, linux_side, overlayHandle, texture, version, dxvk_surface);
             }
 
             WARN("Invalid D3D11 texture %p.\n", texture);
             return cpp_func(linux_side, overlayHandle, texture);
+        }
+
         case TextureType_Vulkan:
             TRACE("Vulkan\n");
             return ivroverlay_set_overlay_texture_vulkan(cpp_func, linux_side, overlayHandle, texture, version);
@@ -1254,20 +1207,9 @@ struct post_present_handoff_data
     void (*post_present_handoff)(void *linux_side);
 };
 
-static CDECL void d3d11_post_present_handoff_callback(const void *data, unsigned int data_size)
-{
-    const struct post_present_handoff_data *callback_data = data;
-
-    TRACE("data {%p, %u}\n", data, data_size);
-
-    callback_data->post_present_handoff(callback_data->linux_side);
-}
-
 void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         void *linux_side, unsigned int version)
 {
-    struct post_present_handoff_data data;
-
     TRACE("%p\n", linux_side);
 
     if (compositor_data.dxvk_device)
@@ -1298,37 +1240,12 @@ struct explicit_timing_data
     unsigned int version;
 };
 
-static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int data_size)
-{
-    const struct explicit_timing_data *callback_data = data;
-    EVRCompositorError error;
-
-    TRACE("data {%p, %u}\n", data, data_size);
-
-    switch (callback_data->version)
-    {
-        case 21:
-            error = cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(callback_data->linux_side);
-            break;
-        case 22:
-            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(callback_data->linux_side);
-            break;
-        default:
-            FIXME("Unhandled version %u.\n", callback_data->version);
-            break;
-    }
-
-    if (error)
-        WARN("error %#x\n", error);
-}
-
 EVRCompositorError ivrcompositor_wait_get_poses(
         EVRCompositorError (cpp_func)(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t),
         void *linux_side, TrackedDevicePose_t *render_poses, uint32_t render_pose_count,
         TrackedDevicePose_t *game_poses, uint32_t game_pose_count,
         unsigned int version)
 {
-    struct explicit_timing_data data;
     EVRCompositorError r;
 
     TRACE("%p, %p, %u, %p, %u\n", linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
@@ -1467,7 +1384,7 @@ static EVRRenderModelError load_linux_texture_map(void *linux_side, TextureID_t 
         return 0;
     }
     case 6:
-        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, texture_map);
+        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (winRenderModel_TextureMap_t_1267 **)texture_map);
     }
     FIXME("Unsupported IVRRenderModels version! %u\n", version);
     return VRRenderModelError_NotSupported;
@@ -1484,7 +1401,7 @@ static void free_linux_texture_map(void *linux_side,
         HeapFree(GetProcessHeap(), 0, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (winRenderModel_TextureMap_t_1267 *)texture_map);
         break;
     default:
         FIXME("Unsupported IVRRenderModels version! %u\n", version);

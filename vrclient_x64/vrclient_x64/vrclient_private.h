@@ -172,8 +172,3 @@ EVRInputError ivrinput_get_digital_action_data(
         VRInputValueHandle_t restrict_to_device, unsigned int version);
 
 #endif  /* __cplusplus */
-
-#define TRACE WINE_TRACE
-#define ERR WINE_ERR
-#define WARN WINE_WARN
-#define FIXME WINE_FIXME
