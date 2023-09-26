@@ -717,7 +717,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     if (!(vrclient_VRClientCoreFactory = reinterpret_cast<decltype(vrclient_VRClientCoreFactory)>
             (dlsym(lib_vrclient, "VRClientCoreFactory"))))
     {
-        WINE_ERR("Could not find function %s.\n", vrclient_VRClientCoreFactory);
+        WINE_ERR("Could not find function VRClientCoreFactory.\n");
         goto done;
     }
     if (!(client_core = vrclient_VRClientCoreFactory(vr::IVRClientCore_Version, &return_code)))
@@ -794,7 +794,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
             (dlsym(unix_handle, "__wine_get_native_VkPhysicalDevice"));
 
     dlclose(unix_handle);
-    if (!__wine_get_native_VkPhysicalDevice)
+    if (!p__wine_get_native_VkPhysicalDevice)
     {
         WINE_ERR("__wine_get_native_VkPhysicalDevice not found.\n");
         goto done;
@@ -1349,7 +1349,7 @@ static BOOL steam_command_handler(int argc, char *argv[])
         WINE_ERR("Forwarding");
         for (i = 0; i < argc; ++i)
             WINE_ERR(" %s", wine_dbgstr_a(argv[i]));
-        WINE_ERR(" to native steam failed, status %#lx.\n", status);
+        WINE_ERR(" to native steam failed, status %#x.\n", status);
     }
     return TRUE;
 }
