@@ -43,6 +43,10 @@
 #define WINE_XR_ALIGN DECLSPEC_ALIGN
 #endif
 
+#ifdef __x86_64__
+#define XR_PTR_SIZE 8
+#endif
+
 #define XR_TRUE 1
 #define XR_FALSE 0
 #define XR_MAX_EXTENSION_NAME_SIZE 128
