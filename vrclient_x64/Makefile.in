@@ -9,6 +9,7 @@ C_SRCS = \
 	vrclient_x64/flatapi.c \
 	vrclient_x64/vrclient_main.c \
 	vrclient_x64/vrsystem_manual.c \
+	vrclient_x64/vrrendermodels_manual.c \
 	vrclient_x64/winIVRApplications.c \
 	vrclient_x64/winIVRChaperone.c \
 	vrclient_x64/winIVRChaperoneSetup.c \
