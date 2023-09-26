@@ -351,27 +351,27 @@ all-dist: $(DIST_WINEOPENXR_JSON64)
 ## steam.exe
 ##
 
-STEAMEXE_CFLAGS = -Wno-attributes
-STEAMEXE_CXXFLAGS = -Wno-attributes
-STEAMEXE_LDFLAGS = -L$(STEAMEXE_SRC)/32/ -L$(STEAMEXE_SRC)/64/ -lsteam_api -lshlwapi -lmsi -lole32 -ldl -static-libgcc -static-libstdc++
+STEAMEXE_CPPFLAGS = \
+	-I$(SRC)/lsteamclient/steamworks_sdk_142/ \
+	-I$(SRC)/openvr/headers/ \
 
-STEAMEXE_WINEMAKER_ARGS = \
-	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
-	"-I$(SRC)/openvr/headers/" \
-	"-L$(SRC)/steam_helper/"
+STEAMEXE_LDFLAGS = \
+	-L$(SRC)/steam_helper/32/ \
+	-L$(SRC)/steam_helper/64/ \
+	-lsteam_api
 
 STEAMEXE_DEPENDS = wine
 
 $(eval $(call rules-source,steamexe,$(SRCDIR)/steam_helper))
-$(eval $(call rules-winemaker,steamexe,64,steam.exe))
-$(eval $(call rules-winemaker,steamexe,32,steam.exe))
+$(eval $(call rules-makedep,steamexe,64))
+$(eval $(call rules-makedep,steamexe,32))
 
 $(OBJ)/.steamexe-post-build32:
-	cp $(STEAMEXE_SRC)/32/libsteam_api.so $(DST_LIBDIR32)/
+	cp $(SRC)/steam_helper/32/libsteam_api.so $(DST_LIBDIR32)/
 	touch $@
 
 $(OBJ)/.steamexe-post-build64:
-	cp $(STEAMEXE_SRC)/64/libsteam_api.so $(DST_LIBDIR64)/
+	cp $(SRC)/steam_helper/64/libsteam_api.so $(DST_LIBDIR64)/
 	touch $@
 
 
