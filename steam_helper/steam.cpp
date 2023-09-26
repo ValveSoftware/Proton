@@ -36,6 +36,7 @@
 #define WIN32_NO_STATUS
 #include <windows.h>
 #include <winternl.h>
+#include <shellapi.h>
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <string.h>
@@ -46,15 +47,21 @@
 
 #pragma push_macro("_WIN32")
 #pragma push_macro("__cdecl")
+#pragma push_macro("strncpy")
 #undef _WIN32
 #undef __cdecl
+#undef strncpy
 #include "steam_api.h"
 #pragma pop_macro("_WIN32")
 #pragma pop_macro("__cdecl")
+#pragma pop_macro("strncpy")
 
 #include "wine/debug.h"
 
+#pragma push_macro("wcsncpy")
+#undef wcsncpy
 #include "json/json.h"
+#pragma pop_macro("wcsncpy")
 
 #include "wine/unixlib.h"
 #include "wine/heap.h"
@@ -66,7 +73,11 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
 
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
+static const WCHAR PROTON_VR_RUNTIME_W[] = {'P','R','O','T','O','N','_','V','R','_','R','U','N','T','I','M','E',0};
+static const WCHAR VR_PATHREG_OVERRIDE_W[] = {'V','R','_','P','A','T','H','R','E','G','_','O','V','E','R','R','I','D','E',0};
+static const WCHAR VR_OVERRIDE_W[] = {'V','R','_','O','V','E','R','R','I','D','E',0};
+static const WCHAR VR_CONFIG_PATH_W[] = {'V','R','_','C','O','N','F','I','G','_','P','A','T','H',0};
+static const WCHAR VR_LOG_PATH_W[] = {'V','R','_','L','O','G','_','P','A','T','H',0};
 
 static bool env_nonzero(const char *env)
 {
@@ -97,7 +108,7 @@ static DWORD WINAPI create_steam_window(void *arg)
     while (GetMessageW(&msg, NULL, 0, 0))
     {
         TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        DispatchMessageW(&msg);
     }
 
     return 0;
@@ -246,16 +257,19 @@ static std::string get_linux_vr_path(void)
 
 static bool get_windows_vr_path(WCHAR *out_path, bool create)
 {
+    static const WCHAR openvrpathsW[] = {'\\','o','p','e','n','v','r','p','a','t','h','s','.','v','r','p','a','t','h',0};
+    static const WCHAR openvrW[] = {'\\','o','p','e','n','v','r',0};
+
     if(FAILED(SHGetFolderPathW(NULL, CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE,
                     NULL, 0, out_path)))
         return false;
 
-    lstrcatW(out_path, L"\\openvr");
+    lstrcatW(out_path, openvrW);
 
     if(create)
         CreateDirectoryW(out_path, NULL);
 
-    lstrcatW(out_path, L"\\openvrpaths.vrpath");
+    lstrcatW(out_path, openvrpathsW);
 
     return true;
 }
@@ -463,11 +477,11 @@ static bool convert_linux_vrpaths(void)
     const char *vr_override = getenv("VR_OVERRIDE");
     if(vr_override)
     {
-        set_env_from_unix(L"PROTON_VR_RUNTIME", vr_override);
+        set_env_from_unix(PROTON_VR_RUNTIME_W, vr_override);
     }
     else if(root.isMember("runtime") && root["runtime"].isArray() && root["runtime"].size() > 0)
     {
-        set_env_from_unix(L"PROTON_VR_RUNTIME", root["runtime"][0].asString());
+        set_env_from_unix(PROTON_VR_RUNTIME_W, root["runtime"][0].asString());
     }
 
     /* set hard-coded paths */
@@ -486,10 +500,10 @@ static bool convert_linux_vrpaths(void)
     root["external_drivers"] = Json::Value(Json::ValueType::nullValue);
 
     /* write out windows vrpaths */
-    SetEnvironmentVariableW(L"VR_PATHREG_OVERRIDE", NULL);
-    SetEnvironmentVariableW(L"VR_OVERRIDE", NULL);
-    convert_environment_path("VR_CONFIG_PATH", L"VR_CONFIG_PATH");
-    convert_environment_path("VR_LOG_PATH", L"VR_LOG_PATH");
+    SetEnvironmentVariableW(VR_PATHREG_OVERRIDE_W, NULL);
+    SetEnvironmentVariableW(VR_OVERRIDE_W, NULL);
+    convert_environment_path("VR_CONFIG_PATH", VR_CONFIG_PATH_W);
+    convert_environment_path("VR_LOG_PATH", VR_LOG_PATH_W);
     Json::StyledWriter writer;
 
     WCHAR windows_vrpaths[MAX_PATH];
@@ -550,7 +564,7 @@ void* load_vrclient(void)
 #endif
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
-    if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    if(!GetEnvironmentVariableW(PROTON_VR_RUNTIME_W, pathW, ARRAY_SIZE(pathW)))
     {
         WINE_TRACE("Linux OpenVR runtime is not available\n");
         return 0;
@@ -933,9 +947,9 @@ static void setup_vr_registry(void)
         return;
     }
 
-    if(GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    if(GetEnvironmentVariableW(PROTON_VR_RUNTIME_W, pathW, ARRAY_SIZE(pathW)))
     {
-        if ((status = RegSetValueExW(vr_key, L"PROTON_VR_RUNTIME", 0, REG_SZ,
+        if ((status = RegSetValueExW(vr_key, PROTON_VR_RUNTIME_W, 0, REG_SZ,
                 (BYTE *)pathW, (lstrlenW(pathW) + 1) * sizeof(WCHAR))))
         {
             WINE_ERR("Could not set PROTON_VR_RUNTIME value, status %#x.\n", status);
@@ -1063,6 +1077,22 @@ static BOOL should_use_shell_execute(const WCHAR *cmdline)
 
 static HANDLE run_process(BOOL *should_await, BOOL game_process)
 {
+    static const WCHAR link2eaW[] = {'l','i','n','k','2','e','a',':','/','/',0};
+    static const WCHAR link2ea_pathW[] =
+    {
+        'S','o','f','t','w','a','r','e','\\','C','l','a','s','s','e','s','\\','l','i','n','k','2','e','a',0
+    };
+    static const WCHAR ea_desktop_pathW[] =
+    {
+        'S','o','f','t','w','a','r','e','\\','E','l','e','c','t','r','o','n','i','c',' ','A','r','t','s',
+        '\\','E','A',' ','D','e','s','k','t','o','p',0
+    };
+    static const WCHAR ea_core_pathW[] =
+    {
+        'S','o','f','t','w','a','r','e','\\','E','l','e','c','t','r','o','n','i','c',' ','A','r','t','s',
+        '\\','E','A',' ','C','o','r','e',0
+    };
+    static const WCHAR IsUnavailableW[] = {'I','s','U','n','a','v','a','i','l','a','b','l','e',0};
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
@@ -1174,7 +1204,7 @@ run:
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
 
     use_shell_execute = should_use_shell_execute(cmdline);
-    if (use_shell_execute && lstrlenW(cmdline) > 10 && !memcmp(cmdline, L"link2ea://", 10 *sizeof(WCHAR)))
+    if (use_shell_execute && lstrlenW(cmdline) > 10 && !memcmp(cmdline, link2eaW, 10 *sizeof(WCHAR)))
     {
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
         DWORD is_unavailable, type, size;
@@ -1185,15 +1215,15 @@ run:
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
             WINE_ERR("Failed to set desktop timeout, err %u.\n", GetLastError());
 
-        if (!RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Desktop", 0, KEY_ALL_ACCESS, &eakey))
+        if (!RegOpenKeyExW(HKEY_LOCAL_MACHINE, ea_desktop_pathW, 0, KEY_ALL_ACCESS, &eakey))
         {
             size = sizeof(is_unavailable);
-            if (!RegQueryValueExW(eakey, L"IsUnavailable", NULL, &type, (BYTE *)&is_unavailable, &size)
+            if (!RegQueryValueExW(eakey, IsUnavailableW, NULL, &type, (BYTE *)&is_unavailable, &size)
                     && type == REG_DWORD && is_unavailable)
             {
                 WINE_ERR("EA Desktop\\IsUnavailable is set, clearing.\n");
                 is_unavailable = 0;
-                RegSetValueExW(eakey, L"IsUnavailable", 0, REG_DWORD, (BYTE *)&is_unavailable, sizeof(is_unavailable));
+                RegSetValueExW(eakey, IsUnavailableW, 0, REG_DWORD, (BYTE *)&is_unavailable, sizeof(is_unavailable));
             }
             RegCloseKey(eakey);
         }
@@ -1219,14 +1249,17 @@ run:
             WINE_ERR("Failed to execture %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
             if (game_process && ret == SE_ERR_NOASSOC && link2ea)
             {
+                static const WCHAR msi_guidW[] = {'{','C','2','6','2','2','0','8','5','-','A','B','D','2','-','4','9','E','5','-','8','A','B','9','-','D','3','D','6','A','6','4','2','C','0','9','1','}',0};
+                static const WCHAR REMOVE_ALL_W[] = {'R','E','M','O','V','E','=','A','L','L',0};
+
                 /* Try to uninstall EA desktop so it is set up from prerequisites on the next run. */
-                UINT ret = MsiConfigureProductExW(L"{C2622085-ABD2-49E5-8AB9-D3D6A642C091}", 0, INSTALLSTATE_DEFAULT, L"REMOVE=ALL");
+                UINT ret = MsiConfigureProductExW(msi_guidW, 0, INSTALLSTATE_DEFAULT, REMOVE_ALL_W);
 
                 WINE_TRACE("MsiConfigureProductExW ret %u.\n", ret);
                 /* If uninstall failed this should trigger interactive repair window on the EA setup run. */
-                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Classes\\link2ea");
-                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Desktop");
-                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Core");
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, link2ea_pathW);
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, ea_desktop_pathW);
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, ea_core_pathW);
             }
         }
         return INVALID_HANDLE_VALUE;
@@ -1323,9 +1356,21 @@ static BOOL steam_command_handler(int argc, char *argv[])
 
 static void setup_steam_files(void)
 {
-    static const WCHAR config_pathW[] = L"C:\\Program Files (x86)\\Steam\\config";
-    static const WCHAR steamapps_pathW[] = L"C:\\Program Files (x86)\\Steam\\steamapps";
-    static const WCHAR libraryfolders_nameW[] = L"C:\\Program Files (x86)\\Steam\\steamapps\\libraryfolders.vdf";
+    static const WCHAR config_pathW[] =
+    {
+        'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m',
+        '\\','c','o','n','f','i','g',0,
+    };
+    static const WCHAR steamapps_pathW[] =
+    {
+        'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m',
+        '\\','s','t','e','a','m','a','p','p','s',0,
+    };
+    static const WCHAR libraryfolders_nameW[] =
+    {
+        'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m',
+        '\\','s','t','e','a','m','a','p','p','s','\\','l','i','b','r','a','r','y','f','o','l','d','e','r','s','.','v','d','f',0,
+    };
     const char *steam_install_path = getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH");
     const char *steam_library_paths = getenv("STEAM_COMPAT_LIBRARY_PATHS");
     const char *start, *end, *next;
@@ -1432,8 +1477,8 @@ static void setup_steam_files(void)
 
 static HANDLE find_ack_event(void)
 {
-    static const WCHAR steam_ack_event[] = L"STEAM_START_ACK_EVENT";
-    static const WCHAR name[] = L"\\BaseNamedObjects\\Session\\1";
+    static const WCHAR steam_ack_event[] = {'S','T','E','A','M','_','S','T','A','R','T','_','A','C','K','_','E','V','E','N','T',0};
+    static const WCHAR name[] = {'\\','B','a','s','e','N','a','m','e','d','O','b','j','e','c','t','s','\\','S','e','s','s','i','o','n','\\','1',0};
     DIRECTORY_BASIC_INFORMATION *di;
     OBJECT_ATTRIBUTES attr;
     HANDLE dir, ret = NULL;
