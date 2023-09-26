@@ -1238,6 +1238,10 @@ DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPT
 	mkdir -p $(CARGO_HOME)
 	$(DOCKER_BASE) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $@
 
+.PHONY: copy-container-usr
+copy-container-usr-headers:
+	$(DOCKER_BASE) rsync -qa --prune-empty-dirs --include='*/' --include='*.h' --include='*.hpp' --exclude='*' /usr $(OBJ)/container-usr-headers
+	@echo -e "\nclangd --path-mappings=/usr=$(OBJ)/container-usr-headers"
 
 .PHONY: test-container
 test-container:

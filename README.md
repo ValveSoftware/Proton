@@ -254,6 +254,36 @@ EOF
 ln -s ../build/current-dev/compile_commands/wine64/compile_commands.json .
 ```
 
+## Container Headers
+
+Since Proton is built in a container it uses paths and header files that are
+present in the container and may not match the ones on your host system. There's
+a handy make target that copiers all the `.h` and `.hpp` files from inside the
+container to the build directory.
+
+```bash
+$ make copy-container-usr-headers
+podman run --rm -v /home/ivyl/src/proton:/home/ivyl/src/proton -v /home/ivyl/build/proton/current-dev:/home/ivyl/build/proton/current-dev -w /home/ivyl/build/proton/current-dev -e MAKEFLAGS -v /home/ivyl/.cargo:/home/ivyl/.cargo -e CARGO_HOME=/home/ivyl/.cargo -v /home/ivyl/.ccache:/home/ivyl/.ccache  -e CCACHE_DIR=/home/ivyl/.ccache  registry.gitlab.steamos.cloud/proton/sniper/sdk:0.20230905.59202-0 rsync -qa --prune-empty-dirs --include='*/' --include='*.h' --include='*.hpp' --exclude='*' /usr /home/ivyl/build/proton/current-dev/container-usr-headers
+
+clangd --path-mappings=/usr=/home/ivyl/build/proton/current-dev/container-usr-headers
+```
+
+It prints `--path-mappings` parameter that you can pass to `clangd`.
+
+## Host Headers
+
+Sadly at the time of writing it's the only way for path mapping - it's not
+supported via `.clangd` config file and not every editor allows to configure
+arguments passed to LSP server.
+
+Since the container is Debian-based it uses `/usr/lib/x86_64-linux-gnu` and
+similar. If your distribution doesn't use those you may want to create symlinks,
+e.g.:
+
+```
+ln -s /usr/lib /usr/lib/x86_64-linux-gnu
+```
+
 
 Runtime Config Options
 ----------------------
