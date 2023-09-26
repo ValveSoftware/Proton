@@ -115,8 +115,3 @@ HSteamPipe after_steam_pipe_create(HSteamPipe pipe);
 #ifdef __cplusplus
 }
 #endif
-
-#define TRACE WINE_TRACE
-#define ERR WINE_ERR
-#define WARN WINE_WARN
-#define FIXME WINE_FIXME

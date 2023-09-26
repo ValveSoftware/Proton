@@ -38,7 +38,6 @@ static HANDLE callback_thread_handle;
 struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
 static unsigned int callback_queue_size;
 static BOOL callback_queue_done;
-static UINT64 callback_queue_current_seq_number;
 static pthread_mutex_t callback_queue_mutex;
 static pthread_cond_t callback_queue_callback_event;
 static pthread_cond_t callback_queue_ready_event;
