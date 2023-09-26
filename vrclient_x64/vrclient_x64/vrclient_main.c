@@ -369,11 +369,11 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface(name, vrclient_VRClientCoreFactory(name, return_code));
 }
 
-static VkDevice_T *(WINAPI *get_native_VkDevice)(VkDevice_T *);
-static VkInstance_T *(WINAPI *get_native_VkInstance)(VkInstance_T *);
-static VkPhysicalDevice_T *(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice_T *);
-static VkPhysicalDevice_T *(WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance_T *, VkPhysicalDevice_T *);
-static VkQueue_T *(WINAPI *get_native_VkQueue)(VkQueue_T *);
+static VkDevice_T *(WINAPI *p_get_native_VkDevice)( VkDevice_T * );
+static VkInstance_T *(WINAPI *p_get_native_VkInstance)( VkInstance_T * );
+static VkPhysicalDevice_T *(WINAPI *p_get_native_VkPhysicalDevice)( VkPhysicalDevice_T * );
+static VkPhysicalDevice_T *(WINAPI *p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
+static VkQueue_T *(WINAPI *p_get_native_VkQueue)( VkQueue_T * );
 
 static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
 {
@@ -418,12 +418,12 @@ static void load_vk_unwrappers(void)
         return;
     }
 
-#define L(name) \
-    if (!(name = dlsym(unix_handle, "__wine_"#name))) \
-    {\
-        ERR("%s not found.\n", #name);\
-        dlclose(unix_handle);\
-        return;\
+#define L( name )                                                                                  \
+    if (!(p_##name = dlsym( unix_handle, "__wine_" #name )))                                       \
+    {                                                                                              \
+        ERR( "%s not found.\n", #name );                                                           \
+        dlclose( unix_handle );                                                                    \
+        return;                                                                                    \
     }
 
     L(get_native_VkDevice);
@@ -434,6 +434,36 @@ static void load_vk_unwrappers(void)
 #undef L
 
     dlclose(unix_handle);
+}
+
+VkDevice_T *get_native_VkDevice( VkDevice_T *device )
+{
+    load_vk_unwrappers();
+    return p_get_native_VkDevice( device );
+}
+
+VkInstance_T *get_native_VkInstance( VkInstance_T *instance )
+{
+    load_vk_unwrappers();
+    return p_get_native_VkInstance( instance );
+}
+
+VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device )
+{
+    load_vk_unwrappers();
+    return p_get_native_VkPhysicalDevice( device );
+}
+
+VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device )
+{
+    load_vk_unwrappers();
+    return p_get_wrapped_VkPhysicalDevice( instance, device );
+}
+
+VkQueue_T *get_native_VkQueue( VkQueue_T *queue )
+{
+    load_vk_unwrappers();
+    return p_get_native_VkQueue( queue );
 }
 
 static bool is_hmd_present_reg(void)
@@ -672,33 +702,6 @@ void ivrsystem_016_get_output_device(
     cpp_func(linux_side, out_device, type);
 }
 
-void ivrsystem_get_output_device(
-        void (*cpp_func)(void *, uint64_t *, ETextureType, VkInstance_T *),
-        void *linux_side, uint64_t *out_device, ETextureType type,
-        VkInstance_T *wrapped_instance, unsigned int version)
-{
-    switch(type){
-        case TextureType_Vulkan:
-        {
-            VkInstance_T *native_instance;
-
-            load_vk_unwrappers();
-
-            native_instance = get_native_VkInstance(wrapped_instance);
-
-            cpp_func(linux_side, out_device, type, native_instance);
-
-            *out_device = (uint64_t)(intptr_t)get_wrapped_VkPhysicalDevice(wrapped_instance,
-                    (VkPhysicalDevice_T *)(intptr_t)*out_device);
-
-            return;
-        }
-        default:
-            cpp_func(linux_side, out_device, type, wrapped_instance);
-            return;
-    }
-}
-
 struct submit_data
 {
     void *linux_side;
@@ -780,8 +783,6 @@ static Texture_t vrclient_translate_texture_dxvk(const Texture_t *texture, struc
     image_info->pNext = NULL;
 
     dxvk_surface->lpVtbl->GetVulkanImageInfo(dxvk_surface, &image_handle, image_layout, image_info);
-
-    load_vk_unwrappers();
 
     vkdata->m_nImage = (uint64_t)image_handle;
     vkdata->m_pDevice = get_native_VkDevice(vkdata->m_pDevice);
@@ -899,8 +900,6 @@ static EVROverlayError ivroverlay_set_overlay_texture_vulkan(
     struct VRVulkanTextureData_t our_vkdata, *their_vkdata;
     Texture_t our_texture;
 
-    load_vk_unwrappers();
-
     their_vkdata = texture->handle;
 
     our_vkdata = *their_vkdata;
@@ -926,9 +925,7 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
     VRTextureWithDepth_t our_depth;
     VRTextureWithPose_t our_pose;
     Texture_t our_texture;
-    void *tex = texture;
-
-    load_vk_unwrappers();
+    const void *tex = texture;
 
     their_vkdata = texture->handle;
 
@@ -1280,8 +1277,6 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         unsigned int version)
 {
     uint32_t ret;
-
-    load_vk_unwrappers();
 
     phys_dev = get_native_VkPhysicalDevice(phys_dev);
 

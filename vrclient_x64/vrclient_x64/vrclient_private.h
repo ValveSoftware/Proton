@@ -188,4 +188,10 @@ EVRInputError ivrinput_get_digital_action_data(
         void *linux_side, VRActionHandle_t action_handle, void *action_data, uint32_t action_data_size,
         VRInputValueHandle_t restrict_to_device, unsigned int version);
 
+extern VkDevice_T *get_native_VkDevice( VkDevice_T *device );
+extern VkInstance_T *get_native_VkInstance( VkInstance_T *instance );
+extern VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device );
+extern VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device );
+extern VkQueue_T *get_native_VkQueue( VkQueue_T *queue );
+
 #endif  /* __cplusplus */
