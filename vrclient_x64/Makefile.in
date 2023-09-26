@@ -8,6 +8,7 @@ EXTRADEFS = -DWINE_NO_LONG_TYPES -DGNUC
 C_SRCS = \
 	vrclient_x64/flatapi.c \
 	vrclient_x64/vrclient_main.c \
+	vrclient_x64/vrcompositor_manual.c \
 	vrclient_x64/vrinput_manual.c \
 	vrclient_x64/vroverlay_manual.c \
 	vrclient_x64/vrsystem_manual.c \
