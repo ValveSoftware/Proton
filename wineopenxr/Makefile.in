@@ -1,0 +1,9 @@
+MODULE     = wineopenxr.dll
+IMPORTS    = advapi32 dxgi vulkan-1
+
+EXTRADLLFLAGS = -mcygwin
+EXTRADEFS = -DWINE_NO_LONG_TYPES
+
+C_SRCS = \
+	openxr.c \
+	openxr_thunks.c \
