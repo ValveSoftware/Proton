@@ -109,8 +109,6 @@ struct openxr_func {
     void *func;
 };
 
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
-
 extern void *wine_xr_proc_addr(const char *name);
 
 extern XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,

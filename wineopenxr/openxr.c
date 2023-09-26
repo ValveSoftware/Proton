@@ -295,7 +295,7 @@ static BOOL get_vulkan_extensions(void)
      * functioning before calling xrCreateInstance.
      *
      * This should be removed when SteamVR's bug is fixed. */
-    DWORD type, value, wait_status, size;
+    DWORD type, value, wait_status = 0, size;
     LSTATUS status;
     HANDLE event;
     HKEY vr_key;
@@ -362,7 +362,7 @@ done:
             return FALSE;
         }
         g_instance_extensions = heap_alloc(size);
-        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, g_instance_extensions, &size)))
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, (BYTE *)g_instance_extensions, &size)))
         {
             WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", wait_status);
             RegCloseKey(vr_key);
@@ -375,7 +375,7 @@ done:
             return FALSE;
         }
         g_device_extensions = heap_alloc(size);
-        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, g_device_extensions, &size)))
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, (BYTE *)g_device_extensions, &size)))
         {
             WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", wait_status);
             RegCloseKey(vr_key);
@@ -425,6 +425,36 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
         .enabledExtensionCount = ARRAY_SIZE(xr_extensions),
         .enabledExtensionNames = xr_extensions,
     };
+    XrInstanceProperties inst_props = {
+        .type = XR_TYPE_INSTANCE_PROPERTIES,
+    };
+    XrSystemGetInfo system_info = {
+        .type = XR_TYPE_SYSTEM_GET_INFO,
+        .formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY,
+    };
+    XrGraphicsRequirementsVulkanKHR reqs = {
+        .type = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR,
+    };
+    VkApplicationInfo vk_appinfo = {
+        .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        .pNext = NULL,
+        .pApplicationName = "wineopenxr test instance",
+        .applicationVersion = 0,
+        .pEngineName = "wineopenxr test instance",
+        .engineVersion = VK_MAKE_VERSION(1, 0, 0),
+        .apiVersion = VK_MAKE_VERSION(1, 1, 0),
+    };
+    VkInstanceCreateInfo vk_createinfo = {
+        .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+        .pNext = NULL,
+        .flags = 0,
+        .pApplicationInfo = &vk_appinfo,
+        .enabledLayerCount = 0,
+        .ppEnabledLayerNames = NULL,
+        .enabledExtensionCount = 0,
+        .ppEnabledExtensionNames = NULL,
+    };
+    XrViewConfigurationType *configs;
 
     strcpy(xrCreateInfo.applicationInfo.applicationName, "wineopenxr test instance");
     strcpy(xrCreateInfo.applicationInfo.engineName, "wineopenxr test instance");
@@ -443,17 +473,10 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
     xrGetInstanceProcAddr(instance, "xrGetInstanceProperties", (PFN_xrVoidFunction *)&pxrGetInstanceProperties);
     xrGetInstanceProcAddr(instance, "xrEnumerateViewConfigurations", (PFN_xrVoidFunction *)&pxrEnumerateViewConfigurations);
 
-    XrInstanceProperties inst_props = {
-        .type = XR_TYPE_INSTANCE_PROPERTIES,
-    };
     res = pxrGetInstanceProperties(instance, &inst_props);
     if(res != XR_SUCCESS)
         WINE_WARN("xrGetInstanceProperties failed: %d\n", res);
 
-    XrSystemGetInfo system_info = {
-        .type = XR_TYPE_SYSTEM_GET_INFO,
-        .formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY,
-    };
     res = pxrGetSystem(instance, &system_info, &system);
     if(res != XR_SUCCESS){
         WINE_WARN("xrGetSystem failed: %d\n", res);
@@ -464,15 +487,12 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
     res = pxrEnumerateViewConfigurations(instance, system, 0, &len, NULL);
     if(res != XR_SUCCESS)
         WINE_WARN("xrEnumerateViewConfigurations failed: %d\n", res);
-    XrViewConfigurationType *configs = heap_alloc(len * sizeof(*configs));
+    configs = heap_alloc(len * sizeof(*configs));
     res = pxrEnumerateViewConfigurations(instance, system, len, &len, configs);
     if(res != XR_SUCCESS)
         WINE_WARN("xrEnumerateViewConfigurations failed: %d\n", res);
     heap_free(configs);
 
-    XrGraphicsRequirementsVulkanKHR reqs = {
-        .type = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR,
-    };
     res = pxrGetVulkanGraphicsRequirementsKHR(instance, system, &reqs);
     if(res != XR_SUCCESS)
         WINE_WARN("xrGetVulkanGraphicsRequirementsKHR failed: %d\n", res);
@@ -491,27 +511,6 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
         heap_free(instance_extensions);
         return res;
     }
-
-    VkApplicationInfo vk_appinfo = {
-        .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-        .pNext = NULL,
-        .pApplicationName = "wineopenxr test instance",
-        .applicationVersion = 0,
-        .pEngineName = "wineopenxr test instance",
-        .engineVersion = VK_MAKE_VERSION(1, 0, 0),
-        .apiVersion = VK_MAKE_VERSION(1, 1, 0),
-    };
-
-    VkInstanceCreateInfo vk_createinfo = {
-        .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-        .pNext = NULL,
-        .flags = 0,
-        .pApplicationInfo = &vk_appinfo,
-        .enabledLayerCount = 0,
-        .ppEnabledLayerNames = NULL,
-        .enabledExtensionCount = 0,
-        .ppEnabledExtensionNames = NULL,
-    };
 
     parse_extensions(instance_extensions,
             &vk_createinfo.enabledExtensionCount,
@@ -1737,7 +1736,7 @@ XrResult WINAPI wine_xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulk
             instance, createInfo, vulkanInstance, vulkanResult);
 
     if (createInfo->createFlags)
-        WINE_WARN("Unexpected flags %#x.\n", createInfo->createFlags);
+        WINE_WARN("Unexpected flags %#lx.\n", createInfo->createFlags);
 
     context.wine_instance = (wine_XrInstance *)instance;
     context.xr_create_info = createInfo;
@@ -1792,7 +1791,7 @@ XrResult WINAPI wine_xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkan
             instance, createInfo, vulkanDevice, vulkanResult);
 
     if (createInfo->createFlags)
-        WINE_WARN("Unexpected flags %#x.\n", createInfo->createFlags);
+        WINE_WARN("Unexpected flags %#lx.\n", createInfo->createFlags);
 
     context.wine_instance = (wine_XrInstance *)instance;
     context.xr_create_info = createInfo;
@@ -2065,7 +2064,7 @@ static D3D11_USAGE d3d11usage_from_XrSwapchainUsageFlags(XrSwapchainUsageFlags f
     D3D11_USAGE ret = 0;
 
     if (flags & ~supported_flags)
-        WINE_FIXME("Unhandled flags %#x.\n", flags);
+        WINE_FIXME("Unhandled flags %#lx.\n", flags);
 
     if (flags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT)
         ret |= D3D11_BIND_RENDER_TARGET;
@@ -2105,6 +2104,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
 
     if(images && res == XR_SUCCESS){
         if(wine_instance->instance_type == INSTANCE_TYPE_D3D11){
+            XrSwapchainImageD3D11KHR *their_d3d11;
             D3D11_TEXTURE2D_DESC1 desc;
 
             desc.Width = wine_swapchain->create_info.width;
@@ -2122,7 +2122,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
             desc.MiscFlags = 0;
             desc.TextureLayout = D3D11_TEXTURE_LAYOUT_UNDEFINED;
 
-            XrSwapchainImageD3D11KHR *their_d3d11 = (XrSwapchainImageD3D11KHR *)their_images;
+            their_d3d11 = (XrSwapchainImageD3D11KHR *)their_images;
             for(i = 0; i < *imageCountOutput; ++i){
                 hr = wine_instance->dxvk_device->lpVtbl->CreateTexture2DFromVkImage(wine_instance->dxvk_device,
                         &desc, our_images[i].image, &their_d3d11[i].texture);
