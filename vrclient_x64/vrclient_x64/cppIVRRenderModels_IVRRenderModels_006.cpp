@@ -12,10 +12,10 @@ extern "C" {
 EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(void *linux_side, const char *pchRenderModelName, winRenderModel_t_1267 **ppRenderModel)
 {
     EVRRenderModelError _ret;
-    RenderModel_t *lin;
-    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, ppRenderModel ? &lin : nullptr);
+    RenderModel_t *lin_ppRenderModel;
+    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, ppRenderModel ? &lin_ppRenderModel : nullptr);
     if (_ret == 0)
-        *ppRenderModel = struct_RenderModel_t_1267_wrap(lin);
+        *ppRenderModel = struct_RenderModel_t_1267_wrap(lin_ppRenderModel);
     return _ret;
 }
 
@@ -27,10 +27,10 @@ void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(void *linux_side, wi
 EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_1267 **ppTexture)
 {
     EVRRenderModelError _ret;
-    RenderModel_TextureMap_t *lin;
-    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, ppTexture ? &lin : nullptr);
+    RenderModel_TextureMap_t *lin_ppTexture;
+    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, ppTexture ? &lin_ppTexture : nullptr);
     if (_ret == 0)
-        *ppTexture = struct_RenderModel_TextureMap_t_1267_wrap(lin);
+        *ppTexture = struct_RenderModel_TextureMap_t_1267_wrap(lin_ppTexture);
     return _ret;
 }
 
@@ -110,10 +110,10 @@ bool cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(void 
 bool cppIVRRenderModels_IVRRenderModels_006_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     bool _ret;
-    VRControllerState001_t lin;
+    VRControllerState001_t lin_pControllerState;
     if (pControllerState)
-        struct_VRControllerState001_t_1267_win_to_lin(pControllerState, &lin);
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, pControllerState ? &lin : nullptr, (const vr::RenderModel_ControllerMode_State_t *)pState, (vr::RenderModel_ComponentState_t *)pComponentState);
+        struct_VRControllerState001_t_1267_win_to_lin(pControllerState, &lin_pControllerState);
+    _ret = ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, pControllerState ? &lin_pControllerState : nullptr, (const vr::RenderModel_ControllerMode_State_t *)pState, (vr::RenderModel_ComponentState_t *)pComponentState);
     return _ret;
 }
 

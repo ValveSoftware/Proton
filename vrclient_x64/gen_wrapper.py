@@ -302,6 +302,12 @@ def underlying_type(decl):
     return decl
 
 
+def param_needs_conversion(decl):
+    decl = underlying_type(decl)
+    return decl.kind == TypeKind.RECORD and \
+           struct_needs_conversion(decl)
+
+
 def declspec(decl, name):
     if type(decl) is Cursor:
         decl = decl.type
@@ -357,6 +363,9 @@ def handle_method_cpp(method, classname, cppname, out):
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
+    need_convert = {n: p for n, p in zip(names, method.get_arguments())
+                    if param_needs_conversion(p)}
+
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
@@ -366,49 +375,36 @@ def handle_method_cpp(method, classname, cppname, out):
     if not returns_void:
         out(f'    {declspec(method.result_type, "_ret")};\n')
 
-    do_lin_to_win = None
-    do_win_to_lin = None
-    do_wrap = None
-    do_unwrap = None
-    for param in method.get_arguments():
-        if param.type.kind == TypeKind.POINTER and \
-                param.type.get_pointee().kind == TypeKind.UNEXPOSED:
-            #unspecified function pointer
+    need_unwrap = {}
+    need_output = {}
+
+    for name, param in sorted(need_convert.items()):
+        type_name = strip_ns(underlying_typename(param))
+
+        if param.type.kind != TypeKind.POINTER:
+            out(f'    {type_name} lin_{name};\n')
+            out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}(&{name}, &lin_{name});\n')
             continue
 
-        real_type = param.type;
-        while real_type.kind == TypeKind.POINTER:
-            real_type = real_type.get_pointee()
-        if param.type.kind == TypeKind.POINTER:
-            if strip_ns(param.type.get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-            elif param.type.get_pointee().get_canonical().kind == TypeKind.POINTER and \
-                    strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in SDK_STRUCTS:
-                do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
-            elif real_type.get_canonical().kind == TypeKind.RECORD and \
-                    struct_needs_conversion(real_type.get_canonical()):
-                real_name = canonical_typename(real_type)
-                do_win_to_lin = (strip_ns(real_name), param.spelling)
-                if not real_type.is_const_qualified():
-                    do_lin_to_win = (strip_ns(real_name), param.spelling)
+        pointee = param.type.get_pointee()
+        if pointee.kind == TypeKind.POINTER:
+            need_output[name] = param
+            out(f'    {type_name} *lin_{name};\n')
+            continue
 
-    if do_lin_to_win or do_win_to_lin:
-        if do_lin_to_win:
-            out(f'    {do_lin_to_win[0]} lin;\n')
-        else:
-            out(f'    {do_win_to_lin[0]} lin;\n')
+        if type_name in SDK_STRUCTS:
+            need_unwrap[name] = param
+            continue
 
-    if do_wrap:
-        out(f'    {do_wrap[0]} *lin;\n')
+        if not pointee.is_const_qualified():
+            need_output[name] = param
 
-    if do_win_to_lin:
-        #XXX we should pass the struct size here
-        out(f'    if ({do_win_to_lin[1]})\n')
-        out(f'        struct_{strip_ns(do_win_to_lin[0])}_{display_sdkver(sdkver)}_win_to_lin({do_win_to_lin[1]}, &lin);\n')
-
+        out(f'    {type_name} lin_{name};\n')
+        out(f'    if ({name})\n')
+        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin({name}, &lin_{name});\n')
 
     size_fixup = {}
-    convert_size_param = ""
+    size_param = {}
     params = list(zip(names[1:], method.get_arguments()))
     params += [(None, None)] # for next_name, next_param
     for i, (name, param) in enumerate(params[:-1]):
@@ -418,16 +414,16 @@ def handle_method_cpp(method, classname, cppname, out):
 
         next_name, next_param = params[i + 1]
         if not next_param or next_param.type.spelling != "uint32_t":
-            convert_size_param = ', -1'
+            size_param[name] = ', -1'
         elif struct_needs_size_adjustment(real_type.get_canonical()):
             real_name = real_type.spelling
             out(f'    uint32_t lin_{next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
-            convert_size_param = f', {next_name}'
+            size_param[name] = f', {next_name}'
             size_fixup[next_name] = True
-        elif do_win_to_lin and do_win_to_lin[1] == name:
-            assert do_win_to_lin[0] not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
-            out(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin) : 0;\n')
-            convert_size_param = f', {next_name}'
+        elif name in need_convert:
+            assert name not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
+            out(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin_{name}) : 0;\n')
+            size_param[name] = f', {next_name}'
             size_fixup[next_name] = True
 
     if returns_void:
@@ -435,29 +431,25 @@ def handle_method_cpp(method, classname, cppname, out):
     else:
         out(u'    _ret = ')
 
-    params = []
-    for name, param in zip(names[1:], method.get_arguments()):
-        if name in size_fixup:
-            params.append(f'lin_{name}')
-        elif do_lin_to_win and do_lin_to_win[1] == name or \
-                do_win_to_lin and do_win_to_lin[1] == name or \
-                do_wrap and do_wrap[1] == name:
-            params.append("%s ? &lin : nullptr" % name)
-        elif do_unwrap and do_unwrap[1] == name:
-            params.append("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
-        elif "&" in param.type.spelling:
-            params.append("*%s" % name)
-        else:
-            params.append("(%s)%s" % (param.type.spelling, name))
+    def param_call(name, param):
+        pfx = '&' if param.type.kind == TypeKind.POINTER else ''
+        if name in size_fixup: return f'lin_{name}'
+        if name in need_unwrap: return f'struct_{type_name}_{display_sdkver(sdkver)}_unwrap({name})'
+        if name in need_convert: return f"{name} ? {pfx}lin_{name} : nullptr"
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*{name}'
+        return f"({param.type.spelling}){name}"
 
+    params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
     out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
 
-    if do_lin_to_win:
-        out(f'    if ({do_lin_to_win[1]})\n')
-        out(f'        struct_{strip_ns(do_lin_to_win[0])}_{display_sdkver(sdkver)}_lin_to_win(&lin, {do_lin_to_win[1]}{convert_size_param});\n')
-    if do_wrap and not returns_void:
+    for name, param in sorted(need_output.items()):
+        type_name = strip_ns(underlying_typename(param))
+        if type_name in SDK_STRUCTS:
             out(u'    if (_ret == 0)\n')
-            out(f'        *{do_wrap[1]} = struct_{strip_ns(do_wrap[0])}_{display_sdkver(sdkver)}_wrap(lin);\n')
+            out(f'        *{name} = struct_{type_name}_{display_sdkver(sdkver)}_wrap(lin_{name});\n')
+            continue
+        out(f'    if ({name})\n')
+        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_lin_to_win(&lin_{name}, {name}{size_param.get(name, "")});\n')
 
     if not returns_void:
         out(u'    return _ret;\n')
@@ -704,6 +696,10 @@ def canonical_typename(cursor):
 
     name = cursor.get_canonical().spelling
     return name.removeprefix("const ")
+
+
+def underlying_typename(decl):
+    return canonical_typename(underlying_type(decl))
 
 
 def find_struct_abis(name):

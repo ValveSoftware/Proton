@@ -89,10 +89,10 @@ const CameraVideoStreamFrame_t * cppIVRTrackedCamera_IVRTrackedCamera_001_GetVid
 bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linux_side, TrackedDeviceIndex_t nDeviceIndex, const CameraVideoStreamFrame_t *pFrameImage)
 {
     bool _ret;
-    CameraVideoStreamFrame_t lin;
+    CameraVideoStreamFrame_t lin_pFrameImage;
     if (pFrameImage)
-        struct_CameraVideoStreamFrame_t_0914_win_to_lin(pFrameImage, &lin);
-    _ret = ((IVRTrackedCamera*)linux_side)->ReleaseVideoStreamFrame((vr::TrackedDeviceIndex_t)nDeviceIndex, pFrameImage ? &lin : nullptr);
+        struct_CameraVideoStreamFrame_t_0914_win_to_lin(pFrameImage, &lin_pFrameImage);
+    _ret = ((IVRTrackedCamera*)linux_side)->ReleaseVideoStreamFrame((vr::TrackedDeviceIndex_t)nDeviceIndex, pFrameImage ? &lin_pFrameImage : nullptr);
     return _ret;
 }
 
