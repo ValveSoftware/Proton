@@ -32,6 +32,7 @@ $$(OBJ)/.$(1)-configure$(3):
 	    -e '/^i386_CXXFLAGS/c i386_CXXFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17' \
 	    -e '/^i386_LDFLAGS/c i386_LDFLAGS = $$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$(CROSSLDFLAGS)' \
 	    \
+	    -e 's@UNIXLDFLAGS =@UNIXLDFLAGS = -L$$(WINE_LIBDIR$(3))/$$(LIBDIR_WINE_$(3)) -l:ntdll.so@' \
 	    $$(WINE_OBJ$(3))/Makefile > $$($(2)_OBJ$(3))/Makefile
 
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
