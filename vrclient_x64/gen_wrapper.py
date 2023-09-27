@@ -261,6 +261,7 @@ MANUAL_METHODS = {
     "IVRRenderModels_FreeTextureD3D11": True,
     "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
     "IVROverlay_SetOverlayTexture": True,
+    "IVRInput_GetDigitalActionData": lambda ver, abi: ver > 3,
 }
 
 
@@ -348,11 +349,6 @@ def ivroverlay_set_overlay_texture(cppname, method):
             "027" in cppname
     return "ivroverlay_set_overlay_texture"
 
-def ivrinput_get_digital_action_data(cppname, method):
-    if "003" in cppname:
-        return None
-    return "ivrinput_get_digital_action_data"
-
 method_overrides = [
     ("IVRClientCore", "BIsHmdPresent", ivrclientcore_is_hmd_present),
     ("IVRClientCore", "Init", ivrclientcore_init),
@@ -364,7 +360,6 @@ method_overrides = [
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
-    ("IVRInput",  "GetDigitalActionData", ivrinput_get_digital_action_data),
 ]
 
 method_overrides_data = [
