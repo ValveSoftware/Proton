@@ -13,6 +13,11 @@
 #include "flatapi.h"
 
 #include "struct_converters.h"
+#include "cppIVRInput_IVRInput_004.h"
+#include "cppIVRInput_IVRInput_005.h"
+#include "cppIVRInput_IVRInput_006.h"
+#include "cppIVRInput_IVRInput_007.h"
+#include "cppIVRInput_IVRInput_010.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
@@ -27,9 +32,9 @@ struct winInputDigitalActionData_t
 } __attribute__((ms_struct));
 #pragma pack( pop )
 
-EVRInputError ivrinput_get_digital_action_data( void *func, void *linux_side, VRActionHandle_t action_handle,
-                                                void *action_data, uint32_t action_data_size,
-                                                VRInputValueHandle_t restrict_to_device, unsigned int version )
+static EVRInputError ivrinput_get_digital_action_data( void *func, void *linux_side, VRActionHandle_t action_handle,
+                                                       void *action_data, uint32_t action_data_size,
+                                                       VRInputValueHandle_t restrict_to_device, unsigned int version )
 {
     EVRInputError (*cpp_func)( void *, VRActionHandle_t, struct winInputDigitalActionData_t *,
                                uint32_t, VRInputValueHandle_t ) = func;
@@ -101,4 +106,59 @@ EVRInputError ivrinput_get_digital_action_data( void *func, void *linux_side, VR
 
     return 0;
 #endif
+}
+
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+                                                                        winInputDigitalActionData_t_1017 *pActionData,
+                                                                        uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+{
+    EVRInputError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrinput_get_digital_action_data( cppIVRInput_IVRInput_004_GetDigitalActionData, _this->u_iface,
+                                             action, pActionData, unActionDataSize, ulRestrictToDevice, 4 );
+    return _ret;
+}
+
+EVRInputError __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+                                                                        winInputDigitalActionData_t_1322 *pActionData,
+                                                                        uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+{
+    EVRInputError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrinput_get_digital_action_data( cppIVRInput_IVRInput_005_GetDigitalActionData, _this->u_iface,
+                                             action, pActionData, unActionDataSize, ulRestrictToDevice, 5 );
+    return _ret;
+}
+
+EVRInputError __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+                                                                        winInputDigitalActionData_t_1418 *pActionData,
+                                                                        uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+{
+    EVRInputError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrinput_get_digital_action_data( cppIVRInput_IVRInput_006_GetDigitalActionData, _this->u_iface,
+                                             action, pActionData, unActionDataSize, ulRestrictToDevice, 6 );
+    return _ret;
+}
+
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+                                                                        winInputDigitalActionData_t_1916 *pActionData,
+                                                                        uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+{
+    EVRInputError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrinput_get_digital_action_data( cppIVRInput_IVRInput_007_GetDigitalActionData, _this->u_iface,
+                                             action, pActionData, unActionDataSize, ulRestrictToDevice, 7 );
+    return _ret;
+}
+
+EVRInputError __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+                                                                        winInputDigitalActionData_t_1267 *pActionData,
+                                                                        uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+{
+    EVRInputError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrinput_get_digital_action_data( cppIVRInput_IVRInput_010_GetDigitalActionData, _this->u_iface,
+                                             action, pActionData, unActionDataSize, ulRestrictToDevice, 10 );
+    return _ret;
 }
