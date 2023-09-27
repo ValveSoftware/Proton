@@ -39,13 +39,7 @@ vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *
     return _ret;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c)
-{
-    vrmb_typeb _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrmailbox_undoc3(cppIVRMailbox_IVRMailbox_001_undoc3, _this->u_iface, a, b, c, 1);
-    return _ret;
-}
+extern vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c);
 
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
 {

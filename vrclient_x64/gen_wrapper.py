@@ -255,6 +255,10 @@ all_versions = {}
 
 
 MANUAL_METHODS = {
+    "IVRClientCore_BIsHmdPresent": True,
+    "IVRClientCore_Init": True,
+    "IVRClientCore_GetGenericInterface": True,
+    "IVRClientCore_Cleanup": True,
     "IVRSystem_GetDXGIOutputInfo": True,
     "IVRSystem_GetOutputDevice": lambda ver, abi: ver > 16,
     "IVRCompositor_Submit": lambda ver, abi: ver > 8,
@@ -265,6 +269,7 @@ MANUAL_METHODS = {
     "IVRRenderModels_LoadTextureD3D11_Async": True,
     "IVRRenderModels_FreeTextureD3D11": True,
     "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
+    "IVRMailbox_undoc3": True,
     "IVROverlay_SetOverlayTexture": True,
     "IVRInput_GetDigitalActionData": lambda ver, abi: ver > 3,
 }
@@ -279,64 +284,6 @@ def is_manual_method(klass, method, abi):
     if callable(needs_manual) and version:
         return needs_manual(int(version[0]), abi)
     return needs_manual
-
-
-def ivrclientcore_is_hmd_present(cppname, method):
-    return "ivrclientcore_is_hmd_present"
-
-def ivrclientcore_init(cppname, method):
-    if "002" in cppname:
-        return "ivrclientcore_002_init"
-    return "ivrclientcore_init"
-
-def ivrclientcore_get_generic_interface(cppname, method):
-    return "ivrclientcore_get_generic_interface"
-
-def ivrclientcore_cleanup(cppname, method):
-    return "ivrclientcore_cleanup"
-
-def ivrmailbox_undoc3(cppname, method):
-    assert "001" in cppname
-    return "ivrmailbox_undoc3"
-
-def ivroverlay_set_overlay_texture(cppname, method):
-    if "001" in cppname:
-        return "ivroverlay_001_set_overlay_texture"
-    for version in ["002", "003", "004", "005"]:
-        if version in cppname:
-            return "ivroverlay_005_set_overlay_texture"
-    assert \
-            "007" in cppname or \
-            "008" in cppname or \
-            "010" in cppname or \
-            "011" in cppname or \
-            "012" in cppname or \
-            "013" in cppname or \
-            "014" in cppname or \
-            "016" in cppname or \
-            "017" in cppname or \
-            "018" in cppname or \
-            "019" in cppname or \
-            "020" in cppname or \
-            "021" in cppname or \
-            "022" in cppname or \
-            "024" in cppname or \
-            "025" in cppname or \
-            "026" in cppname or \
-            "027" in cppname
-    return "ivroverlay_set_overlay_texture"
-
-method_overrides = [
-    ("IVRClientCore", "BIsHmdPresent", ivrclientcore_is_hmd_present),
-    ("IVRClientCore", "Init", ivrclientcore_init),
-    ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
-    ("IVRClientCore", "Cleanup", ivrclientcore_cleanup),
-    ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
-]
-
-method_overrides_data = [
-    ("IVRClientCore", "struct client_core_data", None),
-]
 
 
 class Method:
@@ -676,16 +623,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     else:
         out(u'    ')
 
-    is_method_overridden = False
-    for classname_pattern, methodname, override_generator in method_overrides:
-        if method.name == methodname and classname_pattern in klass.spelling:
-            fn_name = override_generator(cppname, method)
-            if fn_name:
-                out("%s(%s_%s, " % (fn_name, cppname, method.name))
-                is_method_overridden = True
-                break
-    else:
-        out(f'{cppname}_{method.name}(')
+    out(f'{cppname}_{method.name}(')
 
     def param_call(param, name):
         if name == '_this': return '_this->u_iface'
@@ -695,12 +633,6 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     params = ['_this'] + list(method.get_arguments())
     out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
 
-    if is_method_overridden:
-        out(f', {klass.version[klass.version.find("_") + 1:].lstrip("0")}')
-        for classname_pattern, user_data_type, _ in method_overrides_data:
-            if classname_pattern in klass.spelling:
-                out(u', &_this->user_data')
-                break
     out(u');\n')
 
     if path_conv and len(path_conv["l2w_names"]) > 0:
@@ -818,10 +750,6 @@ def handle_class(klass):
         out(f'void destroy_{winclassname}(struct w_steam_iface *object)\n')
         out(u'{\n')
         out(u'    TRACE("%p\\n", object);\n')
-        for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-            if user_data_destructor and classname_pattern in klass.spelling:
-                out(f'    {user_data_destructor}(&object->user_data);\n')
-                break
         out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
         out(u'}\n\n')
 
@@ -848,10 +776,6 @@ def handle_class(klass):
         out(f'void destroy_{winclassname}_FnTable(struct w_steam_iface *object)\n')
         out(u'{\n')
         out(u'    TRACE("%p\\n", object);\n')
-        for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
-            if user_data_destructor and classname_pattern in klass.spelling:
-                out(f'    {user_data_destructor}(&object->user_data);\n')
-                break
         out(u'    VirtualFree(object->vtable[0], 0, MEM_RELEASE);\n')
         out(u'    HeapFree(GetProcessHeap(), 0, object->vtable);\n')
         out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
