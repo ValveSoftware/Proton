@@ -6,6 +6,7 @@
 #include "winbase.h"
 
 #include "wine/debug.h"
+#include "dxvk-interop.h"
 #include "vrclient_defs.h"
 #include "vrclient_private.h"
 
@@ -150,9 +151,8 @@ static void free_linux_texture_map( void *linux_side, struct winRenderModel_Text
     }
 }
 
-EVRRenderModelError ivrrendermodels_load_texture_d3d11_async( EVRRenderModelError (*cpp_func)( void *, TextureID_t, void *, void ** ),
-                                                              void *linux_side, TextureID_t texture_id,
-                                                              void *device, void **dst_texture, unsigned int version )
+static EVRRenderModelError ivrrendermodels_load_texture_d3d11_async( void *linux_side, TextureID_t texture_id,
+                                                                     void *device, void **dst_texture, unsigned int version )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map;
     EVRRenderModelError error;
@@ -209,9 +209,8 @@ EVRRenderModelError ivrrendermodels_load_texture_d3d11_async( EVRRenderModelErro
     return error;
 }
 
-EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async( EVRRenderModelError (*cpp_func)( void *, TextureID_t, void * ),
-                                                                   void *linux_side, TextureID_t texture_id,
-                                                                   void *dst_texture, unsigned int version )
+static EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async( void *linux_side, TextureID_t texture_id,
+                                                                          void *dst_texture, unsigned int version )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map;
     IUnknown *unk = dst_texture;
@@ -248,9 +247,68 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async( EVRRenderMode
     return error;
 }
 
-void ivrrendermodels_free_texture_d3d11( void (*cpp_func)( void *, void * ), void *linux_side,
-                                         void *dst_texture, unsigned int version )
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+                                                                                              void *pD3D11Device, void **ppD3D11Texture2D )
 {
-    ID3D11Texture2D *d3d11_texture = dst_texture;
+    EVRRenderModelError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrrendermodels_load_texture_d3d11_async( _this->u_iface, textureId, pD3D11Device, ppD3D11Texture2D, 4 );
+    return _ret;
+}
+
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+                                                                                              void *pD3D11Device, void **ppD3D11Texture2D )
+{
+    EVRRenderModelError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrrendermodels_load_texture_d3d11_async( _this->u_iface, textureId, pD3D11Device, ppD3D11Texture2D, 5 );
+    return _ret;
+}
+
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+                                                                                              void *pD3D11Device, void **ppD3D11Texture2D )
+{
+    EVRRenderModelError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrrendermodels_load_texture_d3d11_async( _this->u_iface, textureId, pD3D11Device, ppD3D11Texture2D, 6 );
+    return _ret;
+}
+
+void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11( struct w_steam_iface *_this, void *pD3D11Texture2D )
+{
+    ID3D11Texture2D *d3d11_texture = pD3D11Texture2D;
+    TRACE( "%p\n", _this );
+    d3d11_texture->lpVtbl->Release( d3d11_texture );
+}
+
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+                                                                                                  void *pDstTexture )
+{
+    EVRRenderModelError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrrendermodels_load_into_texture_d3d11_async( _this->u_iface, textureId, pDstTexture, 5 );
+    return _ret;
+}
+
+void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11( struct w_steam_iface *_this, void *pD3D11Texture2D )
+{
+    ID3D11Texture2D *d3d11_texture = pD3D11Texture2D;
+    TRACE( "%p\n", _this );
+    d3d11_texture->lpVtbl->Release( d3d11_texture );
+}
+
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+                                                                                                  void *pDstTexture )
+{
+    EVRRenderModelError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrrendermodels_load_into_texture_d3d11_async( _this->u_iface, textureId, pDstTexture, 6 );
+    return _ret;
+}
+
+void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11( struct w_steam_iface *_this, void *pD3D11Texture2D )
+{
+    ID3D11Texture2D *d3d11_texture = pD3D11Texture2D;
+    TRACE( "%p\n", _this );
     d3d11_texture->lpVtbl->Release( d3d11_texture );
 }
