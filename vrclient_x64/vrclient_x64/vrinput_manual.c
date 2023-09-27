@@ -99,16 +99,22 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w
                                                                         winInputDigitalActionData_t_1017 *pActionData,
                                                                         uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
 {
-    EVRInputError _ret;
+    struct cppIVRInput_IVRInput_004_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .action = action,
+        .pActionData = pActionData,
+        .unActionDataSize = unActionDataSize,
+        .ulRestrictToDevice = ulRestrictToDevice,
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRInput_IVRInput_004_GetDigitalActionData( _this->u_iface, action, pActionData,
-                                                          unActionDataSize, ulRestrictToDevice );
+    cppIVRInput_IVRInput_004_GetDigitalActionData( &params );
 #ifdef __x86_64__
-    return _ret;
+    return params._ret;
 #else
-    if (_ret) return _ret;
+    if (params._ret) return params._ret;
     return ivrinput_get_digital_action_data( action, pActionData, unActionDataSize, ulRestrictToDevice, 4 );
 #endif
 }
@@ -117,16 +123,22 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w
                                                                         winInputDigitalActionData_t_1322 *pActionData,
                                                                         uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
 {
-    EVRInputError _ret;
+    struct cppIVRInput_IVRInput_005_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .action = action,
+        .pActionData = pActionData,
+        .unActionDataSize = unActionDataSize,
+        .ulRestrictToDevice = ulRestrictToDevice,
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRInput_IVRInput_005_GetDigitalActionData( _this->u_iface, action, pActionData,
-                                                          unActionDataSize, ulRestrictToDevice );
+    cppIVRInput_IVRInput_005_GetDigitalActionData( &params );
 #ifdef __x86_64__
-    return _ret;
+    return params._ret;
 #else
-    if (_ret) return _ret;
+    if (params._ret) return params._ret;
     return ivrinput_get_digital_action_data( action, pActionData, unActionDataSize, ulRestrictToDevice, 5 );
 #endif
 }
@@ -135,16 +147,22 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w
                                                                         winInputDigitalActionData_t_1418 *pActionData,
                                                                         uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
 {
-    EVRInputError _ret;
+    struct cppIVRInput_IVRInput_006_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .action = action,
+        .pActionData = pActionData,
+        .unActionDataSize = unActionDataSize,
+        .ulRestrictToDevice = ulRestrictToDevice,
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRInput_IVRInput_006_GetDigitalActionData( _this->u_iface, action, pActionData,
-                                                          unActionDataSize, ulRestrictToDevice );
+    cppIVRInput_IVRInput_006_GetDigitalActionData( &params );
 #ifdef __x86_64__
-    return _ret;
+    return params._ret;
 #else
-    if (_ret) return _ret;
+    if (params._ret) return params._ret;
     return ivrinput_get_digital_action_data( action, pActionData, unActionDataSize, ulRestrictToDevice, 6 );
 #endif
 }
@@ -153,16 +171,22 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w
                                                                         winInputDigitalActionData_t_1916 *pActionData,
                                                                         uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
 {
-    EVRInputError _ret;
+    struct cppIVRInput_IVRInput_007_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .action = action,
+        .pActionData = pActionData,
+        .unActionDataSize = unActionDataSize,
+        .ulRestrictToDevice = ulRestrictToDevice,
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRInput_IVRInput_007_GetDigitalActionData( _this->u_iface, action, pActionData,
-                                                          unActionDataSize, ulRestrictToDevice );
+    cppIVRInput_IVRInput_007_GetDigitalActionData( &params );
 #ifdef __x86_64__
-    return _ret;
+    return params._ret;
 #else
-    if (_ret) return _ret;
+    if (params._ret) return params._ret;
     return ivrinput_get_digital_action_data( action, pActionData, unActionDataSize, ulRestrictToDevice, 7 );
 #endif
 }
@@ -171,16 +195,22 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w
                                                                         winInputDigitalActionData_t_1267 *pActionData,
                                                                         uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
 {
-    EVRInputError _ret;
+    struct cppIVRInput_IVRInput_010_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .action = action,
+        .pActionData = pActionData,
+        .unActionDataSize = unActionDataSize,
+        .ulRestrictToDevice = ulRestrictToDevice,
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRInput_IVRInput_010_GetDigitalActionData( _this->u_iface, action, pActionData,
-                                                          unActionDataSize, ulRestrictToDevice );
+    cppIVRInput_IVRInput_010_GetDigitalActionData( &params );
 #ifdef __x86_64__
-    return _ret;
+    return params._ret;
 #else
-    if (_ret) return _ret;
+    if (params._ret) return params._ret;
     return ivrinput_get_digital_action_data( action, pActionData, unActionDataSize, ulRestrictToDevice, 10 );
 #endif
 }

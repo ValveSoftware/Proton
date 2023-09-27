@@ -32,10 +32,14 @@ extern void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
-    EVRInitError _ret;
+    struct cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchInterfaceVersion = pchInterfaceVersion,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->u_iface, pchInterfaceVersion);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid( &params );
+    return params._ret;
 }
 
 extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
@@ -44,18 +48,26 @@ extern bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
-    const char * _ret;
+    struct cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(_this->u_iface, eError);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError( &params );
+    return params._ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
 {
-    const char * _ret;
+    struct cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(_this->u_iface, eError);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_002_vtable;
@@ -137,10 +149,14 @@ extern void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
-    EVRInitError _ret;
+    struct cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchInterfaceVersion = pchInterfaceVersion,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->u_iface, pchInterfaceVersion);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid( &params );
+    return params._ret;
 }
 
 extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
@@ -149,18 +165,26 @@ extern bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
-    const char * _ret;
+    struct cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(_this->u_iface, eError);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError( &params );
+    return params._ret;
 }
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
 {
-    const char * _ret;
+    struct cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError(_this->u_iface, eError);
-    return _ret;
+    cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_003_vtable;

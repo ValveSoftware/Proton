@@ -104,15 +104,22 @@ static EVRRenderModelError load_linux_texture_map_004( void *linux_side, Texture
                                                        struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
     struct winRenderModel_TextureMap_t_0918 *orig_map;
-    EVRRenderModelError _ret;
-
-    _ret = cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( linux_side, texture_id, &orig_map );
-    if (_ret) return _ret;
-
+    struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params load_params =
+    {
+        .linux_side = linux_side,
+        .textureId = texture_id,
+        .ppTexture = &orig_map,
+    };
+    struct cppIVRRenderModels_IVRRenderModels_004_FreeTexture_params free_params =
+    {
+        .linux_side = linux_side,
+    };
+    cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( &load_params );
+    if (load_params._ret) return load_params._ret;
     *texture_map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(**texture_map) );
     memcpy( *texture_map, orig_map, sizeof(*orig_map) );
-    cppIVRRenderModels_IVRRenderModels_004_FreeTexture( linux_side, orig_map );
-
+    free_params.pTexture = orig_map;
+    cppIVRRenderModels_IVRRenderModels_004_FreeTexture( &free_params );
     return 0;
 }
 
@@ -125,15 +132,22 @@ static EVRRenderModelError load_linux_texture_map_005( void *linux_side, Texture
                                                        struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
     struct winRenderModel_TextureMap_t_1015 *orig_map;
-    EVRRenderModelError _ret;
-
-    _ret = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( linux_side, texture_id, &orig_map );
-    if (_ret) return _ret;
-
+    struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params load_params =
+    {
+        .linux_side = linux_side,
+        .textureId = texture_id,
+        .ppTexture = &orig_map,
+    };
+    struct cppIVRRenderModels_IVRRenderModels_005_FreeTexture_params free_params =
+    {
+        .linux_side = linux_side,
+    };
+    cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( &load_params );
+    if (load_params._ret) return load_params._ret;
     *texture_map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(**texture_map) );
     memcpy( *texture_map, orig_map, sizeof(*orig_map) );
-    cppIVRRenderModels_IVRRenderModels_005_FreeTexture( linux_side, orig_map );
-
+    free_params.pTexture = orig_map;
+    cppIVRRenderModels_IVRRenderModels_005_FreeTexture( &free_params );
     return 0;
 }
 
@@ -145,16 +159,25 @@ static void free_linux_texture_map_005( void *linux_side, struct winRenderModel_
 static EVRRenderModelError load_linux_texture_map_006( void *linux_side, TextureID_t texture_id,
                                                        struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
-    EVRRenderModelError _ret;
-
-    _ret = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( linux_side, texture_id, (struct winRenderModel_TextureMap_t_1267 **)texture_map );
-
-    return _ret;
+    struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params load_params =
+    {
+        .linux_side = linux_side,
+        .textureId = texture_id,
+        .ppTexture = (struct winRenderModel_TextureMap_t_1267 **)texture_map,
+    };
+    cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( &load_params );
+    return load_params._ret;
 }
 
 static void free_linux_texture_map_006( void *linux_side, struct winRenderModel_TextureMap_t_1237 *texture_map )
 {
-    cppIVRRenderModels_IVRRenderModels_006_FreeTexture( linux_side, (struct winRenderModel_TextureMap_t_1267 *)texture_map );
+    struct cppIVRRenderModels_IVRRenderModels_006_FreeTexture_params params =
+    {
+        .linux_side = linux_side,
+        .pTexture = (struct winRenderModel_TextureMap_t_1267 *)texture_map,
+    };
+
+    cppIVRRenderModels_IVRRenderModels_006_FreeTexture( &params );
 }
 
 static EVRRenderModelError ivrrendermodels_load_texture_d3d11_async( void *device, struct winRenderModel_TextureMap_t_1237 *texture_map, void **dst_texture )

@@ -9,52 +9,44 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_003_GetCalibrationState(void *linux_side)
+void cppIVRChaperone_IVRChaperone_003_GetCalibrationState( struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params *params )
 {
-    ChaperoneCalibrationState _ret;
-    _ret = ((IVRChaperone*)linux_side)->GetCalibrationState();
-    return _ret;
+    params->_ret = ((IVRChaperone*)params->linux_side)->GetCalibrationState();
 }
 
-bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize(void *linux_side, float *pSizeX, float *pSizeZ)
+void cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize( struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperone*)linux_side)->GetPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
-    return _ret;
+    params->_ret = ((IVRChaperone*)params->linux_side)->GetPlayAreaSize((float *)params->pSizeX, (float *)params->pSizeZ);
 }
 
-bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect(void *linux_side, HmdQuad_t *rect)
+void cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect( struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperone*)linux_side)->GetPlayAreaRect((vr::HmdQuad_t *)rect);
-    return _ret;
+    params->_ret = ((IVRChaperone*)params->linux_side)->GetPlayAreaRect((vr::HmdQuad_t *)params->rect);
 }
 
-void cppIVRChaperone_IVRChaperone_003_ReloadInfo(void *linux_side)
+void cppIVRChaperone_IVRChaperone_003_ReloadInfo( struct cppIVRChaperone_IVRChaperone_003_ReloadInfo_params *params )
 {
-    ((IVRChaperone*)linux_side)->ReloadInfo();
+    ((IVRChaperone*)params->linux_side)->ReloadInfo();
 }
 
-void cppIVRChaperone_IVRChaperone_003_SetSceneColor(void *linux_side, HmdColor_t color)
+void cppIVRChaperone_IVRChaperone_003_SetSceneColor( struct cppIVRChaperone_IVRChaperone_003_SetSceneColor_params *params )
 {
-    ((IVRChaperone*)linux_side)->SetSceneColor((vr::HmdColor_t)color);
+    ((IVRChaperone*)params->linux_side)->SetSceneColor((vr::HmdColor_t)params->color);
 }
 
-void cppIVRChaperone_IVRChaperone_003_GetBoundsColor(void *linux_side, HmdColor_t *pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
+void cppIVRChaperone_IVRChaperone_003_GetBoundsColor( struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params *params )
 {
-    ((IVRChaperone*)linux_side)->GetBoundsColor((vr::HmdColor_t *)pOutputColorArray, (int)nNumOutputColors, (float)flCollisionBoundsFadeDistance, (vr::HmdColor_t *)pOutputCameraColor);
+    ((IVRChaperone*)params->linux_side)->GetBoundsColor((vr::HmdColor_t *)params->pOutputColorArray, (int)params->nNumOutputColors, (float)params->flCollisionBoundsFadeDistance, (vr::HmdColor_t *)params->pOutputCameraColor);
 }
 
-bool cppIVRChaperone_IVRChaperone_003_AreBoundsVisible(void *linux_side)
+void cppIVRChaperone_IVRChaperone_003_AreBoundsVisible( struct cppIVRChaperone_IVRChaperone_003_AreBoundsVisible_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperone*)linux_side)->AreBoundsVisible();
-    return _ret;
+    params->_ret = ((IVRChaperone*)params->linux_side)->AreBoundsVisible();
 }
 
-void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible(void *linux_side, bool bForce)
+void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible( struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params *params )
 {
-    ((IVRChaperone*)linux_side)->ForceBoundsVisible((bool)bForce);
+    ((IVRChaperone*)params->linux_side)->ForceBoundsVisible((bool)params->bForce);
 }
 
 #ifdef __cplusplus

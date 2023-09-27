@@ -9,25 +9,19 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint32_t cppIVRNotifications_IVRNotifications_001_GetErrorString(void *linux_side, NotificationError_t error, char *pchBuffer, uint32_t unBufferSize)
+void cppIVRNotifications_IVRNotifications_001_GetErrorString( struct cppIVRNotifications_IVRNotifications_001_GetErrorString_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRNotifications*)linux_side)->GetErrorString((vr::NotificationError_t)error, (char *)pchBuffer, (uint32_t)unBufferSize);
-    return _ret;
+    params->_ret = ((IVRNotifications*)params->linux_side)->GetErrorString((vr::NotificationError_t)params->error, (char *)params->pchBuffer, (uint32_t)params->unBufferSize);
 }
 
-NotificationError_t cppIVRNotifications_IVRNotifications_001_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, VRNotificationId *notificationId)
+void cppIVRNotifications_IVRNotifications_001_CreateNotification( struct cppIVRNotifications_IVRNotifications_001_CreateNotification_params *params )
 {
-    NotificationError_t _ret;
-    _ret = ((IVRNotifications*)linux_side)->CreateNotification((vr::VROverlayHandle_t)ulOverlayHandle, (uint64_t)ulUserValue, (const char *)strType, (const char *)strText, (const char *)strCategory, (const vr::NotificationBitmap *)photo, (vr::VRNotificationId *)notificationId);
-    return _ret;
+    params->_ret = ((IVRNotifications*)params->linux_side)->CreateNotification((vr::VROverlayHandle_t)params->ulOverlayHandle, (uint64_t)params->ulUserValue, (const char *)params->strType, (const char *)params->strText, (const char *)params->strCategory, (const vr::NotificationBitmap *)params->photo, (vr::VRNotificationId *)params->notificationId);
 }
 
-NotificationError_t cppIVRNotifications_IVRNotifications_001_DismissNotification(void *linux_side, VRNotificationId notificationId)
+void cppIVRNotifications_IVRNotifications_001_DismissNotification( struct cppIVRNotifications_IVRNotifications_001_DismissNotification_params *params )
 {
-    NotificationError_t _ret;
-    _ret = ((IVRNotifications*)linux_side)->DismissNotification((vr::VRNotificationId)notificationId);
-    return _ret;
+    params->_ret = ((IVRNotifications*)params->linux_side)->DismissNotification((vr::VRNotificationId)params->notificationId);
 }
 
 #ifdef __cplusplus

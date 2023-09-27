@@ -1,30 +1,187 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void cppIVRCompositor_IVRCompositor_011_SetTrackingSpace(void *, ETrackingUniverseOrigin);
-extern ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_011_GetTrackingSpace(void *);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_011_WaitGetPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_011_GetLastPoses(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_011_Submit(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags);
-extern void cppIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame(void *);
-extern void cppIVRCompositor_IVRCompositor_011_PostPresentHandoff(void *);
-extern bool cppIVRCompositor_IVRCompositor_011_GetFrameTiming(void *, Compositor_FrameTiming *, uint32_t);
-extern float cppIVRCompositor_IVRCompositor_011_GetFrameTimeRemaining(void *);
-extern void cppIVRCompositor_IVRCompositor_011_FadeToColor(void *, float, float, float, float, float, bool);
-extern void cppIVRCompositor_IVRCompositor_011_FadeGrid(void *, float, bool);
-extern EVRCompositorError cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride(void *, const Texture_t *, uint32_t);
-extern void cppIVRCompositor_IVRCompositor_011_ClearSkyboxOverride(void *);
-extern void cppIVRCompositor_IVRCompositor_011_CompositorBringToFront(void *);
-extern void cppIVRCompositor_IVRCompositor_011_CompositorGoToBack(void *);
-extern void cppIVRCompositor_IVRCompositor_011_CompositorQuit(void *);
-extern bool cppIVRCompositor_IVRCompositor_011_IsFullscreen(void *);
-extern uint32_t cppIVRCompositor_IVRCompositor_011_GetCurrentSceneFocusProcess(void *);
-extern uint32_t cppIVRCompositor_IVRCompositor_011_GetLastFrameRenderer(void *);
-extern bool cppIVRCompositor_IVRCompositor_011_CanRenderScene(void *);
-extern void cppIVRCompositor_IVRCompositor_011_ShowMirrorWindow(void *);
-extern void cppIVRCompositor_IVRCompositor_011_HideMirrorWindow(void *);
-extern bool cppIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible(void *);
-extern void cppIVRCompositor_IVRCompositor_011_CompositorDumpImages(void *);
+struct cppIVRCompositor_IVRCompositor_011_SetTrackingSpace_params
+{
+    void *linux_side;
+    ETrackingUniverseOrigin eOrigin;
+};
+extern void cppIVRCompositor_IVRCompositor_011_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_011_SetTrackingSpace_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetTrackingSpace_params
+{
+    void *linux_side;
+    ETrackingUniverseOrigin _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_011_GetTrackingSpace_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_WaitGetPoses_params
+{
+    void *linux_side;
+    EVRCompositorError _ret;
+    TrackedDevicePose_t *pRenderPoseArray;
+    uint32_t unRenderPoseArrayCount;
+    TrackedDevicePose_t *pGamePoseArray;
+    uint32_t unGamePoseArrayCount;
+};
+extern void cppIVRCompositor_IVRCompositor_011_WaitGetPoses( struct cppIVRCompositor_IVRCompositor_011_WaitGetPoses_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetLastPoses_params
+{
+    void *linux_side;
+    EVRCompositorError _ret;
+    TrackedDevicePose_t *pRenderPoseArray;
+    uint32_t unRenderPoseArrayCount;
+    TrackedDevicePose_t *pGamePoseArray;
+    uint32_t unGamePoseArrayCount;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetLastPoses( struct cppIVRCompositor_IVRCompositor_011_GetLastPoses_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_Submit_params
+{
+    void *linux_side;
+    EVRCompositorError _ret;
+    EVREye eEye;
+    const Texture_t *pTexture;
+    const VRTextureBounds_t *pBounds;
+    EVRSubmitFlags nSubmitFlags;
+};
+extern void cppIVRCompositor_IVRCompositor_011_Submit( struct cppIVRCompositor_IVRCompositor_011_Submit_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame( struct cppIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_PostPresentHandoff_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_PostPresentHandoff( struct cppIVRCompositor_IVRCompositor_011_PostPresentHandoff_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetFrameTiming_params
+{
+    void *linux_side;
+    bool _ret;
+    Compositor_FrameTiming *pTiming;
+    uint32_t unFramesAgo;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetFrameTiming( struct cppIVRCompositor_IVRCompositor_011_GetFrameTiming_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetFrameTimeRemaining_params
+{
+    void *linux_side;
+    float _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetFrameTimeRemaining( struct cppIVRCompositor_IVRCompositor_011_GetFrameTimeRemaining_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_FadeToColor_params
+{
+    void *linux_side;
+    float fSeconds;
+    float fRed;
+    float fGreen;
+    float fBlue;
+    float fAlpha;
+    bool bBackground;
+};
+extern void cppIVRCompositor_IVRCompositor_011_FadeToColor( struct cppIVRCompositor_IVRCompositor_011_FadeToColor_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_FadeGrid_params
+{
+    void *linux_side;
+    float fSeconds;
+    bool bFadeIn;
+};
+extern void cppIVRCompositor_IVRCompositor_011_FadeGrid( struct cppIVRCompositor_IVRCompositor_011_FadeGrid_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride_params
+{
+    void *linux_side;
+    EVRCompositorError _ret;
+    const Texture_t *pTextures;
+    uint32_t unTextureCount;
+};
+extern void cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride( struct cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_ClearSkyboxOverride_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_ClearSkyboxOverride( struct cppIVRCompositor_IVRCompositor_011_ClearSkyboxOverride_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_CompositorBringToFront_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_CompositorBringToFront( struct cppIVRCompositor_IVRCompositor_011_CompositorBringToFront_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_CompositorGoToBack_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_CompositorGoToBack( struct cppIVRCompositor_IVRCompositor_011_CompositorGoToBack_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_CompositorQuit_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_CompositorQuit( struct cppIVRCompositor_IVRCompositor_011_CompositorQuit_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_IsFullscreen_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_IsFullscreen( struct cppIVRCompositor_IVRCompositor_011_IsFullscreen_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetCurrentSceneFocusProcess_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetCurrentSceneFocusProcess( struct cppIVRCompositor_IVRCompositor_011_GetCurrentSceneFocusProcess_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_GetLastFrameRenderer_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_GetLastFrameRenderer( struct cppIVRCompositor_IVRCompositor_011_GetLastFrameRenderer_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_CanRenderScene_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_CanRenderScene( struct cppIVRCompositor_IVRCompositor_011_CanRenderScene_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_ShowMirrorWindow_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_ShowMirrorWindow( struct cppIVRCompositor_IVRCompositor_011_ShowMirrorWindow_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_HideMirrorWindow_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_HideMirrorWindow( struct cppIVRCompositor_IVRCompositor_011_HideMirrorWindow_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible( struct cppIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible_params *params );
+
+struct cppIVRCompositor_IVRCompositor_011_CompositorDumpImages_params
+{
+    void *linux_side;
+};
+extern void cppIVRCompositor_IVRCompositor_011_CompositorDumpImages( struct cppIVRCompositor_IVRCompositor_011_CompositorDumpImages_params *params );
+
 #ifdef __cplusplus
 }
 #endif

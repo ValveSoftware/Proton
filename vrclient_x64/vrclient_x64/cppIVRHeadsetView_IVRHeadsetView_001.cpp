@@ -9,55 +9,49 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(void *linux_side, uint32_t nWidth, uint32_t nHeight)
+void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->SetHeadsetViewSize((uint32_t)nWidth, (uint32_t)nHeight);
+    ((IVRHeadsetView*)params->linux_side)->SetHeadsetViewSize((uint32_t)params->nWidth, (uint32_t)params->nHeight);
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(void *linux_side, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->GetHeadsetViewSize((uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRHeadsetView*)params->linux_side)->GetHeadsetViewSize((uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(void *linux_side, HeadsetViewMode_t eHeadsetViewMode)
+void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->SetHeadsetViewMode((vr::HeadsetViewMode_t)eHeadsetViewMode);
+    ((IVRHeadsetView*)params->linux_side)->SetHeadsetViewMode((vr::HeadsetViewMode_t)params->eHeadsetViewMode);
 }
 
-HeadsetViewMode_t cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(void *linux_side)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params *params )
 {
-    HeadsetViewMode_t _ret;
-    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewMode();
-    return _ret;
+    params->_ret = ((IVRHeadsetView*)params->linux_side)->GetHeadsetViewMode();
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(void *linux_side, bool bCropped)
+void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->SetHeadsetViewCropped((bool)bCropped);
+    ((IVRHeadsetView*)params->linux_side)->SetHeadsetViewCropped((bool)params->bCropped);
 }
 
-bool cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(void *linux_side)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params *params )
 {
-    bool _ret;
-    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewCropped();
-    return _ret;
+    params->_ret = ((IVRHeadsetView*)params->linux_side)->GetHeadsetViewCropped();
 }
 
-float cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(void *linux_side)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio_params *params )
 {
-    float _ret;
-    _ret = ((IVRHeadsetView*)linux_side)->GetHeadsetViewAspectRatio();
-    return _ret;
+    params->_ret = ((IVRHeadsetView*)params->linux_side)->GetHeadsetViewAspectRatio();
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(void *linux_side, float flStartPct, float flEndPct)
+void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->SetHeadsetViewBlendRange((float)flStartPct, (float)flEndPct);
+    ((IVRHeadsetView*)params->linux_side)->SetHeadsetViewBlendRange((float)params->flStartPct, (float)params->flEndPct);
 }
 
-void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(void *linux_side, float *pStartPct, float *pEndPct)
+void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange_params *params )
 {
-    ((IVRHeadsetView*)linux_side)->GetHeadsetViewBlendRange((float *)pStartPct, (float *)pEndPct);
+    ((IVRHeadsetView*)params->linux_side)->GetHeadsetViewBlendRange((float *)params->pStartPct, (float *)params->pEndPct);
 }
 
 #ifdef __cplusplus

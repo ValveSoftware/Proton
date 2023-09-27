@@ -9,18 +9,14 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint32_t cppIVRResources_IVRResources_001_LoadSharedResource(void *linux_side, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
+void cppIVRResources_IVRResources_001_LoadSharedResource( struct cppIVRResources_IVRResources_001_LoadSharedResource_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRResources*)linux_side)->LoadSharedResource((const char *)pchResourceName, (char *)pchBuffer, (uint32_t)unBufferLen);
-    return _ret;
+    params->_ret = ((IVRResources*)params->linux_side)->LoadSharedResource((const char *)params->pchResourceName, (char *)params->pchBuffer, (uint32_t)params->unBufferLen);
 }
 
-uint32_t cppIVRResources_IVRResources_001_GetResourceFullPath(void *linux_side, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
+void cppIVRResources_IVRResources_001_GetResourceFullPath( struct cppIVRResources_IVRResources_001_GetResourceFullPath_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRResources*)linux_side)->GetResourceFullPath((const char *)pchResourceName, (const char *)pchResourceTypeDirectory, (char *)pchPathBuffer, (uint32_t)unBufferLen);
-    return _ret;
+    params->_ret = ((IVRResources*)params->linux_side)->GetResourceFullPath((const char *)params->pchResourceName, (const char *)params->pchResourceTypeDirectory, (char *)params->pchPathBuffer, (uint32_t)params->unBufferLen);
 }
 
 #ifdef __cplusplus
