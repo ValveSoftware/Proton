@@ -679,29 +679,6 @@ void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
     destroy_compositor_data();
 }
 
-void get_dxgi_output_info(void *cpp_func, void *linux_side,
-        int32_t *adapter_idx, unsigned int version)
-{
-    TRACE("%p\n", adapter_idx);
-    *adapter_idx = 0;
-}
-
-void get_dxgi_output_info2(void *cpp_func, void *linux_side,
-        int32_t *adapter_idx, int32_t *output_idx, unsigned int version)
-{
-    TRACE("%p, %p\n", adapter_idx, output_idx);
-    *adapter_idx = 0;
-    *output_idx = 0;
-}
-
-void ivrsystem_016_get_output_device(
-        void (*cpp_func)(void *, uint64_t *, ETextureType),
-        void *linux_side, uint64_t *out_device, ETextureType type,
-        unsigned int version)
-{
-    cpp_func(linux_side, out_device, type);
-}
-
 struct submit_data
 {
     void *linux_side;
