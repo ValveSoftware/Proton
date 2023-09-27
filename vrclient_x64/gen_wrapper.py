@@ -257,6 +257,11 @@ all_versions = {}
 MANUAL_METHODS = {
     "IVRSystem_GetDXGIOutputInfo": True,
     "IVRSystem_GetOutputDevice": lambda ver, abi: ver > 16,
+    "IVRCompositor_Submit": lambda ver, abi: ver > 8,
+    "IVRCompositor_SetSkyboxOverride": lambda ver, abi: ver > 8,
+    "IVRCompositor_PostPresentHandoff": True,
+    "IVRCompositor_WaitGetPoses": lambda ver, abi: ver > 15 and ver < 27,
+    "IVRCompositor_GetVulkanDeviceExtensionsRequired": True,
     "IVRRenderModels_LoadTextureD3D11_Async": True,
     "IVRRenderModels_FreeTextureD3D11": True,
     "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
@@ -289,34 +294,6 @@ def ivrclientcore_get_generic_interface(cppname, method):
 
 def ivrclientcore_cleanup(cppname, method):
     return "ivrclientcore_cleanup"
-
-def ivrcompositor_submit(cppname, method):
-    if "005" in cppname:
-        return "ivrcompositor_005_submit"
-    if "006" in cppname:
-        return "ivrcompositor_006_submit"
-    if "007" in cppname:
-        return "ivrcompositor_007_submit"
-    if "008" in cppname:
-        return "ivrcompositor_008_submit"
-    return "ivrcompositor_submit"
-
-def ivrcompositor_set_skybox_override(cppname, method):
-    if "008" in cppname:
-        return "ivrcompositor_008_set_skybox_override"
-    return "ivrcompositor_set_skybox_override"
-
-def ivrcompositor_post_present_handoff(cppname, method):
-    return "ivrcompositor_post_present_handoff"
-
-def ivrcompositor_wait_get_poses(cppname, method):
-    for version in ["016", "017", "018", "019", "020", "021", "022", "024", "026"]:
-        if version in cppname:
-            return "ivrcompositor_wait_get_poses"
-    return None
-
-def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
-    return "ivrcompositor_get_vulkan_device_extensions_required"
 
 def ivrmailbox_undoc3(cppname, method):
     assert "001" in cppname
@@ -354,11 +331,6 @@ method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
     ("IVRClientCore", "Cleanup", ivrclientcore_cleanup),
-    ("IVRCompositor", "Submit", ivrcompositor_submit),
-    ("IVRCompositor", "SetSkyboxOverride", ivrcompositor_set_skybox_override),
-    ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
-    ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
-    ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
 ]
 
@@ -693,6 +665,9 @@ def handle_method_c(klass, method, winclassname, cppname, out):
                 out(f'    vrclient_dos_path_to_unix_path({path_conv["w2l_names"][i]}, lin_{path_conv["w2l_names"][i]});\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
+
+    if 'eTextureType' in names:
+        out(u'    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
     if returns_record:
         out(u'    *_ret = ')
