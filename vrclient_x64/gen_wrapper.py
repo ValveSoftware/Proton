@@ -254,6 +254,23 @@ all_sources = {}
 all_versions = {}
 
 
+MANUAL_METHODS = {
+    "IVRSystem_GetDXGIOutputInfo": True,
+    "IVRSystem_GetOutputDevice": lambda ver, abi: ver > 16,
+}
+
+
+def is_manual_method(klass, method, abi):
+    version = re.search(r'(\d+)$', klass.version)
+
+    key = f'{klass.spelling}_{method.name}'
+    needs_manual = MANUAL_METHODS.get(key, False)
+
+    if callable(needs_manual) and version:
+        return needs_manual(int(version[0]), abi)
+    return needs_manual
+
+
 def ivrclientcore_is_hmd_present(cppname, method):
     return "ivrclientcore_is_hmd_present"
 
@@ -267,20 +284,6 @@ def ivrclientcore_get_generic_interface(cppname, method):
 
 def ivrclientcore_cleanup(cppname, method):
     return "ivrclientcore_cleanup"
-
-def ivrsystem_get_dxgi_output_info(cppname, method):
-    arguments = list(method.get_arguments())
-    param_count = len(arguments)
-    return {
-        1: "get_dxgi_output_info",
-        2: "get_dxgi_output_info2"
-    }.get(param_count, "unhandled_get_dxgi_output_info_method")
-
-def ivrsystem_get_output_device(cppname, method):
-    #introduced in 016, changed in 017
-    if "016" in cppname:
-        return "ivrsystem_016_get_output_device"
-    return "ivrsystem_get_output_device"
 
 def ivrcompositor_submit(cppname, method):
     if "005" in cppname:
@@ -363,8 +366,6 @@ method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
     ("IVRClientCore", "Cleanup", ivrclientcore_cleanup),
-    ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
-    ("IVRSystem", "GetOutputDevice", ivrsystem_get_output_device),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
     ("IVRCompositor", "SetSkyboxOverride", ivrcompositor_set_skybox_override),
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
@@ -664,7 +665,7 @@ def handle_thiscall_wrapper(klass, method, out):
     out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
-def handle_method_c(method, classname, winclassname, cppname, iface_version, out):
+def handle_method_c(klass, method, winclassname, cppname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -681,6 +682,10 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
 
     params = ['struct w_steam_iface *_this'] + params
     names = ['_this'] + names
+
+    if is_manual_method(klass, method, 'w'):
+        out(f'extern {ret}__thiscall {winclassname}_{method.name}({", ".join(params)});\n\n')
+        return
 
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
     out(u'{\n')
@@ -715,7 +720,7 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
 
     is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
-        if method.name == methodname and classname_pattern in classname:
+        if method.name == methodname and classname_pattern in klass.spelling:
             fn_name = override_generator(cppname, method)
             if fn_name:
                 out("%s(%s_%s, " % (fn_name, cppname, method.name))
@@ -733,9 +738,9 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, out
     out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
 
     if is_method_overridden:
-        out(f', {iface_version[iface_version.find("_") + 1:].lstrip("0")}')
+        out(f', {klass.version[klass.version.find("_") + 1:].lstrip("0")}')
         for classname_pattern, user_data_type, _ in method_overrides_data:
-            if classname_pattern in classname:
+            if classname_pattern in klass.spelling:
                 out(u', &_this->user_data')
                 break
     out(u');\n')
@@ -831,8 +836,7 @@ def handle_class(klass):
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
-            else:
-                handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, out)
+            handle_method_c(klass, method, winclassname, cppname, out)
 
         out(f'extern vtable_ptr {winclassname}_vtable;\n\n')
         out(u'#ifndef __GNUC__\n')

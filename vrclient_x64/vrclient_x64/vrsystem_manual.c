@@ -6,32 +6,204 @@
 #include "winbase.h"
 
 #include "wine/debug.h"
+#include "dxvk-interop.h"
 #include "vrclient_defs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"
 
 #include "struct_converters.h"
+#include "cppIVRSystem_IVRSystem_003.h"
+#include "cppIVRSystem_IVRSystem_004.h"
+#include "cppIVRSystem_IVRSystem_005.h"
+#include "cppIVRSystem_IVRSystem_006.h"
+#include "cppIVRSystem_IVRSystem_009.h"
+#include "cppIVRSystem_IVRSystem_010.h"
+#include "cppIVRSystem_IVRSystem_011.h"
+#include "cppIVRSystem_IVRSystem_012.h"
+#include "cppIVRSystem_IVRSystem_014.h"
+#include "cppIVRSystem_IVRSystem_015.h"
+#include "cppIVRSystem_IVRSystem_016.h"
+#include "cppIVRSystem_IVRSystem_017.h"
+#include "cppIVRSystem_IVRSystem_019.h"
+#include "cppIVRSystem_IVRSystem_020.h"
+#include "cppIVRSystem_IVRSystem_021.h"
+#include "cppIVRSystem_IVRSystem_022.h"
 
-void ivrsystem_get_output_device( void (*cpp_func)( void *, uint64_t *, ETextureType, VkInstance_T * ),
-                                  void *linux_side, uint64_t *out_device, ETextureType type,
-                                  VkInstance_T *wrapped_instance, unsigned int version )
+WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
+
+static VkInstance_T *unwrap_instance( ETextureType type, VkInstance_T *instance )
 {
-    switch (type)
+    if (type == TextureType_Vulkan) return get_native_VkInstance( instance );
+    return instance;
+}
+
+static uint64_t wrap_device( ETextureType type, VkInstance_T *instance, uint64_t device )
+{
+    if (type == TextureType_Vulkan)
     {
-    case TextureType_Vulkan:
-    {
-        VkInstance_T *native_instance;
-
-        native_instance = get_native_VkInstance( wrapped_instance );
-
-        cpp_func( linux_side, out_device, type, native_instance );
-
-        *out_device = (uint64_t)(intptr_t)
-            get_wrapped_VkPhysicalDevice( wrapped_instance, (VkPhysicalDevice_T *)(intptr_t)*out_device );
-
-        return;
+        VkPhysicalDevice_T *phys_device = (VkPhysicalDevice_T *)( intptr_t)device;
+        return (uint64_t)( intptr_t)get_wrapped_VkPhysicalDevice( instance, phys_device );
     }
-    default: cpp_func( linux_side, out_device, type, wrapped_instance ); return;
-    }
+
+    return device;
+}
+
+void __thiscall winIVRSystem_IVRSystem_003_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex,
+                                                              int32_t *pnAdapterOutputIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+    *pnAdapterOutputIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_004_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex,
+                                                              int32_t *pnAdapterOutputIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+    *pnAdapterOutputIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_005_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex,
+                                                              int32_t *pnAdapterOutputIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+    *pnAdapterOutputIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_006_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex,
+                                                              int32_t *pnAdapterOutputIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+    *pnAdapterOutputIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_009_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_010_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_011_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_012_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_014_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_015_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_016_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
+                                                            ETextureType textureType, VkInstance_T *pInstance )
+{
+    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+
+    TRACE( "%p\n", _this );
+
+    cppIVRSystem_IVRSystem_017_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
+}
+
+void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
+                                                            ETextureType textureType, VkInstance_T *pInstance )
+{
+    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+
+    TRACE( "%p\n", _this );
+
+    cppIVRSystem_IVRSystem_019_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
+}
+
+void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
+                                                            ETextureType textureType, VkInstance_T *pInstance )
+{
+    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+
+    TRACE( "%p\n", _this );
+
+    cppIVRSystem_IVRSystem_020_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
+}
+
+void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
+                                                            ETextureType textureType, VkInstance_T *pInstance )
+{
+    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+
+    TRACE( "%p\n", _this );
+
+    cppIVRSystem_IVRSystem_021_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
+}
+
+void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo( struct w_steam_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
+void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
+                                                            ETextureType textureType, VkInstance_T *pInstance )
+{
+    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+
+    TRACE( "%p\n", _this );
+
+    cppIVRSystem_IVRSystem_022_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
