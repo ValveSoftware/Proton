@@ -9,19 +9,19 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(void *linux_side, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params *params )
 {
-    ((IVRExtendedDisplay*)linux_side)->GetWindowBounds((int32_t *)pnX, (int32_t *)pnY, (uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRExtendedDisplay*)params->linux_side)->GetWindowBounds((int32_t *)params->pnX, (int32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(void *linux_side, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params *params )
 {
-    ((IVRExtendedDisplay*)linux_side)->GetEyeOutputViewport((vr::EVREye)eEye, (uint32_t *)pnX, (uint32_t *)pnY, (uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRExtendedDisplay*)params->linux_side)->GetEyeOutputViewport((vr::EVREye)params->eEye, (uint32_t *)params->pnX, (uint32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(void *linux_side, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
+void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params *params )
 {
-    ((IVRExtendedDisplay*)linux_side)->GetDXGIOutputInfo((int32_t *)pnAdapterIndex, (int32_t *)pnAdapterOutputIndex);
+    ((IVRExtendedDisplay*)params->linux_side)->GetDXGIOutputInfo((int32_t *)params->pnAdapterIndex, (int32_t *)params->pnAdapterOutputIndex);
 }
 
 #ifdef __cplusplus

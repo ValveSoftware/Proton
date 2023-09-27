@@ -1,9 +1,35 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(void *, int32_t *, int32_t *, uint32_t *, uint32_t *);
-extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(void *, EVREye, uint32_t *, uint32_t *, uint32_t *, uint32_t *);
-extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(void *, int32_t *, int32_t *);
+struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params
+{
+    void *linux_side;
+    int32_t *pnX;
+    int32_t *pnY;
+    uint32_t *pnWidth;
+    uint32_t *pnHeight;
+};
+extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params *params );
+
+struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params
+{
+    void *linux_side;
+    EVREye eEye;
+    uint32_t *pnX;
+    uint32_t *pnY;
+    uint32_t *pnWidth;
+    uint32_t *pnHeight;
+};
+extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params *params );
+
+struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params
+{
+    void *linux_side;
+    int32_t *pnAdapterIndex;
+    int32_t *pnAdapterOutputIndex;
+};
+extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params *params );
+
 #ifdef __cplusplus
 }
 #endif

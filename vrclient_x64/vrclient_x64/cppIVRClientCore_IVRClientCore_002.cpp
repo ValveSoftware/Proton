@@ -9,51 +9,39 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-EVRInitError cppIVRClientCore_IVRClientCore_002_Init(void *linux_side, EVRApplicationType eApplicationType)
+void cppIVRClientCore_IVRClientCore_002_Init( struct cppIVRClientCore_IVRClientCore_002_Init_params *params )
 {
-    EVRInitError _ret;
-    _ret = ((IVRClientCore*)linux_side)->Init((vr::EVRApplicationType)eApplicationType);
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->Init((vr::EVRApplicationType)params->eApplicationType);
 }
 
-void cppIVRClientCore_IVRClientCore_002_Cleanup(void *linux_side)
+void cppIVRClientCore_IVRClientCore_002_Cleanup( struct cppIVRClientCore_IVRClientCore_002_Cleanup_params *params )
 {
-    ((IVRClientCore*)linux_side)->Cleanup();
+    ((IVRClientCore*)params->linux_side)->Cleanup();
 }
 
-EVRInitError cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(void *linux_side, const char *pchInterfaceVersion)
+void cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid( struct cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid_params *params )
 {
-    EVRInitError _ret;
-    _ret = ((IVRClientCore*)linux_side)->IsInterfaceVersionValid((const char *)pchInterfaceVersion);
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->IsInterfaceVersionValid((const char *)params->pchInterfaceVersion);
 }
 
-void * cppIVRClientCore_IVRClientCore_002_GetGenericInterface(void *linux_side, const char *pchNameAndVersion, EVRInitError *peError)
+void cppIVRClientCore_IVRClientCore_002_GetGenericInterface( struct cppIVRClientCore_IVRClientCore_002_GetGenericInterface_params *params )
 {
-    void *_ret;
-    _ret = ((IVRClientCore*)linux_side)->GetGenericInterface((const char *)pchNameAndVersion, (vr::EVRInitError *)peError);
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->GetGenericInterface((const char *)params->pchNameAndVersion, (vr::EVRInitError *)params->peError);
 }
 
-bool cppIVRClientCore_IVRClientCore_002_BIsHmdPresent(void *linux_side)
+void cppIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct cppIVRClientCore_IVRClientCore_002_BIsHmdPresent_params *params )
 {
-    bool _ret;
-    _ret = ((IVRClientCore*)linux_side)->BIsHmdPresent();
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->BIsHmdPresent();
 }
 
-const char * cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(void *linux_side, EVRInitError eError)
+void cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError( struct cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRClientCore*)linux_side)->GetEnglishStringForHmdError((vr::EVRInitError)eError);
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->GetEnglishStringForHmdError((vr::EVRInitError)params->eError);
 }
 
-const char * cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError(void *linux_side, EVRInitError eError)
+void cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError( struct cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRClientCore*)linux_side)->GetIDForVRInitError((vr::EVRInitError)eError);
-    return _ret;
+    params->_ret = ((IVRClientCore*)params->linux_side)->GetIDForVRInitError((vr::EVRInitError)params->eError);
 }
 
 #ifdef __cplusplus

@@ -33,84 +33,169 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, EVRSettingsError eError)
 {
-    const char * _ret;
+    struct cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(_this->u_iface, eError);
-    return _ret;
+    cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_001_Sync(struct w_steam_iface *_this, bool bForce, EVRSettingsError *peError)
 {
-    bool _ret;
+    struct cppIVRSettings_IVRSettings_001_Sync_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bForce = bForce,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_001_Sync(_this->u_iface, bForce, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_001_Sync( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bDefaultValue, EVRSettingsError *peError)
 {
-    bool _ret;
+    struct cppIVRSettings_IVRSettings_001_GetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .bDefaultValue = bDefaultValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_001_GetBool(_this->u_iface, pchSection, pchSettingsKey, bDefaultValue, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_001_GetBool( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_SetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .bValue = bValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetBool(_this->u_iface, pchSection, pchSettingsKey, bValue, peError);
+    cppIVRSettings_IVRSettings_001_SetBool( &params );
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_001_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nDefaultValue, EVRSettingsError *peError)
 {
-    int32_t _ret;
+    struct cppIVRSettings_IVRSettings_001_GetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .nDefaultValue = nDefaultValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_001_GetInt32(_this->u_iface, pchSection, pchSettingsKey, nDefaultValue, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_001_GetInt32( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_SetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .nValue = nValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetInt32(_this->u_iface, pchSection, pchSettingsKey, nValue, peError);
+    cppIVRSettings_IVRSettings_001_SetInt32( &params );
 }
 
 float __thiscall winIVRSettings_IVRSettings_001_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flDefaultValue, EVRSettingsError *peError)
 {
-    float _ret;
+    struct cppIVRSettings_IVRSettings_001_GetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .flDefaultValue = flDefaultValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_001_GetFloat(_this->u_iface, pchSection, pchSettingsKey, flDefaultValue, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_001_GetFloat( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_SetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .flValue = flValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetFloat(_this->u_iface, pchSection, pchSettingsKey, flValue, peError);
+    cppIVRSettings_IVRSettings_001_SetFloat( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, const char *pchDefaultValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_GetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .unValueLen = unValueLen,
+        .pchDefaultValue = pchDefaultValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, unValueLen, pchDefaultValue, peError);
+    cppIVRSettings_IVRSettings_001_GetString( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_SetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, peError);
+    cppIVRSettings_IVRSettings_001_SetString( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_RemoveSection(struct w_steam_iface *_this, const char *pchSection, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_RemoveSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_RemoveSection(_this->u_iface, pchSection, peError);
+    cppIVRSettings_IVRSettings_001_RemoveSection( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_001_RemoveKeyInSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_RemoveKeyInSection(_this->u_iface, pchSection, pchSettingsKey, peError);
+    cppIVRSettings_IVRSettings_001_RemoveKeyInSection( &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_001_vtable;
@@ -203,84 +288,165 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, EVRSettingsError eError)
 {
-    const char * _ret;
+    struct cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(_this->u_iface, eError);
-    return _ret;
+    cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_002_Sync(struct w_steam_iface *_this, bool bForce, EVRSettingsError *peError)
 {
-    bool _ret;
+    struct cppIVRSettings_IVRSettings_002_Sync_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bForce = bForce,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_002_Sync(_this->u_iface, bForce, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_002_Sync( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_SetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .bValue = bValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetBool(_this->u_iface, pchSection, pchSettingsKey, bValue, peError);
+    cppIVRSettings_IVRSettings_002_SetBool( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_SetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .nValue = nValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetInt32(_this->u_iface, pchSection, pchSettingsKey, nValue, peError);
+    cppIVRSettings_IVRSettings_002_SetInt32( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_SetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .flValue = flValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetFloat(_this->u_iface, pchSection, pchSettingsKey, flValue, peError);
+    cppIVRSettings_IVRSettings_002_SetFloat( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_SetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, peError);
+    cppIVRSettings_IVRSettings_002_SetString( &params );
 }
 
 bool __thiscall winIVRSettings_IVRSettings_002_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    bool _ret;
+    struct cppIVRSettings_IVRSettings_002_GetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_002_GetBool(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_002_GetBool( &params );
+    return params._ret;
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_002_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    int32_t _ret;
+    struct cppIVRSettings_IVRSettings_002_GetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_002_GetInt32(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_002_GetInt32( &params );
+    return params._ret;
 }
 
 float __thiscall winIVRSettings_IVRSettings_002_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    float _ret;
+    struct cppIVRSettings_IVRSettings_002_GetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_002_GetFloat(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_002_GetFloat( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_GetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .unValueLen = unValueLen,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, unValueLen, peError);
+    cppIVRSettings_IVRSettings_002_GetString( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_RemoveSection(struct w_steam_iface *_this, const char *pchSection, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_RemoveSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_RemoveSection(_this->u_iface, pchSection, peError);
+    cppIVRSettings_IVRSettings_002_RemoveSection( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_002_RemoveKeyInSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_RemoveKeyInSection(_this->u_iface, pchSection, pchSettingsKey, peError);
+    cppIVRSettings_IVRSettings_002_RemoveKeyInSection( &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_002_vtable;
@@ -372,76 +538,152 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, EVRSettingsError eError)
 {
-    const char * _ret;
+    struct cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eError = eError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(_this->u_iface, eError);
-    return _ret;
+    cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_SetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .bValue = bValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetBool(_this->u_iface, pchSection, pchSettingsKey, bValue, peError);
+    cppIVRSettings_IVRSettings_003_SetBool( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_SetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .nValue = nValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetInt32(_this->u_iface, pchSection, pchSettingsKey, nValue, peError);
+    cppIVRSettings_IVRSettings_003_SetInt32( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_SetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .flValue = flValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetFloat(_this->u_iface, pchSection, pchSettingsKey, flValue, peError);
+    cppIVRSettings_IVRSettings_003_SetFloat( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_SetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, peError);
+    cppIVRSettings_IVRSettings_003_SetString( &params );
 }
 
 bool __thiscall winIVRSettings_IVRSettings_003_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    bool _ret;
+    struct cppIVRSettings_IVRSettings_003_GetBool_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_003_GetBool(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_003_GetBool( &params );
+    return params._ret;
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_003_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    int32_t _ret;
+    struct cppIVRSettings_IVRSettings_003_GetInt32_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_003_GetInt32(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_003_GetInt32( &params );
+    return params._ret;
 }
 
 float __thiscall winIVRSettings_IVRSettings_003_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
-    float _ret;
+    struct cppIVRSettings_IVRSettings_003_GetFloat_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRSettings_IVRSettings_003_GetFloat(_this->u_iface, pchSection, pchSettingsKey, peError);
-    return _ret;
+    cppIVRSettings_IVRSettings_003_GetFloat( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_GetString_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .pchValue = pchValue,
+        .unValueLen = unValueLen,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetString(_this->u_iface, pchSection, pchSettingsKey, pchValue, unValueLen, peError);
+    cppIVRSettings_IVRSettings_003_GetString( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_RemoveSection(struct w_steam_iface *_this, const char *pchSection, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_RemoveSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_RemoveSection(_this->u_iface, pchSection, peError);
+    cppIVRSettings_IVRSettings_003_RemoveSection( &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
 {
+    struct cppIVRSettings_IVRSettings_003_RemoveKeyInSection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchSection = pchSection,
+        .pchSettingsKey = pchSettingsKey,
+        .peError = peError,
+    };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_RemoveKeyInSection(_this->u_iface, pchSection, pchSettingsKey, peError);
+    cppIVRSettings_IVRSettings_003_RemoveKeyInSection( &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_003_vtable;

@@ -9,74 +9,64 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-const char * cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(void *linux_side, EVRSettingsError eError)
+void cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum( struct cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRSettings*)linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)eError);
-    return _ret;
+    params->_ret = ((IVRSettings*)params->linux_side)->GetSettingsErrorNameFromEnum((vr::EVRSettingsError)params->eError);
 }
 
-bool cppIVRSettings_IVRSettings_001_Sync(void *linux_side, bool bForce, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_Sync( struct cppIVRSettings_IVRSettings_001_Sync_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSettings*)linux_side)->Sync((bool)bForce, (vr::EVRSettingsError *)peError);
-    return _ret;
+    params->_ret = ((IVRSettings*)params->linux_side)->Sync((bool)params->bForce, (vr::EVRSettingsError *)params->peError);
 }
 
-bool cppIVRSettings_IVRSettings_001_GetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, bool bDefaultValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_GetBool( struct cppIVRSettings_IVRSettings_001_GetBool_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSettings*)linux_side)->GetBool((const char *)pchSection, (const char *)pchSettingsKey, (bool)bDefaultValue, (vr::EVRSettingsError *)peError);
-    return _ret;
+    params->_ret = ((IVRSettings*)params->linux_side)->GetBool((const char *)params->pchSection, (const char *)params->pchSettingsKey, (bool)params->bDefaultValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_SetBool(void *linux_side, const char *pchSection, const char *pchSettingsKey, bool bValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_SetBool( struct cppIVRSettings_IVRSettings_001_SetBool_params *params )
 {
-    ((IVRSettings*)linux_side)->SetBool((const char *)pchSection, (const char *)pchSettingsKey, (bool)bValue, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->SetBool((const char *)params->pchSection, (const char *)params->pchSettingsKey, (bool)params->bValue, (vr::EVRSettingsError *)params->peError);
 }
 
-int32_t cppIVRSettings_IVRSettings_001_GetInt32(void *linux_side, const char *pchSection, const char *pchSettingsKey, int32_t nDefaultValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_GetInt32( struct cppIVRSettings_IVRSettings_001_GetInt32_params *params )
 {
-    int32_t _ret;
-    _ret = ((IVRSettings*)linux_side)->GetInt32((const char *)pchSection, (const char *)pchSettingsKey, (int32_t)nDefaultValue, (vr::EVRSettingsError *)peError);
-    return _ret;
+    params->_ret = ((IVRSettings*)params->linux_side)->GetInt32((const char *)params->pchSection, (const char *)params->pchSettingsKey, (int32_t)params->nDefaultValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_SetInt32(void *linux_side, const char *pchSection, const char *pchSettingsKey, int32_t nValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_SetInt32( struct cppIVRSettings_IVRSettings_001_SetInt32_params *params )
 {
-    ((IVRSettings*)linux_side)->SetInt32((const char *)pchSection, (const char *)pchSettingsKey, (int32_t)nValue, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->SetInt32((const char *)params->pchSection, (const char *)params->pchSettingsKey, (int32_t)params->nValue, (vr::EVRSettingsError *)params->peError);
 }
 
-float cppIVRSettings_IVRSettings_001_GetFloat(void *linux_side, const char *pchSection, const char *pchSettingsKey, float flDefaultValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_GetFloat( struct cppIVRSettings_IVRSettings_001_GetFloat_params *params )
 {
-    float _ret;
-    _ret = ((IVRSettings*)linux_side)->GetFloat((const char *)pchSection, (const char *)pchSettingsKey, (float)flDefaultValue, (vr::EVRSettingsError *)peError);
-    return _ret;
+    params->_ret = ((IVRSettings*)params->linux_side)->GetFloat((const char *)params->pchSection, (const char *)params->pchSettingsKey, (float)params->flDefaultValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_SetFloat(void *linux_side, const char *pchSection, const char *pchSettingsKey, float flValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_SetFloat( struct cppIVRSettings_IVRSettings_001_SetFloat_params *params )
 {
-    ((IVRSettings*)linux_side)->SetFloat((const char *)pchSection, (const char *)pchSettingsKey, (float)flValue, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->SetFloat((const char *)params->pchSection, (const char *)params->pchSettingsKey, (float)params->flValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_GetString(void *linux_side, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, const char *pchDefaultValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_GetString( struct cppIVRSettings_IVRSettings_001_GetString_params *params )
 {
-    ((IVRSettings*)linux_side)->GetString((const char *)pchSection, (const char *)pchSettingsKey, (char *)pchValue, (uint32_t)unValueLen, (const char *)pchDefaultValue, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->GetString((const char *)params->pchSection, (const char *)params->pchSettingsKey, (char *)params->pchValue, (uint32_t)params->unValueLen, (const char *)params->pchDefaultValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_SetString(void *linux_side, const char *pchSection, const char *pchSettingsKey, const char *pchValue, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_SetString( struct cppIVRSettings_IVRSettings_001_SetString_params *params )
 {
-    ((IVRSettings*)linux_side)->SetString((const char *)pchSection, (const char *)pchSettingsKey, (const char *)pchValue, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->SetString((const char *)params->pchSection, (const char *)params->pchSettingsKey, (const char *)params->pchValue, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_RemoveSection(void *linux_side, const char *pchSection, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_RemoveSection( struct cppIVRSettings_IVRSettings_001_RemoveSection_params *params )
 {
-    ((IVRSettings*)linux_side)->RemoveSection((const char *)pchSection, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->RemoveSection((const char *)params->pchSection, (vr::EVRSettingsError *)params->peError);
 }
 
-void cppIVRSettings_IVRSettings_001_RemoveKeyInSection(void *linux_side, const char *pchSection, const char *pchSettingsKey, EVRSettingsError *peError)
+void cppIVRSettings_IVRSettings_001_RemoveKeyInSection( struct cppIVRSettings_IVRSettings_001_RemoveKeyInSection_params *params )
 {
-    ((IVRSettings*)linux_side)->RemoveKeyInSection((const char *)pchSection, (const char *)pchSettingsKey, (vr::EVRSettingsError *)peError);
+    ((IVRSettings*)params->linux_side)->RemoveKeyInSection((const char *)params->pchSection, (const char *)params->pchSettingsKey, (vr::EVRSettingsError *)params->peError);
 }
 
 #ifdef __cplusplus

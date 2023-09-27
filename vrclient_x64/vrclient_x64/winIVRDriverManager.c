@@ -25,34 +25,51 @@ DEFINE_THISCALL_WRAPPER(winIVRDriverManager_IVRDriverManager_001_IsEnabled, 8)
 
 uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverCount(struct w_steam_iface *_this)
 {
-    uint32_t _ret;
+    struct cppIVRDriverManager_IVRDriverManager_001_GetDriverCount_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverCount(_this->u_iface);
-    return _ret;
+    cppIVRDriverManager_IVRDriverManager_001_GetDriverCount( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(struct w_steam_iface *_this, DriverId_t nDriver, char *pchValue, uint32_t unBufferSize)
 {
-    uint32_t _ret;
+    struct cppIVRDriverManager_IVRDriverManager_001_GetDriverName_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nDriver = nDriver,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverName(_this->u_iface, nDriver, pchValue, unBufferSize);
-    return _ret;
+    cppIVRDriverManager_IVRDriverManager_001_GetDriverName( &params );
+    return params._ret;
 }
 
 DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(struct w_steam_iface *_this, const char *pchDriverName)
 {
-    DriverHandle_t _ret;
+    struct cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchDriverName = pchDriverName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->u_iface, pchDriverName);
-    return _ret;
+    cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_steam_iface *_this, DriverId_t nDriver)
 {
-    bool _ret;
+    struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nDriver = nDriver,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRDriverManager_IVRDriverManager_001_IsEnabled(_this->u_iface, nDriver);
-    return _ret;
+    cppIVRDriverManager_IVRDriverManager_001_IsEnabled( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRDriverManager_IVRDriverManager_001_vtable;

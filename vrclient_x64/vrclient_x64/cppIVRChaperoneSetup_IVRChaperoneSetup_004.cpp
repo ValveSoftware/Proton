@@ -9,102 +9,84 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(void *linux_side, EChaperoneConfigFile configFile)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->CommitWorkingCopy((vr::EChaperoneConfigFile)configFile);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->CommitWorkingCopy((vr::EChaperoneConfigFile)params->configFile);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy(void *linux_side)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->RevertWorkingCopy();
+    ((IVRChaperoneSetup*)params->linux_side)->RevertWorkingCopy();
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize(void *linux_side, float *pSizeX, float *pSizeZ)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaSize((float *)pSizeX, (float *)pSizeZ);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetWorkingPlayAreaSize((float *)params->pSizeX, (float *)params->pSizeZ);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect(void *linux_side, HmdQuad_t *rect)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingPlayAreaRect((vr::HmdQuad_t *)rect);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetWorkingPlayAreaRect((vr::HmdQuad_t *)params->rect);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)params->pQuadsBuffer, (uint32_t *)params->punQuadsCount);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t *)punQuadsCount);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetLiveCollisionBoundsInfo((vr::HmdQuad_t *)params->pQuadsBuffer, (uint32_t *)params->punQuadsCount);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetWorkingSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)params->pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetWorkingStandingZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatStandingZeroPoseToRawTrackingPose);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetWorkingStandingZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)params->pmatStandingZeroPoseToRawTrackingPose);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize(void *linux_side, float sizeX, float sizeZ)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->SetWorkingPlayAreaSize((float)sizeX, (float)sizeZ);
+    ((IVRChaperoneSetup*)params->linux_side)->SetWorkingPlayAreaSize((float)params->sizeX, (float)params->sizeZ);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(void *linux_side, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->SetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)pQuadsBuffer, (uint32_t)unQuadsCount);
+    ((IVRChaperoneSetup*)params->linux_side)->SetWorkingCollisionBoundsInfo((vr::HmdQuad_t *)params->pQuadsBuffer, (uint32_t)params->unQuadsCount);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(void *linux_side, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->SetWorkingSeatedZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)pMatSeatedZeroPoseToRawTrackingPose);
+    ((IVRChaperoneSetup*)params->linux_side)->SetWorkingSeatedZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)params->pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(void *linux_side, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->SetWorkingStandingZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)pMatStandingZeroPoseToRawTrackingPose);
+    ((IVRChaperoneSetup*)params->linux_side)->SetWorkingStandingZeroPoseToRawTrackingPose((const vr::HmdMatrix34_t *)params->pMatStandingZeroPoseToRawTrackingPose);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(void *linux_side, EChaperoneConfigFile configFile)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->ReloadFromDisk((vr::EChaperoneConfigFile)configFile);
+    ((IVRChaperoneSetup*)params->linux_side)->ReloadFromDisk((vr::EChaperoneConfigFile)params->configFile);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(void *linux_side, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetLiveSeatedZeroPoseToRawTrackingPose((vr::HmdMatrix34_t *)params->pmatSeatedZeroPoseToRawTrackingPose);
 }
 
-void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo(void *linux_side, uint8_t *pTagsBuffer, uint32_t unTagCount)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo_params *params )
 {
-    ((IVRChaperoneSetup*)linux_side)->SetWorkingWallTagInfo((uint8_t *)pTagsBuffer, (uint32_t)unTagCount);
+    ((IVRChaperoneSetup*)params->linux_side)->SetWorkingWallTagInfo((uint8_t *)params->pTagsBuffer, (uint32_t)params->unTagCount);
 }
 
-bool cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo(void *linux_side, uint8_t *pTagsBuffer, uint32_t *punTagCount)
+void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params *params )
 {
-    bool _ret;
-    _ret = ((IVRChaperoneSetup*)linux_side)->GetLiveWallTagInfo((uint8_t *)pTagsBuffer, (uint32_t *)punTagCount);
-    return _ret;
+    params->_ret = ((IVRChaperoneSetup*)params->linux_side)->GetLiveWallTagInfo((uint8_t *)params->pTagsBuffer, (uint32_t *)params->punTagCount);
 }
 
 #ifdef __cplusplus

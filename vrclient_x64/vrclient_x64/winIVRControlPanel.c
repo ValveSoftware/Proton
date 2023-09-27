@@ -49,212 +49,337 @@ DEFINE_THISCALL_WRAPPER(winIVRControlPanel_IVRControlPanel_006_undoc28, 12)
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc1(struct w_steam_iface *_this)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc1_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc1(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc1( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc2(struct w_steam_iface *_this, uint32_t a, char *b, uint32_t c)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc2_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc2(_this->u_iface, a, b, c);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc2( &params );
+    return params._ret;
 }
 
 EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(struct w_steam_iface *_this, const char *a)
 {
-    EVRInitError _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc3_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc3(_this->u_iface, a);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc3( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc4(struct w_steam_iface *_this, const char *a)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc4_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc4(_this->u_iface, a);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc4( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc5(struct w_steam_iface *_this, const char *a, uint32_t b, char *c, uint32_t d)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc5_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+        .d = d,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc5(_this->u_iface, a, b, c, d);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc5( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc6(struct w_steam_iface *_this, const char *a, const char *b, char *c, uint32_t d)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc6_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+        .d = d,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc6(_this->u_iface, a, b, c, d);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc6( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc7(struct w_steam_iface *_this, const char *a, const char *b, char *c, uint32_t d)
 {
-    uint32_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc7_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+        .d = d,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc7(_this->u_iface, a, b, c, d);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc7( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc8(struct w_steam_iface *_this, uint32_t a)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc8_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc8(_this->u_iface, a);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc8( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc9(struct w_steam_iface *_this)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc9_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc9(_this->u_iface);
+    cppIVRControlPanel_IVRControlPanel_006_undoc9( &params );
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc10(struct w_steam_iface *_this)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc10_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc10(_this->u_iface);
+    cppIVRControlPanel_IVRControlPanel_006_undoc10( &params );
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc11(struct w_steam_iface *_this, uint32_t a)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc11_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc11(_this->u_iface, a);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc11( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc12(struct w_steam_iface *_this)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc12_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc12(_this->u_iface);
+    cppIVRControlPanel_IVRControlPanel_006_undoc12( &params );
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc13(struct w_steam_iface *_this, TrackedDeviceIndex_t a)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc13_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc13(_this->u_iface, a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc13( &params );
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc14(struct w_steam_iface *_this, EVRState a)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc14_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc14(_this->u_iface, a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc14( &params );
 }
 
 EVRState __thiscall winIVRControlPanel_IVRControlPanel_006_undoc15(struct w_steam_iface *_this)
 {
-    EVRState _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc15_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc15(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc15( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc16(struct w_steam_iface *_this, bool a)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc16_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc16(_this->u_iface, a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc16( &params );
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc17(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc17_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc17(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc17( &params );
+    return params._ret;
 }
 
 EVRApplicationError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc18(struct w_steam_iface *_this)
 {
-    EVRApplicationError _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc18_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc18(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc18( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc19(struct w_steam_iface *_this, bool a)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc19_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc19(_this->u_iface, a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc19( &params );
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc20(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc20_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc20(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc20( &params );
+    return params._ret;
 }
 
 EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(struct w_steam_iface *_this)
 {
-    EVRInitError _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc21_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc21(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc21( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(struct w_steam_iface *_this, WebConsoleHandle_t a, const char *b, uint32_t c, uint32_t d, const char *e)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc22_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+        .d = d,
+        .e = e,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc22(_this->u_iface, a, b, c, d, e);
+    cppIVRControlPanel_IVRControlPanel_006_undoc22( &params );
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_iface *_this, const char *a)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc23_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     const char *u_a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc23(_this->u_iface, u_a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc23( &params );
     vrclient_free_path( u_a );
-    return _ret;
+    return params._ret;
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc24(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc24_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc24(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc24( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc25(struct w_steam_iface *_this, bool a)
 {
-    bool _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc25_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc25(_this->u_iface, a);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc25( &params );
+    return params._ret;
 }
 
 uint64_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc26(struct w_steam_iface *_this)
 {
-    uint64_t _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc26_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc26(_this->u_iface);
-    return _ret;
+    cppIVRControlPanel_IVRControlPanel_006_undoc26( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_steam_iface *_this, const char *a)
 {
-    EVRCompositorError _ret;
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc27_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     const char *u_a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
-    _ret = cppIVRControlPanel_IVRControlPanel_006_undoc27(_this->u_iface, u_a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc27( &params );
     vrclient_free_path( u_a );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc28(struct w_steam_iface *_this, VROverlayHandle_t a)
 {
+    struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    cppIVRControlPanel_IVRControlPanel_006_undoc28(_this->u_iface, a);
+    cppIVRControlPanel_IVRControlPanel_006_undoc28( &params );
 }
 
 extern vtable_ptr winIVRControlPanel_IVRControlPanel_006_vtable;
