@@ -20,16 +20,25 @@ DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting,
 
 void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unVideoAppID = unVideoAppID,
+    };
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(_this->u_iface, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL( &params );
 }
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(struct w_steam_iface *_this, int *pnNumViewers)
 {
-    bool _ret;
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnNumViewers = pnNumViewers,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(_this->u_iface, pnNumViewers);
-    return _ret;
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable;
@@ -63,30 +72,50 @@ DEFINE_THISCALL_WRAPPER(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringFor
 
 void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unVideoAppID = unVideoAppID,
+    };
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(_this->u_iface, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL( &params );
 }
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(struct w_steam_iface *_this, int *pnNumViewers)
 {
-    bool _ret;
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnNumViewers = pnNumViewers,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(_this->u_iface, pnNumViewers);
-    return _ret;
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w_steam_iface *_this, AppId_t unVideoAppID)
 {
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unVideoAppID = unVideoAppID,
+    };
     TRACE("%p\n", _this);
-    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(_this->u_iface, unVideoAppID);
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings( &params );
 }
 
 bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
 {
-    bool _ret;
+    struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unVideoAppID = unVideoAppID,
+        .pchBuffer = pchBuffer,
+        .pnBufferSize = pnBufferSize,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(_this->u_iface, unVideoAppID, pchBuffer, pnBufferSize);
-    return _ret;
+    cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable;

@@ -13,74 +13,54 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
-SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(void *linux_side, CSteamID steamIDUser)
+void cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->RequestUserStats((CSteamID)steamIDUser);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->RequestUserStats( (CSteamID)params->steamIDUser );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_GetUserStat(void *linux_side, CSteamID steamIDUser, const char *pchName, int32 *pData)
+void cppISteamGameServerStats_SteamGameServerStats001_GetUserStat( struct cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->GetUserStat((CSteamID)steamIDUser, (const char *)pchName, (int32 *)pData);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->GetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (int32 *)params->pData );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(void *linux_side, CSteamID steamIDUser, const char *pchName, float *pData)
+void cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2( struct cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->GetUserStat((CSteamID)steamIDUser, (const char *)pchName, (float *)pData);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->GetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (float *)params->pData );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(void *linux_side, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+void cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement( struct cppISteamGameServerStats_SteamGameServerStats001_GetUserAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->GetUserAchievement((CSteamID)steamIDUser, (const char *)pchName, (bool *)pbAchieved);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->GetUserAchievement( (CSteamID)params->steamIDUser, (const char *)params->pchName, (bool *)params->pbAchieved );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_SetUserStat(void *linux_side, CSteamID steamIDUser, const char *pchName, int32 nData)
+void cppISteamGameServerStats_SteamGameServerStats001_SetUserStat( struct cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->SetUserStat((CSteamID)steamIDUser, (const char *)pchName, (int32)nData);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->SetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (int32)params->nData );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(void *linux_side, CSteamID steamIDUser, const char *pchName, float fData)
+void cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2( struct cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->SetUserStat((CSteamID)steamIDUser, (const char *)pchName, (float)fData);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->SetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (float)params->fData );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(void *linux_side, CSteamID steamIDUser, const char *pchName, float flCountThisSession, double dSessionLength)
+void cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat( struct cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->UpdateUserAvgRateStat((CSteamID)steamIDUser, (const char *)pchName, (float)flCountThisSession, (double)dSessionLength);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->UpdateUserAvgRateStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (float)params->flCountThisSession, (double)params->dSessionLength );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(void *linux_side, CSteamID steamIDUser, const char *pchName)
+void cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement( struct cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->SetUserAchievement((CSteamID)steamIDUser, (const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->SetUserAchievement( (CSteamID)params->steamIDUser, (const char *)params->pchName );
 }
 
-bool cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(void *linux_side, CSteamID steamIDUser, const char *pchName)
+void cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement( struct cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->ClearUserAchievement((CSteamID)steamIDUser, (const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->ClearUserAchievement( (CSteamID)params->steamIDUser, (const char *)params->pchName );
 }
 
-SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats(void *linux_side, CSteamID steamIDUser)
+void cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamGameServerStats*)linux_side)->StoreUserStats((CSteamID)steamIDUser);
-    return (_ret);
+    params->_ret = ((ISteamGameServerStats*)params->linux_side)->StoreUserStats( (CSteamID)params->steamIDUser );
 }
 
 #ifdef __cplusplus

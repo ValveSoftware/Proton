@@ -11,144 +11,111 @@ extern "C" {
 #define SDKVER_107
 #include "struct_converters.h"
 #include "cppISteamClient_SteamClient008.h"
-HSteamPipe cppISteamClient_SteamClient008_CreateSteamPipe(void *linux_side)
+void cppISteamClient_SteamClient008_CreateSteamPipe( struct cppISteamClient_SteamClient008_CreateSteamPipe_params *params )
 {
-    HSteamPipe _ret;
-    _ret = ((ISteamClient*)linux_side)->CreateSteamPipe();
-    return after_steam_pipe_create(_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->CreateSteamPipe(  );
+    params->_ret = after_steam_pipe_create( params->_ret );
 }
 
-bool cppISteamClient_SteamClient008_BReleaseSteamPipe(void *linux_side, HSteamPipe hSteamPipe)
+void cppISteamClient_SteamClient008_BReleaseSteamPipe( struct cppISteamClient_SteamClient008_BReleaseSteamPipe_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamClient*)linux_side)->BReleaseSteamPipe((HSteamPipe)hSteamPipe);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->BReleaseSteamPipe( (HSteamPipe)params->hSteamPipe );
 }
 
-HSteamUser cppISteamClient_SteamClient008_ConnectToGlobalUser(void *linux_side, HSteamPipe hSteamPipe)
+void cppISteamClient_SteamClient008_ConnectToGlobalUser( struct cppISteamClient_SteamClient008_ConnectToGlobalUser_params *params )
 {
-    HSteamUser _ret;
-    _ret = ((ISteamClient*)linux_side)->ConnectToGlobalUser((HSteamPipe)hSteamPipe);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->ConnectToGlobalUser( (HSteamPipe)params->hSteamPipe );
 }
 
-HSteamUser cppISteamClient_SteamClient008_CreateLocalUser(void *linux_side, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+void cppISteamClient_SteamClient008_CreateLocalUser( struct cppISteamClient_SteamClient008_CreateLocalUser_params *params )
 {
-    HSteamUser _ret;
-    _ret = ((ISteamClient*)linux_side)->CreateLocalUser((HSteamPipe *)phSteamPipe, (EAccountType)eAccountType);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->CreateLocalUser( (HSteamPipe *)params->phSteamPipe, (EAccountType)params->eAccountType );
 }
 
-void cppISteamClient_SteamClient008_ReleaseUser(void *linux_side, HSteamPipe hSteamPipe, HSteamUser hUser)
+void cppISteamClient_SteamClient008_ReleaseUser( struct cppISteamClient_SteamClient008_ReleaseUser_params *params )
 {
-    ((ISteamClient*)linux_side)->ReleaseUser((HSteamPipe)hSteamPipe, (HSteamUser)hUser);
+    ((ISteamClient*)params->linux_side)->ReleaseUser( (HSteamPipe)params->hSteamPipe, (HSteamUser)params->hUser );
 }
 
-void /*ISteamUser*/ * cppISteamClient_SteamClient008_GetISteamUser(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamUser( struct cppISteamClient_SteamClient008_GetISteamUser_params *params )
 {
-    void /*ISteamUser*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamUser((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamUser( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamGameServer*/ * cppISteamClient_SteamClient008_GetISteamGameServer(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamGameServer( struct cppISteamClient_SteamClient008_GetISteamGameServer_params *params )
 {
-    void /*ISteamGameServer*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamGameServer((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamGameServer( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void cppISteamClient_SteamClient008_SetLocalIPBinding(void *linux_side, uint32 unIP, uint16 usPort)
+void cppISteamClient_SteamClient008_SetLocalIPBinding( struct cppISteamClient_SteamClient008_SetLocalIPBinding_params *params )
 {
-    ((ISteamClient*)linux_side)->SetLocalIPBinding((uint32)unIP, (uint16)usPort);
+    ((ISteamClient*)params->linux_side)->SetLocalIPBinding( (uint32)params->unIP, (uint16)params->usPort );
 }
 
-void /*ISteamFriends*/ * cppISteamClient_SteamClient008_GetISteamFriends(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamFriends( struct cppISteamClient_SteamClient008_GetISteamFriends_params *params )
 {
-    void /*ISteamFriends*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamFriends((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamFriends( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamUtils*/ * cppISteamClient_SteamClient008_GetISteamUtils(void *linux_side, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamUtils( struct cppISteamClient_SteamClient008_GetISteamUtils_params *params )
 {
-    void /*ISteamUtils*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamUtils((HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamUtils( (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamMatchmaking*/ * cppISteamClient_SteamClient008_GetISteamMatchmaking(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamMatchmaking( struct cppISteamClient_SteamClient008_GetISteamMatchmaking_params *params )
 {
-    void /*ISteamMatchmaking*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamMatchmaking((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamMatchmaking( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamMasterServerUpdater*/ * cppISteamClient_SteamClient008_GetISteamMasterServerUpdater(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamMasterServerUpdater( struct cppISteamClient_SteamClient008_GetISteamMasterServerUpdater_params *params )
 {
-    void /*ISteamMasterServerUpdater*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamMasterServerUpdater((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamMasterServerUpdater( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamMatchmakingServers*/ * cppISteamClient_SteamClient008_GetISteamMatchmakingServers(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamMatchmakingServers( struct cppISteamClient_SteamClient008_GetISteamMatchmakingServers_params *params )
 {
-    void /*ISteamMatchmakingServers*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamMatchmakingServers((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamMatchmakingServers( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void * cppISteamClient_SteamClient008_GetISteamGenericInterface(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamGenericInterface( struct cppISteamClient_SteamClient008_GetISteamGenericInterface_params *params )
 {
-    void *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamGenericInterface((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamGenericInterface( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamUserStats*/ * cppISteamClient_SteamClient008_GetISteamUserStats(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamUserStats( struct cppISteamClient_SteamClient008_GetISteamUserStats_params *params )
 {
-    void /*ISteamUserStats*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamUserStats((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamUserStats( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamApps*/ * cppISteamClient_SteamClient008_GetISteamApps(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamApps( struct cppISteamClient_SteamClient008_GetISteamApps_params *params )
 {
-    void /*ISteamApps*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamApps((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamApps( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamNetworking*/ * cppISteamClient_SteamClient008_GetISteamNetworking(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamNetworking( struct cppISteamClient_SteamClient008_GetISteamNetworking_params *params )
 {
-    void /*ISteamNetworking*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamNetworking((HSteamUser)hSteamUser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamNetworking( (HSteamUser)params->hSteamUser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void /*ISteamRemoteStorage*/ * cppISteamClient_SteamClient008_GetISteamRemoteStorage(void *linux_side, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char *pchVersion)
+void cppISteamClient_SteamClient008_GetISteamRemoteStorage( struct cppISteamClient_SteamClient008_GetISteamRemoteStorage_params *params )
 {
-    void /*ISteamRemoteStorage*/ *_ret;
-    _ret = ((ISteamClient*)linux_side)->GetISteamRemoteStorage((HSteamUser)hSteamuser, (HSteamPipe)hSteamPipe, (const char *)pchVersion);
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetISteamRemoteStorage( (HSteamUser)params->hSteamuser, (HSteamPipe)params->hSteamPipe, (const char *)params->pchVersion );
 }
 
-void cppISteamClient_SteamClient008_RunFrame(void *linux_side)
+void cppISteamClient_SteamClient008_RunFrame( struct cppISteamClient_SteamClient008_RunFrame_params *params )
 {
-    ((ISteamClient*)linux_side)->RunFrame();
+    ((ISteamClient*)params->linux_side)->RunFrame(  );
 }
 
-uint32 cppISteamClient_SteamClient008_GetIPCCallCount(void *linux_side)
+void cppISteamClient_SteamClient008_GetIPCCallCount( struct cppISteamClient_SteamClient008_GetIPCCallCount_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamClient*)linux_side)->GetIPCCallCount();
-    return (_ret);
+    params->_ret = ((ISteamClient*)params->linux_side)->GetIPCCallCount(  );
 }
 
-void cppISteamClient_SteamClient008_SetWarningMessageHook(void *linux_side, SteamAPIWarningMessageHook_t pFunction)
+void cppISteamClient_SteamClient008_SetWarningMessageHook( struct cppISteamClient_SteamClient008_SetWarningMessageHook_params *params )
 {
-    pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t((void*)pFunction);
-    ((ISteamClient*)linux_side)->SetWarningMessageHook((SteamAPIWarningMessageHook_t)pFunction);
+    params->pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    ((ISteamClient*)params->linux_side)->SetWarningMessageHook( (SteamAPIWarningMessageHook_t)params->pFunction );
 }
 
 #ifdef __cplusplus

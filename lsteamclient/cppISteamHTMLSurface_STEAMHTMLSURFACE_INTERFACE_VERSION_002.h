@@ -1,34 +1,279 @@
-extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(void *);
-extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(void *);
-extern SteamAPICall_t cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(void *, const char *, const char *);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(void *, HHTMLBrowser, const char *, const char *);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(void *, HHTMLBrowser, uint32, uint32);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader(void *, HHTMLBrowser, const char *, const char *);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript(void *, HHTMLBrowser, const char *);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp(void *, HHTMLBrowser, EHTMLMouseButton);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown(void *, HHTMLBrowser, EHTMLMouseButton);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick(void *, HHTMLBrowser, EHTMLMouseButton);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove(void *, HHTMLBrowser, int, int);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel(void *, HHTMLBrowser, int32);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown(void *, HHTMLBrowser, uint32, EHTMLKeyModifiers);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp(void *, HHTMLBrowser, uint32, EHTMLKeyModifiers);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar(void *, HHTMLBrowser, uint32, EHTMLKeyModifiers);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll(void *, HHTMLBrowser, uint32);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(void *, HHTMLBrowser, uint32);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus(void *, HHTMLBrowser, bool);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find(void *, HHTMLBrowser, const char *, bool, bool);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind(void *, HHTMLBrowser);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(void *, HHTMLBrowser, int, int);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie(void *, const char *, const char *, const char *, const char *, RTime32, bool, bool);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(void *, HHTMLBrowser, float, int, int);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest(void *, HHTMLBrowser, bool);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse(void *, HHTMLBrowser, bool);
-extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(void *, HHTMLBrowser, const char **);
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser_params
+{
+    void *linux_side;
+    SteamAPICall_t _ret;
+    const char *pchUserAgent;
+    const char *pchUserCSS;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    const char *pchURL;
+    const char *pchPostData;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 unWidth;
+    uint32 unHeight;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    const char *pchKey;
+    const char *pchValue;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    const char *pchScript;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    EHTMLMouseButton eMouseButton;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    EHTMLMouseButton eMouseButton;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    EHTMLMouseButton eMouseButton;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    int x;
+    int y;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    int32 nDelta;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 nNativeKeyCode;
+    EHTMLKeyModifiers eHTMLKeyModifiers;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 nNativeKeyCode;
+    EHTMLKeyModifiers eHTMLKeyModifiers;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 cUnicodeChar;
+    EHTMLKeyModifiers eHTMLKeyModifiers;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 nAbsolutePixelScroll;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    uint32 nAbsolutePixelScroll;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    bool bHasKeyFocus;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    const char *pchSearchStr;
+    bool bCurrentlyInFind;
+    bool bReverse;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    int x;
+    int y;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie_params
+{
+    void *linux_side;
+    const char *pchHostname;
+    const char *pchKey;
+    const char *pchValue;
+    const char *pchPath;
+    RTime32 nExpires;
+    bool bSecure;
+    bool bHTTPOnly;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    float flZoom;
+    int nPointX;
+    int nPointY;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    bool bAllowed;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    bool bResult;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse_params *params );
+
+struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse_params
+{
+    void *linux_side;
+    HHTMLBrowser unBrowserHandle;
+    const char **pchSelectedFiles;
+};
+extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse_params *params );
+

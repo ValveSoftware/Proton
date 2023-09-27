@@ -11,138 +11,104 @@ extern "C" {
 #define SDKVER_101
 #include "struct_converters.h"
 #include "cppISteamFriends_SteamFriends003.h"
-const char * cppISteamFriends_SteamFriends003_GetPersonaName(void *linux_side)
+void cppISteamFriends_SteamFriends003_GetPersonaName( struct cppISteamFriends_SteamFriends003_GetPersonaName_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamFriends*)linux_side)->GetPersonaName();
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetPersonaName(  );
 }
 
-void cppISteamFriends_SteamFriends003_SetPersonaName(void *linux_side, const char *pchPersonaName)
+void cppISteamFriends_SteamFriends003_SetPersonaName( struct cppISteamFriends_SteamFriends003_SetPersonaName_params *params )
 {
-    ((ISteamFriends*)linux_side)->SetPersonaName((const char *)pchPersonaName);
+    ((ISteamFriends*)params->linux_side)->SetPersonaName( (const char *)params->pchPersonaName );
 }
 
-EPersonaState cppISteamFriends_SteamFriends003_GetPersonaState(void *linux_side)
+void cppISteamFriends_SteamFriends003_GetPersonaState( struct cppISteamFriends_SteamFriends003_GetPersonaState_params *params )
 {
-    EPersonaState _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetPersonaState();
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetPersonaState(  );
 }
 
-int cppISteamFriends_SteamFriends003_GetFriendCount(void *linux_side, int iFriendFlags)
+void cppISteamFriends_SteamFriends003_GetFriendCount( struct cppISteamFriends_SteamFriends003_GetFriendCount_params *params )
 {
-    int _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendCount((int)iFriendFlags);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendCount( (int)params->iFriendFlags );
 }
 
-CSteamID cppISteamFriends_SteamFriends003_GetFriendByIndex(void *linux_side, int iFriend, int iFriendFlags)
+void cppISteamFriends_SteamFriends003_GetFriendByIndex( struct cppISteamFriends_SteamFriends003_GetFriendByIndex_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendByIndex((int)iFriend, (int)iFriendFlags);
-    return (_ret);
+    *params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendByIndex( (int)params->iFriend, (int)params->iFriendFlags );
 }
 
-EFriendRelationship cppISteamFriends_SteamFriends003_GetFriendRelationship(void *linux_side, CSteamID steamIDFriend)
+void cppISteamFriends_SteamFriends003_GetFriendRelationship( struct cppISteamFriends_SteamFriends003_GetFriendRelationship_params *params )
 {
-    EFriendRelationship _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendRelationship((CSteamID)steamIDFriend);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendRelationship( (CSteamID)params->steamIDFriend );
 }
 
-EPersonaState cppISteamFriends_SteamFriends003_GetFriendPersonaState(void *linux_side, CSteamID steamIDFriend)
+void cppISteamFriends_SteamFriends003_GetFriendPersonaState( struct cppISteamFriends_SteamFriends003_GetFriendPersonaState_params *params )
 {
-    EPersonaState _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaState((CSteamID)steamIDFriend);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendPersonaState( (CSteamID)params->steamIDFriend );
 }
 
-const char * cppISteamFriends_SteamFriends003_GetFriendPersonaName(void *linux_side, CSteamID steamIDFriend)
+void cppISteamFriends_SteamFriends003_GetFriendPersonaName( struct cppISteamFriends_SteamFriends003_GetFriendPersonaName_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaName((CSteamID)steamIDFriend);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendPersonaName( (CSteamID)params->steamIDFriend );
 }
 
-int cppISteamFriends_SteamFriends003_GetFriendAvatar(void *linux_side, CSteamID steamIDFriend)
+void cppISteamFriends_SteamFriends003_GetFriendAvatar( struct cppISteamFriends_SteamFriends003_GetFriendAvatar_params *params )
 {
-    int _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendAvatar((CSteamID)steamIDFriend);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendAvatar( (CSteamID)params->steamIDFriend );
 }
 
-bool cppISteamFriends_SteamFriends003_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
+void cppISteamFriends_SteamFriends003_GetFriendGamePlayed( struct cppISteamFriends_SteamFriends003_GetFriendGamePlayed_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (uint64 *)pulGameID, (uint32 *)punGameIP, (uint16 *)pusGamePort, (uint16 *)pusQueryPort);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendGamePlayed( (CSteamID)params->steamIDFriend, (uint64 *)params->pulGameID, (uint32 *)params->punGameIP, (uint16 *)params->pusGamePort, (uint16 *)params->pusQueryPort );
 }
 
-const char * cppISteamFriends_SteamFriends003_GetFriendPersonaNameHistory(void *linux_side, CSteamID steamIDFriend, int iPersonaName)
+void cppISteamFriends_SteamFriends003_GetFriendPersonaNameHistory( struct cppISteamFriends_SteamFriends003_GetFriendPersonaNameHistory_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendPersonaNameHistory((CSteamID)steamIDFriend, (int)iPersonaName);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendPersonaNameHistory( (CSteamID)params->steamIDFriend, (int)params->iPersonaName );
 }
 
-bool cppISteamFriends_SteamFriends003_HasFriend(void *linux_side, CSteamID steamIDFriend, int iFriendFlags)
+void cppISteamFriends_SteamFriends003_HasFriend( struct cppISteamFriends_SteamFriends003_HasFriend_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamFriends*)linux_side)->HasFriend((CSteamID)steamIDFriend, (int)iFriendFlags);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->HasFriend( (CSteamID)params->steamIDFriend, (int)params->iFriendFlags );
 }
 
-int cppISteamFriends_SteamFriends003_GetClanCount(void *linux_side)
+void cppISteamFriends_SteamFriends003_GetClanCount( struct cppISteamFriends_SteamFriends003_GetClanCount_params *params )
 {
-    int _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetClanCount();
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetClanCount(  );
 }
 
-CSteamID cppISteamFriends_SteamFriends003_GetClanByIndex(void *linux_side, int iClan)
+void cppISteamFriends_SteamFriends003_GetClanByIndex( struct cppISteamFriends_SteamFriends003_GetClanByIndex_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetClanByIndex((int)iClan);
-    return (_ret);
+    *params->_ret = ((ISteamFriends*)params->linux_side)->GetClanByIndex( (int)params->iClan );
 }
 
-const char * cppISteamFriends_SteamFriends003_GetClanName(void *linux_side, CSteamID steamIDClan)
+void cppISteamFriends_SteamFriends003_GetClanName( struct cppISteamFriends_SteamFriends003_GetClanName_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamFriends*)linux_side)->GetClanName((CSteamID)steamIDClan);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetClanName( (CSteamID)params->steamIDClan );
 }
 
-int cppISteamFriends_SteamFriends003_GetFriendCountFromSource(void *linux_side, CSteamID steamIDSource)
+void cppISteamFriends_SteamFriends003_GetFriendCountFromSource( struct cppISteamFriends_SteamFriends003_GetFriendCountFromSource_params *params )
 {
-    int _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendCountFromSource((CSteamID)steamIDSource);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendCountFromSource( (CSteamID)params->steamIDSource );
 }
 
-CSteamID cppISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(void *linux_side, CSteamID steamIDSource, int iFriend)
+void cppISteamFriends_SteamFriends003_GetFriendFromSourceByIndex( struct cppISteamFriends_SteamFriends003_GetFriendFromSourceByIndex_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamFriends*)linux_side)->GetFriendFromSourceByIndex((CSteamID)steamIDSource, (int)iFriend);
-    return (_ret);
+    *params->_ret = ((ISteamFriends*)params->linux_side)->GetFriendFromSourceByIndex( (CSteamID)params->steamIDSource, (int)params->iFriend );
 }
 
-bool cppISteamFriends_SteamFriends003_IsUserInSource(void *linux_side, CSteamID steamIDUser, CSteamID steamIDSource)
+void cppISteamFriends_SteamFriends003_IsUserInSource( struct cppISteamFriends_SteamFriends003_IsUserInSource_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamFriends*)linux_side)->IsUserInSource((CSteamID)steamIDUser, (CSteamID)steamIDSource);
-    return (_ret);
+    params->_ret = ((ISteamFriends*)params->linux_side)->IsUserInSource( (CSteamID)params->steamIDUser, (CSteamID)params->steamIDSource );
 }
 
-void cppISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(void *linux_side, CSteamID steamIDUser, bool bSpeaking)
+void cppISteamFriends_SteamFriends003_SetInGameVoiceSpeaking( struct cppISteamFriends_SteamFriends003_SetInGameVoiceSpeaking_params *params )
 {
-    ((ISteamFriends*)linux_side)->SetInGameVoiceSpeaking((CSteamID)steamIDUser, (bool)bSpeaking);
+    ((ISteamFriends*)params->linux_side)->SetInGameVoiceSpeaking( (CSteamID)params->steamIDUser, (bool)params->bSpeaking );
 }
 
-void cppISteamFriends_SteamFriends003_ActivateGameOverlay(void *linux_side, const char *pchDialog)
+void cppISteamFriends_SteamFriends003_ActivateGameOverlay( struct cppISteamFriends_SteamFriends003_ActivateGameOverlay_params *params )
 {
-    ((ISteamFriends*)linux_side)->ActivateGameOverlay((const char *)pchDialog);
+    ((ISteamFriends*)params->linux_side)->ActivateGameOverlay( (const char *)params->pchDialog );
 }
 
 #ifdef __cplusplus

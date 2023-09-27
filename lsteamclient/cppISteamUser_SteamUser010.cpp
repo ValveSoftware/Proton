@@ -11,42 +11,34 @@ extern "C" {
 #define SDKVER_101
 #include "struct_converters.h"
 #include "cppISteamUser_SteamUser010.h"
-HSteamUser cppISteamUser_SteamUser010_GetHSteamUser(void *linux_side)
+void cppISteamUser_SteamUser010_GetHSteamUser( struct cppISteamUser_SteamUser010_GetHSteamUser_params *params )
 {
-    HSteamUser _ret;
-    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetHSteamUser(  );
 }
 
-bool cppISteamUser_SteamUser010_BLoggedOn(void *linux_side)
+void cppISteamUser_SteamUser010_BLoggedOn( struct cppISteamUser_SteamUser010_BLoggedOn_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->BLoggedOn(  );
 }
 
-CSteamID cppISteamUser_SteamUser010_GetSteamID(void *linux_side)
+void cppISteamUser_SteamUser010_GetSteamID( struct cppISteamUser_SteamUser010_GetSteamID_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamUser*)linux_side)->GetSteamID();
-    return (_ret);
+    *params->_ret = ((ISteamUser*)params->linux_side)->GetSteamID(  );
 }
 
-int cppISteamUser_SteamUser010_InitiateGameConnection(void *linux_side, void *pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+void cppISteamUser_SteamUser010_InitiateGameConnection( struct cppISteamUser_SteamUser010_InitiateGameConnection_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->InitiateGameConnection( (void *)params->pAuthBlob, (int)params->cbMaxAuthBlob, (CSteamID)params->steamIDGameServer, (uint32)params->unIPServer, (uint16)params->usPortServer, (bool)params->bSecure );
 }
 
-void cppISteamUser_SteamUser010_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
+void cppISteamUser_SteamUser010_TerminateGameConnection( struct cppISteamUser_SteamUser010_TerminateGameConnection_params *params )
 {
-    ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
+    ((ISteamUser*)params->linux_side)->TerminateGameConnection( (uint32)params->unIPServer, (uint16)params->usPortServer );
 }
 
-void cppISteamUser_SteamUser010_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo)
+void cppISteamUser_SteamUser010_TrackAppUsageEvent( struct cppISteamUser_SteamUser010_TrackAppUsageEvent_params *params )
 {
-    ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
+    ((ISteamUser*)params->linux_side)->TrackAppUsageEvent( (CGameID)params->gameID, (int)params->eAppUsageEvent, (const char *)params->pchExtraInfo );
 }
 
 #ifdef __cplusplus

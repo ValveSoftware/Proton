@@ -11,166 +11,134 @@ extern "C" {
 #define SDKVER_099u
 #include "struct_converters.h"
 #include "cppISteamUser_SteamUser004.h"
-HSteamUser cppISteamUser_SteamUser004_GetHSteamUser(void *linux_side)
+void cppISteamUser_SteamUser004_GetHSteamUser( struct cppISteamUser_SteamUser004_GetHSteamUser_params *params )
 {
-    HSteamUser _ret;
-    _ret = ((ISteamUser*)linux_side)->GetHSteamUser();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetHSteamUser(  );
 }
 
-void cppISteamUser_SteamUser004_LogOn(void *linux_side, CSteamID steamID)
+void cppISteamUser_SteamUser004_LogOn( struct cppISteamUser_SteamUser004_LogOn_params *params )
 {
-    ((ISteamUser*)linux_side)->LogOn((CSteamID)steamID);
+    ((ISteamUser*)params->linux_side)->LogOn( (CSteamID)params->steamID );
 }
 
-void cppISteamUser_SteamUser004_LogOff(void *linux_side)
+void cppISteamUser_SteamUser004_LogOff( struct cppISteamUser_SteamUser004_LogOff_params *params )
 {
-    ((ISteamUser*)linux_side)->LogOff();
+    ((ISteamUser*)params->linux_side)->LogOff(  );
 }
 
-bool cppISteamUser_SteamUser004_BLoggedOn(void *linux_side)
+void cppISteamUser_SteamUser004_BLoggedOn( struct cppISteamUser_SteamUser004_BLoggedOn_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->BLoggedOn();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->BLoggedOn(  );
 }
 
-ELogonState cppISteamUser_SteamUser004_GetLogonState(void *linux_side)
+void cppISteamUser_SteamUser004_GetLogonState( struct cppISteamUser_SteamUser004_GetLogonState_params *params )
 {
-    ELogonState _ret;
-    _ret = ((ISteamUser*)linux_side)->GetLogonState();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetLogonState(  );
 }
 
-bool cppISteamUser_SteamUser004_BConnected(void *linux_side)
+void cppISteamUser_SteamUser004_BConnected( struct cppISteamUser_SteamUser004_BConnected_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->BConnected();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->BConnected(  );
 }
 
-CSteamID cppISteamUser_SteamUser004_GetSteamID(void *linux_side)
+void cppISteamUser_SteamUser004_GetSteamID( struct cppISteamUser_SteamUser004_GetSteamID_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamUser*)linux_side)->GetSteamID();
-    return (_ret);
+    *params->_ret = ((ISteamUser*)params->linux_side)->GetSteamID(  );
 }
 
-bool cppISteamUser_SteamUser004_IsVACBanned(void *linux_side, int nGameID)
+void cppISteamUser_SteamUser004_IsVACBanned( struct cppISteamUser_SteamUser004_IsVACBanned_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->IsVACBanned((int)nGameID);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->IsVACBanned( (int)params->nGameID );
 }
 
-bool cppISteamUser_SteamUser004_RequireShowVACBannedMessage(void *linux_side, int nGameID)
+void cppISteamUser_SteamUser004_RequireShowVACBannedMessage( struct cppISteamUser_SteamUser004_RequireShowVACBannedMessage_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->RequireShowVACBannedMessage((int)nGameID);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->RequireShowVACBannedMessage( (int)params->nGameID );
 }
 
-void cppISteamUser_SteamUser004_AcknowledgeVACBanning(void *linux_side, int nGameID)
+void cppISteamUser_SteamUser004_AcknowledgeVACBanning( struct cppISteamUser_SteamUser004_AcknowledgeVACBanning_params *params )
 {
-    ((ISteamUser*)linux_side)->AcknowledgeVACBanning((int)nGameID);
+    ((ISteamUser*)params->linux_side)->AcknowledgeVACBanning( (int)params->nGameID );
 }
 
-int cppISteamUser_SteamUser004_NClientGameIDAdd(void *linux_side, int nGameID)
+void cppISteamUser_SteamUser004_NClientGameIDAdd( struct cppISteamUser_SteamUser004_NClientGameIDAdd_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUser*)linux_side)->NClientGameIDAdd((int)nGameID);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->NClientGameIDAdd( (int)params->nGameID );
 }
 
-void cppISteamUser_SteamUser004_RemoveClientGame(void *linux_side, int nClientGameID)
+void cppISteamUser_SteamUser004_RemoveClientGame( struct cppISteamUser_SteamUser004_RemoveClientGame_params *params )
 {
-    ((ISteamUser*)linux_side)->RemoveClientGame((int)nClientGameID);
+    ((ISteamUser*)params->linux_side)->RemoveClientGame( (int)params->nClientGameID );
 }
 
-void cppISteamUser_SteamUser004_SetClientGameServer(void *linux_side, int nClientGameID, uint32 unIPServer, uint16 usPortServer)
+void cppISteamUser_SteamUser004_SetClientGameServer( struct cppISteamUser_SteamUser004_SetClientGameServer_params *params )
 {
-    ((ISteamUser*)linux_side)->SetClientGameServer((int)nClientGameID, (uint32)unIPServer, (uint16)usPortServer);
+    ((ISteamUser*)params->linux_side)->SetClientGameServer( (int)params->nClientGameID, (uint32)params->unIPServer, (uint16)params->usPortServer );
 }
 
-void cppISteamUser_SteamUser004_SetSteam2Ticket(void *linux_side, uint8 *pubTicket, int cubTicket)
+void cppISteamUser_SteamUser004_SetSteam2Ticket( struct cppISteamUser_SteamUser004_SetSteam2Ticket_params *params )
 {
-    ((ISteamUser*)linux_side)->SetSteam2Ticket((uint8 *)pubTicket, (int)cubTicket);
+    ((ISteamUser*)params->linux_side)->SetSteam2Ticket( (uint8 *)params->pubTicket, (int)params->cubTicket );
 }
 
-void cppISteamUser_SteamUser004_AddServerNetAddress(void *linux_side, uint32 unIP, uint16 unPort)
+void cppISteamUser_SteamUser004_AddServerNetAddress( struct cppISteamUser_SteamUser004_AddServerNetAddress_params *params )
 {
-    ((ISteamUser*)linux_side)->AddServerNetAddress((uint32)unIP, (uint16)unPort);
+    ((ISteamUser*)params->linux_side)->AddServerNetAddress( (uint32)params->unIP, (uint16)params->unPort );
 }
 
-bool cppISteamUser_SteamUser004_SetEmail(void *linux_side, const char *pchEmail)
+void cppISteamUser_SteamUser004_SetEmail( struct cppISteamUser_SteamUser004_SetEmail_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->SetEmail((const char *)pchEmail);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->SetEmail( (const char *)params->pchEmail );
 }
 
-int cppISteamUser_SteamUser004_GetSteamGameConnectToken(void *linux_side, void *pBlob, int cbMaxBlob)
+void cppISteamUser_SteamUser004_GetSteamGameConnectToken( struct cppISteamUser_SteamUser004_GetSteamGameConnectToken_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUser*)linux_side)->GetSteamGameConnectToken((void *)pBlob, (int)cbMaxBlob);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetSteamGameConnectToken( (void *)params->pBlob, (int)params->cbMaxBlob );
 }
 
-bool cppISteamUser_SteamUser004_SetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
+void cppISteamUser_SteamUser004_SetRegistryString( struct cppISteamUser_SteamUser004_SetRegistryString_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->SetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (const char *)pchValue);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->SetRegistryString( (EConfigSubTree)params->eRegistrySubTree, (const char *)params->pchKey, (const char *)params->pchValue );
 }
 
-bool cppISteamUser_SteamUser004_GetRegistryString(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
+void cppISteamUser_SteamUser004_GetRegistryString( struct cppISteamUser_SteamUser004_GetRegistryString_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->GetRegistryString((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (char *)pchValue, (int)cbValue);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetRegistryString( (EConfigSubTree)params->eRegistrySubTree, (const char *)params->pchKey, (char *)params->pchValue, (int)params->cbValue );
 }
 
-bool cppISteamUser_SteamUser004_SetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
+void cppISteamUser_SteamUser004_SetRegistryInt( struct cppISteamUser_SteamUser004_SetRegistryInt_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->SetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int)iValue);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->SetRegistryInt( (EConfigSubTree)params->eRegistrySubTree, (const char *)params->pchKey, (int)params->iValue );
 }
 
-bool cppISteamUser_SteamUser004_GetRegistryInt(void *linux_side, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
+void cppISteamUser_SteamUser004_GetRegistryInt( struct cppISteamUser_SteamUser004_GetRegistryInt_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->GetRegistryInt((EConfigSubTree)eRegistrySubTree, (const char *)pchKey, (int *)piValue);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->GetRegistryInt( (EConfigSubTree)params->eRegistrySubTree, (const char *)params->pchKey, (int *)params->piValue );
 }
 
-int cppISteamUser_SteamUser004_InitiateGameConnection(void *linux_side, void *pBlob, int cbMaxBlob, CSteamID steamID, int nGameAppID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+void cppISteamUser_SteamUser004_InitiateGameConnection( struct cppISteamUser_SteamUser004_InitiateGameConnection_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (int)nGameAppID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->InitiateGameConnection( (void *)params->pBlob, (int)params->cbMaxBlob, (CSteamID)params->steamID, (int)params->nGameAppID, (uint32)params->unIPServer, (uint16)params->usPortServer, (bool)params->bSecure );
 }
 
-void cppISteamUser_SteamUser004_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
+void cppISteamUser_SteamUser004_TerminateGameConnection( struct cppISteamUser_SteamUser004_TerminateGameConnection_params *params )
 {
-    ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
+    ((ISteamUser*)params->linux_side)->TerminateGameConnection( (uint32)params->unIPServer, (uint16)params->usPortServer );
 }
 
-void cppISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination(void *linux_side)
+void cppISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination( struct cppISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination_params *params )
 {
-    ((ISteamUser*)linux_side)->SetSelfAsPrimaryChatDestination();
+    ((ISteamUser*)params->linux_side)->SetSelfAsPrimaryChatDestination(  );
 }
 
-bool cppISteamUser_SteamUser004_IsPrimaryChatDestination(void *linux_side)
+void cppISteamUser_SteamUser004_IsPrimaryChatDestination( struct cppISteamUser_SteamUser004_IsPrimaryChatDestination_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUser*)linux_side)->IsPrimaryChatDestination();
-    return (_ret);
+    params->_ret = ((ISteamUser*)params->linux_side)->IsPrimaryChatDestination(  );
 }
 
-void cppISteamUser_SteamUser004_RequestLegacyCDKey(void *linux_side, uint32 iAppID)
+void cppISteamUser_SteamUser004_RequestLegacyCDKey( struct cppISteamUser_SteamUser004_RequestLegacyCDKey_params *params )
 {
-    ((ISteamUser*)linux_side)->RequestLegacyCDKey((uint32)iAppID);
+    ((ISteamUser*)params->linux_side)->RequestLegacyCDKey( (uint32)params->iAppID );
 }
 
 #ifdef __cplusplus

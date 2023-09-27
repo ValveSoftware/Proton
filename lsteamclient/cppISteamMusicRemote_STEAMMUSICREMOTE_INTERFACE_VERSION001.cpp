@@ -12,228 +12,164 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001.h"
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(void *linux_side, const char *pchName)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->RegisterSteamMusicRemote((const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->RegisterSteamMusicRemote( (const char *)params->pchName );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_DeregisterSteamMusicRemote(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_DeregisterSteamMusicRemote( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_DeregisterSteamMusicRemote_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->DeregisterSteamMusicRemote();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->DeregisterSteamMusicRemote(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCurrentMusicRemote(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCurrentMusicRemote( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCurrentMusicRemote_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->BIsCurrentMusicRemote();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->BIsCurrentMusicRemote(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->BActivationSuccess((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->BActivationSuccess( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName(void *linux_side, const char *pchDisplayName)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetDisplayName((const char *)pchDisplayName);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetDisplayName( (const char *)params->pchDisplayName );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(void *linux_side, void *pvBuffer, uint32 cbBufferLength)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetPNGIcon_64x64((void *)pvBuffer, (uint32)cbBufferLength);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetPNGIcon_64x64( (void *)params->pvBuffer, (uint32)params->cbBufferLength );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnablePlayPrevious((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnablePlayPrevious( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnablePlayNext((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnablePlayNext( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnableShuffled((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnableShuffled( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnableLooped((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnableLooped( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnableQueue((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnableQueue( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->EnablePlaylists((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->EnablePlaylists( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus(void *linux_side, AudioPlayback_Status nStatus)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdatePlaybackStatus((AudioPlayback_Status)nStatus);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdatePlaybackStatus( (AudioPlayback_Status)params->nStatus );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateShuffled((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateShuffled( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped(void *linux_side, bool bValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateLooped((bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateLooped( (bool)params->bValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateVolume(void *linux_side, float flValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateVolume( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateVolume_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateVolume((float)flValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateVolume( (float)params->flValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryWillChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryWillChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryWillChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->CurrentEntryWillChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->CurrentEntryWillChange(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable(void *linux_side, bool bAvailable)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->CurrentEntryIsAvailable((bool)bAvailable);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->CurrentEntryIsAvailable( (bool)params->bAvailable );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText(void *linux_side, const char *pchText)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryText((const char *)pchText);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateCurrentEntryText( (const char *)params->pchText );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds(void *linux_side, int nValue)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryElapsedSeconds((int)nValue);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateCurrentEntryElapsedSeconds( (int)params->nValue );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(void *linux_side, void *pvBuffer, uint32 cbBufferLength)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->UpdateCurrentEntryCoverArt((void *)pvBuffer, (uint32)cbBufferLength);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->UpdateCurrentEntryCoverArt( (void *)params->pvBuffer, (uint32)params->cbBufferLength );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryDidChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryDidChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryDidChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->CurrentEntryDidChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->CurrentEntryDidChange(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueWillChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueWillChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueWillChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->QueueWillChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->QueueWillChange(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntries(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntries( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntries_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->ResetQueueEntries();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->ResetQueueEntries(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(void *linux_side, int nID, int nPosition, const char *pchEntryText)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetQueueEntry((int)nID, (int)nPosition, (const char *)pchEntryText);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetQueueEntry( (int)params->nID, (int)params->nPosition, (const char *)params->pchEntryText );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry(void *linux_side, int nID)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetCurrentQueueEntry((int)nID);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetCurrentQueueEntry( (int)params->nID );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueDidChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueDidChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueDidChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->QueueDidChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->QueueDidChange(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistWillChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistWillChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistWillChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->PlaylistWillChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->PlaylistWillChange(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEntries(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEntries( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEntries_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->ResetPlaylistEntries();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->ResetPlaylistEntries(  );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(void *linux_side, int nID, int nPosition, const char *pchEntryText)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetPlaylistEntry((int)nID, (int)nPosition, (const char *)pchEntryText);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetPlaylistEntry( (int)params->nID, (int)params->nPosition, (const char *)params->pchEntryText );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry(void *linux_side, int nID)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->SetCurrentPlaylistEntry((int)nID);
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->SetCurrentPlaylistEntry( (int)params->nID );
 }
 
-bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistDidChange(void *linux_side)
+void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistDidChange( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistDidChange_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusicRemote*)linux_side)->PlaylistDidChange();
-    return (_ret);
+    params->_ret = ((ISteamMusicRemote*)params->linux_side)->PlaylistDidChange(  );
 }
 
 #ifdef __cplusplus

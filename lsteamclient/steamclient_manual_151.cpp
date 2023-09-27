@@ -26,18 +26,19 @@ extern "C" {
 #define SDK_VERSION 1510
 #include "steamclient_manual_common.h"
 
-const char * cppISteamInput_SteamInput002_GetGlyphForActionOrigin(void *linux_side, EInputActionOrigin eOrigin)
-{
-    const char *path_result;
-    path_result = ((ISteamInput*)linux_side)->GetGlyphForActionOrigin((EInputActionOrigin)eOrigin);
-    return steamclient_isteaminput_getglyph(eOrigin, path_result);
+#include "cppISteamInput_SteamInput002.h"
 }
 
-const char * cppISteamInput_SteamInput002_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+void cppISteamInput_SteamInput002_GetGlyphForActionOrigin( struct cppISteamInput_SteamInput002_GetGlyphForActionOrigin_params *params )
 {
-    const char *path_result;
-    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
-    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
+    ISteamInput *iface = (ISteamInput *)params->linux_side;
+    params->_ret = iface->GetGlyphForActionOrigin( (EInputActionOrigin)params->eOrigin );
+    params->_ret = steamclient_isteaminput_getglyph( params->eOrigin, params->_ret );
 }
 
+void cppISteamInput_SteamInput002_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput002_GetGlyphForXboxOrigin_params *params )
+{
+    ISteamInput *iface = (ISteamInput *)params->linux_side;
+    params->_ret = iface->GetGlyphForXboxOrigin( (EXboxOrigin)params->eOrigin );
+    params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
 }

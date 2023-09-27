@@ -11,39 +11,29 @@ extern "C" {
 #define SDKVER_141
 #include "struct_converters.h"
 #include "cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.h"
-ClientUnifiedMessageHandle cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(void *linux_side, const char *pchServiceMethod, const void *pRequestBuffer, uint32 unRequestBufferSize, uint64 unContext)
+void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params *params )
 {
-    ClientUnifiedMessageHandle _ret;
-    _ret = ((ISteamUnifiedMessages*)linux_side)->SendMethod((const char *)pchServiceMethod, (const void *)pRequestBuffer, (uint32)unRequestBufferSize, (uint64)unContext);
-    return (_ret);
+    params->_ret = ((ISteamUnifiedMessages*)params->linux_side)->SendMethod( (const char *)params->pchServiceMethod, (const void *)params->pRequestBuffer, (uint32)params->unRequestBufferSize, (uint64)params->unContext );
 }
 
-bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(void *linux_side, ClientUnifiedMessageHandle hHandle, uint32 *punResponseSize, EResult *peResult)
+void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseInfo((ClientUnifiedMessageHandle)hHandle, (uint32 *)punResponseSize, (EResult *)peResult);
-    return (_ret);
+    params->_ret = ((ISteamUnifiedMessages*)params->linux_side)->GetMethodResponseInfo( (ClientUnifiedMessageHandle)params->hHandle, (uint32 *)params->punResponseSize, (EResult *)params->peResult );
 }
 
-bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(void *linux_side, ClientUnifiedMessageHandle hHandle, void *pResponseBuffer, uint32 unResponseBufferSize, bool bAutoRelease)
+void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUnifiedMessages*)linux_side)->GetMethodResponseData((ClientUnifiedMessageHandle)hHandle, (void *)pResponseBuffer, (uint32)unResponseBufferSize, (bool)bAutoRelease);
-    return (_ret);
+    params->_ret = ((ISteamUnifiedMessages*)params->linux_side)->GetMethodResponseData( (ClientUnifiedMessageHandle)params->hHandle, (void *)params->pResponseBuffer, (uint32)params->unResponseBufferSize, (bool)params->bAutoRelease );
 }
 
-bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(void *linux_side, ClientUnifiedMessageHandle hHandle)
+void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUnifiedMessages*)linux_side)->ReleaseMethod((ClientUnifiedMessageHandle)hHandle);
-    return (_ret);
+    params->_ret = ((ISteamUnifiedMessages*)params->linux_side)->ReleaseMethod( (ClientUnifiedMessageHandle)params->hHandle );
 }
 
-bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(void *linux_side, const char *pchServiceNotification, const void *pNotificationBuffer, uint32 unNotificationBufferSize)
+void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUnifiedMessages*)linux_side)->SendNotification((const char *)pchServiceNotification, (const void *)pNotificationBuffer, (uint32)unNotificationBufferSize);
-    return (_ret);
+    params->_ret = ((ISteamUnifiedMessages*)params->linux_side)->SendNotification( (const char *)params->pchServiceNotification, (const void *)params->pNotificationBuffer, (uint32)params->unNotificationBufferSize );
 }
 
 #ifdef __cplusplus
