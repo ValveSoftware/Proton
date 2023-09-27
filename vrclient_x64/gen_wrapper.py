@@ -260,6 +260,7 @@ MANUAL_METHODS = {
     "IVRRenderModels_LoadTextureD3D11_Async": True,
     "IVRRenderModels_FreeTextureD3D11": True,
     "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
+    "IVROverlay_SetOverlayTexture": True,
 }
 
 
@@ -363,7 +364,6 @@ method_overrides = [
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
-    ("IVROverlay", "SetOverlayTexture", ivroverlay_set_overlay_texture),
     ("IVRInput",  "GetDigitalActionData", ivrinput_get_digital_action_data),
 ]
 

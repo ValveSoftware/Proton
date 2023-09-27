@@ -323,13 +323,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionA
     return _ret;
 }
 
-VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pTexture)
-{
-    VROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_001_set_overlay_texture(cppIVROverlay_IVROverlay_001_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 1);
-    return _ret;
-}
+extern VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pTexture);
 
 VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
@@ -819,13 +813,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionA
     return _ret;
 }
 
-VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture)
-{
-    VROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_002_SetOverlayTexture, _this->u_iface, ulOverlayHandle, eTextureType, pTexture, 2);
-    return _ret;
-}
+extern VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture);
 
 VROverlayError __thiscall winIVROverlay_IVROverlay_002_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -1363,13 +1351,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionA
     return _ret;
 }
 
-VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture)
-{
-    VROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_003_SetOverlayTexture, _this->u_iface, ulOverlayHandle, eTextureType, pTexture, 3);
-    return _ret;
-}
+extern VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture);
 
 VROverlayError __thiscall winIVROverlay_IVROverlay_003_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -1939,13 +1921,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionA
     return _ret;
 }
 
-VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture)
-{
-    VROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_004_SetOverlayTexture, _this->u_iface, ulOverlayHandle, eTextureType, pTexture, 4);
-    return _ret;
-}
+extern VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture);
 
 VROverlayError __thiscall winIVROverlay_IVROverlay_004_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -2531,13 +2507,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsFocusOverlay(struct w_steam_iface
     return _ret;
 }
 
-VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture)
-{
-    VROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_005_SetOverlayTexture, _this->u_iface, ulOverlayHandle, eTextureType, pTexture, 5);
-    return _ret;
-}
+extern VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void *pTexture);
 
 VROverlayError __thiscall winIVROverlay_IVROverlay_005_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -3190,13 +3160,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_007_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 7);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_007_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -3878,13 +3842,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_008_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 8);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_008_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -4603,13 +4561,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_010_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 10);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_010_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -5362,13 +5314,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_011_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 11);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_011_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -6146,13 +6092,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_012_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 12);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_012_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -6977,13 +6917,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_013_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 13);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_013_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -7828,13 +7762,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_014_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 14);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_014_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -8745,13 +8673,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighb
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_016_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 16);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_016_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -9698,13 +9620,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_GetOverlayDualAnalogTran
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_017_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 17);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_017_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -10646,13 +10562,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTran
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_018_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 18);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -11592,13 +11502,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_GetOverlayDualAnalogTran
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_019_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 19);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_019_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -12520,13 +12424,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTran
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_020_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 20);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -13408,13 +13306,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTran
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_021_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 21);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -14358,13 +14250,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_ClearOverlayCursorPositi
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_022_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 22);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_022_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -15268,13 +15154,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_024_ClearOverlayCursorPositi
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_024_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 24);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_024_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -16179,13 +16059,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_ClearOverlayCursorPositi
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_025_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 25);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_025_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -17119,13 +16993,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_ClearOverlayCursorPositi
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_026_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 26);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_026_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
@@ -18047,13 +17915,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_027_ClearOverlayCursorPositi
     return _ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture)
-{
-    EVROverlayError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_027_SetOverlayTexture, _this->u_iface, ulOverlayHandle, pTexture, 27);
-    return _ret;
-}
+extern EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_027_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
 {
