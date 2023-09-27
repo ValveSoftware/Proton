@@ -594,6 +594,7 @@ def handle_method_cpp(method, classname, cppname, cpp):
         cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
 
 
+    size_fixup = {}
     convert_size_param = ""
     params = list(zip(names[1:], method.get_arguments()))
     params += [(None, None)] # for next_name, next_param
@@ -607,12 +608,14 @@ def handle_method_cpp(method, classname, cppname, cpp):
             convert_size_param = ', -1'
         elif struct_needs_size_adjustment(real_type.get_canonical()):
             real_name = real_type.spelling
-            cpp.write(f'    {next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
+            cpp.write(f'    uint32_t lin_{next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
             convert_size_param = f', {next_name}'
+            size_fixup[next_name] = True
         elif do_win_to_lin and do_win_to_lin[1] == name:
             assert do_win_to_lin[0] not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
-            cpp.write(f'    {next_name} = {next_name} ? sizeof(lin) : 0;\n')
+            cpp.write(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin) : 0;\n')
             convert_size_param = f', {next_name}'
+            size_fixup[next_name] = True
 
 
     if method.result_type.kind == TypeKind.VOID:
@@ -624,7 +627,9 @@ def handle_method_cpp(method, classname, cppname, cpp):
 
     params = []
     for name, param in zip(names[1:], method.get_arguments()):
-        if do_lin_to_win and do_lin_to_win[1] == name or \
+        if name in size_fixup:
+            params.append(f'lin_{name}')
+        elif do_lin_to_win and do_lin_to_win[1] == name or \
                 do_win_to_lin and do_win_to_lin[1] == name or \
                 do_wrap and do_wrap[1] == name:
             params.append("%s ? &lin : nullptr" % name)
