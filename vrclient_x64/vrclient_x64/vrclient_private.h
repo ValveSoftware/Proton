@@ -168,11 +168,6 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
         unsigned int version);
 
-EVRInputError ivrinput_get_digital_action_data(
-        void *func,
-        void *linux_side, VRActionHandle_t action_handle, void *action_data, uint32_t action_data_size,
-        VRInputValueHandle_t restrict_to_device, unsigned int version);
-
 #ifdef __dxvk_interop_h__
 extern Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
                                                   IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
