@@ -23,42 +23,72 @@ DEFINE_THISCALL_WRAPPER(winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_
 
 ClientUnifiedMessageHandle __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(struct w_steam_iface *_this, const char *pchServiceMethod, const void *pRequestBuffer, uint32 unRequestBufferSize, uint64 unContext)
 {
-    ClientUnifiedMessageHandle _ret;
+    struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchServiceMethod = pchServiceMethod,
+        .pRequestBuffer = pRequestBuffer,
+        .unRequestBufferSize = unRequestBufferSize,
+        .unContext = unContext,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(_this->u_iface, pchServiceMethod, pRequestBuffer, unRequestBufferSize, unContext);
-    return _ret;
+    cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(struct w_steam_iface *_this, ClientUnifiedMessageHandle hHandle, uint32 *punResponseSize, EResult *peResult)
 {
-    bool _ret;
+    struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hHandle = hHandle,
+        .punResponseSize = punResponseSize,
+        .peResult = peResult,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(_this->u_iface, hHandle, punResponseSize, peResult);
-    return _ret;
+    cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(struct w_steam_iface *_this, ClientUnifiedMessageHandle hHandle, void *pResponseBuffer, uint32 unResponseBufferSize, bool bAutoRelease)
 {
-    bool _ret;
+    struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hHandle = hHandle,
+        .pResponseBuffer = pResponseBuffer,
+        .unResponseBufferSize = unResponseBufferSize,
+        .bAutoRelease = bAutoRelease,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(_this->u_iface, hHandle, pResponseBuffer, unResponseBufferSize, bAutoRelease);
-    return _ret;
+    cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(struct w_steam_iface *_this, ClientUnifiedMessageHandle hHandle)
 {
-    bool _ret;
+    struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hHandle = hHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(_this->u_iface, hHandle);
-    return _ret;
+    cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(struct w_steam_iface *_this, const char *pchServiceNotification, const void *pNotificationBuffer, uint32 unNotificationBufferSize)
 {
-    bool _ret;
+    struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchServiceNotification = pchServiceNotification,
+        .pNotificationBuffer = pNotificationBuffer,
+        .unNotificationBufferSize = unNotificationBufferSize,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(_this->u_iface, pchServiceNotification, pNotificationBuffer, unNotificationBufferSize);
-    return _ret;
+    cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_vtable;

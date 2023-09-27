@@ -24,46 +24,74 @@ DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Se
 
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struct w_steam_iface *_this, const char *pchAbsolutePathToControllerConfigVDF)
 {
-    bool _ret;
-    const char *u_pchAbsolutePathToControllerConfigVDF = steamclient_dos_to_unix_path( pchAbsolutePathToControllerConfigVDF, 0 );
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchAbsolutePathToControllerConfigVDF = pchAbsolutePathToControllerConfigVDF,
+    };
+    params.pchAbsolutePathToControllerConfigVDF = steamclient_dos_to_unix_path( pchAbsolutePathToControllerConfigVDF, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->u_iface, pchAbsolutePathToControllerConfigVDF ? u_pchAbsolutePathToControllerConfigVDF : NULL);
-    steamclient_free_path( u_pchAbsolutePathToControllerConfigVDF );
-    return _ret;
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init( &params );
+    steamclient_free_path( params.pchAbsolutePathToControllerConfigVDF );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(_this->u_iface);
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame( &params );
 }
 
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(struct w_steam_iface *_this, uint32 unControllerIndex, SteamControllerState001_t *pState)
 {
-    bool _ret;
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unControllerIndex = unControllerIndex,
+        .pState = pState,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(_this->u_iface, unControllerIndex, pState);
-    return _ret;
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(struct w_steam_iface *_this, uint32 unControllerIndex, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unControllerIndex = unControllerIndex,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(_this->u_iface, unControllerIndex, eTargetPad, usDurationMicroSec);
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode(struct w_steam_iface *_this, const char *pchMode)
 {
+    struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchMode = pchMode,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode(_this->u_iface, pchMode);
+    cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode( &params );
 }
 
 extern vtable_ptr winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtable;
@@ -114,126 +142,217 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerRepeatedHa
 
 bool __thiscall winISteamController_SteamController003_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController003_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController003_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController003_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController003_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController003_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController003_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController003_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController003_RunFrame(_this->u_iface);
+    cppISteamController_SteamController003_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController003_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController003_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController003_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController003_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController003_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController003_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController003_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController003_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController003_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController003_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController003_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController003_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController003_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController003_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController003_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController003_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController003_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController003_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController003_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionData_t * __thiscall winISteamController_SteamController003_GetDigitalActionData(struct w_steam_iface *_this, ControllerDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController003_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController003_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController003_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController003_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController003_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController003_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController003_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController003_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController003_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionData_t * __thiscall winISteamController_SteamController003_GetAnalogActionData(struct w_steam_iface *_this, ControllerAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController003_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController003_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController003_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController003_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController003_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController003_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController003_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController003_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController003_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController003_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController003_StopAnalogActionMomentum( &params );
 }
 
 void __thiscall winISteamController_SteamController003_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController003_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController003_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController003_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController003_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController003_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController003_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController003_TriggerRepeatedHapticPulse( &params );
 }
 
 extern vtable_ptr winISteamController_SteamController003_vtable;
@@ -300,165 +419,286 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_ShowAnalogActionO
 
 bool __thiscall winISteamController_SteamController004_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController004_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController004_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController004_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController004_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController004_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController004_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController004_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController004_RunFrame(_this->u_iface);
+    cppISteamController_SteamController004_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController004_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController004_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController004_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController004_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController004_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController004_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController004_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController004_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController004_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController004_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController004_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController004_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController004_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController004_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController004_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController004_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController004_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController004_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController004_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionData_t * __thiscall winISteamController_SteamController004_GetDigitalActionData(struct w_steam_iface *_this, ControllerDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController004_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController004_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController004_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController004_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController004_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController004_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController004_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController004_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController004_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionData_t * __thiscall winISteamController_SteamController004_GetAnalogActionData(struct w_steam_iface *_this, ControllerAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController004_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController004_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController004_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController004_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController004_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController004_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController004_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController004_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController004_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController004_StopAnalogActionMomentum( &params );
 }
 
 void __thiscall winISteamController_SteamController004_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController004_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController004_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController004_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController004_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController004_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController004_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController004_TriggerRepeatedHapticPulse( &params );
 }
 
 int __thiscall winISteamController_SteamController004_GetGamepadIndexForController(struct w_steam_iface *_this, ControllerHandle_t ulControllerHandle)
 {
-    int _ret;
+    struct cppISteamController_SteamController004_GetGamepadIndexForController_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulControllerHandle = ulControllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetGamepadIndexForController(_this->u_iface, ulControllerHandle);
-    return _ret;
+    cppISteamController_SteamController004_GetGamepadIndexForController( &params );
+    return params._ret;
 }
 
 ControllerHandle_t __thiscall winISteamController_SteamController004_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
-    ControllerHandle_t _ret;
+    struct cppISteamController_SteamController004_GetControllerForGamepadIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nIndex = nIndex,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_GetControllerForGamepadIndex(_this->u_iface, nIndex);
-    return _ret;
+    cppISteamController_SteamController004_GetControllerForGamepadIndex( &params );
+    return params._ret;
 }
 
 ControllerMotionData_t * __thiscall winISteamController_SteamController004_GetMotionData(struct w_steam_iface *_this, ControllerMotionData_t *_ret, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController004_GetMotionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController004_GetMotionData(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController004_GetMotionData( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController004_ShowDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController004_ShowDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_ShowDigitalActionOrigins(_this->u_iface, controllerHandle, digitalActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController004_ShowDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController004_ShowAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController004_ShowAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController004_ShowAnalogActionOrigins(_this->u_iface, controllerHandle, analogActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController004_ShowAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamController_SteamController004_vtable;
@@ -534,193 +774,338 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_GetGlyphForAction
 
 bool __thiscall winISteamController_SteamController005_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController005_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController005_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController005_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController005_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController005_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController005_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController005_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_RunFrame(_this->u_iface);
+    cppISteamController_SteamController005_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController005_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController005_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController005_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController005_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController005_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController005_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController005_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController005_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController005_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController005_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController005_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController005_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController005_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController005_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController005_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController005_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController005_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController005_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionData_t * __thiscall winISteamController_SteamController005_GetDigitalActionData(struct w_steam_iface *_this, ControllerDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController005_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController005_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController005_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController005_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController005_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController005_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController005_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController005_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController005_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionData_t * __thiscall winISteamController_SteamController005_GetAnalogActionData(struct w_steam_iface *_this, ControllerAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController005_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController005_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController005_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController005_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController005_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController005_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController005_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController005_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController005_StopAnalogActionMomentum( &params );
 }
 
 void __thiscall winISteamController_SteamController005_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController005_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController005_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController005_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController005_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController005_TriggerRepeatedHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController005_TriggerVibration(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
+    struct cppISteamController_SteamController005_TriggerVibration_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_TriggerVibration(_this->u_iface, controllerHandle, usLeftSpeed, usRightSpeed);
+    cppISteamController_SteamController005_TriggerVibration( &params );
 }
 
 void __thiscall winISteamController_SteamController005_SetLEDColor(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController005_SetLEDColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .nColorR = nColorR,
+        .nColorG = nColorG,
+        .nColorB = nColorB,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController005_SetLEDColor(_this->u_iface, controllerHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamController_SteamController005_SetLEDColor( &params );
 }
 
 int __thiscall winISteamController_SteamController005_GetGamepadIndexForController(struct w_steam_iface *_this, ControllerHandle_t ulControllerHandle)
 {
-    int _ret;
+    struct cppISteamController_SteamController005_GetGamepadIndexForController_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulControllerHandle = ulControllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetGamepadIndexForController(_this->u_iface, ulControllerHandle);
-    return _ret;
+    cppISteamController_SteamController005_GetGamepadIndexForController( &params );
+    return params._ret;
 }
 
 ControllerHandle_t __thiscall winISteamController_SteamController005_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
-    ControllerHandle_t _ret;
+    struct cppISteamController_SteamController005_GetControllerForGamepadIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nIndex = nIndex,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetControllerForGamepadIndex(_this->u_iface, nIndex);
-    return _ret;
+    cppISteamController_SteamController005_GetControllerForGamepadIndex( &params );
+    return params._ret;
 }
 
 ControllerMotionData_t * __thiscall winISteamController_SteamController005_GetMotionData(struct w_steam_iface *_this, ControllerMotionData_t *_ret, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController005_GetMotionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController005_GetMotionData(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController005_GetMotionData( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController005_ShowDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController005_ShowDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_ShowDigitalActionOrigins(_this->u_iface, controllerHandle, digitalActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController005_ShowDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController005_ShowAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController005_ShowAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_ShowAnalogActionOrigins(_this->u_iface, controllerHandle, analogActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController005_ShowAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController005_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController005_GetStringForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetStringForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController005_GetStringForActionOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController005_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController005_GetGlyphForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController005_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController005_GetGlyphForActionOrigin( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamController_SteamController005_vtable;
@@ -805,227 +1190,398 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetInputTypeForHa
 
 bool __thiscall winISteamController_SteamController006_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController006_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController006_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController006_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController006_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController006_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController006_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController006_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_RunFrame(_this->u_iface);
+    cppISteamController_SteamController006_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController006_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController006_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController006_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController006_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController006_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController006_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController006_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController006_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController006_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController006_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController006_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController006_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController006_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController006_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController006_ActivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController006_ActivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_ActivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController006_ActivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController006_DeactivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController006_DeactivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_DeactivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController006_DeactivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController006_DeactivateAllActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController006_DeactivateAllActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_DeactivateAllActionSetLayers(_this->u_iface, controllerHandle);
+    cppISteamController_SteamController006_DeactivateAllActionSetLayers( &params );
 }
 
 int __thiscall winISteamController_SteamController006_GetActiveActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController006_GetActiveActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetActiveActionSetLayers(_this->u_iface, controllerHandle, handlesOut);
-    return _ret;
+    cppISteamController_SteamController006_GetActiveActionSetLayers( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController006_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController006_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController006_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionData_t * __thiscall winISteamController_SteamController006_GetDigitalActionData(struct w_steam_iface *_this, ControllerDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController006_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController006_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController006_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController006_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController006_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController006_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController006_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController006_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionData_t * __thiscall winISteamController_SteamController006_GetAnalogActionData(struct w_steam_iface *_this, ControllerAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController006_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController006_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController006_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController006_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController006_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController006_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController006_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController006_StopAnalogActionMomentum( &params );
 }
 
 void __thiscall winISteamController_SteamController006_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController006_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController006_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController006_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController006_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController006_TriggerRepeatedHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController006_TriggerVibration(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
+    struct cppISteamController_SteamController006_TriggerVibration_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_TriggerVibration(_this->u_iface, controllerHandle, usLeftSpeed, usRightSpeed);
+    cppISteamController_SteamController006_TriggerVibration( &params );
 }
 
 void __thiscall winISteamController_SteamController006_SetLEDColor(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController006_SetLEDColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .nColorR = nColorR,
+        .nColorG = nColorG,
+        .nColorB = nColorB,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController006_SetLEDColor(_this->u_iface, controllerHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamController_SteamController006_SetLEDColor( &params );
 }
 
 int __thiscall winISteamController_SteamController006_GetGamepadIndexForController(struct w_steam_iface *_this, ControllerHandle_t ulControllerHandle)
 {
-    int _ret;
+    struct cppISteamController_SteamController006_GetGamepadIndexForController_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulControllerHandle = ulControllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetGamepadIndexForController(_this->u_iface, ulControllerHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetGamepadIndexForController( &params );
+    return params._ret;
 }
 
 ControllerHandle_t __thiscall winISteamController_SteamController006_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
-    ControllerHandle_t _ret;
+    struct cppISteamController_SteamController006_GetControllerForGamepadIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nIndex = nIndex,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetControllerForGamepadIndex(_this->u_iface, nIndex);
-    return _ret;
+    cppISteamController_SteamController006_GetControllerForGamepadIndex( &params );
+    return params._ret;
 }
 
 ControllerMotionData_t * __thiscall winISteamController_SteamController006_GetMotionData(struct w_steam_iface *_this, ControllerMotionData_t *_ret, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController006_GetMotionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController006_GetMotionData(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetMotionData( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController006_ShowDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController006_ShowDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_ShowDigitalActionOrigins(_this->u_iface, controllerHandle, digitalActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController006_ShowDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController006_ShowAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
-    bool _ret;
+    struct cppISteamController_SteamController006_ShowAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+        .flScale = flScale,
+        .flXPosition = flXPosition,
+        .flYPosition = flYPosition,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_ShowAnalogActionOrigins(_this->u_iface, controllerHandle, analogActionHandle, flScale, flXPosition, flYPosition);
-    return _ret;
+    cppISteamController_SteamController006_ShowAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController006_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController006_GetStringForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetStringForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController006_GetStringForActionOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController006_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController006_GetGlyphForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController006_GetGlyphForActionOrigin( &params );
+    return params._ret;
 }
 
 ESteamInputType __thiscall winISteamController_SteamController006_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ESteamInputType _ret;
+    struct cppISteamController_SteamController006_GetInputTypeForHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController006_GetInputTypeForHandle(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController006_GetInputTypeForHandle( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamController_SteamController006_vtable;
@@ -1118,251 +1674,430 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController007_GetControllerBind
 
 bool __thiscall winISteamController_SteamController007_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController007_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController007_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController007_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController007_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController007_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController007_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController007_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_RunFrame(_this->u_iface);
+    cppISteamController_SteamController007_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController007_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController007_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController007_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController007_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController007_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController007_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController007_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController007_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController007_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController007_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController007_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController007_ActivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController007_ActivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_ActivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController007_ActivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController007_DeactivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController007_DeactivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_DeactivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController007_DeactivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController007_DeactivateAllActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController007_DeactivateAllActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_DeactivateAllActionSetLayers(_this->u_iface, controllerHandle);
+    cppISteamController_SteamController007_DeactivateAllActionSetLayers( &params );
 }
 
 int __thiscall winISteamController_SteamController007_GetActiveActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController007_GetActiveActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetActiveActionSetLayers(_this->u_iface, controllerHandle, handlesOut);
-    return _ret;
+    cppISteamController_SteamController007_GetActiveActionSetLayers( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController007_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController007_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController007_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 InputDigitalActionData_t * __thiscall winISteamController_SteamController007_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController007_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController007_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController007_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController007_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController007_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController007_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController007_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController007_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 InputAnalogActionData_t * __thiscall winISteamController_SteamController007_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController007_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController007_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController007_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController007_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController007_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController007_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController007_GetGlyphForActionOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController007_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController007_GetStringForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetStringForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController007_GetStringForActionOrigin( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController007_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController007_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController007_StopAnalogActionMomentum( &params );
 }
 
 InputMotionData_t * __thiscall winISteamController_SteamController007_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController007_GetMotionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController007_GetMotionData(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetMotionData( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController007_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController007_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController007_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController007_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController007_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController007_TriggerRepeatedHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController007_TriggerVibration(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
+    struct cppISteamController_SteamController007_TriggerVibration_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_TriggerVibration(_this->u_iface, controllerHandle, usLeftSpeed, usRightSpeed);
+    cppISteamController_SteamController007_TriggerVibration( &params );
 }
 
 void __thiscall winISteamController_SteamController007_SetLEDColor(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController007_SetLEDColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .nColorR = nColorR,
+        .nColorG = nColorG,
+        .nColorB = nColorB,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController007_SetLEDColor(_this->u_iface, controllerHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamController_SteamController007_SetLEDColor( &params );
 }
 
 bool __thiscall winISteamController_SteamController007_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController007_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController007_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ESteamInputType __thiscall winISteamController_SteamController007_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ESteamInputType _ret;
+    struct cppISteamController_SteamController007_GetInputTypeForHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetInputTypeForHandle(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetInputTypeForHandle( &params );
+    return params._ret;
 }
 
 ControllerHandle_t __thiscall winISteamController_SteamController007_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
-    ControllerHandle_t _ret;
+    struct cppISteamController_SteamController007_GetControllerForGamepadIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nIndex = nIndex,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetControllerForGamepadIndex(_this->u_iface, nIndex);
-    return _ret;
+    cppISteamController_SteamController007_GetControllerForGamepadIndex( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController007_GetGamepadIndexForController(struct w_steam_iface *_this, ControllerHandle_t ulControllerHandle)
 {
-    int _ret;
+    struct cppISteamController_SteamController007_GetGamepadIndexForController_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulControllerHandle = ulControllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetGamepadIndexForController(_this->u_iface, ulControllerHandle);
-    return _ret;
+    cppISteamController_SteamController007_GetGamepadIndexForController( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController007_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController007_GetStringForXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetStringForXboxOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController007_GetStringForXboxOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController007_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController007_GetGlyphForXboxOrigin( &params );
+    return params._ret;
 }
 
 EControllerActionOrigin __thiscall winISteamController_SteamController007_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, EXboxOrigin eOrigin)
 {
-    EControllerActionOrigin _ret;
+    struct cppISteamController_SteamController007_GetActionOriginFromXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetActionOriginFromXboxOrigin(_this->u_iface, controllerHandle, eOrigin);
-    return _ret;
+    cppISteamController_SteamController007_GetActionOriginFromXboxOrigin( &params );
+    return params._ret;
 }
 
 EControllerActionOrigin __thiscall winISteamController_SteamController007_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EControllerActionOrigin eSourceOrigin)
 {
-    EControllerActionOrigin _ret;
+    struct cppISteamController_SteamController007_TranslateActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eDestinationInputType = eDestinationInputType,
+        .eSourceOrigin = eSourceOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
-    return _ret;
+    cppISteamController_SteamController007_TranslateActionOrigin( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController007_GetControllerBindingRevision(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, int *pMajor, int *pMinor)
 {
-    bool _ret;
+    struct cppISteamController_SteamController007_GetControllerBindingRevision_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .pMajor = pMajor,
+        .pMinor = pMinor,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController007_GetControllerBindingRevision(_this->u_iface, controllerHandle, pMajor, pMinor);
-    return _ret;
+    cppISteamController_SteamController007_GetControllerBindingRevision( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamController_SteamController007_vtable;
@@ -1458,251 +2193,430 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController008_GetControllerBind
 
 bool __thiscall winISteamController_SteamController008_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController008_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_Init(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController008_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController008_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamController_SteamController008_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamController_SteamController008_Shutdown( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController008_RunFrame(struct w_steam_iface *_this)
 {
+    struct cppISteamController_SteamController008_RunFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_RunFrame(_this->u_iface);
+    cppISteamController_SteamController008_RunFrame( &params );
 }
 
 int __thiscall winISteamController_SteamController008_GetConnectedControllers(struct w_steam_iface *_this, ControllerHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController008_GetConnectedControllers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetConnectedControllers(_this->u_iface, handlesOut);
-    return _ret;
+    cppISteamController_SteamController008_GetConnectedControllers( &params );
+    return params._ret;
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController008_GetActionSetHandle(struct w_steam_iface *_this, const char *pszActionSetName)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController008_GetActionSetHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetActionSetHandle(_this->u_iface, pszActionSetName);
-    return _ret;
+    cppISteamController_SteamController008_GetActionSetHandle( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController008_ActivateActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle)
 {
+    struct cppISteamController_SteamController008_ActivateActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_ActivateActionSet(_this->u_iface, controllerHandle, actionSetHandle);
+    cppISteamController_SteamController008_ActivateActionSet( &params );
 }
 
 ControllerActionSetHandle_t __thiscall winISteamController_SteamController008_GetCurrentActionSet(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ControllerActionSetHandle_t _ret;
+    struct cppISteamController_SteamController008_GetCurrentActionSet_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetCurrentActionSet(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetCurrentActionSet( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController008_ActivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController008_ActivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_ActivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController008_ActivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController008_DeactivateActionSetLayer(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetLayerHandle)
 {
+    struct cppISteamController_SteamController008_DeactivateActionSetLayer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_DeactivateActionSetLayer(_this->u_iface, controllerHandle, actionSetLayerHandle);
+    cppISteamController_SteamController008_DeactivateActionSetLayer( &params );
 }
 
 void __thiscall winISteamController_SteamController008_DeactivateAllActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController008_DeactivateAllActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_DeactivateAllActionSetLayers(_this->u_iface, controllerHandle);
+    cppISteamController_SteamController008_DeactivateAllActionSetLayers( &params );
 }
 
 int __thiscall winISteamController_SteamController008_GetActiveActionSetLayers(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t *handlesOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController008_GetActiveActionSetLayers_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .handlesOut = handlesOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetActiveActionSetLayers(_this->u_iface, controllerHandle, handlesOut);
-    return _ret;
+    cppISteamController_SteamController008_GetActiveActionSetLayers( &params );
+    return params._ret;
 }
 
 ControllerDigitalActionHandle_t __thiscall winISteamController_SteamController008_GetDigitalActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerDigitalActionHandle_t _ret;
+    struct cppISteamController_SteamController008_GetDigitalActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetDigitalActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController008_GetDigitalActionHandle( &params );
+    return params._ret;
 }
 
 InputDigitalActionData_t * __thiscall winISteamController_SteamController008_GetDigitalActionData(struct w_steam_iface *_this, InputDigitalActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerDigitalActionHandle_t digitalActionHandle)
 {
+    struct cppISteamController_SteamController008_GetDigitalActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController008_GetDigitalActionData(_this->u_iface, controllerHandle, digitalActionHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetDigitalActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController008_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController008_GetDigitalActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetDigitalActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, digitalActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController008_GetDigitalActionOrigins( &params );
+    return params._ret;
 }
 
 ControllerAnalogActionHandle_t __thiscall winISteamController_SteamController008_GetAnalogActionHandle(struct w_steam_iface *_this, const char *pszActionName)
 {
-    ControllerAnalogActionHandle_t _ret;
+    struct cppISteamController_SteamController008_GetAnalogActionHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetAnalogActionHandle(_this->u_iface, pszActionName);
-    return _ret;
+    cppISteamController_SteamController008_GetAnalogActionHandle( &params );
+    return params._ret;
 }
 
 InputAnalogActionData_t * __thiscall winISteamController_SteamController008_GetAnalogActionData(struct w_steam_iface *_this, InputAnalogActionData_t *_ret, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t analogActionHandle)
 {
+    struct cppISteamController_SteamController008_GetAnalogActionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+        .analogActionHandle = analogActionHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController008_GetAnalogActionData(_this->u_iface, controllerHandle, analogActionHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetAnalogActionData( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController008_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
 {
-    int _ret;
+    struct cppISteamController_SteamController008_GetAnalogActionOrigins_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetAnalogActionOrigins(_this->u_iface, controllerHandle, actionSetHandle, analogActionHandle, originsOut);
-    return _ret;
+    cppISteamController_SteamController008_GetAnalogActionOrigins( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController008_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController008_GetGlyphForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetGlyphForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController008_GetGlyphForActionOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController008_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController008_GetStringForActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetStringForActionOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController008_GetStringForActionOrigin( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController008_StopAnalogActionMomentum(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerAnalogActionHandle_t eAction)
 {
+    struct cppISteamController_SteamController008_StopAnalogActionMomentum_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eAction = eAction,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_StopAnalogActionMomentum(_this->u_iface, controllerHandle, eAction);
+    cppISteamController_SteamController008_StopAnalogActionMomentum( &params );
 }
 
 InputMotionData_t * __thiscall winISteamController_SteamController008_GetMotionData(struct w_steam_iface *_this, InputMotionData_t *_ret, ControllerHandle_t controllerHandle)
 {
+    struct cppISteamController_SteamController008_GetMotionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    *_ret = cppISteamController_SteamController008_GetMotionData(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetMotionData( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamController_SteamController008_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
+    struct cppISteamController_SteamController008_TriggerHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_TriggerHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec);
+    cppISteamController_SteamController008_TriggerHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController008_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController008_TriggerRepeatedHapticPulse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_TriggerRepeatedHapticPulse(_this->u_iface, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
+    cppISteamController_SteamController008_TriggerRepeatedHapticPulse( &params );
 }
 
 void __thiscall winISteamController_SteamController008_TriggerVibration(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
+    struct cppISteamController_SteamController008_TriggerVibration_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_TriggerVibration(_this->u_iface, controllerHandle, usLeftSpeed, usRightSpeed);
+    cppISteamController_SteamController008_TriggerVibration( &params );
 }
 
 void __thiscall winISteamController_SteamController008_SetLEDColor(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
+    struct cppISteamController_SteamController008_SetLEDColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .nColorR = nColorR,
+        .nColorG = nColorG,
+        .nColorB = nColorB,
+        .nFlags = nFlags,
+    };
     TRACE("%p\n", _this);
-    cppISteamController_SteamController008_SetLEDColor(_this->u_iface, controllerHandle, nColorR, nColorG, nColorB, nFlags);
+    cppISteamController_SteamController008_SetLEDColor( &params );
 }
 
 bool __thiscall winISteamController_SteamController008_ShowBindingPanel(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    bool _ret;
+    struct cppISteamController_SteamController008_ShowBindingPanel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_ShowBindingPanel(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController008_ShowBindingPanel( &params );
+    return params._ret;
 }
 
 ESteamInputType __thiscall winISteamController_SteamController008_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
-    ESteamInputType _ret;
+    struct cppISteamController_SteamController008_GetInputTypeForHandle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetInputTypeForHandle(_this->u_iface, controllerHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetInputTypeForHandle( &params );
+    return params._ret;
 }
 
 ControllerHandle_t __thiscall winISteamController_SteamController008_GetControllerForGamepadIndex(struct w_steam_iface *_this, int nIndex)
 {
-    ControllerHandle_t _ret;
+    struct cppISteamController_SteamController008_GetControllerForGamepadIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nIndex = nIndex,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetControllerForGamepadIndex(_this->u_iface, nIndex);
-    return _ret;
+    cppISteamController_SteamController008_GetControllerForGamepadIndex( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamController_SteamController008_GetGamepadIndexForController(struct w_steam_iface *_this, ControllerHandle_t ulControllerHandle)
 {
-    int _ret;
+    struct cppISteamController_SteamController008_GetGamepadIndexForController_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulControllerHandle = ulControllerHandle,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetGamepadIndexForController(_this->u_iface, ulControllerHandle);
-    return _ret;
+    cppISteamController_SteamController008_GetGamepadIndexForController( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController008_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController008_GetStringForXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetStringForXboxOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController008_GetStringForXboxOrigin( &params );
+    return params._ret;
 }
 
 const char * __thiscall winISteamController_SteamController008_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
 {
-    const char * _ret;
+    struct cppISteamController_SteamController008_GetGlyphForXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetGlyphForXboxOrigin(_this->u_iface, eOrigin);
-    return _ret;
+    cppISteamController_SteamController008_GetGlyphForXboxOrigin( &params );
+    return params._ret;
 }
 
 EControllerActionOrigin __thiscall winISteamController_SteamController008_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, EXboxOrigin eOrigin)
 {
-    EControllerActionOrigin _ret;
+    struct cppISteamController_SteamController008_GetActionOriginFromXboxOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .eOrigin = eOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetActionOriginFromXboxOrigin(_this->u_iface, controllerHandle, eOrigin);
-    return _ret;
+    cppISteamController_SteamController008_GetActionOriginFromXboxOrigin( &params );
+    return params._ret;
 }
 
 EControllerActionOrigin __thiscall winISteamController_SteamController008_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EControllerActionOrigin eSourceOrigin)
 {
-    EControllerActionOrigin _ret;
+    struct cppISteamController_SteamController008_TranslateActionOrigin_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eDestinationInputType = eDestinationInputType,
+        .eSourceOrigin = eSourceOrigin,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_TranslateActionOrigin(_this->u_iface, eDestinationInputType, eSourceOrigin);
-    return _ret;
+    cppISteamController_SteamController008_TranslateActionOrigin( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamController_SteamController008_GetControllerBindingRevision(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, int *pMajor, int *pMinor)
 {
-    bool _ret;
+    struct cppISteamController_SteamController008_GetControllerBindingRevision_params params =
+    {
+        .linux_side = _this->u_iface,
+        .controllerHandle = controllerHandle,
+        .pMajor = pMajor,
+        .pMinor = pMinor,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamController_SteamController008_GetControllerBindingRevision(_this->u_iface, controllerHandle, pMajor, pMinor);
-    return _ret;
+    cppISteamController_SteamController008_GetControllerBindingRevision( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamController_SteamController008_vtable;

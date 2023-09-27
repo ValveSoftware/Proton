@@ -19,10 +19,20 @@ DEFINE_THISCALL_WRAPPER(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_G
 
 uint32 __thiscall winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(struct w_steam_iface *_this, uint32 nAppID, void *pvBuffer, uint32 cbBufferLength, uint32 *piAppId, uint32 *piSteamId, uint32 *piSignature, uint32 *pcbSignature)
 {
-    uint32 _ret;
+    struct cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nAppID = nAppID,
+        .pvBuffer = pvBuffer,
+        .cbBufferLength = cbBufferLength,
+        .piAppId = piAppId,
+        .piSteamId = piSteamId,
+        .piSignature = piSignature,
+        .pcbSignature = pcbSignature,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(_this->u_iface, nAppID, pvBuffer, cbBufferLength, piAppId, piSteamId, piSignature, pcbSignature);
-    return _ret;
+    cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable;

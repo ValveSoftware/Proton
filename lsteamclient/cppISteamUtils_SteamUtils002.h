@@ -1,14 +1,114 @@
-extern uint32 cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive(void *);
-extern uint32 cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(void *);
-extern EUniverse cppISteamUtils_SteamUtils002_GetConnectedUniverse(void *);
-extern uint32 cppISteamUtils_SteamUtils002_GetServerRealTime(void *);
-extern const char * cppISteamUtils_SteamUtils002_GetIPCountry(void *);
-extern bool cppISteamUtils_SteamUtils002_GetImageSize(void *, int, uint32 *, uint32 *);
-extern bool cppISteamUtils_SteamUtils002_GetImageRGBA(void *, int, uint8 *, int);
-extern bool cppISteamUtils_SteamUtils002_GetCSERIPPort(void *, uint32 *, uint16 *);
-extern uint8 cppISteamUtils_SteamUtils002_GetCurrentBatteryPower(void *);
-extern uint32 cppISteamUtils_SteamUtils002_GetAppID(void *);
-extern void cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition(void *, ENotificationPosition);
-extern bool cppISteamUtils_SteamUtils002_IsAPICallCompleted(void *, SteamAPICall_t, bool *);
-extern ESteamAPICallFailure cppISteamUtils_SteamUtils002_GetAPICallFailureReason(void *, SteamAPICall_t);
-extern bool cppISteamUtils_SteamUtils002_GetAPICallResult(void *, SteamAPICall_t, void *, int, int, bool *);
+struct cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive_params
+{
+    void *linux_side;
+    uint32 _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive( struct cppISteamUtils_SteamUtils002_GetSecondsSinceAppActive_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive_params
+{
+    void *linux_side;
+    uint32 _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive( struct cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetConnectedUniverse_params
+{
+    void *linux_side;
+    EUniverse _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetConnectedUniverse( struct cppISteamUtils_SteamUtils002_GetConnectedUniverse_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetServerRealTime_params
+{
+    void *linux_side;
+    uint32 _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetServerRealTime( struct cppISteamUtils_SteamUtils002_GetServerRealTime_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetIPCountry_params
+{
+    void *linux_side;
+    const char *_ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetIPCountry( struct cppISteamUtils_SteamUtils002_GetIPCountry_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetImageSize_params
+{
+    void *linux_side;
+    bool _ret;
+    int iImage;
+    uint32 *pnWidth;
+    uint32 *pnHeight;
+};
+extern void cppISteamUtils_SteamUtils002_GetImageSize( struct cppISteamUtils_SteamUtils002_GetImageSize_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetImageRGBA_params
+{
+    void *linux_side;
+    bool _ret;
+    int iImage;
+    uint8 *pubDest;
+    int nDestBufferSize;
+};
+extern void cppISteamUtils_SteamUtils002_GetImageRGBA( struct cppISteamUtils_SteamUtils002_GetImageRGBA_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetCSERIPPort_params
+{
+    void *linux_side;
+    bool _ret;
+    uint32 *unIP;
+    uint16 *usPort;
+};
+extern void cppISteamUtils_SteamUtils002_GetCSERIPPort( struct cppISteamUtils_SteamUtils002_GetCSERIPPort_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetCurrentBatteryPower_params
+{
+    void *linux_side;
+    uint8 _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetCurrentBatteryPower( struct cppISteamUtils_SteamUtils002_GetCurrentBatteryPower_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetAppID_params
+{
+    void *linux_side;
+    uint32 _ret;
+};
+extern void cppISteamUtils_SteamUtils002_GetAppID( struct cppISteamUtils_SteamUtils002_GetAppID_params *params );
+
+struct cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params
+{
+    void *linux_side;
+    ENotificationPosition eNotificationPosition;
+};
+extern void cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition( struct cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params *params );
+
+struct cppISteamUtils_SteamUtils002_IsAPICallCompleted_params
+{
+    void *linux_side;
+    bool _ret;
+    SteamAPICall_t hSteamAPICall;
+    bool *pbFailed;
+};
+extern void cppISteamUtils_SteamUtils002_IsAPICallCompleted( struct cppISteamUtils_SteamUtils002_IsAPICallCompleted_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params
+{
+    void *linux_side;
+    ESteamAPICallFailure _ret;
+    SteamAPICall_t hSteamAPICall;
+};
+extern void cppISteamUtils_SteamUtils002_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params *params );
+
+struct cppISteamUtils_SteamUtils002_GetAPICallResult_params
+{
+    void *linux_side;
+    bool _ret;
+    SteamAPICall_t hSteamAPICall;
+    void *pCallback;
+    int cubCallback;
+    int iCallbackExpected;
+    bool *pbFailed;
+};
+extern void cppISteamUtils_SteamUtils002_GetAPICallResult( struct cppISteamUtils_SteamUtils002_GetAPICallResult_params *params );
+

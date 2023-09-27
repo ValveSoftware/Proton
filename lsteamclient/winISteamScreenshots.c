@@ -24,50 +24,83 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pubRGB = pubRGB,
+        .cubRGB = cubRGB,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(_this->u_iface, pubRGB, cubRGB, nWidth, nHeight);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot( &params );
+    return params._ret;
 }
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
-    const char *u_pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    const char *u_pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchFilename = pchFilename,
+        .pchThumbnailFilename = pchThumbnailFilename,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
+    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
+    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(_this->u_iface, pchFilename ? u_pchFilename : NULL, pchThumbnailFilename ? u_pchThumbnailFilename : NULL, nWidth, nHeight);
-    steamclient_free_path( u_pchFilename );
-    steamclient_free_path( u_pchThumbnailFilename );
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary( &params );
+    steamclient_free_path( params.pchFilename );
+    steamclient_free_path( params.pchThumbnailFilename );
+    return params._ret;
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot(struct w_steam_iface *_this)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot(_this->u_iface);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot( &params );
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots(struct w_steam_iface *_this, bool bHook)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bHook = bHook,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots(_this->u_iface, bHook);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots( &params );
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .pchLocation = pchLocation,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(_this->u_iface, hScreenshot, pchLocation);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .steamID = steamID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser(_this->u_iface, hScreenshot, steamID);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtable;
@@ -108,58 +141,96 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pubRGB = pubRGB,
+        .cubRGB = cubRGB,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(_this->u_iface, pubRGB, cubRGB, nWidth, nHeight);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot( &params );
+    return params._ret;
 }
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
-    const char *u_pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    const char *u_pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchFilename = pchFilename,
+        .pchThumbnailFilename = pchThumbnailFilename,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
+    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
+    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(_this->u_iface, pchFilename ? u_pchFilename : NULL, pchThumbnailFilename ? u_pchThumbnailFilename : NULL, nWidth, nHeight);
-    steamclient_free_path( u_pchFilename );
-    steamclient_free_path( u_pchThumbnailFilename );
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary( &params );
+    steamclient_free_path( params.pchFilename );
+    steamclient_free_path( params.pchThumbnailFilename );
+    return params._ret;
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot(struct w_steam_iface *_this)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot(_this->u_iface);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot( &params );
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots(struct w_steam_iface *_this, bool bHook)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bHook = bHook,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots(_this->u_iface, bHook);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots( &params );
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .pchLocation = pchLocation,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(_this->u_iface, hScreenshot, pchLocation);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .steamID = steamID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser(_this->u_iface, hScreenshot, steamID);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, PublishedFileId_t unPublishedFileID)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .unPublishedFileID = unPublishedFileID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile(_this->u_iface, hScreenshot, unPublishedFileID);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtable;
@@ -203,78 +274,125 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pubRGB = pubRGB,
+        .cubRGB = cubRGB,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(_this->u_iface, pubRGB, cubRGB, nWidth, nHeight);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot( &params );
+    return params._ret;
 }
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
 {
-    ScreenshotHandle _ret;
-    const char *u_pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    const char *u_pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchFilename = pchFilename,
+        .pchThumbnailFilename = pchThumbnailFilename,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
+    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
+    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(_this->u_iface, pchFilename ? u_pchFilename : NULL, pchThumbnailFilename ? u_pchThumbnailFilename : NULL, nWidth, nHeight);
-    steamclient_free_path( u_pchFilename );
-    steamclient_free_path( u_pchThumbnailFilename );
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary( &params );
+    steamclient_free_path( params.pchFilename );
+    steamclient_free_path( params.pchThumbnailFilename );
+    return params._ret;
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot(struct w_steam_iface *_this)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot(_this->u_iface);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot( &params );
 }
 
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots(struct w_steam_iface *_this, bool bHook)
 {
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bHook = bHook,
+    };
     TRACE("%p\n", _this);
-    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots(_this->u_iface, bHook);
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots( &params );
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .pchLocation = pchLocation,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(_this->u_iface, hScreenshot, pchLocation);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .steamID = steamID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(_this->u_iface, hScreenshot, steamID);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, PublishedFileId_t unPublishedFileID)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hScreenshot = hScreenshot,
+        .unPublishedFileID = unPublishedFileID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(_this->u_iface, hScreenshot, unPublishedFileID);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked(_this->u_iface);
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked( &params );
+    return params._ret;
 }
 
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(struct w_steam_iface *_this, EVRScreenshotType eType, const char *pchFilename, const char *pchVRFilename)
 {
-    ScreenshotHandle _ret;
-    const char *u_pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    const char *u_pchVRFilename = steamclient_dos_to_unix_path( pchVRFilename, 0 );
+    struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eType = eType,
+        .pchFilename = pchFilename,
+        .pchVRFilename = pchVRFilename,
+    };
+    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
+    params.pchVRFilename = steamclient_dos_to_unix_path( pchVRFilename, 0 );
     TRACE("%p\n", _this);
-    _ret = cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(_this->u_iface, eType, pchFilename ? u_pchFilename : NULL, pchVRFilename ? u_pchVRFilename : NULL);
-    steamclient_free_path( u_pchFilename );
-    steamclient_free_path( u_pchVRFilename );
-    return _ret;
+    cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary( &params );
+    steamclient_free_path( params.pchFilename );
+    steamclient_free_path( params.pchVRFilename );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtable;

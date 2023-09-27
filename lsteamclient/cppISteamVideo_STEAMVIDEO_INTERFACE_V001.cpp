@@ -11,16 +11,14 @@ extern "C" {
 #define SDKVER_139
 #include "struct_converters.h"
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V001.h"
-void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(void *linux_side, AppId_t unVideoAppID)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params *params )
 {
-    ((ISteamVideo*)linux_side)->GetVideoURL((AppId_t)unVideoAppID);
+    ((ISteamVideo*)params->linux_side)->GetVideoURL( (AppId_t)params->unVideoAppID );
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(void *linux_side, int *pnNumViewers)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamVideo*)linux_side)->IsBroadcasting((int *)pnNumViewers);
-    return (_ret);
+    params->_ret = ((ISteamVideo*)params->linux_side)->IsBroadcasting( (int *)params->pnNumViewers );
 }
 
 #ifdef __cplusplus

@@ -24,50 +24,72 @@ DEFINE_THISCALL_WRAPPER(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFAC
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(_this->u_iface);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(_this->u_iface);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(struct w_steam_iface *_this, AppId_t nAppID)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nAppID = nAppID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(_this->u_iface, nAppID);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(struct w_steam_iface *_this, AppId_t nAppID)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nAppID = nAppID,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(_this->u_iface, nAppID);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(struct w_steam_iface *_this, EParentalFeature eFeature)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eFeature = eFeature,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(_this->u_iface, eFeature);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(struct w_steam_iface *_this, EParentalFeature eFeature)
 {
-    bool _ret;
+    struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eFeature = eFeature,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(_this->u_iface, eFeature);
-    return _ret;
+    cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable;

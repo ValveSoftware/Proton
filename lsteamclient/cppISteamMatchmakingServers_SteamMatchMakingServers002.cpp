@@ -12,113 +12,89 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestInternetServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestInternetServerList( (AppId_t)params->iApp, (MatchMakingKeyValuePair_t **)params->ppchFilters, (uint32)params->nFilters, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList(void *linux_side, AppId_t iApp, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestLANServerList((AppId_t)iApp, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestLANServerList( (AppId_t)params->iApp, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestFriendsServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestFriendsServerList( (AppId_t)params->iApp, (MatchMakingKeyValuePair_t **)params->ppchFilters, (uint32)params->nFilters, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestFavoritesServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestFavoritesServerList( (AppId_t)params->iApp, (MatchMakingKeyValuePair_t **)params->ppchFilters, (uint32)params->nFilters, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestHistoryServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestHistoryServerList( (AppId_t)params->iApp, (MatchMakingKeyValuePair_t **)params->ppchFilters, (uint32)params->nFilters, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList_params *params )
 {
-    HServerListRequest _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->RequestSpectatorServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->RequestSpectatorServerList( (AppId_t)params->iApp, (MatchMakingKeyValuePair_t **)params->ppchFilters, (uint32)params->nFilters, (ISteamMatchmakingServerListResponse *)params->pRequestServersResponse );
 }
 
-void cppISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest(void *linux_side, HServerListRequest hServerListRequest)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params *params )
 {
-    ((ISteamMatchmakingServers*)linux_side)->ReleaseRequest((HServerListRequest)hServerListRequest);
+    ((ISteamMatchmakingServers*)params->linux_side)->ReleaseRequest( (HServerListRequest)params->hServerListRequest );
 }
 
-gameserveritem_t * cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails(void *linux_side, HServerListRequest hRequest, int iServer)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails_params *params )
 {
-    gameserveritem_t *_ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->GetServerDetails((HServerListRequest)hRequest, (int)iServer);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->GetServerDetails( (HServerListRequest)params->hRequest, (int)params->iServer );
 }
 
-void cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelQuery(void *linux_side, HServerListRequest hRequest)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelQuery_params *params )
 {
-    ((ISteamMatchmakingServers*)linux_side)->CancelQuery((HServerListRequest)hRequest);
+    ((ISteamMatchmakingServers*)params->linux_side)->CancelQuery( (HServerListRequest)params->hRequest );
 }
 
-void cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQuery(void *linux_side, HServerListRequest hRequest)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQuery_params *params )
 {
-    ((ISteamMatchmakingServers*)linux_side)->RefreshQuery((HServerListRequest)hRequest);
+    ((ISteamMatchmakingServers*)params->linux_side)->RefreshQuery( (HServerListRequest)params->hRequest );
 }
 
-bool cppISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing(void *linux_side, HServerListRequest hRequest)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->IsRefreshing((HServerListRequest)hRequest);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->IsRefreshing( (HServerListRequest)params->hRequest );
 }
 
-int cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount(void *linux_side, HServerListRequest hRequest)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount_params *params )
 {
-    int _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->GetServerCount((HServerListRequest)hRequest);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->GetServerCount( (HServerListRequest)params->hRequest );
 }
 
-void cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer(void *linux_side, HServerListRequest hRequest, int iServer)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer_params *params )
 {
-    ((ISteamMatchmakingServers*)linux_side)->RefreshServer((HServerListRequest)hRequest, (int)iServer);
+    ((ISteamMatchmakingServers*)params->linux_side)->RefreshServer( (HServerListRequest)params->hRequest, (int)params->iServer );
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(void *linux_side, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer_params *params )
 {
-    HServerQuery _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->PingServer((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPingResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->PingServer( (uint32)params->unIP, (uint16)params->usPort, (ISteamMatchmakingPingResponse *)params->pRequestServersResponse );
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(void *linux_side, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails_params *params )
 {
-    HServerQuery _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->PlayerDetails((uint32)unIP, (uint16)usPort, (ISteamMatchmakingPlayersResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->PlayerDetails( (uint32)params->unIP, (uint16)params->usPort, (ISteamMatchmakingPlayersResponse *)params->pRequestServersResponse );
 }
 
-HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(void *linux_side, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules_params *params )
 {
-    HServerQuery _ret;
-    _ret = ((ISteamMatchmakingServers*)linux_side)->ServerRules((uint32)unIP, (uint16)usPort, (ISteamMatchmakingRulesResponse *)pRequestServersResponse);
-    return (_ret);
+    params->_ret = ((ISteamMatchmakingServers*)params->linux_side)->ServerRules( (uint32)params->unIP, (uint16)params->usPort, (ISteamMatchmakingRulesResponse *)params->pRequestServersResponse );
 }
 
-void cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery(void *linux_side, HServerQuery hServerQuery)
+void cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery_params *params )
 {
-    ((ISteamMatchmakingServers*)linux_side)->CancelServerQuery((HServerQuery)hServerQuery);
+    ((ISteamMatchmakingServers*)params->linux_side)->CancelServerQuery( (HServerQuery)params->hServerQuery );
 }
 
 #ifdef __cplusplus

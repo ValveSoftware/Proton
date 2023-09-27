@@ -12,39 +12,29 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001.h"
-uint32 cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(void *linux_side)
+void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamAppList*)linux_side)->GetNumInstalledApps();
-    return (_ret);
+    params->_ret = ((ISteamAppList*)params->linux_side)->GetNumInstalledApps(  );
 }
 
-uint32 cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(void *linux_side, AppId_t *pvecAppID, uint32 unMaxAppIDs)
+void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamAppList*)linux_side)->GetInstalledApps((AppId_t *)pvecAppID, (uint32)unMaxAppIDs);
-    return (_ret);
+    params->_ret = ((ISteamAppList*)params->linux_side)->GetInstalledApps( (AppId_t *)params->pvecAppID, (uint32)params->unMaxAppIDs );
 }
 
-int cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(void *linux_side, AppId_t nAppID, char *pchName, int cchNameMax)
+void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params *params )
 {
-    int _ret;
-    _ret = ((ISteamAppList*)linux_side)->GetAppName((AppId_t)nAppID, (char *)pchName, (int)cchNameMax);
-    return (_ret);
+    params->_ret = ((ISteamAppList*)params->linux_side)->GetAppName( (AppId_t)params->nAppID, (char *)params->pchName, (int)params->cchNameMax );
 }
 
-int cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(void *linux_side, AppId_t nAppID, char *pchDirectory, int cchNameMax)
+void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *params )
 {
-    int _ret;
-    _ret = ((ISteamAppList*)linux_side)->GetAppInstallDir((AppId_t)nAppID, (char *)pchDirectory, (int)cchNameMax);
-    return (_ret);
+    params->_ret = ((ISteamAppList*)params->linux_side)->GetAppInstallDir( (AppId_t)params->nAppID, (char *)params->pchDirectory, (int)params->cchNameMax );
 }
 
-int cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId(void *linux_side, AppId_t nAppID)
+void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params *params )
 {
-    int _ret;
-    _ret = ((ISteamAppList*)linux_side)->GetAppBuildId((AppId_t)nAppID);
-    return (_ret);
+    params->_ret = ((ISteamAppList*)params->linux_side)->GetAppBuildId( (AppId_t)params->nAppID );
 }
 
 #ifdef __cplusplus
