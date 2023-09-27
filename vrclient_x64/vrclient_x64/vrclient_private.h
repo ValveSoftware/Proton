@@ -145,21 +145,6 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
         unsigned int version);
 
-EVROverlayError ivroverlay_set_overlay_texture(
-        EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, const Texture_t *),
-        void *linux_side, VROverlayHandle_t overlayHandle, const Texture_t *texture,
-        unsigned int version);
-
-EVROverlayError ivroverlay_005_set_overlay_texture(
-        VROverlayError (*cpp_func)(void *, VROverlayHandle_t, GraphicsAPIConvention, void *),
-        void *linux_side, VROverlayHandle_t overlayHandle, GraphicsAPIConvention api, const void *texture,
-        unsigned int version);
-
-EVROverlayError ivroverlay_001_set_overlay_texture(
-        VROverlayError (*cpp_func)(void *, VROverlayHandle_t, void *),
-        void *linux_side, VROverlayHandle_t overlayHandle, const void *texture,
-        unsigned int version);
-
 EVRInputError ivrinput_get_digital_action_data(
         void *func,
         void *linux_side, VRActionHandle_t action_handle, void *action_data, uint32_t action_data_size,
