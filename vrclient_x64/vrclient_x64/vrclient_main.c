@@ -22,7 +22,10 @@
 
 #include "flatapi.h"
 
+#include "struct_converters.h"
+#include "cppIVRClientCore_IVRClientCore_002.h"
 #include "cppIVRClientCore_IVRClientCore_003.h"
+#include "cppIVRMailbox_IVRMailbox_001.h"
 
 #include "wine/unixlib.h"
 
@@ -499,8 +502,8 @@ done:
     return is_hmd_present;
 }
 
-bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, unsigned int version,
-        struct client_core_data *user_data)
+static bool ivrclientcore_is_hmd_present( bool (*cpp_func)( void * ), void *linux_side,
+                                          unsigned int version, struct client_core_data *user_data )
 {
     TRACE("linux_side %p, compositor_data.client_core_linux_side %p.\n",
             linux_side, compositor_data.client_core_linux_side);
@@ -513,25 +516,9 @@ bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, un
     return TRUE;
 }
 
-EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
-        void *linux_side, EVRApplicationType application_type,
-        unsigned int version, struct client_core_data *user_data)
-{
-    EVRInitError error;
-
-    TRACE("%p, %#x\n", linux_side, application_type);
-
-    InitializeCriticalSection(&user_data->critical_section);
-
-    error = cpp_func(linux_side, application_type);
-    if (error)
-        WARN("error %#x\n", error);
-    return error;
-}
-
-EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationType, const char *),
-        void *linux_side, EVRApplicationType application_type, const char *startup_info,
-        unsigned int version, struct client_core_data *user_data)
+static EVRInitError ivrclientcore_init( EVRInitError (*cpp_func)( void *, EVRApplicationType, const char * ),
+                                        void *linux_side, EVRApplicationType application_type, const char *startup_info,
+                                        unsigned int version, struct client_core_data *user_data )
 {
     char *startup_info_converted;
     EVRInitError error;
@@ -554,9 +541,9 @@ EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationT
     return error;
 }
 
-void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *, EVRInitError *),
-        void *linux_side, const char *name_and_version, EVRInitError *error,
-        unsigned int version, struct client_core_data *user_data)
+static void *ivrclientcore_get_generic_interface( void *(*cpp_func)( void *, const char *, EVRInitError *),
+                                                  void *linux_side, const char *name_and_version, EVRInitError *error,
+                                                  unsigned int version, struct client_core_data *user_data )
 {
     const char *cpp_name_and_version = name_and_version;
     struct w_steam_iface *win_object;
@@ -612,8 +599,8 @@ static void destroy_compositor_data(void)
     memset(&compositor_data, 0, sizeof(compositor_data));
 }
 
-void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
-        unsigned int version, struct client_core_data *user_data)
+static void ivrclientcore_cleanup( void (*cpp_func)( void * ), void *linux_side,
+                                   unsigned int version, struct client_core_data *user_data )
 {
     struct generic_interface *iface;
     SIZE_T i;
@@ -675,17 +662,91 @@ Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVu
     return vktexture;
 }
 
-
-vrmb_typeb ivrmailbox_undoc3(
-        vrmb_typeb (*cpp_func)(void *, vrmb_typea, const char *, const char *),
-        void *linux_side, vrmb_typea a, const char *b, const char *c, unsigned int version)
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType )
 {
-    vrmb_typeb r;
+    EVRInitError _ret;
+
+    TRACE( "%p\n", _this );
+
+    InitializeCriticalSection( &_this->user_data.critical_section );
+
+    _ret = cppIVRClientCore_IVRClientCore_002_Init( _this->u_iface, eApplicationType );
+    if (_ret) WARN( "error %#x\n", _ret );
+    return _ret;
+}
+
+void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup( struct w_steam_iface *_this )
+{
+    TRACE( "%p\n", _this );
+    ivrclientcore_cleanup( cppIVRClientCore_IVRClientCore_002_Cleanup, _this->u_iface, 2, &_this->user_data );
+}
+
+void *__thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface( struct w_steam_iface *_this,
+                                                                         const char *pchNameAndVersion, EVRInitError *peError )
+{
+    void *_ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrclientcore_get_generic_interface( cppIVRClientCore_IVRClientCore_002_GetGenericInterface,
+                                                _this->u_iface, pchNameAndVersion, peError, 2,
+                                                &_this->user_data );
+    return _ret;
+}
+
+bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam_iface *_this )
+{
+    bool _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrclientcore_is_hmd_present( cppIVRClientCore_IVRClientCore_002_BIsHmdPresent,
+                                         _this->u_iface, 2, &_this->user_data );
+    return _ret;
+}
+
+EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType,
+                                                                 const char *pStartupInfo )
+{
+    EVRInitError _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrclientcore_init( cppIVRClientCore_IVRClientCore_003_Init, _this->u_iface,
+                               eApplicationType, pStartupInfo, 3, &_this->user_data );
+    return _ret;
+}
+
+void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup( struct w_steam_iface *_this )
+{
+    TRACE( "%p\n", _this );
+    ivrclientcore_cleanup( cppIVRClientCore_IVRClientCore_003_Cleanup, _this->u_iface, 3, &_this->user_data );
+}
+
+void *__thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface( struct w_steam_iface *_this,
+                                                                         const char *pchNameAndVersion, EVRInitError *peError )
+{
+    void *_ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrclientcore_get_generic_interface( cppIVRClientCore_IVRClientCore_003_GetGenericInterface,
+                                                _this->u_iface, pchNameAndVersion, peError, 3,
+                                                &_this->user_data );
+    return _ret;
+}
+
+bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam_iface *_this )
+{
+    bool _ret;
+    TRACE( "%p\n", _this );
+    _ret = ivrclientcore_is_hmd_present( cppIVRClientCore_IVRClientCore_003_BIsHmdPresent,
+                                         _this->u_iface, 3, &_this->user_data );
+    return _ret;
+}
+
+vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3( struct w_steam_iface *_this, vrmb_typea a,
+                                                           const char *b, const char *c )
+{
     char *converted = json_convert_paths(c);
+    vrmb_typeb _ret;
 
-    r = cpp_func(linux_side, a, b, converted ? converted : c);
+    TRACE( "%p\n", _this );
 
+    _ret = cppIVRMailbox_IVRMailbox_001_undoc3( _this->u_iface, a, b, c );
     free(converted);
 
-    return r;
+    return _ret;
 }
