@@ -257,6 +257,9 @@ all_versions = {}
 MANUAL_METHODS = {
     "IVRSystem_GetDXGIOutputInfo": True,
     "IVRSystem_GetOutputDevice": lambda ver, abi: ver > 16,
+    "IVRRenderModels_LoadTextureD3D11_Async": True,
+    "IVRRenderModels_FreeTextureD3D11": True,
+    "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
 }
 
 
@@ -313,18 +316,6 @@ def ivrcompositor_wait_get_poses(cppname, method):
 def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
     return "ivrcompositor_get_vulkan_device_extensions_required"
 
-def ivrrendermodels_load_texture_d3d11_async(cppname, method):
-    assert "004" in cppname or "005" in cppname or "006" in cppname
-    return "ivrrendermodels_load_texture_d3d11_async"
-
-def ivrrendermodels_free_texture_d3d11(cppname, method):
-    assert "004" in cppname or "005" in cppname or "006" in cppname
-    return "ivrrendermodels_free_texture_d3d11"
-
-def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
-    assert "005" in cppname or "006" in cppname
-    return "ivrrendermodels_load_into_texture_d3d11_async"
-
 def ivrmailbox_undoc3(cppname, method):
     assert "001" in cppname
     return "ivrmailbox_undoc3"
@@ -371,9 +362,6 @@ method_overrides = [
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
-    ("IVRRenderModels", "LoadTextureD3D11_Async", ivrrendermodels_load_texture_d3d11_async),
-    ("IVRRenderModels", "FreeTextureD3D11", ivrrendermodels_free_texture_d3d11),
-    ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
     ("IVROverlay", "SetOverlayTexture", ivroverlay_set_overlay_texture),
     ("IVRInput",  "GetDigitalActionData", ivrinput_get_digital_action_data),
