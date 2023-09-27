@@ -483,6 +483,10 @@ def canonical_typename(cursor):
     return name.removeprefix("const ")
 
 
+def underlying_typename(decl):
+    return canonical_typename(underlying_type(decl))
+
+
 def find_struct_abis(name):
     records = all_records[sdkver]
     missing = [name not in records[abi] for abi in ABIS]
@@ -621,21 +625,27 @@ def handle_method_cpp(method, classname, cppname, out):
     if not returns_void:
         out(f'    {declspec(method.result_type, "_ret")};\n')
 
+    need_output = {}
+
     for name, param in sorted(need_convert.items()):
-        if param.type.kind == TypeKind.POINTER:
-            #handle single pointers, but not double pointers
-            real_type = param.type
-            while real_type.kind == TypeKind.POINTER:
-                real_type = real_type.get_pointee()
-            real_name = canonical_typename(real_type)
-            assert(param.type.get_pointee().kind == TypeKind.RECORD or real_name in MANUAL_STRUCTS)
-            pointee_name = canonical_typename(param.type.get_pointee())
-            out(f'    {pointee_name} lin_{name};\n')
-            out(f'    win_to_lin_struct_{real_name}_{sdkver}({name}, &lin_{name});\n')
-        else:
-            #raw structs
-            out(f'    {param.type.spelling} lin_{name};\n')
-            out(f'    win_to_lin_struct_{param.type.spelling}_{sdkver}(&{name}, &lin_{name});\n')
+        type_name = underlying_typename(param)
+
+        if param.type.kind != TypeKind.POINTER:
+            out(f'    {type_name} lin_{name};\n')
+            out(f'    win_to_lin_struct_{type_name}_{sdkver}(&{name}, &lin_{name});\n')
+            continue
+
+        pointee = param.type.get_pointee()
+        if pointee.kind == TypeKind.POINTER:
+            need_output[name] = param
+            out(f'    {type_name} *lin_{name};\n')
+            continue
+
+        if not pointee.is_const_qualified():
+            need_output[name] = param
+
+        out(f'    {type_name} lin_{name};\n')
+        out(f'    win_to_lin_struct_{type_name}_{sdkver}({name}, &lin_{name});\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
@@ -657,15 +667,9 @@ def handle_method_cpp(method, classname, cppname, out):
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
     out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
 
-    for name, param in sorted(need_convert.items()):
-        if param.type.kind == TypeKind.POINTER:
-            if not "const " in param.type.spelling: #don't modify const arguments
-                real_type = param.type
-                while real_type.kind == TypeKind.POINTER:
-                    real_type = real_type.get_pointee()
-                out(f'    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{name}, {name});\n')
-        else:
-            out(f'    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{name}, &{name});\n')
+    for name, param in sorted(need_output.items()):
+        type_name = underlying_typename(param)
+        out(f'    lin_to_win_struct_{type_name}_{sdkver}(&lin_{name}, {name});\n')
 
     if method.result_type.kind != TypeKind.VOID:
         post_exec = post_execution_function(classname, method.spelling)
