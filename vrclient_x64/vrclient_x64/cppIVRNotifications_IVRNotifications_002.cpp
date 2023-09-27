@@ -9,18 +9,14 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-EVRNotificationError cppIVRNotifications_IVRNotifications_002_CreateNotification(void *linux_side, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char *pchText, EVRNotificationStyle style, const NotificationBitmap_t *pImage, VRNotificationId *pNotificationId)
+void cppIVRNotifications_IVRNotifications_002_CreateNotification( struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params *params )
 {
-    EVRNotificationError _ret;
-    _ret = ((IVRNotifications*)linux_side)->CreateNotification((vr::VROverlayHandle_t)ulOverlayHandle, (uint64_t)ulUserValue, (vr::EVRNotificationType)type, (const char *)pchText, (vr::EVRNotificationStyle)style, (const vr::NotificationBitmap_t *)pImage, (vr::VRNotificationId *)pNotificationId);
-    return _ret;
+    params->_ret = ((IVRNotifications*)params->linux_side)->CreateNotification((vr::VROverlayHandle_t)params->ulOverlayHandle, (uint64_t)params->ulUserValue, (vr::EVRNotificationType)params->type, (const char *)params->pchText, (vr::EVRNotificationStyle)params->style, (const vr::NotificationBitmap_t *)params->pImage, (vr::VRNotificationId *)params->pNotificationId);
 }
 
-EVRNotificationError cppIVRNotifications_IVRNotifications_002_RemoveNotification(void *linux_side, VRNotificationId notificationId)
+void cppIVRNotifications_IVRNotifications_002_RemoveNotification( struct cppIVRNotifications_IVRNotifications_002_RemoveNotification_params *params )
 {
-    EVRNotificationError _ret;
-    _ret = ((IVRNotifications*)linux_side)->RemoveNotification((vr::VRNotificationId)notificationId);
-    return _ret;
+    params->_ret = ((IVRNotifications*)params->linux_side)->RemoveNotification((vr::VRNotificationId)params->notificationId);
 }
 
 #ifdef __cplusplus

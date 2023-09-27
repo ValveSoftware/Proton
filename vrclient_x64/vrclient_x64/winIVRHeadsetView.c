@@ -30,62 +30,105 @@ DEFINE_THISCALL_WRAPPER(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlend
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(struct w_steam_iface *_this, uint32_t nWidth, uint32_t nHeight)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nWidth = nWidth,
+        .nHeight = nHeight,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize(_this->u_iface, nWidth, nHeight);
+    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize( &params );
 }
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(struct w_steam_iface *_this, uint32_t *pnWidth, uint32_t *pnHeight)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnWidth = pnWidth,
+        .pnHeight = pnHeight,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(_this->u_iface, pnWidth, pnHeight);
+    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize( &params );
 }
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(struct w_steam_iface *_this, HeadsetViewMode_t eHeadsetViewMode)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eHeadsetViewMode = eHeadsetViewMode,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(_this->u_iface, eHeadsetViewMode);
+    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode( &params );
 }
 
 HeadsetViewMode_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(struct w_steam_iface *_this)
 {
-    HeadsetViewMode_t _ret;
+    struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(_this->u_iface);
-    return _ret;
+    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(struct w_steam_iface *_this, bool bCropped)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bCropped = bCropped,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(_this->u_iface, bCropped);
+    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped( &params );
 }
 
 bool __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(_this->u_iface);
-    return _ret;
+    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped( &params );
+    return params._ret;
 }
 
 float __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(struct w_steam_iface *_this)
 {
-    float _ret;
+    struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio(_this->u_iface);
-    return _ret;
+    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(struct w_steam_iface *_this, float flStartPct, float flEndPct)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange_params params =
+    {
+        .linux_side = _this->u_iface,
+        .flStartPct = flStartPct,
+        .flEndPct = flEndPct,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange(_this->u_iface, flStartPct, flEndPct);
+    cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange( &params );
 }
 
 void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(struct w_steam_iface *_this, float *pStartPct, float *pEndPct)
 {
+    struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pStartPct = pStartPct,
+        .pEndPct = pEndPct,
+    };
     TRACE("%p\n", _this);
-    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(_this->u_iface, pStartPct, pEndPct);
+    cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange( &params );
 }
 
 extern vtable_ptr winIVRHeadsetView_IVRHeadsetView_001_vtable;

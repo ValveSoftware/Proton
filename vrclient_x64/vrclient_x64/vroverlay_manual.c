@@ -166,286 +166,376 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struc
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_007_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_007_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_007_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_008_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_008_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_008_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_010_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_010_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_010_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_011_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_011_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_011_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_012_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_012_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_012_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_013_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_013_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_013_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_014_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_014_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_014_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_016_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_016_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_016_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_017_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_017_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_017_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_018_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_018_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_018_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_019_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_019_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_019_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_020_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_020_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_020_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_021_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_021_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_021_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_022_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_022_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_022_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_024_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_024_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_024_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_025_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_025_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_025_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_026_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_026_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_026_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }
 
 EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
                                                                            const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    EVROverlayError _ret;
+    struct cppIVROverlay_IVROverlay_027_SetOverlayTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ulOverlayHandle = ulOverlayHandle,
+        .pTexture = &state.texture,
+    };
 
     TRACE( "%p\n", _this );
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    _ret = cppIVROverlay_IVROverlay_027_SetOverlayTexture( _this->u_iface, ulOverlayHandle, &state.texture );
+    cppIVROverlay_IVROverlay_027_SetOverlayTexture( &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
-    return _ret;
+    return params._ret;
 }

@@ -272,10 +272,16 @@ static void post_present_handoff_init( void *linux_side, unsigned int version )
 
     if (!compositor_data.d3d11_explicit_handoff && version >= 21)
     {
+        struct cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode_params params =
+        {
+            .linux_side = linux_side,
+            .bExplicitTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
         /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
          * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
          * in lockups and crashes. */
-        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode( linux_side, VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff );
+        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode( &params );
         compositor_data.d3d11_explicit_handoff = TRUE;
     }
 }
@@ -315,22 +321,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_009_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_009_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_009_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_009_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 9 );
-    cppIVRCompositor_IVRCompositor_009_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_009_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -338,12 +352,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_iface *_this,
@@ -351,22 +369,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_010_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_010_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_010_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_010_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 10 );
-    cppIVRCompositor_IVRCompositor_010_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_010_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -374,12 +400,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_iface *_this,
@@ -387,22 +417,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_011_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_011_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_011_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_011_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 11 );
-    cppIVRCompositor_IVRCompositor_011_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_011_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -410,12 +448,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_iface *_this,
@@ -423,22 +465,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_012_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_012_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_012_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_012_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 12 );
-    cppIVRCompositor_IVRCompositor_012_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_012_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -446,12 +496,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_iface *_this,
@@ -459,22 +513,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_013_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_013_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_013_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_013_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 13 );
-    cppIVRCompositor_IVRCompositor_013_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_013_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -482,12 +544,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_iface *_this,
@@ -495,22 +561,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_014_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_014_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_014_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_014_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 14 );
-    cppIVRCompositor_IVRCompositor_014_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_014_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -518,12 +592,16 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_iface *_this,
@@ -531,22 +609,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_015_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_015_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_015_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_015_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 15 );
-    cppIVRCompositor_IVRCompositor_015_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_015_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -554,25 +640,35 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_016_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_016_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_016_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_iface *_this,
@@ -580,22 +676,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_016_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_016_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_016_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_016_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 16 );
-    cppIVRCompositor_IVRCompositor_016_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_016_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -603,25 +707,35 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_017_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_017_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_017_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_iface *_this,
@@ -629,22 +743,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_017_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_017_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_017_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_017_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_017_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 17 );
-    cppIVRCompositor_IVRCompositor_017_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_017_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -652,25 +774,35 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_018_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_018_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_018_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_iface *_this,
@@ -678,22 +810,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_018_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_018_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_018_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_018_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 18 );
-    cppIVRCompositor_IVRCompositor_018_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_018_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -701,25 +841,35 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_019_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_019_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_019_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_iface *_this,
@@ -727,22 +877,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_019_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_019_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_019_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_019_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 19 );
-    cppIVRCompositor_IVRCompositor_019_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_019_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -750,35 +908,50 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_020_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_020_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_020_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_iface *_this,
@@ -786,22 +959,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_020_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_020_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_020_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_020_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 20 );
-    cppIVRCompositor_IVRCompositor_020_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_020_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -809,35 +990,50 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_021_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_021_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_021_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_iface *_this,
@@ -845,22 +1041,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_021_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_021_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_021_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_021_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 21 );
-    cppIVRCompositor_IVRCompositor_021_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_021_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -868,35 +1072,50 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_022_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_022_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_022_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_iface *_this,
@@ -904,22 +1123,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_022_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_022_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_022_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_022_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 22 );
-    cppIVRCompositor_IVRCompositor_022_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_022_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -927,35 +1154,50 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_024_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_024_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_024_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_iface *_this,
@@ -963,22 +1205,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_024_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_024_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_024_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_024_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 24 );
-    cppIVRCompositor_IVRCompositor_024_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_024_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -986,35 +1236,50 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses( struct w_steam_iface *_this,
                                                                                TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                                TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
 {
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_026_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
-    _ret = cppIVRCompositor_IVRCompositor_026_WaitGetPoses( _this->u_iface, pRenderPoseArray, unRenderPoseArrayCount,
-                                                            pGamePoseArray, unGamePoseArrayCount );
+    cppIVRCompositor_IVRCompositor_026_WaitGetPoses( &params );
     wait_get_poses_done( _this->u_iface );
-    return _ret;
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_iface *_this,
@@ -1022,22 +1287,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_026_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_026_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_026_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_026_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 26 );
-    cppIVRCompositor_IVRCompositor_026_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_026_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -1045,22 +1318,31 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }
 
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_iface *_this,
@@ -1068,22 +1350,30 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct 
                                                                          const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_027_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    _ret = cppIVRCompositor_IVRCompositor_027_Submit( _this->u_iface, eEye, state.submit, pBounds, nSubmitFlags );
+    params.pTexture = state.submit;
+    cppIVRCompositor_IVRCompositor_027_Submit( &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_027_PostPresentHandoff( struct w_steam_iface *_this )
 {
+    struct cppIVRCompositor_IVRCompositor_027_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 27 );
-    cppIVRCompositor_IVRCompositor_027_PostPresentHandoff( _this->u_iface );
+    cppIVRCompositor_IVRCompositor_027_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
 
@@ -1091,20 +1381,29 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverri
                                                                                     const Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
-    EVRCompositorError _ret;
+    struct cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
     TRACE( "%p\n", _this );
-    pTextures = set_skybox_override_init( pTextures, unTextureCount, &state );
-    _ret = cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride( _this->u_iface, pTextures, unTextureCount );
+    cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride( &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return _ret;
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
                                                                                           char *pchValue, uint32_t unBufferSize )
 {
-    VkPhysicalDevice_T *native_device = get_native_VkPhysicalDevice( pPhysicalDevice );
-    uint32_t _ret;
+    struct cppIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
     TRACE( "%p\n", _this );
-    _ret = cppIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired( _this->u_iface, native_device, pchValue, unBufferSize );
-    return _ret;
+    cppIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired( &params );
+    return params._ret;
 }

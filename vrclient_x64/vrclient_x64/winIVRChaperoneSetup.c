@@ -37,116 +37,193 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTa
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(_this->u_iface, configFile);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize(struct w_steam_iface *_this, float *pSizeX, float *pSizeZ)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pSizeX = pSizeX,
+        .pSizeZ = pSizeZ,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize(_this->u_iface, pSizeX, pSizeZ);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect(struct w_steam_iface *_this, HmdQuad_t *rect)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect_params params =
+    {
+        .linux_side = _this->u_iface,
+        .rect = rect,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect(_this->u_iface, rect);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatStandingZeroPoseToRawTrackingPose = pmatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pmatStandingZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize(struct w_steam_iface *_this, float sizeX, float sizeZ)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .sizeX = sizeX,
+        .sizeZ = sizeZ,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize(_this->u_iface, sizeX, sizeZ);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .unQuadsCount = unQuadsCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, unQuadsCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatSeatedZeroPoseToRawTrackingPose = pMatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pMatSeatedZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatStandingZeroPoseToRawTrackingPose = pMatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pMatStandingZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(_this->u_iface, configFile);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo(struct w_steam_iface *_this, uint8_t *pTagsBuffer, uint32_t unTagCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTagsBuffer = pTagsBuffer,
+        .unTagCount = unTagCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo(_this->u_iface, pTagsBuffer, unTagCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo(struct w_steam_iface *_this, uint8_t *pTagsBuffer, uint32_t *punTagCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTagsBuffer = pTagsBuffer,
+        .punTagCount = punTagCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo(_this->u_iface, pTagsBuffer, punTagCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_004_vtable;
@@ -255,148 +332,245 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBuf
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(_this->u_iface, configFile);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize(struct w_steam_iface *_this, float *pSizeX, float *pSizeZ)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pSizeX = pSizeX,
+        .pSizeZ = pSizeZ,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize(_this->u_iface, pSizeX, pSizeZ);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect(struct w_steam_iface *_this, HmdQuad_t *rect)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect_params params =
+    {
+        .linux_side = _this->u_iface,
+        .rect = rect,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect(_this->u_iface, rect);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatStandingZeroPoseToRawTrackingPose = pmatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pmatStandingZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(struct w_steam_iface *_this, float sizeX, float sizeZ)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .sizeX = sizeX,
+        .sizeZ = sizeZ,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(_this->u_iface, sizeX, sizeZ);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .unQuadsCount = unQuadsCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, unQuadsCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatSeatedZeroPoseToRawTrackingPose = pMatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pMatSeatedZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatStandingZeroPoseToRawTrackingPose = pMatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pMatStandingZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(_this->u_iface, configFile);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(struct w_steam_iface *_this, uint8_t *pTagsBuffer, uint32_t unTagCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTagsBuffer = pTagsBuffer,
+        .unTagCount = unTagCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(_this->u_iface, pTagsBuffer, unTagCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(struct w_steam_iface *_this, uint8_t *pTagsBuffer, uint32_t *punTagCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTagsBuffer = pTagsBuffer,
+        .punTagCount = punTagCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(_this->u_iface, pTagsBuffer, punTagCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .unQuadsCount = unQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(_this->u_iface, pQuadsBuffer, unQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer(struct w_steam_iface *_this, char *pBuffer, uint32_t *pnBufferLength)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pBuffer = pBuffer,
+        .pnBufferLength = pnBufferLength,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer(_this->u_iface, pBuffer, pnBufferLength);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking(struct w_steam_iface *_this, const char *pBuffer, uint32_t nImportFlags)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pBuffer = pBuffer,
+        .nImportFlags = nImportFlags,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking(_this->u_iface, pBuffer, nImportFlags);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_005_vtable;
@@ -513,142 +687,236 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStar
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(_this->u_iface, configFile);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize(struct w_steam_iface *_this, float *pSizeX, float *pSizeZ)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pSizeX = pSizeX,
+        .pSizeZ = pSizeZ,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize(_this->u_iface, pSizeX, pSizeZ);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect(struct w_steam_iface *_this, HmdQuad_t *rect)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect_params params =
+    {
+        .linux_side = _this->u_iface,
+        .rect = rect,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect(_this->u_iface, rect);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .punQuadsCount = punQuadsCount,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, punQuadsCount);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatStandingZeroPoseToRawTrackingPose = pmatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pmatStandingZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize(struct w_steam_iface *_this, float sizeX, float sizeZ)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .sizeX = sizeX,
+        .sizeZ = sizeZ,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize(_this->u_iface, sizeX, sizeZ);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPlayAreaSize( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t unQuadsCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pQuadsBuffer = pQuadsBuffer,
+        .unQuadsCount = unQuadsCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo(_this->u_iface, pQuadsBuffer, unQuadsCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(struct w_steam_iface *_this, HmdVector2_t *pPointBuffer, uint32_t unPointCount)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPointBuffer = pPointBuffer,
+        .unPointCount = unPointCount,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(_this->u_iface, pPointBuffer, unPointCount);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatSeatedZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatSeatedZeroPoseToRawTrackingPose = pMatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(_this->u_iface, pMatSeatedZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(struct w_steam_iface *_this, const HmdMatrix34_t *pMatStandingZeroPoseToRawTrackingPose)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMatStandingZeroPoseToRawTrackingPose = pMatStandingZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(_this->u_iface, pMatStandingZeroPoseToRawTrackingPose);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk_params params =
+    {
+        .linux_side = _this->u_iface,
+        .configFile = configFile,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(_this->u_iface, configFile);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk( &params );
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose(struct w_steam_iface *_this, HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pmatSeatedZeroPoseToRawTrackingPose = pmatSeatedZeroPoseToRawTrackingPose,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose(_this->u_iface, pmatSeatedZeroPoseToRawTrackingPose);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer(struct w_steam_iface *_this, char *pBuffer, uint32_t *pnBufferLength)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pBuffer = pBuffer,
+        .pnBufferLength = pnBufferLength,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer(_this->u_iface, pBuffer, pnBufferLength);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer( &params );
+    return params._ret;
 }
 
 bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking(struct w_steam_iface *_this, const char *pBuffer, uint32_t nImportFlags)
 {
-    bool _ret;
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pBuffer = pBuffer,
+        .nImportFlags = nImportFlags,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking(_this->u_iface, pBuffer, nImportFlags);
-    return _ret;
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking( &params );
+    return params._ret;
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview( &params );
 }
 
 void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(struct w_steam_iface *_this)
 {
+    struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(_this->u_iface);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting( &params );
 }
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_006_vtable;

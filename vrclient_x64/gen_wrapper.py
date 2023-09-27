@@ -346,34 +346,41 @@ def declspec(decl, name):
 
 
 def handle_method_hpp(method, cppname, out):
-    ret = f'{declspec(method.result_type, "")} '
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
-    params = [declspec(p, "") for p in method.get_arguments()]
-    params = ['void *'] + params
-
-    out(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
-
-
-def handle_method_cpp(method, classname, cppname, out):
-    returns_void = method.result_type.kind == TypeKind.VOID
-
-    ret = f'{declspec(method.result_type, "")} '
+    ret = "*_ret" if returns_record else "_ret"
+    ret = f'{declspec(method.result_type, ret)}'
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
+    if method.result_type.kind != TypeKind.VOID:
+        params = [ret] + params
+    params = ['void *linux_side'] + params
+
+    out(f'struct {cppname}_{method.name}_params\n')
+    out(u'{\n')
+    for param in params:
+        out(f'    {param};\n')
+    out(u'};\n')
+    out(f'extern void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params );\n\n')
+
+
+def handle_method_cpp(method, classname, cppname, out):
+    returns_void = method.result_type.kind == TypeKind.VOID
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+
+    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+             for i, p in enumerate(method.get_arguments())]
+
     need_convert = {n: p for n, p in zip(names, method.get_arguments())
                     if param_needs_conversion(p)}
 
     names = ['linux_side'] + names
-    params = ['void *linux_side'] + params
 
-    out(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
+    out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
     out(u'{\n')
-
-    if not returns_void:
-        out(f'    {declspec(method.result_type, "_ret")};\n')
 
     need_unwrap = {}
     need_output = {}
@@ -383,7 +390,7 @@ def handle_method_cpp(method, classname, cppname, out):
 
         if param.type.kind != TypeKind.POINTER:
             out(f'    {type_name} lin_{name};\n')
-            out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}(&{name}, &lin_{name});\n')
+            out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
@@ -400,11 +407,12 @@ def handle_method_cpp(method, classname, cppname, out):
             need_output[name] = param
 
         out(f'    {type_name} lin_{name};\n')
-        out(f'    if ({name})\n')
-        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin({name}, &lin_{name});\n')
+        out(f'    if (params->{name})\n')
+        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin( params->{name}, &lin_{name} );\n')
 
     size_fixup = {}
     size_param = {}
+    size_fixup = {}
     params = list(zip(names[1:], method.get_arguments()))
     params += [(None, None)] # for next_name, next_param
     for i, (name, param) in enumerate(params[:-1]):
@@ -417,42 +425,42 @@ def handle_method_cpp(method, classname, cppname, out):
             size_param[name] = ', -1'
         elif struct_needs_size_adjustment(real_type.get_canonical()):
             real_name = real_type.spelling
-            out(f'    uint32_t lin_{next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
-            size_param[name] = f', {next_name}'
+            out(f'    uint32_t lin_{next_name} = std::min( params->{next_name}, (uint32_t)sizeof({real_name}) );\n')
+            size_param[name] = f', params->{next_name}'
             size_fixup[next_name] = True
         elif name in need_convert:
             assert name not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
-            out(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin_{name}) : 0;\n')
-            size_param[name] = f', {next_name}'
+            out(f'    uint32_t lin_{next_name} = params->{next_name} ? sizeof(lin_{name}) : 0;\n')
+            size_param[name] = f', params->{next_name}'
             size_fixup[next_name] = True
 
     if returns_void:
         out(u'    ')
+    elif returns_record:
+        out(u'    *params->_ret = ')
     else:
-        out(u'    _ret = ')
+        out(u'    params->_ret = ')
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
-        if name in size_fixup: return f'lin_{name}'
-        if name in need_unwrap: return f'struct_{type_name}_{display_sdkver(sdkver)}_unwrap({name})'
-        if name in need_convert: return f"{name} ? {pfx}lin_{name} : nullptr"
-        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*{name}'
-        return f"({param.type.spelling}){name}"
+        if name in size_fixup: return f"lin_{name}"
+        if name in need_unwrap: return f'struct_{type_name}_{display_sdkver(sdkver)}_unwrap( params->{name} )'
+        if name in need_convert: return f"params->{name} ? {pfx}lin_{name} : nullptr"
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*params->{name}'
+        return f"({param.type.spelling})params->{name}"
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
-    out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
+    out(f'(({classname}*)params->linux_side)->{method.spelling}({", ".join(params)});\n')
 
     for name, param in sorted(need_output.items()):
         type_name = strip_ns(underlying_typename(param))
         if type_name in SDK_STRUCTS:
-            out(u'    if (_ret == 0)\n')
-            out(f'        *{name} = struct_{type_name}_{display_sdkver(sdkver)}_wrap(lin_{name});\n')
+            out(u'    if (params->_ret == 0)\n')
+            out(f'        *params->{name} = struct_{type_name}_{display_sdkver(sdkver)}_wrap( lin_{name} );\n')
             continue
-        out(f'    if ({name})\n')
-        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_lin_to_win(&lin_{name}, {name}{size_param.get(name, "")});\n')
+        out(f'    if (params->{name})\n')
+        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_lin_to_win( &lin_{name}, params->{name}{size_param.get(name, "")} );\n')
 
-    if not returns_void:
-        out(u'    return _ret;\n')
     out(u'}\n\n')
 
 
@@ -495,12 +503,12 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
     out(u'{\n')
 
-    if returns_record:
-        del params[1]
-        del names[1]
-
-    if not returns_record and not returns_void:
-        out(f'    {ret}_ret;\n')
+    out(f'    struct {cppname}_{method.name}_params params =\n')
+    out(u'    {\n')
+    out(u'        .linux_side = _this->u_iface,\n')
+    for name in names[1:]:
+        out(f'        .{name} = {name},\n')
+    out(u'    };\n')
 
     path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.spelling}_{method.spelling}', {})
     path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
@@ -513,36 +521,19 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     if 'eTextureType' in names:
         out(u'    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
-    if returns_record:
-        out(u'    *_ret = ')
-    elif not returns_void:
-        out(u'    _ret = ')
-    else:
-        out(u'    ')
-
-    out(f'{cppname}_{method.name}(')
-
-    def param_call(param, name):
-        if name == '_this': return '_this->u_iface'
-        if name in path_conv_wtou: return f'u_{name}'
-        return name
-
-    params = ['_this'] + list(method.get_arguments())
-    out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
-
-    out(u');\n')
+    out(f'    {cppname}_{method.name}( &params );\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
         out(u'    ')
         if "ret_size" in path_conv_utow:
-            out(u'_ret = ')
-        out(f'vrclient_unix_path_to_dos_path(_ret, {name}, {name}, {conv["len"]});\n')
+            out(u'params._ret = ')
+        out(f'vrclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]} );\n')
 
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
         out(f'    vrclient_free_path( u_{name} );\n')
 
     if not returns_void:
-        out(u'    return _ret;\n')
+        out(u'    return params._ret;\n')
     out(u'}\n\n')
 
 

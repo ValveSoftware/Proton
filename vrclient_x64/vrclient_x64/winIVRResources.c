@@ -23,18 +23,31 @@ DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20
 
 uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(struct w_steam_iface *_this, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
 {
-    uint32_t _ret;
+    struct cppIVRResources_IVRResources_001_LoadSharedResource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchResourceName = pchResourceName,
+        .pchBuffer = pchBuffer,
+        .unBufferLen = unBufferLen,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRResources_IVRResources_001_LoadSharedResource(_this->u_iface, pchResourceName, pchBuffer, unBufferLen);
-    return _ret;
+    cppIVRResources_IVRResources_001_LoadSharedResource( &params );
+    return params._ret;
 }
 
 uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(struct w_steam_iface *_this, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
 {
-    uint32_t _ret;
+    struct cppIVRResources_IVRResources_001_GetResourceFullPath_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchResourceName = pchResourceName,
+        .pchResourceTypeDirectory = pchResourceTypeDirectory,
+        .pchPathBuffer = pchPathBuffer,
+        .unBufferLen = unBufferLen,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRResources_IVRResources_001_GetResourceFullPath(_this->u_iface, pchResourceName, pchResourceTypeDirectory, pchPathBuffer, unBufferLen);
-    return _ret;
+    cppIVRResources_IVRResources_001_GetResourceFullPath( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRResources_IVRResources_001_vtable;

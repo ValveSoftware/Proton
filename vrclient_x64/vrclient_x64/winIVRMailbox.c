@@ -25,28 +25,44 @@ DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
 
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *_this, const char *a, vrmb_typea *b)
 {
-    vrmb_typeb _ret;
+    struct cppIVRMailbox_IVRMailbox_001_undoc1_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc1(_this->u_iface, a, b);
-    return _ret;
+    cppIVRMailbox_IVRMailbox_001_undoc1( &params );
+    return params._ret;
 }
 
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_this, vrmb_typea a)
 {
-    vrmb_typeb _ret;
+    struct cppIVRMailbox_IVRMailbox_001_undoc2_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc2(_this->u_iface, a);
-    return _ret;
+    cppIVRMailbox_IVRMailbox_001_undoc2( &params );
+    return params._ret;
 }
 
 extern vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c);
 
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
 {
-    vrmb_typeb _ret;
+    struct cppIVRMailbox_IVRMailbox_001_undoc4_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+        .d = d,
+    };
     TRACE("%p\n", _this);
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc4(_this->u_iface, a, b, c, d);
-    return _ret;
+    cppIVRMailbox_IVRMailbox_001_undoc4( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winIVRMailbox_IVRMailbox_001_vtable;

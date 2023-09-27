@@ -132,11 +132,17 @@ void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             ETextureType textureType, VkInstance_T *pInstance )
 {
-    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+    struct cppIVRSystem_IVRSystem_017_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = unwrap_instance( textureType, pInstance ),
+    };
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_017_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    cppIVRSystem_IVRSystem_017_GetOutputDevice( &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -149,11 +155,17 @@ void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             ETextureType textureType, VkInstance_T *pInstance )
 {
-    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+    struct cppIVRSystem_IVRSystem_019_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = unwrap_instance( textureType, pInstance ),
+    };
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_019_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    cppIVRSystem_IVRSystem_019_GetOutputDevice( &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -166,11 +178,17 @@ void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             ETextureType textureType, VkInstance_T *pInstance )
 {
-    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+    struct cppIVRSystem_IVRSystem_020_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = unwrap_instance( textureType, pInstance ),
+    };
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_020_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    cppIVRSystem_IVRSystem_020_GetOutputDevice( &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -183,11 +201,17 @@ void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             ETextureType textureType, VkInstance_T *pInstance )
 {
-    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+    struct cppIVRSystem_IVRSystem_021_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = unwrap_instance( textureType, pInstance ),
+    };
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_021_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    cppIVRSystem_IVRSystem_021_GetOutputDevice( &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -200,10 +224,16 @@ void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             ETextureType textureType, VkInstance_T *pInstance )
 {
-    VkInstance_T *native_instance = unwrap_instance( textureType, pInstance );
+    struct cppIVRSystem_IVRSystem_022_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = unwrap_instance( textureType, pInstance ),
+    };
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_022_GetOutputDevice( _this->u_iface, pnDevice, textureType, native_instance );
+    cppIVRSystem_IVRSystem_022_GetOutputDevice( &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }

@@ -24,20 +24,43 @@ DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutp
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(struct w_steam_iface *_this, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnX = pnX,
+        .pnY = pnY,
+        .pnWidth = pnWidth,
+        .pnHeight = pnHeight,
+    };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(_this->u_iface, pnX, pnY, pnWidth, pnHeight);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( &params );
 }
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(struct w_steam_iface *_this, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pnX = pnX,
+        .pnY = pnY,
+        .pnWidth = pnWidth,
+        .pnHeight = pnHeight,
+    };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(_this->u_iface, eEye, pnX, pnY, pnWidth, pnHeight);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport( &params );
 }
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
 {
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnAdapterIndex = pnAdapterIndex,
+        .pnAdapterOutputIndex = pnAdapterOutputIndex,
+    };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(_this->u_iface, pnAdapterIndex, pnAdapterOutputIndex);
+    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( &params );
 }
 
 extern vtable_ptr winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;

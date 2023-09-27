@@ -9,46 +9,34 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-EIOBufferError cppIVRIOBuffer_IVRIOBuffer_002_Open(void *linux_side, const char *pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t *pulBuffer)
+void cppIVRIOBuffer_IVRIOBuffer_002_Open( struct cppIVRIOBuffer_IVRIOBuffer_002_Open_params *params )
 {
-    EIOBufferError _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->Open((const char *)pchPath, (vr::EIOBufferMode)mode, (uint32_t)unElementSize, (uint32_t)unElements, (vr::IOBufferHandle_t *)pulBuffer);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->Open((const char *)params->pchPath, (vr::EIOBufferMode)params->mode, (uint32_t)params->unElementSize, (uint32_t)params->unElements, (vr::IOBufferHandle_t *)params->pulBuffer);
 }
 
-EIOBufferError cppIVRIOBuffer_IVRIOBuffer_002_Close(void *linux_side, IOBufferHandle_t ulBuffer)
+void cppIVRIOBuffer_IVRIOBuffer_002_Close( struct cppIVRIOBuffer_IVRIOBuffer_002_Close_params *params )
 {
-    EIOBufferError _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->Close((vr::IOBufferHandle_t)ulBuffer);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->Close((vr::IOBufferHandle_t)params->ulBuffer);
 }
 
-EIOBufferError cppIVRIOBuffer_IVRIOBuffer_002_Read(void *linux_side, IOBufferHandle_t ulBuffer, void *pDst, uint32_t unBytes, uint32_t *punRead)
+void cppIVRIOBuffer_IVRIOBuffer_002_Read( struct cppIVRIOBuffer_IVRIOBuffer_002_Read_params *params )
 {
-    EIOBufferError _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->Read((vr::IOBufferHandle_t)ulBuffer, (void *)pDst, (uint32_t)unBytes, (uint32_t *)punRead);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->Read((vr::IOBufferHandle_t)params->ulBuffer, (void *)params->pDst, (uint32_t)params->unBytes, (uint32_t *)params->punRead);
 }
 
-EIOBufferError cppIVRIOBuffer_IVRIOBuffer_002_Write(void *linux_side, IOBufferHandle_t ulBuffer, void *pSrc, uint32_t unBytes)
+void cppIVRIOBuffer_IVRIOBuffer_002_Write( struct cppIVRIOBuffer_IVRIOBuffer_002_Write_params *params )
 {
-    EIOBufferError _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->Write((vr::IOBufferHandle_t)ulBuffer, (void *)pSrc, (uint32_t)unBytes);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->Write((vr::IOBufferHandle_t)params->ulBuffer, (void *)params->pSrc, (uint32_t)params->unBytes);
 }
 
-PropertyContainerHandle_t cppIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(void *linux_side, IOBufferHandle_t ulBuffer)
+void cppIVRIOBuffer_IVRIOBuffer_002_PropertyContainer( struct cppIVRIOBuffer_IVRIOBuffer_002_PropertyContainer_params *params )
 {
-    PropertyContainerHandle_t _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->PropertyContainer((vr::IOBufferHandle_t)ulBuffer);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->PropertyContainer((vr::IOBufferHandle_t)params->ulBuffer);
 }
 
-bool cppIVRIOBuffer_IVRIOBuffer_002_HasReaders(void *linux_side, IOBufferHandle_t ulBuffer)
+void cppIVRIOBuffer_IVRIOBuffer_002_HasReaders( struct cppIVRIOBuffer_IVRIOBuffer_002_HasReaders_params *params )
 {
-    bool _ret;
-    _ret = ((IVRIOBuffer*)linux_side)->HasReaders((vr::IOBufferHandle_t)ulBuffer);
-    return _ret;
+    params->_ret = ((IVRIOBuffer*)params->linux_side)->HasReaders((vr::IOBufferHandle_t)params->ulBuffer);
 }
 
 #ifdef __cplusplus
