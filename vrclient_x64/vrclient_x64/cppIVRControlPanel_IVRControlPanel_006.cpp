@@ -9,182 +9,144 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc1(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc1( struct cppIVRControlPanel_IVRControlPanel_006_undoc1_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc1();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc1();
 }
 
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc2(void *linux_side, uint32_t a, char *b, uint32_t c)
+void cppIVRControlPanel_IVRControlPanel_006_undoc2( struct cppIVRControlPanel_IVRControlPanel_006_undoc2_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc2((uint32_t)a, (char *)b, (uint32_t)c);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc2((uint32_t)params->a, (char *)params->b, (uint32_t)params->c);
 }
 
-EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc3(void *linux_side, const char *a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc3( struct cppIVRControlPanel_IVRControlPanel_006_undoc3_params *params )
 {
-    EVRInitError _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc3((const char *)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc3((const char *)params->a);
 }
 
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc4(void *linux_side, const char *a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc4( struct cppIVRControlPanel_IVRControlPanel_006_undoc4_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc4((const char *)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc4((const char *)params->a);
 }
 
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc5(void *linux_side, const char *a, uint32_t b, char *c, uint32_t d)
+void cppIVRControlPanel_IVRControlPanel_006_undoc5( struct cppIVRControlPanel_IVRControlPanel_006_undoc5_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc5((const char *)a, (uint32_t)b, (char *)c, (uint32_t)d);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc5((const char *)params->a, (uint32_t)params->b, (char *)params->c, (uint32_t)params->d);
 }
 
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc6(void *linux_side, const char *a, const char *b, char *c, uint32_t d)
+void cppIVRControlPanel_IVRControlPanel_006_undoc6( struct cppIVRControlPanel_IVRControlPanel_006_undoc6_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc6((const char *)a, (const char *)b, (char *)c, (uint32_t)d);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc6((const char *)params->a, (const char *)params->b, (char *)params->c, (uint32_t)params->d);
 }
 
-uint32_t cppIVRControlPanel_IVRControlPanel_006_undoc7(void *linux_side, const char *a, const char *b, char *c, uint32_t d)
+void cppIVRControlPanel_IVRControlPanel_006_undoc7( struct cppIVRControlPanel_IVRControlPanel_006_undoc7_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc7((const char *)a, (const char *)b, (char *)c, (uint32_t)d);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc7((const char *)params->a, (const char *)params->b, (char *)params->c, (uint32_t)params->d);
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc8(void *linux_side, uint32_t a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc8( struct cppIVRControlPanel_IVRControlPanel_006_undoc8_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc8((uint32_t)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc8((uint32_t)params->a);
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc9(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc9( struct cppIVRControlPanel_IVRControlPanel_006_undoc9_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc9();
+    ((IVRControlPanel*)params->linux_side)->undoc9();
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc10(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc10( struct cppIVRControlPanel_IVRControlPanel_006_undoc10_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc10();
+    ((IVRControlPanel*)params->linux_side)->undoc10();
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc11(void *linux_side, uint32_t a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc11( struct cppIVRControlPanel_IVRControlPanel_006_undoc11_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc11((uint32_t)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc11((uint32_t)params->a);
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc12(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc12( struct cppIVRControlPanel_IVRControlPanel_006_undoc12_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc12();
+    ((IVRControlPanel*)params->linux_side)->undoc12();
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc13(void *linux_side, TrackedDeviceIndex_t a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc13( struct cppIVRControlPanel_IVRControlPanel_006_undoc13_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc13((vr::TrackedDeviceIndex_t)a);
+    ((IVRControlPanel*)params->linux_side)->undoc13((vr::TrackedDeviceIndex_t)params->a);
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc14(void *linux_side, EVRState a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc14( struct cppIVRControlPanel_IVRControlPanel_006_undoc14_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc14((vr::EVRState)a);
+    ((IVRControlPanel*)params->linux_side)->undoc14((vr::EVRState)params->a);
 }
 
-EVRState cppIVRControlPanel_IVRControlPanel_006_undoc15(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc15( struct cppIVRControlPanel_IVRControlPanel_006_undoc15_params *params )
 {
-    EVRState _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc15();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc15();
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc16(void *linux_side, bool a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc16( struct cppIVRControlPanel_IVRControlPanel_006_undoc16_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc16((bool)a);
+    ((IVRControlPanel*)params->linux_side)->undoc16((bool)params->a);
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc17(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc17( struct cppIVRControlPanel_IVRControlPanel_006_undoc17_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc17();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc17();
 }
 
-EVRApplicationError cppIVRControlPanel_IVRControlPanel_006_undoc18(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc18( struct cppIVRControlPanel_IVRControlPanel_006_undoc18_params *params )
 {
-    EVRApplicationError _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc18();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc18();
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc19(void *linux_side, bool a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc19( struct cppIVRControlPanel_IVRControlPanel_006_undoc19_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc19((bool)a);
+    ((IVRControlPanel*)params->linux_side)->undoc19((bool)params->a);
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc20(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc20( struct cppIVRControlPanel_IVRControlPanel_006_undoc20_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc20();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc20();
 }
 
-EVRInitError cppIVRControlPanel_IVRControlPanel_006_undoc21(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc21( struct cppIVRControlPanel_IVRControlPanel_006_undoc21_params *params )
 {
-    EVRInitError _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc21();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc21();
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc22(void *linux_side, WebConsoleHandle_t a, const char *b, uint32_t c, uint32_t d, const char *e)
+void cppIVRControlPanel_IVRControlPanel_006_undoc22( struct cppIVRControlPanel_IVRControlPanel_006_undoc22_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc22((vr::WebConsoleHandle_t)a, (const char *)b, (uint32_t)c, (uint32_t)d, (const char *)e);
+    ((IVRControlPanel*)params->linux_side)->undoc22((vr::WebConsoleHandle_t)params->a, (const char *)params->b, (uint32_t)params->c, (uint32_t)params->d, (const char *)params->e);
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc23(void *linux_side, const char *a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc23( struct cppIVRControlPanel_IVRControlPanel_006_undoc23_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc23((const char *)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc23((const char *)params->a);
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc24(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc24( struct cppIVRControlPanel_IVRControlPanel_006_undoc24_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc24();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc24();
 }
 
-bool cppIVRControlPanel_IVRControlPanel_006_undoc25(void *linux_side, bool a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc25( struct cppIVRControlPanel_IVRControlPanel_006_undoc25_params *params )
 {
-    bool _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc25((bool)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc25((bool)params->a);
 }
 
-uint64_t cppIVRControlPanel_IVRControlPanel_006_undoc26(void *linux_side)
+void cppIVRControlPanel_IVRControlPanel_006_undoc26( struct cppIVRControlPanel_IVRControlPanel_006_undoc26_params *params )
 {
-    uint64_t _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc26();
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc26();
 }
 
-EVRCompositorError cppIVRControlPanel_IVRControlPanel_006_undoc27(void *linux_side, const char *a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc27( struct cppIVRControlPanel_IVRControlPanel_006_undoc27_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRControlPanel*)linux_side)->undoc27((const char *)a);
-    return _ret;
+    params->_ret = ((IVRControlPanel*)params->linux_side)->undoc27((const char *)params->a);
 }
 
-void cppIVRControlPanel_IVRControlPanel_006_undoc28(void *linux_side, VROverlayHandle_t a)
+void cppIVRControlPanel_IVRControlPanel_006_undoc28( struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params *params )
 {
-    ((IVRControlPanel*)linux_side)->undoc28((vr::VROverlayHandle_t)a);
+    ((IVRControlPanel*)params->linux_side)->undoc28((vr::VROverlayHandle_t)params->a);
 }
 
 #ifdef __cplusplus

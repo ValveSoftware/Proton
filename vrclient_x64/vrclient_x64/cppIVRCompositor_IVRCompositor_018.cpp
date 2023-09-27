@@ -9,234 +9,194 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cppIVRCompositor_IVRCompositor_018_SetTrackingSpace(void *linux_side, ETrackingUniverseOrigin eOrigin)
+void cppIVRCompositor_IVRCompositor_018_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_018_SetTrackingSpace_params *params )
 {
-    ((IVRCompositor*)linux_side)->SetTrackingSpace((vr::ETrackingUniverseOrigin)eOrigin);
+    ((IVRCompositor*)params->linux_side)->SetTrackingSpace((vr::ETrackingUniverseOrigin)params->eOrigin);
 }
 
-ETrackingUniverseOrigin cppIVRCompositor_IVRCompositor_018_GetTrackingSpace(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_018_GetTrackingSpace_params *params )
 {
-    ETrackingUniverseOrigin _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetTrackingSpace();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetTrackingSpace();
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_WaitGetPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+void cppIVRCompositor_IVRCompositor_018_WaitGetPoses( struct cppIVRCompositor_IVRCompositor_018_WaitGetPoses_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->WaitGetPoses((vr::TrackedDevicePose_t *)params->pRenderPoseArray, (uint32_t)params->unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)params->pGamePoseArray, (uint32_t)params->unGamePoseArrayCount);
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoses(void *linux_side, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+void cppIVRCompositor_IVRCompositor_018_GetLastPoses( struct cppIVRCompositor_IVRCompositor_018_GetLastPoses_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)pRenderPoseArray, (uint32_t)unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)pGamePoseArray, (uint32_t)unGamePoseArrayCount);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetLastPoses((vr::TrackedDevicePose_t *)params->pRenderPoseArray, (uint32_t)params->unRenderPoseArrayCount, (vr::TrackedDevicePose_t *)params->pGamePoseArray, (uint32_t)params->unGamePoseArrayCount);
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+void cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex( struct cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetLastPoseForTrackedDeviceIndex((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDevicePose_t *)pOutputPose, (vr::TrackedDevicePose_t *)pOutputGamePose);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetLastPoseForTrackedDeviceIndex((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDevicePose_t *)params->pOutputPose, (vr::TrackedDevicePose_t *)params->pOutputGamePose);
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_Submit(void *linux_side, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags)
+void cppIVRCompositor_IVRCompositor_018_Submit( struct cppIVRCompositor_IVRCompositor_018_Submit_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->Submit((vr::EVREye)eEye, (const vr::Texture_t *)pTexture, (const vr::VRTextureBounds_t *)pBounds, (vr::EVRSubmitFlags)nSubmitFlags);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->Submit((vr::EVREye)params->eEye, (const vr::Texture_t *)params->pTexture, (const vr::VRTextureBounds_t *)params->pBounds, (vr::EVRSubmitFlags)params->nSubmitFlags);
 }
 
-void cppIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame( struct cppIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame_params *params )
 {
-    ((IVRCompositor*)linux_side)->ClearLastSubmittedFrame();
+    ((IVRCompositor*)params->linux_side)->ClearLastSubmittedFrame();
 }
 
-void cppIVRCompositor_IVRCompositor_018_PostPresentHandoff(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_PostPresentHandoff( struct cppIVRCompositor_IVRCompositor_018_PostPresentHandoff_params *params )
 {
-    ((IVRCompositor*)linux_side)->PostPresentHandoff();
+    ((IVRCompositor*)params->linux_side)->PostPresentHandoff();
 }
 
-bool cppIVRCompositor_IVRCompositor_018_GetFrameTiming(void *linux_side, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+void cppIVRCompositor_IVRCompositor_018_GetFrameTiming( struct cppIVRCompositor_IVRCompositor_018_GetFrameTiming_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetFrameTiming((vr::Compositor_FrameTiming *)pTiming, (uint32_t)unFramesAgo);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetFrameTiming((vr::Compositor_FrameTiming *)params->pTiming, (uint32_t)params->unFramesAgo);
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_018_GetFrameTimings(void *linux_side, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+void cppIVRCompositor_IVRCompositor_018_GetFrameTimings( struct cppIVRCompositor_IVRCompositor_018_GetFrameTimings_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetFrameTimings((vr::Compositor_FrameTiming *)pTiming, (uint32_t)nFrames);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetFrameTimings((vr::Compositor_FrameTiming *)params->pTiming, (uint32_t)params->nFrames);
 }
 
-float cppIVRCompositor_IVRCompositor_018_GetFrameTimeRemaining(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_GetFrameTimeRemaining( struct cppIVRCompositor_IVRCompositor_018_GetFrameTimeRemaining_params *params )
 {
-    float _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetFrameTimeRemaining();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetFrameTimeRemaining();
 }
 
-void cppIVRCompositor_IVRCompositor_018_GetCumulativeStats(void *linux_side, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void cppIVRCompositor_IVRCompositor_018_GetCumulativeStats( struct cppIVRCompositor_IVRCompositor_018_GetCumulativeStats_params *params )
 {
-    ((IVRCompositor*)linux_side)->GetCumulativeStats((vr::Compositor_CumulativeStats *)pStats, (uint32_t)nStatsSizeInBytes);
+    ((IVRCompositor*)params->linux_side)->GetCumulativeStats((vr::Compositor_CumulativeStats *)params->pStats, (uint32_t)params->nStatsSizeInBytes);
 }
 
-void cppIVRCompositor_IVRCompositor_018_FadeToColor(void *linux_side, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void cppIVRCompositor_IVRCompositor_018_FadeToColor( struct cppIVRCompositor_IVRCompositor_018_FadeToColor_params *params )
 {
-    ((IVRCompositor*)linux_side)->FadeToColor((float)fSeconds, (float)fRed, (float)fGreen, (float)fBlue, (float)fAlpha, (bool)bBackground);
+    ((IVRCompositor*)params->linux_side)->FadeToColor((float)params->fSeconds, (float)params->fRed, (float)params->fGreen, (float)params->fBlue, (float)params->fAlpha, (bool)params->bBackground);
 }
 
-HmdColor_t cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(void *linux_side, bool bBackground)
+void cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor( struct cppIVRCompositor_IVRCompositor_018_GetCurrentFadeColor_params *params )
 {
-    HmdColor_t _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetCurrentFadeColor((bool)bBackground);
-    return _ret;
+    *params->_ret = ((IVRCompositor*)params->linux_side)->GetCurrentFadeColor((bool)params->bBackground);
 }
 
-void cppIVRCompositor_IVRCompositor_018_FadeGrid(void *linux_side, float fSeconds, bool bFadeIn)
+void cppIVRCompositor_IVRCompositor_018_FadeGrid( struct cppIVRCompositor_IVRCompositor_018_FadeGrid_params *params )
 {
-    ((IVRCompositor*)linux_side)->FadeGrid((float)fSeconds, (bool)bFadeIn);
+    ((IVRCompositor*)params->linux_side)->FadeGrid((float)params->fSeconds, (bool)params->bFadeIn);
 }
 
-float cppIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha( struct cppIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha_params *params )
 {
-    float _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetCurrentGridAlpha();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetCurrentGridAlpha();
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride(void *linux_side, const Texture_t *pTextures, uint32_t unTextureCount)
+void cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride( struct cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->SetSkyboxOverride((const vr::Texture_t *)pTextures, (uint32_t)unTextureCount);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->SetSkyboxOverride((const vr::Texture_t *)params->pTextures, (uint32_t)params->unTextureCount);
 }
 
-void cppIVRCompositor_IVRCompositor_018_ClearSkyboxOverride(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_ClearSkyboxOverride( struct cppIVRCompositor_IVRCompositor_018_ClearSkyboxOverride_params *params )
 {
-    ((IVRCompositor*)linux_side)->ClearSkyboxOverride();
+    ((IVRCompositor*)params->linux_side)->ClearSkyboxOverride();
 }
 
-void cppIVRCompositor_IVRCompositor_018_CompositorBringToFront(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_CompositorBringToFront( struct cppIVRCompositor_IVRCompositor_018_CompositorBringToFront_params *params )
 {
-    ((IVRCompositor*)linux_side)->CompositorBringToFront();
+    ((IVRCompositor*)params->linux_side)->CompositorBringToFront();
 }
 
-void cppIVRCompositor_IVRCompositor_018_CompositorGoToBack(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_CompositorGoToBack( struct cppIVRCompositor_IVRCompositor_018_CompositorGoToBack_params *params )
 {
-    ((IVRCompositor*)linux_side)->CompositorGoToBack();
+    ((IVRCompositor*)params->linux_side)->CompositorGoToBack();
 }
 
-void cppIVRCompositor_IVRCompositor_018_CompositorQuit(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_CompositorQuit( struct cppIVRCompositor_IVRCompositor_018_CompositorQuit_params *params )
 {
-    ((IVRCompositor*)linux_side)->CompositorQuit();
+    ((IVRCompositor*)params->linux_side)->CompositorQuit();
 }
 
-bool cppIVRCompositor_IVRCompositor_018_IsFullscreen(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_IsFullscreen( struct cppIVRCompositor_IVRCompositor_018_IsFullscreen_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->IsFullscreen();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->IsFullscreen();
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_018_GetCurrentSceneFocusProcess(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_GetCurrentSceneFocusProcess( struct cppIVRCompositor_IVRCompositor_018_GetCurrentSceneFocusProcess_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetCurrentSceneFocusProcess();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetCurrentSceneFocusProcess();
 }
 
-uint32_t cppIVRCompositor_IVRCompositor_018_GetLastFrameRenderer(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_GetLastFrameRenderer( struct cppIVRCompositor_IVRCompositor_018_GetLastFrameRenderer_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetLastFrameRenderer();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetLastFrameRenderer();
 }
 
-bool cppIVRCompositor_IVRCompositor_018_CanRenderScene(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_CanRenderScene( struct cppIVRCompositor_IVRCompositor_018_CanRenderScene_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->CanRenderScene();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->CanRenderScene();
 }
 
-void cppIVRCompositor_IVRCompositor_018_ShowMirrorWindow(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_ShowMirrorWindow( struct cppIVRCompositor_IVRCompositor_018_ShowMirrorWindow_params *params )
 {
-    ((IVRCompositor*)linux_side)->ShowMirrorWindow();
+    ((IVRCompositor*)params->linux_side)->ShowMirrorWindow();
 }
 
-void cppIVRCompositor_IVRCompositor_018_HideMirrorWindow(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_HideMirrorWindow( struct cppIVRCompositor_IVRCompositor_018_HideMirrorWindow_params *params )
 {
-    ((IVRCompositor*)linux_side)->HideMirrorWindow();
+    ((IVRCompositor*)params->linux_side)->HideMirrorWindow();
 }
 
-bool cppIVRCompositor_IVRCompositor_018_IsMirrorWindowVisible(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_IsMirrorWindowVisible( struct cppIVRCompositor_IVRCompositor_018_IsMirrorWindowVisible_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->IsMirrorWindowVisible();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->IsMirrorWindowVisible();
 }
 
-void cppIVRCompositor_IVRCompositor_018_CompositorDumpImages(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_CompositorDumpImages( struct cppIVRCompositor_IVRCompositor_018_CompositorDumpImages_params *params )
 {
-    ((IVRCompositor*)linux_side)->CompositorDumpImages();
+    ((IVRCompositor*)params->linux_side)->CompositorDumpImages();
 }
 
-bool cppIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources( struct cppIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->ShouldAppRenderWithLowResources();
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->ShouldAppRenderWithLowResources();
 }
 
-void cppIVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn(void *linux_side, bool bOverride)
+void cppIVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn( struct cppIVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn_params *params )
 {
-    ((IVRCompositor*)linux_side)->ForceInterleavedReprojectionOn((bool)bOverride);
+    ((IVRCompositor*)params->linux_side)->ForceInterleavedReprojectionOn((bool)params->bOverride);
 }
 
-void cppIVRCompositor_IVRCompositor_018_ForceReconnectProcess(void *linux_side)
+void cppIVRCompositor_IVRCompositor_018_ForceReconnectProcess( struct cppIVRCompositor_IVRCompositor_018_ForceReconnectProcess_params *params )
 {
-    ((IVRCompositor*)linux_side)->ForceReconnectProcess();
+    ((IVRCompositor*)params->linux_side)->ForceReconnectProcess();
 }
 
-void cppIVRCompositor_IVRCompositor_018_SuspendRendering(void *linux_side, bool bSuspend)
+void cppIVRCompositor_IVRCompositor_018_SuspendRendering( struct cppIVRCompositor_IVRCompositor_018_SuspendRendering_params *params )
 {
-    ((IVRCompositor*)linux_side)->SuspendRendering((bool)bSuspend);
+    ((IVRCompositor*)params->linux_side)->SuspendRendering((bool)params->bSuspend);
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11(void *linux_side, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+void cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11( struct cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetMirrorTextureD3D11((vr::EVREye)eEye, (void *)pD3D11DeviceOrResource, (void **)ppD3D11ShaderResourceView);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetMirrorTextureD3D11((vr::EVREye)params->eEye, (void *)params->pD3D11DeviceOrResource, (void **)params->ppD3D11ShaderResourceView);
 }
 
-EVRCompositorError cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(void *linux_side, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+void cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL( struct cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL_params *params )
 {
-    EVRCompositorError _ret;
-    _ret = ((IVRCompositor*)linux_side)->GetMirrorTextureGL((vr::EVREye)eEye, (vr::glUInt_t *)pglTextureId, (vr::glSharedTextureHandle_t *)pglSharedTextureHandle);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->GetMirrorTextureGL((vr::EVREye)params->eEye, (vr::glUInt_t *)params->pglTextureId, (vr::glSharedTextureHandle_t *)params->pglSharedTextureHandle);
 }
 
-bool cppIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(void *linux_side, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+void cppIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture( struct cppIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture_params *params )
 {
-    bool _ret;
-    _ret = ((IVRCompositor*)linux_side)->ReleaseSharedGLTexture((vr::glUInt_t)glTextureId, (vr::glSharedTextureHandle_t)glSharedTextureHandle);
-    return _ret;
+    params->_ret = ((IVRCompositor*)params->linux_side)->ReleaseSharedGLTexture((vr::glUInt_t)params->glTextureId, (vr::glSharedTextureHandle_t)params->glSharedTextureHandle);
 }
 
-void cppIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess(void *linux_side, glSharedTextureHandle_t glSharedTextureHandle)
+void cppIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess_params *params )
 {
-    ((IVRCompositor*)linux_side)->LockGLSharedTextureForAccess((vr::glSharedTextureHandle_t)glSharedTextureHandle);
+    ((IVRCompositor*)params->linux_side)->LockGLSharedTextureForAccess((vr::glSharedTextureHandle_t)params->glSharedTextureHandle);
 }
 
-void cppIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess(void *linux_side, glSharedTextureHandle_t glSharedTextureHandle)
+void cppIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess_params *params )
 {
-    ((IVRCompositor*)linux_side)->UnlockGLSharedTextureForAccess((vr::glSharedTextureHandle_t)glSharedTextureHandle);
+    ((IVRCompositor*)params->linux_side)->UnlockGLSharedTextureForAccess((vr::glSharedTextureHandle_t)params->glSharedTextureHandle);
 }
 
 #ifdef __cplusplus

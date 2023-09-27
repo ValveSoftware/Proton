@@ -9,93 +9,73 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-bool cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel(void *linux_side, const char *pchRenderModelName, winRenderModel_t_0915 **ppRenderModel)
+void cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params *params )
 {
-    bool _ret;
     RenderModel_t *lin_ppRenderModel;
-    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel((const char *)pchRenderModelName, ppRenderModel ? &lin_ppRenderModel : nullptr);
-    if (_ret == 0)
-        *ppRenderModel = struct_RenderModel_t_0915_wrap(lin_ppRenderModel);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->LoadRenderModel((const char *)params->pchRenderModelName, params->ppRenderModel ? &lin_ppRenderModel : nullptr);
+    if (params->_ret == 0)
+        *params->ppRenderModel = struct_RenderModel_t_0915_wrap( lin_ppRenderModel );
 }
 
-void cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel(void *linux_side, winRenderModel_t_0915 *pRenderModel)
+void cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params *params )
 {
-    ((IVRRenderModels*)linux_side)->FreeRenderModel(struct_RenderModel_t_0915_unwrap(pRenderModel));
+    ((IVRRenderModels*)params->linux_side)->FreeRenderModel(struct_RenderModel_t_0915_unwrap( params->pRenderModel ));
 }
 
-bool cppIVRRenderModels_IVRRenderModels_002_LoadTexture(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_0915 **ppTexture)
+void cppIVRRenderModels_IVRRenderModels_002_LoadTexture( struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params *params )
 {
-    bool _ret;
     RenderModel_TextureMap_t *lin_ppTexture;
-    _ret = ((IVRRenderModels*)linux_side)->LoadTexture((vr::TextureID_t)textureId, ppTexture ? &lin_ppTexture : nullptr);
-    if (_ret == 0)
-        *ppTexture = struct_RenderModel_TextureMap_t_0915_wrap(lin_ppTexture);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->LoadTexture((vr::TextureID_t)params->textureId, params->ppTexture ? &lin_ppTexture : nullptr);
+    if (params->_ret == 0)
+        *params->ppTexture = struct_RenderModel_TextureMap_t_0915_wrap( lin_ppTexture );
 }
 
-void cppIVRRenderModels_IVRRenderModels_002_FreeTexture(void *linux_side, winRenderModel_TextureMap_t_0915 *pTexture)
+void cppIVRRenderModels_IVRRenderModels_002_FreeTexture( struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params *params )
 {
-    ((IVRRenderModels*)linux_side)->FreeTexture(struct_RenderModel_TextureMap_t_0915_unwrap(pTexture));
+    ((IVRRenderModels*)params->linux_side)->FreeTexture(struct_RenderModel_TextureMap_t_0915_unwrap( params->pTexture ));
 }
 
-uint32_t cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName(void *linux_side, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
+void cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName( struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetRenderModelName((uint32_t)unRenderModelIndex, (char *)pchRenderModelName, (uint32_t)unRenderModelNameLen);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetRenderModelName((uint32_t)params->unRenderModelIndex, (char *)params->pchRenderModelName, (uint32_t)params->unRenderModelNameLen);
 }
 
-uint32_t cppIVRRenderModels_IVRRenderModels_002_GetRenderModelCount(void *linux_side)
+void cppIVRRenderModels_IVRRenderModels_002_GetRenderModelCount( struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelCount_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetRenderModelCount();
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetRenderModelCount();
 }
 
-uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentCount(void *linux_side, const char *pchRenderModelName)
+void cppIVRRenderModels_IVRRenderModels_002_GetComponentCount( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentCount_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentCount((const char *)pchRenderModelName);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetComponentCount((const char *)params->pchRenderModelName);
 }
 
-uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentName(void *linux_side, const char *pchRenderModelName, uint32_t unComponentIndex, char *pchComponentName, uint32_t unComponentNameLen)
+void cppIVRRenderModels_IVRRenderModels_002_GetComponentName( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentName_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentName((const char *)pchRenderModelName, (uint32_t)unComponentIndex, (char *)pchComponentName, (uint32_t)unComponentNameLen);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetComponentName((const char *)params->pchRenderModelName, (uint32_t)params->unComponentIndex, (char *)params->pchComponentName, (uint32_t)params->unComponentNameLen);
 }
 
-uint64_t cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask(void *linux_side, const char *pchRenderModelName, const char *pchComponentName)
+void cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask_params *params )
 {
-    uint64_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentButtonMask((const char *)pchRenderModelName, (const char *)pchComponentName);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetComponentButtonMask((const char *)params->pchRenderModelName, (const char *)params->pchComponentName);
 }
 
-uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, char *pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
+void cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentRenderModelName((const char *)pchRenderModelName, (const char *)pchComponentName, (char *)pchComponentRenderModelName, (uint32_t)unComponentRenderModelNameLen);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetComponentRenderModelName((const char *)params->pchRenderModelName, (const char *)params->pchComponentName, (char *)params->pchComponentRenderModelName, (uint32_t)params->unComponentRenderModelNameLen);
 }
 
-bool cppIVRRenderModels_IVRRenderModels_002_GetComponentState(void *linux_side, const char *pchRenderModelName, const char *pchComponentName, const VRControllerState_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
+void cppIVRRenderModels_IVRRenderModels_002_GetComponentState( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentState_params *params )
 {
-    bool _ret;
     VRControllerState001_t lin_pControllerState;
-    if (pControllerState)
-        struct_VRControllerState001_t_0915_win_to_lin(pControllerState, &lin_pControllerState);
-    _ret = ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, pControllerState ? &lin_pControllerState : nullptr, (vr::RenderModel_ComponentState_t *)pComponentState);
-    return _ret;
+    if (params->pControllerState)
+        struct_VRControllerState001_t_0915_win_to_lin( params->pControllerState, &lin_pControllerState );
+    params->_ret = ((IVRRenderModels*)params->linux_side)->GetComponentState((const char *)params->pchRenderModelName, (const char *)params->pchComponentName, params->pControllerState ? &lin_pControllerState : nullptr, (vr::RenderModel_ComponentState_t *)params->pComponentState);
 }
 
-bool cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(void *linux_side, const char *pchRenderModelName, const char *pchComponentName)
+void cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent( struct cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params *params )
 {
-    bool _ret;
-    _ret = ((IVRRenderModels*)linux_side)->RenderModelHasComponent((const char *)pchRenderModelName, (const char *)pchComponentName);
-    return _ret;
+    params->_ret = ((IVRRenderModels*)params->linux_side)->RenderModelHasComponent((const char *)params->pchRenderModelName, (const char *)params->pchComponentName);
 }
 
 #ifdef __cplusplus

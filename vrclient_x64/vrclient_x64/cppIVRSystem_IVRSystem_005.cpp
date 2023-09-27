@@ -9,255 +9,199 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cppIVRSystem_IVRSystem_005_GetWindowBounds(void *linux_side, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRSystem_IVRSystem_005_GetWindowBounds( struct cppIVRSystem_IVRSystem_005_GetWindowBounds_params *params )
 {
-    ((IVRSystem*)linux_side)->GetWindowBounds((int32_t *)pnX, (int32_t *)pnY, (uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRSystem*)params->linux_side)->GetWindowBounds((int32_t *)params->pnX, (int32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-void cppIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize(void *linux_side, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize( struct cppIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize_params *params )
 {
-    ((IVRSystem*)linux_side)->GetRecommendedRenderTargetSize((uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRSystem*)params->linux_side)->GetRecommendedRenderTargetSize((uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-void cppIVRSystem_IVRSystem_005_GetEyeOutputViewport(void *linux_side, Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void cppIVRSystem_IVRSystem_005_GetEyeOutputViewport( struct cppIVRSystem_IVRSystem_005_GetEyeOutputViewport_params *params )
 {
-    ((IVRSystem*)linux_side)->GetEyeOutputViewport((vr::Hmd_Eye)eEye, (uint32_t *)pnX, (uint32_t *)pnY, (uint32_t *)pnWidth, (uint32_t *)pnHeight);
+    ((IVRSystem*)params->linux_side)->GetEyeOutputViewport((vr::Hmd_Eye)params->eEye, (uint32_t *)params->pnX, (uint32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
 }
 
-HmdMatrix44_t cppIVRSystem_IVRSystem_005_GetProjectionMatrix(void *linux_side, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+void cppIVRSystem_IVRSystem_005_GetProjectionMatrix( struct cppIVRSystem_IVRSystem_005_GetProjectionMatrix_params *params )
 {
-    HmdMatrix44_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetProjectionMatrix((vr::Hmd_Eye)eEye, (float)fNearZ, (float)fFarZ, (vr::GraphicsAPIConvention)eProjType);
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->GetProjectionMatrix((vr::Hmd_Eye)params->eEye, (float)params->fNearZ, (float)params->fFarZ, (vr::GraphicsAPIConvention)params->eProjType);
 }
 
-void cppIVRSystem_IVRSystem_005_GetProjectionRaw(void *linux_side, Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void cppIVRSystem_IVRSystem_005_GetProjectionRaw( struct cppIVRSystem_IVRSystem_005_GetProjectionRaw_params *params )
 {
-    ((IVRSystem*)linux_side)->GetProjectionRaw((vr::Hmd_Eye)eEye, (float *)pfLeft, (float *)pfRight, (float *)pfTop, (float *)pfBottom);
+    ((IVRSystem*)params->linux_side)->GetProjectionRaw((vr::Hmd_Eye)params->eEye, (float *)params->pfLeft, (float *)params->pfRight, (float *)params->pfTop, (float *)params->pfBottom);
 }
 
-DistortionCoordinates_t cppIVRSystem_IVRSystem_005_ComputeDistortion(void *linux_side, Hmd_Eye eEye, float fU, float fV)
+void cppIVRSystem_IVRSystem_005_ComputeDistortion( struct cppIVRSystem_IVRSystem_005_ComputeDistortion_params *params )
 {
-    DistortionCoordinates_t _ret;
-    _ret = ((IVRSystem*)linux_side)->ComputeDistortion((vr::Hmd_Eye)eEye, (float)fU, (float)fV);
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->ComputeDistortion((vr::Hmd_Eye)params->eEye, (float)params->fU, (float)params->fV);
 }
 
-HmdMatrix34_t cppIVRSystem_IVRSystem_005_GetEyeToHeadTransform(void *linux_side, Hmd_Eye eEye)
+void cppIVRSystem_IVRSystem_005_GetEyeToHeadTransform( struct cppIVRSystem_IVRSystem_005_GetEyeToHeadTransform_params *params )
 {
-    HmdMatrix34_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetEyeToHeadTransform((vr::Hmd_Eye)eEye);
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->GetEyeToHeadTransform((vr::Hmd_Eye)params->eEye);
 }
 
-bool cppIVRSystem_IVRSystem_005_GetTimeSinceLastVsync(void *linux_side, float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter)
+void cppIVRSystem_IVRSystem_005_GetTimeSinceLastVsync( struct cppIVRSystem_IVRSystem_005_GetTimeSinceLastVsync_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->GetTimeSinceLastVsync((float *)pfSecondsSinceLastVsync, (uint64_t *)pulFrameCounter);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetTimeSinceLastVsync((float *)params->pfSecondsSinceLastVsync, (uint64_t *)params->pulFrameCounter);
 }
 
-int32_t cppIVRSystem_IVRSystem_005_GetD3D9AdapterIndex(void *linux_side)
+void cppIVRSystem_IVRSystem_005_GetD3D9AdapterIndex( struct cppIVRSystem_IVRSystem_005_GetD3D9AdapterIndex_params *params )
 {
-    int32_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetD3D9AdapterIndex();
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetD3D9AdapterIndex();
 }
 
-void cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo(void *linux_side, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
+void cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo( struct cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo_params *params )
 {
-    ((IVRSystem*)linux_side)->GetDXGIOutputInfo((int32_t *)pnAdapterIndex, (int32_t *)pnAdapterOutputIndex);
+    ((IVRSystem*)params->linux_side)->GetDXGIOutputInfo((int32_t *)params->pnAdapterIndex, (int32_t *)params->pnAdapterOutputIndex);
 }
 
-bool cppIVRSystem_IVRSystem_005_AttachToWindow(void *linux_side, void *hWnd)
+void cppIVRSystem_IVRSystem_005_AttachToWindow( struct cppIVRSystem_IVRSystem_005_AttachToWindow_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->AttachToWindow((void *)hWnd);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->AttachToWindow((void *)params->hWnd);
 }
 
-void cppIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose(void *linux_side, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void cppIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose( struct cppIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose_params *params )
 {
-    ((IVRSystem*)linux_side)->GetDeviceToAbsoluteTrackingPose((vr::TrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsToPhotonsFromNow, (vr::TrackedDevicePose_t *)pTrackedDevicePoseArray, (uint32_t)unTrackedDevicePoseArrayCount);
+    ((IVRSystem*)params->linux_side)->GetDeviceToAbsoluteTrackingPose((vr::TrackingUniverseOrigin)params->eOrigin, (float)params->fPredictedSecondsToPhotonsFromNow, (vr::TrackedDevicePose_t *)params->pTrackedDevicePoseArray, (uint32_t)params->unTrackedDevicePoseArrayCount);
 }
 
-void cppIVRSystem_IVRSystem_005_ResetSeatedZeroPose(void *linux_side)
+void cppIVRSystem_IVRSystem_005_ResetSeatedZeroPose( struct cppIVRSystem_IVRSystem_005_ResetSeatedZeroPose_params *params )
 {
-    ((IVRSystem*)linux_side)->ResetSeatedZeroPose();
+    ((IVRSystem*)params->linux_side)->ResetSeatedZeroPose();
 }
 
-HmdMatrix34_t cppIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *linux_side)
+void cppIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose( struct cppIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose_params *params )
 {
-    HmdMatrix34_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetSeatedZeroPoseToStandingAbsoluteTrackingPose();
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->GetSeatedZeroPoseToStandingAbsoluteTrackingPose();
 }
 
-uint32_t cppIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass(void *linux_side, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+void cppIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass( struct cppIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetSortedTrackedDeviceIndicesOfClass((vr::TrackedDeviceClass)eTrackedDeviceClass, (vr::TrackedDeviceIndex_t *)punTrackedDeviceIndexArray, (uint32_t)unTrackedDeviceIndexArrayCount, (vr::TrackedDeviceIndex_t)unRelativeToTrackedDeviceIndex);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetSortedTrackedDeviceIndicesOfClass((vr::TrackedDeviceClass)params->eTrackedDeviceClass, (vr::TrackedDeviceIndex_t *)params->punTrackedDeviceIndexArray, (uint32_t)params->unTrackedDeviceIndexArrayCount, (vr::TrackedDeviceIndex_t)params->unRelativeToTrackedDeviceIndex);
 }
 
-TrackedDeviceClass cppIVRSystem_IVRSystem_005_GetTrackedDeviceClass(void *linux_side, TrackedDeviceIndex_t unDeviceIndex)
+void cppIVRSystem_IVRSystem_005_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_005_GetTrackedDeviceClass_params *params )
 {
-    TrackedDeviceClass _ret;
-    _ret = ((IVRSystem*)linux_side)->GetTrackedDeviceClass((vr::TrackedDeviceIndex_t)unDeviceIndex);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetTrackedDeviceClass((vr::TrackedDeviceIndex_t)params->unDeviceIndex);
 }
 
-bool cppIVRSystem_IVRSystem_005_IsTrackedDeviceConnected(void *linux_side, TrackedDeviceIndex_t unDeviceIndex)
+void cppIVRSystem_IVRSystem_005_IsTrackedDeviceConnected( struct cppIVRSystem_IVRSystem_005_IsTrackedDeviceConnected_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->IsTrackedDeviceConnected((vr::TrackedDeviceIndex_t)unDeviceIndex);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->IsTrackedDeviceConnected((vr::TrackedDeviceIndex_t)params->unDeviceIndex);
 }
 
-bool cppIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->GetBoolTrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetBoolTrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (vr::TrackedPropertyError *)params->pError);
 }
 
-float cppIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty_params *params )
 {
-    float _ret;
-    _ret = ((IVRSystem*)linux_side)->GetFloatTrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetFloatTrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (vr::TrackedPropertyError *)params->pError);
 }
 
-int32_t cppIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty_params *params )
 {
-    int32_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetInt32TrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetInt32TrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (vr::TrackedPropertyError *)params->pError);
 }
 
-uint64_t cppIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty_params *params )
 {
-    uint64_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetUint64TrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetUint64TrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (vr::TrackedPropertyError *)params->pError);
 }
 
-HmdMatrix34_t cppIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty_params *params )
 {
-    HmdMatrix34_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetMatrix34TrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->GetMatrix34TrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (vr::TrackedPropertyError *)params->pError);
 }
 
-uint32_t cppIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, TrackedPropertyError *pError)
+void cppIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetStringTrackedDeviceProperty((vr::TrackedDeviceIndex_t)unDeviceIndex, (vr::TrackedDeviceProperty)prop, (char *)pchValue, (uint32_t)unBufferSize, (vr::TrackedPropertyError *)pError);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetStringTrackedDeviceProperty((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (vr::TrackedDeviceProperty)params->prop, (char *)params->pchValue, (uint32_t)params->unBufferSize, (vr::TrackedPropertyError *)params->pError);
 }
 
-const char * cppIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum(void *linux_side, TrackedPropertyError error)
+void cppIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum( struct cppIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRSystem*)linux_side)->GetPropErrorNameFromEnum((vr::TrackedPropertyError)error);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetPropErrorNameFromEnum((vr::TrackedPropertyError)params->error);
 }
 
-bool cppIVRSystem_IVRSystem_005_PollNextEvent(void *linux_side, VREvent_t *pEvent)
+void cppIVRSystem_IVRSystem_005_PollNextEvent( struct cppIVRSystem_IVRSystem_005_PollNextEvent_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->PollNextEvent((vr::VREvent_t *)pEvent);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->PollNextEvent((vr::VREvent_t *)params->pEvent);
 }
 
-bool cppIVRSystem_IVRSystem_005_PollNextEventWithPose(void *linux_side, TrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+void cppIVRSystem_IVRSystem_005_PollNextEventWithPose( struct cppIVRSystem_IVRSystem_005_PollNextEventWithPose_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->PollNextEventWithPose((vr::TrackingUniverseOrigin)eOrigin, (vr::VREvent_t *)pEvent, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->PollNextEventWithPose((vr::TrackingUniverseOrigin)params->eOrigin, (vr::VREvent_t *)params->pEvent, (vr::TrackedDevicePose_t *)params->pTrackedDevicePose);
 }
 
-const char * cppIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(void *linux_side, EVREventType eType)
+void cppIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum( struct cppIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRSystem*)linux_side)->GetEventTypeNameFromEnum((vr::EVREventType)eType);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetEventTypeNameFromEnum((vr::EVREventType)params->eType);
 }
 
-HiddenAreaMesh_t cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh(void *linux_side, Hmd_Eye eEye)
+void cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh( struct cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh_params *params )
 {
-    HiddenAreaMesh_t _ret;
-    _ret = ((IVRSystem*)linux_side)->GetHiddenAreaMesh((vr::Hmd_Eye)eEye);
-    return _ret;
+    *params->_ret = ((IVRSystem*)params->linux_side)->GetHiddenAreaMesh((vr::Hmd_Eye)params->eEye);
 }
 
-bool cppIVRSystem_IVRSystem_005_GetControllerState(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState)
+void cppIVRSystem_IVRSystem_005_GetControllerState( struct cppIVRSystem_IVRSystem_005_GetControllerState_params *params )
 {
-    bool _ret;
     VRControllerState001_t lin_pControllerState;
-    if (pControllerState)
-        struct_VRControllerState001_t_098_win_to_lin(pControllerState, &lin_pControllerState);
-    _ret = ((IVRSystem*)linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin_pControllerState : nullptr);
-    if (pControllerState)
-        struct_VRControllerState001_t_098_lin_to_win(&lin_pControllerState, pControllerState, -1);
-    return _ret;
+    if (params->pControllerState)
+        struct_VRControllerState001_t_098_win_to_lin( params->pControllerState, &lin_pControllerState );
+    params->_ret = ((IVRSystem*)params->linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)params->unControllerDeviceIndex, params->pControllerState ? &lin_pControllerState : nullptr);
+    if (params->pControllerState)
+        struct_VRControllerState001_t_098_lin_to_win( &lin_pControllerState, params->pControllerState, -1 );
 }
 
-bool cppIVRSystem_IVRSystem_005_GetControllerStateWithPose(void *linux_side, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+void cppIVRSystem_IVRSystem_005_GetControllerStateWithPose( struct cppIVRSystem_IVRSystem_005_GetControllerStateWithPose_params *params )
 {
-    bool _ret;
     VRControllerState001_t lin_pControllerState;
-    if (pControllerState)
-        struct_VRControllerState001_t_098_win_to_lin(pControllerState, &lin_pControllerState);
-    _ret = ((IVRSystem*)linux_side)->GetControllerStateWithPose((vr::TrackingUniverseOrigin)eOrigin, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin_pControllerState : nullptr, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
-    if (pControllerState)
-        struct_VRControllerState001_t_098_lin_to_win(&lin_pControllerState, pControllerState, -1);
-    return _ret;
+    if (params->pControllerState)
+        struct_VRControllerState001_t_098_win_to_lin( params->pControllerState, &lin_pControllerState );
+    params->_ret = ((IVRSystem*)params->linux_side)->GetControllerStateWithPose((vr::TrackingUniverseOrigin)params->eOrigin, (vr::TrackedDeviceIndex_t)params->unControllerDeviceIndex, params->pControllerState ? &lin_pControllerState : nullptr, (vr::TrackedDevicePose_t *)params->pTrackedDevicePose);
+    if (params->pControllerState)
+        struct_VRControllerState001_t_098_lin_to_win( &lin_pControllerState, params->pControllerState, -1 );
 }
 
-void cppIVRSystem_IVRSystem_005_TriggerHapticPulse(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void cppIVRSystem_IVRSystem_005_TriggerHapticPulse( struct cppIVRSystem_IVRSystem_005_TriggerHapticPulse_params *params )
 {
-    ((IVRSystem*)linux_side)->TriggerHapticPulse((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, (uint32_t)unAxisId, (unsigned short)usDurationMicroSec);
+    ((IVRSystem*)params->linux_side)->TriggerHapticPulse((vr::TrackedDeviceIndex_t)params->unControllerDeviceIndex, (uint32_t)params->unAxisId, (unsigned short)params->usDurationMicroSec);
 }
 
-const char * cppIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum(void *linux_side, EVRButtonId eButtonId)
+void cppIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum( struct cppIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRSystem*)linux_side)->GetButtonIdNameFromEnum((vr::EVRButtonId)eButtonId);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetButtonIdNameFromEnum((vr::EVRButtonId)params->eButtonId);
 }
 
-const char * cppIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum(void *linux_side, EVRControllerAxisType eAxisType)
+void cppIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum( struct cppIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum_params *params )
 {
-    const char *_ret;
-    _ret = ((IVRSystem*)linux_side)->GetControllerAxisTypeNameFromEnum((vr::EVRControllerAxisType)eAxisType);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->GetControllerAxisTypeNameFromEnum((vr::EVRControllerAxisType)params->eAxisType);
 }
 
-bool cppIVRSystem_IVRSystem_005_CaptureInputFocus(void *linux_side)
+void cppIVRSystem_IVRSystem_005_CaptureInputFocus( struct cppIVRSystem_IVRSystem_005_CaptureInputFocus_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->CaptureInputFocus();
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->CaptureInputFocus();
 }
 
-void cppIVRSystem_IVRSystem_005_ReleaseInputFocus(void *linux_side)
+void cppIVRSystem_IVRSystem_005_ReleaseInputFocus( struct cppIVRSystem_IVRSystem_005_ReleaseInputFocus_params *params )
 {
-    ((IVRSystem*)linux_side)->ReleaseInputFocus();
+    ((IVRSystem*)params->linux_side)->ReleaseInputFocus();
 }
 
-bool cppIVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess(void *linux_side)
+void cppIVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess( struct cppIVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess_params *params )
 {
-    bool _ret;
-    _ret = ((IVRSystem*)linux_side)->IsInputFocusCapturedByAnotherProcess();
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->IsInputFocusCapturedByAnotherProcess();
 }
 
-uint32_t cppIVRSystem_IVRSystem_005_DriverDebugRequest(void *linux_side, TrackedDeviceIndex_t unDeviceIndex, const char *pchRequest, char *pchResponseBuffer, uint32_t unResponseBufferSize)
+void cppIVRSystem_IVRSystem_005_DriverDebugRequest( struct cppIVRSystem_IVRSystem_005_DriverDebugRequest_params *params )
 {
-    uint32_t _ret;
-    _ret = ((IVRSystem*)linux_side)->DriverDebugRequest((vr::TrackedDeviceIndex_t)unDeviceIndex, (const char *)pchRequest, (char *)pchResponseBuffer, (uint32_t)unResponseBufferSize);
-    return _ret;
+    params->_ret = ((IVRSystem*)params->linux_side)->DriverDebugRequest((vr::TrackedDeviceIndex_t)params->unDeviceIndex, (const char *)params->pchRequest, (char *)params->pchResponseBuffer, (uint32_t)params->unResponseBufferSize);
 }
 
 #ifdef __cplusplus

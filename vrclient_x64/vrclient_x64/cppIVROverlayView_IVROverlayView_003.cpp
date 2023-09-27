@@ -9,33 +9,27 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-EVROverlayError cppIVROverlayView_IVROverlayView_003_AcquireOverlayView(void *linux_side, VROverlayHandle_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
+void cppIVROverlayView_IVROverlayView_003_AcquireOverlayView( struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params *params )
 {
-    EVROverlayError _ret;
-    _ret = ((IVROverlayView*)linux_side)->AcquireOverlayView((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VRNativeDevice_t *)pNativeDevice, (vr::VROverlayView_t *)pOverlayView, (uint32_t)unOverlayViewSize);
-    return _ret;
+    params->_ret = ((IVROverlayView*)params->linux_side)->AcquireOverlayView((vr::VROverlayHandle_t)params->ulOverlayHandle, (vr::VRNativeDevice_t *)params->pNativeDevice, (vr::VROverlayView_t *)params->pOverlayView, (uint32_t)params->unOverlayViewSize);
 }
 
-EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void *linux_side, VROverlayView_t *pOverlayView)
+void cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView( struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params *params )
 {
-    EVROverlayError _ret;
-    _ret = ((IVROverlayView*)linux_side)->ReleaseOverlayView((vr::VROverlayView_t *)pOverlayView);
-    return _ret;
+    params->_ret = ((IVROverlayView*)params->linux_side)->ReleaseOverlayView((vr::VROverlayView_t *)params->pOverlayView);
 }
 
-void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, const VREvent_t *pvrEvent)
+void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent( struct cppIVROverlayView_IVROverlayView_003_PostOverlayEvent_params *params )
 {
     VREvent_t lin_pvrEvent;
-    if (pvrEvent)
-        struct_VREvent_t_1267_win_to_lin(pvrEvent, &lin_pvrEvent);
-    ((IVROverlayView*)linux_side)->PostOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pvrEvent ? &lin_pvrEvent : nullptr);
+    if (params->pvrEvent)
+        struct_VREvent_t_1267_win_to_lin( params->pvrEvent, &lin_pvrEvent );
+    ((IVROverlayView*)params->linux_side)->PostOverlayEvent((vr::VROverlayHandle_t)params->ulOverlayHandle, params->pvrEvent ? &lin_pvrEvent : nullptr);
 }
 
-bool cppIVROverlayView_IVROverlayView_003_IsViewingPermitted(void *linux_side, VROverlayHandle_t ulOverlayHandle)
+void cppIVROverlayView_IVROverlayView_003_IsViewingPermitted( struct cppIVROverlayView_IVROverlayView_003_IsViewingPermitted_params *params )
 {
-    bool _ret;
-    _ret = ((IVROverlayView*)linux_side)->IsViewingPermitted((vr::VROverlayHandle_t)ulOverlayHandle);
-    return _ret;
+    params->_ret = ((IVROverlayView*)params->linux_side)->IsViewingPermitted((vr::VROverlayHandle_t)params->ulOverlayHandle);
 }
 
 #ifdef __cplusplus

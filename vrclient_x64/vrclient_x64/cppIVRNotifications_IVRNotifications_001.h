@@ -1,9 +1,38 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern uint32_t cppIVRNotifications_IVRNotifications_001_GetErrorString(void *, NotificationError_t, char *, uint32_t);
-extern NotificationError_t cppIVRNotifications_IVRNotifications_001_CreateNotification(void *, VROverlayHandle_t, uint64_t, const char *, const char *, const char *, const NotificationBitmap *, VRNotificationId *);
-extern NotificationError_t cppIVRNotifications_IVRNotifications_001_DismissNotification(void *, VRNotificationId);
+struct cppIVRNotifications_IVRNotifications_001_GetErrorString_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    NotificationError_t error;
+    char *pchBuffer;
+    uint32_t unBufferSize;
+};
+extern void cppIVRNotifications_IVRNotifications_001_GetErrorString( struct cppIVRNotifications_IVRNotifications_001_GetErrorString_params *params );
+
+struct cppIVRNotifications_IVRNotifications_001_CreateNotification_params
+{
+    void *linux_side;
+    NotificationError_t _ret;
+    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulUserValue;
+    const char *strType;
+    const char *strText;
+    const char *strCategory;
+    const NotificationBitmap *photo;
+    VRNotificationId *notificationId;
+};
+extern void cppIVRNotifications_IVRNotifications_001_CreateNotification( struct cppIVRNotifications_IVRNotifications_001_CreateNotification_params *params );
+
+struct cppIVRNotifications_IVRNotifications_001_DismissNotification_params
+{
+    void *linux_side;
+    NotificationError_t _ret;
+    VRNotificationId notificationId;
+};
+extern void cppIVRNotifications_IVRNotifications_001_DismissNotification( struct cppIVRNotifications_IVRNotifications_001_DismissNotification_params *params );
+
 #ifdef __cplusplus
 }
 #endif

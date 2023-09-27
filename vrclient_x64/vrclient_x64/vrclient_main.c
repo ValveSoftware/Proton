@@ -615,52 +615,64 @@ Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVu
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType )
 {
-    EVRInitError _ret;
+    struct cppIVRClientCore_IVRClientCore_002_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eApplicationType = eApplicationType,
+    };
 
     TRACE( "%p\n", _this );
 
     InitializeCriticalSection( &_this->user_data.critical_section );
 
-    _ret = cppIVRClientCore_IVRClientCore_002_Init( _this->u_iface, eApplicationType );
-    if (_ret) WARN( "error %#x\n", _ret );
-    return _ret;
+    cppIVRClientCore_IVRClientCore_002_Init( &params );
+    if (params._ret) WARN( "error %#x\n", params._ret );
+    return params._ret;
 }
 
 void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup( struct w_steam_iface *_this )
 {
+    struct cppIVRClientCore_IVRClientCore_002_Cleanup_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE( "%p\n", _this );
     ivrclientcore_cleanup( &_this->user_data );
-    cppIVRClientCore_IVRClientCore_002_Cleanup( _this->u_iface );
+    cppIVRClientCore_IVRClientCore_002_Cleanup( &params );
     destroy_compositor_data();
 }
 
 void *__thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface( struct w_steam_iface *_this,
                                                                          const char *pchNameAndVersion, EVRInitError *peError )
 {
-    const char *cpp_name_and_version = pchNameAndVersion;
-    void *_ret;
+    struct cppIVRClientCore_IVRClientCore_002_GetGenericInterface_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchNameAndVersion = pchNameAndVersion,
+        .peError = peError,
+    };
 
     TRACE( "%p\n", _this );
 
     /* In theory we could pass this along, but we'd have to generate a separate
      * set of thunks for it. Hopefully this will work as it is. */
-    if (pchNameAndVersion && !strncmp( pchNameAndVersion, "FnTable:", 8 )) cpp_name_and_version += 8;
+    if (pchNameAndVersion && !strncmp( pchNameAndVersion, "FnTable:", 8 )) params.pchNameAndVersion += 8;
 
-    _ret = cppIVRClientCore_IVRClientCore_002_GetGenericInterface( _this->u_iface, cpp_name_and_version, peError );
+    cppIVRClientCore_IVRClientCore_002_GetGenericInterface( &params );
 
-    if (!_ret)
+    if (!params._ret)
     {
         WARN( "Failed to create %s.\n", pchNameAndVersion );
         return NULL;
     }
 
-    _ret = ivrclientcore_get_generic_interface( _ret, pchNameAndVersion, &_this->user_data );
-    return _ret;
+    params._ret = ivrclientcore_get_generic_interface( params._ret, pchNameAndVersion, &_this->user_data );
+    return params._ret;
 }
 
 bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam_iface *_this )
 {
-    bool _ret;
+    struct cppIVRClientCore_IVRClientCore_002_BIsHmdPresent_params params = {.linux_side = _this->u_iface};
 
     TRACE( "linux_side %p, compositor_data.client_core_linux_side %p.\n", _this->u_iface,
            compositor_data.client_core_linux_side );
@@ -669,8 +681,8 @@ bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam
      * Return true if the value stored by steam.exe helper in registry says the HMD is presnt. */
     if (compositor_data.client_core_linux_side || !is_hmd_present_reg())
     {
-        _ret = cppIVRClientCore_IVRClientCore_002_BIsHmdPresent( _this->u_iface );
-        return _ret;
+        cppIVRClientCore_IVRClientCore_002_BIsHmdPresent( &params );
+        return params._ret;
     }
 
     return TRUE;
@@ -679,69 +691,83 @@ bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType,
                                                                  const char *pStartupInfo )
 {
+    struct cppIVRClientCore_IVRClientCore_003_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eApplicationType = eApplicationType,
+        .pStartupInfo = pStartupInfo,
+    };
     char *startup_info_converted;
-    EVRInitError _ret;
 
     TRACE( "%p\n", _this );
 
     startup_info_converted = json_convert_startup_info( pStartupInfo );
-    if (startup_info_converted) pStartupInfo = startup_info_converted;
+    if (startup_info_converted) params.pStartupInfo = startup_info_converted;
     InitializeCriticalSection( &_this->user_data.critical_section );
 
-    _ret = cppIVRClientCore_IVRClientCore_003_Init( _this->u_iface, eApplicationType, pStartupInfo );
+    cppIVRClientCore_IVRClientCore_003_Init( &params );
 
     free( startup_info_converted );
 
-    if (_ret) WARN( "error %#x\n", _ret );
-    else compositor_data.client_core_linux_side = _this->u_iface;
+    if (params._ret) WARN( "error %#x\n", params._ret );
+    else compositor_data.client_core_linux_side = params.linux_side;
 
-    return _ret;
+    return params._ret;
 }
 
 void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup( struct w_steam_iface *_this )
 {
+    struct cppIVRClientCore_IVRClientCore_003_Cleanup_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE( "%p\n", _this );
     ivrclientcore_cleanup( &_this->user_data );
-    cppIVRClientCore_IVRClientCore_003_Cleanup( _this->u_iface );
+    cppIVRClientCore_IVRClientCore_003_Cleanup( &params );
     destroy_compositor_data();
 }
 
 void *__thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface( struct w_steam_iface *_this,
                                                                          const char *pchNameAndVersion, EVRInitError *peError )
 {
-    const char *cpp_name_and_version = pchNameAndVersion;
-    void *_ret;
+    struct cppIVRClientCore_IVRClientCore_003_GetGenericInterface_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchNameAndVersion = pchNameAndVersion,
+        .peError = peError,
+    };
 
     TRACE( "%p\n", _this );
 
     /* In theory we could pass this along, but we'd have to generate a separate
      * set of thunks for it. Hopefully this will work as it is. */
-    if (pchNameAndVersion && !strncmp( pchNameAndVersion, "FnTable:", 8 )) cpp_name_and_version += 8;
+    if (pchNameAndVersion && !strncmp( pchNameAndVersion, "FnTable:", 8 )) params.pchNameAndVersion += 8;
 
-    _ret = cppIVRClientCore_IVRClientCore_003_GetGenericInterface( _this->u_iface, cpp_name_and_version, peError );
+    cppIVRClientCore_IVRClientCore_003_GetGenericInterface( &params );
 
-    if (!_ret)
+    if (!params._ret)
     {
         WARN( "Failed to create %s.\n", pchNameAndVersion );
         return NULL;
     }
 
-    _ret = ivrclientcore_get_generic_interface( _ret, pchNameAndVersion, &_this->user_data );
-    return _ret;
+    params._ret = ivrclientcore_get_generic_interface( params._ret, pchNameAndVersion, &_this->user_data );
+    return params._ret;
 }
 
 bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam_iface *_this )
 {
-    bool _ret;
+    struct cppIVRClientCore_IVRClientCore_003_BIsHmdPresent_params params = {.linux_side = _this->u_iface};
 
-    TRACE( "linux_side %p, compositor_data.client_core_linux_side %p.\n", _this->u_iface, compositor_data.client_core_linux_side );
+    TRACE( "linux_side %p, compositor_data.client_core_linux_side %p.\n", _this->u_iface,
+           compositor_data.client_core_linux_side );
 
     /* BIsHmdPresent() currently always returns FALSE on Linux if called before Init().
      * Return true if the value stored by steam.exe helper in registry says the HMD is presnt. */
     if (compositor_data.client_core_linux_side || !is_hmd_present_reg())
     {
-        _ret = cppIVRClientCore_IVRClientCore_003_BIsHmdPresent( _this->u_iface );
-        return _ret;
+        cppIVRClientCore_IVRClientCore_003_BIsHmdPresent( &params );
+        return params._ret;
     }
 
     return TRUE;
@@ -750,13 +776,18 @@ bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3( struct w_steam_iface *_this, vrmb_typea a,
                                                            const char *b, const char *c )
 {
-    char *converted = json_convert_paths(c);
-    vrmb_typeb _ret;
+    struct cppIVRMailbox_IVRMailbox_001_undoc3_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = json_convert_paths(c),
+    };
 
     TRACE( "%p\n", _this );
 
-    _ret = cppIVRMailbox_IVRMailbox_001_undoc3( _this->u_iface, a, b, c );
-    free(converted);
+    cppIVRMailbox_IVRMailbox_001_undoc3( &params );
+    free( (char *)params.c );
 
-    return _ret;
+    return params._ret;
 }

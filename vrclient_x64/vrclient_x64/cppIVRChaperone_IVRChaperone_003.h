@@ -1,14 +1,67 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern ChaperoneCalibrationState cppIVRChaperone_IVRChaperone_003_GetCalibrationState(void *);
-extern bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize(void *, float *, float *);
-extern bool cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect(void *, HmdQuad_t *);
-extern void cppIVRChaperone_IVRChaperone_003_ReloadInfo(void *);
-extern void cppIVRChaperone_IVRChaperone_003_SetSceneColor(void *, HmdColor_t);
-extern void cppIVRChaperone_IVRChaperone_003_GetBoundsColor(void *, HmdColor_t *, int, float, HmdColor_t *);
-extern bool cppIVRChaperone_IVRChaperone_003_AreBoundsVisible(void *);
-extern void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible(void *, bool);
+struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params
+{
+    void *linux_side;
+    ChaperoneCalibrationState _ret;
+};
+extern void cppIVRChaperone_IVRChaperone_003_GetCalibrationState( struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize_params
+{
+    void *linux_side;
+    bool _ret;
+    float *pSizeX;
+    float *pSizeZ;
+};
+extern void cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize( struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect_params
+{
+    void *linux_side;
+    bool _ret;
+    HmdQuad_t *rect;
+};
+extern void cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect( struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_ReloadInfo_params
+{
+    void *linux_side;
+};
+extern void cppIVRChaperone_IVRChaperone_003_ReloadInfo( struct cppIVRChaperone_IVRChaperone_003_ReloadInfo_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_SetSceneColor_params
+{
+    void *linux_side;
+    HmdColor_t color;
+};
+extern void cppIVRChaperone_IVRChaperone_003_SetSceneColor( struct cppIVRChaperone_IVRChaperone_003_SetSceneColor_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params
+{
+    void *linux_side;
+    HmdColor_t *pOutputColorArray;
+    int nNumOutputColors;
+    float flCollisionBoundsFadeDistance;
+    HmdColor_t *pOutputCameraColor;
+};
+extern void cppIVRChaperone_IVRChaperone_003_GetBoundsColor( struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_AreBoundsVisible_params
+{
+    void *linux_side;
+    bool _ret;
+};
+extern void cppIVRChaperone_IVRChaperone_003_AreBoundsVisible( struct cppIVRChaperone_IVRChaperone_003_AreBoundsVisible_params *params );
+
+struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params
+{
+    void *linux_side;
+    bool bForce;
+};
+extern void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible( struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params *params );
+
 #ifdef __cplusplus
 }
 #endif
