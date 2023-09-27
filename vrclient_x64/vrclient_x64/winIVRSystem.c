@@ -118,11 +118,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_003_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info2(cppIVRSystem_IVRSystem_003_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, pnAdapterOutputIndex, 3);
-}
+extern void __thiscall winIVRSystem_IVRSystem_003_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_003_AttachToWindow(struct w_steam_iface *_this, void *hWnd)
 {
@@ -560,11 +556,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_004_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_004_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info2(cppIVRSystem_IVRSystem_004_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, pnAdapterOutputIndex, 4);
-}
+extern void __thiscall winIVRSystem_IVRSystem_004_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_004_AttachToWindow(struct w_steam_iface *_this, void *hWnd)
 {
@@ -985,11 +977,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_005_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_005_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info2(cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, pnAdapterOutputIndex, 5);
-}
+extern void __thiscall winIVRSystem_IVRSystem_005_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_005_AttachToWindow(struct w_steam_iface *_this, void *hWnd)
 {
@@ -1425,11 +1413,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_006_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_006_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info2(cppIVRSystem_IVRSystem_006_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, pnAdapterOutputIndex, 6);
-}
+extern void __thiscall winIVRSystem_IVRSystem_006_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_006_AttachToWindow(struct w_steam_iface *_this, void *hWnd)
 {
@@ -1902,11 +1886,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_009_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_009_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_009_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 9);
-}
+extern void __thiscall winIVRSystem_IVRSystem_009_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_009_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -2393,11 +2373,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_010_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_010_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 10);
-}
+extern void __thiscall winIVRSystem_IVRSystem_010_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_010_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -2920,11 +2896,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_011_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_011_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 11);
-}
+extern void __thiscall winIVRSystem_IVRSystem_011_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_011_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -3445,11 +3417,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_012_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_012_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_012_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 12);
-}
+extern void __thiscall winIVRSystem_IVRSystem_012_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_012_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -3955,11 +3923,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_014_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_014_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_014_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 14);
-}
+extern void __thiscall winIVRSystem_IVRSystem_014_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_014_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -4465,11 +4429,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_015_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_015_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_015_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 15);
-}
+extern void __thiscall winIVRSystem_IVRSystem_015_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 bool __thiscall winIVRSystem_IVRSystem_015_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -4976,16 +4936,12 @@ int32_t __thiscall winIVRSystem_IVRSystem_016_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_016_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_016_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 16);
-}
+extern void __thiscall winIVRSystem_IVRSystem_016_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
 void __thiscall winIVRSystem_IVRSystem_016_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType)
 {
     TRACE("%p\n", _this);
-    ivrsystem_016_get_output_device(cppIVRSystem_IVRSystem_016_GetOutputDevice, _this->u_iface, pnDevice, textureType, 16);
+    cppIVRSystem_IVRSystem_016_GetOutputDevice(_this->u_iface, pnDevice, textureType);
 }
 
 bool __thiscall winIVRSystem_IVRSystem_016_IsDisplayOnDesktop(struct w_steam_iface *_this)
@@ -5495,17 +5451,9 @@ int32_t __thiscall winIVRSystem_IVRSystem_017_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_017_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 17);
-}
+extern void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance)
-{
-    TRACE("%p\n", _this);
-    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_017_GetOutputDevice, _this->u_iface, pnDevice, textureType, pInstance, 17);
-}
+extern void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_017_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -6016,17 +5964,9 @@ int32_t __thiscall winIVRSystem_IVRSystem_019_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_019_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 19);
-}
+extern void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance)
-{
-    TRACE("%p\n", _this);
-    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_019_GetOutputDevice, _this->u_iface, pnDevice, textureType, pInstance, 19);
-}
+extern void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_019_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -6560,17 +6500,9 @@ int32_t __thiscall winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_020_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 20);
-}
+extern void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance)
-{
-    TRACE("%p\n", _this);
-    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_020_GetOutputDevice, _this->u_iface, pnDevice, textureType, pInstance, 20);
-}
+extern void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_020_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -7113,17 +7045,9 @@ int32_t __thiscall winIVRSystem_IVRSystem_021_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_021_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 21);
-}
+extern void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance)
-{
-    TRACE("%p\n", _this);
-    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_021_GetOutputDevice, _this->u_iface, pnDevice, textureType, pInstance, 21);
-}
+extern void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_021_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -7657,17 +7581,9 @@ int32_t __thiscall winIVRSystem_IVRSystem_022_GetD3D9AdapterIndex(struct w_steam
     return _ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex)
-{
-    TRACE("%p\n", _this);
-    get_dxgi_output_info(cppIVRSystem_IVRSystem_022_GetDXGIOutputInfo, _this->u_iface, pnAdapterIndex, 22);
-}
+extern void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance)
-{
-    TRACE("%p\n", _this);
-    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_022_GetOutputDevice, _this->u_iface, pnDevice, textureType, pInstance, 22);
-}
+extern void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_022_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
