@@ -68,10 +68,10 @@ bool cppIVRCompositor_IVRCompositor_006_GetFrameTiming(void *linux_side, winComp
 {
     bool _ret;
     Compositor_FrameTiming lin;
-    if(pTiming)
+    if (pTiming)
         struct_Compositor_FrameTiming_092_win_to_lin(pTiming, &lin);
     _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin : nullptr, (uint32_t)unFramesAgo);
-    if(pTiming)
+    if (pTiming)
         struct_Compositor_FrameTiming_092_lin_to_win(&lin, pTiming);
     return _ret;
 }

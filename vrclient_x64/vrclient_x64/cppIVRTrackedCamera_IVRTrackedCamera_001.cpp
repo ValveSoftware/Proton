@@ -90,7 +90,7 @@ bool cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(void *linu
 {
     bool _ret;
     CameraVideoStreamFrame_t lin;
-    if(pFrameImage)
+    if (pFrameImage)
         struct_CameraVideoStreamFrame_t_0914_win_to_lin(pFrameImage, &lin);
     _ret = ((IVRTrackedCamera*)linux_side)->ReleaseVideoStreamFrame((vr::TrackedDeviceIndex_t)nDeviceIndex, pFrameImage ? &lin : nullptr);
     return _ret;
