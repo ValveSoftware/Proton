@@ -122,52 +122,6 @@ void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *
 void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
         unsigned int version, struct client_core_data *user_data);
 
-void ivrcompositor_005_submit(
-        void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
-        void *linux_side, Hmd_Eye eye, const void *texture, Compositor_TextureBounds *bounds,
-        unsigned int version);
-VRCompositorError ivrcompositor_006_submit(
-        VRCompositorError (*cpp_func)(void *, Hmd_Eye, void *, VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, const void *texture, const VRTextureBounds_t *bounds,
-        unsigned int version);
-VRCompositorError ivrcompositor_007_submit(
-        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, const VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, const void *texture, const VRTextureBounds_t *bounds,
-        unsigned int version);
-VRCompositorError ivrcompositor_008_submit(
-        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
-        const VRTextureBounds_t *, VRSubmitFlags_t),
-        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention texture_type, const void *texture,
-        const VRTextureBounds_t *bounds, VRSubmitFlags_t submit_flags,
-        unsigned int version);
-EVRCompositorError ivrcompositor_submit(
-        EVRCompositorError (*cpp_func)(void *, EVREye, const Texture_t *, const VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, const Texture_t *texture, const VRTextureBounds_t *bounds, EVRSubmitFlags flags,
-        unsigned int version);
-
-void ivrcompositor_008_set_skybox_override(
-        void (*cpp_func)(void *, GraphicsAPIConvention, void *, void *, void *, void *, void *, void *),
-        void *linux_side, GraphicsAPIConvention api, void *front, void *back, void *left, void *right, void *top, void *bottom,
-        unsigned int version);
-EVRCompositorError ivrcompositor_set_skybox_override(
-        EVRCompositorError (*cpp_func)(void *, const Texture_t *textures, uint32_t count),
-        void *linux_side, const Texture_t *textures, uint32_t count,
-        unsigned int version);
-
-void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
-        void *linux_side, unsigned int version);
-
-EVRCompositorError ivrcompositor_wait_get_poses(
-        EVRCompositorError (cpp_func)(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t),
-        void *linux_side, TrackedDevicePose_t *render_poses, uint32_t render_pose_count,
-        TrackedDevicePose_t *game_poses, uint32_t game_pose_count,
-        unsigned int version);
-
-uint32_t ivrcompositor_get_vulkan_device_extensions_required(
-        uint32_t (*cpp_func)(void *, VkPhysicalDevice_T *, char *, uint32_t),
-        void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
-        unsigned int version);
-
 #ifdef __dxvk_interop_h__
 extern Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
                                                   IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
