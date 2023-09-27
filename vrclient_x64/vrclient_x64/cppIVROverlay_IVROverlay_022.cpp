@@ -334,13 +334,13 @@ EVROverlayError cppIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinates(v
 bool cppIVROverlay_IVROverlay_022_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1916 *pEvent, uint32_t uncbVREvent)
 {
     bool _ret;
-    VREvent_t lin;
+    VREvent_t lin_pEvent;
     if (pEvent)
-        struct_VREvent_t_1916_win_to_lin(pEvent, &lin);
-    uint32_t lin_uncbVREvent = uncbVREvent ? sizeof(lin) : 0;
-    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pEvent ? &lin : nullptr, lin_uncbVREvent);
+        struct_VREvent_t_1916_win_to_lin(pEvent, &lin_pEvent);
+    uint32_t lin_uncbVREvent = uncbVREvent ? sizeof(lin_pEvent) : 0;
+    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pEvent ? &lin_pEvent : nullptr, lin_uncbVREvent);
     if (pEvent)
-        struct_VREvent_t_1916_lin_to_win(&lin, pEvent, uncbVREvent);
+        struct_VREvent_t_1916_lin_to_win(&lin_pEvent, pEvent, uncbVREvent);
     return _ret;
 }
 

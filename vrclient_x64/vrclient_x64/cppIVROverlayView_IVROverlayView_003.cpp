@@ -25,10 +25,10 @@ EVROverlayError cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView(void *li
 
 void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, const VREvent_t *pvrEvent)
 {
-    VREvent_t lin;
+    VREvent_t lin_pvrEvent;
     if (pvrEvent)
-        struct_VREvent_t_1267_win_to_lin(pvrEvent, &lin);
-    ((IVROverlayView*)linux_side)->PostOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pvrEvent ? &lin : nullptr);
+        struct_VREvent_t_1267_win_to_lin(pvrEvent, &lin_pvrEvent);
+    ((IVROverlayView*)linux_side)->PostOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pvrEvent ? &lin_pvrEvent : nullptr);
 }
 
 bool cppIVROverlayView_IVROverlayView_003_IsViewingPermitted(void *linux_side, VROverlayHandle_t ulOverlayHandle)
