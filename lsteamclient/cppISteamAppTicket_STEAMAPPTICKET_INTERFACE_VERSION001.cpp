@@ -13,11 +13,9 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001.h"
-uint32 cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData(void *linux_side, uint32 nAppID, void *pvBuffer, uint32 cbBufferLength, uint32 *piAppId, uint32 *piSteamId, uint32 *piSignature, uint32 *pcbSignature)
+void cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData( struct cppISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamAppTicket*)linux_side)->GetAppOwnershipTicketData((uint32)nAppID, (void *)pvBuffer, (uint32)cbBufferLength, (uint32 *)piAppId, (uint32 *)piSteamId, (uint32 *)piSignature, (uint32 *)pcbSignature);
-    return (_ret);
+    params->_ret = ((ISteamAppTicket*)params->linux_side)->GetAppOwnershipTicketData( (uint32)params->nAppID, (void *)params->pvBuffer, (uint32)params->cbBufferLength, (uint32 *)params->piAppId, (uint32 *)params->piSteamId, (uint32 *)params->piSignature, (uint32 *)params->pcbSignature );
 }
 
 #ifdef __cplusplus

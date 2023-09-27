@@ -21,26 +21,43 @@ DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_Retriev
 
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(struct w_steam_iface *_this, uint32 unMsgType, const void *pubData, uint32 cubData)
 {
-    EGCResults _ret;
+    struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unMsgType = unMsgType,
+        .pubData = pubData,
+        .cubData = cubData,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(_this->u_iface, unMsgType, pubData, cubData);
-    return _ret;
+    cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32 *pcubMsgSize)
 {
-    bool _ret;
+    struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pcubMsgSize = pcubMsgSize,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(_this->u_iface, pcubMsgSize);
-    return _ret;
+    cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable( &params );
+    return params._ret;
 }
 
 EGCResults __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(struct w_steam_iface *_this, uint32 *punMsgType, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
 {
-    EGCResults _ret;
+    struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params params =
+    {
+        .linux_side = _this->u_iface,
+        .punMsgType = punMsgType,
+        .pubDest = pubDest,
+        .cubDest = cubDest,
+        .pcubMsgSize = pcubMsgSize,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(_this->u_iface, punMsgType, pubDest, cubDest, pcubMsgSize);
-    return _ret;
+    cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage( &params );
+    return params._ret;
 }
 
 extern vtable_ptr winISteamGameCoordinator_SteamGameCoordinator001_vtable;

@@ -12,102 +12,74 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamGameSearch_SteamMatchGameSearch001.h"
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(void *linux_side, const char *pchKeyToFind, const char *pchValuesToFind)
+void cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams( struct cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->AddGameSearchParams((const char *)pchKeyToFind, (const char *)pchValuesToFind);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->AddGameSearchParams( (const char *)params->pchKeyToFind, (const char *)params->pchValuesToFind );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(void *linux_side, CSteamID steamIDLobby, int nPlayerMin, int nPlayerMax)
+void cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby( struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->SearchForGameWithLobby((CSteamID)steamIDLobby, (int)nPlayerMin, (int)nPlayerMax);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->SearchForGameWithLobby( (CSteamID)params->steamIDLobby, (int)params->nPlayerMin, (int)params->nPlayerMax );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(void *linux_side, int nPlayerMin, int nPlayerMax)
+void cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo( struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->SearchForGameSolo((int)nPlayerMin, (int)nPlayerMax);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->SearchForGameSolo( (int)params->nPlayerMin, (int)params->nPlayerMax );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame(void *linux_side)
+void cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame( struct cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->AcceptGame();
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->AcceptGame(  );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame(void *linux_side)
+void cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame( struct cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->DeclineGame();
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->DeclineGame(  );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(void *linux_side, CSteamID steamIDHost, char *pchConnectionDetails, int cubConnectionDetails)
+void cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails( struct cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->RetrieveConnectionDetails((CSteamID)steamIDHost, (char *)pchConnectionDetails, (int)cubConnectionDetails);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->RetrieveConnectionDetails( (CSteamID)params->steamIDHost, (char *)params->pchConnectionDetails, (int)params->cubConnectionDetails );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(void *linux_side)
+void cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch( struct cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->EndGameSearch();
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->EndGameSearch(  );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(void *linux_side, const char *pchKey, const char *pchValue)
+void cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams( struct cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->SetGameHostParams((const char *)pchKey, (const char *)pchValue);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->SetGameHostParams( (const char *)params->pchKey, (const char *)params->pchValue );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(void *linux_side, const char *pchConnectionDetails, int cubConnectionDetails)
+void cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails( struct cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->SetConnectionDetails((const char *)pchConnectionDetails, (int)cubConnectionDetails);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->SetConnectionDetails( (const char *)params->pchConnectionDetails, (int)params->cubConnectionDetails );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(void *linux_side, int nPlayerMin, int nPlayerMax, int nMaxTeamSize)
+void cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame( struct cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->RequestPlayersForGame((int)nPlayerMin, (int)nPlayerMax, (int)nMaxTeamSize);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->RequestPlayersForGame( (int)params->nPlayerMin, (int)params->nPlayerMax, (int)params->nMaxTeamSize );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(void *linux_side, uint64 ullUniqueGameID)
+void cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart( struct cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->HostConfirmGameStart((uint64)ullUniqueGameID);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->HostConfirmGameStart( (uint64)params->ullUniqueGameID );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(void *linux_side)
+void cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame( struct cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->CancelRequestPlayersForGame();
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->CancelRequestPlayersForGame(  );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(void *linux_side, uint64 ullUniqueGameID, CSteamID steamIDPlayer, EPlayerResult_t EPlayerResult)
+void cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult( struct cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->SubmitPlayerResult((uint64)ullUniqueGameID, (CSteamID)steamIDPlayer, (EPlayerResult_t)EPlayerResult);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->SubmitPlayerResult( (uint64)params->ullUniqueGameID, (CSteamID)params->steamIDPlayer, (EPlayerResult_t)params->EPlayerResult );
 }
 
-EGameSearchErrorCode_t cppISteamGameSearch_SteamMatchGameSearch001_EndGame(void *linux_side, uint64 ullUniqueGameID)
+void cppISteamGameSearch_SteamMatchGameSearch001_EndGame( struct cppISteamGameSearch_SteamMatchGameSearch001_EndGame_params *params )
 {
-    EGameSearchErrorCode_t _ret;
-    _ret = ((ISteamGameSearch*)linux_side)->EndGame((uint64)ullUniqueGameID);
-    return (_ret);
+    params->_ret = ((ISteamGameSearch*)params->linux_side)->EndGame( (uint64)params->ullUniqueGameID );
 }
 
 #ifdef __cplusplus

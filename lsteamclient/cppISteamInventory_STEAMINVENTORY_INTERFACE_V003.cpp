@@ -12,266 +12,194 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V003.h"
-EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus(void *linux_side, SteamInventoryResult_t resultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetResultStatus((SteamInventoryResult_t)resultHandle);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetResultStatus( (SteamInventoryResult_t)params->resultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems(void *linux_side, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32 *punOutItemsArraySize)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetResultItems((SteamInventoryResult_t)resultHandle, (SteamItemDetails_t *)pOutItemsArray, (uint32 *)punOutItemsArraySize);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetResultItems( (SteamInventoryResult_t)params->resultHandle, (SteamItemDetails_t *)params->pOutItemsArray, (uint32 *)params->punOutItemsArraySize );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty(void *linux_side, SteamInventoryResult_t resultHandle, uint32 unItemIndex, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetResultItemProperty((SteamInventoryResult_t)resultHandle, (uint32)unItemIndex, (const char *)pchPropertyName, (char *)pchValueBuffer, (uint32 *)punValueBufferSizeOut);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetResultItemProperty( (SteamInventoryResult_t)params->resultHandle, (uint32)params->unItemIndex, (const char *)params->pchPropertyName, (char *)params->pchValueBuffer, (uint32 *)params->punValueBufferSizeOut );
 }
 
-uint32 cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp(void *linux_side, SteamInventoryResult_t resultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetResultTimestamp((SteamInventoryResult_t)resultHandle);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetResultTimestamp( (SteamInventoryResult_t)params->resultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_CheckResultSteamID(void *linux_side, SteamInventoryResult_t resultHandle, CSteamID steamIDExpected)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_CheckResultSteamID( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_CheckResultSteamID_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->CheckResultSteamID((SteamInventoryResult_t)resultHandle, (CSteamID)steamIDExpected);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->CheckResultSteamID( (SteamInventoryResult_t)params->resultHandle, (CSteamID)params->steamIDExpected );
 }
 
-void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DestroyResult(void *linux_side, SteamInventoryResult_t resultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DestroyResult( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DestroyResult_params *params )
 {
-    ((ISteamInventory*)linux_side)->DestroyResult((SteamInventoryResult_t)resultHandle);
+    ((ISteamInventory*)params->linux_side)->DestroyResult( (SteamInventoryResult_t)params->resultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetAllItems(void *linux_side, SteamInventoryResult_t *pResultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetAllItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetAllItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetAllItems((SteamInventoryResult_t *)pResultHandle);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetAllItems( (SteamInventoryResult_t *)params->pResultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID(void *linux_side, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32 unCountInstanceIDs)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetItemsByID((SteamInventoryResult_t *)pResultHandle, (const SteamItemInstanceID_t *)pInstanceIDs, (uint32)unCountInstanceIDs);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetItemsByID( (SteamInventoryResult_t *)params->pResultHandle, (const SteamItemInstanceID_t *)params->pInstanceIDs, (uint32)params->unCountInstanceIDs );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult(void *linux_side, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32 *punOutBufferSize)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SerializeResult((SteamInventoryResult_t)resultHandle, (void *)pOutBuffer, (uint32 *)punOutBufferSize);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SerializeResult( (SteamInventoryResult_t)params->resultHandle, (void *)params->pOutBuffer, (uint32 *)params->punOutBufferSize );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult(void *linux_side, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->DeserializeResult((SteamInventoryResult_t *)pOutResultHandle, (const void *)pBuffer, (uint32)unBufferSize, (bool)bRESERVED_MUST_BE_FALSE);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->DeserializeResult( (SteamInventoryResult_t *)params->pOutResultHandle, (const void *)params->pBuffer, (uint32)params->unBufferSize, (bool)params->bRESERVED_MUST_BE_FALSE );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems(void *linux_side, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GenerateItems((SteamInventoryResult_t *)pResultHandle, (const SteamItemDef_t *)pArrayItemDefs, (const uint32 *)punArrayQuantity, (uint32)unArrayLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GenerateItems( (SteamInventoryResult_t *)params->pResultHandle, (const SteamItemDef_t *)params->pArrayItemDefs, (const uint32 *)params->punArrayQuantity, (uint32)params->unArrayLength );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GrantPromoItems(void *linux_side, SteamInventoryResult_t *pResultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GrantPromoItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GrantPromoItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GrantPromoItems((SteamInventoryResult_t *)pResultHandle);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GrantPromoItems( (SteamInventoryResult_t *)params->pResultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem(void *linux_side, SteamInventoryResult_t *pResultHandle, SteamItemDef_t itemDef)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->AddPromoItem((SteamInventoryResult_t *)pResultHandle, (SteamItemDef_t)itemDef);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->AddPromoItem( (SteamInventoryResult_t *)params->pResultHandle, (SteamItemDef_t)params->itemDef );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems(void *linux_side, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32 unArrayLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->AddPromoItems((SteamInventoryResult_t *)pResultHandle, (const SteamItemDef_t *)pArrayItemDefs, (uint32)unArrayLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->AddPromoItems( (SteamInventoryResult_t *)params->pResultHandle, (const SteamItemDef_t *)params->pArrayItemDefs, (uint32)params->unArrayLength );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem(void *linux_side, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32 unQuantity)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->ConsumeItem((SteamInventoryResult_t *)pResultHandle, (SteamItemInstanceID_t)itemConsume, (uint32)unQuantity);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->ConsumeItem( (SteamInventoryResult_t *)params->pResultHandle, (SteamItemInstanceID_t)params->itemConsume, (uint32)params->unQuantity );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems(void *linux_side, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32 *punArrayGenerateQuantity, uint32 unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32 *punArrayDestroyQuantity, uint32 unArrayDestroyLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->ExchangeItems((SteamInventoryResult_t *)pResultHandle, (const SteamItemDef_t *)pArrayGenerate, (const uint32 *)punArrayGenerateQuantity, (uint32)unArrayGenerateLength, (const SteamItemInstanceID_t *)pArrayDestroy, (const uint32 *)punArrayDestroyQuantity, (uint32)unArrayDestroyLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->ExchangeItems( (SteamInventoryResult_t *)params->pResultHandle, (const SteamItemDef_t *)params->pArrayGenerate, (const uint32 *)params->punArrayGenerateQuantity, (uint32)params->unArrayGenerateLength, (const SteamItemInstanceID_t *)params->pArrayDestroy, (const uint32 *)params->punArrayDestroyQuantity, (uint32)params->unArrayDestroyLength );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity(void *linux_side, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32 unQuantity, SteamItemInstanceID_t itemIdDest)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->TransferItemQuantity((SteamInventoryResult_t *)pResultHandle, (SteamItemInstanceID_t)itemIdSource, (uint32)unQuantity, (SteamItemInstanceID_t)itemIdDest);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->TransferItemQuantity( (SteamInventoryResult_t *)params->pResultHandle, (SteamItemInstanceID_t)params->itemIdSource, (uint32)params->unQuantity, (SteamItemInstanceID_t)params->itemIdDest );
 }
 
-void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SendItemDropHeartbeat(void *linux_side)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SendItemDropHeartbeat( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SendItemDropHeartbeat_params *params )
 {
-    ((ISteamInventory*)linux_side)->SendItemDropHeartbeat();
+    ((ISteamInventory*)params->linux_side)->SendItemDropHeartbeat(  );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop(void *linux_side, SteamInventoryResult_t *pResultHandle, SteamItemDef_t dropListDefinition)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->TriggerItemDrop((SteamInventoryResult_t *)pResultHandle, (SteamItemDef_t)dropListDefinition);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->TriggerItemDrop( (SteamInventoryResult_t *)params->pResultHandle, (SteamItemDef_t)params->dropListDefinition );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems(void *linux_side, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32 *pArrayGiveQuantity, uint32 nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32 *pArrayGetQuantity, uint32 nArrayGetLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->TradeItems((SteamInventoryResult_t *)pResultHandle, (CSteamID)steamIDTradePartner, (const SteamItemInstanceID_t *)pArrayGive, (const uint32 *)pArrayGiveQuantity, (uint32)nArrayGiveLength, (const SteamItemInstanceID_t *)pArrayGet, (const uint32 *)pArrayGetQuantity, (uint32)nArrayGetLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->TradeItems( (SteamInventoryResult_t *)params->pResultHandle, (CSteamID)params->steamIDTradePartner, (const SteamItemInstanceID_t *)params->pArrayGive, (const uint32 *)params->pArrayGiveQuantity, (uint32)params->nArrayGiveLength, (const SteamItemInstanceID_t *)params->pArrayGet, (const uint32 *)params->pArrayGetQuantity, (uint32)params->nArrayGetLength );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_LoadItemDefinitions(void *linux_side)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_LoadItemDefinitions( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_LoadItemDefinitions_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->LoadItemDefinitions();
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->LoadItemDefinitions(  );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs(void *linux_side, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetItemDefinitionIDs((SteamItemDef_t *)pItemDefIDs, (uint32 *)punItemDefIDsArraySize);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetItemDefinitionIDs( (SteamItemDef_t *)params->pItemDefIDs, (uint32 *)params->punItemDefIDsArraySize );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty(void *linux_side, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetItemDefinitionProperty((SteamItemDef_t)iDefinition, (const char *)pchPropertyName, (char *)pchValueBuffer, (uint32 *)punValueBufferSizeOut);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetItemDefinitionProperty( (SteamItemDef_t)params->iDefinition, (const char *)params->pchPropertyName, (char *)params->pchValueBuffer, (uint32 *)params->punValueBufferSizeOut );
 }
 
-SteamAPICall_t cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestEligiblePromoItemDefinitionsIDs(void *linux_side, CSteamID steamID)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestEligiblePromoItemDefinitionsIDs( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestEligiblePromoItemDefinitionsIDs_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamInventory*)linux_side)->RequestEligiblePromoItemDefinitionsIDs((CSteamID)steamID);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->RequestEligiblePromoItemDefinitionsIDs( (CSteamID)params->steamID );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs(void *linux_side, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetEligiblePromoItemDefinitionIDs((CSteamID)steamID, (SteamItemDef_t *)pItemDefIDs, (uint32 *)punItemDefIDsArraySize);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetEligiblePromoItemDefinitionIDs( (CSteamID)params->steamID, (SteamItemDef_t *)params->pItemDefIDs, (uint32 *)params->punItemDefIDsArraySize );
 }
 
-SteamAPICall_t cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase(void *linux_side, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamInventory*)linux_side)->StartPurchase((const SteamItemDef_t *)pArrayItemDefs, (const uint32 *)punArrayQuantity, (uint32)unArrayLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->StartPurchase( (const SteamItemDef_t *)params->pArrayItemDefs, (const uint32 *)params->punArrayQuantity, (uint32)params->unArrayLength );
 }
 
-SteamAPICall_t cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestPrices(void *linux_side)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestPrices( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestPrices_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamInventory*)linux_side)->RequestPrices();
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->RequestPrices(  );
 }
 
-uint32 cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices(void *linux_side)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetNumItemsWithPrices();
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetNumItemsWithPrices(  );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices(void *linux_side, SteamItemDef_t *pArrayItemDefs, uint64 *pCurrentPrices, uint64 *pBasePrices, uint32 unArrayLength)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetItemsWithPrices((SteamItemDef_t *)pArrayItemDefs, (uint64 *)pCurrentPrices, (uint64 *)pBasePrices, (uint32)unArrayLength);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetItemsWithPrices( (SteamItemDef_t *)params->pArrayItemDefs, (uint64 *)params->pCurrentPrices, (uint64 *)params->pBasePrices, (uint32)params->unArrayLength );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice(void *linux_side, SteamItemDef_t iDefinition, uint64 *pCurrentPrice, uint64 *pBasePrice)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->GetItemPrice((SteamItemDef_t)iDefinition, (uint64 *)pCurrentPrice, (uint64 *)pBasePrice);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->GetItemPrice( (SteamItemDef_t)params->iDefinition, (uint64 *)params->pCurrentPrice, (uint64 *)params->pBasePrice );
 }
 
-SteamInventoryUpdateHandle_t cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartUpdateProperties(void *linux_side)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartUpdateProperties( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartUpdateProperties_params *params )
 {
-    SteamInventoryUpdateHandle_t _ret;
-    _ret = ((ISteamInventory*)linux_side)->StartUpdateProperties();
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->StartUpdateProperties(  );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->RemoveProperty((SteamInventoryUpdateHandle_t)handle, (SteamItemInstanceID_t)nItemID, (const char *)pchPropertyName);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->RemoveProperty( (SteamInventoryUpdateHandle_t)params->handle, (SteamItemInstanceID_t)params->nItemID, (const char *)params->pchPropertyName );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, const char *pchPropertyValue)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SetProperty((SteamInventoryUpdateHandle_t)handle, (SteamItemInstanceID_t)nItemID, (const char *)pchPropertyName, (const char *)pchPropertyValue);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SetProperty( (SteamInventoryUpdateHandle_t)params->handle, (SteamItemInstanceID_t)params->nItemID, (const char *)params->pchPropertyName, (const char *)params->pchPropertyValue );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, bool bValue)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SetProperty((SteamInventoryUpdateHandle_t)handle, (SteamItemInstanceID_t)nItemID, (const char *)pchPropertyName, (bool)bValue);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SetProperty( (SteamInventoryUpdateHandle_t)params->handle, (SteamItemInstanceID_t)params->nItemID, (const char *)params->pchPropertyName, (bool)params->bValue );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, int64 nValue)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SetProperty((SteamInventoryUpdateHandle_t)handle, (SteamItemInstanceID_t)nItemID, (const char *)pchPropertyName, (int64)nValue);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SetProperty( (SteamInventoryUpdateHandle_t)params->handle, (SteamItemInstanceID_t)params->nItemID, (const char *)params->pchPropertyName, (int64)params->nValue );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, float flValue)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SetProperty((SteamInventoryUpdateHandle_t)handle, (SteamItemInstanceID_t)nItemID, (const char *)pchPropertyName, (float)flValue);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SetProperty( (SteamInventoryUpdateHandle_t)params->handle, (SteamItemInstanceID_t)params->nItemID, (const char *)params->pchPropertyName, (float)params->flValue );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamInventoryResult_t *pResultHandle)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->SubmitUpdateProperties((SteamInventoryUpdateHandle_t)handle, (SteamInventoryResult_t *)pResultHandle);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->SubmitUpdateProperties( (SteamInventoryUpdateHandle_t)params->handle, (SteamInventoryResult_t *)params->pResultHandle );
 }
 
-bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(void *linux_side, SteamInventoryResult_t *pResultHandle, const char *pchItemToken)
+void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamInventory*)linux_side)->InspectItem((SteamInventoryResult_t *)pResultHandle, (const char *)pchItemToken);
-    return (_ret);
+    params->_ret = ((ISteamInventory*)params->linux_side)->InspectItem( (SteamInventoryResult_t *)params->pResultHandle, (const char *)params->pchItemToken );
 }
 
 #ifdef __cplusplus

@@ -26,58 +26,103 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSock
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous(struct w_steam_iface *_this, CSteamID steamIDRemote, uint32 unConnectionIDSrc, const void *pMsgRendezvous, uint32 cbRendezvous)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous_params params =
+    {
+        .linux_side = _this->u_iface,
+        .steamIDRemote = steamIDRemote,
+        .unConnectionIDSrc = unConnectionIDSrc,
+        .pMsgRendezvous = pMsgRendezvous,
+        .cbRendezvous = cbRendezvous,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous(_this->u_iface, steamIDRemote, unConnectionIDSrc, pMsgRendezvous, cbRendezvous);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous( &params );
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure(struct w_steam_iface *_this, CSteamID steamIDRemote, uint32 unConnectionIDDest, uint32 nReason, const char *pszReason)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure_params params =
+    {
+        .linux_side = _this->u_iface,
+        .steamIDRemote = steamIDRemote,
+        .unConnectionIDDest = unConnectionIDDest,
+        .nReason = nReason,
+        .pszReason = pszReason,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure(_this->u_iface, steamIDRemote, unConnectionIDDest, nReason, pszReason);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure( &params );
 }
 
 SteamAPICall_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(struct w_steam_iface *_this)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync(_this->u_iface);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(struct w_steam_iface *_this, void *buf, uint32 cbBuf)
 {
-    int _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON_params params =
+    {
+        .linux_side = _this->u_iface,
+        .buf = buf,
+        .cbBuf = cbBuf,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON(_this->u_iface, buf, cbBuf);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetNetworkConfigJSON( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket(struct w_steam_iface *_this, const void *pTicket, uint32 cbTicket)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTicket = pTicket,
+        .cbTicket = cbTicket,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket(_this->u_iface, pTicket, cbTicket);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_CacheRelayTicket( &params );
 }
 
 uint32 __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(struct w_steam_iface *_this)
 {
-    uint32 _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount(_this->u_iface);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicketCount( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(struct w_steam_iface *_this, uint32 idxTicket, void *buf, uint32 cbBuf)
 {
-    int _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket_params params =
+    {
+        .linux_side = _this->u_iface,
+        .idxTicket = idxTicket,
+        .buf = buf,
+        .cbBuf = cbBuf,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket(_this->u_iface, idxTicket, buf, cbBuf);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCachedRelayTicket( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg(struct w_steam_iface *_this, const void *pMsg, uint32 cbMsg)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg(_this->u_iface, pMsg, cbMsg);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg( &params );
 }
 
 extern vtable_ptr winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_vtable;
@@ -121,58 +166,104 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSock
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous(struct w_steam_iface *_this, CSteamID steamIDRemote, uint32 unConnectionIDSrc, const void *pMsgRendezvous, uint32 cbRendezvous)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous_params params =
+    {
+        .linux_side = _this->u_iface,
+        .steamIDRemote = steamIDRemote,
+        .unConnectionIDSrc = unConnectionIDSrc,
+        .pMsgRendezvous = pMsgRendezvous,
+        .cbRendezvous = cbRendezvous,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous(_this->u_iface, steamIDRemote, unConnectionIDSrc, pMsgRendezvous, cbRendezvous);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous( &params );
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure(struct w_steam_iface *_this, CSteamID steamIDRemote, uint32 unConnectionIDDest, uint32 nReason, const char *pszReason)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure_params params =
+    {
+        .linux_side = _this->u_iface,
+        .steamIDRemote = steamIDRemote,
+        .unConnectionIDDest = unConnectionIDDest,
+        .nReason = nReason,
+        .pszReason = pszReason,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure(_this->u_iface, steamIDRemote, unConnectionIDDest, nReason, pszReason);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure( &params );
 }
 
 SteamAPICall_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync(struct w_steam_iface *_this)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync(_this->u_iface);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCertAsync( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON(struct w_steam_iface *_this, void *buf, uint32 cbBuf, const char *pszLauncherPartner)
 {
-    int _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON_params params =
+    {
+        .linux_side = _this->u_iface,
+        .buf = buf,
+        .cbBuf = cbBuf,
+        .pszLauncherPartner = pszLauncherPartner,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON(_this->u_iface, buf, cbBuf, pszLauncherPartner);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket(struct w_steam_iface *_this, const void *pTicket, uint32 cbTicket)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTicket = pTicket,
+        .cbTicket = cbTicket,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket(_this->u_iface, pTicket, cbTicket);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket( &params );
 }
 
 uint32 __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount(struct w_steam_iface *_this)
 {
-    uint32 _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount(_this->u_iface);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount( &params );
+    return params._ret;
 }
 
 int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket(struct w_steam_iface *_this, uint32 idxTicket, void *buf, uint32 cbBuf)
 {
-    int _ret;
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket_params params =
+    {
+        .linux_side = _this->u_iface,
+        .idxTicket = idxTicket,
+        .buf = buf,
+        .cbBuf = cbBuf,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket(_this->u_iface, idxTicket, buf, cbBuf);
-    return _ret;
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg(struct w_steam_iface *_this, const void *pMsg, uint32 cbMsg)
 {
+    struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+    };
     TRACE("%p\n", _this);
-    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg(_this->u_iface, pMsg, cbMsg);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg( &params );
 }
 
 extern vtable_ptr winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_vtable;

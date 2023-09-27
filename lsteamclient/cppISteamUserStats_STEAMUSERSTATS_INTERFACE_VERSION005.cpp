@@ -11,193 +11,139 @@ extern "C" {
 #define SDKVER_104
 #include "struct_converters.h"
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005.h"
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(void *linux_side)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->RequestCurrentStats();
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->RequestCurrentStats(  );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(void *linux_side, const char *pchName, int32 *pData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetStat((const char *)pchName, (int32 *)pData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetStat( (const char *)params->pchName, (int32 *)params->pData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(void *linux_side, const char *pchName, float *pData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetStat((const char *)pchName, (float *)pData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetStat( (const char *)params->pchName, (float *)params->pData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(void *linux_side, const char *pchName, int32 nData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->SetStat((const char *)pchName, (int32)nData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->SetStat( (const char *)params->pchName, (int32)params->nData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(void *linux_side, const char *pchName, float fData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->SetStat((const char *)pchName, (float)fData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->SetStat( (const char *)params->pchName, (float)params->fData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(void *linux_side, const char *pchName, float flCountThisSession, double dSessionLength)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->UpdateAvgRateStat((const char *)pchName, (float)flCountThisSession, (double)dSessionLength);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->UpdateAvgRateStat( (const char *)params->pchName, (float)params->flCountThisSession, (double)params->dSessionLength );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(void *linux_side, const char *pchName, bool *pbAchieved)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetAchievement((const char *)pchName, (bool *)pbAchieved);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievement( (const char *)params->pchName, (bool *)params->pbAchieved );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(void *linux_side, const char *pchName)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->SetAchievement((const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->SetAchievement( (const char *)params->pchName );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(void *linux_side, const char *pchName)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->ClearAchievement((const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->ClearAchievement( (const char *)params->pchName );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(void *linux_side)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->StoreStats();
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->StoreStats(  );
 }
 
-int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon(void *linux_side, const char *pchName)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetAchievementIcon((const char *)pchName);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievementIcon( (const char *)params->pchName );
 }
 
-const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute(void *linux_side, const char *pchName, const char *pchKey)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetAchievementDisplayAttribute((const char *)pchName, (const char *)pchKey);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetAchievementDisplayAttribute( (const char *)params->pchName, (const char *)params->pchKey );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(void *linux_side, const char *pchName, uint32 nCurProgress, uint32 nMaxProgress)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->IndicateAchievementProgress((const char *)pchName, (uint32)nCurProgress, (uint32)nMaxProgress);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->IndicateAchievementProgress( (const char *)params->pchName, (uint32)params->nCurProgress, (uint32)params->nMaxProgress );
 }
 
-SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(void *linux_side, CSteamID steamIDUser)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamUserStats*)linux_side)->RequestUserStats((CSteamID)steamIDUser);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->RequestUserStats( (CSteamID)params->steamIDUser );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(void *linux_side, CSteamID steamIDUser, const char *pchName, int32 *pData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetUserStat((CSteamID)steamIDUser, (const char *)pchName, (int32 *)pData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (int32 *)params->pData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(void *linux_side, CSteamID steamIDUser, const char *pchName, float *pData)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetUserStat((CSteamID)steamIDUser, (const char *)pchName, (float *)pData);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetUserStat( (CSteamID)params->steamIDUser, (const char *)params->pchName, (float *)params->pData );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(void *linux_side, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetUserAchievement((CSteamID)steamIDUser, (const char *)pchName, (bool *)pbAchieved);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetUserAchievement( (CSteamID)params->steamIDUser, (const char *)params->pchName, (bool *)params->pbAchieved );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(void *linux_side, bool bAchievementsToo)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->ResetAllStats((bool)bAchievementsToo);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->ResetAllStats( (bool)params->bAchievementsToo );
 }
 
-SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(void *linux_side, const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamUserStats*)linux_side)->FindOrCreateLeaderboard((const char *)pchLeaderboardName, (ELeaderboardSortMethod)eLeaderboardSortMethod, (ELeaderboardDisplayType)eLeaderboardDisplayType);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->FindOrCreateLeaderboard( (const char *)params->pchLeaderboardName, (ELeaderboardSortMethod)params->eLeaderboardSortMethod, (ELeaderboardDisplayType)params->eLeaderboardDisplayType );
 }
 
-SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(void *linux_side, const char *pchLeaderboardName)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamUserStats*)linux_side)->FindLeaderboard((const char *)pchLeaderboardName);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->FindLeaderboard( (const char *)params->pchLeaderboardName );
 }
 
-const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(void *linux_side, SteamLeaderboard_t hSteamLeaderboard)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetLeaderboardName((SteamLeaderboard_t)hSteamLeaderboard);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetLeaderboardName( (SteamLeaderboard_t)params->hSteamLeaderboard );
 }
 
-int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(void *linux_side, SteamLeaderboard_t hSteamLeaderboard)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount_params *params )
 {
-    int _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetLeaderboardEntryCount((SteamLeaderboard_t)hSteamLeaderboard);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetLeaderboardEntryCount( (SteamLeaderboard_t)params->hSteamLeaderboard );
 }
 
-ELeaderboardSortMethod cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(void *linux_side, SteamLeaderboard_t hSteamLeaderboard)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod_params *params )
 {
-    ELeaderboardSortMethod _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetLeaderboardSortMethod((SteamLeaderboard_t)hSteamLeaderboard);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetLeaderboardSortMethod( (SteamLeaderboard_t)params->hSteamLeaderboard );
 }
 
-ELeaderboardDisplayType cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(void *linux_side, SteamLeaderboard_t hSteamLeaderboard)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType_params *params )
 {
-    ELeaderboardDisplayType _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetLeaderboardDisplayType((SteamLeaderboard_t)hSteamLeaderboard);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetLeaderboardDisplayType( (SteamLeaderboard_t)params->hSteamLeaderboard );
 }
 
-SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(void *linux_side, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamUserStats*)linux_side)->DownloadLeaderboardEntries((SteamLeaderboard_t)hSteamLeaderboard, (ELeaderboardDataRequest)eLeaderboardDataRequest, (int)nRangeStart, (int)nRangeEnd);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->DownloadLeaderboardEntries( (SteamLeaderboard_t)params->hSteamLeaderboard, (ELeaderboardDataRequest)params->eLeaderboardDataRequest, (int)params->nRangeStart, (int)params->nRangeEnd );
 }
 
-bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(void *linux_side, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t *pLeaderboardEntry, int32 *pDetails, int cDetailsMax)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUserStats*)linux_side)->GetDownloadedLeaderboardEntry((SteamLeaderboardEntries_t)hSteamLeaderboardEntries, (int)index, (LeaderboardEntry_t *)pLeaderboardEntry, (int32 *)pDetails, (int)cDetailsMax);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->GetDownloadedLeaderboardEntry( (SteamLeaderboardEntries_t)params->hSteamLeaderboardEntries, (int)params->index, (LeaderboardEntry_t *)params->pLeaderboardEntry, (int32 *)params->pDetails, (int)params->cDetailsMax );
 }
 
-SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(void *linux_side, SteamLeaderboard_t hSteamLeaderboard, int32 nScore, int32 *pScoreDetails, int cScoreDetailsCount)
+void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamUserStats*)linux_side)->UploadLeaderboardScore((SteamLeaderboard_t)hSteamLeaderboard, (int32)nScore, (int32 *)pScoreDetails, (int)cScoreDetailsCount);
-    return (_ret);
+    params->_ret = ((ISteamUserStats*)params->linux_side)->UploadLeaderboardScore( (SteamLeaderboard_t)params->hSteamLeaderboard, (int32)params->nScore, (int32 *)params->pScoreDetails, (int)params->cScoreDetailsCount );
 }
 
 #ifdef __cplusplus

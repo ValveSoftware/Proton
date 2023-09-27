@@ -11,11 +11,9 @@ extern "C" {
 #define SDKVER_100
 #include "struct_converters.h"
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION001.h"
-int cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(void *linux_side, AppId_t nAppID, const char *pchKey, char *pchValue, int cchValueMax)
+void cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData_params *params )
 {
-    int _ret;
-    _ret = ((ISteamApps*)linux_side)->GetAppData((AppId_t)nAppID, (const char *)pchKey, (char *)pchValue, (int)cchValueMax);
-    return (_ret);
+    params->_ret = ((ISteamApps*)params->linux_side)->GetAppData( (AppId_t)params->nAppID, (const char *)params->pchKey, (char *)params->pchValue, (int)params->cchValueMax );
 }
 
 #ifdef __cplusplus

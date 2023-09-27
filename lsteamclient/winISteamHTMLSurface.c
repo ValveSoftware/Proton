@@ -54,204 +54,390 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown( &params );
+    return params._ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(struct w_steam_iface *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchUserAgent = pchUserAgent,
+        .pchUserCSS = pchUserCSS,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(_this->u_iface, pchUserAgent, pchUserCSS);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchURL = pchURL,
+        .pchPostData = pchPostData,
+    };
+    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
-    steamclient_free_path( u_pchURL );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL( &params );
+    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(_this->u_iface, unBrowserHandle, unWidth, unHeight);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchKey, const char *pchValue)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader(_this->u_iface, unBrowserHandle, pchKey, pchValue);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchScript)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchScript = pchScript,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript(_this->u_iface, unBrowserHandle, pchScript);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nDelta = nDelta,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(_this->u_iface, unBrowserHandle, nDelta);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .cUnicodeChar = cUnicodeChar,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(_this->u_iface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bHasKeyFocus = bHasKeyFocus,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus(_this->u_iface, unBrowserHandle, bHasKeyFocus);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSearchStr = pchSearchStr,
+        .bCurrentlyInFind = bCurrentlyInFind,
+        .bReverse = bReverse,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find(_this->u_iface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bAllowed = bAllowed,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(_this->u_iface, unBrowserHandle, bAllowed);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bResult = bResult,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse(_this->u_iface, unBrowserHandle, bResult);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSelectedFiles = pchSelectedFiles,
+    };
+    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
-    steamclient_free_path_array( u_pchSelectedFiles );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse( &params );
+    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
@@ -350,216 +536,421 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown( &params );
+    return params._ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(struct w_steam_iface *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchUserAgent = pchUserAgent,
+        .pchUserCSS = pchUserCSS,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser(_this->u_iface, pchUserAgent, pchUserCSS);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_RemoveBrowser( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchURL = pchURL,
+        .pchPostData = pchPostData,
+    };
+    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
-    steamclient_free_path( u_pchURL );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL( &params );
+    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(_this->u_iface, unBrowserHandle, unWidth, unHeight);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopLoad( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Reload( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoBack( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GoForward( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchKey, const char *pchValue)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader(_this->u_iface, unBrowserHandle, pchKey, pchValue);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchScript)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchScript = pchScript,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript(_this->u_iface, unBrowserHandle, pchScript);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nDelta = nDelta,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel(_this->u_iface, unBrowserHandle, nDelta);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .cUnicodeChar = cUnicodeChar,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar(_this->u_iface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bHasKeyFocus = bHasKeyFocus,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus(_this->u_iface, unBrowserHandle, bHasKeyFocus);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CopyToClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSearchStr = pchSearchStr,
+        .bCurrentlyInFind = bCurrentlyInFind,
+        .bReverse = bReverse,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find(_this->u_iface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie(struct w_steam_iface *_this, const char *pchHostname, const char *pchKey, const char *pchValue, const char *pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchHostname = pchHostname,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+        .pchPath = pchPath,
+        .nExpires = nExpires,
+        .bSecure = bSecure,
+        .bHTTPOnly = bHTTPOnly,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie(_this->u_iface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flZoom = flZoom,
+        .nPointX = nPointX,
+        .nPointY = nPointY,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(_this->u_iface, unBrowserHandle, flZoom, nPointX, nPointY);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bAllowed = bAllowed,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest(_this->u_iface, unBrowserHandle, bAllowed);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bResult = bResult,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse(_this->u_iface, unBrowserHandle, bResult);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSelectedFiles = pchSelectedFiles,
+    };
+    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
-    steamclient_free_path_array( u_pchSelectedFiles );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse( &params );
+    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
@@ -661,222 +1052,433 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown( &params );
+    return params._ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser(struct w_steam_iface *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchUserAgent = pchUserAgent,
+        .pchUserCSS = pchUserCSS,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser(_this->u_iface, pchUserAgent, pchUserCSS);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_RemoveBrowser(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_RemoveBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_RemoveBrowser(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_RemoveBrowser( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchURL = pchURL,
+        .pchPostData = pchPostData,
+    };
+    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
-    steamclient_free_path( u_pchURL );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL( &params );
+    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(_this->u_iface, unBrowserHandle, unWidth, unHeight);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopLoad(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopLoad_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopLoad(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopLoad( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Reload(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Reload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Reload(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Reload( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoBack(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoBack_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoBack(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoBack( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoForward(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoForward_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoForward(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GoForward( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddHeader(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchKey, const char *pchValue)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddHeader_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddHeader(_this->u_iface, unBrowserHandle, pchKey, pchValue);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddHeader( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ExecuteJavascript(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchScript)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ExecuteJavascript_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchScript = pchScript,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ExecuteJavascript(_this->u_iface, unBrowserHandle, pchScript);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ExecuteJavascript( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseUp(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDown(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDoubleClick(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDoubleClick_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDoubleClick(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDoubleClick( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nDelta = nDelta,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel(_this->u_iface, unBrowserHandle, nDelta);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .cUnicodeChar = cUnicodeChar,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar(_this->u_iface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bHasKeyFocus = bHasKeyFocus,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus(_this->u_iface, unBrowserHandle, bHasKeyFocus);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ViewSource(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ViewSource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ViewSource(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ViewSource( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CopyToClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CopyToClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CopyToClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CopyToClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_PasteFromClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_PasteFromClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_PasteFromClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_PasteFromClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSearchStr = pchSearchStr,
+        .bCurrentlyInFind = bCurrentlyInFind,
+        .bReverse = bReverse,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find(_this->u_iface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie(struct w_steam_iface *_this, const char *pchHostname, const char *pchKey, const char *pchValue, const char *pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchHostname = pchHostname,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+        .pchPath = pchPath,
+        .nExpires = nExpires,
+        .bSecure = bSecure,
+        .bHTTPOnly = bHTTPOnly,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie(_this->u_iface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flZoom = flZoom,
+        .nPointX = nPointX,
+        .nPointY = nPointY,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor(_this->u_iface, unBrowserHandle, flZoom, nPointX, nPointY);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bBackgroundMode)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bBackgroundMode = bBackgroundMode,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode(_this->u_iface, unBrowserHandle, bBackgroundMode);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bAllowed = bAllowed,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest(_this->u_iface, unBrowserHandle, bAllowed);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bResult = bResult,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse(_this->u_iface, unBrowserHandle, bResult);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSelectedFiles = pchSelectedFiles,
+    };
+    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
-    steamclient_free_path_array( u_pchSelectedFiles );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse( &params );
+    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
@@ -980,228 +1582,445 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown( &params );
+    return params._ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(struct w_steam_iface *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchUserAgent = pchUserAgent,
+        .pchUserCSS = pchUserCSS,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(_this->u_iface, pchUserAgent, pchUserCSS);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_RemoveBrowser( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchURL = pchURL,
+        .pchPostData = pchPostData,
+    };
+    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
-    steamclient_free_path( u_pchURL );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL( &params );
+    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(_this->u_iface, unBrowserHandle, unWidth, unHeight);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopLoad(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopLoad_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopLoad(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopLoad( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Reload(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Reload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Reload(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Reload( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoBack(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoBack_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoBack(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoBack( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoForward(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoForward_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoForward(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GoForward( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddHeader(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchKey, const char *pchValue)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddHeader_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddHeader(_this->u_iface, unBrowserHandle, pchKey, pchValue);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddHeader( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ExecuteJavascript(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchScript)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ExecuteJavascript_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchScript = pchScript,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ExecuteJavascript(_this->u_iface, unBrowserHandle, pchScript);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ExecuteJavascript( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseUp(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDown(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDoubleClick(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDoubleClick_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDoubleClick(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDoubleClick( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nDelta = nDelta,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel(_this->u_iface, unBrowserHandle, nDelta);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .cUnicodeChar = cUnicodeChar,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar(_this->u_iface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bHasKeyFocus = bHasKeyFocus,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus(_this->u_iface, unBrowserHandle, bHasKeyFocus);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ViewSource(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ViewSource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ViewSource(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ViewSource( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CopyToClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CopyToClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CopyToClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CopyToClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_PasteFromClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_PasteFromClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_PasteFromClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_PasteFromClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSearchStr = pchSearchStr,
+        .bCurrentlyInFind = bCurrentlyInFind,
+        .bReverse = bReverse,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find(_this->u_iface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie(struct w_steam_iface *_this, const char *pchHostname, const char *pchKey, const char *pchValue, const char *pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchHostname = pchHostname,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+        .pchPath = pchPath,
+        .nExpires = nExpires,
+        .bSecure = bSecure,
+        .bHTTPOnly = bHTTPOnly,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie(_this->u_iface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flZoom = flZoom,
+        .nPointX = nPointX,
+        .nPointY = nPointY,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor(_this->u_iface, unBrowserHandle, flZoom, nPointX, nPointY);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bBackgroundMode)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bBackgroundMode = bBackgroundMode,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode(_this->u_iface, unBrowserHandle, bBackgroundMode);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flDPIScaling)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flDPIScaling = flDPIScaling,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor(_this->u_iface, unBrowserHandle, flDPIScaling);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bAllowed = bAllowed,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest(_this->u_iface, unBrowserHandle, bAllowed);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bResult = bResult,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse(_this->u_iface, unBrowserHandle, bResult);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSelectedFiles = pchSelectedFiles,
+    };
+    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
-    steamclient_free_path_array( u_pchSelectedFiles );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse( &params );
+    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
@@ -1307,234 +2126,457 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_dest
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init( &params );
+    return params._ret;
 }
 
 bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(struct w_steam_iface *_this)
 {
-    bool _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(_this->u_iface);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown( &params );
+    return params._ret;
 }
 
 SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(struct w_steam_iface *_this, const char *pchUserAgent, const char *pchUserCSS)
 {
-    SteamAPICall_t _ret;
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchUserAgent = pchUserAgent,
+        .pchUserCSS = pchUserCSS,
+    };
     TRACE("%p\n", _this);
-    _ret = cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(_this->u_iface, pchUserAgent, pchUserCSS);
-    return _ret;
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser( &params );
+    return params._ret;
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_RemoveBrowser(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_RemoveBrowser_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_RemoveBrowser(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_RemoveBrowser( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchURL, const char *pchPostData)
 {
-    const char *u_pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchURL = pchURL,
+        .pchPostData = pchPostData,
+    };
+    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(_this->u_iface, unBrowserHandle, pchURL ? u_pchURL : NULL, pchPostData);
-    steamclient_free_path( u_pchURL );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL( &params );
+    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(_this->u_iface, unBrowserHandle, unWidth, unHeight);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopLoad(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopLoad_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopLoad(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopLoad( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Reload(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Reload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Reload(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Reload( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoBack(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoBack_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoBack(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoBack( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoForward(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoForward_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoForward(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GoForward( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddHeader(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchKey, const char *pchValue)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddHeader_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddHeader(_this->u_iface, unBrowserHandle, pchKey, pchValue);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddHeader( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ExecuteJavascript(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchScript)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ExecuteJavascript_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchScript = pchScript,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ExecuteJavascript(_this->u_iface, unBrowserHandle, pchScript);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ExecuteJavascript( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .eMouseButton = eMouseButton,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick(_this->u_iface, unBrowserHandle, eMouseButton);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nDelta = nDelta,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel(_this->u_iface, unBrowserHandle, nDelta);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers, bool bIsSystemKey)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+        .bIsSystemKey = bIsSystemKey,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers, bIsSystemKey);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nNativeKeyCode = nNativeKeyCode,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp(_this->u_iface, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .cUnicodeChar = cUnicodeChar,
+        .eHTMLKeyModifiers = eHTMLKeyModifiers,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar(_this->u_iface, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .nAbsolutePixelScroll = nAbsolutePixelScroll,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll(_this->u_iface, unBrowserHandle, nAbsolutePixelScroll);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetKeyFocus(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetKeyFocus_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bHasKeyFocus = bHasKeyFocus,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetKeyFocus(_this->u_iface, unBrowserHandle, bHasKeyFocus);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetKeyFocus( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ViewSource(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ViewSource_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ViewSource(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ViewSource( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CopyToClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CopyToClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CopyToClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CopyToClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_PasteFromClipboard(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_PasteFromClipboard_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_PasteFromClipboard(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_PasteFromClipboard( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char *pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSearchStr = pchSearchStr,
+        .bCurrentlyInFind = bCurrentlyInFind,
+        .bReverse = bReverse,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find(_this->u_iface, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .x = x,
+        .y = y,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition(_this->u_iface, unBrowserHandle, x, y);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie(struct w_steam_iface *_this, const char *pchHostname, const char *pchKey, const char *pchValue, const char *pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchHostname = pchHostname,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+        .pchPath = pchPath,
+        .nExpires = nExpires,
+        .bSecure = bSecure,
+        .bHTTPOnly = bHTTPOnly,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie(_this->u_iface, pchHostname, pchKey, pchValue, pchPath, nExpires, bSecure, bHTTPOnly);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flZoom = flZoom,
+        .nPointX = nPointX,
+        .nPointY = nPointY,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor(_this->u_iface, unBrowserHandle, flZoom, nPointX, nPointY);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetBackgroundMode(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bBackgroundMode)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetBackgroundMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bBackgroundMode = bBackgroundMode,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetBackgroundMode(_this->u_iface, unBrowserHandle, bBackgroundMode);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetBackgroundMode( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetDPIScalingFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flDPIScaling)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetDPIScalingFactor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .flDPIScaling = flDPIScaling,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetDPIScalingFactor(_this->u_iface, unBrowserHandle, flDPIScaling);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetDPIScalingFactor( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_OpenDeveloperTools(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_OpenDeveloperTools_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_OpenDeveloperTools(_this->u_iface, unBrowserHandle);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_OpenDeveloperTools( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartRequest(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bAllowed = bAllowed,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartRequest(_this->u_iface, unBrowserHandle, bAllowed);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartRequest( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .bResult = bResult,
+    };
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse(_this->u_iface, unBrowserHandle, bResult);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse( &params );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, const char **pchSelectedFiles)
 {
-    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
+    struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unBrowserHandle = unBrowserHandle,
+        .pchSelectedFiles = pchSelectedFiles,
+    };
+    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(_this->u_iface, unBrowserHandle, pchSelectedFiles ? u_pchSelectedFiles : NULL);
-    steamclient_free_path_array( u_pchSelectedFiles );
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse( &params );
+    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;

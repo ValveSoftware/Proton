@@ -11,125 +11,95 @@ extern "C" {
 #define SDKVER_106
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils004.h"
-uint32 cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive( struct cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetSecondsSinceAppActive();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetSecondsSinceAppActive(  );
 }
 
-uint32 cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive( struct cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetSecondsSinceComputerActive();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetSecondsSinceComputerActive(  );
 }
 
-EUniverse cppISteamUtils_SteamUtils004_GetConnectedUniverse(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetConnectedUniverse( struct cppISteamUtils_SteamUtils004_GetConnectedUniverse_params *params )
 {
-    EUniverse _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetConnectedUniverse();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetConnectedUniverse(  );
 }
 
-uint32 cppISteamUtils_SteamUtils004_GetServerRealTime(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetServerRealTime( struct cppISteamUtils_SteamUtils004_GetServerRealTime_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetServerRealTime();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetServerRealTime(  );
 }
 
-const char * cppISteamUtils_SteamUtils004_GetIPCountry(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetIPCountry( struct cppISteamUtils_SteamUtils004_GetIPCountry_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamUtils*)linux_side)->GetIPCountry();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetIPCountry(  );
 }
 
-bool cppISteamUtils_SteamUtils004_GetImageSize(void *linux_side, int iImage, uint32 *pnWidth, uint32 *pnHeight)
+void cppISteamUtils_SteamUtils004_GetImageSize( struct cppISteamUtils_SteamUtils004_GetImageSize_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetImageSize((int)iImage, (uint32 *)pnWidth, (uint32 *)pnHeight);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetImageSize( (int)params->iImage, (uint32 *)params->pnWidth, (uint32 *)params->pnHeight );
 }
 
-bool cppISteamUtils_SteamUtils004_GetImageRGBA(void *linux_side, int iImage, uint8 *pubDest, int nDestBufferSize)
+void cppISteamUtils_SteamUtils004_GetImageRGBA( struct cppISteamUtils_SteamUtils004_GetImageRGBA_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetImageRGBA((int)iImage, (uint8 *)pubDest, (int)nDestBufferSize);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetImageRGBA( (int)params->iImage, (uint8 *)params->pubDest, (int)params->nDestBufferSize );
 }
 
-bool cppISteamUtils_SteamUtils004_GetCSERIPPort(void *linux_side, uint32 *unIP, uint16 *usPort)
+void cppISteamUtils_SteamUtils004_GetCSERIPPort( struct cppISteamUtils_SteamUtils004_GetCSERIPPort_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetCSERIPPort((uint32 *)unIP, (uint16 *)usPort);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetCSERIPPort( (uint32 *)params->unIP, (uint16 *)params->usPort );
 }
 
-uint8 cppISteamUtils_SteamUtils004_GetCurrentBatteryPower(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetCurrentBatteryPower( struct cppISteamUtils_SteamUtils004_GetCurrentBatteryPower_params *params )
 {
-    uint8 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetCurrentBatteryPower();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetCurrentBatteryPower(  );
 }
 
-uint32 cppISteamUtils_SteamUtils004_GetAppID(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetAppID( struct cppISteamUtils_SteamUtils004_GetAppID_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetAppID();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetAppID(  );
 }
 
-void cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition(void *linux_side, ENotificationPosition eNotificationPosition)
+void cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition( struct cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition_params *params )
 {
-    ((ISteamUtils*)linux_side)->SetOverlayNotificationPosition((ENotificationPosition)eNotificationPosition);
+    ((ISteamUtils*)params->linux_side)->SetOverlayNotificationPosition( (ENotificationPosition)params->eNotificationPosition );
 }
 
-bool cppISteamUtils_SteamUtils004_IsAPICallCompleted(void *linux_side, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+void cppISteamUtils_SteamUtils004_IsAPICallCompleted( struct cppISteamUtils_SteamUtils004_IsAPICallCompleted_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->IsAPICallCompleted((SteamAPICall_t)hSteamAPICall, (bool *)pbFailed);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->IsAPICallCompleted( (SteamAPICall_t)params->hSteamAPICall, (bool *)params->pbFailed );
 }
 
-ESteamAPICallFailure cppISteamUtils_SteamUtils004_GetAPICallFailureReason(void *linux_side, SteamAPICall_t hSteamAPICall)
+void cppISteamUtils_SteamUtils004_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils004_GetAPICallFailureReason_params *params )
 {
-    ESteamAPICallFailure _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetAPICallFailureReason((SteamAPICall_t)hSteamAPICall);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetAPICallFailureReason( (SteamAPICall_t)params->hSteamAPICall );
 }
 
-bool cppISteamUtils_SteamUtils004_GetAPICallResult(void *linux_side, SteamAPICall_t hSteamAPICall, void *pCallback, int cubCallback, int iCallbackExpected, bool *pbFailed)
+void cppISteamUtils_SteamUtils004_GetAPICallResult( struct cppISteamUtils_SteamUtils004_GetAPICallResult_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetAPICallResult((SteamAPICall_t)hSteamAPICall, (void *)pCallback, (int)cubCallback, (int)iCallbackExpected, (bool *)pbFailed);
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetAPICallResult( (SteamAPICall_t)params->hSteamAPICall, (void *)params->pCallback, (int)params->cubCallback, (int)params->iCallbackExpected, (bool *)params->pbFailed );
 }
 
-void cppISteamUtils_SteamUtils004_RunFrame(void *linux_side)
+void cppISteamUtils_SteamUtils004_RunFrame( struct cppISteamUtils_SteamUtils004_RunFrame_params *params )
 {
-    ((ISteamUtils*)linux_side)->RunFrame();
+    ((ISteamUtils*)params->linux_side)->RunFrame(  );
 }
 
-uint32 cppISteamUtils_SteamUtils004_GetIPCCallCount(void *linux_side)
+void cppISteamUtils_SteamUtils004_GetIPCCallCount( struct cppISteamUtils_SteamUtils004_GetIPCCallCount_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamUtils*)linux_side)->GetIPCCallCount();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->GetIPCCallCount(  );
 }
 
-void cppISteamUtils_SteamUtils004_SetWarningMessageHook(void *linux_side, SteamAPIWarningMessageHook_t pFunction)
+void cppISteamUtils_SteamUtils004_SetWarningMessageHook( struct cppISteamUtils_SteamUtils004_SetWarningMessageHook_params *params )
 {
-    pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t((void*)pFunction);
-    ((ISteamUtils*)linux_side)->SetWarningMessageHook((SteamAPIWarningMessageHook_t)pFunction);
+    params->pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    ((ISteamUtils*)params->linux_side)->SetWarningMessageHook( (SteamAPIWarningMessageHook_t)params->pFunction );
 }
 
-bool cppISteamUtils_SteamUtils004_IsOverlayEnabled(void *linux_side)
+void cppISteamUtils_SteamUtils004_IsOverlayEnabled( struct cppISteamUtils_SteamUtils004_IsOverlayEnabled_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamUtils*)linux_side)->IsOverlayEnabled();
-    return (_ret);
+    params->_ret = ((ISteamUtils*)params->linux_side)->IsOverlayEnabled(  );
 }
 
 #ifdef __cplusplus

@@ -12,28 +12,24 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V002.h"
-void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(void *linux_side, AppId_t unVideoAppID)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL_params *params )
 {
-    ((ISteamVideo*)linux_side)->GetVideoURL((AppId_t)unVideoAppID);
+    ((ISteamVideo*)params->linux_side)->GetVideoURL( (AppId_t)params->unVideoAppID );
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(void *linux_side, int *pnNumViewers)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamVideo*)linux_side)->IsBroadcasting((int *)pnNumViewers);
-    return (_ret);
+    params->_ret = ((ISteamVideo*)params->linux_side)->IsBroadcasting( (int *)params->pnNumViewers );
 }
 
-void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(void *linux_side, AppId_t unVideoAppID)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings_params *params )
 {
-    ((ISteamVideo*)linux_side)->GetOPFSettings((AppId_t)unVideoAppID);
+    ((ISteamVideo*)params->linux_side)->GetOPFSettings( (AppId_t)params->unVideoAppID );
 }
 
-bool cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(void *linux_side, AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize)
+void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamVideo*)linux_side)->GetOPFStringForApp((AppId_t)unVideoAppID, (char *)pchBuffer, (int32 *)pnBufferSize);
-    return (_ret);
+    params->_ret = ((ISteamVideo*)params->linux_side)->GetOPFStringForApp( (AppId_t)params->unVideoAppID, (char *)params->pchBuffer, (int32 *)params->pnBufferSize );
 }
 
 #ifdef __cplusplus
