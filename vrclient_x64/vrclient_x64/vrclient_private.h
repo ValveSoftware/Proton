@@ -106,22 +106,6 @@ struct generic_interface
     void (*dtor)(struct w_steam_iface *);
 };
 
-bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, unsigned int version,
-        struct client_core_data *user_data);
-EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
-        void *linux_side, EVRApplicationType application_type,
-        unsigned int version, struct client_core_data *user_data);
-EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationType, const char *),
-        void *linux_side, EVRApplicationType application_type, const char *startup_info,
-        unsigned int version, struct client_core_data *user_data);
-
-void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *, EVRInitError *),
-        void *linux_side, const char *name_and_version, EVRInitError *error,
-        unsigned int version, struct client_core_data *user_data);
-
-void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
-        unsigned int version, struct client_core_data *user_data);
-
 #ifdef __dxvk_interop_h__
 extern Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
                                                   IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,

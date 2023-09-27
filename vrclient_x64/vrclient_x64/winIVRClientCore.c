@@ -26,19 +26,9 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 8)
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType)
-{
-    EVRInitError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_002_init(cppIVRClientCore_IVRClientCore_002_Init, _this->u_iface, eApplicationType, 2, &_this->user_data);
-    return _ret;
-}
+extern EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType);
 
-void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam_iface *_this)
-{
-    TRACE("%p\n", _this);
-    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_002_Cleanup, _this->u_iface, 2, &_this->user_data);
-}
+extern void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam_iface *_this);
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
@@ -48,21 +38,9 @@ EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionVal
     return _ret;
 }
 
-void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError)
-{
-    void * _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_002_GetGenericInterface, _this->u_iface, pchNameAndVersion, peError, 2, &_this->user_data);
-    return _ret;
-}
+extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
 
-bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->u_iface, 2, &_this->user_data);
-    return _ret;
-}
+extern bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this);
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
@@ -153,19 +131,9 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 8)
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo)
-{
-    EVRInitError _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_init(cppIVRClientCore_IVRClientCore_003_Init, _this->u_iface, eApplicationType, pStartupInfo, 3, &_this->user_data);
-    return _ret;
-}
+extern EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo);
 
-void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam_iface *_this)
-{
-    TRACE("%p\n", _this);
-    ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_003_Cleanup, _this->u_iface, 3, &_this->user_data);
-}
+extern void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam_iface *_this);
 
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
@@ -175,21 +143,9 @@ EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionVal
     return _ret;
 }
 
-void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError)
-{
-    void * _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_get_generic_interface(cppIVRClientCore_IVRClientCore_003_GetGenericInterface, _this->u_iface, pchNameAndVersion, peError, 3, &_this->user_data);
-    return _ret;
-}
+extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
 
-bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this)
-{
-    bool _ret;
-    TRACE("%p\n", _this);
-    _ret = ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->u_iface, 3, &_this->user_data);
-    return _ret;
-}
+extern bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this);
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
 {
