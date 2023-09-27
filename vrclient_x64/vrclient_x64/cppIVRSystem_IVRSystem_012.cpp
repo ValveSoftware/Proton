@@ -155,8 +155,8 @@ bool cppIVRSystem_IVRSystem_012_PollNextEvent(void *linux_side, winVREvent_t_103
     bool _ret;
     if(pEvent)
         struct_VREvent_t_103_win_to_lin(pEvent, &lin);
-    uncbVREvent = uncbVREvent ? sizeof(lin) : 0;
-    _ret = ((IVRSystem*)linux_side)->PollNextEvent(pEvent ? &lin : nullptr, (uint32_t)uncbVREvent);
+    uint32_t lin_uncbVREvent = uncbVREvent ? sizeof(lin) : 0;
+    _ret = ((IVRSystem*)linux_side)->PollNextEvent(pEvent ? &lin : nullptr, lin_uncbVREvent);
     if(pEvent)
         struct_VREvent_t_103_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
@@ -168,8 +168,8 @@ bool cppIVRSystem_IVRSystem_012_PollNextEventWithPose(void *linux_side, ETrackin
     bool _ret;
     if(pEvent)
         struct_VREvent_t_103_win_to_lin(pEvent, &lin);
-    uncbVREvent = uncbVREvent ? sizeof(lin) : 0;
-    _ret = ((IVRSystem*)linux_side)->PollNextEventWithPose((vr::ETrackingUniverseOrigin)eOrigin, pEvent ? &lin : nullptr, (uint32_t)uncbVREvent, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
+    uint32_t lin_uncbVREvent = uncbVREvent ? sizeof(lin) : 0;
+    _ret = ((IVRSystem*)linux_side)->PollNextEventWithPose((vr::ETrackingUniverseOrigin)eOrigin, pEvent ? &lin : nullptr, lin_uncbVREvent, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
     if(pEvent)
         struct_VREvent_t_103_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
