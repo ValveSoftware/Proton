@@ -525,16 +525,16 @@ def declspec(decl, name):
     return f'{const}{typename}{name}'
 
 
-def handle_method_hpp(method, cppname, cpp_h):
+def handle_method_hpp(method, cppname, out):
     ret = f'{declspec(method.result_type, "")} '
 
     params = [declspec(p, "") for p in method.get_arguments()]
     params = ['void *'] + params
 
-    cpp_h.write(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
+    out(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
 
 
-def handle_method_cpp(method, classname, cppname, cpp):
+def handle_method_cpp(method, classname, cppname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
 
     ret = f'{declspec(method.result_type, "")} '
@@ -546,11 +546,11 @@ def handle_method_cpp(method, classname, cppname, cpp):
     names = ['linux_side'] + names
     params = ['void *linux_side'] + params
 
-    cpp.write(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
-    cpp.write("{\n")
+    out(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
+    out(u'{\n')
 
     if not returns_void:
-        cpp.write(f'    {declspec(method.result_type, "_ret")};\n')
+        out(f'    {declspec(method.result_type, "_ret")};\n')
 
     do_lin_to_win = None
     do_win_to_lin = None
@@ -580,17 +580,17 @@ def handle_method_cpp(method, classname, cppname, cpp):
 
     if do_lin_to_win or do_win_to_lin:
         if do_lin_to_win:
-            cpp.write("    %s lin;\n" % do_lin_to_win[0])
+            out(f'    {do_lin_to_win[0]} lin;\n')
         else:
-            cpp.write("    %s lin;\n" % do_win_to_lin[0])
+            out(f'    {do_win_to_lin[0]} lin;\n')
 
     if do_wrap:
-        cpp.write("    %s *lin;\n" % do_wrap[0])
+        out(f'    {do_wrap[0]} *lin;\n')
 
     if do_win_to_lin:
         #XXX we should pass the struct size here
-        cpp.write("    if(%s)\n" % do_win_to_lin[1])
-        cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
+        out(f'    if ({do_win_to_lin[1]})\n')
+        out(f'        struct_{strip_ns(do_win_to_lin[0])}_{display_sdkver(sdkver)}_win_to_lin({do_win_to_lin[1]}, &lin);\n')
 
 
     size_fixup = {}
@@ -607,19 +607,19 @@ def handle_method_cpp(method, classname, cppname, cpp):
             convert_size_param = ', -1'
         elif struct_needs_size_adjustment(real_type.get_canonical()):
             real_name = real_type.spelling
-            cpp.write(f'    uint32_t lin_{next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
+            out(f'    uint32_t lin_{next_name} = std::min({next_name}, (uint32_t)sizeof({real_name}));\n')
             convert_size_param = f', {next_name}'
             size_fixup[next_name] = True
         elif do_win_to_lin and do_win_to_lin[1] == name:
             assert do_win_to_lin[0] not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
-            cpp.write(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin) : 0;\n')
+            out(f'    uint32_t lin_{next_name} = {next_name} ? sizeof(lin) : 0;\n')
             convert_size_param = f', {next_name}'
             size_fixup[next_name] = True
 
     if returns_void:
-        cpp.write("    ")
+        out(u'    ')
     else:
-        cpp.write("    _ret = ")
+        out(u'    _ret = ')
 
     params = []
     for name, param in zip(names[1:], method.get_arguments()):
@@ -636,21 +636,21 @@ def handle_method_cpp(method, classname, cppname, cpp):
         else:
             params.append("(%s)%s" % (param.type.spelling, name))
 
-    cpp.write(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
+    out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
 
     if do_lin_to_win:
-        cpp.write("    if(%s)\n" % do_lin_to_win[1])
-        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
+        out(f'    if ({do_lin_to_win[1]})\n')
+        out(f'        struct_{strip_ns(do_lin_to_win[0])}_{display_sdkver(sdkver)}_lin_to_win(&lin, {do_lin_to_win[1]}{convert_size_param});\n')
     if do_wrap and not returns_void:
-            cpp.write("    if(_ret == 0)\n")
-            cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
+            out(u'    if (_ret == 0)\n')
+            out(f'        *{do_wrap[1]} = struct_{strip_ns(do_wrap[0])}_{display_sdkver(sdkver)}_wrap(lin);\n')
 
     if not returns_void:
-        cpp.write(u'    return _ret;\n')
-    cpp.write("}\n\n")
+        out(u'    return _ret;\n')
+    out(u'}\n\n')
 
 
-def handle_thiscall_wrapper(klass, method, cfile):
+def handle_thiscall_wrapper(klass, method, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     def param_stack_size(param):
@@ -661,10 +661,10 @@ def handle_thiscall_wrapper(klass, method, cfile):
     if returns_record: size += 4
 
     name = f'win{klass.spelling}_{klass.version}_{method.name}'
-    cfile.write(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
+    out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
-def handle_method_c(method, classname, winclassname, cppname, iface_version, cfile):
+def handle_method_c(method, classname, winclassname, cppname, iface_version, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -682,51 +682,51 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
     params = [f'{winclassname} *_this'] + params
     names = ['_this'] + names
 
-    cfile.write(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
-    cfile.write("{\n")
+    out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
+    out(u'{\n')
 
     if returns_record:
         del params[1]
         del names[1]
 
     if not returns_record and not returns_void:
-        cfile.write(f'    {ret}_ret;\n')
+        out(f'    {ret}_ret;\n')
 
     path_conv = get_path_converter(method)
 
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write("    const char **lin_%s = vrclient_dos_to_unix_stringlist(%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                out(f'    const char **lin_{path_conv["w2l_names"][i]} = vrclient_dos_to_unix_stringlist({path_conv["w2l_names"][i]});\n')
                 # TODO
                 pass
             else:
-                cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
-                cfile.write("    vrclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                out(f'    char lin_{path_conv["w2l_names"][i]}[PATH_MAX];\n')
+                out(f'    vrclient_dos_path_to_unix_path({path_conv["w2l_names"][i]}, lin_{path_conv["w2l_names"][i]});\n')
 
-    cfile.write("    TRACE(\"%p\\n\", _this);\n")
+    out(u'    TRACE("%p\\n", _this);\n')
 
     if returns_record:
-        cfile.write(u'    *_ret = ')
+        out(u'    *_ret = ')
     elif not returns_void:
-        cfile.write(u'    _ret = ')
+        out(u'    _ret = ')
     else:
-        cfile.write(u'    ')
+        out(u'    ')
 
     should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR")
     if should_gen_wrapper:
-        cfile.write("create_win_interface(pchNameAndVersion,\n        ")
+        out(u'create_win_interface(pchNameAndVersion,\n        ')
 
     is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
         if method.name == methodname and classname_pattern in classname:
             fn_name = override_generator(cppname, method)
             if fn_name:
-                cfile.write("%s(%s_%s, " % (fn_name, cppname, method.name))
+                out("%s(%s_%s, " % (fn_name, cppname, method.name))
                 is_method_overridden = True
                 break
     else:
-        cfile.write("%s_%s(" % (cppname, method.name))
+        out(f'{cppname}_{method.name}(')
 
     def param_call(param, name):
         if name == '_this': return '_this->linux_side'
@@ -734,36 +734,36 @@ def handle_method_c(method, classname, winclassname, cppname, iface_version, cfi
         return name
 
     params = ['_this'] + list(method.get_arguments())
-    cfile.write(", ".join([param_call(p, n) for p, n in zip(params, names)]))
+    out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
 
     if should_gen_wrapper:
-        cfile.write(")")
+        out(u')')
 
     if should_gen_wrapper:
-        cfile.write(")")
+        out(u')')
     if is_method_overridden:
-        cfile.write(", %s" % iface_version[iface_version.find("_") + 1:].lstrip("0"))
+        out(f', {iface_version[iface_version.find("_") + 1:].lstrip("0")}')
         for classname_pattern, user_data_type, _ in method_overrides_data:
             if classname_pattern in classname:
-                cfile.write(", &_this->user_data")
+                out(u', &_this->user_data')
                 break
-    cfile.write(");\n")
+    out(u');\n')
 
     if path_conv and len(path_conv["l2w_names"]) > 0:
         for i in range(len(path_conv["l2w_names"])):
             assert(path_conv["l2w_names"][i]) #otherwise, no name means string is in return value. needs special handling.
-            cfile.write("    ")
+            out(u'    ')
             if path_conv["return_is_size"]:
-                cfile.write("_ret = ")
-            cfile.write("vrclient_unix_path_to_dos_path(_ret, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
+                out(u'_ret = ')
+            out(f'vrclient_unix_path_to_dos_path(_ret, {path_conv["l2w_names"][i]}, {path_conv["l2w_names"][i]}, {path_conv["l2w_lens"][i]});\n')
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
+                out(f'    vrclient_free_stringlist(lin_{path_conv["w2l_names"][i]});\n')
 
     if not returns_void:
-        cfile.write(u'    return _ret;\n')
-    cfile.write("}\n\n")
+        out(u'    return _ret;\n')
+    out(u'}\n\n')
 
 
 max_c_api_param_count = 0
@@ -836,24 +836,24 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("} %s;\n\n" % winclassname)
 
     for method in klass.methods:
-        handle_thiscall_wrapper(klass, method, cfile)
+        handle_thiscall_wrapper(klass, method, cfile.write)
     cfile.write('\n')
 
     for method in klass.methods:
         if type(method) is Destructor:
             continue
-        handle_method_hpp(method, cppname, cpp_h)
+        handle_method_hpp(method, cppname, cpp_h.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
             continue
-        handle_method_cpp(method, klass.spelling, cppname, cpp)
+        handle_method_cpp(method, klass.spelling, cppname, cpp.write)
 
     for method in klass.methods:
         if type(method) is Destructor:
             continue
         else:
-            handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, cfile)
+            handle_method_c(method, klass.spelling, winclassname, cppname, klass.version, cfile.write)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
