@@ -13,46 +13,34 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(void *linux_side)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsParentalLockEnabled();
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsParentalLockEnabled(  );
 }
 
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked(void *linux_side)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsParentalLockLocked();
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsParentalLockLocked(  );
 }
 
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(void *linux_side, AppId_t nAppID)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsAppBlocked((AppId_t)nAppID);
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsAppBlocked( (AppId_t)params->nAppID );
 }
 
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(void *linux_side, AppId_t nAppID)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsAppInBlockList((AppId_t)nAppID);
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsAppInBlockList( (AppId_t)params->nAppID );
 }
 
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(void *linux_side, EParentalFeature eFeature)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsFeatureBlocked((EParentalFeature)eFeature);
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsFeatureBlocked( (EParentalFeature)params->eFeature );
 }
 
-bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(void *linux_side, EParentalFeature eFeature)
+void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamParentalSettings*)linux_side)->BIsFeatureInBlockList((EParentalFeature)eFeature);
-    return (_ret);
+    params->_ret = ((ISteamParentalSettings*)params->linux_side)->BIsFeatureInBlockList( (EParentalFeature)params->eFeature );
 }
 
 #ifdef __cplusplus

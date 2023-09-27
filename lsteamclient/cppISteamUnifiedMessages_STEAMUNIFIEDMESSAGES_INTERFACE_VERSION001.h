@@ -1,5 +1,50 @@
-extern ClientUnifiedMessageHandle cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(void *, const char *, const void *, uint32, uint64);
-extern bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(void *, ClientUnifiedMessageHandle, uint32 *, EResult *);
-extern bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(void *, ClientUnifiedMessageHandle, void *, uint32, bool);
-extern bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(void *, ClientUnifiedMessageHandle);
-extern bool cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(void *, const char *, const void *, uint32);
+struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params
+{
+    void *linux_side;
+    ClientUnifiedMessageHandle _ret;
+    const char *pchServiceMethod;
+    const void *pRequestBuffer;
+    uint32 unRequestBufferSize;
+    uint64 unContext;
+};
+extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params *params );
+
+struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params
+{
+    void *linux_side;
+    bool _ret;
+    ClientUnifiedMessageHandle hHandle;
+    uint32 *punResponseSize;
+    EResult *peResult;
+};
+extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params *params );
+
+struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params
+{
+    void *linux_side;
+    bool _ret;
+    ClientUnifiedMessageHandle hHandle;
+    void *pResponseBuffer;
+    uint32 unResponseBufferSize;
+    bool bAutoRelease;
+};
+extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params *params );
+
+struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params
+{
+    void *linux_side;
+    bool _ret;
+    ClientUnifiedMessageHandle hHandle;
+};
+extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params *params );
+
+struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params
+{
+    void *linux_side;
+    bool _ret;
+    const char *pchServiceNotification;
+    const void *pNotificationBuffer;
+    uint32 unNotificationBufferSize;
+};
+extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params *params );
+

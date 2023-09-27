@@ -12,57 +12,49 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001.h"
-bool cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusic*)linux_side)->BIsEnabled();
-    return (_ret);
+    params->_ret = ((ISteamMusic*)params->linux_side)->BIsEnabled(  );
 }
 
-bool cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamMusic*)linux_side)->BIsPlaying();
-    return (_ret);
+    params->_ret = ((ISteamMusic*)params->linux_side)->BIsPlaying(  );
 }
 
-AudioPlayback_Status cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus_params *params )
 {
-    AudioPlayback_Status _ret;
-    _ret = ((ISteamMusic*)linux_side)->GetPlaybackStatus();
-    return (_ret);
+    params->_ret = ((ISteamMusic*)params->linux_side)->GetPlaybackStatus(  );
 }
 
-void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Play(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Play( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Play_params *params )
 {
-    ((ISteamMusic*)linux_side)->Play();
+    ((ISteamMusic*)params->linux_side)->Play(  );
 }
 
-void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Pause(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Pause( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_Pause_params *params )
 {
-    ((ISteamMusic*)linux_side)->Pause();
+    ((ISteamMusic*)params->linux_side)->Pause(  );
 }
 
-void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayPrevious(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayPrevious( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayPrevious_params *params )
 {
-    ((ISteamMusic*)linux_side)->PlayPrevious();
+    ((ISteamMusic*)params->linux_side)->PlayPrevious(  );
 }
 
-void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayNext(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayNext( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayNext_params *params )
 {
-    ((ISteamMusic*)linux_side)->PlayNext();
+    ((ISteamMusic*)params->linux_side)->PlayNext(  );
 }
 
-void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume(void *linux_side, float flVolume)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume_params *params )
 {
-    ((ISteamMusic*)linux_side)->SetVolume((float)flVolume);
+    ((ISteamMusic*)params->linux_side)->SetVolume( (float)params->flVolume );
 }
 
-float cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(void *linux_side)
+void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume_params *params )
 {
-    float _ret;
-    _ret = ((ISteamMusic*)linux_side)->GetVolume();
-    return (_ret);
+    params->_ret = ((ISteamMusic*)params->linux_side)->GetVolume(  );
 }
 
 #ifdef __cplusplus

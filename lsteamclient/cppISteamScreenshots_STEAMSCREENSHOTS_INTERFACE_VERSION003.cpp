@@ -12,63 +12,49 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003.h"
-ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(void *linux_side, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params *params )
 {
-    ScreenshotHandle _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->WriteScreenshot((void *)pubRGB, (uint32)cubRGB, (int)nWidth, (int)nHeight);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->WriteScreenshot( (void *)params->pubRGB, (uint32)params->cubRGB, (int)params->nWidth, (int)params->nHeight );
 }
 
-ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(void *linux_side, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params *params )
 {
-    ScreenshotHandle _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->AddScreenshotToLibrary((const char *)pchFilename, (const char *)pchThumbnailFilename, (int)nWidth, (int)nHeight);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->AddScreenshotToLibrary( (const char *)params->pchFilename, (const char *)params->pchThumbnailFilename, (int)params->nWidth, (int)params->nHeight );
 }
 
-void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot(void *linux_side)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot_params *params )
 {
-    ((ISteamScreenshots*)linux_side)->TriggerScreenshot();
+    ((ISteamScreenshots*)params->linux_side)->TriggerScreenshot(  );
 }
 
-void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots(void *linux_side, bool bHook)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots_params *params )
 {
-    ((ISteamScreenshots*)linux_side)->HookScreenshots((bool)bHook);
+    ((ISteamScreenshots*)params->linux_side)->HookScreenshots( (bool)params->bHook );
 }
 
-bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(void *linux_side, ScreenshotHandle hScreenshot, const char *pchLocation)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->SetLocation((ScreenshotHandle)hScreenshot, (const char *)pchLocation);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->SetLocation( (ScreenshotHandle)params->hScreenshot, (const char *)params->pchLocation );
 }
 
-bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(void *linux_side, ScreenshotHandle hScreenshot, CSteamID steamID)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->TagUser((ScreenshotHandle)hScreenshot, (CSteamID)steamID);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->TagUser( (ScreenshotHandle)params->hScreenshot, (CSteamID)params->steamID );
 }
 
-bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(void *linux_side, ScreenshotHandle hScreenshot, PublishedFileId_t unPublishedFileID)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->TagPublishedFile((ScreenshotHandle)hScreenshot, (PublishedFileId_t)unPublishedFileID);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->TagPublishedFile( (ScreenshotHandle)params->hScreenshot, (PublishedFileId_t)params->unPublishedFileID );
 }
 
-bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked(void *linux_side)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->IsScreenshotsHooked();
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->IsScreenshotsHooked(  );
 }
 
-ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(void *linux_side, EVRScreenshotType eType, const char *pchFilename, const char *pchVRFilename)
+void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params *params )
 {
-    ScreenshotHandle _ret;
-    _ret = ((ISteamScreenshots*)linux_side)->AddVRScreenshotToLibrary((EVRScreenshotType)eType, (const char *)pchFilename, (const char *)pchVRFilename);
-    return (_ret);
+    params->_ret = ((ISteamScreenshots*)params->linux_side)->AddVRScreenshotToLibrary( (EVRScreenshotType)params->eType, (const char *)params->pchFilename, (const char *)params->pchVRFilename );
 }
 
 #ifdef __cplusplus

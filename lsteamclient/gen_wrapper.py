@@ -259,7 +259,7 @@ def method_needs_manual_handling(interface_with_version, method_name):
     return method and method.version_func(version)
 
 def post_execution_function(classname, method_name):
-    return POST_EXEC_FUNCS.get(classname + "_" + method_name, '')
+    return POST_EXEC_FUNCS.get(classname + "_" + method_name, None)
 
 # manual converters for simple types (function pointers)
 MANUAL_TYPES = [
@@ -593,22 +593,33 @@ def declspec(decl, name):
 
 
 def handle_method_hpp(method, cppname, out):
-    ret = f'{declspec(method.result_type, "")} '
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
-    params = [declspec(p, "") for p in method.get_arguments()]
-    params = ['void *'] + params
-
-    out(f'extern {ret}{cppname}_{method.name}({", ".join(params)});\n')
-
-
-def handle_method_cpp(method, classname, cppname, out):
-    returns_void = method.result_type.kind == TypeKind.VOID
-
-    ret = f'{declspec(method.result_type, "")} '
+    ret = "*_ret" if returns_record else "_ret"
+    ret = f'{declspec(method.result_type, ret)}'
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
+
+    if method.result_type.kind != TypeKind.VOID:
+        params = [ret] + params
+    params = ['void *linux_side'] + params
+
+    out(f'struct {cppname}_{method.name}_params\n')
+    out(u'{\n')
+    for param in params:
+        out(f'    {param};\n')
+    out(u'};\n')
+    out(f'extern void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params );\n\n')
+
+
+def handle_method_cpp(method, classname, cppname, out):
+    returns_void = method.result_type.kind == TypeKind.VOID
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
+
+    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+             for i, p in enumerate(method.get_arguments())]
 
     need_convert = {n: p for n, p in zip(names, method.get_arguments())
                     if param_needs_conversion(p)}
@@ -617,13 +628,9 @@ def handle_method_cpp(method, classname, cppname, out):
                       or p.spelling in MANUAL_PARAMS}
 
     names = ['linux_side'] + names
-    params = ['void *linux_side'] + params
 
-    out(f'{ret}{cppname}_{method.name}({", ".join(params)})\n')
+    out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
     out(u'{\n')
-
-    if not returns_void:
-        out(f'    {declspec(method.result_type, "_ret")};\n')
 
     need_output = {}
 
@@ -632,7 +639,7 @@ def handle_method_cpp(method, classname, cppname, out):
 
         if param.type.kind != TypeKind.POINTER:
             out(f'    {type_name} lin_{name};\n')
-            out(f'    win_to_lin_struct_{type_name}_{sdkver}(&{name}, &lin_{name});\n')
+            out(f'    win_to_lin_struct_{type_name}_{sdkver}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
@@ -645,35 +652,37 @@ def handle_method_cpp(method, classname, cppname, out):
             need_output[name] = param
 
         out(f'    {type_name} lin_{name};\n')
-        out(f'    win_to_lin_struct_{type_name}_{sdkver}({name}, &lin_{name});\n')
+        out(f'    win_to_lin_struct_{type_name}_{sdkver}( params->{name}, &lin_{name} );\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            out(f'    {name} = manual_convert_{name}({name});\n')
+            out(f'    params->{name} = manual_convert_{name}( params->{name} );\n')
         else:
-            out(f'    {name} = ({param.type.spelling})manual_convert_{param.type.spelling}((void*){name});\n')
+            out(f'    params->{name} = ({param.type.spelling})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
 
     if returns_void:
         out(u'    ')
+    elif returns_record:
+        out(u'    *params->_ret = ')
     else:
-        out(u'    _ret = ')
+        out(u'    params->_ret = ')
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}lin_{name}"
-        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*{name}'
-        return f"({param.type.spelling}){name}"
+        if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*params->{name}'
+        return f"({param.type.spelling})params->{name}"
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
-    out(f'(({classname}*)linux_side)->{method.spelling}({", ".join(params)});\n')
+    out(f'(({classname}*)params->linux_side)->{method.spelling}( {", ".join(params)} );\n')
 
     for name, param in sorted(need_output.items()):
         type_name = underlying_typename(param)
-        out(f'    lin_to_win_struct_{type_name}_{sdkver}(&lin_{name}, {name});\n')
+        out(f'    lin_to_win_struct_{type_name}_{sdkver}( &lin_{name}, params->{name} );\n')
 
     if method.result_type.kind != TypeKind.VOID:
         post_exec = post_execution_function(classname, method.spelling)
-        out(f'    return {post_exec}(_ret);\n')
+        if post_exec: out(f'    params->_ret = {post_exec}( params->_ret );\n')
     out(u'}\n\n')
 
 
@@ -698,98 +707,81 @@ def handle_method_c(method, winclassname, cppname, out):
     ret = "*" if returns_record else ""
     ret = f'{declspec(method.result_type, ret)} '
 
+    types = [p.type for p in method.get_arguments()]
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i]) for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
         params = [f'{declspec(method.result_type, "*_ret")}'] + params
+        types = [method.result_type] + types
         names = ['_ret'] + names
 
     params = ['struct w_steam_iface *_this'] + params
+    types = [None] + types
     names = ['_this'] + names
 
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
     out(u'{\n')
 
-    if returns_record:
-        del params[1]
-        del names[1]
-
-    if not returns_record and not returns_void:
-        out(f'    {ret}_ret;\n')
+    out(f'    struct {cppname}_{method.name}_params params =\n')
+    out(u'    {\n')
+    out(u'        .linux_side = _this->u_iface,\n')
+    for type, name in zip(types[1:], names[1:]):
+        iface = type.get_pointee().spelling if type.kind == TypeKind.POINTER else None
+        out(f'        .{name} = ')
+        if iface not in WRAPPED_CLASSES: out(f'{name},\n')
+        else: out(f'create_Linux{iface}({name}, "{winclassname}"),\n')
+    out(u'    };\n')
 
     should_gen_callback = "GetAPICallResult" in method.name
     if should_gen_callback:
-        out(u'    int u_callback_len = cubCallback, w_callback_len = cubCallback;\n')
-        out(u'    void *u_callback, *w_callback = pCallback;\n')
+        out(u'    int w_callback_len = cubCallback;\n')
+        out(u'    void *w_callback = pCallback;\n')
 
     path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.spelling}_{method.spelling}', {})
     path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
         if conv['array']:
-            out(f'    const char **u_{name} = steamclient_dos_to_unix_path_array( {name} );\n')
+            out(f'    params.{name} = steamclient_dos_to_unix_path_array( {name} );\n')
         else:
-            out(f'    const char *u_{name} = steamclient_dos_to_unix_path( {name}, {int(conv["url"])} );\n')
+            out(f'    params.{name} = steamclient_dos_to_unix_path( {name}, {int(conv["url"])} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
     if should_gen_callback:
-        out(u'    if (!(u_callback = alloc_callback_wtou(iCallbackExpected, w_callback, &u_callback_len))) return FALSE;\n')
-        out(u'    cubCallback = u_callback_len;\n')
-        out(u'    pCallback = u_callback;\n\n')
+        out(u'    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;\n')
 
-    if returns_record:
-        out(u'    *_ret = ')
-    elif not returns_void:
-        out(u'    _ret = ')
-    else:
-        out(u'    ')
+    out(f'    {cppname}_{method.name}( &params );\n')
 
     should_gen_wrapper = not method_needs_manual_handling(cppname, method.name) and \
             (method.result_type.spelling.startswith("ISteam") or \
              method.name.startswith("GetISteamGenericInterface"))
     if should_gen_wrapper:
-        out(u'create_win_interface(pchVersion,\n        ')
-    out(f'{cppname}_{method.name}(')
-
-    def param_call(param, name):
-        if name == '_this': return '_this->u_iface'
-        iface = param.type.get_pointee().spelling if param.type.kind == TypeKind.POINTER else None
-        if iface in WRAPPED_CLASSES: return f'create_Linux{iface}({name}, "{winclassname}")'
-        if name in path_conv_wtou: return f'{name} ? u_{name} : NULL'
-        return name
-
-    params = ['_this'] + list(method.get_arguments())
-    out(", ".join([param_call(p, n) for p, n in zip(params, names)]))
-
-    if should_gen_wrapper:
-        out(u')')
-
-    out(u');\n')
+        out(u'    params._ret = create_win_interface( pchVersion, params._ret );\n')
 
     if should_gen_callback:
-        out(u'    if (_ret && u_callback != w_callback)\n')
+        out(u'    if (params._ret && params.pCallback != w_callback)\n')
         out(u'    {\n')
-        out(u'        convert_callback_utow(iCallbackExpected, u_callback, u_callback_len, w_callback, w_callback_len);\n')
-        out(u'        HeapFree(GetProcessHeap(), 0, u_callback);\n')
+        out(u'        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);\n')
+        out(u'        HeapFree(GetProcessHeap(), 0, params.pCallback);\n')
         out(u'    }\n\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
         out(u'    ')
         if "ret_size" in path_conv_utow:
-            out(u'_ret = ')
-        out(f'steamclient_unix_path_to_dos_path(_ret, {name}, {name}, {conv["len"]}, {int(conv["url"])});\n')
+            out(u'params._ret = ')
+        out(f'steamclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]}, {int(conv["url"])} );\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
         if conv["array"]:
-            out(f'    steamclient_free_path_array( u_{name} );\n')
+            out(f'    steamclient_free_path_array( params.{name} );\n')
         else:
-            out(f'    steamclient_free_path( u_{name} );\n')
+            out(f'    steamclient_free_path( params.{name} );\n')
 
     if not returns_void:
-        out(u'    return _ret;\n')
+        out(u'    return params._ret;\n')
     out(u'}\n\n')
 
 

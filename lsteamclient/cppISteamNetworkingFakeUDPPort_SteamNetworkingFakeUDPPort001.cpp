@@ -13,16 +13,14 @@ extern "C" {
 #define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
-EResult cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(void *linux_side, const SteamNetworkingIPAddr *remoteAddress, const void *pData, uint32 cbData, int nSendFlags)
+void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamNetworkingFakeUDPPort*)linux_side)->SendMessageToFakeIP(*remoteAddress, (const void *)pData, (uint32)cbData, (int)nSendFlags);
-    return (_ret);
+    params->_ret = ((ISteamNetworkingFakeUDPPort*)params->linux_side)->SendMessageToFakeIP( *params->remoteAddress, (const void *)params->pData, (uint32)params->cbData, (int)params->nSendFlags );
 }
 
-void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup(void *linux_side, const SteamNetworkingIPAddr *remoteAddress)
+void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup_params *params )
 {
-    ((ISteamNetworkingFakeUDPPort*)linux_side)->ScheduleCleanup(*remoteAddress);
+    ((ISteamNetworkingFakeUDPPort*)params->linux_side)->ScheduleCleanup( *params->remoteAddress );
 }
 
 #ifdef __cplusplus

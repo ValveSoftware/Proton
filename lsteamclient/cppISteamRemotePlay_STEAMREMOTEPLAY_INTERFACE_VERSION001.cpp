@@ -12,53 +12,39 @@ extern "C" {
 #define SDKVER_157
 #include "struct_converters.h"
 #include "cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001.h"
-uint32 cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount(void *linux_side)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount_params *params )
 {
-    uint32 _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->GetSessionCount();
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->GetSessionCount(  );
 }
 
-RemotePlaySessionID_t cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID(void *linux_side, int iSessionIndex)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID_params *params )
 {
-    RemotePlaySessionID_t _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->GetSessionID((int)iSessionIndex);
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->GetSessionID( (int)params->iSessionIndex );
 }
 
-CSteamID cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID(void *linux_side, RemotePlaySessionID_t unSessionID)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID_params *params )
 {
-    CSteamID _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->GetSessionSteamID((RemotePlaySessionID_t)unSessionID);
-    return (_ret);
+    *params->_ret = ((ISteamRemotePlay*)params->linux_side)->GetSessionSteamID( (RemotePlaySessionID_t)params->unSessionID );
 }
 
-const char * cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName(void *linux_side, RemotePlaySessionID_t unSessionID)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName_params *params )
 {
-    const char *_ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->GetSessionClientName((RemotePlaySessionID_t)unSessionID);
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->GetSessionClientName( (RemotePlaySessionID_t)params->unSessionID );
 }
 
-ESteamDeviceFormFactor cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor(void *linux_side, RemotePlaySessionID_t unSessionID)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor_params *params )
 {
-    ESteamDeviceFormFactor _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->GetSessionClientFormFactor((RemotePlaySessionID_t)unSessionID);
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->GetSessionClientFormFactor( (RemotePlaySessionID_t)params->unSessionID );
 }
 
-bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(void *linux_side, RemotePlaySessionID_t unSessionID, int *pnResolutionX, int *pnResolutionY)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->BGetSessionClientResolution((RemotePlaySessionID_t)unSessionID, (int *)pnResolutionX, (int *)pnResolutionY);
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->BGetSessionClientResolution( (RemotePlaySessionID_t)params->unSessionID, (int *)params->pnResolutionX, (int *)params->pnResolutionY );
 }
 
-bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite(void *linux_side, CSteamID steamIDFriend)
+void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite_params *params )
 {
-    bool _ret;
-    _ret = ((ISteamRemotePlay*)linux_side)->BSendRemotePlayTogetherInvite((CSteamID)steamIDFriend);
-    return (_ret);
+    params->_ret = ((ISteamRemotePlay*)params->linux_side)->BSendRemotePlayTogetherInvite( (CSteamID)params->steamIDFriend );
 }
 
 #ifdef __cplusplus

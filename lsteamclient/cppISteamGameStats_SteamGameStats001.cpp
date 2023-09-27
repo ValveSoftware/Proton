@@ -12,95 +12,69 @@ extern "C" {
 #define SDKVER_117
 #include "struct_converters.h"
 #include "cppISteamGameStats_SteamGameStats001.h"
-SteamAPICall_t cppISteamGameStats_SteamGameStats001_GetNewSession(void *linux_side, int8 nAccountType, uint64 ulAccountID, int32 nAppID, RTime32 rtTimeStarted)
+void cppISteamGameStats_SteamGameStats001_GetNewSession( struct cppISteamGameStats_SteamGameStats001_GetNewSession_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamGameStats*)linux_side)->GetNewSession((int8)nAccountType, (uint64)ulAccountID, (int32)nAppID, (RTime32)rtTimeStarted);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->GetNewSession( (int8)params->nAccountType, (uint64)params->ulAccountID, (int32)params->nAppID, (RTime32)params->rtTimeStarted );
 }
 
-SteamAPICall_t cppISteamGameStats_SteamGameStats001_EndSession(void *linux_side, uint64 ulSessionID, RTime32 rtTimeEnded, int nReasonCode)
+void cppISteamGameStats_SteamGameStats001_EndSession( struct cppISteamGameStats_SteamGameStats001_EndSession_params *params )
 {
-    SteamAPICall_t _ret;
-    _ret = ((ISteamGameStats*)linux_side)->EndSession((uint64)ulSessionID, (RTime32)rtTimeEnded, (int)nReasonCode);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->EndSession( (uint64)params->ulSessionID, (RTime32)params->rtTimeEnded, (int)params->nReasonCode );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt(void *linux_side, uint64 ulSessionID, const char *pstrName, int32 nData)
+void cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt( struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddSessionAttributeInt((uint64)ulSessionID, (const char *)pstrName, (int32)nData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddSessionAttributeInt( (uint64)params->ulSessionID, (const char *)params->pstrName, (int32)params->nData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeString(void *linux_side, uint64 ulSessionID, const char *pstrName, const char *pstrData)
+void cppISteamGameStats_SteamGameStats001_AddSessionAttributeString( struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeString_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddSessionAttributeString((uint64)ulSessionID, (const char *)pstrName, (const char *)pstrData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddSessionAttributeString( (uint64)params->ulSessionID, (const char *)params->pstrName, (const char *)params->pstrData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat(void *linux_side, uint64 ulSessionID, const char *pstrName, float fData)
+void cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat( struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddSessionAttributeFloat((uint64)ulSessionID, (const char *)pstrName, (float)fData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddSessionAttributeFloat( (uint64)params->ulSessionID, (const char *)params->pstrName, (float)params->fData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddNewRow(void *linux_side, uint64 *pulRowID, uint64 ulSessionID, const char *pstrTableName)
+void cppISteamGameStats_SteamGameStats001_AddNewRow( struct cppISteamGameStats_SteamGameStats001_AddNewRow_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddNewRow((uint64 *)pulRowID, (uint64)ulSessionID, (const char *)pstrTableName);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddNewRow( (uint64 *)params->pulRowID, (uint64)params->ulSessionID, (const char *)params->pstrTableName );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_CommitRow(void *linux_side, uint64 ulRowID)
+void cppISteamGameStats_SteamGameStats001_CommitRow( struct cppISteamGameStats_SteamGameStats001_CommitRow_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->CommitRow((uint64)ulRowID);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->CommitRow( (uint64)params->ulRowID );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_CommitOutstandingRows(void *linux_side, uint64 ulSessionID)
+void cppISteamGameStats_SteamGameStats001_CommitOutstandingRows( struct cppISteamGameStats_SteamGameStats001_CommitOutstandingRows_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->CommitOutstandingRows((uint64)ulSessionID);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->CommitOutstandingRows( (uint64)params->ulSessionID );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddRowAttributeInt(void *linux_side, uint64 ulRowID, const char *pstrName, int32 nData)
+void cppISteamGameStats_SteamGameStats001_AddRowAttributeInt( struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddRowAttributeInt((uint64)ulRowID, (const char *)pstrName, (int32)nData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddRowAttributeInt( (uint64)params->ulRowID, (const char *)params->pstrName, (int32)params->nData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddRowAtributeString(void *linux_side, uint64 ulRowID, const char *pstrName, const char *pstrData)
+void cppISteamGameStats_SteamGameStats001_AddRowAtributeString( struct cppISteamGameStats_SteamGameStats001_AddRowAtributeString_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddRowAtributeString((uint64)ulRowID, (const char *)pstrName, (const char *)pstrData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddRowAtributeString( (uint64)params->ulRowID, (const char *)params->pstrName, (const char *)params->pstrData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat(void *linux_side, uint64 ulRowID, const char *pstrName, float fData)
+void cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat( struct cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddRowAttributeFloat((uint64)ulRowID, (const char *)pstrName, (float)fData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddRowAttributeFloat( (uint64)params->ulRowID, (const char *)params->pstrName, (float)params->fData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(void *linux_side, uint64 ulSessionID, const char *pstrName, int64 llData)
+void cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64( struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddSessionAttributeInt64((uint64)ulSessionID, (const char *)pstrName, (int64)llData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddSessionAttributeInt64( (uint64)params->ulSessionID, (const char *)params->pstrName, (int64)params->llData );
 }
 
-EResult cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64(void *linux_side, uint64 ulRowID, const char *pstrName, int64 llData)
+void cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64( struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64_params *params )
 {
-    EResult _ret;
-    _ret = ((ISteamGameStats*)linux_side)->AddRowAttributeInt64((uint64)ulRowID, (const char *)pstrName, (int64)llData);
-    return (_ret);
+    params->_ret = ((ISteamGameStats*)params->linux_side)->AddRowAttributeInt64( (uint64)params->ulRowID, (const char *)params->pstrName, (int64)params->llData );
 }
 
 #ifdef __cplusplus
