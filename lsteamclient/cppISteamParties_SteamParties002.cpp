@@ -100,7 +100,6 @@ bool cppISteamParties_SteamParties002_GetBeaconLocationData(void *linux_side, wi
     SteamPartyBeaconLocation_t lin_BeaconLocation;
     win_to_lin_struct_SteamPartyBeaconLocation_t_158(&BeaconLocation, &lin_BeaconLocation);
     _ret = ((ISteamParties*)linux_side)->GetBeaconLocationData(lin_BeaconLocation, (ESteamPartyBeaconLocationData)eData, (char *)pchDataStringOut, (int)cchDataStringOut);
-    lin_to_win_struct_SteamPartyBeaconLocation_t_158(&lin_BeaconLocation, &BeaconLocation);
     return (_ret);
 }
 
