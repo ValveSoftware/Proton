@@ -55,12 +55,12 @@ void cppIVRCompositor_IVRCompositor_009_PostPresentHandoff(void *linux_side)
 bool cppIVRCompositor_IVRCompositor_009_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
 {
     bool _ret;
-    Compositor_FrameTiming lin;
+    Compositor_FrameTiming lin_pTiming;
     if (pTiming)
-        struct_Compositor_FrameTiming_0913_win_to_lin(pTiming, &lin);
-    _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin : nullptr, (uint32_t)unFramesAgo);
+        struct_Compositor_FrameTiming_0913_win_to_lin(pTiming, &lin_pTiming);
+    _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin_pTiming : nullptr, (uint32_t)unFramesAgo);
     if (pTiming)
-        struct_Compositor_FrameTiming_0913_lin_to_win(&lin, pTiming);
+        struct_Compositor_FrameTiming_0913_lin_to_win(&lin_pTiming, pTiming);
     return _ret;
 }
 
