@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRRenderModels_IVRRenderModels_001;
 struct cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel_params
 {
     void *linux_side;

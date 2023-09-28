@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRExtendedDisplay_IVRExtendedDisplay_001;
 struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params
 {
     void *linux_side;
