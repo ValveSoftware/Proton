@@ -18,7 +18,7 @@ struct cppISteamUser_SteamUser008
     virtual int32_t GetHSteamUser(  ) = 0;
     virtual bool BLoggedOn(  ) = 0;
     virtual CSteamID GetSteamID(  ) = 0;
-    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, CGameID, uint32_t, uint16_t, bool, void *, int32_t ) = 0;
+    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, CGameID *, uint32_t, uint16_t, bool, void *, int32_t ) = 0;
     virtual void TerminateGameConnection( uint32_t, uint16_t ) = 0;
     virtual void TrackAppUsageEvent( CGameID, int32_t, const char * ) = 0;
     virtual void RefreshSteam2Login(  ) = 0;
@@ -41,6 +41,12 @@ void cppISteamUser_SteamUser008_GetSteamID( struct cppISteamUser_SteamUser008_Ge
 {
     struct cppISteamUser_SteamUser008 *iface = (struct cppISteamUser_SteamUser008 *)params->linux_side;
     *params->_ret = iface->GetSteamID(  );
+}
+
+void cppISteamUser_SteamUser008_InitiateGameConnection( struct cppISteamUser_SteamUser008_InitiateGameConnection_params *params )
+{
+    struct cppISteamUser_SteamUser008 *iface = (struct cppISteamUser_SteamUser008 *)params->linux_side;
+    params->_ret = iface->InitiateGameConnection( params->pBlob, params->cbMaxBlob, params->steamID, &params->gameID, params->unIPServer, params->usPortServer, params->bSecure, params->pvSteam2GetEncryptionKey, params->cbSteam2GetEncryptionKey );
 }
 
 void cppISteamUser_SteamUser008_TerminateGameConnection( struct cppISteamUser_SteamUser008_TerminateGameConnection_params *params )
