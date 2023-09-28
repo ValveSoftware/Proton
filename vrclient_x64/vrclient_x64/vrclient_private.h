@@ -21,36 +21,6 @@ void vrclient_free_path( const char *path );
 }
 #endif
 
-/* TODO these should be generated */
-typedef struct __winISteamClient winISteamClient;
-typedef struct __winISteamUser winISteamUser;
-typedef struct __winISteamGameServer winISteamGameServer;
-typedef struct __winISteamFriends winISteamFriends;
-typedef struct __winISteamUtils winISteamUtils;
-typedef struct __winISteamMatchmaking winISteamMatchmaking;
-typedef struct __winISteamMatchmakingServers winISteamMatchmakingServers;
-typedef struct __winISteamUserStats winISteamUserStats;
-typedef struct __winISteamGameServerStats winISteamGameServerStats;
-typedef struct __winISteamApps winISteamApps;
-typedef struct __winISteamNetworking winISteamNetworking;
-typedef struct __winISteamRemoteStorage winISteamRemoteStorage;
-typedef struct __winISteamRemoteScreenshots winISteamRemoteScreenshots;
-typedef struct __winISteamScreenshots winISteamScreenshots;
-typedef struct __winISteamHTTP winISteamHTTP;
-typedef struct __winISteamUnifiedMessages winISteamUnifiedMessages;
-typedef struct __winISteamController winISteamController;
-typedef struct __winISteamUGC winISteamUGC;
-typedef struct __winISteamAppList winISteamAppList;
-typedef struct __winISteamMusic winISteamMusic;
-typedef struct __winISteamMusicRemote winISteamMusicRemote;
-typedef struct __winISteamHTMLSurface winISteamHTMLSurface;
-typedef struct __winISteamInventory winISteamInventory;
-typedef struct __winISteamVideo winISteamVideo;
-typedef struct __winISteamMasterServerUpdater winISteamMasterServerUpdater;
-typedef struct __winISteamContentServer winISteamContentServer;
-typedef struct __winX winX;
-typedef struct __winX winX;
-
 unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes);
 void *create_LinuxMatchmakingServerListResponse(void *win);
 
