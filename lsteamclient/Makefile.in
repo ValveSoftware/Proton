@@ -239,7 +239,6 @@ SOURCES = \
 	cppISteamUtils_SteamUtils010.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V001.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V002.cpp \
-	steamclient_manual_099y.cpp \
 	steamclient_manual_141.cpp \
 	steamclient_manual_142.cpp \
 	steamclient_manual_144.cpp \

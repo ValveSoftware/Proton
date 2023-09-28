@@ -229,13 +229,6 @@ MANUAL_METHODS = {
         Method("DestroyFakeUDPPort"),
         Method("ReceiveMessages"),
     ],
-    "cppISteamUser_SteamUser": [
-        #TODO: Do we need the the value -> pointer conversion for other versions of the interface?
-        Method("InitiateGameConnection", lambda version: version == 8),
-    ],
-    #"cppISteamClient_SteamClient": [
-    #    Method("BShutdownIfAllPipesClosed"),
-    #],
 }
 
 
@@ -482,6 +475,14 @@ class Class:
         for method in self.methods:
             types = [declspec(p, "", prefix if prefix != "cpp" else None)
                      for p in method.get_arguments()]
+
+            # CGameID -> CGameID &
+            # Windows side follows the prototype in the header while Linux
+            # steamclient treats gameID parameter as pointer
+            if self.full_name == 'ISteamUser_SteamUser008' \
+               and method.name == 'InitiateGameConnection':
+                types[3] = 'CGameID *'
+
             if type(method) is Destructor:
                 out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
             else:
@@ -728,6 +729,14 @@ def handle_method_cpp(method, classname, cppname, out):
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
+
+    # CGameID -> CGameID &
+    # Windows side follows the prototype in the header while Linux
+    # steamclient treats gameID parameter as pointer
+    if klass.full_name == 'ISteamUser_SteamUser008' \
+       and method.name == 'InitiateGameConnection':
+        params[3] = f'&{params[3]}'
+
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 
     for name, param in sorted(need_output.items()):
