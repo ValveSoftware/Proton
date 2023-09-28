@@ -123,6 +123,7 @@ EXEMPT_STRUCTS = {
     "HmdVector4_t",
     "IntersectionMaskCircle_t",
     "IntersectionMaskRectangle_t",
+    "CVRSettingHelper",
 }
 
 # structs for which the size is important, either because of arrays or size parameters
@@ -356,6 +357,31 @@ class Struct:
     def fields(self):
         return [f for f in self.padded_fields if type(f) is not Padding]
 
+    def write_definition(self, out, prefix):
+        version = all_versions[sdkver][self.name]
+        kind = 'union' if type(self) is Union else 'struct'
+        wrapped = len(prefix) > 0
+
+        out(f'#pragma pack( push, {self.align} )\n')
+        out(f'{kind} {prefix}{version}\n')
+        out(u'{\n')
+        for f in self.padded_fields:
+            if type(f) is Field:
+                out(f'    {declspec(f._cursor, f.name, prefix, wrapped)};\n')
+            else:
+                out(f'    uint8_t __pad_{f.offset}[{f.size}];\n')
+        out(u'};\n')
+        out(u'#pragma pack( pop )\n\n')
+
+    def write_checks(self, out, prefix):
+        version = all_versions[sdkver][self.name]
+
+        out(f'C_ASSERT( sizeof({prefix}{version}) >= {self.size} );\n')
+        for f in self.fields:
+            out(f'C_ASSERT( offsetof({prefix}{version}, {f.name}) == {f.offset} );\n')
+            out(f'C_ASSERT( sizeof({prefix}{version}().{f.name}) >= {f.size} );\n')
+        out(u'\n')
+
     def needs_conversion(self, other):
         if other.id in self._conv_cache:
             return self._conv_cache[other.id]
@@ -379,9 +405,6 @@ class Struct:
 class Union(Struct):
     def __init__(self, sdkver, abi, cursor):
         super().__init__(sdkver, abi, cursor)
-
-    def needs_conversion(self, other):
-        return False # FIXME
 
 
 class Method:
@@ -559,13 +582,13 @@ def callconv(cursor, prefix):
 
 
 def declspec_func(decl, name, prefix):
-    ret = declspec(decl.get_result(), "", prefix)
-    params = [declspec(a, "", prefix) for a in decl.argument_types()]
+    ret = declspec(decl.get_result(), "", prefix, False)
+    params = [declspec(a, "", prefix, False) for a in decl.argument_types()]
     params = ", ".join(params) if len(params) else "void"
     return f'{ret} ({name})({params})'
 
 
-def declspec(decl, name, prefix):
+def declspec(decl, name, prefix, wrapped=False):
     call = callconv(decl, prefix)
     if type(decl) is Cursor:
         decl = decl.type
@@ -577,10 +600,16 @@ def declspec(decl, name, prefix):
         return declspec_func(decl, name, prefix)
     if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
         decl = decl.get_pointee()
-        return declspec(decl, f"*{call}{const}{name}", prefix)
+        spec = declspec(decl, f"*{call}{const}{name}", prefix, False)
+        if wrapped:
+            return f'{prefix.upper()}PTR({spec}, {name})'
+        return spec
     if decl.kind == TypeKind.CONSTANTARRAY:
         decl, count = decl.element_type, decl.element_count
-        return declspec(decl, f"({const}{name})[{count}]", prefix)
+        if wrapped:
+            spec = declspec(decl, const, prefix, False)
+            return f'{prefix.upper()}ARRAY({spec}, {count}, {name})'
+        return declspec(decl, f"({const}{name})[{count}]", prefix, False)
 
     if len(name):
         name = f' {name}'
@@ -594,6 +623,13 @@ def declspec(decl, name, prefix):
     type_name = decl.spelling.removeprefix("vr::")
     if type_name.startswith(('IVR', 'ID3D')):
         return f'{const}void /*{type_name}*/{name}'
+
+    if prefix not in (None, "win") and decl.kind == TypeKind.RECORD \
+       and type_name in all_versions[sdkver] \
+       and type_name not in EXEMPT_STRUCTS:
+        if type_name in unique_structs:
+            return f'{const}{all_versions[sdkver][type_name]}{name}'
+        return f'{const}{prefix}{all_versions[sdkver][type_name]}{name}'
 
     real_name = canonical_typename(decl)
     real_name = real_name.removeprefix("const ")
@@ -682,14 +718,14 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = strip_ns(underlying_typename(param))
 
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {declspec(param, f"lin_{name}", "u_").removeprefix("const ")};\n')
+            out(f'    {declspec(param, f"lin_{name}", None).removeprefix("const ")};\n')
             out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {declspec(pointee, f"lin_{name}", "u_").removeprefix("const ")};\n')
+            out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
             continue
 
         if type_name in SDK_STRUCTS:
@@ -699,7 +735,7 @@ def handle_method_cpp(method, classname, cppname, out):
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {declspec(pointee, f"lin_{name}", "u_").removeprefix("const ")};\n')
+        out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
         out(f'    if (params->{name})\n')
         out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin( params->{name}, &lin_{name} );\n')
 
@@ -1651,8 +1687,8 @@ for i, name in enumerate(all_structs.keys()):
         if not versions or sdkver not in versions: continue
         all_versions[sdkver][name] = versions[sdkver]
 
-def struct_order(tuple):
-    name, structs = tuple
+def struct_order(x):
+    name, structs = x if type(x) is tuple else (x, all_structs[x])
     order = (struct.order for abis in structs.values()
              for struct in abis.values())
     return (min(order), name)
@@ -1709,3 +1745,126 @@ with open("tests/main_autogen.c", "a") as f:
     f.write("}\n")
 
 generate_flatapi_c()
+
+
+declared = {}
+
+with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
+    out = file.write
+
+    for name in sorted(unique_structs, key=struct_order):
+        if name in EXEMPT_STRUCTS: continue
+        for sdkver, abis in all_structs[name].items():
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'struct {version}' in declared: continue
+            declared[f'struct {version}'] = True
+
+            kind = 'union' if type(abis['w64']) is Union else 'struct'
+
+            out(f'typedef {kind} {version} {version};\n')
+            abis['w64'].write_definition(out, "")
+
+    for name, structs in all_structs.items():
+        if name in EXEMPT_STRUCTS: continue
+        if name in unique_structs: continue
+        for sdkver, abis in structs.items():
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'typedef {version}' in declared: continue
+            declared[f'typedef {version}'] = True
+
+            kind = 'union' if type(abis['w64']) is Union else 'struct'
+
+            if type(abis['w64']) is Class:
+                out(f'typedef {kind} u_{version} u_{version};\n')
+                out(f'typedef {kind} u_{version} u64_{version};\n')
+                out(f'typedef {kind} u_{version} u32_{version};\n')
+                out(f'typedef {kind} w_{version} w_{version};\n')
+                out(f'typedef {kind} w_{version} w64_{version};\n')
+                out(f'typedef {kind} w_{version} w32_{version};\n')
+                continue
+
+            if abis["w64"].needs_conversion(abis["u64"]):
+                out(f'typedef {kind} u64_{version} u64_{version};\n')
+            else:
+                out(f'typedef {kind} w64_{version} u64_{version};\n')
+            out(f'typedef {kind} w64_{version} w64_{version};\n')
+
+            if abis["w32"].needs_conversion(abis["u32"]):
+                out(f'typedef {kind} u32_{version} u32_{version};\n')
+            else:
+                out(f'typedef {kind} w32_{version} u32_{version};\n')
+            out(f'typedef {kind} w32_{version} w32_{version};\n')
+
+    for name, structs in all_structs.items():
+        if name in EXEMPT_STRUCTS: continue
+        if name in unique_structs: continue
+        for sdkver, abis in structs.items():
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'struct {version}' in declared: continue
+            declared[f'struct {version}'] = True
+
+            kind = 'union' if type(abis['w64']) is Union else 'struct'
+
+            if type(abis['w64']) is Class:
+                abis['w64'].write_definition(out, "w_")
+                abis['u64'].write_definition(out, "u_")
+                continue
+
+            abis['w64'].write_definition(out, "w64_")
+            if abis["w64"].needs_conversion(abis["u64"]):
+                abis['u64'].write_definition(out, "u64_")
+
+            abis['w32'].write_definition(out, "w32_")
+            if abis["w32"].needs_conversion(abis["u32"]):
+                abis['u32'].write_definition(out, "u32_")
+
+            out(u'#ifdef __i386__\n')
+            out(f'typedef w32_{version} w_{version};\n')
+            out(f'typedef u32_{version} u_{version};\n')
+            out(u'#endif\n')
+            out(u'#ifdef __x86_64__\n')
+            out(f'typedef w64_{version} w_{version};\n')
+            out(f'typedef u64_{version} u_{version};\n')
+            out(u'#endif\n')
+            out(u'\n')
+
+
+with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'#include "vrclient_structs.h"\n\n')
+
+    for name in sorted(unique_structs, key=struct_order):
+        for sdkver, abis in sorted(all_structs[name].items()):
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'checks {version}' in declared: continue
+            declared[f'checks {version}'] = True
+
+            abis['w64'].write_checks(out, "")
+
+    for name, structs in all_structs.items():
+        if name in EXEMPT_STRUCTS: continue
+        if name in unique_structs: continue
+        for sdkver, abis in structs.items():
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'checks {version}' in declared: continue
+            declared[f'checks {version}'] = True
+
+            if type(abis['w64']) is Class:
+                continue
+
+            abis['w64'].write_checks(out, "w64_")
+            abis['u64'].write_checks(out, "u64_")
+            abis['w32'].write_checks(out, "w32_")
+            abis['u32'].write_checks(out, "u32_")

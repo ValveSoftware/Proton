@@ -198,3 +198,4 @@ SOURCES = \
 	vrclient_x64/struct_converters_1715.cpp \
 	vrclient_x64/struct_converters_1819.cpp \
 	vrclient_x64/struct_converters_1916.cpp \
+	vrclient_x64/unixlib_generated.cpp \
