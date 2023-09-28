@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRCompositor_IVRCompositor_010;
 struct cppIVRCompositor_IVRCompositor_010_SetTrackingSpace_params
 {
     void *linux_side;

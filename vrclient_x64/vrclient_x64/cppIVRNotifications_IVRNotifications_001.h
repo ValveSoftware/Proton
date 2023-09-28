@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRNotifications_IVRNotifications_001;
 struct cppIVRNotifications_IVRNotifications_001_GetErrorString_params
 {
     void *linux_side;

@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRChaperone_IVRChaperone_003;
 struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params
 {
     void *linux_side;

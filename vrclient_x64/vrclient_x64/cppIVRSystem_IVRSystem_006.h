@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRSystem_IVRSystem_006;
 struct cppIVRSystem_IVRSystem_006_GetWindowBounds_params
 {
     void *linux_side;

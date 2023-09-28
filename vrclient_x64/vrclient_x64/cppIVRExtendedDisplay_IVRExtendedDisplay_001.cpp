@@ -9,19 +9,32 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct cppIVRExtendedDisplay_IVRExtendedDisplay_001
+{
+#ifdef __cplusplus
+    virtual void GetWindowBounds( int32_t *, int32_t *, uint32_t *, uint32_t * ) = 0;
+    virtual void GetEyeOutputViewport( uint32_t, uint32_t *, uint32_t *, uint32_t *, uint32_t * ) = 0;
+    virtual void GetDXGIOutputInfo( int32_t *, int32_t * ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params *params )
 {
-    ((IVRExtendedDisplay*)params->linux_side)->GetWindowBounds((int32_t *)params->pnX, (int32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *iface = (struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *)params->linux_side;
+    iface->GetWindowBounds( params->pnX, params->pnY, params->pnWidth, params->pnHeight );
 }
 
 void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params *params )
 {
-    ((IVRExtendedDisplay*)params->linux_side)->GetEyeOutputViewport((vr::EVREye)params->eEye, (uint32_t *)params->pnX, (uint32_t *)params->pnY, (uint32_t *)params->pnWidth, (uint32_t *)params->pnHeight);
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *iface = (struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *)params->linux_side;
+    iface->GetEyeOutputViewport( params->eEye, params->pnX, params->pnY, params->pnWidth, params->pnHeight );
 }
 
 void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params *params )
 {
-    ((IVRExtendedDisplay*)params->linux_side)->GetDXGIOutputInfo((int32_t *)params->pnAdapterIndex, (int32_t *)params->pnAdapterOutputIndex);
+    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *iface = (struct cppIVRExtendedDisplay_IVRExtendedDisplay_001 *)params->linux_side;
+    iface->GetDXGIOutputInfo( params->pnAdapterIndex, params->pnAdapterOutputIndex );
 }
 
 #ifdef __cplusplus

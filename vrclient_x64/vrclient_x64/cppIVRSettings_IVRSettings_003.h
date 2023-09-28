@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRSettings_IVRSettings_003;
 struct cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params
 {
     void *linux_side;
