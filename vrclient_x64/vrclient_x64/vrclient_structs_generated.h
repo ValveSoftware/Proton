@@ -1707,6 +1707,9 @@ struct w64_RenderModel_TextureMap_t_1237
     uint32_t format;
     uint16_t unMipLevels;
     uint8_t __pad_22[2];
+#ifdef __cplusplus
+    operator u64_RenderModel_TextureMap_t_1237() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -1719,6 +1722,9 @@ struct u64_RenderModel_TextureMap_t_1237
     uint32_t format;
     uint16_t unMipLevels;
     uint8_t __pad_18[2];
+#ifdef __cplusplus
+    operator w64_RenderModel_TextureMap_t_1237() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -1752,6 +1758,9 @@ struct w64_RenderModel_TextureMap_t_11111
     W64_PTR(const uint8_t *rubTextureMapData, rubTextureMapData);
     uint32_t format;
     uint8_t __pad_20[4];
+#ifdef __cplusplus
+    operator u64_RenderModel_TextureMap_t_11111() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -1762,6 +1771,9 @@ struct u64_RenderModel_TextureMap_t_11111
     uint16_t unHeight;
     U64_PTR(const uint8_t *rubTextureMapData, rubTextureMapData);
     uint32_t format;
+#ifdef __cplusplus
+    operator w64_RenderModel_TextureMap_t_11111() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -1791,6 +1803,9 @@ struct w64_RenderModel_TextureMap_t_090
     uint16_t unHeight;
     uint8_t __pad_4[4];
     W64_PTR(const uint8_t *rubTextureMapData, rubTextureMapData);
+#ifdef __cplusplus
+    operator u64_RenderModel_TextureMap_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -1800,6 +1815,9 @@ struct u64_RenderModel_TextureMap_t_090
     uint16_t unWidth;
     uint16_t unHeight;
     U64_PTR(const uint8_t *rubTextureMapData, rubTextureMapData);
+#ifdef __cplusplus
+    operator w64_RenderModel_TextureMap_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2417,6 +2435,9 @@ struct w32_CameraVideoStreamFrameHeader_t_1017
     TrackedDevicePose_t trackedDevicePose;
     uint8_t __pad_100[4];
     uint64_t ulFrameExposureTime;
+#ifdef __cplusplus
+    operator u32_CameraVideoStreamFrameHeader_t_1017() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2430,6 +2451,9 @@ struct u32_CameraVideoStreamFrameHeader_t_1017
     uint32_t nFrameSequence;
     TrackedDevicePose_t trackedDevicePose;
     uint64_t ulFrameExposureTime;
+#ifdef __cplusplus
+    operator w32_CameraVideoStreamFrameHeader_t_1017() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2499,6 +2523,9 @@ struct w64_CameraVideoStreamFrame_t_0914
     W64_ARRAY(float, 4, m_Pad);
     uint8_t __pad_140[4];
     W64_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator u64_CameraVideoStreamFrame_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2524,6 +2551,9 @@ struct u64_CameraVideoStreamFrame_t_0914
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U64_ARRAY(float, 4, m_Pad);
     U64_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator w64_CameraVideoStreamFrame_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2550,6 +2580,9 @@ struct w32_CameraVideoStreamFrame_t_0914
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     W32_ARRAY(float, 4, m_Pad);
     W32_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator u32_CameraVideoStreamFrame_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2575,6 +2608,9 @@ struct u32_CameraVideoStreamFrame_t_0914
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U32_ARRAY(float, 4, m_Pad);
     U32_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator w32_CameraVideoStreamFrame_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2606,6 +2642,9 @@ struct w64_CameraVideoStreamFrame_t_0912
     W64_ARRAY(float, 4, m_Pad);
     uint8_t __pad_116[4];
     W64_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator u64_CameraVideoStreamFrame_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2627,6 +2666,9 @@ struct u64_CameraVideoStreamFrame_t_0912
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U64_ARRAY(float, 4, m_Pad);
     U64_PTR(void *m_pImageData, m_pImageData);
+#ifdef __cplusplus
+    operator w64_CameraVideoStreamFrame_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2829,6 +2871,9 @@ struct w64_Compositor_FrameTiming_102
     float m_flCompositorUpdateEndMs;
     float m_flCompositorRenderStartMs;
     TrackedDevicePose_t m_HmdPose;
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2858,6 +2903,9 @@ struct u64_Compositor_FrameTiming_102
     float m_flCompositorUpdateEndMs;
     float m_flCompositorRenderStartMs;
     TrackedDevicePose_t m_HmdPose;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2888,6 +2936,9 @@ struct w32_Compositor_FrameTiming_102
     float m_flCompositorUpdateEndMs;
     float m_flCompositorRenderStartMs;
     TrackedDevicePose_t m_HmdPose;
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -2917,6 +2968,9 @@ struct u32_Compositor_FrameTiming_102
     float m_flCompositorUpdateEndMs;
     float m_flCompositorRenderStartMs;
     TrackedDevicePose_t m_HmdPose;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3086,6 +3140,9 @@ struct w64_Compositor_FrameTiming_0914
     float m_flCompositorUpdateCpuMs;
     uint32_t m_nPresents;
     uint8_t __pad_156[4];
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3110,6 +3167,9 @@ struct u64_Compositor_FrameTiming_0914
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
     uint32_t m_nPresents;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3136,6 +3196,9 @@ struct w32_Compositor_FrameTiming_0914
     float m_flCompositorUpdateCpuMs;
     uint32_t m_nPresents;
     uint8_t __pad_156[4];
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3160,6 +3223,9 @@ struct u32_Compositor_FrameTiming_0914
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
     uint32_t m_nPresents;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3193,6 +3259,9 @@ struct w64_Compositor_FrameTiming_0913
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_0913() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3216,6 +3285,9 @@ struct u64_Compositor_FrameTiming_0913
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_0913() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3240,6 +3312,9 @@ struct w32_Compositor_FrameTiming_0913
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_0913() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3263,6 +3338,9 @@ struct u32_Compositor_FrameTiming_0913
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     float m_flCompositorUpdateCpuMs;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_0913() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3296,6 +3374,9 @@ struct w64_Compositor_FrameTiming_0912
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     uint8_t __pad_148[4];
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3318,6 +3399,9 @@ struct u64_Compositor_FrameTiming_0912
     float m_flRunningStartMs;
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3342,6 +3426,9 @@ struct w32_Compositor_FrameTiming_0912
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
     uint8_t __pad_148[4];
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3364,6 +3451,9 @@ struct u32_Compositor_FrameTiming_0912
     float m_flRunningStartMs;
     float m_flHandoffStartMs;
     float m_flHandoffEndMs;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3395,6 +3485,9 @@ struct w64_Compositor_FrameTiming_093
     float m_flPresentCallCpuMs;
     float m_flRunningStartMs;
     uint8_t __pad_140[4];
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3415,6 +3508,9 @@ struct u64_Compositor_FrameTiming_093
     float m_flCompositorRenderGpuMs;
     float m_flPresentCallCpuMs;
     float m_flRunningStartMs;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3437,6 +3533,9 @@ struct w32_Compositor_FrameTiming_093
     float m_flPresentCallCpuMs;
     float m_flRunningStartMs;
     uint8_t __pad_140[4];
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3457,6 +3556,9 @@ struct u32_Compositor_FrameTiming_093
     float m_flCompositorRenderGpuMs;
     float m_flPresentCallCpuMs;
     float m_flRunningStartMs;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3480,6 +3582,9 @@ struct w64_Compositor_FrameTiming_090
     uint32_t frameIndex;
     TrackedDevicePose_t pose;
     uint8_t __pad_108[4];
+#ifdef __cplusplus
+    operator u64_Compositor_FrameTiming_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3492,6 +3597,9 @@ struct u64_Compositor_FrameTiming_090
     uint32_t droppedFrames;
     uint32_t frameIndex;
     TrackedDevicePose_t pose;
+#ifdef __cplusplus
+    operator w64_Compositor_FrameTiming_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3506,6 +3614,9 @@ struct w32_Compositor_FrameTiming_090
     uint32_t frameIndex;
     TrackedDevicePose_t pose;
     uint8_t __pad_108[4];
+#ifdef __cplusplus
+    operator u32_Compositor_FrameTiming_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3518,6 +3629,9 @@ struct u32_Compositor_FrameTiming_090
     uint32_t droppedFrames;
     uint32_t frameIndex;
     TrackedDevicePose_t pose;
+#ifdef __cplusplus
+    operator w32_Compositor_FrameTiming_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3655,6 +3769,9 @@ struct w32_InputAnalogActionData_t
     float deltaZ;
     float fUpdateTime;
     uint8_t __pad_44[4];
+#ifdef __cplusplus
+    operator u32_InputAnalogActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3671,6 +3788,9 @@ struct u32_InputAnalogActionData_t
     float deltaY;
     float deltaZ;
     float fUpdateTime;
+#ifdef __cplusplus
+    operator w32_InputAnalogActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3706,6 +3826,9 @@ struct w32_InputDigitalActionData_t
     bool bChanged;
     uint8_t __pad_18[2];
     float fUpdateTime;
+#ifdef __cplusplus
+    operator u32_InputDigitalActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3719,6 +3842,9 @@ struct u32_InputDigitalActionData_t
     bool bChanged;
     uint8_t __pad_14[2];
     float fUpdateTime;
+#ifdef __cplusplus
+    operator w32_InputDigitalActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3748,6 +3874,9 @@ struct w32_InputOriginInfo_t
     uint32_t trackedDeviceIndex;
     W32_ARRAY(char, 128, rchRenderModelComponentName);
     uint8_t __pad_140[4];
+#ifdef __cplusplus
+    operator u32_InputOriginInfo_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3757,6 +3886,9 @@ struct u32_InputOriginInfo_t
     uint64_t devicePath;
     uint32_t trackedDeviceIndex;
     U32_ARRAY(char, 128, rchRenderModelComponentName);
+#ifdef __cplusplus
+    operator w32_InputOriginInfo_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3786,6 +3918,9 @@ struct w32_InputPoseActionData_t
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     TrackedDevicePose_t pose;
+#ifdef __cplusplus
+    operator u32_InputPoseActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3796,6 +3931,9 @@ struct u32_InputPoseActionData_t
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
     TrackedDevicePose_t pose;
+#ifdef __cplusplus
+    operator w32_InputPoseActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3823,6 +3961,9 @@ struct w32_InputSkeletalActionData_t_113b
     bool bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
+#ifdef __cplusplus
+    operator u32_InputSkeletalActionData_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3832,6 +3973,9 @@ struct u32_InputSkeletalActionData_t_113b
     bool bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
+#ifdef __cplusplus
+    operator w32_InputSkeletalActionData_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3863,6 +4007,9 @@ struct w32_InputSkeletalActionData_t_1016
     uint64_t activeOrigin;
     uint32_t boneCount;
     uint8_t __pad_20[4];
+#ifdef __cplusplus
+    operator u32_InputSkeletalActionData_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3873,6 +4020,9 @@ struct u32_InputSkeletalActionData_t_1016
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
     uint32_t boneCount;
+#ifdef __cplusplus
+    operator w32_InputSkeletalActionData_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3900,6 +4050,9 @@ struct w32_InputSkeletonActionData_t
     bool bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
+#ifdef __cplusplus
+    operator u32_InputSkeletonActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3909,6 +4062,9 @@ struct u32_InputSkeletonActionData_t
     bool bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
+#ifdef __cplusplus
+    operator w32_InputSkeletonActionData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -3990,6 +4146,9 @@ struct w64_RenderModel_t_0912
     W64_PTR(const uint16_t *rIndexData, rIndexData);
     uint32_t unTriangleCount;
     int32_t diffuseTextureId;
+#ifdef __cplusplus
+    operator u64_RenderModel_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4001,6 +4160,9 @@ struct u64_RenderModel_t_0912
     U64_PTR(const uint16_t *rIndexData, rIndexData);
     uint32_t unTriangleCount;
     int32_t diffuseTextureId;
+#ifdef __cplusplus
+    operator w64_RenderModel_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4035,6 +4197,9 @@ struct w64_RenderModel_t_090
     uint32_t unTriangleCount;
     uint8_t __pad_36[4];
     w64_RenderModel_TextureMap_t_090 diffuseTexture;
+#ifdef __cplusplus
+    operator u64_RenderModel_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4047,6 +4212,9 @@ struct u64_RenderModel_t_090
     U64_PTR(const uint16_t *rIndexData, rIndexData);
     uint32_t unTriangleCount;
     u64_RenderModel_TextureMap_t_090 diffuseTexture;
+#ifdef __cplusplus
+    operator w64_RenderModel_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4079,6 +4247,9 @@ struct w64_VRControllerState001_t
     uint64_t ulButtonPressed;
     uint64_t ulButtonTouched;
     W64_ARRAY(VRControllerAxis_t, 5, rAxis);
+#ifdef __cplusplus
+    operator u64_VRControllerState001_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4089,6 +4260,9 @@ struct u64_VRControllerState001_t
     uint64_t ulButtonPressed;
     uint64_t ulButtonTouched;
     U64_ARRAY(VRControllerAxis_t, 5, rAxis);
+#ifdef __cplusplus
+    operator w64_VRControllerState001_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4100,6 +4274,9 @@ struct w32_VRControllerState001_t
     uint64_t ulButtonPressed;
     uint64_t ulButtonTouched;
     W32_ARRAY(VRControllerAxis_t, 5, rAxis);
+#ifdef __cplusplus
+    operator u32_VRControllerState001_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4110,6 +4287,9 @@ struct u32_VRControllerState001_t
     uint64_t ulButtonPressed;
     uint64_t ulButtonTouched;
     U32_ARRAY(VRControllerAxis_t, 5, rAxis);
+#ifdef __cplusplus
+    operator w32_VRControllerState001_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4130,6 +4310,9 @@ struct w64_VREvent_t_1168
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1168 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1168() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4140,6 +4323,9 @@ struct u64_VREvent_t_1168
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1168 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1168() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4151,6 +4337,9 @@ struct w32_VREvent_t_1168
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1168 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1168() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4161,6 +4350,9 @@ struct u32_VREvent_t_1168
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1168 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1168() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4181,6 +4373,9 @@ struct w64_VREvent_t_11030
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_11030 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_11030() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4191,6 +4386,9 @@ struct u64_VREvent_t_11030
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_11030 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_11030() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4202,6 +4400,9 @@ struct w32_VREvent_t_11030
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_11030 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_11030() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4212,6 +4413,9 @@ struct u32_VREvent_t_11030
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_11030 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_11030() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4232,6 +4436,9 @@ struct w64_VREvent_t_1322
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1322 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1322() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4242,6 +4449,9 @@ struct u64_VREvent_t_1322
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1322 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1322() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4253,6 +4463,9 @@ struct w32_VREvent_t_1322
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1322 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1322() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4263,6 +4476,9 @@ struct u32_VREvent_t_1322
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1322 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1322() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4283,6 +4499,9 @@ struct w64_VREvent_t_1210
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1210 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1210() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4293,6 +4512,9 @@ struct u64_VREvent_t_1210
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1210 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1210() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4304,6 +4526,9 @@ struct w32_VREvent_t_1210
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1210 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1210() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4314,6 +4539,9 @@ struct u32_VREvent_t_1210
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1210 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1210() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4334,6 +4562,9 @@ struct w64_VREvent_t_113b
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_113b data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4344,6 +4575,9 @@ struct u64_VREvent_t_113b
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_113b data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4355,6 +4589,9 @@ struct w32_VREvent_t_113b
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_113b data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4365,6 +4602,9 @@ struct u32_VREvent_t_113b
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_113b data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_113b() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4385,6 +4625,9 @@ struct w64_VREvent_t_1016
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1016 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4395,6 +4638,9 @@ struct u64_VREvent_t_1016
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1016 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4406,6 +4652,9 @@ struct w32_VREvent_t_1016
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1016 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4416,6 +4665,9 @@ struct u32_VREvent_t_1016
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1016 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1016() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4436,6 +4688,9 @@ struct w64_VREvent_t_1015
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1015 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1015() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4446,6 +4701,9 @@ struct u64_VREvent_t_1015
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1015 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1015() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4457,6 +4715,9 @@ struct w32_VREvent_t_1015
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1015 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1015() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4467,6 +4728,9 @@ struct u32_VREvent_t_1015
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1015 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1015() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4487,6 +4751,9 @@ struct w64_VREvent_t_1014
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1014 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1014() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4497,6 +4764,9 @@ struct u64_VREvent_t_1014
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1014 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1014() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4508,6 +4778,9 @@ struct w32_VREvent_t_1014
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1014 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1014() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4518,6 +4791,9 @@ struct u32_VREvent_t_1014
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1014 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1014() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4538,6 +4814,9 @@ struct w64_VREvent_t_1013
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1013 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1013() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4548,6 +4827,9 @@ struct u64_VREvent_t_1013
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1013 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1013() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4559,6 +4841,9 @@ struct w32_VREvent_t_1013
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1013 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1013() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4569,6 +4854,9 @@ struct u32_VREvent_t_1013
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1013 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1013() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4589,6 +4877,9 @@ struct w64_VREvent_t_1012
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1012 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1012() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4599,6 +4890,9 @@ struct u64_VREvent_t_1012
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1012 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1012() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4610,6 +4904,9 @@ struct w32_VREvent_t_1012
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1012 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1012() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4620,6 +4917,9 @@ struct u32_VREvent_t_1012
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1012 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1012() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4640,6 +4940,9 @@ struct w64_VREvent_t_1011
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1011 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_1011() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4650,6 +4953,9 @@ struct u64_VREvent_t_1011
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1011 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_1011() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4661,6 +4967,9 @@ struct w32_VREvent_t_1011
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_1011 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_1011() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4671,6 +4980,9 @@ struct u32_VREvent_t_1011
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_1011 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_1011() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4691,6 +5003,9 @@ struct w64_VREvent_t_106
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_106 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_106() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4701,6 +5016,9 @@ struct u64_VREvent_t_106
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_106 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_106() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4712,6 +5030,9 @@ struct w32_VREvent_t_106
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_106 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_106() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4722,6 +5043,9 @@ struct u32_VREvent_t_106
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_106 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_106() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4742,6 +5066,9 @@ struct w64_VREvent_t_105
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_105 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_105() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4752,6 +5079,9 @@ struct u64_VREvent_t_105
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_105 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_105() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4763,6 +5093,9 @@ struct w32_VREvent_t_105
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_105 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_105() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4773,6 +5106,9 @@ struct u32_VREvent_t_105
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_105 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_105() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4793,6 +5129,9 @@ struct w64_VREvent_t_103
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_103 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_103() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4803,6 +5142,9 @@ struct u64_VREvent_t_103
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_103 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_103() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4814,6 +5156,9 @@ struct w32_VREvent_t_103
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_103 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_103() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4824,6 +5169,9 @@ struct u32_VREvent_t_103
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_103 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_103() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4844,6 +5192,9 @@ struct w64_VREvent_t_102
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_102 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4854,6 +5205,9 @@ struct u64_VREvent_t_102
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_102 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4865,6 +5219,9 @@ struct w32_VREvent_t_102
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_102 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4875,6 +5232,9 @@ struct u32_VREvent_t_102
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_102 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_102() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4895,6 +5255,9 @@ struct w64_VREvent_t_101
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_101 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_101() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4905,6 +5268,9 @@ struct u64_VREvent_t_101
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_101 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_101() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4916,6 +5282,9 @@ struct w32_VREvent_t_101
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_101 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_101() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4926,6 +5295,9 @@ struct u32_VREvent_t_101
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_101 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_101() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4946,6 +5318,9 @@ struct w64_VREvent_t_0918
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_0918 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_0918() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4956,6 +5331,9 @@ struct u64_VREvent_t_0918
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_0918 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_0918() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4967,6 +5345,9 @@ struct w32_VREvent_t_0918
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_0918 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_0918() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4977,6 +5358,9 @@ struct u32_VREvent_t_0918
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_0918 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_0918() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -4997,6 +5381,9 @@ struct w64_VREvent_t_0915
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_0915 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_0915() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5007,6 +5394,9 @@ struct u64_VREvent_t_0915
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_0915 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_0915() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5018,6 +5408,9 @@ struct w32_VREvent_t_0915
     float eventAgeSeconds;
     uint8_t __pad_12[4];
     VREvent_Data_t_0915 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_0915() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5028,6 +5421,9 @@ struct u32_VREvent_t_0915
     uint32_t trackedDeviceIndex;
     float eventAgeSeconds;
     VREvent_Data_t_0915 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_0915() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5048,6 +5444,9 @@ struct w64_VREvent_t_0914
     VREvent_Data_t_0914 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5058,6 +5457,9 @@ struct u64_VREvent_t_0914
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0914 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5069,6 +5471,9 @@ struct w32_VREvent_t_0914
     VREvent_Data_t_0914 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5079,6 +5484,9 @@ struct u32_VREvent_t_0914
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0914 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_0914() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5099,6 +5507,9 @@ struct w64_VREvent_t_0912
     VREvent_Data_t_0912 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5109,6 +5520,9 @@ struct u64_VREvent_t_0912
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0912 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5120,6 +5534,9 @@ struct w32_VREvent_t_0912
     VREvent_Data_t_0912 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5130,6 +5547,9 @@ struct u32_VREvent_t_0912
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0912 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_0912() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5150,6 +5570,9 @@ struct w64_VREvent_t_0910
     VREvent_Data_t_0910 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_0910() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5160,6 +5583,9 @@ struct u64_VREvent_t_0910
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0910 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_0910() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5171,6 +5597,9 @@ struct w32_VREvent_t_0910
     VREvent_Data_t_0910 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_0910() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5181,6 +5610,9 @@ struct u32_VREvent_t_0910
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_0910 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_0910() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5201,6 +5633,9 @@ struct w64_VREvent_t_097
     VREvent_Data_t_097 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_097() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5211,6 +5646,9 @@ struct u64_VREvent_t_097
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_097 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_097() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5222,6 +5660,9 @@ struct w32_VREvent_t_097
     VREvent_Data_t_097 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_097() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5232,6 +5673,9 @@ struct u32_VREvent_t_097
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_097 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_097() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5252,6 +5696,9 @@ struct w64_VREvent_t_093
     VREvent_Data_t_093 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5262,6 +5709,9 @@ struct u64_VREvent_t_093
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_093 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5273,6 +5723,9 @@ struct w32_VREvent_t_093
     VREvent_Data_t_093 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5283,6 +5736,9 @@ struct u32_VREvent_t_093
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_093 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_093() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5303,6 +5759,9 @@ struct w64_VREvent_t_092
     VREvent_Data_t_092 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_092() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5313,6 +5772,9 @@ struct u64_VREvent_t_092
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_092 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_092() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5324,6 +5786,9 @@ struct w32_VREvent_t_092
     VREvent_Data_t_092 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_092() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5334,6 +5799,9 @@ struct u32_VREvent_t_092
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_092 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_092() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5354,6 +5822,9 @@ struct w64_VREvent_t_090
     VREvent_Data_t_090 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u64_VREvent_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5364,6 +5835,9 @@ struct u64_VREvent_t_090
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_090 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w64_VREvent_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5375,6 +5849,9 @@ struct w32_VREvent_t_090
     VREvent_Data_t_090 data;
     float eventAgeSeconds;
     uint8_t __pad_28[4];
+#ifdef __cplusplus
+    operator u32_VREvent_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5385,6 +5862,9 @@ struct u32_VREvent_t_090
     uint32_t trackedDeviceIndex;
     VREvent_Data_t_090 data;
     float eventAgeSeconds;
+#ifdef __cplusplus
+    operator w32_VREvent_t_090() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5439,6 +5919,9 @@ struct w32_VROverlayView_t
     w32_Texture_t texture;
     VRTextureBounds_t textureBounds;
     uint8_t __pad_36[4];
+#ifdef __cplusplus
+    operator u32_VROverlayView_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5448,6 +5931,9 @@ struct u32_VROverlayView_t
     uint64_t overlayHandle;
     u32_Texture_t texture;
     VRTextureBounds_t textureBounds;
+#ifdef __cplusplus
+    operator w32_VROverlayView_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5616,6 +6102,9 @@ struct w32_VRVulkanTextureArrayData_t
     uint8_t __pad_44[4];
     uint32_t m_unArrayIndex;
     uint32_t m_unArraySize;
+#ifdef __cplusplus
+    operator u32_VRVulkanTextureArrayData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
@@ -5634,6 +6123,9 @@ struct u32_VRVulkanTextureArrayData_t
     uint32_t m_nSampleCount;
     uint32_t m_unArrayIndex;
     uint32_t m_unArraySize;
+#ifdef __cplusplus
+    operator w32_VRVulkanTextureArrayData_t() const;
+#endif /* __cplusplus */
 };
 #pragma pack( pop )
 
