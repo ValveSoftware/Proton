@@ -208,9 +208,6 @@ PATH_CONV_METHODS_WTOU = {
 #    TODO: LaunchInternalProcess, need steam cooperation
 }
 
-struct_conversion_cache = {}
-struct_needs_size_adjustment_cache = {}
-
 all_classes = {}
 all_records = {}
 all_structs = {}
@@ -285,12 +282,14 @@ class Struct:
         self._sdkver = sdkver
         self._abi = abi
         self._fields = None
+        self._conv_cache = {}
 
         self.name = canonical_typename(self._cursor)
         self.name = self.name.removeprefix("vr::")
         self.type = self._cursor.type.get_canonical()
         self.size = self.type.get_size()
         self.align = self.type.get_align()
+        self.id = f'{abi}_{self.name}_{sdkver}'
 
     @property
     def padded_fields(self):
@@ -325,6 +324,10 @@ class Struct:
         return [f for f in self.padded_fields if type(f) is not Padding]
 
     def needs_conversion(self, other):
+        if other.id in self._conv_cache:
+            return self._conv_cache[other.id]
+        self._conv_cache[other.id] = other._conv_cache[self.id] = True
+
         if self.name in SIZED_STRUCTS and self.size != other.size:
             return True
         if len(self.fields) != len(other.fields):
@@ -333,6 +336,7 @@ class Struct:
                for a, b in zip(self.fields, other.fields)]):
             return True
 
+        self._conv_cache[other.id] = other._conv_cache[self.id] = False
         return False
 
     def get_children(self):
@@ -943,46 +947,49 @@ def find_struct_abis(name):
     return structs[sdkver]
 
 
-def struct_needs_conversion_nocache(struct):
+def struct_needs_conversion(struct):
     name = canonical_typename(struct)
 
     abis = find_struct_abis(name)
     if abis is None:
-        return False, False
+        return False
     if abis['w32'].needs_conversion(abis['u32']):
-        return True, False
+        return True
     if abis['w64'].needs_conversion(abis['u64']):
-        return True, False
+        return True
 
     assert abis['u32'].size <= abis['w32'].size
     if abis['u32'].size < abis['w32'].size:
-        return False, True
+        return False
     assert abis['u64'].size <= abis['w64'].size
     if abis['u64'].size < abis['w64'].size:
-        return False, True
+        return False
 
-    return False, False
+    return False
 
 
-def struct_needs_conversion(struct):
+def struct_needs_size_adjustment(struct):
     name = canonical_typename(struct)
     if name in EXEMPT_STRUCTS:
         return False
 
-    if not sdkver in struct_conversion_cache:
-        struct_conversion_cache[sdkver] = {}
-        struct_needs_size_adjustment_cache[sdkver] = {}
+    abis = find_struct_abis(name)
+    if abis is None:
+        return False
+    if abis['w32'].needs_conversion(abis['u32']):
+        return False
+    if abis['w64'].needs_conversion(abis['u64']):
+        return False
 
-    if not name in struct_conversion_cache[sdkver]:
-        struct_conversion_cache[sdkver][name], \
-                struct_needs_size_adjustment_cache[sdkver][name] = \
-                struct_needs_conversion_nocache(struct)
+    assert abis['u32'].size <= abis['w32'].size
+    if abis['u32'].size < abis['w32'].size:
+        return True
+    assert abis['u64'].size <= abis['w64'].size
+    if abis['u64'].size < abis['w64'].size:
+        return True
 
-    return struct_conversion_cache[sdkver][name]
+    return False
 
-def struct_needs_size_adjustment(struct):
-    name = canonical_typename(struct)
-    return not struct_needs_conversion(struct) and struct_needs_size_adjustment_cache[sdkver][name]
 
 def get_field_attribute_str(field):
     ftype = field.type.get_canonical()
