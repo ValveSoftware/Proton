@@ -357,7 +357,7 @@ class Struct:
     def fields(self):
         return [f for f in self.padded_fields if type(f) is not Padding]
 
-    def write_definition(self, out, prefix):
+    def write_definition(self, out, prefix, converters):
         version = all_versions[sdkver][self.name]
         kind = 'union' if type(self) is Union else 'struct'
         wrapped = len(prefix) > 0
@@ -370,6 +370,10 @@ class Struct:
                 out(f'    {declspec(f._cursor, f.name, prefix, wrapped)};\n')
             else:
                 out(f'    uint8_t __pad_{f.offset}[{f.size}];\n')
+        for conv in converters:
+            out(u'#ifdef __cplusplus\n')
+            out(f'    operator {conv}{version}() const;\n')
+            out(u'#endif /* __cplusplus */\n')
         out(u'};\n')
         out(u'#pragma pack( pop )\n\n')
 
@@ -381,6 +385,16 @@ class Struct:
             out(f'C_ASSERT( offsetof({prefix}{version}, {f.name}) == {f.offset} );\n')
             out(f'C_ASSERT( sizeof({prefix}{version}().{f.name}) >= {f.size} );\n')
         out(u'\n')
+
+    def write_converter(self, prefix):
+        version = all_versions[sdkver][self.name]
+        out(f'{self._abi}_{version}::operator {prefix}{version}() const\n')
+        out(u'{\n')
+        out(f'    {prefix}{version} ret;\n')
+        for field in self.fields:
+            out(f'    ret.{field.name} = this->{field.name};\n')
+        out(u'    return ret;\n')
+        out(u'}\n')
 
     def needs_conversion(self, other):
         if other.id in self._conv_cache:
@@ -1764,7 +1778,7 @@ with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
             kind = 'union' if type(abis['w64']) is Union else 'struct'
 
             out(f'typedef {kind} {version} {version};\n')
-            abis['w64'].write_definition(out, "")
+            abis['w64'].write_definition(out, "", [])
 
     for name, structs in all_structs.items():
         if name in EXEMPT_STRUCTS: continue
@@ -1816,13 +1830,17 @@ with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
                 abis['u64'].write_definition(out, "u_")
                 continue
 
-            abis['w64'].write_definition(out, "w64_")
-            if abis["w64"].needs_conversion(abis["u64"]):
-                abis['u64'].write_definition(out, "u64_")
+            if not abis["w64"].needs_conversion(abis["u64"]):
+                abis['w64'].write_definition(out, "w64_", [])
+            else:
+                abis['w64'].write_definition(out, "w64_", ["u64_"])
+                abis['u64'].write_definition(out, "u64_", ["w64_"])
 
-            abis['w32'].write_definition(out, "w32_")
-            if abis["w32"].needs_conversion(abis["u32"]):
-                abis['u32'].write_definition(out, "u32_")
+            if not abis["w32"].needs_conversion(abis["u32"]):
+                abis['w32'].write_definition(out, "w32_", [])
+            else:
+                abis['w32'].write_definition(out, "w32_", ["u32_"])
+                abis['u32'].write_definition(out, "u32_", ["w32_"])
 
             out(u'#ifdef __i386__\n')
             out(f'typedef w32_{version} w_{version};\n')
@@ -1842,7 +1860,7 @@ with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
     out(u'#include "vrclient_structs.h"\n\n')
 
     for name in sorted(unique_structs, key=struct_order):
-        for sdkver, abis in sorted(all_structs[name].items()):
+        for sdkver, abis in all_structs[name].items():
             if name not in all_versions[sdkver]: continue
 
             version = all_versions[sdkver][name]
@@ -1868,3 +1886,27 @@ with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
             abis['u64'].write_checks(out, "u64_")
             abis['w32'].write_checks(out, "w32_")
             abis['u32'].write_checks(out, "u32_")
+
+        for sdkver, abis in structs.items():
+            if name not in all_versions[sdkver]: continue
+
+            version = all_versions[sdkver][name]
+            if f'struct {version} convert' in declared: continue
+            declared[f'struct {version} convert'] = True
+
+            if type(abis['w64']) in (Class, Union):
+                continue
+
+            if abis["w64"].needs_conversion(abis["u64"]):
+                out(u'#ifdef __x86_64__\n')
+                abis['w64'].write_converter('u64_')
+                out(u'\n')
+                abis['u64'].write_converter('w64_')
+                out(u'#endif\n\n')
+
+            if abis["w32"].needs_conversion(abis["u32"]):
+                out(u'#ifdef __i386__\n')
+                abis['w32'].write_converter('u32_')
+                out(u'\n')
+                abis['u32'].write_converter('w32_')
+                out(u'#endif\n\n')
