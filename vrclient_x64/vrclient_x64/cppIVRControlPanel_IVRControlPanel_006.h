@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRControlPanel_IVRControlPanel_006;
 struct cppIVRControlPanel_IVRControlPanel_006_undoc1_params
 {
     void *linux_side;

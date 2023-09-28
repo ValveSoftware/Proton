@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRApplications_IVRApplications_004;
 struct cppIVRApplications_IVRApplications_004_AddApplicationManifest_params
 {
     void *linux_side;

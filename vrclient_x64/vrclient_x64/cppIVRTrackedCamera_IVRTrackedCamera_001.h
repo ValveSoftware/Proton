@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRTrackedCamera_IVRTrackedCamera_001;
 struct cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params
 {
     void *linux_side;

@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRCompositor_IVRCompositor_008;
 struct cppIVRCompositor_IVRCompositor_008_GetLastError_params
 {
     void *linux_side;

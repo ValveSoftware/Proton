@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRScreenshots_IVRScreenshots_001;
 struct cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot_params
 {
     void *linux_side;

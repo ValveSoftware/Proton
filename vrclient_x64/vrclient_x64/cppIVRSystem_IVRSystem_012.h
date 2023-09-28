@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRSystem_IVRSystem_012;
 struct cppIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize_params
 {
     void *linux_side;

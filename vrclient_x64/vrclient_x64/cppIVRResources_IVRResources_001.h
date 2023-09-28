@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRResources_IVRResources_001;
 struct cppIVRResources_IVRResources_001_LoadSharedResource_params
 {
     void *linux_side;

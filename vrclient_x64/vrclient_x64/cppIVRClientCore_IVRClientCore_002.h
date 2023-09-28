@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRClientCore_IVRClientCore_002;
 struct cppIVRClientCore_IVRClientCore_002_Init_params
 {
     void *linux_side;

@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRChaperoneSetup_IVRChaperoneSetup_005;
 struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params
 {
     void *linux_side;

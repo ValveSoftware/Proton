@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRInput_IVRInput_003;
 struct cppIVRInput_IVRInput_003_SetActionManifestPath_params
 {
     void *linux_side;

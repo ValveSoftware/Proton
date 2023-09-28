@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRMailbox_IVRMailbox_001;
 struct cppIVRMailbox_IVRMailbox_001_undoc1_params
 {
     void *linux_side;

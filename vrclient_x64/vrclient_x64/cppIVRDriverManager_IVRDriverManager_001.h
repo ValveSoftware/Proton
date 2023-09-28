@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRDriverManager_IVRDriverManager_001;
 struct cppIVRDriverManager_IVRDriverManager_001_GetDriverCount_params
 {
     void *linux_side;

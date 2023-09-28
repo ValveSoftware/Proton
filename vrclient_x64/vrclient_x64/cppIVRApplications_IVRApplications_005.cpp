@@ -9,124 +9,179 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct cppIVRApplications_IVRApplications_005
+{
+#ifdef __cplusplus
+    virtual uint32_t AddApplicationManifest( const char *, bool ) = 0;
+    virtual uint32_t RemoveApplicationManifest( const char * ) = 0;
+    virtual bool IsApplicationInstalled( const char * ) = 0;
+    virtual uint32_t GetApplicationCount(  ) = 0;
+    virtual uint32_t GetApplicationKeyByIndex( uint32_t, char *, uint32_t ) = 0;
+    virtual uint32_t GetApplicationKeyByProcessId( uint32_t, char *, uint32_t ) = 0;
+    virtual uint32_t LaunchApplication( const char * ) = 0;
+    virtual uint32_t LaunchTemplateApplication( const char *, const char *, const AppOverrideKeys_t *, uint32_t ) = 0;
+    virtual uint32_t LaunchDashboardOverlay( const char * ) = 0;
+    virtual bool CancelApplicationLaunch( const char * ) = 0;
+    virtual uint32_t IdentifyApplication( uint32_t, const char * ) = 0;
+    virtual uint32_t GetApplicationProcessId( const char * ) = 0;
+    virtual const char * GetApplicationsErrorNameFromEnum( uint32_t ) = 0;
+    virtual uint32_t GetApplicationPropertyString( const char *, uint32_t, char *, uint32_t, uint32_t * ) = 0;
+    virtual bool GetApplicationPropertyBool( const char *, uint32_t, uint32_t * ) = 0;
+    virtual uint64_t GetApplicationPropertyUint64( const char *, uint32_t, uint32_t * ) = 0;
+    virtual uint32_t SetApplicationAutoLaunch( const char *, bool ) = 0;
+    virtual bool GetApplicationAutoLaunch( const char * ) = 0;
+    virtual uint32_t GetStartingApplication( char *, uint32_t ) = 0;
+    virtual uint32_t GetTransitionState(  ) = 0;
+    virtual uint32_t PerformApplicationPrelaunchCheck( const char * ) = 0;
+    virtual const char * GetApplicationsTransitionStateNameFromEnum( uint32_t ) = 0;
+    virtual bool IsQuitUserPromptRequested(  ) = 0;
+    virtual uint32_t LaunchInternalProcess( const char *, const char *, const char * ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppIVRApplications_IVRApplications_005_AddApplicationManifest( struct cppIVRApplications_IVRApplications_005_AddApplicationManifest_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->AddApplicationManifest((const char *)params->pchApplicationManifestFullPath, (bool)params->bTemporary);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->AddApplicationManifest( params->pchApplicationManifestFullPath, params->bTemporary );
 }
 
 void cppIVRApplications_IVRApplications_005_RemoveApplicationManifest( struct cppIVRApplications_IVRApplications_005_RemoveApplicationManifest_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->RemoveApplicationManifest((const char *)params->pchApplicationManifestFullPath);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->RemoveApplicationManifest( params->pchApplicationManifestFullPath );
 }
 
 void cppIVRApplications_IVRApplications_005_IsApplicationInstalled( struct cppIVRApplications_IVRApplications_005_IsApplicationInstalled_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->IsApplicationInstalled((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->IsApplicationInstalled( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationCount( struct cppIVRApplications_IVRApplications_005_GetApplicationCount_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationCount();
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationCount(  );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationKeyByIndex( struct cppIVRApplications_IVRApplications_005_GetApplicationKeyByIndex_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationKeyByIndex((uint32_t)params->unApplicationIndex, (char *)params->pchAppKeyBuffer, (uint32_t)params->unAppKeyBufferLen);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationKeyByIndex( params->unApplicationIndex, params->pchAppKeyBuffer, params->unAppKeyBufferLen );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId( struct cppIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationKeyByProcessId((uint32_t)params->unProcessId, (char *)params->pchAppKeyBuffer, (uint32_t)params->unAppKeyBufferLen);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationKeyByProcessId( params->unProcessId, params->pchAppKeyBuffer, params->unAppKeyBufferLen );
 }
 
 void cppIVRApplications_IVRApplications_005_LaunchApplication( struct cppIVRApplications_IVRApplications_005_LaunchApplication_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->LaunchApplication((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->LaunchApplication( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_LaunchTemplateApplication( struct cppIVRApplications_IVRApplications_005_LaunchTemplateApplication_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->LaunchTemplateApplication((const char *)params->pchTemplateAppKey, (const char *)params->pchNewAppKey, (const vr::AppOverrideKeys_t *)params->pKeys, (uint32_t)params->unKeys);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->LaunchTemplateApplication( params->pchTemplateAppKey, params->pchNewAppKey, params->pKeys, params->unKeys );
 }
 
 void cppIVRApplications_IVRApplications_005_LaunchDashboardOverlay( struct cppIVRApplications_IVRApplications_005_LaunchDashboardOverlay_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->LaunchDashboardOverlay((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->LaunchDashboardOverlay( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_CancelApplicationLaunch( struct cppIVRApplications_IVRApplications_005_CancelApplicationLaunch_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->CancelApplicationLaunch((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->CancelApplicationLaunch( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_IdentifyApplication( struct cppIVRApplications_IVRApplications_005_IdentifyApplication_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->IdentifyApplication((uint32_t)params->unProcessId, (const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->IdentifyApplication( params->unProcessId, params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationProcessId( struct cppIVRApplications_IVRApplications_005_GetApplicationProcessId_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationProcessId((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationProcessId( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum( struct cppIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationsErrorNameFromEnum((vr::EVRApplicationError)params->error);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationsErrorNameFromEnum( params->error );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationPropertyString( struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyString_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationPropertyString((const char *)params->pchAppKey, (vr::EVRApplicationProperty)params->eProperty, (char *)params->pchPropertyValueBuffer, (uint32_t)params->unPropertyValueBufferLen, (vr::EVRApplicationError *)params->peError);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationPropertyString( params->pchAppKey, params->eProperty, params->pchPropertyValueBuffer, params->unPropertyValueBufferLen, params->peError );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationPropertyBool( struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyBool_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationPropertyBool((const char *)params->pchAppKey, (vr::EVRApplicationProperty)params->eProperty, (vr::EVRApplicationError *)params->peError);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationPropertyBool( params->pchAppKey, params->eProperty, params->peError );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationPropertyUint64( struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyUint64_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationPropertyUint64((const char *)params->pchAppKey, (vr::EVRApplicationProperty)params->eProperty, (vr::EVRApplicationError *)params->peError);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationPropertyUint64( params->pchAppKey, params->eProperty, params->peError );
 }
 
 void cppIVRApplications_IVRApplications_005_SetApplicationAutoLaunch( struct cppIVRApplications_IVRApplications_005_SetApplicationAutoLaunch_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->SetApplicationAutoLaunch((const char *)params->pchAppKey, (bool)params->bAutoLaunch);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->SetApplicationAutoLaunch( params->pchAppKey, params->bAutoLaunch );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationAutoLaunch( struct cppIVRApplications_IVRApplications_005_GetApplicationAutoLaunch_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationAutoLaunch((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationAutoLaunch( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_GetStartingApplication( struct cppIVRApplications_IVRApplications_005_GetStartingApplication_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetStartingApplication((char *)params->pchAppKeyBuffer, (uint32_t)params->unAppKeyBufferLen);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetStartingApplication( params->pchAppKeyBuffer, params->unAppKeyBufferLen );
 }
 
 void cppIVRApplications_IVRApplications_005_GetTransitionState( struct cppIVRApplications_IVRApplications_005_GetTransitionState_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetTransitionState();
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetTransitionState(  );
 }
 
 void cppIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck( struct cppIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->PerformApplicationPrelaunchCheck((const char *)params->pchAppKey);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->PerformApplicationPrelaunchCheck( params->pchAppKey );
 }
 
 void cppIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum( struct cppIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->GetApplicationsTransitionStateNameFromEnum((vr::EVRApplicationTransitionState)params->state);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->GetApplicationsTransitionStateNameFromEnum( params->state );
 }
 
 void cppIVRApplications_IVRApplications_005_IsQuitUserPromptRequested( struct cppIVRApplications_IVRApplications_005_IsQuitUserPromptRequested_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->IsQuitUserPromptRequested();
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->IsQuitUserPromptRequested(  );
 }
 
 void cppIVRApplications_IVRApplications_005_LaunchInternalProcess( struct cppIVRApplications_IVRApplications_005_LaunchInternalProcess_params *params )
 {
-    params->_ret = ((IVRApplications*)params->linux_side)->LaunchInternalProcess((const char *)params->pchBinaryPath, (const char *)params->pchArguments, (const char *)params->pchWorkingDirectory);
+    struct cppIVRApplications_IVRApplications_005 *iface = (struct cppIVRApplications_IVRApplications_005 *)params->linux_side;
+    params->_ret = iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
 }
 
 #ifdef __cplusplus

@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVRIOBuffer_IVRIOBuffer_002;
 struct cppIVRIOBuffer_IVRIOBuffer_002_Open_params
 {
     void *linux_side;

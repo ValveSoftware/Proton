@@ -9,24 +9,39 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct cppIVRDriverManager_IVRDriverManager_001
+{
+#ifdef __cplusplus
+    virtual uint32_t GetDriverCount(  ) = 0;
+    virtual uint32_t GetDriverName( uint32_t, char *, uint32_t ) = 0;
+    virtual uint64_t GetDriverHandle( const char * ) = 0;
+    virtual bool IsEnabled( uint32_t ) = 0;
+#endif /* __cplusplus */
+};
+
 void cppIVRDriverManager_IVRDriverManager_001_GetDriverCount( struct cppIVRDriverManager_IVRDriverManager_001_GetDriverCount_params *params )
 {
-    params->_ret = ((IVRDriverManager*)params->linux_side)->GetDriverCount();
+    struct cppIVRDriverManager_IVRDriverManager_001 *iface = (struct cppIVRDriverManager_IVRDriverManager_001 *)params->linux_side;
+    params->_ret = iface->GetDriverCount(  );
 }
 
 void cppIVRDriverManager_IVRDriverManager_001_GetDriverName( struct cppIVRDriverManager_IVRDriverManager_001_GetDriverName_params *params )
 {
-    params->_ret = ((IVRDriverManager*)params->linux_side)->GetDriverName((vr::DriverId_t)params->nDriver, (char *)params->pchValue, (uint32_t)params->unBufferSize);
+    struct cppIVRDriverManager_IVRDriverManager_001 *iface = (struct cppIVRDriverManager_IVRDriverManager_001 *)params->linux_side;
+    params->_ret = iface->GetDriverName( params->nDriver, params->pchValue, params->unBufferSize );
 }
 
 void cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle( struct cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle_params *params )
 {
-    params->_ret = ((IVRDriverManager*)params->linux_side)->GetDriverHandle((const char *)params->pchDriverName);
+    struct cppIVRDriverManager_IVRDriverManager_001 *iface = (struct cppIVRDriverManager_IVRDriverManager_001 *)params->linux_side;
+    params->_ret = iface->GetDriverHandle( params->pchDriverName );
 }
 
 void cppIVRDriverManager_IVRDriverManager_001_IsEnabled( struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params *params )
 {
-    params->_ret = ((IVRDriverManager*)params->linux_side)->IsEnabled((vr::DriverId_t)params->nDriver);
+    struct cppIVRDriverManager_IVRDriverManager_001 *iface = (struct cppIVRDriverManager_IVRDriverManager_001 *)params->linux_side;
+    params->_ret = iface->IsEnabled( params->nDriver );
 }
 
 #ifdef __cplusplus

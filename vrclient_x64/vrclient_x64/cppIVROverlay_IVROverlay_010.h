@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct cppIVROverlay_IVROverlay_010;
 struct cppIVROverlay_IVROverlay_010_FindOverlay_params
 {
     void *linux_side;
