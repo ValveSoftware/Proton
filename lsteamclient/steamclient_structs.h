@@ -53,6 +53,11 @@ typedef struct { uint8_t _[20]; } SteamIPAddress_t;
 
 #include "steamclient_structs_generated.h"
 
+#define PATH_MAX 4096
+extern char g_tmppath[PATH_MAX];
+
+extern unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst, uint32_t dst_bytes, int is_url );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
