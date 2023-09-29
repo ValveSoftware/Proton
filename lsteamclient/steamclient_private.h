@@ -37,6 +37,8 @@ struct w_steam_iface
     void *u_iface;
 };
 
+#include "win_constructors.h"
+
 struct SteamInputActionEvent_t;
 typedef void (*CDECL win_SteamInputActionEventCallbackPointer)( struct SteamInputActionEvent_t * );
 void lin_SteamInputActionEventCallbackPointer( struct SteamInputActionEvent_t *dat );

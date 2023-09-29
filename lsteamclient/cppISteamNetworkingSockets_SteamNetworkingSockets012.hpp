@@ -314,3 +314,9 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets012_GetRemoteFakeIPForConn
     params->_ret = iface->GetRemoteFakeIPForConnection( params->hConn, params->pOutAddr );
 }
 
+void cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort( struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort_params *params )
+{
+    struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *)params->linux_side;
+    params->_ret = iface->CreateFakeUDPPort( params->idxFakeServerPort );
+}
+
