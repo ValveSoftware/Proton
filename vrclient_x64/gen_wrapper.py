@@ -517,12 +517,11 @@ class Class:
         out(u'{\n')
         out(u'#ifdef __cplusplus\n')
         for method in self.methods:
-            types = [declspec(p, "", prefix if prefix != "cpp" else None)
-                     for p in method.get_arguments()]
+            types = [declspec(p, "", prefix) for p in method.get_arguments()]
             if type(method) is Destructor:
                 out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
             else:
-                method_name = f'{declspec(method.result_type, "", None)} {method.spelling}'
+                method_name = f'{declspec(method.result_type, "", prefix)} {method.spelling}'
                 out(f'    virtual {method_name}( {", ".join(types)} ) = 0;\n')
         out(u'#endif /* __cplusplus */\n')
         out(u'};\n\n')
@@ -576,7 +575,7 @@ def param_needs_conversion(decl):
 
 
 def callconv(cursor, prefix):
-    if type(cursor) is not Cursor or prefix is None:
+    if type(cursor) is not Cursor:
         return ''
     canon = cursor.type.get_canonical()
     if canon.kind != TypeKind.POINTER:
@@ -606,8 +605,7 @@ def declspec(decl, name, prefix, wrapped=False):
     call = callconv(decl, prefix)
     if type(decl) is Cursor:
         decl = decl.type
-    if 'VRControllerState_t' not in decl.spelling: # FIXME
-        decl = decl.get_canonical()
+    decl = decl.get_canonical()
 
     const = 'const ' if decl.is_const_qualified() else ''
     if decl.kind == TypeKind.FUNCTIONPROTO:
@@ -633,12 +631,13 @@ def declspec(decl, name, prefix, wrapped=False):
     if decl.kind == TypeKind.ENUM:
         return f'uint{decl.get_size() * 8}_t{name}'
 
-    type_name = decl.spelling.removeprefix("const ")
-    type_name = decl.spelling.removeprefix("vr::")
+    type_name = decl.spelling
+    type_name = type_name.removeprefix("const ")
+    type_name = type_name.removeprefix("vr::")
     if type_name.startswith(('IVR', 'ID3D')):
         return f'{const}void /*{type_name}*/{name}'
 
-    if prefix not in (None, "win") and decl.kind == TypeKind.RECORD \
+    if decl.kind == TypeKind.RECORD \
        and type_name in all_versions[sdkver] \
        and type_name not in EXEMPT_STRUCTS:
         if type_name in unique_structs:
@@ -648,16 +647,6 @@ def declspec(decl, name, prefix, wrapped=False):
     real_name = canonical_typename(decl)
     real_name = real_name.removeprefix("const ")
     real_name = real_name.removeprefix("vr::")
-
-    if prefix == "win" and real_name in SDK_STRUCTS:
-        type_name = f"win{real_name}_{display_sdkver(sdkver)}"
-    elif prefix == "win" and struct_needs_conversion(decl.get_canonical()) \
-         and not decl.is_const_qualified(): # FIXME
-        type_name = f"win{real_name}_{display_sdkver(sdkver)}"
-    else:
-        type_name = decl.spelling
-        type_name = type_name.removeprefix("const ")
-        type_name = type_name.removeprefix("vr::")
 
     if type_name in ('void', 'bool', 'char', 'float', 'double'):
         return f'{const}{type_name}{name}'
@@ -673,11 +662,11 @@ def handle_method_hpp(method, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*_ret" if returns_record else "_ret"
-    ret = f'{declspec(method.result_type, ret, "win")}'
+    ret = f'{declspec(method.result_type, ret, "w_")}'
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
 
     if method.result_type.kind != TypeKind.VOID:
         params = [ret] + params
@@ -705,7 +694,7 @@ def handle_method_cpp(method, classname, cppname, out):
 
     out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
     out(u'{\n')
-    out(f'    struct {cppname} *iface = (struct {cppname} *)params->linux_side;\n')
+    out(f'    struct u_{klass.full_name} *iface = (struct u_{klass.full_name} *)params->linux_side;\n')
 
     params = list(zip(names[1:], method.get_arguments()))
     for i, (name, param) in enumerate(params[:-1]):
@@ -732,14 +721,13 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = strip_ns(underlying_typename(param))
 
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {declspec(param, f"lin_{name}", None).removeprefix("const ")};\n')
-            out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}( &params->{name}, &lin_{name} );\n')
+            out(f'    {declspec(param, f"u_{name}", "u_")} = params->{name};\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
+            out(f'    {declspec(pointee, f"u_{name}", "u_")};\n')
             continue
 
         if type_name in SDK_STRUCTS:
@@ -749,9 +737,8 @@ def handle_method_cpp(method, classname, cppname, out):
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
-        out(f'    if (params->{name})\n')
-        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin( params->{name}, &lin_{name} );\n')
+        out(f'    {declspec(pointee, f"u_{name}", "u_").removeprefix("const ")};\n')
+        out(f'    if (params->{name}) u_{name} = *params->{name};\n')
 
     size_fixup = {}
     size_param = {}
@@ -768,12 +755,12 @@ def handle_method_cpp(method, classname, cppname, out):
             size_param[name] = ', -1'
         elif struct_needs_size_adjustment(real_type.get_canonical()):
             real_name = real_type.spelling
-            out(f'    uint32_t lin_{next_name} = std::min( params->{next_name}, (uint32_t)sizeof({real_name}) );\n')
+            out(f'    uint32_t u_{next_name} = std::min( params->{next_name}, (uint32_t)sizeof({real_name}) );\n')
             size_param[name] = f', params->{next_name}'
             size_fixup[next_name] = True
         elif name in need_convert:
             assert name not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
-            out(f'    uint32_t lin_{next_name} = params->{next_name} ? sizeof(lin_{name}) : 0;\n')
+            out(f'    uint32_t u_{next_name} = params->{next_name} ? sizeof(u_{name}) : 0;\n')
             size_param[name] = f', params->{next_name}'
             size_fixup[next_name] = True
 
@@ -782,13 +769,13 @@ def handle_method_cpp(method, classname, cppname, out):
     elif returns_record:
         out(u'    *params->_ret = ')
     else:
-        out(u'    params->_ret = ')
+        out(f'    params->_ret = ({declspec(method.result_type, "", "w_")})') # FIXME
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
-        if name in size_fixup: return f"lin_{name}"
-        if name in need_unwrap: return f'struct_{type_name}_{display_sdkver(sdkver)}_unwrap( params->{name} )'
-        if name in need_convert: return f"params->{name} ? {pfx}lin_{name} : nullptr"
+        if name in size_fixup: return f"u_{name}"
+        if name in need_unwrap: return f'struct_{all_versions[sdkver][type_name]}_unwrap( params->{name} )'
+        if name in need_convert: return f"params->{name} ? {pfx}u_{name} : nullptr"
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
@@ -798,10 +785,9 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = strip_ns(underlying_typename(param))
         if type_name in SDK_STRUCTS:
             out(u'    if (params->_ret == 0)\n')
-            out(f'        *params->{name} = struct_{type_name}_{display_sdkver(sdkver)}_wrap( lin_{name} );\n')
+            out(f'        *params->{name} = struct_{all_versions[sdkver][type_name]}_wrap( u_{name} );\n')
             continue
-        out(f'    if (params->{name})\n')
-        out(f'        struct_{type_name}_{display_sdkver(sdkver)}_lin_to_win( &lin_{name}, params->{name}{size_param.get(name, "")} );\n')
+        out(f'    if (params->{name}) *params->{name} = u_{name};\n')
 
     out(u'}\n\n')
 
@@ -825,14 +811,14 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*" if returns_record else ""
-    ret = f'{declspec(method.result_type, ret, "win")} '
+    ret = f'{declspec(method.result_type, ret, "w_")} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{declspec(method.result_type, "*_ret", "win")}'] + params
+        params = [f'{declspec(method.result_type, "*_ret", "w_")}'] + params
         names = ['_ret'] + names
 
     params = ['struct w_steam_iface *_this'] + params
@@ -861,7 +847,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     out(u'    TRACE("%p\\n", _this);\n')
 
     if 'eTextureType' in names:
-        out(u'    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
+        out(u'    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
     out(f'    {cppname}_{method.name}( &params );\n')
 
@@ -900,49 +886,38 @@ def handle_class(klass):
     with open(f"vrclient_x64/{cppname}.h", "w") as file:
         out = file.write
 
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include <stdarg.h>\n')
+        out(u'#include <stddef.h>\n')
+        out(u'#include <stdint.h>\n')
+        out(u'\n')
         out(u'#ifdef __cplusplus\n')
         out(u'extern "C" {\n')
-        out(u'#endif\n')
-
-        out(f'struct {cppname};\n')
+        out(u'#endif /* __cplusplus */\n')
+        out(u'\n')
 
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
             handle_method_hpp(method, cppname, out)
 
-        out(u'#ifdef __cplusplus')
-        out(u'\n}')
-        out(u'\n#endif\n')
+        out(u'#ifdef __cplusplus\n')
+        out(u'} /* extern "C" */\n')
+        out(u'#endif /* __cplusplus */\n')
 
     with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
         out = file.write
 
-        out(u'#include "vrclient_private.h"\n')
-        out(u'#include "vrclient_defs.h"\n')
-        if os.path.isfile(f"openvr_{klass._sdkver}/ivrclientcore.h"):
-            out(f'#include "openvr_{klass._sdkver}/ivrclientcore.h"\n')
-        else:
-            out(f'#include "openvr_{klass._sdkver}/openvr.h"\n')
-        out(u'using namespace vr;\n')
-        out(u'extern "C" {\n')
-        out(u'#include "struct_converters.h"\n')
-        out(u'}\n')
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include "unix_private.h"\n')
         out(f'#include "{cppname}.h"\n')
-        out(u'#ifdef __cplusplus\n')
-        out(u'extern "C" {\n')
-        out(u'#endif\n\n')
 
-        klass.write_definition(out, "cpp")
+        klass.write_definition(out, "u_")
 
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
             handle_method_cpp(method, klass.name, cppname, out)
-
-        out(u'#ifdef __cplusplus\n')
-        out(u'}\n')
-        out(u'#endif\n')
 
     winclassname = f'win{klass.full_name}'
     with open(f'vrclient_x64/win{klass.name}.c', 'a') as file:
@@ -1725,15 +1700,8 @@ for klass in all_classes.values():
         out(u'#include <stdarg.h>\n')
         out(u'#include <stdint.h>\n')
         out(u'\n')
-        out(u'#include "windef.h"\n')
-        out(u'#include "winbase.h"\n')
-        out(u'#include "wine/debug.h"\n')
-        out(u'\n')
-        out(u'#include "vrclient_defs.h"\n')
-        out(u'\n')
+        out(u'#include "vrclient_structs.h"\n')
         out(u'#include "vrclient_private.h"\n')
-        out(u'\n')
-        out(u'#include "struct_converters.h"\n')
         out(u'\n')
         out(u'#include "flatapi.h"\n')
         out(u'\n')
@@ -1857,7 +1825,7 @@ with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
-    out(u'#include "vrclient_structs.h"\n\n')
+    out(u'#include "unix_private.h"\n\n')
 
     for name in sorted(unique_structs, key=struct_order):
         for sdkver, abis in all_structs[name].items():

@@ -17,12 +17,11 @@
 #include "d3d11_4.h"
 #include "dxvk-interop.h"
 
-#include "vrclient_defs.h"
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"
 
-#include "struct_converters.h"
 #include "cppIVRClientCore_IVRClientCore_002.h"
 #include "cppIVRClientCore_IVRClientCore_003.h"
 #include "cppIVRMailbox_IVRMailbox_001.h"
@@ -581,11 +580,11 @@ static void ivrclientcore_cleanup( struct client_core_data *user_data )
     DeleteCriticalSection(&user_data->critical_section);
 }
 
-Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
-                                           IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
-                                           VkImageLayout *image_layout, VkImageCreateInfo *image_info )
+w_Texture_t vrclient_translate_texture_dxvk( const w_Texture_t *texture, w_VRVulkanTextureData_t *vkdata,
+                                             IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
+                                             VkImageLayout *image_layout, VkImageCreateInfo *image_info )
 {
-    struct Texture_t vktexture;
+    w_Texture_t vktexture;
     VkImage image_handle;
 
     dxvk_surface->lpVtbl->GetDevice(dxvk_surface, p_dxvk_device);

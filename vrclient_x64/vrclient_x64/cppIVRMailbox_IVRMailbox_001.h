@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRMailbox_IVRMailbox_001;
+#endif /* __cplusplus */
+
 struct cppIVRMailbox_IVRMailbox_001_undoc1_params
 {
     void *linux_side;
@@ -41,5 +46,5 @@ struct cppIVRMailbox_IVRMailbox_001_undoc4_params
 extern void cppIVRMailbox_IVRMailbox_001_undoc4( struct cppIVRMailbox_IVRMailbox_001_undoc4_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

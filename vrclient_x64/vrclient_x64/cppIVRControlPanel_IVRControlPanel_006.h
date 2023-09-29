@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRControlPanel_IVRControlPanel_006;
+#endif /* __cplusplus */
+
 struct cppIVRControlPanel_IVRControlPanel_006_undoc1_params
 {
     void *linux_side;
@@ -222,5 +227,5 @@ struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc28( struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

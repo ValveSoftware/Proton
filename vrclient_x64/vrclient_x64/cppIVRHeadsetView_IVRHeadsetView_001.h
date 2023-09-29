@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRHeadsetView_IVRHeadsetView_001;
+#endif /* __cplusplus */
+
 struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params
 {
     void *linux_side;
@@ -70,5 +75,5 @@ struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange_params
 extern void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

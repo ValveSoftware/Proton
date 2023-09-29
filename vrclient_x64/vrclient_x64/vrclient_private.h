@@ -1,7 +1,11 @@
+#include <stdarg.h>
+#include <stddef.h>
 #include <stdint.h>
+
 #include <linux/limits.h>
 
 #ifndef __cplusplus
+#include "wine/debug.h"
 #include "cxx.h"
 #else
 typedef void (*vtable_ptr)(void);
@@ -78,9 +82,9 @@ struct generic_interface
 };
 
 #ifdef __dxvk_interop_h__
-extern Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
-                                                  IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
-                                                  VkImageLayout *image_layout, VkImageCreateInfo *image_info );
+extern w_Texture_t vrclient_translate_texture_dxvk( const w_Texture_t *texture, w_VRVulkanTextureData_t *vkdata,
+                                                    IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device,
+                                                    VkImageLayout *image_layout, VkImageCreateInfo *image_info );
 #endif /* __dxvk_interop_h__ */
 
 extern VkDevice_T *get_native_VkDevice( VkDevice_T *device );

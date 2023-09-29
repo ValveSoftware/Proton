@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRSettings_IVRSettings_003;
+#endif /* __cplusplus */
+
 struct cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params
 {
     void *linux_side;
@@ -109,5 +114,5 @@ struct cppIVRSettings_IVRSettings_003_RemoveKeyInSection_params
 extern void cppIVRSettings_IVRSettings_003_RemoveKeyInSection( struct cppIVRSettings_IVRSettings_003_RemoveKeyInSection_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

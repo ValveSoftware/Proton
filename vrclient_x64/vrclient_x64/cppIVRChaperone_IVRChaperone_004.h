@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRChaperone_IVRChaperone_004;
+#endif /* __cplusplus */
+
 struct cppIVRChaperone_IVRChaperone_004_GetCalibrationState_params
 {
     void *linux_side;
@@ -71,5 +76,5 @@ struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params
 extern void cppIVRChaperone_IVRChaperone_004_ResetZeroPose( struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

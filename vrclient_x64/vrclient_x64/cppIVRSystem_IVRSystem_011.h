@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRSystem_IVRSystem_011;
+#endif /* __cplusplus */
+
 struct cppIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize_params
 {
     void *linux_side;
@@ -252,7 +257,7 @@ struct cppIVRSystem_IVRSystem_011_PollNextEvent_params
 {
     void *linux_side;
     bool _ret;
-    winVREvent_t_0918 *pEvent;
+    w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
 };
 extern void cppIVRSystem_IVRSystem_011_PollNextEvent( struct cppIVRSystem_IVRSystem_011_PollNextEvent_params *params );
@@ -262,7 +267,7 @@ struct cppIVRSystem_IVRSystem_011_PollNextEventWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    winVREvent_t_0918 *pEvent;
+    w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -279,7 +284,7 @@ extern void cppIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum( struct cppIVRSy
 struct cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh_params
 {
     void *linux_side;
-    HiddenAreaMesh_t *_ret;
+    w_HiddenAreaMesh_t *_ret;
     uint32_t eEye;
 };
 extern void cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh( struct cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh_params *params );
@@ -289,7 +294,7 @@ struct cppIVRSystem_IVRSystem_011_GetControllerState_params
     void *linux_side;
     bool _ret;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_0918 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
 };
 extern void cppIVRSystem_IVRSystem_011_GetControllerState( struct cppIVRSystem_IVRSystem_011_GetControllerState_params *params );
 
@@ -299,7 +304,7 @@ struct cppIVRSystem_IVRSystem_011_GetControllerStateWithPose_params
     bool _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_0918 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
 extern void cppIVRSystem_IVRSystem_011_GetControllerStateWithPose( struct cppIVRSystem_IVRSystem_011_GetControllerStateWithPose_params *params );
@@ -395,5 +400,5 @@ struct cppIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange_param
 extern void cppIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange( struct cppIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */
