@@ -251,18 +251,6 @@ int32_t __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(struct w_
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput001_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamInput_SteamInput001_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetStringForActionOrigin_params params =
@@ -414,18 +402,6 @@ const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(stru
     };
     TRACE("%p\n", _this);
     cppISteamInput_SteamInput001_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput001_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput001_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 
@@ -784,18 +760,6 @@ int32_t __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(struct w_
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput002_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamInput_SteamInput002_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetStringForActionOrigin_params params =
@@ -947,18 +911,6 @@ const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(stru
     };
     TRACE("%p\n", _this);
     cppISteamInput_SteamInput002_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput002_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput002_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 
@@ -1402,45 +1354,6 @@ int32_t __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(struct w_
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t eSize, uint32_t unFlags)
-{
-    struct cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-        .eSize = eSize,
-        .unFlags = unFlags,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unFlags)
-{
-    struct cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-        .unFlags = unFlags,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamInput_SteamInput005_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetStringForActionOrigin_params params =
@@ -1635,18 +1548,6 @@ const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(stru
     };
     TRACE("%p\n", _this);
     cppISteamInput_SteamInput005_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput005_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput005_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 
@@ -2114,45 +2015,6 @@ int32_t __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(struct w_
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t eSize, uint32_t unFlags)
-{
-    struct cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-        .eSize = eSize,
-        .unFlags = unFlags,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unFlags)
-{
-    struct cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-        .unFlags = unFlags,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamInput_SteamInput006_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetStringForActionOrigin_params params =
@@ -2347,18 +2209,6 @@ const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(stru
     };
     TRACE("%p\n", _this);
     cppISteamInput_SteamInput006_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamInput_SteamInput006_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamInput_SteamInput006_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 

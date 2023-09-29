@@ -18,12 +18,6 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-extern const char *steamclient_isteamcontroller_getglyph( int origin, const char *lin_path );
-extern const char *steamclient_isteaminput_getglyph( int origin, const char *lin_path );
-extern const char *steamclient_isteaminput_getglyph_xbox( int origin, const char *lin_path );
-extern const char *steamclient_isteaminput_getglyph_png( int origin, int size, int flags, const char *lin_path );
-extern const char *steamclient_isteaminput_getglyph_svg( int origin, int flags, const char *lin_path );
-
 extern struct u_ISteamMatchmakingServerListResponse *create_LinuxISteamMatchmakingServerListResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
 extern struct u_ISteamMatchmakingPingResponse *create_LinuxISteamMatchmakingPingResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
 extern struct u_ISteamMatchmakingPlayersResponse *create_LinuxISteamMatchmakingPlayersResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
