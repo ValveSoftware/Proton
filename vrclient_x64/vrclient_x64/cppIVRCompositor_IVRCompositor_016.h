@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRCompositor_IVRCompositor_016;
+#endif /* __cplusplus */
+
 struct cppIVRCompositor_IVRCompositor_016_SetTrackingSpace_params
 {
     void *linux_side;
@@ -53,7 +58,7 @@ struct cppIVRCompositor_IVRCompositor_016_Submit_params
     void *linux_side;
     uint32_t _ret;
     uint32_t eEye;
-    const Texture_t *pTexture;
+    const w_Texture_t *pTexture;
     const VRTextureBounds_t *pBounds;
     uint32_t nSubmitFlags;
 };
@@ -75,7 +80,7 @@ struct cppIVRCompositor_IVRCompositor_016_GetFrameTiming_params
 {
     void *linux_side;
     bool _ret;
-    winCompositor_FrameTiming_103 *pTiming;
+    w_Compositor_FrameTiming_102 *pTiming;
     uint32_t unFramesAgo;
 };
 extern void cppIVRCompositor_IVRCompositor_016_GetFrameTiming( struct cppIVRCompositor_IVRCompositor_016_GetFrameTiming_params *params );
@@ -90,7 +95,7 @@ extern void cppIVRCompositor_IVRCompositor_016_GetFrameTimeRemaining( struct cpp
 struct cppIVRCompositor_IVRCompositor_016_GetCumulativeStats_params
 {
     void *linux_side;
-    Compositor_CumulativeStats *pStats;
+    Compositor_CumulativeStats_100 *pStats;
     uint32_t nStatsSizeInBytes;
 };
 extern void cppIVRCompositor_IVRCompositor_016_GetCumulativeStats( struct cppIVRCompositor_IVRCompositor_016_GetCumulativeStats_params *params );
@@ -119,7 +124,7 @@ struct cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride_params
 {
     void *linux_side;
     uint32_t _ret;
-    const Texture_t *pTextures;
+    const w_Texture_t *pTextures;
     uint32_t unTextureCount;
 };
 extern void cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride( struct cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride_params *params );
@@ -272,5 +277,5 @@ struct cppIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess_params
 extern void cppIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,16 +1,7 @@
-#include "vrclient_private.h"
-#include "vrclient_defs.h"
-#include "openvr_v1.26.7/ivrclientcore.h"
-using namespace vr;
-extern "C" {
-#include "struct_converters.h"
-}
+/* This file is auto-generated, do not edit. */
+#include "unix_private.h"
 #include "cppIVRClientCore_IVRClientCore_003.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-struct cppIVRClientCore_IVRClientCore_003
+struct u_IVRClientCore_IVRClientCore_003
 {
 #ifdef __cplusplus
     virtual uint32_t Init( uint32_t, const char * ) = 0;
@@ -25,46 +16,43 @@ struct cppIVRClientCore_IVRClientCore_003
 
 void cppIVRClientCore_IVRClientCore_003_Init( struct cppIVRClientCore_IVRClientCore_003_Init_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->Init( params->eApplicationType, params->pStartupInfo );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->Init( params->eApplicationType, params->pStartupInfo );
 }
 
 void cppIVRClientCore_IVRClientCore_003_Cleanup( struct cppIVRClientCore_IVRClientCore_003_Cleanup_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
     iface->Cleanup(  );
 }
 
 void cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid( struct cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->IsInterfaceVersionValid( params->pchInterfaceVersion );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->IsInterfaceVersionValid( params->pchInterfaceVersion );
 }
 
 void cppIVRClientCore_IVRClientCore_003_GetGenericInterface( struct cppIVRClientCore_IVRClientCore_003_GetGenericInterface_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->GetGenericInterface( params->pchNameAndVersion, params->peError );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (void *)iface->GetGenericInterface( params->pchNameAndVersion, params->peError );
 }
 
 void cppIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct cppIVRClientCore_IVRClientCore_003_BIsHmdPresent_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->BIsHmdPresent(  );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (bool)iface->BIsHmdPresent(  );
 }
 
 void cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError( struct cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->GetEnglishStringForHmdError( params->eError );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (const char *)iface->GetEnglishStringForHmdError( params->eError );
 }
 
 void cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError( struct cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError_params *params )
 {
-    struct cppIVRClientCore_IVRClientCore_003 *iface = (struct cppIVRClientCore_IVRClientCore_003 *)params->linux_side;
-    params->_ret = iface->GetIDForVRInitError( params->eError );
+    struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
+    params->_ret = (const char *)iface->GetIDForVRInitError( params->eError );
 }
 
-#ifdef __cplusplus
-}
-#endif

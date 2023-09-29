@@ -95,6 +95,40 @@ typedef struct VkQueue_T VkQueue_T;
 
 #include "vrclient_structs_generated.h"
 
+#define VROverlayError_InvalidHandle 11
+#define VRRenderModelError_None 0
+#define VRRenderModelError_Loading 100
+#define VRRenderModelError_NotSupported 200
+#define VRRenderModelError_InvalidArg 300
+#define VRRenderModelError_InvalidTexture 400
+
+#define VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff 2
+
+enum EVRSubmitFlags
+{
+    Submit_Default = 0x00,
+    Submit_LensDistortionAlreadyApplied = 0x01,
+    Submit_GlRenderBuffer = 0x02,
+    Submit_Reserved = 0x04,
+    Submit_TextureWithPose = 0x08,
+    Submit_TextureWithDepth = 0x10,
+    Submit_FrameDiscontinuty = 0x20,
+    Submit_VulkanTextureWithArrayData = 0x40,
+    Submit_GlArrayTexture = 0x80,
+    Submit_Reserved2 = 0x08000,
+    Submit_Reserved3 = 0x10000,
+};
+
+enum ETextureType
+{
+    TextureType_DirectX = 0,
+    TextureType_OpenGL = 1,
+    TextureType_Vulkan = 2,
+    TextureType_IOSurface = 3,
+    TextureType_DirectX12 = 4,
+    TextureType_DXGISharedHandle = 5,
+};
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

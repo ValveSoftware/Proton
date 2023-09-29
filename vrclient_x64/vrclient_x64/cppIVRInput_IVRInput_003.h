@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRInput_IVRInput_003;
+#endif /* __cplusplus */
+
 struct cppIVRInput_IVRInput_003_SetActionManifestPath_params
 {
     void *linux_side;
@@ -41,7 +46,7 @@ struct cppIVRInput_IVRInput_003_UpdateActionState_params
 {
     void *linux_side;
     uint32_t _ret;
-    VRActiveActionSet_t *pSets;
+    VRActiveActionSet_t_1015 *pSets;
     uint32_t unSizeOfVRSelectedActionSet_t;
     uint32_t unSetCount;
 };
@@ -52,7 +57,7 @@ struct cppIVRInput_IVRInput_003_GetDigitalActionData_params
     void *linux_side;
     uint32_t _ret;
     uint64_t action;
-    winInputDigitalActionData_t_1015 *pActionData;
+    w_InputDigitalActionData_t *pActionData;
     uint32_t unActionDataSize;
 };
 extern void cppIVRInput_IVRInput_003_GetDigitalActionData( struct cppIVRInput_IVRInput_003_GetDigitalActionData_params *params );
@@ -62,7 +67,7 @@ struct cppIVRInput_IVRInput_003_GetAnalogActionData_params
     void *linux_side;
     uint32_t _ret;
     uint64_t action;
-    winInputAnalogActionData_t_1015 *pActionData;
+    w_InputAnalogActionData_t *pActionData;
     uint32_t unActionDataSize;
 };
 extern void cppIVRInput_IVRInput_003_GetAnalogActionData( struct cppIVRInput_IVRInput_003_GetAnalogActionData_params *params );
@@ -74,7 +79,7 @@ struct cppIVRInput_IVRInput_003_GetPoseActionData_params
     uint64_t action;
     uint32_t eOrigin;
     float fPredictedSecondsFromNow;
-    winInputPoseActionData_t_1015 *pActionData;
+    w_InputPoseActionData_t *pActionData;
     uint32_t unActionDataSize;
 };
 extern void cppIVRInput_IVRInput_003_GetPoseActionData( struct cppIVRInput_IVRInput_003_GetPoseActionData_params *params );
@@ -86,7 +91,7 @@ struct cppIVRInput_IVRInput_003_GetSkeletalActionData_params
     uint64_t action;
     uint32_t eBoneParent;
     float fPredictedSecondsFromNow;
-    winInputSkeletonActionData_t_1015 *pActionData;
+    w_InputSkeletonActionData_t *pActionData;
     uint32_t unActionDataSize;
     VRBoneTransform_t *pTransformArray;
     uint32_t unTransformArrayCount;
@@ -156,7 +161,7 @@ struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params
     void *linux_side;
     uint32_t _ret;
     uint64_t origin;
-    winInputOriginInfo_t_1015 *pOriginInfo;
+    w_InputOriginInfo_t *pOriginInfo;
     uint32_t unOriginInfoSize;
 };
 extern void cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo( struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params *params );
@@ -174,7 +179,7 @@ struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params
 {
     void *linux_side;
     uint32_t _ret;
-    VRActiveActionSet_t *pSets;
+    VRActiveActionSet_t_1015 *pSets;
     uint32_t unSizeOfVRSelectedActionSet_t;
     uint32_t unSetCount;
     uint64_t originToHighlight;
@@ -182,5 +187,5 @@ struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params
 extern void cppIVRInput_IVRInput_003_ShowBindingsForActionSet( struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

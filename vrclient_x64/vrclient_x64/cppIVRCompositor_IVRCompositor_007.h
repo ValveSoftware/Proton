@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRCompositor_IVRCompositor_007;
+#endif /* __cplusplus */
+
 struct cppIVRCompositor_IVRCompositor_007_GetLastError_params
 {
     void *linux_side;
@@ -71,7 +76,7 @@ struct cppIVRCompositor_IVRCompositor_007_GetFrameTiming_params
 {
     void *linux_side;
     bool _ret;
-    winCompositor_FrameTiming_098 *pTiming;
+    w_Compositor_FrameTiming_093 *pTiming;
     uint32_t unFramesAgo;
 };
 extern void cppIVRCompositor_IVRCompositor_007_GetFrameTiming( struct cppIVRCompositor_IVRCompositor_007_GetFrameTiming_params *params );
@@ -150,5 +155,5 @@ struct cppIVRCompositor_IVRCompositor_007_CanRenderScene_params
 extern void cppIVRCompositor_IVRCompositor_007_CanRenderScene( struct cppIVRCompositor_IVRCompositor_007_CanRenderScene_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

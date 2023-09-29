@@ -1,18 +1,17 @@
 #include <stdarg.h>
 #include <stddef.h>
-#include <stdint.h>
 
 #include "windef.h"
 #include "winbase.h"
 
-#include "wine/debug.h"
+#define COBJMACROS
+#include "d3d11_4.h"
 #include "dxvk-interop.h"
-#include "vrclient_defs.h"
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"
 
-#include "struct_converters.h"
 #include "cppIVRCompositor_IVRCompositor_005.h"
 #include "cppIVRCompositor_IVRCompositor_006.h"
 #include "cppIVRCompositor_IVRCompositor_007.h"
@@ -40,16 +39,16 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 struct submit_state
 {
     void *submit;
-    struct Texture_t texture;
-    struct VRVulkanTextureArrayData_t vkdata;
+    w_Texture_t texture;
+    w_VRVulkanTextureArrayData_t vkdata;
     union
     {
         struct
         {
-            struct VRVulkanTextureData_t depth_vkdata;
-            VRTextureWithPoseAndDepth_t both;
-            VRTextureWithDepth_t depth;
-            VRTextureWithPose_t pose;
+            w_VRVulkanTextureData_t depth_vkdata;
+            w_VRTextureWithPoseAndDepth_t both;
+            w_VRTextureWithDepth_t depth;
+            w_VRTextureWithPose_t pose;
         };
         struct
         {
@@ -61,9 +60,10 @@ struct submit_state
     };
 };
 
-static void load_compositor_texture_dxvk( uint32_t eye, const Texture_t *texture, uint32_t *flags, struct submit_state *state )
+static void load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags, struct submit_state *state )
 {
     static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty;
+    w_VRVulkanTextureData_t vkdata;
     VkImageCreateInfo image_info;
     IUnknown *texture_iface;
 
@@ -82,8 +82,19 @@ static void load_compositor_texture_dxvk( uint32_t eye, const Texture_t *texture
         return;
     }
 
-    state->texture = vrclient_translate_texture_dxvk( texture, &state->vkdata.t, state->dxvk_surface, &state->dxvk_device,
+    state->texture = vrclient_translate_texture_dxvk( texture, &vkdata, state->dxvk_surface, &state->dxvk_device,
                                                       &state->image_layout, &image_info );
+    state->vkdata.m_nImage = vkdata.m_nImage;
+    state->vkdata.m_pDevice = vkdata.m_pDevice;
+    state->vkdata.m_pPhysicalDevice = vkdata.m_pPhysicalDevice;
+    state->vkdata.m_pInstance = vkdata.m_pInstance;
+    state->vkdata.m_pQueue = vkdata.m_pQueue;
+    state->vkdata.m_nQueueFamilyIndex = vkdata.m_nQueueFamilyIndex;
+    state->vkdata.m_nWidth = vkdata.m_nWidth;
+    state->vkdata.m_nHeight = vkdata.m_nHeight;
+    state->vkdata.m_nFormat = vkdata.m_nFormat;
+    state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
+    state->texture.handle = &state->vkdata;
 
     compositor_data.dxvk_device = state->dxvk_device;
 
@@ -119,19 +130,19 @@ static void free_compositor_texture_dxvk( struct submit_state *state )
     state->dxvk_surface->lpVtbl->Release( state->dxvk_surface );
 }
 
-static void load_compositor_texture_vulkan( uint32_t eye, const Texture_t *texture, uint32_t flags, struct submit_state *state )
+static void load_compositor_texture_vulkan( uint32_t eye, const w_Texture_t *texture, uint32_t flags, struct submit_state *state )
 {
-    struct VRVulkanTextureData_t *their_vkdata;
+    w_VRVulkanTextureData_t *their_vkdata;
 
     their_vkdata = texture->handle;
 
-    memcpy( &state->vkdata, their_vkdata, flags & Submit_VulkanTextureWithArrayData ? sizeof(struct VRVulkanTextureArrayData_t)
-                                                                                    : sizeof(struct VRVulkanTextureData_t) );
+    memcpy( &state->vkdata, their_vkdata, flags & Submit_VulkanTextureWithArrayData ? sizeof(w_VRVulkanTextureArrayData_t)
+                                                                                    : sizeof(w_VRVulkanTextureData_t) );
 
-    state->vkdata.t.m_pDevice = get_native_VkDevice( state->vkdata.t.m_pDevice );
-    state->vkdata.t.m_pPhysicalDevice = get_native_VkPhysicalDevice( state->vkdata.t.m_pPhysicalDevice );
-    state->vkdata.t.m_pInstance = get_native_VkInstance( state->vkdata.t.m_pInstance );
-    state->vkdata.t.m_pQueue = get_native_VkQueue( state->vkdata.t.m_pQueue );
+    state->vkdata.m_pDevice = get_native_VkDevice( state->vkdata.m_pDevice );
+    state->vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice( state->vkdata.m_pPhysicalDevice );
+    state->vkdata.m_pInstance = get_native_VkInstance( state->vkdata.m_pInstance );
+    state->vkdata.m_pQueue = get_native_VkQueue( state->vkdata.m_pQueue );
 
     switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
     {
@@ -141,20 +152,20 @@ static void load_compositor_texture_vulkan( uint32_t eye, const Texture_t *textu
         break;
 
     case Submit_TextureWithPose:
-        state->pose = *(VRTextureWithPose_t *)texture;
-        state->pose.texture.handle = &state->vkdata;
+        state->pose = *(w_VRTextureWithPose_t *)texture;
+        state->pose.handle = &state->vkdata;
         state->submit = &state->pose;
         break;
 
     case Submit_TextureWithDepth:
-        state->depth = *(VRTextureWithDepth_t *)texture;
-        state->depth.texture.handle = &state->vkdata;
+        state->depth = *(w_VRTextureWithDepth_t *)texture;
+        state->depth.handle = &state->vkdata;
         state->submit = &state->depth;
         break;
 
     case Submit_TextureWithPose | Submit_TextureWithDepth:
-        state->both = *(VRTextureWithPoseAndDepth_t *)texture;
-        state->both.texture.handle = &state->vkdata;
+        state->both = *(w_VRTextureWithPoseAndDepth_t *)texture;
+        state->both.handle = &state->vkdata;
 
         their_vkdata = state->both.depth.handle;
         state->depth_vkdata = *their_vkdata;
@@ -171,18 +182,18 @@ static void load_compositor_texture_vulkan( uint32_t eye, const Texture_t *textu
 
 struct set_skybox_override_state
 {
-    Texture_t textures[6];
-    struct VRVulkanTextureData_t vkdata[6];
+    w_Texture_t textures[6];
+    w_VRVulkanTextureData_t vkdata[6];
 };
 
-static const Texture_t *set_skybox_override_d3d11_init( const Texture_t *textures, uint32_t count, struct set_skybox_override_state *state )
+static const w_Texture_t *set_skybox_override_d3d11_init( const w_Texture_t *textures, uint32_t count, struct set_skybox_override_state *state )
 {
     IDXGIVkInteropSurface *dxvk_surface;
     unsigned int i;
 
     for (i = 0; i < count; ++i)
     {
-        const Texture_t *texture = &textures[i];
+        const w_Texture_t *texture = &textures[i];
         VkImageSubresourceRange subresources;
         IDXGIVkInteropDevice *dxvk_device;
         VkImageCreateInfo image_info;
@@ -241,7 +252,7 @@ static const Texture_t *set_skybox_override_d3d11_init( const Texture_t *texture
     return state->textures;
 }
 
-static const Texture_t *set_skybox_override_init( const Texture_t *textures, uint32_t count, struct set_skybox_override_state *state )
+static const w_Texture_t *set_skybox_override_init( const w_Texture_t *textures, uint32_t count, struct set_skybox_override_state *state )
 {
     if (!count || count > 6)
     {
@@ -256,7 +267,7 @@ static const Texture_t *set_skybox_override_init( const Texture_t *textures, uin
     return textures;
 }
 
-static void set_skybox_override_done( const Texture_t *textures, uint32_t count )
+static void set_skybox_override_done( const w_Texture_t *textures, uint32_t count )
 {
     if (!count || count > 6) return;
     while (count--) if (!textures[count].handle || textures[count].eType != TextureType_DirectX) return;
@@ -289,7 +300,7 @@ static void wait_get_poses_done( void *linux_side )
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -321,7 +332,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride_params params =
@@ -337,7 +348,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -369,7 +380,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride_params params =
@@ -385,7 +396,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -417,7 +428,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride_params params =
@@ -433,7 +444,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -465,7 +476,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride_params params =
@@ -481,7 +492,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -513,7 +524,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride_params params =
@@ -529,7 +540,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -561,7 +572,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride_params params =
@@ -577,7 +588,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride( struct
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -609,7 +620,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride_params params =
@@ -644,7 +655,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -676,7 +687,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride_params params =
@@ -711,7 +722,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -743,7 +754,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride_params params =
@@ -778,7 +789,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -810,7 +821,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride_params params =
@@ -845,7 +856,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -877,7 +888,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride_params params =
@@ -927,7 +938,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -959,7 +970,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride_params params =
@@ -1025,7 +1036,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -1073,7 +1084,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride_params params =
@@ -1139,7 +1150,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -1187,7 +1198,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride_params params =
@@ -1253,7 +1264,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -1301,7 +1312,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride_params params =
@@ -1367,7 +1378,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses( struct w_st
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -1415,7 +1426,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride_params params =
@@ -1446,7 +1457,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensions
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_iface *_this,
-                                                               uint32_t eEye, const Texture_t *pTexture,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
     struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
@@ -1494,7 +1505,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_PostPresentHandoff( struct w_
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride( struct w_steam_iface *_this,
-                                                                          const Texture_t *pTextures, uint32_t unTextureCount )
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
 {
     struct set_skybox_override_state state = {0};
     struct cppIVRCompositor_IVRCompositor_027_SetSkyboxOverride_params params =

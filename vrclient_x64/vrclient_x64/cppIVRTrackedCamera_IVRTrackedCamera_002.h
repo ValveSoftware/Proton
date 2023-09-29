@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRTrackedCamera_IVRTrackedCamera_002;
+#endif /* __cplusplus */
+
 struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum_params
 {
     void *linux_side;
@@ -79,11 +84,11 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer_params
     uint32_t eFrameType;
     void *pFrameBuffer;
     uint32_t nFrameBufferSize;
-    CameraVideoStreamFrameHeader_t *pFrameHeader;
+    w_CameraVideoStreamFrameHeader_t_100 *pFrameHeader;
     uint32_t nFrameHeaderSize;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer( struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

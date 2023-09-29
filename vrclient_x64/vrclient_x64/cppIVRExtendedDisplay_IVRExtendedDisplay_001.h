@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRExtendedDisplay_IVRExtendedDisplay_001;
+#endif /* __cplusplus */
+
 struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params
 {
     void *linux_side;
@@ -32,5 +37,5 @@ struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params
 extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

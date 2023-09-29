@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRScreenshots_IVRScreenshots_001;
+#endif /* __cplusplus */
+
 struct cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot_params
 {
     void *linux_side;
@@ -74,5 +79,5 @@ struct cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params
 extern void cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot( struct cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRSystem_IVRSystem_014;
+#endif /* __cplusplus */
+
 struct cppIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize_params
 {
     void *linux_side;
@@ -253,7 +258,7 @@ struct cppIVRSystem_IVRSystem_014_PollNextEvent_params
 {
     void *linux_side;
     bool _ret;
-    winVREvent_t_104 *pEvent;
+    w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
 };
 extern void cppIVRSystem_IVRSystem_014_PollNextEvent( struct cppIVRSystem_IVRSystem_014_PollNextEvent_params *params );
@@ -263,7 +268,7 @@ struct cppIVRSystem_IVRSystem_014_PollNextEventWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    winVREvent_t_104 *pEvent;
+    w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -280,7 +285,7 @@ extern void cppIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum( struct cppIVRSy
 struct cppIVRSystem_IVRSystem_014_GetHiddenAreaMesh_params
 {
     void *linux_side;
-    HiddenAreaMesh_t *_ret;
+    w_HiddenAreaMesh_t *_ret;
     uint32_t eEye;
     uint32_t type;
 };
@@ -291,7 +296,7 @@ struct cppIVRSystem_IVRSystem_014_GetControllerState_params
     void *linux_side;
     bool _ret;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_104 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
 };
 extern void cppIVRSystem_IVRSystem_014_GetControllerState( struct cppIVRSystem_IVRSystem_014_GetControllerState_params *params );
@@ -302,7 +307,7 @@ struct cppIVRSystem_IVRSystem_014_GetControllerStateWithPose_params
     bool _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_104 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -385,5 +390,5 @@ struct cppIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt_params
 extern void cppIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt( struct cppIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

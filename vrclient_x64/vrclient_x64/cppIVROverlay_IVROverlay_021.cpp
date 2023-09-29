@@ -1,16 +1,7 @@
-#include "vrclient_private.h"
-#include "vrclient_defs.h"
-#include "openvr_v1.8.19/ivrclientcore.h"
-using namespace vr;
-extern "C" {
-#include "struct_converters.h"
-}
+/* This file is auto-generated, do not edit. */
+#include "unix_private.h"
 #include "cppIVROverlay_IVROverlay_021.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-struct cppIVROverlay_IVROverlay_021
+struct u_IVROverlay_IVROverlay_021
 {
 #ifdef __cplusplus
     virtual uint32_t FindOverlay( const char *, uint64_t * ) = 0;
@@ -56,7 +47,7 @@ struct cppIVROverlay_IVROverlay_021
     virtual uint32_t HideOverlay( uint64_t ) = 0;
     virtual bool IsOverlayVisible( uint64_t ) = 0;
     virtual uint32_t GetTransformForOverlayCoordinates( uint64_t, uint32_t, HmdVector2_t, HmdMatrix34_t * ) = 0;
-    virtual bool PollNextOverlayEvent( uint64_t, VREvent_t *, uint32_t ) = 0;
+    virtual bool PollNextOverlayEvent( uint64_t, u_VREvent_t_1322 *, uint32_t ) = 0;
     virtual uint32_t GetOverlayInputMethod( uint64_t, uint32_t * ) = 0;
     virtual uint32_t SetOverlayInputMethod( uint64_t, uint32_t ) = 0;
     virtual uint32_t GetOverlayMouseScale( uint64_t, HmdVector2_t * ) = 0;
@@ -65,7 +56,7 @@ struct cppIVROverlay_IVROverlay_021
     virtual bool IsHoverTargetOverlay( uint64_t ) = 0;
     virtual uint32_t SetOverlayDualAnalogTransform( uint64_t, uint32_t, const HmdVector2_t *, float ) = 0;
     virtual uint32_t GetOverlayDualAnalogTransform( uint64_t, uint32_t, HmdVector2_t *, float * ) = 0;
-    virtual uint32_t SetOverlayTexture( uint64_t, const Texture_t * ) = 0;
+    virtual uint32_t SetOverlayTexture( uint64_t, const u_Texture_t * ) = 0;
     virtual uint32_t ClearOverlayTexture( uint64_t ) = 0;
     virtual uint32_t SetOverlayRaw( uint64_t, void *, uint32_t, uint32_t, uint32_t ) = 0;
     virtual uint32_t SetOverlayFromFile( uint64_t, const char * ) = 0;
@@ -94,466 +85,461 @@ struct cppIVROverlay_IVROverlay_021
 
 void cppIVROverlay_IVROverlay_021_FindOverlay( struct cppIVROverlay_IVROverlay_021_FindOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->FindOverlay( params->pchOverlayKey, params->pOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->FindOverlay( params->pchOverlayKey, params->pOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_CreateOverlay( struct cppIVROverlay_IVROverlay_021_CreateOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->CreateOverlay( params->pchOverlayKey, params->pchOverlayName, params->pOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->CreateOverlay( params->pchOverlayKey, params->pchOverlayName, params->pOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_DestroyOverlay( struct cppIVROverlay_IVROverlay_021_DestroyOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->DestroyOverlay( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->DestroyOverlay( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayKey( struct cppIVROverlay_IVROverlay_021_GetOverlayKey_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayKey( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pError );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayKey( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pError );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayName( struct cppIVROverlay_IVROverlay_021_GetOverlayName_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayName( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pError );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayName( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pError );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayName( struct cppIVROverlay_IVROverlay_021_SetOverlayName_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayName( params->ulOverlayHandle, params->pchName );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayName( params->ulOverlayHandle, params->pchName );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayImageData( struct cppIVROverlay_IVROverlay_021_GetOverlayImageData_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayImageData( params->ulOverlayHandle, params->pvBuffer, params->unBufferSize, params->punWidth, params->punHeight );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayImageData( params->ulOverlayHandle, params->pvBuffer, params->unBufferSize, params->punWidth, params->punHeight );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum( struct cppIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayErrorNameFromEnum( params->error );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (const char *)iface->GetOverlayErrorNameFromEnum( params->error );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayRenderingPid( struct cppIVROverlay_IVROverlay_021_SetOverlayRenderingPid_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayRenderingPid( params->ulOverlayHandle, params->unPID );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayRenderingPid( params->ulOverlayHandle, params->unPID );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayRenderingPid( struct cppIVROverlay_IVROverlay_021_GetOverlayRenderingPid_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayRenderingPid( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayRenderingPid( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayFlag( struct cppIVROverlay_IVROverlay_021_SetOverlayFlag_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayFlag( params->ulOverlayHandle, params->eOverlayFlag, params->bEnabled );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayFlag( params->ulOverlayHandle, params->eOverlayFlag, params->bEnabled );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayFlag( struct cppIVROverlay_IVROverlay_021_GetOverlayFlag_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayFlag( params->ulOverlayHandle, params->eOverlayFlag, params->pbEnabled );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayFlag( params->ulOverlayHandle, params->eOverlayFlag, params->pbEnabled );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayColor( struct cppIVROverlay_IVROverlay_021_SetOverlayColor_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayColor( params->ulOverlayHandle, params->fRed, params->fGreen, params->fBlue );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayColor( params->ulOverlayHandle, params->fRed, params->fGreen, params->fBlue );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayColor( struct cppIVROverlay_IVROverlay_021_GetOverlayColor_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayColor( params->ulOverlayHandle, params->pfRed, params->pfGreen, params->pfBlue );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayColor( params->ulOverlayHandle, params->pfRed, params->pfGreen, params->pfBlue );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayAlpha( struct cppIVROverlay_IVROverlay_021_SetOverlayAlpha_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayAlpha( params->ulOverlayHandle, params->fAlpha );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayAlpha( params->ulOverlayHandle, params->fAlpha );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayAlpha( struct cppIVROverlay_IVROverlay_021_GetOverlayAlpha_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayAlpha( params->ulOverlayHandle, params->pfAlpha );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayAlpha( params->ulOverlayHandle, params->pfAlpha );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTexelAspect( struct cppIVROverlay_IVROverlay_021_SetOverlayTexelAspect_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTexelAspect( params->ulOverlayHandle, params->fTexelAspect );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTexelAspect( params->ulOverlayHandle, params->fTexelAspect );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTexelAspect( struct cppIVROverlay_IVROverlay_021_GetOverlayTexelAspect_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTexelAspect( params->ulOverlayHandle, params->pfTexelAspect );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTexelAspect( params->ulOverlayHandle, params->pfTexelAspect );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlaySortOrder( struct cppIVROverlay_IVROverlay_021_SetOverlaySortOrder_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlaySortOrder( params->ulOverlayHandle, params->unSortOrder );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlaySortOrder( params->ulOverlayHandle, params->unSortOrder );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlaySortOrder( struct cppIVROverlay_IVROverlay_021_GetOverlaySortOrder_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlaySortOrder( params->ulOverlayHandle, params->punSortOrder );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlaySortOrder( params->ulOverlayHandle, params->punSortOrder );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayWidthInMeters( struct cppIVROverlay_IVROverlay_021_SetOverlayWidthInMeters_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayWidthInMeters( params->ulOverlayHandle, params->fWidthInMeters );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayWidthInMeters( params->ulOverlayHandle, params->fWidthInMeters );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayWidthInMeters( struct cppIVROverlay_IVROverlay_021_GetOverlayWidthInMeters_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayWidthInMeters( params->ulOverlayHandle, params->pfWidthInMeters );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayWidthInMeters( params->ulOverlayHandle, params->pfWidthInMeters );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayCurvature( struct cppIVROverlay_IVROverlay_021_SetOverlayCurvature_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayCurvature( params->ulOverlayHandle, params->fCurvature );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayCurvature( params->ulOverlayHandle, params->fCurvature );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayCurvature( struct cppIVROverlay_IVROverlay_021_GetOverlayCurvature_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayCurvature( params->ulOverlayHandle, params->pfCurvature );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayCurvature( params->ulOverlayHandle, params->pfCurvature );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace( struct cppIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTextureColorSpace( params->ulOverlayHandle, params->eTextureColorSpace );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTextureColorSpace( params->ulOverlayHandle, params->eTextureColorSpace );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace( struct cppIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTextureColorSpace( params->ulOverlayHandle, params->peTextureColorSpace );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTextureColorSpace( params->ulOverlayHandle, params->peTextureColorSpace );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTextureBounds( struct cppIVROverlay_IVROverlay_021_SetOverlayTextureBounds_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTextureBounds( params->ulOverlayHandle, params->pOverlayTextureBounds );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTextureBounds( params->ulOverlayHandle, params->pOverlayTextureBounds );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTextureBounds( struct cppIVROverlay_IVROverlay_021_GetOverlayTextureBounds_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTextureBounds( params->ulOverlayHandle, params->pOverlayTextureBounds );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTextureBounds( params->ulOverlayHandle, params->pOverlayTextureBounds );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayRenderModel( struct cppIVROverlay_IVROverlay_021_GetOverlayRenderModel_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayRenderModel( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pColor, params->pError );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayRenderModel( params->ulOverlayHandle, params->pchValue, params->unBufferSize, params->pColor, params->pError );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayRenderModel( struct cppIVROverlay_IVROverlay_021_SetOverlayRenderModel_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayRenderModel( params->ulOverlayHandle, params->pchRenderModel, params->pColor );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayRenderModel( params->ulOverlayHandle, params->pchRenderModel, params->pColor );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTransformType( struct cppIVROverlay_IVROverlay_021_GetOverlayTransformType_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTransformType( params->ulOverlayHandle, params->peTransformType );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTransformType( params->ulOverlayHandle, params->peTransformType );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute( struct cppIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTransformAbsolute( params->ulOverlayHandle, params->eTrackingOrigin, params->pmatTrackingOriginToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTransformAbsolute( params->ulOverlayHandle, params->eTrackingOrigin, params->pmatTrackingOriginToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute( struct cppIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTransformAbsolute( params->ulOverlayHandle, params->peTrackingOrigin, params->pmatTrackingOriginToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTransformAbsolute( params->ulOverlayHandle, params->peTrackingOrigin, params->pmatTrackingOriginToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative( struct cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTransformTrackedDeviceRelative( params->ulOverlayHandle, params->unTrackedDevice, params->pmatTrackedDeviceToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTransformTrackedDeviceRelative( params->ulOverlayHandle, params->unTrackedDevice, params->pmatTrackedDeviceToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative( struct cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTransformTrackedDeviceRelative( params->ulOverlayHandle, params->punTrackedDevice, params->pmatTrackedDeviceToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTransformTrackedDeviceRelative( params->ulOverlayHandle, params->punTrackedDevice, params->pmatTrackedDeviceToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent( struct cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTransformTrackedDeviceComponent( params->ulOverlayHandle, params->unDeviceIndex, params->pchComponentName );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTransformTrackedDeviceComponent( params->ulOverlayHandle, params->unDeviceIndex, params->pchComponentName );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent( struct cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTransformTrackedDeviceComponent( params->ulOverlayHandle, params->punDeviceIndex, params->pchComponentName, params->unComponentNameSize );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTransformTrackedDeviceComponent( params->ulOverlayHandle, params->punDeviceIndex, params->pchComponentName, params->unComponentNameSize );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative( struct cppIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTransformOverlayRelative( params->ulOverlayHandle, params->ulOverlayHandleParent, params->pmatParentOverlayToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTransformOverlayRelative( params->ulOverlayHandle, params->ulOverlayHandleParent, params->pmatParentOverlayToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative( struct cppIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTransformOverlayRelative( params->ulOverlayHandle, params->ulOverlayHandleParent, params->pmatParentOverlayToOverlayTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTransformOverlayRelative( params->ulOverlayHandle, params->ulOverlayHandleParent, params->pmatParentOverlayToOverlayTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_ShowOverlay( struct cppIVROverlay_IVROverlay_021_ShowOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ShowOverlay( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowOverlay( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_HideOverlay( struct cppIVROverlay_IVROverlay_021_HideOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->HideOverlay( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->HideOverlay( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_IsOverlayVisible( struct cppIVROverlay_IVROverlay_021_IsOverlayVisible_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->IsOverlayVisible( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (bool)iface->IsOverlayVisible( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates( struct cppIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetTransformForOverlayCoordinates( params->ulOverlayHandle, params->eTrackingOrigin, params->coordinatesInOverlay, params->pmatTransform );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetTransformForOverlayCoordinates( params->ulOverlayHandle, params->eTrackingOrigin, params->coordinatesInOverlay, params->pmatTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_PollNextOverlayEvent( struct cppIVROverlay_IVROverlay_021_PollNextOverlayEvent_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    VREvent_t lin_pEvent;
-    if (params->pEvent)
-        struct_VREvent_t_1819_win_to_lin( params->pEvent, &lin_pEvent );
-    uint32_t lin_uncbVREvent = params->uncbVREvent ? sizeof(lin_pEvent) : 0;
-    params->_ret = iface->PollNextOverlayEvent( params->ulOverlayHandle, params->pEvent ? &lin_pEvent : nullptr, lin_uncbVREvent );
-    if (params->pEvent)
-        struct_VREvent_t_1819_lin_to_win( &lin_pEvent, params->pEvent, params->uncbVREvent );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    u_VREvent_t_1322 u_pEvent;
+    if (params->pEvent) u_pEvent = *params->pEvent;
+    uint32_t u_uncbVREvent = params->uncbVREvent ? sizeof(u_pEvent) : 0;
+    params->_ret = (bool)iface->PollNextOverlayEvent( params->ulOverlayHandle, params->pEvent ? &u_pEvent : nullptr, u_uncbVREvent );
+    if (params->pEvent) *params->pEvent = u_pEvent;
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayInputMethod( struct cppIVROverlay_IVROverlay_021_GetOverlayInputMethod_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayInputMethod( params->ulOverlayHandle, params->peInputMethod );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayInputMethod( params->ulOverlayHandle, params->peInputMethod );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayInputMethod( struct cppIVROverlay_IVROverlay_021_SetOverlayInputMethod_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayInputMethod( params->ulOverlayHandle, params->eInputMethod );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayInputMethod( params->ulOverlayHandle, params->eInputMethod );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayMouseScale( struct cppIVROverlay_IVROverlay_021_GetOverlayMouseScale_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayMouseScale( params->ulOverlayHandle, params->pvecMouseScale );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayMouseScale( params->ulOverlayHandle, params->pvecMouseScale );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayMouseScale( struct cppIVROverlay_IVROverlay_021_SetOverlayMouseScale_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayMouseScale( params->ulOverlayHandle, params->pvecMouseScale );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayMouseScale( params->ulOverlayHandle, params->pvecMouseScale );
 }
 
 void cppIVROverlay_IVROverlay_021_ComputeOverlayIntersection( struct cppIVROverlay_IVROverlay_021_ComputeOverlayIntersection_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ComputeOverlayIntersection( params->ulOverlayHandle, params->pParams, params->pResults );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (bool)iface->ComputeOverlayIntersection( params->ulOverlayHandle, params->pParams, params->pResults );
 }
 
 void cppIVROverlay_IVROverlay_021_IsHoverTargetOverlay( struct cppIVROverlay_IVROverlay_021_IsHoverTargetOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->IsHoverTargetOverlay( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (bool)iface->IsHoverTargetOverlay( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform( struct cppIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayDualAnalogTransform( params->ulOverlay, params->eWhich, params->pvCenter, params->fRadius );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayDualAnalogTransform( params->ulOverlay, params->eWhich, params->pvCenter, params->fRadius );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform( struct cppIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayDualAnalogTransform( params->ulOverlay, params->eWhich, params->pvCenter, params->pfRadius );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayDualAnalogTransform( params->ulOverlay, params->eWhich, params->pvCenter, params->pfRadius );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayTexture( struct cppIVROverlay_IVROverlay_021_SetOverlayTexture_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayTexture( params->ulOverlayHandle, params->pTexture );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->pTexture );
 }
 
 void cppIVROverlay_IVROverlay_021_ClearOverlayTexture( struct cppIVROverlay_IVROverlay_021_ClearOverlayTexture_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ClearOverlayTexture( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ClearOverlayTexture( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayRaw( struct cppIVROverlay_IVROverlay_021_SetOverlayRaw_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayRaw( params->ulOverlayHandle, params->pvBuffer, params->unWidth, params->unHeight, params->unDepth );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayRaw( params->ulOverlayHandle, params->pvBuffer, params->unWidth, params->unHeight, params->unDepth );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayFromFile( struct cppIVROverlay_IVROverlay_021_SetOverlayFromFile_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayFromFile( params->ulOverlayHandle, params->pchFilePath );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayFromFile( params->ulOverlayHandle, params->pchFilePath );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTexture( struct cppIVROverlay_IVROverlay_021_GetOverlayTexture_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTexture( params->ulOverlayHandle, params->pNativeTextureHandle, params->pNativeTextureRef, params->pWidth, params->pHeight, params->pNativeFormat, params->pAPIType, params->pColorSpace, params->pTextureBounds );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTexture( params->ulOverlayHandle, params->pNativeTextureHandle, params->pNativeTextureRef, params->pWidth, params->pHeight, params->pNativeFormat, params->pAPIType, params->pColorSpace, params->pTextureBounds );
 }
 
 void cppIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle( struct cppIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ReleaseNativeOverlayHandle( params->ulOverlayHandle, params->pNativeTextureHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ReleaseNativeOverlayHandle( params->ulOverlayHandle, params->pNativeTextureHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayTextureSize( struct cppIVROverlay_IVROverlay_021_GetOverlayTextureSize_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayTextureSize( params->ulOverlayHandle, params->pWidth, params->pHeight );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayTextureSize( params->ulOverlayHandle, params->pWidth, params->pHeight );
 }
 
 void cppIVROverlay_IVROverlay_021_CreateDashboardOverlay( struct cppIVROverlay_IVROverlay_021_CreateDashboardOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->CreateDashboardOverlay( params->pchOverlayKey, params->pchOverlayFriendlyName, params->pMainHandle, params->pThumbnailHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->CreateDashboardOverlay( params->pchOverlayKey, params->pchOverlayFriendlyName, params->pMainHandle, params->pThumbnailHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_IsDashboardVisible( struct cppIVROverlay_IVROverlay_021_IsDashboardVisible_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->IsDashboardVisible(  );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (bool)iface->IsDashboardVisible(  );
 }
 
 void cppIVROverlay_IVROverlay_021_IsActiveDashboardOverlay( struct cppIVROverlay_IVROverlay_021_IsActiveDashboardOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->IsActiveDashboardOverlay( params->ulOverlayHandle );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (bool)iface->IsActiveDashboardOverlay( params->ulOverlayHandle );
 }
 
 void cppIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess( struct cppIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetDashboardOverlaySceneProcess( params->ulOverlayHandle, params->unProcessId );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetDashboardOverlaySceneProcess( params->ulOverlayHandle, params->unProcessId );
 }
 
 void cppIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess( struct cppIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetDashboardOverlaySceneProcess( params->ulOverlayHandle, params->punProcessId );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetDashboardOverlaySceneProcess( params->ulOverlayHandle, params->punProcessId );
 }
 
 void cppIVROverlay_IVROverlay_021_ShowDashboard( struct cppIVROverlay_IVROverlay_021_ShowDashboard_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
     iface->ShowDashboard( params->pchOverlayToShow );
 }
 
 void cppIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice( struct cppIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetPrimaryDashboardDevice(  );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetPrimaryDashboardDevice(  );
 }
 
 void cppIVROverlay_IVROverlay_021_ShowKeyboard( struct cppIVROverlay_IVROverlay_021_ShowKeyboard_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ShowKeyboard( params->eInputMode, params->eLineInputMode, params->pchDescription, params->unCharMax, params->pchExistingText, params->bUseMinimalMode, params->uUserValue );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowKeyboard( params->eInputMode, params->eLineInputMode, params->pchDescription, params->unCharMax, params->pchExistingText, params->bUseMinimalMode, params->uUserValue );
 }
 
 void cppIVROverlay_IVROverlay_021_ShowKeyboardForOverlay( struct cppIVROverlay_IVROverlay_021_ShowKeyboardForOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ShowKeyboardForOverlay( params->ulOverlayHandle, params->eInputMode, params->eLineInputMode, params->pchDescription, params->unCharMax, params->pchExistingText, params->bUseMinimalMode, params->uUserValue );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowKeyboardForOverlay( params->ulOverlayHandle, params->eInputMode, params->eLineInputMode, params->pchDescription, params->unCharMax, params->pchExistingText, params->bUseMinimalMode, params->uUserValue );
 }
 
 void cppIVROverlay_IVROverlay_021_GetKeyboardText( struct cppIVROverlay_IVROverlay_021_GetKeyboardText_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetKeyboardText( params->pchText, params->cchText );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetKeyboardText( params->pchText, params->cchText );
 }
 
 void cppIVROverlay_IVROverlay_021_HideKeyboard( struct cppIVROverlay_IVROverlay_021_HideKeyboard_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
     iface->HideKeyboard(  );
 }
 
 void cppIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute( struct cppIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
     iface->SetKeyboardTransformAbsolute( params->eTrackingOrigin, params->pmatTrackingOriginToKeyboardTransform );
 }
 
 void cppIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay( struct cppIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
     iface->SetKeyboardPositionForOverlay( params->ulOverlayHandle, params->avoidRect );
 }
 
 void cppIVROverlay_IVROverlay_021_SetOverlayIntersectionMask( struct cppIVROverlay_IVROverlay_021_SetOverlayIntersectionMask_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->SetOverlayIntersectionMask( params->ulOverlayHandle, params->pMaskPrimitives, params->unNumMaskPrimitives, params->unPrimitiveSize );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetOverlayIntersectionMask( params->ulOverlayHandle, params->pMaskPrimitives, params->unNumMaskPrimitives, params->unPrimitiveSize );
 }
 
 void cppIVROverlay_IVROverlay_021_GetOverlayFlags( struct cppIVROverlay_IVROverlay_021_GetOverlayFlags_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->GetOverlayFlags( params->ulOverlayHandle, params->pFlags );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOverlayFlags( params->ulOverlayHandle, params->pFlags );
 }
 
 void cppIVROverlay_IVROverlay_021_ShowMessageOverlay( struct cppIVROverlay_IVROverlay_021_ShowMessageOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = iface->ShowMessageOverlay( params->pchText, params->pchCaption, params->pchButton0Text, params->pchButton1Text, params->pchButton2Text, params->pchButton3Text );
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowMessageOverlay( params->pchText, params->pchCaption, params->pchButton0Text, params->pchButton1Text, params->pchButton2Text, params->pchButton3Text );
 }
 
 void cppIVROverlay_IVROverlay_021_CloseMessageOverlay( struct cppIVROverlay_IVROverlay_021_CloseMessageOverlay_params *params )
 {
-    struct cppIVROverlay_IVROverlay_021 *iface = (struct cppIVROverlay_IVROverlay_021 *)params->linux_side;
+    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
     iface->CloseMessageOverlay(  );
 }
 
-#ifdef __cplusplus
-}
-#endif

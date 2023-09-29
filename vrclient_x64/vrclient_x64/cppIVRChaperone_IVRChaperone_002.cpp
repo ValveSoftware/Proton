@@ -1,16 +1,7 @@
-#include "vrclient_private.h"
-#include "vrclient_defs.h"
-#include "openvr_v0.9.10/openvr.h"
-using namespace vr;
-extern "C" {
-#include "struct_converters.h"
-}
+/* This file is auto-generated, do not edit. */
+#include "unix_private.h"
 #include "cppIVRChaperone_IVRChaperone_002.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-struct cppIVRChaperone_IVRChaperone_002
+struct u_IVRChaperone_IVRChaperone_002
 {
 #ifdef __cplusplus
     virtual uint32_t GetCalibrationState(  ) = 0;
@@ -27,58 +18,55 @@ struct cppIVRChaperone_IVRChaperone_002
 
 void cppIVRChaperone_IVRChaperone_002_GetCalibrationState( struct cppIVRChaperone_IVRChaperone_002_GetCalibrationState_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = iface->GetCalibrationState(  );
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetCalibrationState(  );
 }
 
 void cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo( struct cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = iface->GetSoftBoundsInfo( params->pInfo );
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
+    params->_ret = (bool)iface->GetSoftBoundsInfo( params->pInfo );
 }
 
 void cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo( struct cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = iface->GetHardBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
+    params->_ret = (bool)iface->GetHardBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
 }
 
 void cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo( struct cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = iface->GetSeatedBoundsInfo( params->pInfo );
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
+    params->_ret = (bool)iface->GetSeatedBoundsInfo( params->pInfo );
 }
 
 void cppIVRChaperone_IVRChaperone_002_ReloadInfo( struct cppIVRChaperone_IVRChaperone_002_ReloadInfo_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
     iface->ReloadInfo(  );
 }
 
 void cppIVRChaperone_IVRChaperone_002_SetSceneColor( struct cppIVRChaperone_IVRChaperone_002_SetSceneColor_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
     iface->SetSceneColor( params->color );
 }
 
 void cppIVRChaperone_IVRChaperone_002_GetBoundsColor( struct cppIVRChaperone_IVRChaperone_002_GetBoundsColor_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
     iface->GetBoundsColor( params->pOutputColorArray, params->nNumOutputColors );
 }
 
 void cppIVRChaperone_IVRChaperone_002_AreBoundsVisible( struct cppIVRChaperone_IVRChaperone_002_AreBoundsVisible_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = iface->AreBoundsVisible(  );
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
+    params->_ret = (bool)iface->AreBoundsVisible(  );
 }
 
 void cppIVRChaperone_IVRChaperone_002_ForceBoundsVisible( struct cppIVRChaperone_IVRChaperone_002_ForceBoundsVisible_params *params )
 {
-    struct cppIVRChaperone_IVRChaperone_002 *iface = (struct cppIVRChaperone_IVRChaperone_002 *)params->linux_side;
+    struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
     iface->ForceBoundsVisible( params->bForce );
 }
 
-#ifdef __cplusplus
-}
-#endif

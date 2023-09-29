@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRChaperoneSetup_IVRChaperoneSetup_004;
+#endif /* __cplusplus */
+
 struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params
 {
     void *linux_side;
@@ -130,5 +135,5 @@ struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

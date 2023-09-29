@@ -1,169 +1,147 @@
-#include "vrclient_private.h"
-#include "vrclient_defs.h"
-#include "openvr_v1.0.15/ivrclientcore.h"
-using namespace vr;
-extern "C" {
-#include "struct_converters.h"
-}
+/* This file is auto-generated, do not edit. */
+#include "unix_private.h"
 #include "cppIVRInput_IVRInput_003.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-struct cppIVRInput_IVRInput_003
+struct u_IVRInput_IVRInput_003
 {
 #ifdef __cplusplus
     virtual uint32_t SetActionManifestPath( const char * ) = 0;
     virtual uint32_t GetActionSetHandle( const char *, uint64_t * ) = 0;
     virtual uint32_t GetActionHandle( const char *, uint64_t * ) = 0;
     virtual uint32_t GetInputSourceHandle( const char *, uint64_t * ) = 0;
-    virtual uint32_t UpdateActionState( VRActiveActionSet_t *, uint32_t, uint32_t ) = 0;
-    virtual uint32_t GetDigitalActionData( uint64_t, InputDigitalActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetAnalogActionData( uint64_t, InputAnalogActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetPoseActionData( uint64_t, uint32_t, float, InputPoseActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetSkeletalActionData( uint64_t, uint32_t, float, InputSkeletonActionData_t *, uint32_t, VRBoneTransform_t *, uint32_t ) = 0;
+    virtual uint32_t UpdateActionState( VRActiveActionSet_t_1015 *, uint32_t, uint32_t ) = 0;
+    virtual uint32_t GetDigitalActionData( uint64_t, u_InputDigitalActionData_t *, uint32_t ) = 0;
+    virtual uint32_t GetAnalogActionData( uint64_t, u_InputAnalogActionData_t *, uint32_t ) = 0;
+    virtual uint32_t GetPoseActionData( uint64_t, uint32_t, float, u_InputPoseActionData_t *, uint32_t ) = 0;
+    virtual uint32_t GetSkeletalActionData( uint64_t, uint32_t, float, u_InputSkeletonActionData_t *, uint32_t, VRBoneTransform_t *, uint32_t ) = 0;
     virtual uint32_t GetSkeletalActionDataCompressed( uint64_t, uint32_t, float, void *, uint32_t, uint32_t * ) = 0;
     virtual uint32_t UncompressSkeletalActionData( void *, uint32_t, uint32_t *, VRBoneTransform_t *, uint32_t ) = 0;
     virtual uint32_t TriggerHapticVibrationAction( uint64_t, float, float, float, float ) = 0;
     virtual uint32_t GetActionOrigins( uint64_t, uint64_t, uint64_t *, uint32_t ) = 0;
     virtual uint32_t GetOriginLocalizedName( uint64_t, char *, uint32_t ) = 0;
-    virtual uint32_t GetOriginTrackedDeviceInfo( uint64_t, InputOriginInfo_t *, uint32_t ) = 0;
+    virtual uint32_t GetOriginTrackedDeviceInfo( uint64_t, u_InputOriginInfo_t *, uint32_t ) = 0;
     virtual uint32_t ShowActionOrigins( uint64_t, uint64_t ) = 0;
-    virtual uint32_t ShowBindingsForActionSet( VRActiveActionSet_t *, uint32_t, uint32_t, uint64_t ) = 0;
+    virtual uint32_t ShowBindingsForActionSet( VRActiveActionSet_t_1015 *, uint32_t, uint32_t, uint64_t ) = 0;
 #endif /* __cplusplus */
 };
 
 void cppIVRInput_IVRInput_003_SetActionManifestPath( struct cppIVRInput_IVRInput_003_SetActionManifestPath_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->SetActionManifestPath( params->pchActionManifestPath );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->SetActionManifestPath( params->pchActionManifestPath );
 }
 
 void cppIVRInput_IVRInput_003_GetActionSetHandle( struct cppIVRInput_IVRInput_003_GetActionSetHandle_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetActionSetHandle( params->pchActionSetName, params->pHandle );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetActionSetHandle( params->pchActionSetName, params->pHandle );
 }
 
 void cppIVRInput_IVRInput_003_GetActionHandle( struct cppIVRInput_IVRInput_003_GetActionHandle_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetActionHandle( params->pchActionName, params->pHandle );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetActionHandle( params->pchActionName, params->pHandle );
 }
 
 void cppIVRInput_IVRInput_003_GetInputSourceHandle( struct cppIVRInput_IVRInput_003_GetInputSourceHandle_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetInputSourceHandle( params->pchInputSourcePath, params->pHandle );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetInputSourceHandle( params->pchInputSourcePath, params->pHandle );
 }
 
 void cppIVRInput_IVRInput_003_UpdateActionState( struct cppIVRInput_IVRInput_003_UpdateActionState_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->UpdateActionState( params->pSets, params->unSizeOfVRSelectedActionSet_t, params->unSetCount );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->UpdateActionState( params->pSets, params->unSizeOfVRSelectedActionSet_t, params->unSetCount );
 }
 
 void cppIVRInput_IVRInput_003_GetDigitalActionData( struct cppIVRInput_IVRInput_003_GetDigitalActionData_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    InputDigitalActionData_t lin_pActionData;
-    if (params->pActionData)
-        struct_InputDigitalActionData_t_1015_win_to_lin( params->pActionData, &lin_pActionData );
-    uint32_t lin_unActionDataSize = params->unActionDataSize ? sizeof(lin_pActionData) : 0;
-    params->_ret = iface->GetDigitalActionData( params->action, params->pActionData ? &lin_pActionData : nullptr, lin_unActionDataSize );
-    if (params->pActionData)
-        struct_InputDigitalActionData_t_1015_lin_to_win( &lin_pActionData, params->pActionData, params->unActionDataSize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    u_InputDigitalActionData_t u_pActionData;
+    if (params->pActionData) u_pActionData = *params->pActionData;
+    uint32_t u_unActionDataSize = params->unActionDataSize ? sizeof(u_pActionData) : 0;
+    params->_ret = (uint32_t)iface->GetDigitalActionData( params->action, params->pActionData ? &u_pActionData : nullptr, u_unActionDataSize );
+    if (params->pActionData) *params->pActionData = u_pActionData;
 }
 
 void cppIVRInput_IVRInput_003_GetAnalogActionData( struct cppIVRInput_IVRInput_003_GetAnalogActionData_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    InputAnalogActionData_t lin_pActionData;
-    if (params->pActionData)
-        struct_InputAnalogActionData_t_1015_win_to_lin( params->pActionData, &lin_pActionData );
-    uint32_t lin_unActionDataSize = params->unActionDataSize ? sizeof(lin_pActionData) : 0;
-    params->_ret = iface->GetAnalogActionData( params->action, params->pActionData ? &lin_pActionData : nullptr, lin_unActionDataSize );
-    if (params->pActionData)
-        struct_InputAnalogActionData_t_1015_lin_to_win( &lin_pActionData, params->pActionData, params->unActionDataSize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    u_InputAnalogActionData_t u_pActionData;
+    if (params->pActionData) u_pActionData = *params->pActionData;
+    uint32_t u_unActionDataSize = params->unActionDataSize ? sizeof(u_pActionData) : 0;
+    params->_ret = (uint32_t)iface->GetAnalogActionData( params->action, params->pActionData ? &u_pActionData : nullptr, u_unActionDataSize );
+    if (params->pActionData) *params->pActionData = u_pActionData;
 }
 
 void cppIVRInput_IVRInput_003_GetPoseActionData( struct cppIVRInput_IVRInput_003_GetPoseActionData_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    InputPoseActionData_t lin_pActionData;
-    if (params->pActionData)
-        struct_InputPoseActionData_t_1015_win_to_lin( params->pActionData, &lin_pActionData );
-    uint32_t lin_unActionDataSize = params->unActionDataSize ? sizeof(lin_pActionData) : 0;
-    params->_ret = iface->GetPoseActionData( params->action, params->eOrigin, params->fPredictedSecondsFromNow, params->pActionData ? &lin_pActionData : nullptr, lin_unActionDataSize );
-    if (params->pActionData)
-        struct_InputPoseActionData_t_1015_lin_to_win( &lin_pActionData, params->pActionData, params->unActionDataSize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    u_InputPoseActionData_t u_pActionData;
+    if (params->pActionData) u_pActionData = *params->pActionData;
+    uint32_t u_unActionDataSize = params->unActionDataSize ? sizeof(u_pActionData) : 0;
+    params->_ret = (uint32_t)iface->GetPoseActionData( params->action, params->eOrigin, params->fPredictedSecondsFromNow, params->pActionData ? &u_pActionData : nullptr, u_unActionDataSize );
+    if (params->pActionData) *params->pActionData = u_pActionData;
 }
 
 void cppIVRInput_IVRInput_003_GetSkeletalActionData( struct cppIVRInput_IVRInput_003_GetSkeletalActionData_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    InputSkeletonActionData_t lin_pActionData;
-    if (params->pActionData)
-        struct_InputSkeletonActionData_t_1015_win_to_lin( params->pActionData, &lin_pActionData );
-    params->_ret = iface->GetSkeletalActionData( params->action, params->eBoneParent, params->fPredictedSecondsFromNow, params->pActionData ? &lin_pActionData : nullptr, params->unActionDataSize, params->pTransformArray, params->unTransformArrayCount );
-    if (params->pActionData)
-        struct_InputSkeletonActionData_t_1015_lin_to_win( &lin_pActionData, params->pActionData );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    u_InputSkeletonActionData_t u_pActionData;
+    if (params->pActionData) u_pActionData = *params->pActionData;
+    params->_ret = (uint32_t)iface->GetSkeletalActionData( params->action, params->eBoneParent, params->fPredictedSecondsFromNow, params->pActionData ? &u_pActionData : nullptr, params->unActionDataSize, params->pTransformArray, params->unTransformArrayCount );
+    if (params->pActionData) *params->pActionData = u_pActionData;
 }
 
 void cppIVRInput_IVRInput_003_GetSkeletalActionDataCompressed( struct cppIVRInput_IVRInput_003_GetSkeletalActionDataCompressed_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetSkeletalActionDataCompressed( params->action, params->eBoneParent, params->fPredictedSecondsFromNow, params->pvCompressedData, params->unCompressedSize, params->punRequiredCompressedSize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetSkeletalActionDataCompressed( params->action, params->eBoneParent, params->fPredictedSecondsFromNow, params->pvCompressedData, params->unCompressedSize, params->punRequiredCompressedSize );
 }
 
 void cppIVRInput_IVRInput_003_UncompressSkeletalActionData( struct cppIVRInput_IVRInput_003_UncompressSkeletalActionData_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->UncompressSkeletalActionData( params->pvCompressedBuffer, params->unCompressedBufferSize, params->peBoneParent, params->pTransformArray, params->unTransformArrayCount );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->UncompressSkeletalActionData( params->pvCompressedBuffer, params->unCompressedBufferSize, params->peBoneParent, params->pTransformArray, params->unTransformArrayCount );
 }
 
 void cppIVRInput_IVRInput_003_TriggerHapticVibrationAction( struct cppIVRInput_IVRInput_003_TriggerHapticVibrationAction_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->TriggerHapticVibrationAction( params->action, params->fStartSecondsFromNow, params->fDurationSeconds, params->fFrequency, params->fAmplitude );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->TriggerHapticVibrationAction( params->action, params->fStartSecondsFromNow, params->fDurationSeconds, params->fFrequency, params->fAmplitude );
 }
 
 void cppIVRInput_IVRInput_003_GetActionOrigins( struct cppIVRInput_IVRInput_003_GetActionOrigins_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetActionOrigins( params->actionSetHandle, params->digitalActionHandle, params->originsOut, params->originOutCount );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetActionOrigins( params->actionSetHandle, params->digitalActionHandle, params->originsOut, params->originOutCount );
 }
 
 void cppIVRInput_IVRInput_003_GetOriginLocalizedName( struct cppIVRInput_IVRInput_003_GetOriginLocalizedName_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->GetOriginLocalizedName( params->origin, params->pchNameArray, params->unNameArraySize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->GetOriginLocalizedName( params->origin, params->pchNameArray, params->unNameArraySize );
 }
 
 void cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo( struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    InputOriginInfo_t lin_pOriginInfo;
-    if (params->pOriginInfo)
-        struct_InputOriginInfo_t_1015_win_to_lin( params->pOriginInfo, &lin_pOriginInfo );
-    uint32_t lin_unOriginInfoSize = params->unOriginInfoSize ? sizeof(lin_pOriginInfo) : 0;
-    params->_ret = iface->GetOriginTrackedDeviceInfo( params->origin, params->pOriginInfo ? &lin_pOriginInfo : nullptr, lin_unOriginInfoSize );
-    if (params->pOriginInfo)
-        struct_InputOriginInfo_t_1015_lin_to_win( &lin_pOriginInfo, params->pOriginInfo, params->unOriginInfoSize );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    u_InputOriginInfo_t u_pOriginInfo;
+    if (params->pOriginInfo) u_pOriginInfo = *params->pOriginInfo;
+    uint32_t u_unOriginInfoSize = params->unOriginInfoSize ? sizeof(u_pOriginInfo) : 0;
+    params->_ret = (uint32_t)iface->GetOriginTrackedDeviceInfo( params->origin, params->pOriginInfo ? &u_pOriginInfo : nullptr, u_unOriginInfoSize );
+    if (params->pOriginInfo) *params->pOriginInfo = u_pOriginInfo;
 }
 
 void cppIVRInput_IVRInput_003_ShowActionOrigins( struct cppIVRInput_IVRInput_003_ShowActionOrigins_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->ShowActionOrigins( params->actionSetHandle, params->ulActionHandle );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowActionOrigins( params->actionSetHandle, params->ulActionHandle );
 }
 
 void cppIVRInput_IVRInput_003_ShowBindingsForActionSet( struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params *params )
 {
-    struct cppIVRInput_IVRInput_003 *iface = (struct cppIVRInput_IVRInput_003 *)params->linux_side;
-    params->_ret = iface->ShowBindingsForActionSet( params->pSets, params->unSizeOfVRSelectedActionSet_t, params->unSetCount, params->originToHighlight );
+    struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;
+    params->_ret = (uint32_t)iface->ShowBindingsForActionSet( params->pSets, params->unSizeOfVRSelectedActionSet_t, params->unSetCount, params->originToHighlight );
 }
 
-#ifdef __cplusplus
-}
-#endif

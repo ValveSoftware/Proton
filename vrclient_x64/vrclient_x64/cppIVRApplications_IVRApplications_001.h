@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRApplications_IVRApplications_001;
+#endif /* __cplusplus */
+
 struct cppIVRApplications_IVRApplications_001_AddApplicationManifest_params
 {
     void *linux_side;
@@ -184,5 +189,5 @@ struct cppIVRApplications_IVRApplications_001_GetApplicationsTransitionStateName
 extern void cppIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum( struct cppIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

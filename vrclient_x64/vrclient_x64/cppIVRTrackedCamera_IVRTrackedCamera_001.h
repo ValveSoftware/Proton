@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRTrackedCamera_IVRTrackedCamera_001;
+#endif /* __cplusplus */
+
 struct cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params
 {
     void *linux_side;
@@ -92,7 +97,7 @@ extern void cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime( 
 struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params
 {
     void *linux_side;
-    const CameraVideoStreamFrame_t *_ret;
+    const w_CameraVideoStreamFrame_t_0914 *_ret;
     uint32_t nDeviceIndex;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame( struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params *params );
@@ -102,7 +107,7 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params
     void *linux_side;
     bool _ret;
     uint32_t nDeviceIndex;
-    const CameraVideoStreamFrame_t *pFrameImage;
+    const w_CameraVideoStreamFrame_t_0914 *pFrameImage;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame( struct cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params *params );
 
@@ -165,5 +170,5 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params
 extern void cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection( struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

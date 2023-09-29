@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRCompositor_IVRCompositor_017;
+#endif /* __cplusplus */
+
 struct cppIVRCompositor_IVRCompositor_017_SetTrackingSpace_params
 {
     void *linux_side;
@@ -53,7 +58,7 @@ struct cppIVRCompositor_IVRCompositor_017_Submit_params
     void *linux_side;
     uint32_t _ret;
     uint32_t eEye;
-    const Texture_t *pTexture;
+    const w_Texture_t *pTexture;
     const VRTextureBounds_t *pBounds;
     uint32_t nSubmitFlags;
 };
@@ -75,7 +80,7 @@ struct cppIVRCompositor_IVRCompositor_017_GetFrameTiming_params
 {
     void *linux_side;
     bool _ret;
-    Compositor_FrameTiming *pTiming;
+    w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
 extern void cppIVRCompositor_IVRCompositor_017_GetFrameTiming( struct cppIVRCompositor_IVRCompositor_017_GetFrameTiming_params *params );
@@ -84,7 +89,7 @@ struct cppIVRCompositor_IVRCompositor_017_GetFrameTimings_params
 {
     void *linux_side;
     uint32_t _ret;
-    Compositor_FrameTiming *pTiming;
+    w_Compositor_FrameTiming_103a *pTiming;
     uint32_t nFrames;
 };
 extern void cppIVRCompositor_IVRCompositor_017_GetFrameTimings( struct cppIVRCompositor_IVRCompositor_017_GetFrameTimings_params *params );
@@ -99,7 +104,7 @@ extern void cppIVRCompositor_IVRCompositor_017_GetFrameTimeRemaining( struct cpp
 struct cppIVRCompositor_IVRCompositor_017_GetCumulativeStats_params
 {
     void *linux_side;
-    Compositor_CumulativeStats *pStats;
+    Compositor_CumulativeStats_100 *pStats;
     uint32_t nStatsSizeInBytes;
 };
 extern void cppIVRCompositor_IVRCompositor_017_GetCumulativeStats( struct cppIVRCompositor_IVRCompositor_017_GetCumulativeStats_params *params );
@@ -128,7 +133,7 @@ struct cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride_params
 {
     void *linux_side;
     uint32_t _ret;
-    const Texture_t *pTextures;
+    const w_Texture_t *pTextures;
     uint32_t unTextureCount;
 };
 extern void cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride( struct cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride_params *params );
@@ -281,5 +286,5 @@ struct cppIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess_params
 extern void cppIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

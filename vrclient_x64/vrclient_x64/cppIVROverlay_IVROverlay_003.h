@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVROverlay_IVROverlay_003;
+#endif /* __cplusplus */
+
 struct cppIVROverlay_IVROverlay_003_FindOverlay_params
 {
     void *linux_side;
@@ -278,7 +283,7 @@ struct cppIVROverlay_IVROverlay_003_PollNextOverlayEvent_params
     void *linux_side;
     bool _ret;
     uint64_t ulOverlayHandle;
-    winVREvent_t_097 *pEvent;
+    w_VREvent_t_097 *pEvent;
 };
 extern void cppIVROverlay_IVROverlay_003_PollNextOverlayEvent( struct cppIVROverlay_IVROverlay_003_PollNextOverlayEvent_params *params );
 
@@ -428,5 +433,5 @@ struct cppIVROverlay_IVROverlay_003_ShowDashboard_params
 extern void cppIVROverlay_IVROverlay_003_ShowDashboard( struct cppIVROverlay_IVROverlay_003_ShowDashboard_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

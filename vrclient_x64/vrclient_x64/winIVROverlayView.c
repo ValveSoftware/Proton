@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -23,7 +16,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_ReleaseOverlayView,
 DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_PostOverlayEvent, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlayView_IVROverlayView_003_IsViewingPermitted, 12)
 
-uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRNativeDevice_t *pNativeDevice, winVROverlayView_t_1267 *pOverlayView, uint32_t unOverlayViewSize)
+uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VRNativeDevice_t *pNativeDevice, w_VROverlayView_t *pOverlayView, uint32_t unOverlayViewSize)
 {
     struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params params =
     {
@@ -38,7 +31,7 @@ uint32_t __thiscall winIVROverlayView_IVROverlayView_003_AcquireOverlayView(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(struct w_steam_iface *_this, winVROverlayView_t_1267 *pOverlayView)
+uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(struct w_steam_iface *_this, w_VROverlayView_t *pOverlayView)
 {
     struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params params =
     {
@@ -50,7 +43,7 @@ uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(stru
     return params._ret;
 }
 
-void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VREvent_t *pvrEvent)
+void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const w_VREvent_t_1168 *pvrEvent)
 {
     struct cppIVROverlayView_IVROverlayView_003_PostOverlayEvent_params params =
     {
