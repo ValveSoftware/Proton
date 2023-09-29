@@ -33,7 +33,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestIn
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList( &params );
@@ -45,7 +45,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestLA
     {
         .linux_side = _this->u_iface,
         .iApp = iApp,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList( &params );
@@ -59,7 +59,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFr
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList( &params );
@@ -73,7 +73,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFa
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList( &params );
@@ -87,7 +87,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestHi
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList( &params );
@@ -101,7 +101,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestSp
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList( &params );
@@ -185,7 +185,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PingSe
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingPingResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer( &params );
@@ -199,7 +199,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_Player
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingPlayersResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails( &params );
@@ -213,7 +213,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_Server
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingRulesResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers001"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules( &params );
@@ -295,7 +295,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList( &params );
@@ -308,7 +308,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
     {
         .linux_side = _this->u_iface,
         .iApp = iApp,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList( &params );
@@ -323,7 +323,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList( &params );
@@ -338,7 +338,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList( &params );
@@ -353,7 +353,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList( &params );
@@ -368,7 +368,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .ppchFilters = ppchFilters,
         .nFilters = nFilters,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingServerListResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList( &params );
@@ -464,7 +464,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PingSe
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingPingResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer( &params );
@@ -478,7 +478,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Player
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingPlayersResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails( &params );
@@ -492,7 +492,7 @@ int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Server
         .linux_side = _this->u_iface,
         .unIP = unIP,
         .usPort = usPort,
-        .pRequestServersResponse = create_LinuxISteamMatchmakingRulesResponse(pRequestServersResponse, "winISteamMatchmakingServers_SteamMatchMakingServers002"),
+        .pRequestServersResponse = pRequestServersResponse,
     };
     TRACE("%p\n", _this);
     cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules( &params );

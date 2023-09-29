@@ -116,9 +116,12 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *ver
     if(!ret)
         return NULL;
 
-    if(strcmp(version, "winISteamMatchmakingServers_SteamMatchMakingServers001") == 0){
+    if (strcmp( version, "ISteamMatchmakingServers_SteamMatchMakingServers001" ) == 0)
+    {
         ret->vtable = &gccServerListResponse001_vtbl;
-    }else{
+    }
+    else
+    {
         ret->vtable = &gccServerListResponse_vtbl;
     }
     ret->win_side = (struct winServerListResponse*)win;
