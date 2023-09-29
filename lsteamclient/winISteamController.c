@@ -1086,18 +1086,6 @@ const char * __thiscall winISteamController_SteamController005_GetStringForActio
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController005_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController005_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController005_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 extern vtable_ptr winISteamController_SteamController005_vtable;
 
 #ifndef __GNUC__
@@ -1550,18 +1538,6 @@ const char * __thiscall winISteamController_SteamController006_GetStringForActio
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController006_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController006_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController006_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winISteamController_SteamController006_GetInputTypeForHandle(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct cppISteamController_SteamController006_GetInputTypeForHandle_params params =
@@ -1872,18 +1848,6 @@ int32_t __thiscall winISteamController_SteamController007_GetAnalogActionOrigins
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController007_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController007_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamController_SteamController007_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetStringForActionOrigin_params params =
@@ -2035,18 +1999,6 @@ const char * __thiscall winISteamController_SteamController007_GetStringForXboxO
     };
     TRACE("%p\n", _this);
     cppISteamController_SteamController007_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamController_SteamController007_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController007_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 
@@ -2391,18 +2343,6 @@ int32_t __thiscall winISteamController_SteamController008_GetAnalogActionOrigins
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController008_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController008_GetGlyphForActionOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController008_GetGlyphForActionOrigin( &params );
-    return params._ret;
-}
-
 const char * __thiscall winISteamController_SteamController008_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetStringForActionOrigin_params params =
@@ -2554,18 +2494,6 @@ const char * __thiscall winISteamController_SteamController008_GetStringForXboxO
     };
     TRACE("%p\n", _this);
     cppISteamController_SteamController008_GetStringForXboxOrigin( &params );
-    return params._ret;
-}
-
-const char * __thiscall winISteamController_SteamController008_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
-{
-    struct cppISteamController_SteamController008_GetGlyphForXboxOrigin_params params =
-    {
-        .linux_side = _this->u_iface,
-        .eOrigin = eOrigin,
-    };
-    TRACE("%p\n", _this);
-    cppISteamController_SteamController008_GetGlyphForXboxOrigin( &params );
     return params._ret;
 }
 
