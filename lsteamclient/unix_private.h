@@ -59,6 +59,9 @@ typedef void (W_STDCALL *w_void_SteamAPI_PostAPIResultInProcess_t)(void);
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 
+void *alloc_callback_wtou( int id, void *callback, int *callback_len );
+void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
