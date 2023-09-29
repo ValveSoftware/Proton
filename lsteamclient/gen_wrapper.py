@@ -215,14 +215,14 @@ MANUAL_METHODS = {
     "ISteamNetworkingMessages_ReceiveMessagesOnChannel": lambda ver, abi: abi == 'u',
 
     "ISteamInput_EnableActionEventCallbacks": lambda ver, abi: abi == 'u',
-    "ISteamInput_GetGlyphForActionOrigin": lambda ver, abi: abi == 'u',
-    "ISteamInput_GetGlyphPNGForActionOrigin": lambda ver, abi: abi == 'u',
-    "ISteamInput_GetGlyphSVGForActionOrigin": lambda ver, abi: abi == 'u',
-    "ISteamInput_GetGlyphForActionOrigin_Legacy": lambda ver, abi: abi == 'u',
-    "ISteamInput_GetGlyphForXboxOrigin": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphForActionOrigin": True,
+    "ISteamInput_GetGlyphPNGForActionOrigin": True,
+    "ISteamInput_GetGlyphSVGForActionOrigin": True,
+    "ISteamInput_GetGlyphForActionOrigin_Legacy": True,
+    "ISteamInput_GetGlyphForXboxOrigin": True,
 
-    "ISteamController_GetGlyphForActionOrigin": lambda ver, abi: abi == 'u',
-    "ISteamController_GetGlyphForXboxOrigin": lambda ver, abi: abi == 'u',
+    "ISteamController_GetGlyphForActionOrigin": True,
+    "ISteamController_GetGlyphForXboxOrigin": True,
 
     "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'w',
     "ISteamNetworkingFakeUDPPort_ReceiveMessages": lambda ver, abi: abi == 'u',
