@@ -208,7 +208,6 @@ MANUAL_METHODS = {
     "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": lambda ver, abi: abi == 'u',
     "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": lambda ver, abi: abi == 'u',
     "ISteamNetworkingSockets_SendMessages": lambda ver, abi: abi == 'u',
-    "ISteamNetworkingSockets_CreateFakeUDPPort": lambda ver, abi: abi == 'u',
 
     "ISteamNetworkingUtils_AllocateMessage": lambda ver, abi: abi == 'u',
     "ISteamNetworkingUtils_SetConfigValue": lambda ver, abi: abi == 'u' and ver >= 3,
@@ -225,7 +224,7 @@ MANUAL_METHODS = {
     "ISteamController_GetGlyphForActionOrigin": lambda ver, abi: abi == 'u',
     "ISteamController_GetGlyphForXboxOrigin": lambda ver, abi: abi == 'u',
 
-    "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'w',
     "ISteamNetworkingFakeUDPPort_ReceiveMessages": lambda ver, abi: abi == 'u',
 
     "ISteamClient_BShutdownIfAllPipesClosed": lambda ver, abi: abi == 'w',
@@ -1010,10 +1009,11 @@ def handle_method_c(klass, method, winclassname, cppname, out):
 
     out(f'    {cppname}_{method.name}( &params );\n')
 
-    should_gen_wrapper = not is_manual_method(klass, method, "u") and \
-            (method.result_type.spelling.startswith("ISteam") or \
-             method.name.startswith("GetISteamGenericInterface"))
-    if should_gen_wrapper:
+    if method.name.startswith('CreateFakeUDPPort'):
+        out(u'    params._ret = create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001( params._ret );\n')
+    elif method.name.startswith("GetISteamGenericInterface"):
+        out(u'    params._ret = create_win_interface( pchVersion, params._ret );\n')
+    elif method.result_type.spelling.startswith("ISteam"):
         out(u'    params._ret = create_win_interface( pchVersion, params._ret );\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):

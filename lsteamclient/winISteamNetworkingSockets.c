@@ -3417,6 +3417,7 @@ void /*ISteamNetworkingFakeUDPPort*/ * __thiscall winISteamNetworkingSockets_Ste
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort( &params );
+    params._ret = create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001( params._ret );
     return params._ret;
 }
 
