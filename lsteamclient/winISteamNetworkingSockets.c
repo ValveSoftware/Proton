@@ -1409,7 +1409,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_Connect
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling_params params =
     {
         .linux_side = _this->u_iface,
-        .pSignaling = create_LinuxISteamNetworkingConnectionCustomSignaling(pSignaling, "winISteamNetworkingSockets_SteamNetworkingSockets006"),
+        .pSignaling = pSignaling,
         .pPeerIdentity = pPeerIdentity,
         .nOptions = nOptions,
         .pOptions = pOptions,
@@ -1426,7 +1426,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2P
         .linux_side = _this->u_iface,
         .pMsg = pMsg,
         .cbMsg = cbMsg,
-        .pContext = create_LinuxISteamNetworkingCustomSignalingRecvContext(pContext, "winISteamNetworkingSockets_SteamNetworkingSockets006"),
+        .pContext = pContext,
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal( &params );
@@ -2000,7 +2000,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_Connect
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling_params params =
     {
         .linux_side = _this->u_iface,
-        .pSignaling = create_LinuxISteamNetworkingConnectionCustomSignaling(pSignaling, "winISteamNetworkingSockets_SteamNetworkingSockets008"),
+        .pSignaling = pSignaling,
         .pPeerIdentity = pPeerIdentity,
         .nOptions = nOptions,
         .pOptions = pOptions,
@@ -2017,7 +2017,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2P
         .linux_side = _this->u_iface,
         .pMsg = pMsg,
         .cbMsg = cbMsg,
-        .pContext = create_LinuxISteamNetworkingCustomSignalingRecvContext(pContext, "winISteamNetworkingSockets_SteamNetworkingSockets008"),
+        .pContext = pContext,
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal( &params );

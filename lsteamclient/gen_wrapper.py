@@ -885,6 +885,8 @@ def handle_method_cpp(method, classname, cppname, out):
 
     need_convert = {n: p for n, p in zip(names, method.get_arguments())
                     if param_needs_conversion(p)}
+    need_wrapper = {n: p for n, p in zip(names, method.get_arguments())
+                    if underlying_typename(p) in WRAPPED_CLASSES}
     manual_convert = {n: p for n, p in zip(names, method.get_arguments())
                       if underlying_type(p).spelling in MANUAL_TYPES
                       or p.spelling in MANUAL_PARAMS}
@@ -941,6 +943,9 @@ def handle_method_cpp(method, classname, cppname, out):
         else:
             out(f'    {declspec(param, f"lin_{name}", "u_")} = manual_convert_{method.name}_{name}( params->{name} );\n')
 
+    for name, param in sorted(need_wrapper.items()):
+        out(f'    {declspec(param, f"lin_{name}", None)} = create_Linux{underlying_type(param.type).spelling}(params->{name}, "{classname}_{klass.version}");\n')
+
     if returns_void:
         out(u'    ')
     elif returns_record:
@@ -952,6 +957,7 @@ def handle_method_cpp(method, classname, cppname, out):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}lin_{name}"
         if name in manual_convert: return f"lin_{name}"
+        if name in need_wrapper: return f"lin_{name}"
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
@@ -996,18 +1002,15 @@ def handle_method_c(method, winclassname, cppname, out):
     ret = "*" if returns_record else ""
     ret = f'{declspec(method.result_type, ret, "win")} '
 
-    types = [p.type for p in method.get_arguments()]
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
         params = [f'{declspec(method.result_type, "*_ret", "win")}'] + params
-        types = [method.result_type] + types
         names = ['_ret'] + names
 
     params = ['struct w_steam_iface *_this'] + params
-    types = [None] + types
     names = ['_this'] + names
 
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
@@ -1016,11 +1019,7 @@ def handle_method_c(method, winclassname, cppname, out):
     out(f'    struct {cppname}_{method.name}_params params =\n')
     out(u'    {\n')
     out(u'        .linux_side = _this->u_iface,\n')
-    for type, name in zip(types[1:], names[1:]):
-        iface = type.get_pointee().spelling if type.kind == TypeKind.POINTER else None
-        out(f'        .{name} = ')
-        if iface not in WRAPPED_CLASSES: out(f'{name},\n')
-        else: out(f'create_Linux{iface}({name}, "{winclassname}"),\n')
+    for name in names[1:]: out(f'        .{name} = {name},\n')
     out(u'    };\n')
 
     should_gen_callback = "GetAPICallResult" in method.name
