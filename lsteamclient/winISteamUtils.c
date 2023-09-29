@@ -185,17 +185,8 @@ bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils002_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -419,17 +410,8 @@ bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils004_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -705,17 +687,8 @@ bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils005_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -1062,17 +1035,8 @@ bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils006_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -1444,17 +1408,8 @@ bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils007_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -1842,17 +1797,8 @@ bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils008_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -2269,17 +2215,8 @@ bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils009_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 
@@ -2777,17 +2714,8 @@ bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(struct w_steam_ifa
         .iCallbackExpected = iCallbackExpected,
         .pbFailed = pbFailed,
     };
-    int w_callback_len = cubCallback;
-    void *w_callback = pCallback;
     TRACE("%p\n", _this);
-    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;
     cppISteamUtils_SteamUtils010_GetAPICallResult( &params );
-    if (params._ret && params.pCallback != w_callback)
-    {
-        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);
-        HeapFree(GetProcessHeap(), 0, params.pCallback);
-    }
-
     return params._ret;
 }
 

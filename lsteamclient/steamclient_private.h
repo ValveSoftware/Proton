@@ -48,9 +48,6 @@ unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
 void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version);
 
-void *alloc_callback_wtou( int id, void *callback, int *callback_len );
-void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
-
 extern void start_callback_thread(void) DECLSPEC_HIDDEN;
 extern void stop_callback_thread(void) DECLSPEC_HIDDEN;
 
