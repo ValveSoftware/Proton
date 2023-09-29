@@ -296,6 +296,8 @@ all_records = {}
 all_sources = {}
 all_structs = {}
 all_versions = {}
+unique_structs = []
+
 
 PATH_CONV_METHODS_UTOW = {
     "ISteamAppList_GetAppInstallDir": {
@@ -427,8 +429,24 @@ class BasicType:
     def __init__(self, type, abi):
         self._type = type.get_canonical()
         self._abi = abi
+        self._decl_order = 0
+        self._conv_cache = {}
+
+        self.size = self._type.get_size()
+        self.id = self._type.spelling
+
+    @property
+    def order(self):
+        return self._decl_order
+
+    def set_used(self, order=-1):
+        if self._decl_order <= order:
+            return
+        self._decl_order = order
 
     def needs_conversion(self, other):
+        if self._type.kind == TypeKind.POINTER and self._type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
+            return self._abi != other._abi
         return False
 
 
@@ -438,6 +456,7 @@ class Struct:
         self._sdkver = sdkver
         self._abi = abi
         self._fields = None
+        self._decl_order = 0
         self._conv_cache = {}
 
         self.name = canonical_typename(self._cursor)
@@ -448,6 +467,16 @@ class Struct:
 
         if self.name in EXEMPT_STRUCTS:
             self._fields = [Padding(0, self.size)]
+
+    @property
+    def order(self):
+        return self._decl_order
+
+    def set_used(self, order=-1):
+        if self._decl_order <= order:
+            return
+        self._decl_order = order
+        [f._type.set_used(order - 1) for f in self.fields]
 
     @property
     def padded_fields(self):
@@ -551,6 +580,7 @@ class Class:
         self._sdkver = sdkver
         self._abi = abi
         self._methods = None
+        self._decl_order = 0
 
         self.name = cursor.spelling
         self.filename = SDK_CLASSES.get(self.name, None)
@@ -559,6 +589,7 @@ class Class:
         self.version = versions.get(self.version, "")
 
         self.type = self._cursor.type.get_canonical()
+        self.id = f'{abi}_{self.name}_{sdkver}'
 
     @property
     def methods(self):
@@ -585,6 +616,15 @@ class Class:
         if len(self.version) == 0:
             return self.name
         return f'{self.name}_{self.version}'
+
+    @property
+    def order(self):
+        return self._decl_order
+
+    def set_used(self, order=-1):
+        if self._decl_order <= order:
+            return
+        self._decl_order = order
 
     def needs_conversion(self, other):
         return self._abi[0] != other._abi[0]
@@ -1359,6 +1399,43 @@ def load(sdkver):
     return versions, sources
 
 
+def classify_struct(name):
+    if name in EXEMPT_STRUCTS:
+        return None
+    structs = all_structs[name]
+
+    prev = []
+    versions = {}
+    unique = True
+
+    for sdkver in filter(lambda v: v in structs, reversed(SDK_VERSIONS)):
+        abis = [structs[sdkver][a] for a in ABIS]
+
+        if any(abis[0].needs_conversion(a) for a in abis[1:]):
+            unique = False
+
+        def is_always_compatible(other):
+            for a, b in zip(abis, other):
+                if a.needs_conversion(b):
+                    return False
+            return True
+
+        compat = next((k for k, v in prev if is_always_compatible(v)), None)
+        if compat:
+            versions[sdkver] = versions[compat]
+        else:
+            [abi.set_used() for abi in abis] # make sure order is computed
+            versions[sdkver] = f"{name}_{sdkver}"
+            prev += [(sdkver, abis)]
+
+    if unique:
+        unique_structs.append(name)
+
+    if len(set(versions.values())) == 1:
+        versions = {sdkver: name for sdkver in versions.keys()}
+    return versions
+
+
 def generate(sdkver, structs):
     print(f'generating SDK version {sdkver}...')
     for child in structs['u32'].values():
@@ -1418,6 +1495,31 @@ for i, sdkver in enumerate(reversed(SDK_VERSIONS)):
     all_classes.update(tmp_classes[sdkver]['u32'])
 
 print('parsing SDKs... 100%')
+
+
+tmp_structs = {}
+
+for i, name in enumerate(all_structs.keys()):
+    print(f'classifying structs... {i * 100 // len(all_structs.keys())}%', end='\r')
+    versions = classify_struct(name)
+    for sdkver in SDK_VERSIONS:
+        if not versions or sdkver not in versions: continue
+        all_versions[sdkver][name] = versions[sdkver]
+
+def struct_order(tuple):
+    name, structs = tuple
+    order = (struct.order for abis in structs.values()
+             for struct in abis.values())
+    return (min(order), name)
+
+for name, structs in sorted(all_structs.items(), key=struct_order):
+    tmp_structs[name] = {}
+    for sdkver in filter(lambda v: v in structs, SDK_VERSIONS):
+        tmp_structs[name][sdkver] = {a: structs[sdkver][a] for a in ABIS}
+
+all_structs = tmp_structs
+
+print('classifying structs... 100%')
 
 
 for klass in all_classes.values():
