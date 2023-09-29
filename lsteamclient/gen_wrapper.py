@@ -231,6 +231,8 @@ MANUAL_METHODS = {
     "ISteamClient_BShutdownIfAllPipesClosed": lambda ver, abi: abi == 'w',
     "ISteamClient_CreateSteamPipe": lambda ver, abi: abi == 'w',
     "ISteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess": lambda ver, abi: abi == 'u' and ver >= 20,
+
+    "ISteamUtils_GetAPICallResult": lambda ver, abi: abi == 'u',
 }
 
 
@@ -995,11 +997,6 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     for name in names[1:]: out(f'        .{name} = {name},\n')
     out(u'    };\n')
 
-    should_gen_callback = "GetAPICallResult" in method.name
-    if should_gen_callback:
-        out(u'    int w_callback_len = cubCallback;\n')
-        out(u'    void *w_callback = pCallback;\n')
-
     path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
     path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
 
@@ -1011,9 +1008,6 @@ def handle_method_c(klass, method, winclassname, cppname, out):
 
     out(u'    TRACE("%p\\n", _this);\n')
 
-    if should_gen_callback:
-        out(u'    if (!(params.pCallback = alloc_callback_wtou(iCallbackExpected, w_callback, &params.cubCallback))) return FALSE;\n')
-
     out(f'    {cppname}_{method.name}( &params );\n')
 
     should_gen_wrapper = not is_manual_method(klass, method, "u") and \
@@ -1021,13 +1015,6 @@ def handle_method_c(klass, method, winclassname, cppname, out):
              method.name.startswith("GetISteamGenericInterface"))
     if should_gen_wrapper:
         out(u'    params._ret = create_win_interface( pchVersion, params._ret );\n')
-
-    if should_gen_callback:
-        out(u'    if (params._ret && params.pCallback != w_callback)\n')
-        out(u'    {\n')
-        out(u'        convert_callback_utow(iCallbackExpected, params.pCallback, params.cubCallback, w_callback, w_callback_len);\n')
-        out(u'        HeapFree(GetProcessHeap(), 0, params.pCallback);\n')
-        out(u'    }\n\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
         out(u'    ')
