@@ -73,20 +73,6 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( struct c
     }
 }
 
-/* from winISteamNetworkingFakeUDPPort.c */
-typedef struct __winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 {
-    void *vtable;
-    void *linux_side;
-} winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001;
-
-void cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort( struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort_params *params )
-{
-    struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *)params->linux_side;
-    void *lin_iface = iface->CreateFakeUDPPort( params->idxFakeServerPort );
-    if (!lin_iface) params->_ret = NULL;
-    else params->_ret = create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001( lin_iface );
-}
-
 void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params *params )
 {
     struct u_ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *iface = (struct u_ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *)params->linux_side;
@@ -94,16 +80,6 @@ void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessage
     params->_ret = iface->ReceiveMessages( u_ppOutMessages, params->nMaxMessages );
     lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, u_ppOutMessages,
                                                 params->ppOutMessages, params->nMaxMessages );
-}
-
-void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort_params *params )
-{
-    struct u_ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *iface = (struct u_ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *)params->linux_side;
-    winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001
-    *win_side = (winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *)( char *)params->linux_side -
-                offsetof( winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001, linux_side );
-    iface->DestroyFakeUDPPort();
-    HeapFree(GetProcessHeap(), 0, win_side);
 }
 
 typedef void (*CDECL win_FnSteamNetConnectionStatusChanged)( w_SteamNetConnectionStatusChangedCallback_t_153a * );
