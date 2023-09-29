@@ -1,20 +1,25 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRRenderModels_IVRRenderModels_002;
+#endif /* __cplusplus */
+
 struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params
 {
     void *linux_side;
     bool _ret;
     const char *pchRenderModelName;
-    winRenderModel_t_0915 **ppRenderModel;
+    w_RenderModel_t_0912 **ppRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params *params );
 
 struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params
 {
     void *linux_side;
-    winRenderModel_t_0915 *pRenderModel;
+    w_RenderModel_t_0912 *pRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params *params );
 
@@ -23,14 +28,14 @@ struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params
     void *linux_side;
     bool _ret;
     int32_t textureId;
-    winRenderModel_TextureMap_t_0915 **ppTexture;
+    w_RenderModel_TextureMap_t_090 **ppTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_LoadTexture( struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params *params );
 
 struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params
 {
     void *linux_side;
-    winRenderModel_TextureMap_t_0915 *pTexture;
+    w_RenderModel_TextureMap_t_090 *pTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_FreeTexture( struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params *params );
 
@@ -96,7 +101,7 @@ struct cppIVRRenderModels_IVRRenderModels_002_GetComponentState_params
     bool _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
-    const VRControllerState_t *pControllerState;
+    const w_VRControllerState001_t *pControllerState;
     RenderModel_ComponentState_t *pComponentState;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_GetComponentState( struct cppIVRRenderModels_IVRRenderModels_002_GetComponentState_params *params );
@@ -111,5 +116,5 @@ struct cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params
 extern void cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent( struct cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

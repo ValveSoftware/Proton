@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -209,7 +202,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_ClearOverlay(struct w_steam_i
     cppIVRCompositor_IVRCompositor_005_ClearOverlay( &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_091 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_005_GetFrameTiming_params params =
     {
@@ -559,7 +552,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame(struc
     cppIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame( &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_092 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_006_GetFrameTiming_params params =
     {
@@ -879,7 +872,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_007_Submit(struct w_steam_ifa
         .pBounds = pBounds,
     };
     TRACE("%p\n", _this);
-    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\n" );
+    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\n" );
     cppIVRCompositor_IVRCompositor_007_Submit( &params );
     return params._ret;
 }
@@ -894,7 +887,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame(struc
     cppIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame( &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_098 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_007_GetFrameTiming_params params =
     {
@@ -1220,7 +1213,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_008_Submit(struct w_steam_ifa
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE("%p\n", _this);
-    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\n" );
+    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\n" );
     cppIVRCompositor_IVRCompositor_008_Submit( &params );
     return params._ret;
 }
@@ -1235,7 +1228,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(struc
     cppIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame( &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_0910 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_008_GetFrameTiming_params params =
     {
@@ -1290,7 +1283,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_SetSkyboxOverride(struct w_st
         .pBottom = pBottom,
     };
     TRACE("%p\n", _this);
-    if (eTextureType == API_DirectX) FIXME( "Not implemented Direct3D API!\n" );
+    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\n" );
     cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride( &params );
 }
 
@@ -1621,7 +1614,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -1635,7 +1628,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_009_GetFrameTiming_params params =
     {
@@ -1687,7 +1680,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_009_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_009_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -1990,7 +1983,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2004,7 +1997,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_0914 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0914 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_010_GetFrameTiming_params params =
     {
@@ -2056,7 +2049,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_010_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_010_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -2359,7 +2352,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2373,7 +2366,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_011_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_011_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_011_GetFrameTiming_params params =
     {
@@ -2425,7 +2418,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_011_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_011_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -2744,7 +2737,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2758,7 +2751,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_012_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_012_GetFrameTiming_params params =
     {
@@ -2810,7 +2803,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_012_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_012_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -3145,7 +3138,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -3159,7 +3152,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_013_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_013_GetFrameTiming_params params =
     {
@@ -3211,7 +3204,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_013_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_013_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -3561,7 +3554,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -3575,7 +3568,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_014_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_014_GetFrameTiming_params params =
     {
@@ -3627,7 +3620,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_014_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_014_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -4010,7 +4003,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -4024,7 +4017,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_015_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetFrameTiming_params params =
     {
@@ -4048,7 +4041,7 @@ float __thiscall winIVRCompositor_IVRCompositor_015_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_015_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetCumulativeStats_params params =
     {
@@ -4088,7 +4081,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_015_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_015_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -4560,7 +4553,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -4574,7 +4567,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(struct w_steam_iface *_this, winCompositor_FrameTiming_103 *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_102 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetFrameTiming_params params =
     {
@@ -4598,7 +4591,7 @@ float __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_016_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetCumulativeStats_params params =
     {
@@ -4638,7 +4631,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_016_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_016_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -5082,7 +5075,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_017_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -5096,7 +5089,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_017_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetFrameTiming_params params =
     {
@@ -5109,7 +5102,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetFrameTimings_params params =
     {
@@ -5133,7 +5126,7 @@ float __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_017_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetCumulativeStats_params params =
     {
@@ -5173,7 +5166,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_017_FadeGrid( &params );
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_017_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -5621,7 +5614,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -5635,7 +5628,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetFrameTiming_params params =
     {
@@ -5648,7 +5641,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetFrameTimings_params params =
     {
@@ -5672,7 +5665,7 @@ float __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_018_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetCumulativeStats_params params =
     {
@@ -5736,7 +5729,7 @@ float __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_018_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -6190,7 +6183,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -6204,7 +6197,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetFrameTiming_params params =
     {
@@ -6217,7 +6210,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetFrameTimings_params params =
     {
@@ -6241,7 +6234,7 @@ float __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_019_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetCumulativeStats_params params =
     {
@@ -6305,7 +6298,7 @@ float __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_019_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -6779,7 +6772,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -6793,7 +6786,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetFrameTiming_params params =
     {
@@ -6806,7 +6799,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetFrameTimings_params params =
     {
@@ -6830,7 +6823,7 @@ float __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_020_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetCumulativeStats_params params =
     {
@@ -6894,7 +6887,7 @@ float __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_020_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -7383,7 +7376,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -7397,7 +7390,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetFrameTiming_params params =
     {
@@ -7410,7 +7403,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetFrameTimings_params params =
     {
@@ -7434,7 +7427,7 @@ float __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_021_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetCumulativeStats_params params =
     {
@@ -7498,7 +7491,7 @@ float __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_021_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -8016,7 +8009,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -8030,7 +8023,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetFrameTiming_params params =
     {
@@ -8043,7 +8036,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetFrameTimings_params params =
     {
@@ -8067,7 +8060,7 @@ float __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_022_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetCumulativeStats_params params =
     {
@@ -8131,7 +8124,7 @@ float __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_022_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -8690,7 +8683,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_024_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -8704,7 +8697,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetFrameTiming_params params =
     {
@@ -8717,7 +8710,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetFrameTimings_params params =
     {
@@ -8741,7 +8734,7 @@ float __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_024_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetCumulativeStats_params params =
     {
@@ -8805,7 +8798,7 @@ float __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_024_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -9398,7 +9391,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_026_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -9412,7 +9405,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetFrameTiming_params params =
     {
@@ -9425,7 +9418,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetFrameTimings_params params =
     {
@@ -9449,7 +9442,7 @@ float __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_026_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_100 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetCumulativeStats_params params =
     {
@@ -9513,7 +9506,7 @@ float __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_026_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -10165,7 +10158,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDevi
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_027_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -10179,7 +10172,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_027_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTiming(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetFrameTiming_params params =
     {
@@ -10192,7 +10185,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTimings(struct w_steam_iface *_this, Compositor_FrameTiming *pTiming, uint32_t nFrames)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t nFrames)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetFrameTimings_params params =
     {
@@ -10216,7 +10209,7 @@ float __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats *pStats, uint32_t nStatsSizeInBytes)
+void __thiscall winIVRCompositor_IVRCompositor_027_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_1267 *pStats, uint32_t nStatsSizeInBytes)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetCumulativeStats_params params =
     {
@@ -10280,7 +10273,7 @@ float __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_027_ClearSkyboxOverride(struct w_steam_iface *_this)
 {

@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -1686,7 +1679,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchApplication(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const w_AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_005_LaunchTemplateApplication_params params =
     {
@@ -2127,7 +2120,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchApplication(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const w_AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchTemplateApplication_params params =
     {
@@ -2674,7 +2667,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchApplication(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const w_AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchTemplateApplication_params params =
     {

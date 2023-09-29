@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRSystem_IVRSystem_003;
+#endif /* __cplusplus */
+
 struct cppIVRSystem_IVRSystem_003_GetWindowBounds_params
 {
     void *linux_side;
@@ -131,14 +136,14 @@ struct cppIVRSystem_IVRSystem_003_LoadRenderModel_params
     void *linux_side;
     bool _ret;
     const char *pchRenderModelName;
-    winRenderModel_t_091 *pRenderModel;
+    w_RenderModel_t_090 *pRenderModel;
 };
 extern void cppIVRSystem_IVRSystem_003_LoadRenderModel( struct cppIVRSystem_IVRSystem_003_LoadRenderModel_params *params );
 
 struct cppIVRSystem_IVRSystem_003_FreeRenderModel_params
 {
     void *linux_side;
-    winRenderModel_t_091 *pRenderModel;
+    w_RenderModel_t_090 *pRenderModel;
 };
 extern void cppIVRSystem_IVRSystem_003_FreeRenderModel( struct cppIVRSystem_IVRSystem_003_FreeRenderModel_params *params );
 
@@ -232,7 +237,7 @@ struct cppIVRSystem_IVRSystem_003_PollNextEvent_params
 {
     void *linux_side;
     bool _ret;
-    winVREvent_t_091 *pEvent;
+    w_VREvent_t_090 *pEvent;
 };
 extern void cppIVRSystem_IVRSystem_003_PollNextEvent( struct cppIVRSystem_IVRSystem_003_PollNextEvent_params *params );
 
@@ -241,7 +246,7 @@ struct cppIVRSystem_IVRSystem_003_PollNextEventWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    winVREvent_t_091 *pEvent;
+    w_VREvent_t_090 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
 extern void cppIVRSystem_IVRSystem_003_PollNextEventWithPose( struct cppIVRSystem_IVRSystem_003_PollNextEventWithPose_params *params );
@@ -257,7 +262,7 @@ extern void cppIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum( struct cppIVRSy
 struct cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh_params
 {
     void *linux_side;
-    HiddenAreaMesh_t *_ret;
+    w_HiddenAreaMesh_t *_ret;
     uint32_t eEye;
 };
 extern void cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh( struct cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh_params *params );
@@ -267,7 +272,7 @@ struct cppIVRSystem_IVRSystem_003_GetControllerState_params
     void *linux_side;
     bool _ret;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_091 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
 };
 extern void cppIVRSystem_IVRSystem_003_GetControllerState( struct cppIVRSystem_IVRSystem_003_GetControllerState_params *params );
 
@@ -277,7 +282,7 @@ struct cppIVRSystem_IVRSystem_003_GetControllerStateWithPose_params
     bool _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
-    winVRControllerState001_t_091 *pControllerState;
+    w_VRControllerState001_t *pControllerState;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
 extern void cppIVRSystem_IVRSystem_003_GetControllerStateWithPose( struct cppIVRSystem_IVRSystem_003_GetControllerStateWithPose_params *params );
@@ -340,5 +345,5 @@ struct cppIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess_params
 extern void cppIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess( struct cppIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

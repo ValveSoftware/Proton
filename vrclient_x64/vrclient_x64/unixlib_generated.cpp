@@ -1,6 +1,6 @@
 /* This file is auto-generated, do not edit. */
 
-#include "vrclient_structs.h"
+#include "unix_private.h"
 
 C_ASSERT( sizeof(VREvent_ApplicationLaunch_t) >= 8 );
 C_ASSERT( offsetof(VREvent_ApplicationLaunch_t, pid) == 0 );

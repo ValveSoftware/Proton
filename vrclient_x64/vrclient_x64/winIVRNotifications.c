@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -36,7 +29,7 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_001_GetErrorString(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, uint32_t *notificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const w_NotificationBitmap *photo, uint32_t *notificationId)
 {
     struct cppIVRNotifications_IVRNotifications_001_CreateNotification_params params =
     {
@@ -126,7 +119,7 @@ void destroy_winIVRNotifications_IVRNotifications_001_FnTable(struct w_steam_ifa
 DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_CreateNotification, 40)
 DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_RemoveNotification, 8)
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, uint32_t type, const char *pchText, uint32_t style, const NotificationBitmap_t *pImage, uint32_t *pNotificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, uint32_t type, const char *pchText, uint32_t style, const w_NotificationBitmap_t *pImage, uint32_t *pNotificationId)
 {
     struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params params =
     {

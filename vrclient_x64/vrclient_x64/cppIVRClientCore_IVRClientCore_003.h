@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRClientCore_IVRClientCore_003;
+#endif /* __cplusplus */
+
 struct cppIVRClientCore_IVRClientCore_003_Init_params
 {
     void *linux_side;
@@ -58,5 +63,5 @@ struct cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError_params
 extern void cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError( struct cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

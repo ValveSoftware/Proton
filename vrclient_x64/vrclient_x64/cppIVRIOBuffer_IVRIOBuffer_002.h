@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRIOBuffer_IVRIOBuffer_002;
+#endif /* __cplusplus */
+
 struct cppIVRIOBuffer_IVRIOBuffer_002_Open_params
 {
     void *linux_side;
@@ -60,5 +65,5 @@ struct cppIVRIOBuffer_IVRIOBuffer_002_HasReaders_params
 extern void cppIVRIOBuffer_IVRIOBuffer_002_HasReaders( struct cppIVRIOBuffer_IVRIOBuffer_002_HasReaders_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

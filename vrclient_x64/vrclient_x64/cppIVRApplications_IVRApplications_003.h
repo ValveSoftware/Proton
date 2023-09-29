@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRApplications_IVRApplications_003;
+#endif /* __cplusplus */
+
 struct cppIVRApplications_IVRApplications_003_AddApplicationManifest_params
 {
     void *linux_side;
@@ -184,5 +189,5 @@ struct cppIVRApplications_IVRApplications_003_IsQuitUserPromptRequested_params
 extern void cppIVRApplications_IVRApplications_003_IsQuitUserPromptRequested( struct cppIVRApplications_IVRApplications_003_IsQuitUserPromptRequested_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

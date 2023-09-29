@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -231,7 +224,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandin
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_091 *pRenderModel)
+bool __thiscall winIVRSystem_IVRSystem_003_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_090 *pRenderModel)
 {
     struct cppIVRSystem_IVRSystem_003_LoadRenderModel_params params =
     {
@@ -244,7 +237,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_LoadRenderModel(struct w_steam_iface 
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_FreeRenderModel(struct w_steam_iface *_this, winRenderModel_t_091 *pRenderModel)
+void __thiscall winIVRSystem_IVRSystem_003_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_090 *pRenderModel)
 {
     struct cppIVRSystem_IVRSystem_003_FreeRenderModel_params params =
     {
@@ -378,7 +371,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_091 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_090 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_003_PollNextEvent_params params =
     {
@@ -390,7 +383,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_091 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_090 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_003_PollNextEventWithPose_params params =
     {
@@ -416,7 +409,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh_params params =
     {
@@ -429,7 +422,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_091 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_003_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_003_GetControllerState_params params =
     {
@@ -442,7 +435,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_091 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_003_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_003_GetControllerStateWithPose_params params =
     {
@@ -1003,7 +996,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_092 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_092 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_004_PollNextEvent_params params =
     {
@@ -1015,7 +1008,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_092 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_092 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_004_PollNextEventWithPose_params params =
     {
@@ -1041,7 +1034,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_004_GetHiddenAreaMesh_params params =
     {
@@ -1054,7 +1047,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_092 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_004_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_004_GetControllerState_params params =
     {
@@ -1067,7 +1060,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_092 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_004_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_004_GetControllerStateWithPose_params params =
     {
@@ -1639,7 +1632,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_098 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_097 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_005_PollNextEvent_params params =
     {
@@ -1651,7 +1644,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_098 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_097 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_005_PollNextEventWithPose_params params =
     {
@@ -1677,7 +1670,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh_params params =
     {
@@ -1690,7 +1683,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_005_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_005_GetControllerState_params params =
     {
@@ -1703,7 +1696,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_005_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_005_GetControllerStateWithPose_params params =
     {
@@ -2306,7 +2299,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0910 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_0910 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_006_PollNextEvent_params params =
     {
@@ -2318,7 +2311,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0910 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_0910 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params params =
     {
@@ -2344,7 +2337,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_006_GetHiddenAreaMesh_params params =
     {
@@ -2357,7 +2350,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0910 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_006_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_006_GetControllerState_params params =
     {
@@ -2370,7 +2363,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0910 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_006_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_006_GetControllerStateWithPose_params params =
     {
@@ -3013,7 +3006,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0912 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_0912 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_009_PollNextEvent_params params =
     {
@@ -3025,7 +3018,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0912 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_0912 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_009_PollNextEventWithPose_params params =
     {
@@ -3051,7 +3044,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_009_GetHiddenAreaMesh_params params =
     {
@@ -3064,7 +3057,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0912 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_009_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_009_GetControllerState_params params =
     {
@@ -3077,7 +3070,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0912 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_009_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_009_GetControllerStateWithPose_params params =
     {
@@ -3745,7 +3738,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0914 *pEvent)
+bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_0914 *pEvent)
 {
     struct cppIVRSystem_IVRSystem_010_PollNextEvent_params params =
     {
@@ -3757,7 +3750,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0914 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_0914 *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_010_PollNextEventWithPose_params params =
     {
@@ -3783,7 +3776,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh_params params =
     {
@@ -3796,7 +3789,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0914 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_010_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_010_GetControllerState_params params =
     {
@@ -3809,7 +3802,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0914 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_010_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_010_GetControllerStateWithPose_params params =
     {
@@ -4507,7 +4500,7 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_011_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_011_PollNextEvent_params params =
     {
@@ -4520,7 +4513,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_011_PollNextEventWithPose_params params =
     {
@@ -4547,7 +4540,7 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh_params params =
     {
@@ -4560,7 +4553,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0918 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_011_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_011_GetControllerState_params params =
     {
@@ -4573,7 +4566,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_0918 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_011_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_011_GetControllerStateWithPose_params params =
     {
@@ -5269,7 +5262,7 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_103 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_012_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_012_PollNextEvent_params params =
     {
@@ -5282,7 +5275,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_012_PollNextEventWithPose_params params =
     {
@@ -5309,7 +5302,7 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_012_GetHiddenAreaMesh_params params =
     {
@@ -5322,7 +5315,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_103 *pControllerState)
+bool __thiscall winIVRSystem_IVRSystem_012_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState)
 {
     struct cppIVRSystem_IVRSystem_012_GetControllerState_params params =
     {
@@ -5335,7 +5328,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_103 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_012_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_012_GetControllerStateWithPose_params params =
     {
@@ -6005,7 +5998,7 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_104 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_014_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_014_PollNextEvent_params params =
     {
@@ -6018,7 +6011,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_104 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_014_PollNextEventWithPose_params params =
     {
@@ -6045,7 +6038,7 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_014_GetHiddenAreaMesh_params params =
     {
@@ -6059,7 +6052,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_104 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_014_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_014_GetControllerState_params params =
     {
@@ -6073,7 +6066,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_104 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_014_GetControllerStateWithPose_params params =
     {
@@ -6743,7 +6736,7 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_107 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_015_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_015_PollNextEvent_params params =
     {
@@ -6756,7 +6749,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_107 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_015_PollNextEventWithPose_params params =
     {
@@ -6783,7 +6776,7 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_015_GetHiddenAreaMesh_params params =
     {
@@ -6797,7 +6790,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_107 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_015_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_015_GetControllerState_params params =
     {
@@ -6811,7 +6804,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_107 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_015_GetControllerStateWithPose_params params =
     {
@@ -7494,7 +7487,7 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_109 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_016_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_016_PollNextEvent_params params =
     {
@@ -7507,7 +7500,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_109 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_016_PollNextEventWithPose_params params =
     {
@@ -7534,7 +7527,7 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_016_GetHiddenAreaMesh_params params =
     {
@@ -7548,7 +7541,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_109 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_016_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_016_GetControllerState_params params =
     {
@@ -7562,7 +7555,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_109 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_016_GetControllerStateWithPose_params params =
     {
@@ -8237,7 +8230,7 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_017_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_017_PollNextEvent_params params =
     {
@@ -8250,7 +8243,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_017_PollNextEventWithPose_params params =
     {
@@ -8277,7 +8270,7 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_017_GetHiddenAreaMesh_params params =
     {
@@ -8291,7 +8284,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1011 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_017_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_017_GetControllerState_params params =
     {
@@ -8305,7 +8298,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1011 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_017_GetControllerStateWithPose_params params =
     {
@@ -8999,7 +8992,7 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_1418 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_019_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_019_PollNextEvent_params params =
     {
@@ -9012,7 +9005,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1418 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_019_PollNextEventWithPose_params params =
     {
@@ -9039,7 +9032,7 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_019_GetHiddenAreaMesh_params params =
     {
@@ -9053,7 +9046,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1418 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_019_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_019_GetControllerState_params params =
     {
@@ -9067,7 +9060,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1418 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_019_GetControllerStateWithPose_params params =
     {
@@ -9778,7 +9771,7 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_020_PollNextEvent_params params =
     {
@@ -9791,7 +9784,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_020_PollNextEventWithPose_params params =
     {
@@ -9818,7 +9811,7 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_020_GetHiddenAreaMesh_params params =
     {
@@ -9832,7 +9825,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1715 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_020_GetControllerState_params params =
     {
@@ -9846,7 +9839,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1715 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_020_GetControllerStateWithPose_params params =
     {
@@ -10567,7 +10560,7 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_1125 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_021_PollNextEvent_params params =
     {
@@ -10580,7 +10573,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1125 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_021_PollNextEventWithPose_params params =
     {
@@ -10607,7 +10600,7 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_021_GetHiddenAreaMesh_params params =
     {
@@ -10621,7 +10614,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1125 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_021_GetControllerState_params params =
     {
@@ -10635,7 +10628,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1125 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_021_GetControllerStateWithPose_params params =
     {
@@ -11333,7 +11326,7 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_this, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVRSystem_IVRSystem_022_PollNextEvent_params params =
     {
@@ -11346,7 +11339,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_022_PollNextEventWithPose_params params =
     {
@@ -11373,7 +11366,7 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
+w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(struct w_steam_iface *_this, w_HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_022_GetHiddenAreaMesh_params params =
     {
@@ -11387,7 +11380,7 @@ HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(struc
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1267 *pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_022_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
     struct cppIVRSystem_IVRSystem_022_GetControllerState_params params =
     {
@@ -11401,7 +11394,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, winVRControllerState001_t_1267 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_022_GetControllerStateWithPose_params params =
     {

@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRTrackedCamera_IVRTrackedCamera_005;
+#endif /* __cplusplus */
+
 struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum_params
 {
     void *linux_side;
@@ -81,7 +86,7 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer_params
     uint32_t eFrameType;
     void *pFrameBuffer;
     uint32_t nFrameBufferSize;
-    winCameraVideoStreamFrameHeader_t_1610 *pFrameHeader;
+    w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader;
     uint32_t nFrameHeaderSize;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer( struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer_params *params );
@@ -106,7 +111,7 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11_param
     uint32_t eFrameType;
     void *pD3D11DeviceOrResource;
     void **ppD3D11ShaderResourceView;
-    winCameraVideoStreamFrameHeader_t_1610 *pFrameHeader;
+    w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader;
     uint32_t nFrameHeaderSize;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11( struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11_params *params );
@@ -118,7 +123,7 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL_params
     uint64_t hTrackedCamera;
     uint32_t eFrameType;
     uint32_t *pglTextureId;
-    winCameraVideoStreamFrameHeader_t_1610 *pFrameHeader;
+    w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader;
     uint32_t nFrameHeaderSize;
 };
 extern void cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL( struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL_params *params );
@@ -133,5 +138,5 @@ struct cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL_para
 extern void cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL( struct cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

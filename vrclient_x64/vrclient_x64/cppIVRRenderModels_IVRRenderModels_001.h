@@ -1,20 +1,25 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRRenderModels_IVRRenderModels_001;
+#endif /* __cplusplus */
+
 struct cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel_params
 {
     void *linux_side;
     bool _ret;
     const char *pchRenderModelName;
-    winRenderModel_t_0910 *pRenderModel;
+    w_RenderModel_t_090 *pRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel( struct cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel_params *params );
 
 struct cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel_params
 {
     void *linux_side;
-    winRenderModel_t_0910 *pRenderModel;
+    w_RenderModel_t_090 *pRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel( struct cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel_params *params );
 
@@ -36,5 +41,5 @@ struct cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount_params
 extern void cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount( struct cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

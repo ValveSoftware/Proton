@@ -1,11 +1,7 @@
 #include <stdint.h>
+#include <stdbool.h>
 
-#ifdef __cplusplus
-#include <algorithm>
-#else
-#ifndef bool
-typedef char bool; /* 1 byte on modern visual studio c++ */
-#endif
+#ifndef __cplusplus
 
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;

@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRNotifications_IVRNotifications_002;
+#endif /* __cplusplus */
+
 struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params
 {
     void *linux_side;
@@ -11,7 +16,7 @@ struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params
     uint32_t type;
     const char *pchText;
     uint32_t style;
-    const NotificationBitmap_t *pImage;
+    const w_NotificationBitmap_t *pImage;
     uint32_t *pNotificationId;
 };
 extern void cppIVRNotifications_IVRNotifications_002_CreateNotification( struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params *params );
@@ -25,5 +30,5 @@ struct cppIVRNotifications_IVRNotifications_002_RemoveNotification_params
 extern void cppIVRNotifications_IVRNotifications_002_RemoveNotification( struct cppIVRNotifications_IVRNotifications_002_RemoveNotification_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

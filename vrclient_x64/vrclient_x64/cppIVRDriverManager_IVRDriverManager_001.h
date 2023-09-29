@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRDriverManager_IVRDriverManager_001;
+#endif /* __cplusplus */
+
 struct cppIVRDriverManager_IVRDriverManager_001_GetDriverCount_params
 {
     void *linux_side;
@@ -36,5 +41,5 @@ struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params
 extern void cppIVRDriverManager_IVRDriverManager_001_IsEnabled( struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 

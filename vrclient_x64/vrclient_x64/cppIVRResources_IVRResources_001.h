@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRResources_IVRResources_001;
+#endif /* __cplusplus */
+
 struct cppIVRResources_IVRResources_001_LoadSharedResource_params
 {
     void *linux_side;
@@ -24,5 +29,5 @@ struct cppIVRResources_IVRResources_001_GetResourceFullPath_params
 extern void cppIVRResources_IVRResources_001_GetResourceFullPath( struct cppIVRResources_IVRResources_001_GetResourceFullPath_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRChaperone_IVRChaperone_003;
+#endif /* __cplusplus */
+
 struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params
 {
     void *linux_side;
@@ -64,5 +69,5 @@ struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params
 extern void cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible( struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

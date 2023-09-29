@@ -1,7 +1,12 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVROverlay_IVROverlay_019;
+#endif /* __cplusplus */
+
 struct cppIVROverlay_IVROverlay_019_FindOverlay_params
 {
     void *linux_side;
@@ -434,7 +439,7 @@ struct cppIVROverlay_IVROverlay_019_PollNextOverlayEvent_params
     void *linux_side;
     bool _ret;
     uint64_t ulOverlayHandle;
-    winVREvent_t_1610 *pEvent;
+    w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
 };
 extern void cppIVROverlay_IVROverlay_019_PollNextOverlayEvent( struct cppIVROverlay_IVROverlay_019_PollNextOverlayEvent_params *params );
@@ -554,7 +559,7 @@ struct cppIVROverlay_IVROverlay_019_SetOverlayTexture_params
     void *linux_side;
     uint32_t _ret;
     uint64_t ulOverlayHandle;
-    const Texture_t *pTexture;
+    const w_Texture_t *pTexture;
 };
 extern void cppIVROverlay_IVROverlay_019_SetOverlayTexture( struct cppIVROverlay_IVROverlay_019_SetOverlayTexture_params *params );
 
@@ -780,5 +785,5 @@ struct cppIVROverlay_IVROverlay_019_CloseMessageOverlay_params
 extern void cppIVROverlay_IVROverlay_019_CloseMessageOverlay( struct cppIVROverlay_IVROverlay_019_CloseMessageOverlay_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

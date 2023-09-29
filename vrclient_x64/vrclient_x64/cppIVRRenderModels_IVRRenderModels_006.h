@@ -1,20 +1,25 @@
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif
-struct cppIVRRenderModels_IVRRenderModels_006;
+#endif /* __cplusplus */
+
 struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params
 {
     void *linux_side;
     uint32_t _ret;
     const char *pchRenderModelName;
-    winRenderModel_t_1267 **ppRenderModel;
+    w_RenderModel_t_0912 **ppRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async( struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params *params );
 
 struct cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel_params
 {
     void *linux_side;
-    winRenderModel_t_1267 *pRenderModel;
+    w_RenderModel_t_0912 *pRenderModel;
 };
 extern void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel( struct cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel_params *params );
 
@@ -23,14 +28,14 @@ struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params
     void *linux_side;
     uint32_t _ret;
     int32_t textureId;
-    winRenderModel_TextureMap_t_1267 **ppTexture;
+    w_RenderModel_TextureMap_t_1237 **ppTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params *params );
 
 struct cppIVRRenderModels_IVRRenderModels_006_FreeTexture_params
 {
     void *linux_side;
-    winRenderModel_TextureMap_t_1267 *pTexture;
+    w_RenderModel_TextureMap_t_1237 *pTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_006_FreeTexture( struct cppIVRRenderModels_IVRRenderModels_006_FreeTexture_params *params );
 
@@ -134,7 +139,7 @@ struct cppIVRRenderModels_IVRRenderModels_006_GetComponentState_params
     bool _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
-    const VRControllerState_t *pControllerState;
+    const w_VRControllerState001_t *pControllerState;
     const RenderModel_ControllerMode_State_t *pState;
     RenderModel_ComponentState_t *pComponentState;
 };
@@ -180,5 +185,5 @@ struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum_pa
 extern void cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum( struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum_params *params );
 
 #ifdef __cplusplus
-}
-#endif
+} /* extern "C" */
+#endif /* __cplusplus */

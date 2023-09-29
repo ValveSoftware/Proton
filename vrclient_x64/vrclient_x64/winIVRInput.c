@@ -2,15 +2,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "vrclient_defs.h"
-
+#include "vrclient_structs.h"
 #include "vrclient_private.h"
-
-#include "struct_converters.h"
 
 #include "flatapi.h"
 
@@ -89,7 +82,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1015 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_003_UpdateActionState_params params =
     {
@@ -103,7 +96,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetDigitalActionData_params params =
     {
@@ -117,7 +110,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetAnalogActionData_params params =
     {
@@ -131,7 +124,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetPoseActionData_params params =
     {
@@ -147,7 +140,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eBoneParent, float fPredictedSecondsFromNow, winInputSkeletonActionData_t_1015 *pActionData, uint32_t unActionDataSize, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eBoneParent, float fPredictedSecondsFromNow, w_InputSkeletonActionData_t *pActionData, uint32_t unActionDataSize, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_003_GetSkeletalActionData_params params =
     {
@@ -243,7 +236,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1015 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params params =
     {
@@ -270,7 +263,7 @@ uint32_t __thiscall winIVRInput_IVRInput_003_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_003_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_003_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1015 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params params =
     {
@@ -442,7 +435,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_004_UpdateActionState_params params =
     {
@@ -456,9 +449,9 @@ uint32_t __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1017 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1017 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetAnalogActionData_params params =
     {
@@ -473,7 +466,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1017 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetPoseActionData_params params =
     {
@@ -490,7 +483,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, winInputSkeletalActionData_t_1017 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_1016 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetSkeletalActionData_params params =
     {
@@ -602,7 +595,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1017 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo_params params =
     {
@@ -629,7 +622,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_004_ShowBindingsForActionSet_params params =
     {
@@ -810,7 +803,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_005_UpdateActionState_params params =
     {
@@ -824,9 +817,9 @@ uint32_t __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1322 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1322 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_005_GetAnalogActionData_params params =
     {
@@ -841,7 +834,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1322 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_005_GetPoseActionData_params params =
     {
@@ -858,7 +851,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, winInputSkeletalActionData_t_1322 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalActionData_params params =
     {
@@ -1051,7 +1044,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1322 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1078,7 +1071,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_005_ShowBindingsForActionSet_params params =
     {
@@ -1285,7 +1278,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_006_UpdateActionState_params params =
     {
@@ -1299,9 +1292,9 @@ uint32_t __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1418 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1418 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetAnalogActionData_params params =
     {
@@ -1316,7 +1309,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow_params params =
     {
@@ -1333,7 +1326,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetPoseActionDataForNextFrame_params params =
     {
@@ -1349,7 +1342,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struc
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, winInputSkeletalActionData_t_1418 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalActionData_params params =
     {
@@ -1543,7 +1536,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1418 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1570,7 +1563,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_006_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_006_ShowBindingsForActionSet_params params =
     {
@@ -1781,7 +1774,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_007_UpdateActionState_params params =
     {
@@ -1795,9 +1788,9 @@ uint32_t __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1916 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1916 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetAnalogActionData_params params =
     {
@@ -1812,7 +1805,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow_params params =
     {
@@ -1829,7 +1822,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetPoseActionDataForNextFrame_params params =
     {
@@ -1845,7 +1838,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struc
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, winInputSkeletalActionData_t_1916 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalActionData_params params =
     {
@@ -2039,7 +2032,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1916 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2053,7 +2046,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetActionBindingInfo(struct w_steam_iface *_this, uint64_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetActionBindingInfo(struct w_steam_iface *_this, uint64_t action, InputBindingInfo_t_1517 *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
 {
     struct cppIVRInput_IVRInput_007_GetActionBindingInfo_params params =
     {
@@ -2082,7 +2075,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_007_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_007_ShowBindingsForActionSet_params params =
     {
@@ -2316,7 +2309,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetInputSourceHandle(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_010_UpdateActionState_params params =
     {
@@ -2330,9 +2323,9 @@ uint32_t __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_steam_if
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, winInputDigitalActionData_t_1267 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice);
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, winInputAnalogActionData_t_1267 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetAnalogActionData_params params =
     {
@@ -2347,7 +2340,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow_params params =
     {
@@ -2364,7 +2357,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetPoseActionDataForNextFrame_params params =
     {
@@ -2380,7 +2373,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struc
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, winInputSkeletalActionData_t_1267 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalActionData_params params =
     {
@@ -2598,7 +2591,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, winInputOriginInfo_t_1267 *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2612,7 +2605,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetActionBindingInfo(struct w_steam_iface *_this, uint64_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetActionBindingInfo(struct w_steam_iface *_this, uint64_t action, InputBindingInfo_t_11030 *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
 {
     struct cppIVRInput_IVRInput_010_GetActionBindingInfo_params params =
     {
@@ -2641,7 +2634,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_ShowActionOrigins(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t_1016 *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, uint64_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_010_ShowBindingsForActionSet_params params =
     {
@@ -2656,7 +2649,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t_11030 *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
 {
     struct cppIVRInput_IVRInput_010_GetComponentStateForBinding_params params =
     {
