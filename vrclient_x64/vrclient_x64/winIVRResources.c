@@ -8,14 +8,12 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRResources_IVRResources_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_LoadSharedResource, 16)
 DEFINE_THISCALL_WRAPPER(winIVRResources_IVRResources_001_GetResourceFullPath, 20)
 
 uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(struct w_steam_iface *_this, const char *pchResourceName, char *pchBuffer, uint32_t unBufferLen)
 {
-    struct cppIVRResources_IVRResources_001_LoadSharedResource_params params =
+    struct IVRResources_IVRResources_001_LoadSharedResource_params params =
     {
         .linux_side = _this->u_iface,
         .pchResourceName = pchResourceName,
@@ -23,13 +21,13 @@ uint32_t __thiscall winIVRResources_IVRResources_001_LoadSharedResource(struct w
         .unBufferLen = unBufferLen,
     };
     TRACE("%p\n", _this);
-    cppIVRResources_IVRResources_001_LoadSharedResource( &params );
+    VRCLIENT_CALL( IVRResources_IVRResources_001_LoadSharedResource, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(struct w_steam_iface *_this, const char *pchResourceName, const char *pchResourceTypeDirectory, char *pchPathBuffer, uint32_t unBufferLen)
 {
-    struct cppIVRResources_IVRResources_001_GetResourceFullPath_params params =
+    struct IVRResources_IVRResources_001_GetResourceFullPath_params params =
     {
         .linux_side = _this->u_iface,
         .pchResourceName = pchResourceName,
@@ -38,7 +36,7 @@ uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(struct 
         .unBufferLen = unBufferLen,
     };
     TRACE("%p\n", _this);
-    cppIVRResources_IVRResources_001_GetResourceFullPath( &params );
+    VRCLIENT_CALL( IVRResources_IVRResources_001_GetResourceFullPath, &params );
     return params._ret;
 }
 

@@ -4,7 +4,13 @@
 #include <stdarg.h>
 #include <stddef.h>
 
+#include <windef.h>
+#include <winbase.h>
+#include <winternl.h>
+
 #include "vrclient_structs.h"
+
+#include "wine/unixlib.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -53,8 +59,15 @@ extern bool unix_vrclient_init( struct vrclient_init_params *params );
 extern void *unix_HmdSystemFactory( const char *name, int *return_code );
 extern void *unix_VRClientCoreFactory( const char *name, int *return_code );
 
+typedef NTSTATUS (*unixlib_entry_t)( void *args );
+extern const unixlib_entry_t __wine_unix_call_funcs[];
+
+#define VRCLIENT_CALL( code, args ) __wine_unix_call_funcs[unix_ ## code]( args )
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
+
+#include "unixlib_generated.h"
 
 #endif /* __VRCLIENT_UNIXLIB_H */

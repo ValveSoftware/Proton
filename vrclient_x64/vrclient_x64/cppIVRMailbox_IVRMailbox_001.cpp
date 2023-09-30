@@ -1,27 +1,35 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
-#include "cppIVRMailbox_IVRMailbox_001.h"
-void cppIVRMailbox_IVRMailbox_001_undoc1( struct cppIVRMailbox_IVRMailbox_001_undoc1_params *params )
+
+NTSTATUS IVRMailbox_IVRMailbox_001_undoc1( void *args )
 {
+    struct IVRMailbox_IVRMailbox_001_undoc1_params *params = (struct IVRMailbox_IVRMailbox_001_undoc1_params *)args;
     struct u_IVRMailbox_IVRMailbox_001 *iface = (struct u_IVRMailbox_IVRMailbox_001 *)params->linux_side;
     params->_ret = (uint32_t)iface->undoc1( params->a, params->b );
+    return 0;
 }
 
-void cppIVRMailbox_IVRMailbox_001_undoc2( struct cppIVRMailbox_IVRMailbox_001_undoc2_params *params )
+NTSTATUS IVRMailbox_IVRMailbox_001_undoc2( void *args )
 {
+    struct IVRMailbox_IVRMailbox_001_undoc2_params *params = (struct IVRMailbox_IVRMailbox_001_undoc2_params *)args;
     struct u_IVRMailbox_IVRMailbox_001 *iface = (struct u_IVRMailbox_IVRMailbox_001 *)params->linux_side;
     params->_ret = (uint32_t)iface->undoc2( params->a );
+    return 0;
 }
 
-void cppIVRMailbox_IVRMailbox_001_undoc3( struct cppIVRMailbox_IVRMailbox_001_undoc3_params *params )
+NTSTATUS IVRMailbox_IVRMailbox_001_undoc3( void *args )
 {
+    struct IVRMailbox_IVRMailbox_001_undoc3_params *params = (struct IVRMailbox_IVRMailbox_001_undoc3_params *)args;
     struct u_IVRMailbox_IVRMailbox_001 *iface = (struct u_IVRMailbox_IVRMailbox_001 *)params->linux_side;
     params->_ret = (uint32_t)iface->undoc3( params->a, params->b, params->c );
+    return 0;
 }
 
-void cppIVRMailbox_IVRMailbox_001_undoc4( struct cppIVRMailbox_IVRMailbox_001_undoc4_params *params )
+NTSTATUS IVRMailbox_IVRMailbox_001_undoc4( void *args )
 {
+    struct IVRMailbox_IVRMailbox_001_undoc4_params *params = (struct IVRMailbox_IVRMailbox_001_undoc4_params *)args;
     struct u_IVRMailbox_IVRMailbox_001 *iface = (struct u_IVRMailbox_IVRMailbox_001 *)params->linux_side;
     params->_ret = (uint32_t)iface->undoc4( params->a, params->b, params->c, params->d );
+    return 0;
 }
 

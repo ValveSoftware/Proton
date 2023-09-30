@@ -1,291 +1,383 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
-#include "cppIVRSystem_IVRSystem_010.h"
-void cppIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize( struct cppIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize_params *params )
+
+NTSTATUS IVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize_params *params = (struct IVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->GetRecommendedRenderTargetSize( params->pnWidth, params->pnHeight );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetProjectionMatrix( struct cppIVRSystem_IVRSystem_010_GetProjectionMatrix_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetProjectionMatrix( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetProjectionMatrix_params *params = (struct IVRSystem_IVRSystem_010_GetProjectionMatrix_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetProjectionMatrix( params->eEye, params->fNearZ, params->fFarZ, params->eProjType );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetProjectionRaw( struct cppIVRSystem_IVRSystem_010_GetProjectionRaw_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetProjectionRaw( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetProjectionRaw_params *params = (struct IVRSystem_IVRSystem_010_GetProjectionRaw_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->GetProjectionRaw( params->eEye, params->pfLeft, params->pfRight, params->pfTop, params->pfBottom );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_ComputeDistortion( struct cppIVRSystem_IVRSystem_010_ComputeDistortion_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_ComputeDistortion( void *args )
 {
+    struct IVRSystem_IVRSystem_010_ComputeDistortion_params *params = (struct IVRSystem_IVRSystem_010_ComputeDistortion_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->ComputeDistortion( params->eEye, params->fU, params->fV );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform( struct cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetEyeToHeadTransform( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetEyeToHeadTransform_params *params = (struct IVRSystem_IVRSystem_010_GetEyeToHeadTransform_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetEyeToHeadTransform( params->eEye );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetTimeSinceLastVsync( struct cppIVRSystem_IVRSystem_010_GetTimeSinceLastVsync_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetTimeSinceLastVsync( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetTimeSinceLastVsync_params *params = (struct IVRSystem_IVRSystem_010_GetTimeSinceLastVsync_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->GetTimeSinceLastVsync( params->pfSecondsSinceLastVsync, params->pulFrameCounter );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetD3D9AdapterIndex( struct cppIVRSystem_IVRSystem_010_GetD3D9AdapterIndex_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetD3D9AdapterIndex( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetD3D9AdapterIndex_params *params = (struct IVRSystem_IVRSystem_010_GetD3D9AdapterIndex_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (int32_t)iface->GetD3D9AdapterIndex(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetDXGIOutputInfo( struct cppIVRSystem_IVRSystem_010_GetDXGIOutputInfo_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetDXGIOutputInfo( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetDXGIOutputInfo_params *params = (struct IVRSystem_IVRSystem_010_GetDXGIOutputInfo_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->GetDXGIOutputInfo( params->pnAdapterIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_IsDisplayOnDesktop( struct cppIVRSystem_IVRSystem_010_IsDisplayOnDesktop_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_IsDisplayOnDesktop( void *args )
 {
+    struct IVRSystem_IVRSystem_010_IsDisplayOnDesktop_params *params = (struct IVRSystem_IVRSystem_010_IsDisplayOnDesktop_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->IsDisplayOnDesktop(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_SetDisplayVisibility( struct cppIVRSystem_IVRSystem_010_SetDisplayVisibility_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_SetDisplayVisibility( void *args )
 {
+    struct IVRSystem_IVRSystem_010_SetDisplayVisibility_params *params = (struct IVRSystem_IVRSystem_010_SetDisplayVisibility_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->SetDisplayVisibility( params->bIsVisibleOnDesktop );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose( struct cppIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params *params = (struct IVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->GetDeviceToAbsoluteTrackingPose( params->eOrigin, params->fPredictedSecondsToPhotonsFromNow, params->pTrackedDevicePoseArray, params->unTrackedDevicePoseArrayCount );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_ResetSeatedZeroPose( struct cppIVRSystem_IVRSystem_010_ResetSeatedZeroPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_ResetSeatedZeroPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_ResetSeatedZeroPose_params *params = (struct IVRSystem_IVRSystem_010_ResetSeatedZeroPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->ResetSeatedZeroPose(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose( struct cppIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose_params *params = (struct IVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetSeatedZeroPoseToStandingAbsoluteTrackingPose(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose( struct cppIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose_params *params = (struct IVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetRawZeroPoseToStandingAbsoluteTrackingPose(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass( struct cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass_params *params = (struct IVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetSortedTrackedDeviceIndicesOfClass( params->eTrackedDeviceClass, params->punTrackedDeviceIndexArray, params->unTrackedDeviceIndexArrayCount, params->unRelativeToTrackedDeviceIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel( struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params *params = (struct IVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetTrackedDeviceActivityLevel( params->unDeviceId );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_ApplyTransform( struct cppIVRSystem_IVRSystem_010_ApplyTransform_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_ApplyTransform( void *args )
 {
+    struct IVRSystem_IVRSystem_010_ApplyTransform_params *params = (struct IVRSystem_IVRSystem_010_ApplyTransform_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->ApplyTransform( params->pOutputPose, params->pTrackedDevicePose, params->pTransform );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole( struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole_params *params = (struct IVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetTrackedDeviceIndexForControllerRole( params->unDeviceType );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex( struct cppIVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex_params *params = (struct IVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetControllerRoleForTrackedDeviceIndex( params->unDeviceIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetTrackedDeviceClass( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetTrackedDeviceClass_params *params = (struct IVRSystem_IVRSystem_010_GetTrackedDeviceClass_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetTrackedDeviceClass( params->unDeviceIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_IsTrackedDeviceConnected( struct cppIVRSystem_IVRSystem_010_IsTrackedDeviceConnected_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_IsTrackedDeviceConnected( void *args )
 {
+    struct IVRSystem_IVRSystem_010_IsTrackedDeviceConnected_params *params = (struct IVRSystem_IVRSystem_010_IsTrackedDeviceConnected_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->IsTrackedDeviceConnected( params->unDeviceIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->GetBoolTrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (float)iface->GetFloatTrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (int32_t)iface->GetInt32TrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint64_t)iface->GetUint64TrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetMatrix34TrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params *params = (struct IVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetStringTrackedDeviceProperty( params->unDeviceIndex, params->prop, params->pchValue, params->unBufferSize, params->pError );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetPropErrorNameFromEnum( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params *params = (struct IVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (const char *)iface->GetPropErrorNameFromEnum( params->error );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_PollNextEvent( struct cppIVRSystem_IVRSystem_010_PollNextEvent_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_PollNextEvent( void *args )
 {
+    struct IVRSystem_IVRSystem_010_PollNextEvent_params *params = (struct IVRSystem_IVRSystem_010_PollNextEvent_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     u_VREvent_t_0914 u_pEvent;
     if (params->pEvent) u_pEvent = *params->pEvent;
     params->_ret = (bool)iface->PollNextEvent( params->pEvent ? &u_pEvent : nullptr );
     if (params->pEvent) *params->pEvent = u_pEvent;
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_PollNextEventWithPose( struct cppIVRSystem_IVRSystem_010_PollNextEventWithPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_PollNextEventWithPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_PollNextEventWithPose_params *params = (struct IVRSystem_IVRSystem_010_PollNextEventWithPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     u_VREvent_t_0914 u_pEvent;
     if (params->pEvent) u_pEvent = *params->pEvent;
     params->_ret = (bool)iface->PollNextEventWithPose( params->eOrigin, params->pEvent ? &u_pEvent : nullptr, params->pTrackedDevicePose );
     if (params->pEvent) *params->pEvent = u_pEvent;
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetEventTypeNameFromEnum( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params *params = (struct IVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (const char *)iface->GetEventTypeNameFromEnum( params->eType );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh( struct cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetHiddenAreaMesh( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetHiddenAreaMesh_params *params = (struct IVRSystem_IVRSystem_010_GetHiddenAreaMesh_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     *params->_ret = iface->GetHiddenAreaMesh( params->eEye );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetControllerState( struct cppIVRSystem_IVRSystem_010_GetControllerState_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetControllerState( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetControllerState_params *params = (struct IVRSystem_IVRSystem_010_GetControllerState_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     u_VRControllerState001_t u_pControllerState;
     if (params->pControllerState) u_pControllerState = *params->pControllerState;
     params->_ret = (bool)iface->GetControllerState( params->unControllerDeviceIndex, params->pControllerState ? &u_pControllerState : nullptr );
     if (params->pControllerState) *params->pControllerState = u_pControllerState;
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetControllerStateWithPose( struct cppIVRSystem_IVRSystem_010_GetControllerStateWithPose_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetControllerStateWithPose( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetControllerStateWithPose_params *params = (struct IVRSystem_IVRSystem_010_GetControllerStateWithPose_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     u_VRControllerState001_t u_pControllerState;
     if (params->pControllerState) u_pControllerState = *params->pControllerState;
     params->_ret = (bool)iface->GetControllerStateWithPose( params->eOrigin, params->unControllerDeviceIndex, params->pControllerState ? &u_pControllerState : nullptr, params->pTrackedDevicePose );
     if (params->pControllerState) *params->pControllerState = u_pControllerState;
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_TriggerHapticPulse( struct cppIVRSystem_IVRSystem_010_TriggerHapticPulse_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_TriggerHapticPulse( void *args )
 {
+    struct IVRSystem_IVRSystem_010_TriggerHapticPulse_params *params = (struct IVRSystem_IVRSystem_010_TriggerHapticPulse_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->TriggerHapticPulse( params->unControllerDeviceIndex, params->unAxisId, params->usDurationMicroSec );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetButtonIdNameFromEnum( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params *params = (struct IVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (const char *)iface->GetButtonIdNameFromEnum( params->eButtonId );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum( void *args )
 {
+    struct IVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params *params = (struct IVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (const char *)iface->GetControllerAxisTypeNameFromEnum( params->eAxisType );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_CaptureInputFocus( struct cppIVRSystem_IVRSystem_010_CaptureInputFocus_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_CaptureInputFocus( void *args )
 {
+    struct IVRSystem_IVRSystem_010_CaptureInputFocus_params *params = (struct IVRSystem_IVRSystem_010_CaptureInputFocus_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->CaptureInputFocus(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_ReleaseInputFocus( struct cppIVRSystem_IVRSystem_010_ReleaseInputFocus_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_ReleaseInputFocus( void *args )
 {
+    struct IVRSystem_IVRSystem_010_ReleaseInputFocus_params *params = (struct IVRSystem_IVRSystem_010_ReleaseInputFocus_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->ReleaseInputFocus(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess( struct cppIVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess( void *args )
 {
+    struct IVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess_params *params = (struct IVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (bool)iface->IsInputFocusCapturedByAnotherProcess(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_DriverDebugRequest( struct cppIVRSystem_IVRSystem_010_DriverDebugRequest_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_DriverDebugRequest( void *args )
 {
+    struct IVRSystem_IVRSystem_010_DriverDebugRequest_params *params = (struct IVRSystem_IVRSystem_010_DriverDebugRequest_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->DriverDebugRequest( params->unDeviceIndex, params->pchRequest, params->pchResponseBuffer, params->unResponseBufferSize );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_PerformFirmwareUpdate( struct cppIVRSystem_IVRSystem_010_PerformFirmwareUpdate_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_PerformFirmwareUpdate( void *args )
 {
+    struct IVRSystem_IVRSystem_010_PerformFirmwareUpdate_params *params = (struct IVRSystem_IVRSystem_010_PerformFirmwareUpdate_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     params->_ret = (uint32_t)iface->PerformFirmwareUpdate( params->unDeviceIndex );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting( struct cppIVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting( void *args )
 {
+    struct IVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting_params *params = (struct IVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->AcknowledgeQuit_Exiting(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt( struct cppIVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt( void *args )
 {
+    struct IVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt_params *params = (struct IVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->AcknowledgeQuit_UserPrompt(  );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_PerformanceTestEnableCapture( struct cppIVRSystem_IVRSystem_010_PerformanceTestEnableCapture_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_PerformanceTestEnableCapture( void *args )
 {
+    struct IVRSystem_IVRSystem_010_PerformanceTestEnableCapture_params *params = (struct IVRSystem_IVRSystem_010_PerformanceTestEnableCapture_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->PerformanceTestEnableCapture( params->bEnable );
+    return 0;
 }
 
-void cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange( struct cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params *params )
+NTSTATUS IVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange( void *args )
 {
+    struct IVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params *params = (struct IVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params *)args;
     struct u_IVRSystem_IVRSystem_010 *iface = (struct u_IVRSystem_IVRSystem_010 *)params->linux_side;
     iface->PerformanceTestReportFidelityLevelChange( params->nFidelityLevel );
+    return 0;
 }
 

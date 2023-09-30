@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription, 16)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions, 20)
@@ -31,19 +29,19 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjec
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_HasCamera, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription(struct w_steam_iface *_this, uint32_t nDeviceIndex, char *pBuffer, uint32_t nBufferLen)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -51,13 +49,13 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescri
         .nBufferLen = nBufferLen,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat, uint32_t *pWidth, uint32_t *pHeight)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -66,173 +64,173 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimension
         .pHeight = pHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .nVideoStreamFormat = nVideoStreamFormat,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool bEnable)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .bEnable = bEnable,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive, &params );
     return params._ret;
 }
 
 float __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime, &params );
     return params._ret;
 }
 
 const w_CameraVideoStreamFrame_t_0914 * __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex, const w_CameraVideoStreamFrame_t_0914 *pFrameImage)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pFrameImage = pFrameImage,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool bEnable)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .bEnable = bEnable,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flInputU, float flInputV, float *pflOutputU, float *pflOutputV)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -242,13 +240,13 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(str
         .pflOutputV = pflOutputV,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -259,7 +257,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(str
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection, &params );
     return params._ret;
 }
 
@@ -346,8 +344,6 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_001_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_002.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera, 12)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize, 24)
@@ -359,32 +355,32 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamF
 
 const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eCameraError)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eCameraError = eCameraError,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHasCamera = pHasCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_HasCamera, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, uint32_t *pnWidth, uint32_t *pnHeight, uint32_t *pnFrameBufferSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -394,13 +390,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize(
         .pnFrameBufferSize = pnFrameBufferSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, HmdVector2_t *pFocalLength, HmdVector2_t *pCenter)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -409,13 +405,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisic
         .pCenter = pCenter,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -425,38 +421,38 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService(struct w_steam_iface *_this, uint32_t nDeviceIndex, void **pHandle)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHandle = pHandle,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService(struct w_steam_iface *_this, void *hTrackedCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, void *hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_100 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -467,7 +463,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrame
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer, &params );
     return params._ret;
 }
 
@@ -534,8 +530,6 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_002_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_003.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera, 12)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize, 24)
@@ -551,32 +545,32 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStr
 
 const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eCameraError)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eCameraError = eCameraError,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHasCamera = pHasCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_HasCamera, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, uint32_t *pnWidth, uint32_t *pnHeight, uint32_t *pnFrameBufferSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -586,13 +580,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize(
         .pnFrameBufferSize = pnFrameBufferSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, HmdVector2_t *pFocalLength, HmdVector2_t *pCenter)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -601,13 +595,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics
         .pCenter = pCenter,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -617,38 +611,38 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint64_t *pHandle)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHandle = pHandle,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService(struct w_steam_iface *_this, uint64_t hTrackedCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_100 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -659,13 +653,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrame
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, VRTextureBounds_t *pTextureBounds, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -675,13 +669,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextu
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_100 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -692,13 +686,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_100 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -708,20 +702,20 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t glTextureId)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .glTextureId = glTextureId,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL, &params );
     return params._ret;
 }
 
@@ -796,8 +790,6 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_003_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_004.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera, 12)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize, 24)
@@ -813,32 +805,32 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStr
 
 const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eCameraError)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eCameraError = eCameraError,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHasCamera = pHasCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_HasCamera, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, uint32_t *pnWidth, uint32_t *pnHeight, uint32_t *pnFrameBufferSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -848,13 +840,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize(
         .pnFrameBufferSize = pnFrameBufferSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, HmdVector2_t *pFocalLength, HmdVector2_t *pCenter)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -863,13 +855,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics
         .pCenter = pCenter,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -879,38 +871,38 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint64_t *pHandle)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHandle = pHandle,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService(struct w_steam_iface *_this, uint64_t hTrackedCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -921,13 +913,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrame
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, VRTextureBounds_t *pTextureBounds, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -937,13 +929,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextu
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -954,13 +946,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -970,20 +962,20 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t glTextureId)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .glTextureId = glTextureId,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL, &params );
     return params._ret;
 }
 
@@ -1058,8 +1050,6 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_004_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_005.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_005_HasCamera, 12)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize, 24)
@@ -1075,32 +1065,32 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStr
 
 const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eCameraError)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eCameraError = eCameraError,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHasCamera = pHasCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_HasCamera, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, uint32_t *pnWidth, uint32_t *pnHeight, uint32_t *pnFrameBufferSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1110,13 +1100,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize(
         .pnFrameBufferSize = pnFrameBufferSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nCameraIndex, uint32_t eFrameType, HmdVector2_t *pFocalLength, HmdVector2_t *pCenter)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1126,13 +1116,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics
         .pCenter = pCenter,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetCameraIntrinsics, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nCameraIndex, uint32_t eFrameType, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1143,38 +1133,38 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetCameraProjection, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_AcquireVideoStreamingService(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint64_t *pHandle)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_AcquireVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_AcquireVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHandle = pHandle,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_AcquireVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_AcquireVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamingService(struct w_steam_iface *_this, uint64_t hTrackedCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1185,13 +1175,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrame
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, VRTextureBounds_t *pTextureBounds, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1201,13 +1191,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextu
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1218,13 +1208,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1234,20 +1224,20 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t glTextureId)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .glTextureId = glTextureId,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL, &params );
     return params._ret;
 }
 
@@ -1322,8 +1312,6 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_005_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRTrackedCamera_IVRTrackedCamera_006.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_006_HasCamera, 12)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize, 24)
@@ -1341,32 +1329,32 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTracki
 
 const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eCameraError)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eCameraError = eCameraError,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_HasCamera_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_HasCamera_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHasCamera = pHasCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_HasCamera( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_HasCamera, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, uint32_t *pnWidth, uint32_t *pnHeight, uint32_t *pnFrameBufferSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1376,13 +1364,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize(
         .pnFrameBufferSize = pnFrameBufferSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nCameraIndex, uint32_t eFrameType, HmdVector2_t *pFocalLength, HmdVector2_t *pCenter)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1392,13 +1380,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics
         .pCenter = pCenter,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetCameraIntrinsics, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nCameraIndex, uint32_t eFrameType, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1409,38 +1397,38 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection
         .pProjection = pProjection,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetCameraProjection, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_AcquireVideoStreamingService(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint64_t *pHandle)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_AcquireVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_AcquireVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
         .pHandle = pHandle,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_AcquireVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_AcquireVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamingService(struct w_steam_iface *_this, uint64_t hTrackedCamera)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamingService_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamingService_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamingService( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamingService, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1451,13 +1439,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrame
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureSize(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t eFrameType, VRTextureBounds_t *pTextureBounds, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureSize_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureSize_params params =
     {
         .linux_side = _this->u_iface,
         .nDeviceIndex = nDeviceIndex,
@@ -1467,13 +1455,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextu
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureSize( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureSize, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1484,13 +1472,13 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
@@ -1500,42 +1488,42 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextu
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t glTextureId)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamTextureGL_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .glTextureId = glTextureId,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamTextureGL( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreamTextureGL, &params );
     return params._ret;
 }
 
 void __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace(struct w_steam_iface *_this, uint32_t eUniverse)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace_params params =
     {
         .linux_side = _this->u_iface,
         .eUniverse = eUniverse,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace, &params );
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace(struct w_steam_iface *_this)
 {
-    struct cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace_params params =
+    struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace( &params );
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace, &params );
     return params._ret;
 }
 

@@ -1,183 +1,243 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
-#include "cppIVRApplications_IVRApplications_007.h"
-void cppIVRApplications_IVRApplications_007_AddApplicationManifest( struct cppIVRApplications_IVRApplications_007_AddApplicationManifest_params *params )
+
+NTSTATUS IVRApplications_IVRApplications_007_AddApplicationManifest( void *args )
 {
+    struct IVRApplications_IVRApplications_007_AddApplicationManifest_params *params = (struct IVRApplications_IVRApplications_007_AddApplicationManifest_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->AddApplicationManifest( params->pchApplicationManifestFullPath, params->bTemporary );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_RemoveApplicationManifest( struct cppIVRApplications_IVRApplications_007_RemoveApplicationManifest_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_RemoveApplicationManifest( void *args )
 {
+    struct IVRApplications_IVRApplications_007_RemoveApplicationManifest_params *params = (struct IVRApplications_IVRApplications_007_RemoveApplicationManifest_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->RemoveApplicationManifest( params->pchApplicationManifestFullPath );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_IsApplicationInstalled( struct cppIVRApplications_IVRApplications_007_IsApplicationInstalled_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_IsApplicationInstalled( void *args )
 {
+    struct IVRApplications_IVRApplications_007_IsApplicationInstalled_params *params = (struct IVRApplications_IVRApplications_007_IsApplicationInstalled_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->IsApplicationInstalled( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationCount( struct cppIVRApplications_IVRApplications_007_GetApplicationCount_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationCount( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationCount_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationCount_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationCount(  );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationKeyByIndex( struct cppIVRApplications_IVRApplications_007_GetApplicationKeyByIndex_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationKeyByIndex( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationKeyByIndex_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationKeyByIndex_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationKeyByIndex( params->unApplicationIndex, params->pchAppKeyBuffer, params->unAppKeyBufferLen );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId( struct cppIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationKeyByProcessId( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationKeyByProcessId_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationKeyByProcessId_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationKeyByProcessId( params->unProcessId, params->pchAppKeyBuffer, params->unAppKeyBufferLen );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_LaunchApplication( struct cppIVRApplications_IVRApplications_007_LaunchApplication_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_LaunchApplication( void *args )
 {
+    struct IVRApplications_IVRApplications_007_LaunchApplication_params *params = (struct IVRApplications_IVRApplications_007_LaunchApplication_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->LaunchApplication( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_LaunchTemplateApplication( struct cppIVRApplications_IVRApplications_007_LaunchTemplateApplication_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_LaunchTemplateApplication( void *args )
 {
+    struct IVRApplications_IVRApplications_007_LaunchTemplateApplication_params *params = (struct IVRApplications_IVRApplications_007_LaunchTemplateApplication_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->LaunchTemplateApplication( params->pchTemplateAppKey, params->pchNewAppKey, params->pKeys, params->unKeys );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType( struct cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_LaunchApplicationFromMimeType( void *args )
 {
+    struct IVRApplications_IVRApplications_007_LaunchApplicationFromMimeType_params *params = (struct IVRApplications_IVRApplications_007_LaunchApplicationFromMimeType_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->LaunchApplicationFromMimeType( params->pchMimeType, params->pchArgs );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_LaunchDashboardOverlay( struct cppIVRApplications_IVRApplications_007_LaunchDashboardOverlay_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_LaunchDashboardOverlay( void *args )
 {
+    struct IVRApplications_IVRApplications_007_LaunchDashboardOverlay_params *params = (struct IVRApplications_IVRApplications_007_LaunchDashboardOverlay_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->LaunchDashboardOverlay( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_CancelApplicationLaunch( struct cppIVRApplications_IVRApplications_007_CancelApplicationLaunch_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_CancelApplicationLaunch( void *args )
 {
+    struct IVRApplications_IVRApplications_007_CancelApplicationLaunch_params *params = (struct IVRApplications_IVRApplications_007_CancelApplicationLaunch_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->CancelApplicationLaunch( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_IdentifyApplication( struct cppIVRApplications_IVRApplications_007_IdentifyApplication_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_IdentifyApplication( void *args )
 {
+    struct IVRApplications_IVRApplications_007_IdentifyApplication_params *params = (struct IVRApplications_IVRApplications_007_IdentifyApplication_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->IdentifyApplication( params->unProcessId, params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationProcessId( struct cppIVRApplications_IVRApplications_007_GetApplicationProcessId_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationProcessId( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationProcessId_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationProcessId_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationProcessId( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum( struct cppIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (const char *)iface->GetApplicationsErrorNameFromEnum( params->error );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationPropertyString( struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyString_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationPropertyString( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationPropertyString_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationPropertyString_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationPropertyString( params->pchAppKey, params->eProperty, params->pchPropertyValueBuffer, params->unPropertyValueBufferLen, params->peError );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationPropertyBool( struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyBool_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationPropertyBool( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationPropertyBool_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationPropertyBool_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->GetApplicationPropertyBool( params->pchAppKey, params->eProperty, params->peError );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationPropertyUint64( struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyUint64_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationPropertyUint64( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationPropertyUint64_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationPropertyUint64_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint64_t)iface->GetApplicationPropertyUint64( params->pchAppKey, params->eProperty, params->peError );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_SetApplicationAutoLaunch( struct cppIVRApplications_IVRApplications_007_SetApplicationAutoLaunch_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_SetApplicationAutoLaunch( void *args )
 {
+    struct IVRApplications_IVRApplications_007_SetApplicationAutoLaunch_params *params = (struct IVRApplications_IVRApplications_007_SetApplicationAutoLaunch_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->SetApplicationAutoLaunch( params->pchAppKey, params->bAutoLaunch );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationAutoLaunch( struct cppIVRApplications_IVRApplications_007_GetApplicationAutoLaunch_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationAutoLaunch( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationAutoLaunch_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationAutoLaunch_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->GetApplicationAutoLaunch( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType( struct cppIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType( void *args )
 {
+    struct IVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType_params *params = (struct IVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->SetDefaultApplicationForMimeType( params->pchAppKey, params->pchMimeType );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType( struct cppIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType_params *params = (struct IVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->GetDefaultApplicationForMimeType( params->pchMimeType, params->pchAppKeyBuffer, params->unAppKeyBufferLen );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes( struct cppIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (bool)iface->GetApplicationSupportedMimeTypes( params->pchAppKey, params->pchMimeTypesBuffer, params->unMimeTypesBuffer );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType( struct cppIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationsThatSupportMimeType( params->pchMimeType, params->pchAppKeysThatSupportBuffer, params->unAppKeysThatSupportBuffer );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetApplicationLaunchArguments( struct cppIVRApplications_IVRApplications_007_GetApplicationLaunchArguments_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetApplicationLaunchArguments( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetApplicationLaunchArguments_params *params = (struct IVRApplications_IVRApplications_007_GetApplicationLaunchArguments_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetApplicationLaunchArguments( params->unHandle, params->pchArgs, params->unArgs );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetStartingApplication( struct cppIVRApplications_IVRApplications_007_GetStartingApplication_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetStartingApplication( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetStartingApplication_params *params = (struct IVRApplications_IVRApplications_007_GetStartingApplication_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetStartingApplication( params->pchAppKeyBuffer, params->unAppKeyBufferLen );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetSceneApplicationState( struct cppIVRApplications_IVRApplications_007_GetSceneApplicationState_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetSceneApplicationState( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetSceneApplicationState_params *params = (struct IVRApplications_IVRApplications_007_GetSceneApplicationState_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetSceneApplicationState(  );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck( struct cppIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck( void *args )
 {
+    struct IVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck_params *params = (struct IVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->PerformApplicationPrelaunchCheck( params->pchAppKey );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum( struct cppIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum_params *params = (struct IVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (const char *)iface->GetSceneApplicationStateNameFromEnum( params->state );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_LaunchInternalProcess( struct cppIVRApplications_IVRApplications_007_LaunchInternalProcess_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_LaunchInternalProcess( void *args )
 {
+    struct IVRApplications_IVRApplications_007_LaunchInternalProcess_params *params = (struct IVRApplications_IVRApplications_007_LaunchInternalProcess_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
+    return 0;
 }
 
-void cppIVRApplications_IVRApplications_007_GetCurrentSceneProcessId( struct cppIVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params *params )
+NTSTATUS IVRApplications_IVRApplications_007_GetCurrentSceneProcessId( void *args )
 {
+    struct IVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params *params = (struct IVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params *)args;
     struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetCurrentSceneProcessId(  );
+    return 0;
 }
 

@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRChaperone_IVRChaperone_002.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetCalibrationState, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 8)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 12)
@@ -22,105 +20,105 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 8)
 
 uint32_t __thiscall winIVRChaperone_IVRChaperone_002_GetCalibrationState(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_002_GetCalibrationState_params params =
+    struct IVRChaperone_IVRChaperone_002_GetCalibrationState_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_GetCalibrationState( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_GetCalibrationState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(struct w_steam_iface *_this, ChaperoneSoftBoundsInfo_t *pInfo)
 {
-    struct cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params params =
+    struct IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params params =
     {
         .linux_side = _this->u_iface,
         .pInfo = pInfo,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(struct w_steam_iface *_this, HmdQuad_t *pQuadsBuffer, uint32_t *punQuadsCount)
 {
-    struct cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params params =
+    struct IVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params params =
     {
         .linux_side = _this->u_iface,
         .pQuadsBuffer = pQuadsBuffer,
         .punQuadsCount = punQuadsCount,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_GetHardBoundsInfo, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo(struct w_steam_iface *_this, ChaperoneSeatedBoundsInfo_t *pInfo)
 {
-    struct cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params params =
+    struct IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params params =
     {
         .linux_side = _this->u_iface,
         .pInfo = pInfo,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_002_ReloadInfo(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_002_ReloadInfo_params params =
+    struct IVRChaperone_IVRChaperone_002_ReloadInfo_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_ReloadInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_ReloadInfo, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_002_SetSceneColor(struct w_steam_iface *_this, HmdColor_t color)
 {
-    struct cppIVRChaperone_IVRChaperone_002_SetSceneColor_params params =
+    struct IVRChaperone_IVRChaperone_002_SetSceneColor_params params =
     {
         .linux_side = _this->u_iface,
         .color = color,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_SetSceneColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_SetSceneColor, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_002_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors)
 {
-    struct cppIVRChaperone_IVRChaperone_002_GetBoundsColor_params params =
+    struct IVRChaperone_IVRChaperone_002_GetBoundsColor_params params =
     {
         .linux_side = _this->u_iface,
         .pOutputColorArray = pOutputColorArray,
         .nNumOutputColors = nNumOutputColors,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_GetBoundsColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_GetBoundsColor, &params );
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_002_AreBoundsVisible(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_002_AreBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_002_AreBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_AreBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_AreBoundsVisible, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_002_ForceBoundsVisible(struct w_steam_iface *_this, bool bForce)
 {
-    struct cppIVRChaperone_IVRChaperone_002_ForceBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_002_ForceBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
         .bForce = bForce,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_002_ForceBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_002_ForceBoundsVisible, &params );
 }
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_002_vtable;
@@ -188,8 +186,6 @@ void destroy_winIVRChaperone_IVRChaperone_002_FnTable(struct w_steam_iface *obje
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRChaperone_IVRChaperone_003.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetCalibrationState, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 12)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 8)
@@ -201,64 +197,64 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 8)
 
 uint32_t __thiscall winIVRChaperone_IVRChaperone_003_GetCalibrationState(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params params =
+    struct IVRChaperone_IVRChaperone_003_GetCalibrationState_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_GetCalibrationState( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_GetCalibrationState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaSize(struct w_steam_iface *_this, float *pSizeX, float *pSizeZ)
 {
-    struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize_params params =
+    struct IVRChaperone_IVRChaperone_003_GetPlayAreaSize_params params =
     {
         .linux_side = _this->u_iface,
         .pSizeX = pSizeX,
         .pSizeZ = pSizeZ,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_GetPlayAreaSize, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaRect(struct w_steam_iface *_this, HmdQuad_t *rect)
 {
-    struct cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect_params params =
+    struct IVRChaperone_IVRChaperone_003_GetPlayAreaRect_params params =
     {
         .linux_side = _this->u_iface,
         .rect = rect,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_GetPlayAreaRect( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_GetPlayAreaRect, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_003_ReloadInfo(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_003_ReloadInfo_params params =
+    struct IVRChaperone_IVRChaperone_003_ReloadInfo_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_ReloadInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_ReloadInfo, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_003_SetSceneColor(struct w_steam_iface *_this, HmdColor_t color)
 {
-    struct cppIVRChaperone_IVRChaperone_003_SetSceneColor_params params =
+    struct IVRChaperone_IVRChaperone_003_SetSceneColor_params params =
     {
         .linux_side = _this->u_iface,
         .color = color,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_SetSceneColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_SetSceneColor, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
 {
-    struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params params =
+    struct IVRChaperone_IVRChaperone_003_GetBoundsColor_params params =
     {
         .linux_side = _this->u_iface,
         .pOutputColorArray = pOutputColorArray,
@@ -267,29 +263,29 @@ void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(struct w_steam_i
         .pOutputCameraColor = pOutputCameraColor,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_GetBoundsColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_GetBoundsColor, &params );
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_003_AreBoundsVisible(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_003_AreBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_003_AreBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_AreBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_AreBoundsVisible, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_003_ForceBoundsVisible(struct w_steam_iface *_this, bool bForce)
 {
-    struct cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_003_ForceBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
         .bForce = bForce,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_003_ForceBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_003_ForceBoundsVisible, &params );
 }
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_003_vtable;
@@ -355,8 +351,6 @@ void destroy_winIVRChaperone_IVRChaperone_003_FnTable(struct w_steam_iface *obje
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRChaperone_IVRChaperone_004.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetCalibrationState, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize, 12)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaRect, 8)
@@ -369,64 +363,64 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ResetZeroPose, 8)
 
 uint32_t __thiscall winIVRChaperone_IVRChaperone_004_GetCalibrationState(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_004_GetCalibrationState_params params =
+    struct IVRChaperone_IVRChaperone_004_GetCalibrationState_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_GetCalibrationState( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_GetCalibrationState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaSize(struct w_steam_iface *_this, float *pSizeX, float *pSizeZ)
 {
-    struct cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize_params params =
+    struct IVRChaperone_IVRChaperone_004_GetPlayAreaSize_params params =
     {
         .linux_side = _this->u_iface,
         .pSizeX = pSizeX,
         .pSizeZ = pSizeZ,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_GetPlayAreaSize, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaRect(struct w_steam_iface *_this, HmdQuad_t *rect)
 {
-    struct cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect_params params =
+    struct IVRChaperone_IVRChaperone_004_GetPlayAreaRect_params params =
     {
         .linux_side = _this->u_iface,
         .rect = rect,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_GetPlayAreaRect, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_004_ReloadInfo(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_004_ReloadInfo_params params =
+    struct IVRChaperone_IVRChaperone_004_ReloadInfo_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_ReloadInfo( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_ReloadInfo, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_004_SetSceneColor(struct w_steam_iface *_this, HmdColor_t color)
 {
-    struct cppIVRChaperone_IVRChaperone_004_SetSceneColor_params params =
+    struct IVRChaperone_IVRChaperone_004_SetSceneColor_params params =
     {
         .linux_side = _this->u_iface,
         .color = color,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_SetSceneColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_SetSceneColor, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
 {
-    struct cppIVRChaperone_IVRChaperone_004_GetBoundsColor_params params =
+    struct IVRChaperone_IVRChaperone_004_GetBoundsColor_params params =
     {
         .linux_side = _this->u_iface,
         .pOutputColorArray = pOutputColorArray,
@@ -435,40 +429,40 @@ void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(struct w_steam_i
         .pOutputCameraColor = pOutputCameraColor,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_GetBoundsColor( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_GetBoundsColor, &params );
 }
 
 bool __thiscall winIVRChaperone_IVRChaperone_004_AreBoundsVisible(struct w_steam_iface *_this)
 {
-    struct cppIVRChaperone_IVRChaperone_004_AreBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_004_AreBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_AreBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_AreBoundsVisible, &params );
     return params._ret;
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_004_ForceBoundsVisible(struct w_steam_iface *_this, bool bForce)
 {
-    struct cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible_params params =
+    struct IVRChaperone_IVRChaperone_004_ForceBoundsVisible_params params =
     {
         .linux_side = _this->u_iface,
         .bForce = bForce,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_ForceBoundsVisible, &params );
 }
 
 void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(struct w_steam_iface *_this, uint32_t eTrackingUniverseOrigin)
 {
-    struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params params =
+    struct IVRChaperone_IVRChaperone_004_ResetZeroPose_params params =
     {
         .linux_side = _this->u_iface,
         .eTrackingUniverseOrigin = eTrackingUniverseOrigin,
     };
     TRACE("%p\n", _this);
-    cppIVRChaperone_IVRChaperone_004_ResetZeroPose( &params );
+    VRCLIENT_CALL( IVRChaperone_IVRChaperone_004_ResetZeroPose, &params );
 }
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_004_vtable;

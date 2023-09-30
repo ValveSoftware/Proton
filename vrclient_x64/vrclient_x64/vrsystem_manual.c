@@ -1,22 +1,5 @@
 #include "vrclient_private.h"
 
-#include "cppIVRSystem_IVRSystem_003.h"
-#include "cppIVRSystem_IVRSystem_004.h"
-#include "cppIVRSystem_IVRSystem_005.h"
-#include "cppIVRSystem_IVRSystem_006.h"
-#include "cppIVRSystem_IVRSystem_009.h"
-#include "cppIVRSystem_IVRSystem_010.h"
-#include "cppIVRSystem_IVRSystem_011.h"
-#include "cppIVRSystem_IVRSystem_012.h"
-#include "cppIVRSystem_IVRSystem_014.h"
-#include "cppIVRSystem_IVRSystem_015.h"
-#include "cppIVRSystem_IVRSystem_016.h"
-#include "cppIVRSystem_IVRSystem_017.h"
-#include "cppIVRSystem_IVRSystem_019.h"
-#include "cppIVRSystem_IVRSystem_020.h"
-#include "cppIVRSystem_IVRSystem_021.h"
-#include "cppIVRSystem_IVRSystem_022.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 static VkInstance_T *unwrap_instance( uint32_t type, VkInstance_T *instance )
@@ -119,7 +102,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             uint32_t textureType, VkInstance_T *pInstance )
 {
-    struct cppIVRSystem_IVRSystem_017_GetOutputDevice_params params =
+    struct IVRSystem_IVRSystem_017_GetOutputDevice_params params =
     {
         .linux_side = _this->u_iface,
         .pnDevice = pnDevice,
@@ -129,7 +112,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_steam_iface
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_017_GetOutputDevice( &params );
+    VRCLIENT_CALL( IVRSystem_IVRSystem_017_GetOutputDevice, &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -142,7 +125,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             uint32_t textureType, VkInstance_T *pInstance )
 {
-    struct cppIVRSystem_IVRSystem_019_GetOutputDevice_params params =
+    struct IVRSystem_IVRSystem_019_GetOutputDevice_params params =
     {
         .linux_side = _this->u_iface,
         .pnDevice = pnDevice,
@@ -152,7 +135,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice( struct w_steam_iface
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_019_GetOutputDevice( &params );
+    VRCLIENT_CALL( IVRSystem_IVRSystem_019_GetOutputDevice, &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -165,7 +148,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             uint32_t textureType, VkInstance_T *pInstance )
 {
-    struct cppIVRSystem_IVRSystem_020_GetOutputDevice_params params =
+    struct IVRSystem_IVRSystem_020_GetOutputDevice_params params =
     {
         .linux_side = _this->u_iface,
         .pnDevice = pnDevice,
@@ -175,7 +158,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice( struct w_steam_iface
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_020_GetOutputDevice( &params );
+    VRCLIENT_CALL( IVRSystem_IVRSystem_020_GetOutputDevice, &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -188,7 +171,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             uint32_t textureType, VkInstance_T *pInstance )
 {
-    struct cppIVRSystem_IVRSystem_021_GetOutputDevice_params params =
+    struct IVRSystem_IVRSystem_021_GetOutputDevice_params params =
     {
         .linux_side = _this->u_iface,
         .pnDevice = pnDevice,
@@ -198,7 +181,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice( struct w_steam_iface
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_021_GetOutputDevice( &params );
+    VRCLIENT_CALL( IVRSystem_IVRSystem_021_GetOutputDevice, &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }
 
@@ -211,7 +194,7 @@ void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo( struct w_steam_ifa
 void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
                                                             uint32_t textureType, VkInstance_T *pInstance )
 {
-    struct cppIVRSystem_IVRSystem_022_GetOutputDevice_params params =
+    struct IVRSystem_IVRSystem_022_GetOutputDevice_params params =
     {
         .linux_side = _this->u_iface,
         .pnDevice = pnDevice,
@@ -221,6 +204,6 @@ void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_steam_iface
 
     TRACE( "%p\n", _this );
 
-    cppIVRSystem_IVRSystem_022_GetOutputDevice( &params );
+    VRCLIENT_CALL( IVRSystem_IVRSystem_022_GetOutputDevice, &params );
     *pnDevice = wrap_device( textureType, pInstance, *pnDevice );
 }

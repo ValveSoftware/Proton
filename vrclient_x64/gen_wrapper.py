@@ -423,11 +423,12 @@ class Union(Struct):
 
 
 class Method:
-    def __init__(self, sdkver, abi, cursor, index, override):
+    def __init__(self, sdkver, abi, cursor, klass, index, override):
         self._sdkver = sdkver
         self._abi = abi
 
         self._cursor = cursor
+        self._klass = klass
         self._index = index
         self._override = override
 
@@ -439,21 +440,51 @@ class Method:
         if self._override > 1: return f'{self.spelling}_{self._override}'
         return self.spelling
 
+    @property
+    def full_name(self):
+        return f'{self._klass.full_name}_{self.name}'
+
     def get_arguments(self):
         return self._cursor.get_arguments()
+
+    def write_params(self, out):
+        returns_record = self.result_type.get_canonical().kind == TypeKind.RECORD
+
+        ret = "*_ret" if returns_record else "_ret"
+        ret = f'{declspec(self.result_type, ret, "w_")}'
+
+        names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
+                 for i, p in enumerate(self.get_arguments())]
+        params = [declspec(p, names[i], "w_") for i, p in enumerate(self.get_arguments())]
+
+        if self.result_type.kind != TypeKind.VOID:
+            params = [ret] + params
+            names = ['_ret'] + names
+
+        params = ['void *linux_side'] + params
+        names = ['linux_side'] + names
+
+        out(f'struct {self.full_name}_params\n')
+        out(u'{\n')
+        for param in params:
+            out(f'    {param};\n')
+        out(u'};\n\n')
 
     def get_children(self):
         return self._cursor.get_children()
 
 
 class Destructor(Method):
-    def __init__(self, sdkver, abi, cursor, index, override):
-        super().__init__(sdkver, abi, cursor, index, override)
+    def __init__(self, sdkver, abi, cursor, klass, index, override):
+        super().__init__(sdkver, abi, cursor, klass, index, override)
 
     @property
     def name(self):
         if self._override > 1: return f'destructor_{self._override}'
         return 'destructor'
+
+    def write_params(self, out):
+        pass
 
 
 class Class:
@@ -486,9 +517,9 @@ class Class:
             index, override = overrides.get(method.spelling, (i, 1))
             overrides[method.spelling] = (index, override + 1)
             if method.kind == CursorKind.DESTRUCTOR:
-                self._methods.append(Destructor(self._sdkver, self._abi, method, index, override))
+                self._methods.append(Destructor(self._sdkver, self._abi, method, self, index, override))
             else:
-                self._methods.append(Method(self._sdkver, self._abi, method, index, override))
+                self._methods.append(Method(self._sdkver, self._abi, method, self, index, override))
 
         return self._methods
 
@@ -659,29 +690,7 @@ def declspec(decl, name, prefix, wrapped=False):
     return f'{const}{type_name}{name}'
 
 
-def handle_method_hpp(method, cppname, out):
-    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
-
-    ret = "*_ret" if returns_record else "_ret"
-    ret = f'{declspec(method.result_type, ret, "w_")}'
-
-    names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
-             for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
-
-    if method.result_type.kind != TypeKind.VOID:
-        params = [ret] + params
-    params = ['void *linux_side'] + params
-
-    out(f'struct {cppname}_{method.name}_params\n')
-    out(u'{\n')
-    for param in params:
-        out(f'    {param};\n')
-    out(u'};\n')
-    out(f'extern void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params );\n\n')
-
-
-def handle_method_cpp(method, classname, cppname, out):
+def handle_method_cpp(method, classname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -693,8 +702,9 @@ def handle_method_cpp(method, classname, cppname, out):
 
     names = ['linux_side'] + names
 
-    out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
+    out(f'NTSTATUS {method.full_name}( void *args )\n')
     out(u'{\n')
+    out(f'    struct {method.full_name}_params *params = (struct {method.full_name}_params *)args;\n')
     out(f'    struct u_{klass.full_name} *iface = (struct u_{klass.full_name} *)params->linux_side;\n')
 
     params = list(zip(names[1:], method.get_arguments()))
@@ -777,6 +787,7 @@ def handle_method_cpp(method, classname, cppname, out):
     for name, param in sorted(need_output.items()):
         out(f'    if (params->{name}) *params->{name} = u_{name};\n')
 
+    out(u'    return 0;\n')
     out(u'}\n\n')
 
 
@@ -794,7 +805,7 @@ def handle_thiscall_wrapper(klass, method, out):
     out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
-def handle_method_c(klass, method, winclassname, cppname, out):
+def handle_method_c(klass, method, winclassname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -819,7 +830,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
     out(u'{\n')
 
-    out(f'    struct {cppname}_{method.name}_params params =\n')
+    out(f'    struct {method.full_name}_params params =\n')
     out(u'    {\n')
     out(u'        .linux_side = _this->u_iface,\n')
     for name in names[1:]:
@@ -837,7 +848,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     if 'eTextureType' in names:
         out(u'    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
-    out(f'    {cppname}_{method.name}( &params );\n')
+    out(f'    VRCLIENT_CALL( {method.full_name}, &params );\n')
 
     for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
         out(u'    ')
@@ -871,47 +882,22 @@ def get_capi_thunk_params(method):
 def handle_class(klass):
     cppname = f"cpp{klass.full_name}"
 
-    with open(f"vrclient_x64/{cppname}.h", "w") as file:
-        out = file.write
-
-        out(u'/* This file is auto-generated, do not edit. */\n')
-        out(u'#include <stdarg.h>\n')
-        out(u'#include <stddef.h>\n')
-        out(u'#include <stdint.h>\n')
-        out(u'\n')
-        out(u'#ifdef __cplusplus\n')
-        out(u'extern "C" {\n')
-        out(u'#endif /* __cplusplus */\n')
-        out(u'\n')
-
-        for method in klass.methods:
-            if type(method) is Destructor:
-                continue
-            handle_method_hpp(method, cppname, out)
-
-        out(u'#ifdef __cplusplus\n')
-        out(u'} /* extern "C" */\n')
-        out(u'#endif /* __cplusplus */\n')
-
     with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
-        out(u'#include "unix_private.h"\n')
-        out(f'#include "{cppname}.h"\n')
+        out(u'#include "unix_private.h"\n\n')
 
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
             if is_manual_method(klass, method, "u"):
                 continue
-            handle_method_cpp(method, klass.name, cppname, out)
+            handle_method_cpp(method, klass.name, out)
 
     winclassname = f'win{klass.full_name}'
     with open(f'vrclient_x64/win{klass.name}.c', 'a') as file:
         out = file.write
-
-        out(f'#include "{cppname}.h"\n\n')
 
         for method in klass.methods:
             handle_thiscall_wrapper(klass, method, out)
@@ -920,7 +906,7 @@ def handle_class(klass):
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
-            handle_method_c(klass, method, winclassname, cppname, out)
+            handle_method_c(klass, method, winclassname, out)
 
         out(f'extern vtable_ptr {winclassname}_vtable;\n')
         out(u'\n')
@@ -1548,15 +1534,66 @@ with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
             out(u'\n')
 
 
+all_methods = [(k, m) for _, k in sorted(all_classes.items())
+               for m in k.methods]
+
 with open("vrclient_x64/unix_private_generated.h", "w") as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'#ifdef __cplusplus\n')
+    out(u'extern "C" {\n')
+    out(u'#endif /* __cplusplus */\n')
+    out(u'\n')
 
     for klass in all_classes.values():
         sdkver = klass._sdkver
         klass.write_definition(out, "u_")
     out(u'\n')
+
+    for klass, method in all_methods:
+        sdkver = klass._sdkver
+        if type(method) is Destructor:
+            continue
+        out(f'NTSTATUS {method.full_name}( void * );\n')
+    out(u'\n')
+
+    out(u'#ifdef __cplusplus\n')
+    out(u'} /* extern "C" */\n')
+    out(u'#endif /* __cplusplus */\n')
+
+
+with open(u"vrclient_x64/unixlib_generated.h", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n')
+    out(u'#include <stdarg.h>\n')
+    out(u'#include <stddef.h>\n')
+    out(u'#include <stdint.h>\n')
+    out(u'#include <stdbool.h>\n')
+    out(u'\n')
+    out(u'#ifdef __cplusplus\n')
+    out(u'extern "C" {\n')
+    out(u'#endif /* __cplusplus */\n')
+    out(u'\n')
+
+    for klass, method in all_methods:
+        sdkver = klass._sdkver
+        method.write_params(out)
+
+    out(u'enum unix_funcs\n')
+    out(u'{\n')
+    for klass, method in all_methods:
+        sdkver = klass._sdkver
+        if type(method) is Destructor:
+            continue
+        out(f'    unix_{method.full_name},\n')
+    out(u'};\n')
+    out(u'\n')
+
+    out(u'#ifdef __cplusplus\n')
+    out(u'} /* extern "C" */\n')
+    out(u'#endif /* __cplusplus */\n')
 
 
 with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
@@ -1564,6 +1601,16 @@ with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
     out(u'#include "unix_private.h"\n\n')
+
+    out(u'extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =\n')
+    out(u'{\n')
+    for klass, method in all_methods:
+        sdkver = klass._sdkver
+        if type(method) is Destructor:
+            continue
+        out(f'    {method.full_name},\n')
+    out(u'};\n')
+    out(u'\n')
 
     for name in sorted(unique_structs, key=struct_order):
         for sdkver, abis in all_structs[name].items():
