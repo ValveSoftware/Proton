@@ -617,15 +617,6 @@ uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk )
 #error You must implement VK<->Native keysym conversion for this platform.
 #endif
 
-#include "win_constructors.h"
-
-static const struct {
-    const char *iface_version;
-    struct w_steam_iface *(*ctor)(void *);
-} constructors[] = {
-#include "win_constructors_table.dat"
-};
-
 struct steamclient_interface
 {
     struct list entry;
@@ -640,7 +631,7 @@ struct w_steam_iface *create_win_interface(const char *name, void *u_iface)
 {
     struct steamclient_interface *e;
     struct w_steam_iface *ret = NULL;
-    int i;
+    iface_constructor constructor;
 
     TRACE("trying to create %s\n", name);
 
@@ -659,27 +650,24 @@ struct w_steam_iface *create_win_interface(const char *name, void *u_iface)
         }
     }
 
-    for (i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i)
+    if ((constructor = find_iface_constructor( name )))
     {
-        if (!strcmp(name, constructors[i].iface_version))
+        ret = constructor( u_iface );
+        if (allocated_from_steamclient_dll( ret ) || allocated_from_steamclient_dll( ret->vtable ))
         {
-            ret = constructors[i].ctor(u_iface);
-            if (allocated_from_steamclient_dll(ret) || allocated_from_steamclient_dll(ret->vtable))
-            {
-                /* Don't cache interfaces allocated from steamclient.dll space.
-                 * steamclient may get reloaded by the app, miss the previous
-                 * data and potentially have different load address. */
-                break;
-            }
-
-            e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
-            e->name = constructors[i].iface_version;
-            e->u_iface = u_iface;
-            e->w_iface = ret;
-            list_add_tail(&steamclient_interfaces, &e->entry);
-
-            break;
+            /* Don't cache interfaces allocated from steamclient.dll space.
+             * steamclient may get reloaded by the app, miss the previous
+             * data and potentially have different load address. */
+            goto done;
         }
+
+        e = HeapAlloc( GetProcessHeap(), 0, sizeof(*e) );
+        e->name = strdup( name );
+        e->u_iface = u_iface;
+        e->w_iface = ret;
+        list_add_tail( &steamclient_interfaces, &e->entry );
+
+        goto done;
     }
 
 done:

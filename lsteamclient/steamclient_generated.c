@@ -1,6 +1,12 @@
+/* This file is auto-generated, do not edit. */
+
+#include "steamclient_private.h"
+
+static const struct { const char *iface_version; iface_constructor ctor; } constructors[] =
+{
     {"STEAMAPPLIST_INTERFACE_VERSION001", &create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001},
-    {"SteamApps001", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001}, /* alias */
     {"STEAMAPPS_INTERFACE_VERSION001", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001},
+    {"SteamApps001", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001}, /* alias */
     {"STEAMAPPS_INTERFACE_VERSION002", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002},
     {"STEAMAPPS_INTERFACE_VERSION003", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION003},
     {"STEAMAPPS_INTERFACE_VERSION004", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004},
@@ -118,9 +124,9 @@
     {"SteamGameServer003", &create_winISteamGameServer_SteamGameServer003},
     {"SteamGameServer004", &create_winISteamGameServer_SteamGameServer004},
     {"SteamGameServer005", &create_winISteamGameServer_SteamGameServer005},
+    {"SteamGameServer008", &create_winISteamGameServer_SteamGameServer008},
     {"SteamGameServer007", &create_winISteamGameServer_SteamGameServer008}, /* alias */
     {"SteamGameServer006", &create_winISteamGameServer_SteamGameServer008}, /* alias */
-    {"SteamGameServer008", &create_winISteamGameServer_SteamGameServer008},
     {"SteamGameServer009", &create_winISteamGameServer_SteamGameServer009},
     {"SteamGameServer010", &create_winISteamGameServer_SteamGameServer010},
     {"SteamGameServer011", &create_winISteamGameServer_SteamGameServer011},
@@ -155,15 +161,15 @@
     {"SteamNetworking006", &create_winISteamNetworking_SteamNetworking006},
     {"SteamNetworkingFakeUDPPort001", &create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001},
     {"SteamNetworkingMessages002", &create_winISteamNetworkingMessages_SteamNetworkingMessages002},
-    {"SteamNetworkingSockets003", &create_winISteamNetworkingSockets_SteamNetworkingSockets002}, /* alias */
     {"SteamNetworkingSockets002", &create_winISteamNetworkingSockets_SteamNetworkingSockets002},
+    {"SteamNetworkingSockets003", &create_winISteamNetworkingSockets_SteamNetworkingSockets002}, /* alias */
     {"SteamNetworkingSockets004", &create_winISteamNetworkingSockets_SteamNetworkingSockets004},
     {"SteamNetworkingSockets006", &create_winISteamNetworkingSockets_SteamNetworkingSockets006},
     {"SteamNetworkingSockets008", &create_winISteamNetworkingSockets_SteamNetworkingSockets008},
     {"SteamNetworkingSockets009", &create_winISteamNetworkingSockets_SteamNetworkingSockets009},
     {"SteamNetworkingSockets012", &create_winISteamNetworkingSockets_SteamNetworkingSockets012},
-    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
     {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
+    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
     {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
     {"SteamNetworkingUtils001", &create_winISteamNetworkingUtils_SteamNetworkingUtils001},
     {"SteamNetworkingUtils002", &create_winISteamNetworkingUtils_SteamNetworkingUtils002},
@@ -190,13 +196,23 @@
     {"SteamUser021", &create_winISteamUser_SteamUser021},
     {"SteamUser022", &create_winISteamUser_SteamUser022},
     {"SteamUser023", &create_winISteamUser_SteamUser023},
-    {"SteamUtils001", &create_winISteamUtils_SteamUtils002}, /* alias */
     {"SteamUtils002", &create_winISteamUtils_SteamUtils002},
-    {"SteamUtils003", &create_winISteamUtils_SteamUtils004}, /* alias */
+    {"SteamUtils001", &create_winISteamUtils_SteamUtils002}, /* alias */
     {"SteamUtils004", &create_winISteamUtils_SteamUtils004},
+    {"SteamUtils003", &create_winISteamUtils_SteamUtils004}, /* alias */
     {"SteamUtils005", &create_winISteamUtils_SteamUtils005},
     {"SteamUtils006", &create_winISteamUtils_SteamUtils006},
     {"SteamUtils007", &create_winISteamUtils_SteamUtils007},
     {"SteamUtils008", &create_winISteamUtils_SteamUtils008},
     {"SteamUtils009", &create_winISteamUtils_SteamUtils009},
     {"SteamUtils010", &create_winISteamUtils_SteamUtils010},
+};
+
+iface_constructor find_iface_constructor( const char *iface_version )
+{
+    int i;
+    for (i = 0; i < ARRAYSIZE(constructors); ++i)
+        if (!strcmp( iface_version, constructors[i].iface_version ))
+            return constructors[i].ctor;
+    return NULL;
+}
