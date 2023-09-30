@@ -1,34 +1,43 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
-#include "cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001.h"
 
-void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *params )
+NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps( void *args )
 {
+    struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetNumInstalledApps(  );
+    return 0;
 }
 
-void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params *params )
+NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps( void *args )
 {
+    struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetInstalledApps( params->pvecAppID, params->unMaxAppIDs );
+    return 0;
 }
 
-void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params *params )
+NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName( void *args )
 {
+    struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetAppName( params->nAppID, params->pchName, params->cchNameMax );
+    return 0;
 }
 
-void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *params )
+NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir( void *args )
 {
+    struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetAppInstallDir( params->nAppID, params->pchDirectory, params->cchNameMax );
+    return 0;
 }
 
-void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params *params )
+NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId( void *args )
 {
+    struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetAppBuildId( params->nAppID );
+    return 0;
 }
 
