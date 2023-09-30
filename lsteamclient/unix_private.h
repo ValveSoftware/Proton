@@ -66,4 +66,6 @@ extern void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, cons
 } /* extern "C" */
 #endif /* __cplusplus */
 
+#include "unix_private_generated.h"
+
 #endif /* __STEAMCLIENT_UNIX_PRIVATE_H */

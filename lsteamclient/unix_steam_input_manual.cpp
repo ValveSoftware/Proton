@@ -2,14 +2,14 @@
 
 #include <unordered_map>
 
-#include "cppISteamController_SteamController005.hpp"
-#include "cppISteamController_SteamController006.hpp"
-#include "cppISteamController_SteamController007.hpp"
-#include "cppISteamController_SteamController008.hpp"
-#include "cppISteamInput_SteamInput001.hpp"
-#include "cppISteamInput_SteamInput002.hpp"
-#include "cppISteamInput_SteamInput005.hpp"
-#include "cppISteamInput_SteamInput006.hpp"
+#include "cppISteamController_SteamController005.h"
+#include "cppISteamController_SteamController006.h"
+#include "cppISteamController_SteamController007.h"
+#include "cppISteamController_SteamController008.h"
+#include "cppISteamInput_SteamInput001.h"
+#include "cppISteamInput_SteamInput002.h"
+#include "cppISteamInput_SteamInput005.h"
+#include "cppISteamInput_SteamInput006.h"
 
 #ifdef __linux__
 #include <X11/keysym.h>

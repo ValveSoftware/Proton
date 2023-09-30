@@ -2,34 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamClient_SteamClient007.h"
 
-struct u_ISteamClient_SteamClient007
-{
-#ifdef __cplusplus
-    virtual int32_t CreateSteamPipe(  ) = 0;
-    virtual bool BReleaseSteamPipe( int32_t ) = 0;
-    virtual int32_t ConnectToGlobalUser( int32_t ) = 0;
-    virtual int32_t CreateLocalUser( int32_t * ) = 0;
-    virtual void ReleaseUser( int32_t, int32_t ) = 0;
-    virtual void /*ISteamUser*/ * GetISteamUser( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamGameServer*/ * GetISteamGameServer( int32_t, int32_t, const char * ) = 0;
-    virtual void SetLocalIPBinding( uint32_t, uint16_t ) = 0;
-    virtual void /*ISteamFriends*/ * GetISteamFriends( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamUtils*/ * GetISteamUtils( int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmaking*/ * GetISteamMatchmaking( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamContentServer*/ * GetISteamContentServer( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMasterServerUpdater*/ * GetISteamMasterServerUpdater( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmakingServers*/ * GetISteamMatchmakingServers( int32_t, int32_t, const char * ) = 0;
-    virtual void * GetISteamGenericInterface( int32_t, int32_t, const char * ) = 0;
-    virtual void RunFrame(  ) = 0;
-    virtual uint32_t GetIPCCallCount(  ) = 0;
-    virtual void /*ISteamUserStats*/ * GetISteamUserStats( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamApps*/ * GetISteamApps( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamNetworking*/ * GetISteamNetworking( int32_t, int32_t, const char * ) = 0;
-    virtual void SetWarningMessageHook( void (*U_CDECL )(int32_t, const char *) ) = 0;
-    virtual void /*ISteamRemoteStorage*/ * GetISteamRemoteStorage( int32_t, int32_t, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamClient_SteamClient007_CreateSteamPipe( struct cppISteamClient_SteamClient007_CreateSteamPipe_params *params )
 {
     struct u_ISteamClient_SteamClient007 *iface = (struct u_ISteamClient_SteamClient007 *)params->linux_side;

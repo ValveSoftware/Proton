@@ -2,20 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001.h"
 
-struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual bool FileWrite( const char *, const void *, int32_t ) = 0;
-    virtual int32_t GetFileSize( const char * ) = 0;
-    virtual int32_t FileRead( const char *, void *, int32_t ) = 0;
-    virtual bool FileExists( const char * ) = 0;
-    virtual bool FileDelete( const char * ) = 0;
-    virtual int32_t GetFileCount(  ) = 0;
-    virtual const char * GetFileNameAndSize( int32_t, int32_t * ) = 0;
-    virtual bool GetQuota( int32_t *, int32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite_params *params )
 {
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *)params->linux_side;

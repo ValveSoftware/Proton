@@ -2,27 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001.h"
 
-struct u_ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual uint32_t CreateHTTPRequest( uint32_t, const char * ) = 0;
-    virtual bool SetHTTPRequestContextValue( uint32_t, uint64_t ) = 0;
-    virtual bool SetHTTPRequestNetworkActivityTimeout( uint32_t, uint32_t ) = 0;
-    virtual bool SetHTTPRequestHeaderValue( uint32_t, const char *, const char * ) = 0;
-    virtual bool SetHTTPRequestGetOrPostParameter( uint32_t, const char *, const char * ) = 0;
-    virtual bool SendHTTPRequest( uint32_t, uint64_t * ) = 0;
-    virtual bool DeferHTTPRequest( uint32_t ) = 0;
-    virtual bool PrioritizeHTTPRequest( uint32_t ) = 0;
-    virtual bool GetHTTPResponseHeaderSize( uint32_t, const char *, uint32_t * ) = 0;
-    virtual bool GetHTTPResponseHeaderValue( uint32_t, const char *, uint8_t *, uint32_t ) = 0;
-    virtual bool GetHTTPResponseBodySize( uint32_t, uint32_t * ) = 0;
-    virtual bool GetHTTPResponseBodyData( uint32_t, uint8_t *, uint32_t ) = 0;
-    virtual bool ReleaseHTTPRequest( uint32_t ) = 0;
-    virtual bool GetHTTPDownloadProgressPct( uint32_t, float * ) = 0;
-    virtual bool SetHTTPRequestRawPostBody( uint32_t, const char *, uint8_t *, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest_params *params )
 {
     struct u_ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001 *iface = (struct u_ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001 *)params->linux_side;

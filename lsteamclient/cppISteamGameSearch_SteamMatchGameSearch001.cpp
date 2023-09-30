@@ -2,26 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameSearch_SteamMatchGameSearch001.h"
 
-struct u_ISteamGameSearch_SteamMatchGameSearch001
-{
-#ifdef __cplusplus
-    virtual uint32_t AddGameSearchParams( const char *, const char * ) = 0;
-    virtual uint32_t SearchForGameWithLobby( CSteamID, int32_t, int32_t ) = 0;
-    virtual uint32_t SearchForGameSolo( int32_t, int32_t ) = 0;
-    virtual uint32_t AcceptGame(  ) = 0;
-    virtual uint32_t DeclineGame(  ) = 0;
-    virtual uint32_t RetrieveConnectionDetails( CSteamID, char *, int32_t ) = 0;
-    virtual uint32_t EndGameSearch(  ) = 0;
-    virtual uint32_t SetGameHostParams( const char *, const char * ) = 0;
-    virtual uint32_t SetConnectionDetails( const char *, int32_t ) = 0;
-    virtual uint32_t RequestPlayersForGame( int32_t, int32_t, int32_t ) = 0;
-    virtual uint32_t HostConfirmGameStart( uint64_t ) = 0;
-    virtual uint32_t CancelRequestPlayersForGame(  ) = 0;
-    virtual uint32_t SubmitPlayerResult( uint64_t, CSteamID, uint32_t ) = 0;
-    virtual uint32_t EndGame( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams( struct cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params *params )
 {
     struct u_ISteamGameSearch_SteamMatchGameSearch001 *iface = (struct u_ISteamGameSearch_SteamMatchGameSearch001 *)params->linux_side;

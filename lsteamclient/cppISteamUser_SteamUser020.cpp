@@ -2,43 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUser_SteamUser020.h"
 
-struct u_ISteamUser_SteamUser020
-{
-#ifdef __cplusplus
-    virtual int32_t GetHSteamUser(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, uint32_t, uint16_t, bool ) = 0;
-    virtual void TerminateGameConnection( uint32_t, uint16_t ) = 0;
-    virtual void TrackAppUsageEvent( CGameID, int32_t, const char * ) = 0;
-    virtual bool GetUserDataFolder( char *, int32_t ) = 0;
-    virtual void StartVoiceRecording(  ) = 0;
-    virtual void StopVoiceRecording(  ) = 0;
-    virtual uint32_t GetAvailableVoice( uint32_t *, uint32_t *, uint32_t ) = 0;
-    virtual uint32_t GetVoice( bool, void *, uint32_t, uint32_t *, bool, void *, uint32_t, uint32_t *, uint32_t ) = 0;
-    virtual uint32_t DecompressVoice( const void *, uint32_t, void *, uint32_t, uint32_t *, uint32_t ) = 0;
-    virtual uint32_t GetVoiceOptimalSampleRate(  ) = 0;
-    virtual uint32_t GetAuthSessionTicket( void *, int32_t, uint32_t * ) = 0;
-    virtual uint32_t BeginAuthSession( const void *, int32_t, CSteamID ) = 0;
-    virtual void EndAuthSession( CSteamID ) = 0;
-    virtual void CancelAuthTicket( uint32_t ) = 0;
-    virtual uint32_t UserHasLicenseForApp( CSteamID, uint32_t ) = 0;
-    virtual bool BIsBehindNAT(  ) = 0;
-    virtual void AdvertiseGame( CSteamID, uint32_t, uint16_t ) = 0;
-    virtual uint64_t RequestEncryptedAppTicket( void *, int32_t ) = 0;
-    virtual bool GetEncryptedAppTicket( void *, int32_t, uint32_t * ) = 0;
-    virtual int32_t GetGameBadgeLevel( int32_t, bool ) = 0;
-    virtual int32_t GetPlayerSteamLevel(  ) = 0;
-    virtual uint64_t RequestStoreAuthURL( const char * ) = 0;
-    virtual bool BIsPhoneVerified(  ) = 0;
-    virtual bool BIsTwoFactorEnabled(  ) = 0;
-    virtual bool BIsPhoneIdentifying(  ) = 0;
-    virtual bool BIsPhoneRequiringVerification(  ) = 0;
-    virtual uint64_t GetMarketEligibility(  ) = 0;
-    virtual uint64_t GetDurationControl(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUser_SteamUser020_GetHSteamUser( struct cppISteamUser_SteamUser020_GetHSteamUser_params *params )
 {
     struct u_ISteamUser_SteamUser020 *iface = (struct u_ISteamUser_SteamUser020 *)params->linux_side;

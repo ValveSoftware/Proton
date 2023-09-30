@@ -2,40 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMatchmaking_SteamMatchMaking006.h"
 
-struct u_ISteamMatchmaking_SteamMatchMaking006
-{
-#ifdef __cplusplus
-    virtual int32_t GetFavoriteGameCount(  ) = 0;
-    virtual bool GetFavoriteGame( int32_t, uint32_t *, uint32_t *, uint16_t *, uint16_t *, uint32_t *, uint32_t * ) = 0;
-    virtual int32_t AddFavoriteGame( uint32_t, uint32_t, uint16_t, uint16_t, uint32_t, uint32_t ) = 0;
-    virtual bool RemoveFavoriteGame( uint32_t, uint32_t, uint16_t, uint16_t, uint32_t ) = 0;
-    virtual uint64_t RequestLobbyList(  ) = 0;
-    virtual void AddRequestLobbyListFilter( const char *, const char * ) = 0;
-    virtual void AddRequestLobbyListNumericalFilter( const char *, int32_t, int32_t ) = 0;
-    virtual void AddRequestLobbyListNearValueFilter( const char *, int32_t ) = 0;
-    virtual CSteamID GetLobbyByIndex( int32_t ) = 0;
-    virtual uint64_t CreateLobby( uint32_t ) = 0;
-    virtual uint64_t JoinLobby( CSteamID ) = 0;
-    virtual void LeaveLobby( CSteamID ) = 0;
-    virtual bool InviteUserToLobby( CSteamID, CSteamID ) = 0;
-    virtual int32_t GetNumLobbyMembers( CSteamID ) = 0;
-    virtual CSteamID GetLobbyMemberByIndex( CSteamID, int32_t ) = 0;
-    virtual const char * GetLobbyData( CSteamID, const char * ) = 0;
-    virtual bool SetLobbyData( CSteamID, const char *, const char * ) = 0;
-    virtual const char * GetLobbyMemberData( CSteamID, CSteamID, const char * ) = 0;
-    virtual void SetLobbyMemberData( CSteamID, const char *, const char * ) = 0;
-    virtual bool SendLobbyChatMsg( CSteamID, const void *, int32_t ) = 0;
-    virtual int32_t GetLobbyChatEntry( CSteamID, int32_t, CSteamID *, void *, int32_t, uint32_t * ) = 0;
-    virtual bool RequestLobbyData( CSteamID ) = 0;
-    virtual void SetLobbyGameServer( CSteamID, uint32_t, uint16_t, CSteamID ) = 0;
-    virtual bool GetLobbyGameServer( CSteamID, uint32_t *, uint16_t *, CSteamID * ) = 0;
-    virtual bool SetLobbyMemberLimit( CSteamID, int32_t ) = 0;
-    virtual int32_t GetLobbyMemberLimit( CSteamID ) = 0;
-    virtual bool SetLobbyType( CSteamID, uint32_t ) = 0;
-    virtual CSteamID GetLobbyOwner( CSteamID ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMatchmaking_SteamMatchMaking006_GetFavoriteGameCount( struct cppISteamMatchmaking_SteamMatchMaking006_GetFavoriteGameCount_params *params )
 {
     struct u_ISteamMatchmaking_SteamMatchMaking006 *iface = (struct u_ISteamMatchmaking_SteamMatchMaking006 *)params->linux_side;

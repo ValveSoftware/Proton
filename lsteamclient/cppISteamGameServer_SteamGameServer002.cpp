@@ -2,33 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameServer_SteamGameServer002.h"
 
-struct u_ISteamGameServer_SteamGameServer002
-{
-#ifdef __cplusplus
-    virtual void LogOn(  ) = 0;
-    virtual void LogOff(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual void GSSetSpawnCount( uint32_t ) = 0;
-    virtual bool GSGetSteam2GetEncryptionKeyToSendToNewClient( void *, uint32_t *, uint32_t ) = 0;
-    virtual bool GSSendSteam2UserConnect( uint32_t, const void *, uint32_t, uint32_t, uint16_t, const void *, uint32_t ) = 0;
-    virtual bool GSSendSteam3UserConnect( CSteamID, uint32_t, const void *, uint32_t ) = 0;
-    virtual bool GSRemoveUserConnect( uint32_t ) = 0;
-    virtual bool GSSendUserDisconnect( CSteamID, uint32_t ) = 0;
-    virtual bool GSSendUserStatusResponse( CSteamID, int32_t, int32_t ) = 0;
-    virtual bool Obsolete_GSSetStatus( int32_t, uint32_t, int32_t, int32_t, int32_t, int32_t, const char *, const char *, const char *, const char * ) = 0;
-    virtual bool GSUpdateStatus( int32_t, int32_t, int32_t, const char *, const char * ) = 0;
-    virtual bool BSecure(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual bool GSSetServerType( int32_t, uint32_t, uint32_t, uint32_t, const char *, const char * ) = 0;
-    virtual bool GSSetServerType2( int32_t, uint32_t, uint32_t, uint16_t, uint16_t, uint16_t, const char *, const char *, bool ) = 0;
-    virtual bool GSUpdateStatus2( int32_t, int32_t, int32_t, const char *, const char *, const char * ) = 0;
-    virtual bool GSCreateUnauthenticatedUser( CSteamID * ) = 0;
-    virtual bool GSSetUserData( CSteamID, const char *, uint32_t ) = 0;
-    virtual void GSUpdateSpectatorPort( uint16_t ) = 0;
-    virtual void GSSetGameType( const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameServer_SteamGameServer002_LogOn( struct cppISteamGameServer_SteamGameServer002_LogOn_params *params )
 {
     struct u_ISteamGameServer_SteamGameServer002 *iface = (struct u_ISteamGameServer_SteamGameServer002 *)params->linux_side;

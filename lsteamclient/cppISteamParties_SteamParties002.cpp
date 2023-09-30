@@ -2,24 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamParties_SteamParties002.h"
 
-struct u_ISteamParties_SteamParties002
-{
-#ifdef __cplusplus
-    virtual uint32_t GetNumActiveBeacons(  ) = 0;
-    virtual uint64_t GetBeaconByIndex( uint32_t ) = 0;
-    virtual bool GetBeaconDetails( uint64_t, CSteamID *, u_SteamPartyBeaconLocation_t *, char *, int32_t ) = 0;
-    virtual uint64_t JoinParty( uint64_t ) = 0;
-    virtual bool GetNumAvailableBeaconLocations( uint32_t * ) = 0;
-    virtual bool GetAvailableBeaconLocations( u_SteamPartyBeaconLocation_t *, uint32_t ) = 0;
-    virtual uint64_t CreateBeacon( uint32_t, u_SteamPartyBeaconLocation_t *, const char *, const char * ) = 0;
-    virtual void OnReservationCompleted( uint64_t, CSteamID ) = 0;
-    virtual void CancelReservation( uint64_t, CSteamID ) = 0;
-    virtual uint64_t ChangeNumOpenSlots( uint64_t, uint32_t ) = 0;
-    virtual bool DestroyBeacon( uint64_t ) = 0;
-    virtual bool GetBeaconLocationData( u_SteamPartyBeaconLocation_t, uint32_t, char *, int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamParties_SteamParties002_GetNumActiveBeacons( struct cppISteamParties_SteamParties002_GetNumActiveBeacons_params *params )
 {
     struct u_ISteamParties_SteamParties002 *iface = (struct u_ISteamParties_SteamParties002 *)params->linux_side;

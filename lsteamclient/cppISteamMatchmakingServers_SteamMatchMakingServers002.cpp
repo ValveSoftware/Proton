@@ -2,29 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
 
-struct u_ISteamMatchmakingServers_SteamMatchMakingServers002
-{
-#ifdef __cplusplus
-    virtual void * RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void ReleaseRequest( void * ) = 0;
-    virtual gameserveritem_t_105 * GetServerDetails( void *, int32_t ) = 0;
-    virtual void CancelQuery( void * ) = 0;
-    virtual void RefreshQuery( void * ) = 0;
-    virtual bool IsRefreshing( void * ) = 0;
-    virtual int32_t GetServerCount( void * ) = 0;
-    virtual void RefreshServer( void *, int32_t ) = 0;
-    virtual int32_t PingServer( uint32_t, uint16_t, u_ISteamMatchmakingPingResponse * ) = 0;
-    virtual int32_t PlayerDetails( uint32_t, uint16_t, u_ISteamMatchmakingPlayersResponse * ) = 0;
-    virtual int32_t ServerRules( uint32_t, uint16_t, u_ISteamMatchmakingRulesResponse * ) = 0;
-    virtual void CancelServerQuery( int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList_params *params )
 {
     struct u_ISteamMatchmakingServers_SteamMatchMakingServers002 *iface = (struct u_ISteamMatchmakingServers_SteamMatchMakingServers002 *)params->linux_side;

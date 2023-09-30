@@ -2,17 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.h"
 
-struct u_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual uint64_t SendMethod( const char *, const void *, uint32_t, uint64_t ) = 0;
-    virtual bool GetMethodResponseInfo( uint64_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetMethodResponseData( uint64_t, void *, uint32_t, bool ) = 0;
-    virtual bool ReleaseMethod( uint64_t ) = 0;
-    virtual bool SendNotification( const char *, const void *, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params *params )
 {
     struct u_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001 *iface = (struct u_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001 *)params->linux_side;

@@ -2,43 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005.h"
 
-struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
-{
-#ifdef __cplusplus
-    virtual bool FileWrite( const char *, const void *, int32_t ) = 0;
-    virtual int32_t FileRead( const char *, void *, int32_t ) = 0;
-    virtual bool FileForget( const char * ) = 0;
-    virtual bool FileDelete( const char * ) = 0;
-    virtual uint64_t FileShare( const char * ) = 0;
-    virtual bool SetSyncPlatforms( const char *, uint32_t ) = 0;
-    virtual bool FileExists( const char * ) = 0;
-    virtual bool FilePersisted( const char * ) = 0;
-    virtual int32_t GetFileSize( const char * ) = 0;
-    virtual int64_t GetFileTimestamp( const char * ) = 0;
-    virtual uint32_t GetSyncPlatforms( const char * ) = 0;
-    virtual int32_t GetFileCount(  ) = 0;
-    virtual const char * GetFileNameAndSize( int32_t, int32_t * ) = 0;
-    virtual bool GetQuota( int32_t *, int32_t * ) = 0;
-    virtual bool IsCloudEnabledForAccount(  ) = 0;
-    virtual bool IsCloudEnabledForApp(  ) = 0;
-    virtual void SetCloudEnabledForApp( bool ) = 0;
-    virtual uint64_t UGCDownload( uint64_t ) = 0;
-    virtual bool GetUGCDetails( uint64_t, uint32_t *, char **, int32_t *, CSteamID * ) = 0;
-    virtual int32_t UGCRead( uint64_t, void *, int32_t ) = 0;
-    virtual int32_t GetCachedUGCCount(  ) = 0;
-    virtual uint64_t GetCachedUGCHandle( int32_t ) = 0;
-    virtual uint64_t PublishFile( const char *, const char *, uint32_t, const char *, const char *, uint32_t, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t PublishWorkshopFile( const char *, const char *, uint32_t, const char *, const char *, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t UpdatePublishedFile( u_RemoteStorageUpdatePublishedFileRequest_t ) = 0;
-    virtual uint64_t GetPublishedFileDetails( uint64_t ) = 0;
-    virtual uint64_t DeletePublishedFile( uint64_t ) = 0;
-    virtual uint64_t EnumerateUserPublishedFiles( uint32_t ) = 0;
-    virtual uint64_t SubscribePublishedFile( uint64_t ) = 0;
-    virtual uint64_t EnumerateUserSubscribedFiles( uint32_t ) = 0;
-    virtual uint64_t UnsubscribePublishedFile( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite_params *params )
 {
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *)params->linux_side;

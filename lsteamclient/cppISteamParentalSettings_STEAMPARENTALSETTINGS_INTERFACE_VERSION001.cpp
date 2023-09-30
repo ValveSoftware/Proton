@@ -2,18 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
 
-struct u_ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual bool BIsParentalLockEnabled(  ) = 0;
-    virtual bool BIsParentalLockLocked(  ) = 0;
-    virtual bool BIsAppBlocked( uint32_t ) = 0;
-    virtual bool BIsAppInBlockList( uint32_t ) = 0;
-    virtual bool BIsFeatureBlocked( uint32_t ) = 0;
-    virtual bool BIsFeatureInBlockList( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled_params *params )
 {
     struct u_ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *iface = (struct u_ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *)params->linux_side;

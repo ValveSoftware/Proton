@@ -2,21 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003.h"
 
-struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003
-{
-#ifdef __cplusplus
-    virtual uint32_t WriteScreenshot( void *, uint32_t, int32_t, int32_t ) = 0;
-    virtual uint32_t AddScreenshotToLibrary( const char *, const char *, int32_t, int32_t ) = 0;
-    virtual void TriggerScreenshot(  ) = 0;
-    virtual void HookScreenshots( bool ) = 0;
-    virtual bool SetLocation( uint32_t, const char * ) = 0;
-    virtual bool TagUser( uint32_t, CSteamID ) = 0;
-    virtual bool TagPublishedFile( uint32_t, uint64_t ) = 0;
-    virtual bool IsScreenshotsHooked(  ) = 0;
-    virtual uint32_t AddVRScreenshotToLibrary( uint32_t, const char *, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params *params )
 {
     struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *iface = (struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *)params->linux_side;

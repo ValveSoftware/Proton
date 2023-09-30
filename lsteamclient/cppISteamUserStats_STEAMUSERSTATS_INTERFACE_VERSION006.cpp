@@ -2,40 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006.h"
 
-struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006
-{
-#ifdef __cplusplus
-    virtual bool RequestCurrentStats(  ) = 0;
-    virtual bool GetStat( const char *, int32_t * ) = 0;
-    virtual bool GetStat( const char *, float * ) = 0;
-    virtual bool SetStat( const char *, int32_t ) = 0;
-    virtual bool SetStat( const char *, float ) = 0;
-    virtual bool UpdateAvgRateStat( const char *, float, double ) = 0;
-    virtual bool GetAchievement( const char *, bool * ) = 0;
-    virtual bool SetAchievement( const char * ) = 0;
-    virtual bool ClearAchievement( const char * ) = 0;
-    virtual bool StoreStats(  ) = 0;
-    virtual int32_t GetAchievementIcon( const char * ) = 0;
-    virtual const char * GetAchievementDisplayAttribute( const char *, const char * ) = 0;
-    virtual bool IndicateAchievementProgress( const char *, uint32_t, uint32_t ) = 0;
-    virtual uint64_t RequestUserStats( CSteamID ) = 0;
-    virtual bool GetUserStat( CSteamID, const char *, int32_t * ) = 0;
-    virtual bool GetUserStat( CSteamID, const char *, float * ) = 0;
-    virtual bool GetUserAchievement( CSteamID, const char *, bool * ) = 0;
-    virtual bool ResetAllStats( bool ) = 0;
-    virtual uint64_t FindOrCreateLeaderboard( const char *, uint32_t, uint32_t ) = 0;
-    virtual uint64_t FindLeaderboard( const char * ) = 0;
-    virtual const char * GetLeaderboardName( uint64_t ) = 0;
-    virtual int32_t GetLeaderboardEntryCount( uint64_t ) = 0;
-    virtual uint32_t GetLeaderboardSortMethod( uint64_t ) = 0;
-    virtual uint32_t GetLeaderboardDisplayType( uint64_t ) = 0;
-    virtual uint64_t DownloadLeaderboardEntries( uint64_t, uint32_t, int32_t, int32_t ) = 0;
-    virtual bool GetDownloadedLeaderboardEntry( uint64_t, int32_t, u_LeaderboardEntry_t_104 *, int32_t *, int32_t ) = 0;
-    virtual uint64_t UploadLeaderboardScore( uint64_t, uint32_t, int32_t, const int32_t *, int32_t ) = 0;
-    virtual uint64_t GetNumberOfCurrentPlayers(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats_params *params )
 {
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *)params->linux_side;

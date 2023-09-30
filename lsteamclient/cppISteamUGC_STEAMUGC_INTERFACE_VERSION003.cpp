@@ -2,43 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION003.h"
 
-struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION003
-{
-#ifdef __cplusplus
-    virtual uint64_t CreateQueryUserUGCRequest( uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t ) = 0;
-    virtual uint64_t CreateQueryAllUGCRequest( uint32_t, uint32_t, uint32_t, uint32_t, uint32_t ) = 0;
-    virtual uint64_t SendQueryUGCRequest( uint64_t ) = 0;
-    virtual bool GetQueryUGCResult( uint64_t, uint32_t, u_SteamUGCDetails_t_128x * ) = 0;
-    virtual bool ReleaseQueryUGCRequest( uint64_t ) = 0;
-    virtual bool AddRequiredTag( uint64_t, const char * ) = 0;
-    virtual bool AddExcludedTag( uint64_t, const char * ) = 0;
-    virtual bool SetReturnLongDescription( uint64_t, bool ) = 0;
-    virtual bool SetReturnTotalOnly( uint64_t, bool ) = 0;
-    virtual bool SetAllowCachedResponse( uint64_t, uint32_t ) = 0;
-    virtual bool SetCloudFileNameFilter( uint64_t, const char * ) = 0;
-    virtual bool SetMatchAnyTag( uint64_t, bool ) = 0;
-    virtual bool SetSearchText( uint64_t, const char * ) = 0;
-    virtual bool SetRankedByTrendDays( uint64_t, uint32_t ) = 0;
-    virtual uint64_t RequestUGCDetails( uint64_t, uint32_t ) = 0;
-    virtual uint64_t CreateItem( uint32_t, uint32_t ) = 0;
-    virtual uint64_t StartItemUpdate( uint32_t, uint64_t ) = 0;
-    virtual bool SetItemTitle( uint64_t, const char * ) = 0;
-    virtual bool SetItemDescription( uint64_t, const char * ) = 0;
-    virtual bool SetItemVisibility( uint64_t, uint32_t ) = 0;
-    virtual bool SetItemTags( uint64_t, const u_SteamParamStringArray_t * ) = 0;
-    virtual bool SetItemContent( uint64_t, const char * ) = 0;
-    virtual bool SetItemPreview( uint64_t, const char * ) = 0;
-    virtual uint64_t SubmitItemUpdate( uint64_t, const char * ) = 0;
-    virtual uint32_t GetItemUpdateProgress( uint64_t, uint64_t *, uint64_t * ) = 0;
-    virtual uint64_t SubscribeItem( uint64_t ) = 0;
-    virtual uint64_t UnsubscribeItem( uint64_t ) = 0;
-    virtual uint32_t GetNumSubscribedItems(  ) = 0;
-    virtual uint32_t GetSubscribedItems( uint64_t *, uint32_t ) = 0;
-    virtual bool GetItemInstallInfo( uint64_t, uint64_t *, char *, uint32_t, bool * ) = 0;
-    virtual bool GetItemUpdateInfo( uint64_t, bool *, bool *, uint64_t *, uint64_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest_params *params )
 {
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION003 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION003 *)params->linux_side;

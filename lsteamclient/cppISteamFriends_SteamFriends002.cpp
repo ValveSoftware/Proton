@@ -2,42 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamFriends_SteamFriends002.h"
 
-struct u_ISteamFriends_SteamFriends002
-{
-#ifdef __cplusplus
-    virtual const char * GetPersonaName(  ) = 0;
-    virtual void SetPersonaName( const char * ) = 0;
-    virtual uint32_t GetPersonaState(  ) = 0;
-    virtual void SetPersonaState( uint32_t ) = 0;
-    virtual int32_t GetFriendCount( int32_t ) = 0;
-    virtual CSteamID GetFriendByIndex( int32_t, int32_t ) = 0;
-    virtual uint32_t GetFriendRelationship( CSteamID ) = 0;
-    virtual uint32_t GetFriendPersonaState( CSteamID ) = 0;
-    virtual const char * GetFriendPersonaName( CSteamID ) = 0;
-    virtual void SetFriendRegValue( CSteamID, const char *, const char * ) = 0;
-    virtual const char * GetFriendRegValue( CSteamID, const char * ) = 0;
-    virtual bool GetFriendGamePlayed( CSteamID, uint64_t *, uint32_t *, uint16_t *, uint16_t * ) = 0;
-    virtual const char * GetFriendPersonaNameHistory( CSteamID, int32_t ) = 0;
-    virtual bool AddFriend( CSteamID ) = 0;
-    virtual bool RemoveFriend( CSteamID ) = 0;
-    virtual bool HasFriend( CSteamID, int32_t ) = 0;
-    virtual int32_t AddFriendByName( const char * ) = 0;
-    virtual bool InviteFriendByEmail( const char * ) = 0;
-    virtual int32_t GetChatMessage( CSteamID, int32_t, void *, int32_t, uint32_t * ) = 0;
-    virtual bool SendMsgToFriend( CSteamID, uint32_t, const void *, int32_t ) = 0;
-    virtual int32_t GetChatIDOfChatHistoryStart( CSteamID ) = 0;
-    virtual void SetChatHistoryStart( CSteamID, int32_t ) = 0;
-    virtual void ClearChatHistory( CSteamID ) = 0;
-    virtual int32_t GetClanCount(  ) = 0;
-    virtual CSteamID GetClanByIndex( int32_t ) = 0;
-    virtual const char * GetClanName( CSteamID ) = 0;
-    virtual bool InviteFriendToClan( CSteamID, CSteamID ) = 0;
-    virtual bool AcknowledgeInviteToClan( CSteamID, bool ) = 0;
-    virtual int32_t GetFriendCountFromSource( CSteamID ) = 0;
-    virtual CSteamID GetFriendFromSourceByIndex( CSteamID, int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamFriends_SteamFriends002_GetPersonaName( struct cppISteamFriends_SteamFriends002_GetPersonaName_params *params )
 {
     struct u_ISteamFriends_SteamFriends002 *iface = (struct u_ISteamFriends_SteamFriends002 *)params->linux_side;

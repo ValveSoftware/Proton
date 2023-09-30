@@ -2,22 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
 
-struct u_ISteamGameServerStats_SteamGameServerStats001
-{
-#ifdef __cplusplus
-    virtual uint64_t RequestUserStats( CSteamID ) = 0;
-    virtual bool GetUserStat( CSteamID, const char *, int32_t * ) = 0;
-    virtual bool GetUserStat( CSteamID, const char *, float * ) = 0;
-    virtual bool GetUserAchievement( CSteamID, const char *, bool * ) = 0;
-    virtual bool SetUserStat( CSteamID, const char *, int32_t ) = 0;
-    virtual bool SetUserStat( CSteamID, const char *, float ) = 0;
-    virtual bool UpdateUserAvgRateStat( CSteamID, const char *, float, double ) = 0;
-    virtual bool SetUserAchievement( CSteamID, const char * ) = 0;
-    virtual bool ClearUserAchievement( CSteamID, const char * ) = 0;
-    virtual uint64_t StoreUserStats( CSteamID ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params *params )
 {
     struct u_ISteamGameServerStats_SteamGameServerStats001 *iface = (struct u_ISteamGameServerStats_SteamGameServerStats001 *)params->linux_side;

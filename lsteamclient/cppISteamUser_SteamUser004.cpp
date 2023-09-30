@@ -2,38 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUser_SteamUser004.h"
 
-struct u_ISteamUser_SteamUser004
-{
-#ifdef __cplusplus
-    virtual int32_t GetHSteamUser(  ) = 0;
-    virtual void LogOn( CSteamID ) = 0;
-    virtual void LogOff(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual uint32_t GetLogonState(  ) = 0;
-    virtual bool BConnected(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual bool IsVACBanned( int32_t ) = 0;
-    virtual bool RequireShowVACBannedMessage( int32_t ) = 0;
-    virtual void AcknowledgeVACBanning( int32_t ) = 0;
-    virtual int32_t NClientGameIDAdd( int32_t ) = 0;
-    virtual void RemoveClientGame( int32_t ) = 0;
-    virtual void SetClientGameServer( int32_t, uint32_t, uint16_t ) = 0;
-    virtual void SetSteam2Ticket( uint8_t *, int32_t ) = 0;
-    virtual void AddServerNetAddress( uint32_t, uint16_t ) = 0;
-    virtual bool SetEmail( const char * ) = 0;
-    virtual int32_t GetSteamGameConnectToken( void *, int32_t ) = 0;
-    virtual bool SetRegistryString( uint32_t, const char *, const char * ) = 0;
-    virtual bool GetRegistryString( uint32_t, const char *, char *, int32_t ) = 0;
-    virtual bool SetRegistryInt( uint32_t, const char *, int32_t ) = 0;
-    virtual bool GetRegistryInt( uint32_t, const char *, int32_t * ) = 0;
-    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, int32_t, uint32_t, uint16_t, bool ) = 0;
-    virtual void TerminateGameConnection( uint32_t, uint16_t ) = 0;
-    virtual void SetSelfAsPrimaryChatDestination(  ) = 0;
-    virtual bool IsPrimaryChatDestination(  ) = 0;
-    virtual void RequestLegacyCDKey( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUser_SteamUser004_GetHSteamUser( struct cppISteamUser_SteamUser004_GetHSteamUser_params *params )
 {
     struct u_ISteamUser_SteamUser004 *iface = (struct u_ISteamUser_SteamUser004 *)params->linux_side;

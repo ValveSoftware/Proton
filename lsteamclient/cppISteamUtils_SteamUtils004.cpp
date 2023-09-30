@@ -2,30 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUtils_SteamUtils004.h"
 
-struct u_ISteamUtils_SteamUtils004
-{
-#ifdef __cplusplus
-    virtual uint32_t GetSecondsSinceAppActive(  ) = 0;
-    virtual uint32_t GetSecondsSinceComputerActive(  ) = 0;
-    virtual uint32_t GetConnectedUniverse(  ) = 0;
-    virtual uint32_t GetServerRealTime(  ) = 0;
-    virtual const char * GetIPCountry(  ) = 0;
-    virtual bool GetImageSize( int32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetImageRGBA( int32_t, uint8_t *, int32_t ) = 0;
-    virtual bool GetCSERIPPort( uint32_t *, uint16_t * ) = 0;
-    virtual uint8_t GetCurrentBatteryPower(  ) = 0;
-    virtual uint32_t GetAppID(  ) = 0;
-    virtual void SetOverlayNotificationPosition( uint32_t ) = 0;
-    virtual bool IsAPICallCompleted( uint64_t, bool * ) = 0;
-    virtual uint32_t GetAPICallFailureReason( uint64_t ) = 0;
-    virtual bool GetAPICallResult( uint64_t, void *, int32_t, int32_t, bool * ) = 0;
-    virtual void RunFrame(  ) = 0;
-    virtual uint32_t GetIPCCallCount(  ) = 0;
-    virtual void SetWarningMessageHook( void (*U_CDECL )(int32_t, const char *) ) = 0;
-    virtual bool IsOverlayEnabled(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive( struct cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params *params )
 {
     struct u_ISteamUtils_SteamUtils004 *iface = (struct u_ISteamUtils_SteamUtils004 *)params->linux_side;

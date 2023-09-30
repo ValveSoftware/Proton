@@ -2,38 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils004.h"
 
-struct u_ISteamNetworkingUtils_SteamNetworkingUtils004
-{
-#ifdef __cplusplus
-    virtual u_SteamNetworkingMessage_t_153a * AllocateMessage( int32_t ) = 0;
-    virtual uint32_t GetRelayNetworkStatus( SteamRelayNetworkStatus_t * ) = 0;
-    virtual float GetLocalPingLocation( SteamNetworkPingLocation_t * ) = 0;
-    virtual int32_t EstimatePingTimeBetweenTwoLocations( const SteamNetworkPingLocation_t *, const SteamNetworkPingLocation_t * ) = 0;
-    virtual int32_t EstimatePingTimeFromLocalHost( const SteamNetworkPingLocation_t * ) = 0;
-    virtual void ConvertPingLocationToString( const SteamNetworkPingLocation_t *, char *, int32_t ) = 0;
-    virtual bool ParsePingLocationString( const char *, SteamNetworkPingLocation_t * ) = 0;
-    virtual bool CheckPingDataUpToDate( float ) = 0;
-    virtual int32_t GetPingToDataCenter( uint32_t, uint32_t * ) = 0;
-    virtual int32_t GetDirectPingToPOP( uint32_t ) = 0;
-    virtual int32_t GetPOPCount(  ) = 0;
-    virtual int32_t GetPOPList( uint32_t *, int32_t ) = 0;
-    virtual int64_t GetLocalTimestamp(  ) = 0;
-    virtual void SetDebugOutputFunction( uint32_t, void (*U_STDCALL )(uint32_t, const char *) ) = 0;
-    virtual uint32_t GetIPv4FakeIPType( uint32_t ) = 0;
-    virtual uint32_t GetRealIdentityForFakeIP( const SteamNetworkingIPAddr *, SteamNetworkingIdentity_144 * ) = 0;
-    virtual bool SetConfigValue( uint32_t, uint32_t, int32_t, uint32_t, const void * ) = 0;
-    virtual uint32_t GetConfigValue( uint32_t, uint32_t, int32_t, uint32_t *, void *, uint32_t * ) = 0;
-    virtual const char * GetConfigValueInfo( uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual uint32_t IterateGenericEditableConfigValues( uint32_t, bool ) = 0;
-    virtual void SteamNetworkingIPAddr_ToString( const SteamNetworkingIPAddr *, char *, uint32_t, bool ) = 0;
-    virtual bool SteamNetworkingIPAddr_ParseString( SteamNetworkingIPAddr *, const char * ) = 0;
-    virtual uint32_t SteamNetworkingIPAddr_GetFakeIPType( const SteamNetworkingIPAddr * ) = 0;
-    virtual void SteamNetworkingIdentity_ToString( const SteamNetworkingIdentity_144 *, char *, uint32_t ) = 0;
-    virtual bool SteamNetworkingIdentity_ParseString( SteamNetworkingIdentity_144 *, const char * ) = 0;
-    virtual ~u_ISteamNetworkingUtils_SteamNetworkingUtils004(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params *params )
 {
     struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *iface = (struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *)params->linux_side;

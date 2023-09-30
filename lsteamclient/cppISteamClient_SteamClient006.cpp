@@ -2,33 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamClient_SteamClient006.h"
 
-struct u_ISteamClient_SteamClient006
-{
-#ifdef __cplusplus
-    virtual int32_t CreateSteamPipe(  ) = 0;
-    virtual bool BReleaseSteamPipe( int32_t ) = 0;
-    virtual int32_t CreateGlobalUser( int32_t * ) = 0;
-    virtual int32_t ConnectToGlobalUser( int32_t ) = 0;
-    virtual int32_t CreateLocalUser( int32_t * ) = 0;
-    virtual void ReleaseUser( int32_t, int32_t ) = 0;
-    virtual void /*ISteamUser*/ * GetISteamUser( int32_t, int32_t, const char * ) = 0;
-    virtual void * GetIVAC( int32_t ) = 0;
-    virtual void /*ISteamGameServer*/ * GetISteamGameServer( int32_t, int32_t, const char * ) = 0;
-    virtual void SetLocalIPBinding( uint32_t, uint16_t ) = 0;
-    virtual const char * GetUniverseName( uint32_t ) = 0;
-    virtual void /*ISteamFriends*/ * GetISteamFriends( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamUtils*/ * GetISteamUtils( int32_t, const char * ) = 0;
-    virtual void * GetISteamBilling( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmaking*/ * GetISteamMatchmaking( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamApps*/ * GetISteamApps( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamContentServer*/ * GetISteamContentServer( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMasterServerUpdater*/ * GetISteamMasterServerUpdater( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmakingServers*/ * GetISteamMatchmakingServers( int32_t, int32_t, const char * ) = 0;
-    virtual void RunFrame(  ) = 0;
-    virtual uint32_t GetIPCCallCount(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamClient_SteamClient006_CreateSteamPipe( struct cppISteamClient_SteamClient006_CreateSteamPipe_params *params )
 {
     struct u_ISteamClient_SteamClient006 *iface = (struct u_ISteamClient_SteamClient006 *)params->linux_side;

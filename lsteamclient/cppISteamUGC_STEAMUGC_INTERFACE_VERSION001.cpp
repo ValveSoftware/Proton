@@ -2,26 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION001.h"
 
-struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual uint64_t CreateQueryUserUGCRequest( uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t ) = 0;
-    virtual uint64_t CreateQueryAllUGCRequest( uint32_t, uint32_t, uint32_t, uint32_t, uint32_t ) = 0;
-    virtual uint64_t SendQueryUGCRequest( uint64_t ) = 0;
-    virtual bool GetQueryUGCResult( uint64_t, uint32_t, u_SteamUGCDetails_t_126 * ) = 0;
-    virtual bool ReleaseQueryUGCRequest( uint64_t ) = 0;
-    virtual bool AddRequiredTag( uint64_t, const char * ) = 0;
-    virtual bool AddExcludedTag( uint64_t, const char * ) = 0;
-    virtual bool SetReturnLongDescription( uint64_t, bool ) = 0;
-    virtual bool SetReturnTotalOnly( uint64_t, bool ) = 0;
-    virtual bool SetCloudFileNameFilter( uint64_t, const char * ) = 0;
-    virtual bool SetMatchAnyTag( uint64_t, bool ) = 0;
-    virtual bool SetSearchText( uint64_t, const char * ) = 0;
-    virtual bool SetRankedByTrendDays( uint64_t, uint32_t ) = 0;
-    virtual uint64_t RequestUGCDetails( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params *params )
 {
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION001 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION001 *)params->linux_side;

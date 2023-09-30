@@ -2,52 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets008.h"
 
-struct u_ISteamNetworkingSockets_SteamNetworkingSockets008
-{
-#ifdef __cplusplus
-    virtual uint32_t CreateListenSocketIP( const SteamNetworkingIPAddr *, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint32_t ConnectByIPAddress( const SteamNetworkingIPAddr *, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint32_t CreateListenSocketP2P( int32_t, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint32_t ConnectP2P( const SteamNetworkingIdentity_144 *, int32_t, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint32_t AcceptConnection( uint32_t ) = 0;
-    virtual bool CloseConnection( uint32_t, int32_t, const char *, bool ) = 0;
-    virtual bool CloseListenSocket( uint32_t ) = 0;
-    virtual bool SetConnectionUserData( uint32_t, int64_t ) = 0;
-    virtual int64_t GetConnectionUserData( uint32_t ) = 0;
-    virtual void SetConnectionName( uint32_t, const char * ) = 0;
-    virtual bool GetConnectionName( uint32_t, char *, int32_t ) = 0;
-    virtual uint32_t SendMessageToConnection( uint32_t, const void *, uint32_t, int32_t, int64_t * ) = 0;
-    virtual void SendMessages( int32_t, u_SteamNetworkingMessage_t_147 *const *, int64_t * ) = 0;
-    virtual uint32_t FlushMessagesOnConnection( uint32_t ) = 0;
-    virtual int32_t ReceiveMessagesOnConnection( uint32_t, u_SteamNetworkingMessage_t_147 **, int32_t ) = 0;
-    virtual bool GetConnectionInfo( uint32_t, SteamNetConnectionInfo_t_144 * ) = 0;
-    virtual bool GetQuickConnectionStatus( uint32_t, SteamNetworkingQuickConnectionStatus * ) = 0;
-    virtual int32_t GetDetailedConnectionStatus( uint32_t, char *, int32_t ) = 0;
-    virtual bool GetListenSocketAddress( uint32_t, SteamNetworkingIPAddr * ) = 0;
-    virtual bool CreateSocketPair( uint32_t *, uint32_t *, bool, const SteamNetworkingIdentity_144 *, const SteamNetworkingIdentity_144 * ) = 0;
-    virtual bool GetIdentity( SteamNetworkingIdentity_144 * ) = 0;
-    virtual uint32_t InitAuthentication(  ) = 0;
-    virtual uint32_t GetAuthenticationStatus( SteamNetAuthenticationStatus_t * ) = 0;
-    virtual uint32_t CreatePollGroup(  ) = 0;
-    virtual bool DestroyPollGroup( uint32_t ) = 0;
-    virtual bool SetConnectionPollGroup( uint32_t, uint32_t ) = 0;
-    virtual int32_t ReceiveMessagesOnPollGroup( uint32_t, u_SteamNetworkingMessage_t_147 **, int32_t ) = 0;
-    virtual bool ReceivedRelayAuthTicket( const void *, int32_t, SteamDatagramRelayAuthTicket * ) = 0;
-    virtual int32_t FindRelayAuthTicketForServer( const SteamNetworkingIdentity_144 *, int32_t, SteamDatagramRelayAuthTicket * ) = 0;
-    virtual uint32_t ConnectToHostedDedicatedServer( const SteamNetworkingIdentity_144 *, int32_t, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint16_t GetHostedDedicatedServerPort(  ) = 0;
-    virtual uint32_t GetHostedDedicatedServerPOPID(  ) = 0;
-    virtual uint32_t GetHostedDedicatedServerAddress( SteamDatagramHostedAddress * ) = 0;
-    virtual uint32_t CreateHostedDedicatedServerListenSocket( int32_t, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual uint32_t GetGameCoordinatorServerLogin( SteamDatagramGameCoordinatorServerLogin *, int32_t *, void * ) = 0;
-    virtual uint32_t ConnectP2PCustomSignaling( u_ISteamNetworkingConnectionCustomSignaling *, const SteamNetworkingIdentity_144 *, int32_t, const SteamNetworkingConfigValue_t * ) = 0;
-    virtual bool ReceivedP2PCustomSignal( const void *, int32_t, u_ISteamNetworkingCustomSignalingRecvContext * ) = 0;
-    virtual bool GetCertificateRequest( int32_t *, void *, char (*)[1024] ) = 0;
-    virtual bool SetCertificate( const void *, int32_t, char (*)[1024] ) = 0;
-    virtual ~u_ISteamNetworkingSockets_SteamNetworkingSockets008(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP( struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP_params *params )
 {
     struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *)params->linux_side;

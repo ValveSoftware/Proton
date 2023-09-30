@@ -2,14 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V001.h"
 
-struct u_ISteamVideo_STEAMVIDEO_INTERFACE_V001
-{
-#ifdef __cplusplus
-    virtual void GetVideoURL( uint32_t ) = 0;
-    virtual bool IsBroadcasting( int32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params *params )
 {
     struct u_ISteamVideo_STEAMVIDEO_INTERFACE_V001 *iface = (struct u_ISteamVideo_STEAMVIDEO_INTERFACE_V001 *)params->linux_side;

@@ -2,32 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamFriends_SteamFriends003.h"
 
-struct u_ISteamFriends_SteamFriends003
-{
-#ifdef __cplusplus
-    virtual const char * GetPersonaName(  ) = 0;
-    virtual void SetPersonaName( const char * ) = 0;
-    virtual uint32_t GetPersonaState(  ) = 0;
-    virtual int32_t GetFriendCount( int32_t ) = 0;
-    virtual CSteamID GetFriendByIndex( int32_t, int32_t ) = 0;
-    virtual uint32_t GetFriendRelationship( CSteamID ) = 0;
-    virtual uint32_t GetFriendPersonaState( CSteamID ) = 0;
-    virtual const char * GetFriendPersonaName( CSteamID ) = 0;
-    virtual int32_t GetFriendAvatar( CSteamID ) = 0;
-    virtual bool GetFriendGamePlayed( CSteamID, uint64_t *, uint32_t *, uint16_t *, uint16_t * ) = 0;
-    virtual const char * GetFriendPersonaNameHistory( CSteamID, int32_t ) = 0;
-    virtual bool HasFriend( CSteamID, int32_t ) = 0;
-    virtual int32_t GetClanCount(  ) = 0;
-    virtual CSteamID GetClanByIndex( int32_t ) = 0;
-    virtual const char * GetClanName( CSteamID ) = 0;
-    virtual int32_t GetFriendCountFromSource( CSteamID ) = 0;
-    virtual CSteamID GetFriendFromSourceByIndex( CSteamID, int32_t ) = 0;
-    virtual bool IsUserInSource( CSteamID, CSteamID ) = 0;
-    virtual void SetInGameVoiceSpeaking( CSteamID, bool ) = 0;
-    virtual void ActivateGameOverlay( const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamFriends_SteamFriends003_GetPersonaName( struct cppISteamFriends_SteamFriends003_GetPersonaName_params *params )
 {
     struct u_ISteamFriends_SteamFriends003 *iface = (struct u_ISteamFriends_SteamFriends003 *)params->linux_side;

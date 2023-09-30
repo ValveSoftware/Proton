@@ -2,56 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameServer_SteamGameServer014.h"
 
-struct u_ISteamGameServer_SteamGameServer014
-{
-#ifdef __cplusplus
-    virtual bool InitGameServer( uint32_t, uint16_t, uint16_t, uint32_t, uint32_t, const char * ) = 0;
-    virtual void SetProduct( const char * ) = 0;
-    virtual void SetGameDescription( const char * ) = 0;
-    virtual void SetModDir( const char * ) = 0;
-    virtual void SetDedicatedServer( bool ) = 0;
-    virtual void LogOn( const char * ) = 0;
-    virtual void LogOnAnonymous(  ) = 0;
-    virtual void LogOff(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual bool BSecure(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual bool WasRestartRequested(  ) = 0;
-    virtual void SetMaxPlayerCount( int32_t ) = 0;
-    virtual void SetBotPlayerCount( int32_t ) = 0;
-    virtual void SetServerName( const char * ) = 0;
-    virtual void SetMapName( const char * ) = 0;
-    virtual void SetPasswordProtected( bool ) = 0;
-    virtual void SetSpectatorPort( uint16_t ) = 0;
-    virtual void SetSpectatorServerName( const char * ) = 0;
-    virtual void ClearAllKeyValues(  ) = 0;
-    virtual void SetKeyValue( const char *, const char * ) = 0;
-    virtual void SetGameTags( const char * ) = 0;
-    virtual void SetGameData( const char * ) = 0;
-    virtual void SetRegion( const char * ) = 0;
-    virtual void SetAdvertiseServerActive( bool ) = 0;
-    virtual uint32_t GetAuthSessionTicket( void *, int32_t, uint32_t * ) = 0;
-    virtual uint32_t BeginAuthSession( const void *, int32_t, CSteamID ) = 0;
-    virtual void EndAuthSession( CSteamID ) = 0;
-    virtual void CancelAuthTicket( uint32_t ) = 0;
-    virtual uint32_t UserHasLicenseForApp( CSteamID, uint32_t ) = 0;
-    virtual bool RequestUserGroupStatus( CSteamID, CSteamID ) = 0;
-    virtual void GetGameplayStats(  ) = 0;
-    virtual uint64_t GetServerReputation(  ) = 0;
-    virtual SteamIPAddress_t GetPublicIP(  ) = 0;
-    virtual bool HandleIncomingPacket( const void *, int32_t, uint32_t, uint16_t ) = 0;
-    virtual int32_t GetNextOutgoingPacket( void *, int32_t, uint32_t *, uint16_t * ) = 0;
-    virtual uint64_t AssociateWithClan( CSteamID ) = 0;
-    virtual uint64_t ComputeNewPlayerCompatibility( CSteamID ) = 0;
-    virtual bool SendUserConnectAndAuthenticate_DEPRECATED( uint32_t, const void *, uint32_t, CSteamID * ) = 0;
-    virtual CSteamID CreateUnauthenticatedUserConnection(  ) = 0;
-    virtual void SendUserDisconnect_DEPRECATED( CSteamID ) = 0;
-    virtual bool BUpdateUserData( CSteamID, const char *, uint32_t ) = 0;
-    virtual void SetMasterServerHeartbeatInterval_DEPRECATED( int32_t ) = 0;
-    virtual void ForceMasterServerHeartbeat_DEPRECATED(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameServer_SteamGameServer014_InitGameServer( struct cppISteamGameServer_SteamGameServer014_InitGameServer_params *params )
 {
     struct u_ISteamGameServer_SteamGameServer014 *iface = (struct u_ISteamGameServer_SteamGameServer014 *)params->linux_side;

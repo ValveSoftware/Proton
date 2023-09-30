@@ -2,42 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION008.h"
 
-struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008
-{
-#ifdef __cplusplus
-    virtual bool BIsSubscribed(  ) = 0;
-    virtual bool BIsLowViolence(  ) = 0;
-    virtual bool BIsCybercafe(  ) = 0;
-    virtual bool BIsVACBanned(  ) = 0;
-    virtual const char * GetCurrentGameLanguage(  ) = 0;
-    virtual const char * GetAvailableGameLanguages(  ) = 0;
-    virtual bool BIsSubscribedApp( uint32_t ) = 0;
-    virtual bool BIsDlcInstalled( uint32_t ) = 0;
-    virtual uint32_t GetEarliestPurchaseUnixTime( uint32_t ) = 0;
-    virtual bool BIsSubscribedFromFreeWeekend(  ) = 0;
-    virtual int32_t GetDLCCount(  ) = 0;
-    virtual bool BGetDLCDataByIndex( int32_t, uint32_t *, bool *, char *, int32_t ) = 0;
-    virtual void InstallDLC( uint32_t ) = 0;
-    virtual void UninstallDLC( uint32_t ) = 0;
-    virtual void RequestAppProofOfPurchaseKey( uint32_t ) = 0;
-    virtual bool GetCurrentBetaName( char *, int32_t ) = 0;
-    virtual bool MarkContentCorrupt( bool ) = 0;
-    virtual uint32_t GetInstalledDepots( uint32_t, uint32_t *, uint32_t ) = 0;
-    virtual uint32_t GetAppInstallDir( uint32_t, char *, uint32_t ) = 0;
-    virtual bool BIsAppInstalled( uint32_t ) = 0;
-    virtual CSteamID GetAppOwner(  ) = 0;
-    virtual const char * GetLaunchQueryParam( const char * ) = 0;
-    virtual bool GetDlcDownloadProgress( uint32_t, uint64_t *, uint64_t * ) = 0;
-    virtual int32_t GetAppBuildId(  ) = 0;
-    virtual void RequestAllProofOfPurchaseKeys(  ) = 0;
-    virtual uint64_t GetFileDetails( const char * ) = 0;
-    virtual int32_t GetLaunchCommandLine( char *, int32_t ) = 0;
-    virtual bool BIsSubscribedFromFamilySharing(  ) = 0;
-    virtual bool BIsTimedTrial( uint32_t *, uint32_t * ) = 0;
-    virtual bool SetDlcContext( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed_params *params )
 {
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *)params->linux_side;

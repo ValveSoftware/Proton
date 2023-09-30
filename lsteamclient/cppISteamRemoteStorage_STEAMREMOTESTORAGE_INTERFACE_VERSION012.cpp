@@ -2,64 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012.h"
 
-struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
-{
-#ifdef __cplusplus
-    virtual bool FileWrite( const char *, const void *, int32_t ) = 0;
-    virtual int32_t FileRead( const char *, void *, int32_t ) = 0;
-    virtual bool FileForget( const char * ) = 0;
-    virtual bool FileDelete( const char * ) = 0;
-    virtual uint64_t FileShare( const char * ) = 0;
-    virtual bool SetSyncPlatforms( const char *, uint32_t ) = 0;
-    virtual uint64_t FileWriteStreamOpen( const char * ) = 0;
-    virtual bool FileWriteStreamWriteChunk( uint64_t, const void *, int32_t ) = 0;
-    virtual bool FileWriteStreamClose( uint64_t ) = 0;
-    virtual bool FileWriteStreamCancel( uint64_t ) = 0;
-    virtual bool FileExists( const char * ) = 0;
-    virtual bool FilePersisted( const char * ) = 0;
-    virtual int32_t GetFileSize( const char * ) = 0;
-    virtual int64_t GetFileTimestamp( const char * ) = 0;
-    virtual uint32_t GetSyncPlatforms( const char * ) = 0;
-    virtual int32_t GetFileCount(  ) = 0;
-    virtual const char * GetFileNameAndSize( int32_t, int32_t * ) = 0;
-    virtual bool GetQuota( int32_t *, int32_t * ) = 0;
-    virtual bool IsCloudEnabledForAccount(  ) = 0;
-    virtual bool IsCloudEnabledForApp(  ) = 0;
-    virtual void SetCloudEnabledForApp( bool ) = 0;
-    virtual uint64_t UGCDownload( uint64_t, uint32_t ) = 0;
-    virtual bool GetUGCDownloadProgress( uint64_t, int32_t *, int32_t * ) = 0;
-    virtual bool GetUGCDetails( uint64_t, uint32_t *, char **, int32_t *, CSteamID * ) = 0;
-    virtual int32_t UGCRead( uint64_t, void *, int32_t, uint32_t, uint32_t ) = 0;
-    virtual int32_t GetCachedUGCCount(  ) = 0;
-    virtual uint64_t GetCachedUGCHandle( int32_t ) = 0;
-    virtual uint64_t PublishWorkshopFile( const char *, const char *, uint32_t, const char *, const char *, uint32_t, u_SteamParamStringArray_t *, uint32_t ) = 0;
-    virtual uint64_t CreatePublishedFileUpdateRequest( uint64_t ) = 0;
-    virtual bool UpdatePublishedFileFile( uint64_t, const char * ) = 0;
-    virtual bool UpdatePublishedFilePreviewFile( uint64_t, const char * ) = 0;
-    virtual bool UpdatePublishedFileTitle( uint64_t, const char * ) = 0;
-    virtual bool UpdatePublishedFileDescription( uint64_t, const char * ) = 0;
-    virtual bool UpdatePublishedFileVisibility( uint64_t, uint32_t ) = 0;
-    virtual bool UpdatePublishedFileTags( uint64_t, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t CommitPublishedFileUpdate( uint64_t ) = 0;
-    virtual uint64_t GetPublishedFileDetails( uint64_t, uint32_t ) = 0;
-    virtual uint64_t DeletePublishedFile( uint64_t ) = 0;
-    virtual uint64_t EnumerateUserPublishedFiles( uint32_t ) = 0;
-    virtual uint64_t SubscribePublishedFile( uint64_t ) = 0;
-    virtual uint64_t EnumerateUserSubscribedFiles( uint32_t ) = 0;
-    virtual uint64_t UnsubscribePublishedFile( uint64_t ) = 0;
-    virtual bool UpdatePublishedFileSetChangeDescription( uint64_t, const char * ) = 0;
-    virtual uint64_t GetPublishedItemVoteDetails( uint64_t ) = 0;
-    virtual uint64_t UpdateUserPublishedItemVote( uint64_t, bool ) = 0;
-    virtual uint64_t GetUserPublishedItemVoteDetails( uint64_t ) = 0;
-    virtual uint64_t EnumerateUserSharedWorkshopFiles( CSteamID, uint32_t, u_SteamParamStringArray_t *, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t PublishVideo( uint32_t, const char *, const char *, const char *, uint32_t, const char *, const char *, uint32_t, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t SetUserPublishedFileAction( uint64_t, uint32_t ) = 0;
-    virtual uint64_t EnumeratePublishedFilesByUserAction( uint32_t, uint32_t ) = 0;
-    virtual uint64_t EnumeratePublishedWorkshopFiles( uint32_t, uint32_t, uint32_t, uint32_t, u_SteamParamStringArray_t *, u_SteamParamStringArray_t * ) = 0;
-    virtual uint64_t UGCDownloadToLocation( uint64_t, const char *, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite_params *params )
 {
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *)params->linux_side;
