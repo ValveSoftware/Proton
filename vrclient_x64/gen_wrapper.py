@@ -214,6 +214,12 @@ all_versions = {}
 unique_structs = []
 
 
+UNIX_FUNCS = [
+    'vrclient_init',
+    'vrclient_HmdSystemFactory',
+    'vrclient_VRClientCoreFactory',
+]
+
 MANUAL_METHODS = {
     "IVRClientCore_BIsHmdPresent": lambda ver, abi: abi == 'w',
     "IVRClientCore_Init": lambda ver, abi: True,
@@ -1583,6 +1589,8 @@ with open(u"vrclient_x64/unixlib_generated.h", "w") as file:
 
     out(u'enum unix_funcs\n')
     out(u'{\n')
+    for func in UNIX_FUNCS:
+        out(f'    unix_{func},\n')
     for klass, method in all_methods:
         sdkver = klass._sdkver
         if type(method) is Destructor:
@@ -1604,6 +1612,8 @@ with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
 
     out(u'extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =\n')
     out(u'{\n')
+    for func in UNIX_FUNCS:
+        out(f'    {func},\n')
     for klass, method in all_methods:
         sdkver = klass._sdkver
         if type(method) is Destructor:

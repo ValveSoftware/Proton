@@ -67,23 +67,28 @@ static void load_vk_unwrappers( HMODULE winevulkan )
     dlclose(unix_handle);
 }
 
-bool unix_vrclient_init( struct vrclient_init_params *params )
+NTSTATUS vrclient_init( void *args )
 {
+    struct vrclient_init_params *params = (struct vrclient_init_params *)args;
     static void *vrclient;
 
-    if (vrclient) return true;
+    if (vrclient)
+    {
+        params->_ret = true;
+        return 0;
+    }
 
     if (!(vrclient = dlopen( params->unix_path, RTLD_NOW )))
     {
         TRACE( "unable to load %s\n", params->unix_path );
-        return false;
+        return -1;
     }
 
 #define LOAD_FUNC( x )                                      \
     if (!(p_##x = (decltype(p_##x))dlsym( vrclient, #x )))  \
     {                                                       \
         ERR( "unable to load " #x "\n" );                   \
-        return false;                                       \
+        return -1;                                          \
     }
 
     LOAD_FUNC( HmdSystemFactory );
@@ -92,15 +97,20 @@ bool unix_vrclient_init( struct vrclient_init_params *params )
 #undef LOAD_FUNC
 
     load_vk_unwrappers( params->winevulkan );
-    return true;
+    params->_ret = true;
+    return 0;
 }
 
-void *unix_HmdSystemFactory( const char *name, int *return_code )
+NTSTATUS vrclient_HmdSystemFactory( void *args )
 {
-    return p_HmdSystemFactory( name, return_code );
+    struct vrclient_HmdSystemFactory_params *params = (struct vrclient_HmdSystemFactory_params *)args;
+    params->_ret = p_HmdSystemFactory( params->name, params->return_code );
+    return 0;
 }
 
-void *unix_VRClientCoreFactory( const char *name, int *return_code )
+NTSTATUS vrclient_VRClientCoreFactory( void *args )
 {
-    return p_VRClientCoreFactory( name, return_code );
+    struct vrclient_VRClientCoreFactory_params *params = (struct vrclient_VRClientCoreFactory_params *)args;
+    params->_ret = p_VRClientCoreFactory( params->name, params->return_code );
+    return 0;
 }

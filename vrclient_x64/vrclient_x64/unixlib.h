@@ -45,13 +45,24 @@ struct render_model_texture_map
 
 struct vrclient_init_params
 {
+    bool _ret;
     HMODULE winevulkan;
     char *unix_path;
 };
 
-extern bool unix_vrclient_init( struct vrclient_init_params *params );
-extern void *unix_HmdSystemFactory( const char *name, int *return_code );
-extern void *unix_VRClientCoreFactory( const char *name, int *return_code );
+struct vrclient_HmdSystemFactory_params
+{
+    void *_ret;
+    const char *name;
+    int *return_code;
+};
+
+struct vrclient_VRClientCoreFactory_params
+{
+    void *_ret;
+    const char *name;
+    int *return_code;
+};
 
 typedef NTSTATUS (*unixlib_entry_t)( void *args );
 extern const unixlib_entry_t __wine_unix_call_funcs[];
