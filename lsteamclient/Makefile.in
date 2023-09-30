@@ -71,8 +71,13 @@ SOURCES = \
 	cppISteamClient_SteamClient017.cpp \
 	cppISteamClient_SteamClient018.cpp \
 	cppISteamClient_SteamClient019.cpp \
+	cppISteamClient_SteamClient020.cpp \
 	cppISteamController_SteamController003.cpp \
 	cppISteamController_SteamController004.cpp \
+	cppISteamController_SteamController005.cpp \
+	cppISteamController_SteamController006.cpp \
+	cppISteamController_SteamController007.cpp \
+	cppISteamController_SteamController008.cpp \
 	cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.cpp \
 	cppISteamFriends_SteamFriends001.cpp \
 	cppISteamFriends_SteamFriends002.cpp \
@@ -114,6 +119,10 @@ SOURCES = \
 	cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001.cpp \
 	cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002.cpp \
 	cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION003.cpp \
+	cppISteamInput_SteamInput001.cpp \
+	cppISteamInput_SteamInput002.cpp \
+	cppISteamInput_SteamInput005.cpp \
+	cppISteamInput_SteamInput006.cpp \
 	cppISteamInventory_STEAMINVENTORY_INTERFACE_V001.cpp \
 	cppISteamInventory_STEAMINVENTORY_INTERFACE_V002.cpp \
 	cppISteamInventory_STEAMINVENTORY_INTERFACE_V003.cpp \
@@ -137,10 +146,20 @@ SOURCES = \
 	cppISteamNetworking_SteamNetworking004.cpp \
 	cppISteamNetworking_SteamNetworking005.cpp \
 	cppISteamNetworking_SteamNetworking006.cpp \
+	cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.cpp \
+	cppISteamNetworkingMessages_SteamNetworkingMessages002.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets002.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets004.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets006.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets008.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets009.cpp \
+	cppISteamNetworkingSockets_SteamNetworkingSockets012.cpp \
 	cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002.cpp \
 	cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003.cpp \
 	cppISteamNetworkingUtils_SteamNetworkingUtils001.cpp \
 	cppISteamNetworkingUtils_SteamNetworkingUtils002.cpp \
+	cppISteamNetworkingUtils_SteamNetworkingUtils003.cpp \
+	cppISteamNetworkingUtils_SteamNetworkingUtils004.cpp \
 	cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.cpp \
 	cppISteamParties_SteamParties002.cpp \
 	cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001.cpp \
@@ -213,6 +232,14 @@ SOURCES = \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010.cpp \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011.cpp \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012.cpp \
+	cppISteamUtils_SteamUtils002.cpp \
+	cppISteamUtils_SteamUtils004.cpp \
+	cppISteamUtils_SteamUtils005.cpp \
+	cppISteamUtils_SteamUtils006.cpp \
+	cppISteamUtils_SteamUtils007.cpp \
+	cppISteamUtils_SteamUtils008.cpp \
+	cppISteamUtils_SteamUtils009.cpp \
+	cppISteamUtils_SteamUtils010.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V001.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V002.cpp \
 	unix_steam_client_manual.cpp \

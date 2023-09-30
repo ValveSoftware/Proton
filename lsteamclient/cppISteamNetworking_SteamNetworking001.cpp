@@ -2,24 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamNetworking_SteamNetworking001.h"
 
-struct u_ISteamNetworking_SteamNetworking001
-{
-#ifdef __cplusplus
-    virtual uint32_t CreateListenSocket( int32_t, uint32_t, uint16_t ) = 0;
-    virtual uint32_t CreateP2PConnectionSocket( CSteamID, int32_t, int32_t ) = 0;
-    virtual uint32_t CreateConnectionSocket( uint32_t, uint16_t, int32_t ) = 0;
-    virtual bool DestroySocket( uint32_t, bool ) = 0;
-    virtual bool DestroyListenSocket( uint32_t, bool ) = 0;
-    virtual bool SendDataOnSocket( uint32_t, void *, uint32_t, bool ) = 0;
-    virtual bool IsDataAvailableOnSocket( uint32_t, uint32_t * ) = 0;
-    virtual bool RetrieveDataFromSocket( uint32_t, void *, uint32_t, uint32_t * ) = 0;
-    virtual bool IsDataAvailable( uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool RetrieveData( uint32_t, void *, uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetSocketInfo( uint32_t, CSteamID *, int32_t *, uint32_t *, uint16_t * ) = 0;
-    virtual bool GetListenSocketInfo( uint32_t, uint32_t *, uint16_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamNetworking_SteamNetworking001_CreateListenSocket( struct cppISteamNetworking_SteamNetworking001_CreateListenSocket_params *params )
 {
     struct u_ISteamNetworking_SteamNetworking001 *iface = (struct u_ISteamNetworking_SteamNetworking001 *)params->linux_side;

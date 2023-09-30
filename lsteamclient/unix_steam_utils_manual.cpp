@@ -1,13 +1,13 @@
 #include "unix_private.h"
 
-#include "cppISteamUtils_SteamUtils002.hpp"
-#include "cppISteamUtils_SteamUtils004.hpp"
-#include "cppISteamUtils_SteamUtils005.hpp"
-#include "cppISteamUtils_SteamUtils006.hpp"
-#include "cppISteamUtils_SteamUtils007.hpp"
-#include "cppISteamUtils_SteamUtils008.hpp"
-#include "cppISteamUtils_SteamUtils009.hpp"
-#include "cppISteamUtils_SteamUtils010.hpp"
+#include "cppISteamUtils_SteamUtils002.h"
+#include "cppISteamUtils_SteamUtils004.h"
+#include "cppISteamUtils_SteamUtils005.h"
+#include "cppISteamUtils_SteamUtils006.h"
+#include "cppISteamUtils_SteamUtils007.h"
+#include "cppISteamUtils_SteamUtils008.h"
+#include "cppISteamUtils_SteamUtils009.h"
+#include "cppISteamUtils_SteamUtils010.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 

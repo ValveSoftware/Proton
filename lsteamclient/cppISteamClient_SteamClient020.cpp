@@ -2,54 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamClient_SteamClient020.h"
 
-struct u_ISteamClient_SteamClient020
-{
-#ifdef __cplusplus
-    virtual int32_t CreateSteamPipe(  ) = 0;
-    virtual bool BReleaseSteamPipe( int32_t ) = 0;
-    virtual int32_t ConnectToGlobalUser( int32_t ) = 0;
-    virtual int32_t CreateLocalUser( int32_t *, uint32_t ) = 0;
-    virtual void ReleaseUser( int32_t, int32_t ) = 0;
-    virtual void /*ISteamUser*/ * GetISteamUser( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamGameServer*/ * GetISteamGameServer( int32_t, int32_t, const char * ) = 0;
-    virtual void SetLocalIPBinding( const SteamIPAddress_t *, uint16_t ) = 0;
-    virtual void /*ISteamFriends*/ * GetISteamFriends( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamUtils*/ * GetISteamUtils( int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmaking*/ * GetISteamMatchmaking( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMatchmakingServers*/ * GetISteamMatchmakingServers( int32_t, int32_t, const char * ) = 0;
-    virtual void * GetISteamGenericInterface( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamUserStats*/ * GetISteamUserStats( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamGameServerStats*/ * GetISteamGameServerStats( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamApps*/ * GetISteamApps( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamNetworking*/ * GetISteamNetworking( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamRemoteStorage*/ * GetISteamRemoteStorage( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamScreenshots*/ * GetISteamScreenshots( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamGameSearch*/ * GetISteamGameSearch( int32_t, int32_t, const char * ) = 0;
-    virtual void RunFrame(  ) = 0;
-    virtual uint32_t GetIPCCallCount(  ) = 0;
-    virtual void SetWarningMessageHook( void (*U_CDECL )(int32_t, const char *) ) = 0;
-    virtual bool BShutdownIfAllPipesClosed(  ) = 0;
-    virtual void /*ISteamHTTP*/ * GetISteamHTTP( int32_t, int32_t, const char * ) = 0;
-    virtual void * DEPRECATED_GetISteamUnifiedMessages( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamController*/ * GetISteamController( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamUGC*/ * GetISteamUGC( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamAppList*/ * GetISteamAppList( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
-    virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamParentalSettings*/ * GetISteamParentalSettings( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamInput*/ * GetISteamInput( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamParties*/ * GetISteamParties( int32_t, int32_t, const char * ) = 0;
-    virtual void /*ISteamRemotePlay*/ * GetISteamRemotePlay( int32_t, int32_t, const char * ) = 0;
-    virtual void DestroyAllInterfaces(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamClient_SteamClient020_CreateSteamPipe( struct cppISteamClient_SteamClient020_CreateSteamPipe_params *params )
 {
     struct u_ISteamClient_SteamClient020 *iface = (struct u_ISteamClient_SteamClient020 *)params->linux_side;

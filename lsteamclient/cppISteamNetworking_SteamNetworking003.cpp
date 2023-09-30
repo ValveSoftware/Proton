@@ -2,32 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamNetworking_SteamNetworking003.h"
 
-struct u_ISteamNetworking_SteamNetworking003
-{
-#ifdef __cplusplus
-    virtual bool SendP2PPacket( CSteamID, const void *, uint32_t, uint32_t ) = 0;
-    virtual bool IsP2PPacketAvailable( uint32_t * ) = 0;
-    virtual bool ReadP2PPacket( void *, uint32_t, uint32_t *, CSteamID * ) = 0;
-    virtual bool AcceptP2PSessionWithUser( CSteamID ) = 0;
-    virtual bool CloseP2PSessionWithUser( CSteamID ) = 0;
-    virtual bool GetP2PSessionState( CSteamID, P2PSessionState_t * ) = 0;
-    virtual uint32_t CreateListenSocket( int32_t, uint32_t, uint16_t, bool ) = 0;
-    virtual uint32_t CreateP2PConnectionSocket( CSteamID, int32_t, int32_t, bool ) = 0;
-    virtual uint32_t CreateConnectionSocket( uint32_t, uint16_t, int32_t ) = 0;
-    virtual bool DestroySocket( uint32_t, bool ) = 0;
-    virtual bool DestroyListenSocket( uint32_t, bool ) = 0;
-    virtual bool SendDataOnSocket( uint32_t, void *, uint32_t, bool ) = 0;
-    virtual bool IsDataAvailableOnSocket( uint32_t, uint32_t * ) = 0;
-    virtual bool RetrieveDataFromSocket( uint32_t, void *, uint32_t, uint32_t * ) = 0;
-    virtual bool IsDataAvailable( uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool RetrieveData( uint32_t, void *, uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetSocketInfo( uint32_t, CSteamID *, int32_t *, uint32_t *, uint16_t * ) = 0;
-    virtual bool GetListenSocketInfo( uint32_t, uint32_t *, uint16_t * ) = 0;
-    virtual uint32_t GetSocketConnectionType( uint32_t ) = 0;
-    virtual int32_t GetMaxPacketSize( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamNetworking_SteamNetworking003_SendP2PPacket( struct cppISteamNetworking_SteamNetworking003_SendP2PPacket_params *params )
 {
     struct u_ISteamNetworking_SteamNetworking003 *iface = (struct u_ISteamNetworking_SteamNetworking003 *)params->linux_side;

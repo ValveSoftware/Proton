@@ -2,51 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUser_SteamUser005.h"
 
-struct u_ISteamUser_SteamUser005
-{
-#ifdef __cplusplus
-    virtual int32_t GetHSteamUser(  ) = 0;
-    virtual void LogOn( CSteamID ) = 0;
-    virtual void LogOff(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual uint32_t GetLogonState(  ) = 0;
-    virtual bool BConnected(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual bool IsVACBanned( int32_t ) = 0;
-    virtual bool RequireShowVACBannedMessage( int32_t ) = 0;
-    virtual void AcknowledgeVACBanning( int32_t ) = 0;
-    virtual void SetSteam2Ticket( uint8_t *, int32_t ) = 0;
-    virtual void AddServerNetAddress( uint32_t, uint16_t ) = 0;
-    virtual bool SetEmail( const char * ) = 0;
-    virtual bool SetRegistryString( uint32_t, const char *, const char * ) = 0;
-    virtual bool GetRegistryString( uint32_t, const char *, char *, int32_t ) = 0;
-    virtual bool SetRegistryInt( uint32_t, const char *, int32_t ) = 0;
-    virtual bool GetRegistryInt( uint32_t, const char *, int32_t * ) = 0;
-    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, CGameID, uint32_t, uint16_t, bool ) = 0;
-    virtual void TerminateGameConnection( uint32_t, uint16_t ) = 0;
-    virtual void SetSelfAsPrimaryChatDestination(  ) = 0;
-    virtual bool IsPrimaryChatDestination(  ) = 0;
-    virtual void RequestLegacyCDKey( uint32_t ) = 0;
-    virtual bool SendGuestPassByEmail( const char *, uint64_t, bool ) = 0;
-    virtual bool SendGuestPassByAccountID( uint32_t, uint64_t, bool ) = 0;
-    virtual bool AckGuestPass( const char * ) = 0;
-    virtual bool RedeemGuestPass( const char * ) = 0;
-    virtual uint32_t GetGuestPassToGiveCount(  ) = 0;
-    virtual uint32_t GetGuestPassToRedeemCount(  ) = 0;
-    virtual uint32_t GetGuestPassLastUpdateTime(  ) = 0;
-    virtual bool GetGuestPassToGiveInfo( uint32_t, uint64_t *, uint32_t *, uint32_t *, uint32_t *, uint32_t *, uint32_t *, char *, int32_t ) = 0;
-    virtual bool GetGuestPassToRedeemInfo( uint32_t, uint64_t *, uint32_t *, uint32_t *, uint32_t *, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetGuestPassToRedeemSenderAddress( uint32_t, char *, int32_t ) = 0;
-    virtual bool GetGuestPassToRedeemSenderName( uint32_t, char *, int32_t ) = 0;
-    virtual void AcknowledgeMessageByGID( const char * ) = 0;
-    virtual bool SetLanguage( const char * ) = 0;
-    virtual void TrackAppUsageEvent( CGameID, int32_t, const char * ) = 0;
-    virtual void SetAccountName( const char * ) = 0;
-    virtual void SetPassword( const char * ) = 0;
-    virtual void SetAccountCreationTime( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUser_SteamUser005_GetHSteamUser( struct cppISteamUser_SteamUser005_GetHSteamUser_params *params )
 {
     struct u_ISteamUser_SteamUser005 *iface = (struct u_ISteamUser_SteamUser005 *)params->linux_side;

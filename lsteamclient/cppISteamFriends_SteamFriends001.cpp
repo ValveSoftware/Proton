@@ -2,39 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamFriends_SteamFriends001.h"
 
-struct u_ISteamFriends_SteamFriends001
-{
-#ifdef __cplusplus
-    virtual const char * GetPersonaName(  ) = 0;
-    virtual void SetPersonaName( const char * ) = 0;
-    virtual uint32_t GetPersonaState(  ) = 0;
-    virtual void SetPersonaState( uint32_t ) = 0;
-    virtual bool AddFriend( CSteamID ) = 0;
-    virtual bool RemoveFriend( CSteamID ) = 0;
-    virtual bool HasFriend( CSteamID ) = 0;
-    virtual uint32_t GetFriendRelationship( CSteamID ) = 0;
-    virtual uint32_t GetFriendPersonaState( CSteamID ) = 0;
-    virtual bool Deprecated_GetFriendGamePlayed( CSteamID, int32_t *, uint32_t *, uint16_t * ) = 0;
-    virtual const char * GetFriendPersonaName( CSteamID ) = 0;
-    virtual int32_t AddFriendByName( const char * ) = 0;
-    virtual int32_t GetFriendCount(  ) = 0;
-    virtual CSteamID GetFriendByIndex( int32_t ) = 0;
-    virtual void SendMsgToFriend( CSteamID, uint32_t, const char * ) = 0;
-    virtual void SetFriendRegValue( CSteamID, const char *, const char * ) = 0;
-    virtual const char * GetFriendRegValue( CSteamID, const char * ) = 0;
-    virtual const char * GetFriendPersonaNameHistory( CSteamID, int32_t ) = 0;
-    virtual int32_t GetChatMessage( CSteamID, int32_t, void *, int32_t, uint32_t * ) = 0;
-    virtual bool SendMsgToFriend( CSteamID, uint32_t, const void *, int32_t ) = 0;
-    virtual int32_t GetChatIDOfChatHistoryStart( CSteamID ) = 0;
-    virtual void SetChatHistoryStart( CSteamID, int32_t ) = 0;
-    virtual void ClearChatHistory( CSteamID ) = 0;
-    virtual bool InviteFriendByEmail( const char * ) = 0;
-    virtual int32_t GetBlockedFriendCount(  ) = 0;
-    virtual bool GetFriendGamePlayed( CSteamID, uint64_t *, uint32_t *, uint16_t * ) = 0;
-    virtual bool GetFriendGamePlayed2( CSteamID, uint64_t *, uint32_t *, uint16_t *, uint16_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamFriends_SteamFriends001_GetPersonaName( struct cppISteamFriends_SteamFriends001_GetPersonaName_params *params )
 {
     struct u_ISteamFriends_SteamFriends001 *iface = (struct u_ISteamFriends_SteamFriends001 *)params->linux_side;
