@@ -1,16 +1,5 @@
 #include "steamclient_private.h"
 
-#include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
-#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets002.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets004.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets006.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets008.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets009.h"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets012.h"
-#include "cppISteamNetworkingUtils_SteamNetworkingUtils003.h"
-#include "cppISteamNetworkingUtils_SteamNetworkingUtils004.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 struct networking_message_pool
@@ -248,7 +237,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_144 **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -259,7 +248,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_144( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_144( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -268,7 +257,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
 int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket( struct w_steam_iface *_this, uint32_t hSocket,
                                                                                                        w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket_params params =
     {
         .linux_side = _this->u_iface,
         .hSocket = hSocket,
@@ -279,7 +268,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_144( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket, &params );
     if (!networking_message_pool_receive_144( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -291,7 +280,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_144 **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -302,7 +291,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_144( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_144( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -311,7 +300,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
 int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket( struct w_steam_iface *_this, uint32_t hSocket,
                                                                                                        w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket_params params =
     {
         .linux_side = _this->u_iface,
         .hSocket = hSocket,
@@ -322,7 +311,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_144( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket, &params );
     if (!networking_message_pool_receive_144( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -334,7 +323,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_147 **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -345,7 +334,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -354,7 +343,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
 int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket( struct w_steam_iface *_this, uint32_t hSocket,
                                                                                                        w_SteamNetworkingMessage_t_147 **ppOutMessages, int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket_params params =
     {
         .linux_side = _this->u_iface,
         .hSocket = hSocket,
@@ -365,7 +354,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -373,7 +362,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
 
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_147 **pMessages, int64_t *pOutMessageNumberOrResult)
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages_params params =
     {
         .linux_side = _this->u_iface,
         .nMessages = nMessages,
@@ -384,7 +373,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessage
 
     TRACE("%p\n", _this);
 
-    cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
 }
 
@@ -394,7 +383,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_147 **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -405,7 +394,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -415,7 +404,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
                                                                                                     w_SteamNetworkingMessage_t_147 **ppOutMessages,
                                                                                                     int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup_params params =
     {
         .linux_side = _this->u_iface,
         .hPollGroup = hPollGroup,
@@ -426,7 +415,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -434,7 +423,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
 
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_147 *const *pMessages, int64_t *pOutMessageNumberOrResult)
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages_params params =
     {
         .linux_side = _this->u_iface,
         .nMessages = nMessages,
@@ -445,7 +434,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SendMessage
 
     TRACE("%p\n", _this);
 
-    cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
 }
 
@@ -455,7 +444,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_147 **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -466,7 +455,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -476,7 +465,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
                                                                                                     w_SteamNetworkingMessage_t_147 **ppOutMessages,
                                                                                                     int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params params =
     {
         .linux_side = _this->u_iface,
         .hPollGroup = hPollGroup,
@@ -487,7 +476,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_147( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -495,7 +484,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
 
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_147 *const *pMessages, int64_t *pOutMessageNumberOrResult)
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages_params params =
     {
         .linux_side = _this->u_iface,
         .nMessages = nMessages,
@@ -506,7 +495,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessage
 
     TRACE("%p\n", _this);
 
-    cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
 }
 
@@ -514,7 +503,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessage
 
 w_SteamNetworkingMessage_t_147 *__thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage( struct w_steam_iface *_this, int32_t cbAllocateBuffer )
 {
-    struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params params =
+    struct ISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params params =
     {
         .linux_side = _this->u_iface,
         .cbAllocateBuffer = cbAllocateBuffer,
@@ -534,7 +523,7 @@ w_SteamNetworkingMessage_t_147 *__thiscall winISteamNetworkingUtils_SteamNetwork
     message->w_msg_147.m_pfnRelease = w_SteamNetworkingMessage_t_147_Release;
     params._ret = &message->w_msg_147;
 
-    cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage, &params );
 
     return params._ret;
 }
@@ -543,9 +532,9 @@ w_SteamNetworkingMessage_t_147 *__thiscall winISteamNetworkingUtils_SteamNetwork
 
 void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort( struct w_steam_iface *_this )
 {
-    struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort_params params = {.linux_side = _this->u_iface};
+    struct ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
-    cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort, &params );
     HeapFree( GetProcessHeap(), 0, _this );
 }
 
@@ -553,7 +542,7 @@ int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_
                                                                                                  w_SteamNetworkingMessage_t_153a **ppOutMessages,
                                                                                                  int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params params =
+    struct ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params params =
     {
         .linux_side = _this->u_iface,
         .ppOutMessages = ppOutMessages,
@@ -563,7 +552,7 @@ int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages, &params );
     if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -575,7 +564,7 @@ int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_Receiv
                                                                                                     w_SteamNetworkingMessage_t_153a **ppOutMessages,
                                                                                                     int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params params =
+    struct ISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params params =
     {
         .linux_side = _this->u_iface,
         .nLocalChannel = nLocalChannel,
@@ -586,7 +575,7 @@ int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_Receiv
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel, &params );
     if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -598,7 +587,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
                                                                                                      uint32_t hConn, w_SteamNetworkingMessage_t_153a **ppOutMessages,
                                                                                                      int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params params =
     {
         .linux_side = _this->u_iface,
         .hConn = hConn,
@@ -609,7 +598,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection, &params );
     if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -619,7 +608,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
                                                                                                     w_SteamNetworkingMessage_t_153a **ppOutMessages,
                                                                                                     int32_t nMaxMessages )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup_params params =
     {
         .linux_side = _this->u_iface,
         .hPollGroup = hPollGroup,
@@ -630,7 +619,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
     TRACE( "%p\n", _this );
 
     if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup, &params );
     if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
     return params._ret;
@@ -640,7 +629,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
 
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_153a *const *pMessages, int64_t *pOutMessageNumberOrResult)
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages_params params =
+    struct ISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages_params params =
     {
         .linux_side = _this->u_iface,
         .nMessages = nMessages,
@@ -651,13 +640,13 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessage
 
     TRACE("%p\n", _this);
 
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
 }
 
 w_SteamNetworkingMessage_t_153a *__thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( struct w_steam_iface *_this, int32_t cbAllocateBuffer )
 {
-    struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params params =
+    struct ISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params params =
     {
         .linux_side = _this->u_iface,
         .cbAllocateBuffer = cbAllocateBuffer,
@@ -677,6 +666,6 @@ w_SteamNetworkingMessage_t_153a *__thiscall winISteamNetworkingUtils_SteamNetwor
     message->w_msg_153a.m_pfnRelease = w_SteamNetworkingMessage_t_153a_Release;
     params._ret = &message->w_msg_153a;
 
-    cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( &params );
+    STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage, &params );
     return params._ret;
 }

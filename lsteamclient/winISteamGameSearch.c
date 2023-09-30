@@ -3,8 +3,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
-#include "cppISteamGameSearch_SteamMatchGameSearch001.h"
-
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby, 20)
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo, 12)
@@ -22,20 +20,20 @@ DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGame, 12)
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(struct w_steam_iface *_this, const char *pchKeyToFind, const char *pchValuesToFind)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params params =
     {
         .linux_side = _this->u_iface,
         .pchKeyToFind = pchKeyToFind,
         .pchValuesToFind = pchValuesToFind,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(struct w_steam_iface *_this, CSteamID steamIDLobby, int32_t nPlayerMin, int32_t nPlayerMax)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params params =
     {
         .linux_side = _this->u_iface,
         .steamIDLobby = steamIDLobby,
@@ -43,48 +41,48 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWit
         .nPlayerMax = nPlayerMax,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(struct w_steam_iface *_this, int32_t nPlayerMin, int32_t nPlayerMax)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params params =
     {
         .linux_side = _this->u_iface,
         .nPlayerMin = nPlayerMin,
         .nPlayerMax = nPlayerMax,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AcceptGame(struct w_steam_iface *_this)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_AcceptGame_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_AcceptGame, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_DeclineGame(struct w_steam_iface *_this)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_DeclineGame_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_DeclineGame, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(struct w_steam_iface *_this, CSteamID steamIDHost, char *pchConnectionDetails, int32_t cubConnectionDetails)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_params params =
     {
         .linux_side = _this->u_iface,
         .steamIDHost = steamIDHost,
@@ -92,50 +90,50 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnecti
         .cubConnectionDetails = cubConnectionDetails,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(struct w_steam_iface *_this)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_EndGameSearch_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_EndGameSearch, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams_params params =
     {
         .linux_side = _this->u_iface,
         .pchKey = pchKey,
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(struct w_steam_iface *_this, const char *pchConnectionDetails, int32_t cubConnectionDetails)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params params =
     {
         .linux_side = _this->u_iface,
         .pchConnectionDetails = pchConnectionDetails,
         .cubConnectionDetails = cubConnectionDetails,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(struct w_steam_iface *_this, int32_t nPlayerMin, int32_t nPlayerMax, int32_t nMaxTeamSize)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params params =
     {
         .linux_side = _this->u_iface,
         .nPlayerMin = nPlayerMin,
@@ -143,36 +141,36 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersFo
         .nMaxTeamSize = nMaxTeamSize,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(struct w_steam_iface *_this, uint64_t ullUniqueGameID)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params params =
     {
         .linux_side = _this->u_iface,
         .ullUniqueGameID = ullUniqueGameID,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(struct w_steam_iface *_this)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(struct w_steam_iface *_this, uint64_t ullUniqueGameID, CSteamID steamIDPlayer, uint32_t EPlayerResult)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult_params params =
     {
         .linux_side = _this->u_iface,
         .ullUniqueGameID = ullUniqueGameID,
@@ -180,19 +178,19 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResu
         .EPlayerResult = EPlayerResult,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGame(struct w_steam_iface *_this, uint64_t ullUniqueGameID)
 {
-    struct cppISteamGameSearch_SteamMatchGameSearch001_EndGame_params params =
+    struct ISteamGameSearch_SteamMatchGameSearch001_EndGame_params params =
     {
         .linux_side = _this->u_iface,
         .ullUniqueGameID = ullUniqueGameID,
     };
     TRACE("%p\n", _this);
-    cppISteamGameSearch_SteamMatchGameSearch001_EndGame( &params );
+    STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_EndGame, &params );
     return params._ret;
 }
 

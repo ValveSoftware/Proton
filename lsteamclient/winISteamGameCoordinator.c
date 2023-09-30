@@ -3,15 +3,13 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
-#include "cppISteamGameCoordinator_SteamGameCoordinator001.h"
-
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_SendMessage, 16)
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage, 20)
 
 uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(struct w_steam_iface *_this, uint32_t unMsgType, const void *pubData, uint32_t cubData)
 {
-    struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params params =
+    struct ISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params params =
     {
         .linux_side = _this->u_iface,
         .unMsgType = unMsgType,
@@ -19,25 +17,25 @@ uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage( &params );
+    STEAMCLIENT_CALL( ISteamGameCoordinator_SteamGameCoordinator001_SendMessage, &params );
     return params._ret;
 }
 
 bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32_t *pcubMsgSize)
 {
-    struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params params =
+    struct ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params params =
     {
         .linux_side = _this->u_iface,
         .pcubMsgSize = pcubMsgSize,
     };
     TRACE("%p\n", _this);
-    cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable( &params );
+    STEAMCLIENT_CALL( ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(struct w_steam_iface *_this, uint32_t *punMsgType, void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize)
 {
-    struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params params =
+    struct ISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params params =
     {
         .linux_side = _this->u_iface,
         .punMsgType = punMsgType,
@@ -46,7 +44,7 @@ uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMes
         .pcubMsgSize = pcubMsgSize,
     };
     TRACE("%p\n", _this);
-    cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage( &params );
+    STEAMCLIENT_CALL( ISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage, &params );
     return params._ret;
 }
 
