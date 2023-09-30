@@ -17,7 +17,6 @@
 #include "d3d11_4.h"
 #include "dxvk-interop.h"
 
-#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"

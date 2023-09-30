@@ -19,36 +19,6 @@ struct u_IVRRenderModels_IVRRenderModels_002
 #endif /* __cplusplus */
 };
 
-void cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params *params )
-{
-    struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;
-    u_RenderModel_t_0912 *u_ppRenderModel;
-    params->_ret = (bool)iface->LoadRenderModel( params->pchRenderModelName, params->ppRenderModel ? &u_ppRenderModel : nullptr );
-    if (params->_ret == 0)
-        *params->ppRenderModel = struct_RenderModel_t_0912_wrap( u_ppRenderModel );
-}
-
-void cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel( struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params *params )
-{
-    struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;
-    iface->FreeRenderModel( struct_RenderModel_t_0912_unwrap( params->pRenderModel ) );
-}
-
-void cppIVRRenderModels_IVRRenderModels_002_LoadTexture( struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params *params )
-{
-    struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;
-    u_RenderModel_TextureMap_t_090 *u_ppTexture;
-    params->_ret = (bool)iface->LoadTexture( params->textureId, params->ppTexture ? &u_ppTexture : nullptr );
-    if (params->_ret == 0)
-        *params->ppTexture = struct_RenderModel_TextureMap_t_090_wrap( u_ppTexture );
-}
-
-void cppIVRRenderModels_IVRRenderModels_002_FreeTexture( struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params *params )
-{
-    struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;
-    iface->FreeTexture( struct_RenderModel_TextureMap_t_090_unwrap( params->pTexture ) );
-}
-
 void cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName( struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName_params *params )
 {
     struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;
