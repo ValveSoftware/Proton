@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRMailbox_IVRMailbox_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc1, 12)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc2, 12)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
@@ -17,26 +15,26 @@ DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
 
 uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *_this, const char *a, uint64_t *b)
 {
-    struct cppIVRMailbox_IVRMailbox_001_undoc1_params params =
+    struct IVRMailbox_IVRMailbox_001_undoc1_params params =
     {
         .linux_side = _this->u_iface,
         .a = a,
         .b = b,
     };
     TRACE("%p\n", _this);
-    cppIVRMailbox_IVRMailbox_001_undoc1( &params );
+    VRCLIENT_CALL( IVRMailbox_IVRMailbox_001_undoc1, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_this, uint64_t a)
 {
-    struct cppIVRMailbox_IVRMailbox_001_undoc2_params params =
+    struct IVRMailbox_IVRMailbox_001_undoc2_params params =
     {
         .linux_side = _this->u_iface,
         .a = a,
     };
     TRACE("%p\n", _this);
-    cppIVRMailbox_IVRMailbox_001_undoc2( &params );
+    VRCLIENT_CALL( IVRMailbox_IVRMailbox_001_undoc2, &params );
     return params._ret;
 }
 
@@ -44,7 +42,7 @@ extern uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_if
 
 uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, uint64_t a, char *b, uint32_t c, uint32_t *d)
 {
-    struct cppIVRMailbox_IVRMailbox_001_undoc4_params params =
+    struct IVRMailbox_IVRMailbox_001_undoc4_params params =
     {
         .linux_side = _this->u_iface,
         .a = a,
@@ -53,7 +51,7 @@ uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_t
         .d = d,
     };
     TRACE("%p\n", _this);
-    cppIVRMailbox_IVRMailbox_001_undoc4( &params );
+    VRCLIENT_CALL( IVRMailbox_IVRMailbox_001_undoc4, &params );
     return params._ret;
 }
 

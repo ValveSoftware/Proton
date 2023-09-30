@@ -9,32 +9,6 @@
 #include "dxvk-interop.h"
 #include "vrclient_private.h"
 
-#include "flatapi.h"
-
-#include "cppIVROverlay_IVROverlay_001.h"
-#include "cppIVROverlay_IVROverlay_002.h"
-#include "cppIVROverlay_IVROverlay_003.h"
-#include "cppIVROverlay_IVROverlay_004.h"
-#include "cppIVROverlay_IVROverlay_005.h"
-#include "cppIVROverlay_IVROverlay_007.h"
-#include "cppIVROverlay_IVROverlay_008.h"
-#include "cppIVROverlay_IVROverlay_010.h"
-#include "cppIVROverlay_IVROverlay_011.h"
-#include "cppIVROverlay_IVROverlay_012.h"
-#include "cppIVROverlay_IVROverlay_013.h"
-#include "cppIVROverlay_IVROverlay_014.h"
-#include "cppIVROverlay_IVROverlay_016.h"
-#include "cppIVROverlay_IVROverlay_017.h"
-#include "cppIVROverlay_IVROverlay_018.h"
-#include "cppIVROverlay_IVROverlay_019.h"
-#include "cppIVROverlay_IVROverlay_020.h"
-#include "cppIVROverlay_IVROverlay_021.h"
-#include "cppIVROverlay_IVROverlay_022.h"
-#include "cppIVROverlay_IVROverlay_024.h"
-#include "cppIVROverlay_IVROverlay_025.h"
-#include "cppIVROverlay_IVROverlay_026.h"
-#include "cppIVROverlay_IVROverlay_027.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 struct set_overlay_texture_state
@@ -160,7 +134,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_007_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_007_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -171,7 +145,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_007_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_007_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -181,7 +155,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_008_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_008_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -192,7 +166,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_008_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_008_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -202,7 +176,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_010_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_010_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -213,7 +187,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_010_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_010_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -223,7 +197,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_011_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_011_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -234,7 +208,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_011_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_011_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -244,7 +218,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_012_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_012_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -255,7 +229,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_012_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_012_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -265,7 +239,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_013_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_013_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -276,7 +250,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_013_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_013_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -286,7 +260,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_014_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_014_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -297,7 +271,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_014_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_014_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -307,7 +281,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_016_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_016_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -318,7 +292,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_016_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_016_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -328,7 +302,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_017_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_017_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -339,7 +313,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_017_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_017_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -349,7 +323,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_018_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_018_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -360,7 +334,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_018_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_018_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -370,7 +344,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_019_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_019_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -381,7 +355,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_019_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_019_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -391,7 +365,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_020_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_020_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -402,7 +376,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_020_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_020_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -412,7 +386,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_021_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_021_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -423,7 +397,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_021_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_021_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -433,7 +407,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_022_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_022_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -444,7 +418,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_022_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_022_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -454,7 +428,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_024_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_024_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -465,7 +439,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_024_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_024_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -475,7 +449,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_025_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_025_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -486,7 +460,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_025_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_025_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -496,7 +470,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_026_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_026_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -507,7 +481,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_026_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_026_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;
@@ -517,7 +491,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture( struct w_ste
                                                                     const w_Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
-    struct cppIVROverlay_IVROverlay_027_SetOverlayTexture_params params =
+    struct IVROverlay_IVROverlay_027_SetOverlayTexture_params params =
     {
         .linux_side = _this->u_iface,
         .ulOverlayHandle = ulOverlayHandle,
@@ -528,7 +502,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture( struct w_ste
 
     if (pTexture->eType == TextureType_DirectX) load_overlay_texture_dxvk( pTexture, &state );
     if (pTexture->eType == TextureType_Vulkan) load_overlay_texture_vulkan( pTexture, &state );
-    cppIVROverlay_IVROverlay_027_SetOverlayTexture( &params );
+    VRCLIENT_CALL( IVROverlay_IVROverlay_027_SetOverlayTexture, &params );
     if (pTexture->eType == TextureType_DirectX) free_unix_overlay_texture_dxvk( &state );
 
     return params._ret;

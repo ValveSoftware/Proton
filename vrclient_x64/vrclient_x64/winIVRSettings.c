@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRSettings_IVRSettings_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_Sync, 12)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_GetBool, 20)
@@ -25,32 +23,32 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_001_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eError)
 {
-    struct cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params params =
+    struct IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eError = eError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_001_Sync(struct w_steam_iface *_this, bool bForce, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_Sync_params params =
+    struct IVRSettings_IVRSettings_001_Sync_params params =
     {
         .linux_side = _this->u_iface,
         .bForce = bForce,
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_Sync( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_Sync, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bDefaultValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_GetBool_params params =
+    struct IVRSettings_IVRSettings_001_GetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -59,13 +57,13 @@ bool __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_GetBool, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_SetBool_params params =
+    struct IVRSettings_IVRSettings_001_SetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -74,12 +72,12 @@ void __thiscall winIVRSettings_IVRSettings_001_SetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_SetBool, &params );
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_001_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nDefaultValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_GetInt32_params params =
+    struct IVRSettings_IVRSettings_001_GetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -88,13 +86,13 @@ int32_t __thiscall winIVRSettings_IVRSettings_001_GetInt32(struct w_steam_iface 
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_GetInt32, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_SetInt32_params params =
+    struct IVRSettings_IVRSettings_001_SetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -103,12 +101,12 @@ void __thiscall winIVRSettings_IVRSettings_001_SetInt32(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_SetInt32, &params );
 }
 
 float __thiscall winIVRSettings_IVRSettings_001_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flDefaultValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_GetFloat_params params =
+    struct IVRSettings_IVRSettings_001_GetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -117,13 +115,13 @@ float __thiscall winIVRSettings_IVRSettings_001_GetFloat(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_GetFloat, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_SetFloat_params params =
+    struct IVRSettings_IVRSettings_001_SetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -132,12 +130,12 @@ void __thiscall winIVRSettings_IVRSettings_001_SetFloat(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_SetFloat, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, const char *pchDefaultValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_GetString_params params =
+    struct IVRSettings_IVRSettings_001_GetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -148,12 +146,12 @@ void __thiscall winIVRSettings_IVRSettings_001_GetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_GetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_GetString, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_SetString_params params =
+    struct IVRSettings_IVRSettings_001_SetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -162,24 +160,24 @@ void __thiscall winIVRSettings_IVRSettings_001_SetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_SetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_SetString, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_RemoveSection(struct w_steam_iface *_this, const char *pchSection, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_RemoveSection_params params =
+    struct IVRSettings_IVRSettings_001_RemoveSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_RemoveSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_RemoveSection, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_001_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_001_RemoveKeyInSection_params params =
+    struct IVRSettings_IVRSettings_001_RemoveKeyInSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -187,7 +185,7 @@ void __thiscall winIVRSettings_IVRSettings_001_RemoveKeyInSection(struct w_steam
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_001_RemoveKeyInSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_001_RemoveKeyInSection, &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_001_vtable;
@@ -261,8 +259,6 @@ void destroy_winIVRSettings_IVRSettings_001_FnTable(struct w_steam_iface *object
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRSettings_IVRSettings_002.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_Sync, 12)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_SetBool, 20)
@@ -278,32 +274,32 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_002_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eError)
 {
-    struct cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum_params params =
+    struct IVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eError = eError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRSettings_IVRSettings_002_Sync(struct w_steam_iface *_this, bool bForce, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_Sync_params params =
+    struct IVRSettings_IVRSettings_002_Sync_params params =
     {
         .linux_side = _this->u_iface,
         .bForce = bForce,
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_Sync( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_Sync, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_SetBool_params params =
+    struct IVRSettings_IVRSettings_002_SetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -312,12 +308,12 @@ void __thiscall winIVRSettings_IVRSettings_002_SetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_SetBool, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_SetInt32_params params =
+    struct IVRSettings_IVRSettings_002_SetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -326,12 +322,12 @@ void __thiscall winIVRSettings_IVRSettings_002_SetInt32(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_SetInt32, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_SetFloat_params params =
+    struct IVRSettings_IVRSettings_002_SetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -340,12 +336,12 @@ void __thiscall winIVRSettings_IVRSettings_002_SetFloat(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_SetFloat, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_SetString_params params =
+    struct IVRSettings_IVRSettings_002_SetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -354,12 +350,12 @@ void __thiscall winIVRSettings_IVRSettings_002_SetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_SetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_SetString, &params );
 }
 
 bool __thiscall winIVRSettings_IVRSettings_002_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_GetBool_params params =
+    struct IVRSettings_IVRSettings_002_GetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -367,13 +363,13 @@ bool __thiscall winIVRSettings_IVRSettings_002_GetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_GetBool, &params );
     return params._ret;
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_002_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_GetInt32_params params =
+    struct IVRSettings_IVRSettings_002_GetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -381,13 +377,13 @@ int32_t __thiscall winIVRSettings_IVRSettings_002_GetInt32(struct w_steam_iface 
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_GetInt32, &params );
     return params._ret;
 }
 
 float __thiscall winIVRSettings_IVRSettings_002_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_GetFloat_params params =
+    struct IVRSettings_IVRSettings_002_GetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -395,13 +391,13 @@ float __thiscall winIVRSettings_IVRSettings_002_GetFloat(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_GetFloat, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_GetString_params params =
+    struct IVRSettings_IVRSettings_002_GetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -411,24 +407,24 @@ void __thiscall winIVRSettings_IVRSettings_002_GetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_GetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_GetString, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_RemoveSection(struct w_steam_iface *_this, const char *pchSection, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_RemoveSection_params params =
+    struct IVRSettings_IVRSettings_002_RemoveSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_RemoveSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_RemoveSection, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_002_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_002_RemoveKeyInSection_params params =
+    struct IVRSettings_IVRSettings_002_RemoveKeyInSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -436,7 +432,7 @@ void __thiscall winIVRSettings_IVRSettings_002_RemoveKeyInSection(struct w_steam
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_002_RemoveKeyInSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_002_RemoveKeyInSection, &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_002_vtable;
@@ -510,8 +506,6 @@ void destroy_winIVRSettings_IVRSettings_002_FnTable(struct w_steam_iface *object
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRSettings_IVRSettings_003.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetBool, 20)
 DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_SetInt32, 20)
@@ -526,19 +520,19 @@ DEFINE_THISCALL_WRAPPER(winIVRSettings_IVRSettings_003_RemoveKeyInSection, 16)
 
 const char * __thiscall winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t eError)
 {
-    struct cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params params =
+    struct IVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .eError = eError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_SetBool_params params =
+    struct IVRSettings_IVRSettings_003_SetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -547,12 +541,12 @@ void __thiscall winIVRSettings_IVRSettings_003_SetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_SetBool, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int32_t nValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_SetInt32_params params =
+    struct IVRSettings_IVRSettings_003_SetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -561,12 +555,12 @@ void __thiscall winIVRSettings_IVRSettings_003_SetInt32(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_SetInt32, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, float flValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_SetFloat_params params =
+    struct IVRSettings_IVRSettings_003_SetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -575,12 +569,12 @@ void __thiscall winIVRSettings_IVRSettings_003_SetFloat(struct w_steam_iface *_t
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_SetFloat, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_SetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, const char *pchValue, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_SetString_params params =
+    struct IVRSettings_IVRSettings_003_SetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -589,12 +583,12 @@ void __thiscall winIVRSettings_IVRSettings_003_SetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_SetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_SetString, &params );
 }
 
 bool __thiscall winIVRSettings_IVRSettings_003_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_GetBool_params params =
+    struct IVRSettings_IVRSettings_003_GetBool_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -602,13 +596,13 @@ bool __thiscall winIVRSettings_IVRSettings_003_GetBool(struct w_steam_iface *_th
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetBool( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_GetBool, &params );
     return params._ret;
 }
 
 int32_t __thiscall winIVRSettings_IVRSettings_003_GetInt32(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_GetInt32_params params =
+    struct IVRSettings_IVRSettings_003_GetInt32_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -616,13 +610,13 @@ int32_t __thiscall winIVRSettings_IVRSettings_003_GetInt32(struct w_steam_iface 
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetInt32( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_GetInt32, &params );
     return params._ret;
 }
 
 float __thiscall winIVRSettings_IVRSettings_003_GetFloat(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_GetFloat_params params =
+    struct IVRSettings_IVRSettings_003_GetFloat_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -630,13 +624,13 @@ float __thiscall winIVRSettings_IVRSettings_003_GetFloat(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetFloat( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_GetFloat, &params );
     return params._ret;
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_GetString(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, char *pchValue, uint32_t unValueLen, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_GetString_params params =
+    struct IVRSettings_IVRSettings_003_GetString_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -646,24 +640,24 @@ void __thiscall winIVRSettings_IVRSettings_003_GetString(struct w_steam_iface *_
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_GetString( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_GetString, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_RemoveSection(struct w_steam_iface *_this, const char *pchSection, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_RemoveSection_params params =
+    struct IVRSettings_IVRSettings_003_RemoveSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_RemoveSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_RemoveSection, &params );
 }
 
 void __thiscall winIVRSettings_IVRSettings_003_RemoveKeyInSection(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
-    struct cppIVRSettings_IVRSettings_003_RemoveKeyInSection_params params =
+    struct IVRSettings_IVRSettings_003_RemoveKeyInSection_params params =
     {
         .linux_side = _this->u_iface,
         .pchSection = pchSection,
@@ -671,7 +665,7 @@ void __thiscall winIVRSettings_IVRSettings_003_RemoveKeyInSection(struct w_steam
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRSettings_IVRSettings_003_RemoveKeyInSection( &params );
+    VRCLIENT_CALL( IVRSettings_IVRSettings_003_RemoveKeyInSection, &params );
 }
 
 extern vtable_ptr winIVRSettings_IVRSettings_003_vtable;

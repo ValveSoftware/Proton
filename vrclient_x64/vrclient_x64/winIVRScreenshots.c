@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRScreenshots_IVRScreenshots_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_RequestScreenshot, 20)
 DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_HookScreenshot, 12)
 DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, 12)
@@ -20,7 +18,7 @@ DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 2
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struct w_steam_iface *_this, uint32_t *pOutScreenshotHandle, uint32_t type, const char *pchPreviewFilename, const char *pchVRFilename)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot_params params =
+    struct IVRScreenshots_IVRScreenshots_001_RequestScreenshot_params params =
     {
         .linux_side = _this->u_iface,
         .pOutScreenshotHandle = pOutScreenshotHandle,
@@ -31,7 +29,7 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struc
     params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
     params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_RequestScreenshot, &params );
     vrclient_free_path( params.pchPreviewFilename );
     vrclient_free_path( params.pchVRFilename );
     return params._ret;
@@ -39,33 +37,33 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struc
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(struct w_steam_iface *_this, uint32_t *pSupportedTypes, int32_t numTypes)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_HookScreenshot_params params =
+    struct IVRScreenshots_IVRScreenshots_001_HookScreenshot_params params =
     {
         .linux_side = _this->u_iface,
         .pSupportedTypes = pSupportedTypes,
         .numTypes = numTypes,
     };
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_HookScreenshot( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_HookScreenshot, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t *pError)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType_params params =
+    struct IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType_params params =
     {
         .linux_side = _this->u_iface,
         .screenshotHandle = screenshotHandle,
         .pError = pError,
     };
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t filenameType, char *pchFilename, uint32_t cchFilename, uint32_t *pError)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename_params params =
+    struct IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename_params params =
     {
         .linux_side = _this->u_iface,
         .screenshotHandle = screenshotHandle,
@@ -75,27 +73,27 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFi
         .pError = pError,
     };
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, &params );
     params._ret = vrclient_unix_path_to_dos_path( params._ret, pchFilename, pchFilename, cchFilename );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(struct w_steam_iface *_this, uint32_t screenshotHandle, float flProgress)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress_params params =
+    struct IVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress_params params =
     {
         .linux_side = _this->u_iface,
         .screenshotHandle = screenshotHandle,
         .flProgress = flProgress,
     };
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(struct w_steam_iface *_this, uint32_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot_params params =
+    struct IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot_params params =
     {
         .linux_side = _this->u_iface,
         .pOutScreenshotHandle = pOutScreenshotHandle,
@@ -105,7 +103,7 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(st
     params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
     params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, &params );
     vrclient_free_path( params.pchPreviewFilename );
     vrclient_free_path( params.pchVRFilename );
     return params._ret;
@@ -113,7 +111,7 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(st
 
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
 {
-    struct cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params params =
+    struct IVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params params =
     {
         .linux_side = _this->u_iface,
         .screenshotHandle = screenshotHandle,
@@ -124,7 +122,7 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct
     params.pchSourcePreviewFilename = vrclient_dos_to_unix_path( pchSourcePreviewFilename );
     params.pchSourceVRFilename = vrclient_dos_to_unix_path( pchSourceVRFilename );
     TRACE("%p\n", _this);
-    cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot( &params );
+    VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_SubmitScreenshot, &params );
     vrclient_free_path( params.pchSourcePreviewFilename );
     vrclient_free_path( params.pchSourceVRFilename );
     return params._ret;

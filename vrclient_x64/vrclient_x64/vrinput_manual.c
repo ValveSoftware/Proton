@@ -1,11 +1,5 @@
 #include "vrclient_private.h"
 
-#include "cppIVRInput_IVRInput_004.h"
-#include "cppIVRInput_IVRInput_005.h"
-#include "cppIVRInput_IVRInput_006.h"
-#include "cppIVRInput_IVRInput_007.h"
-#include "cppIVRInput_IVRInput_010.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #ifndef __x86_64__
@@ -75,7 +69,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_stea
                                                                    w_InputDigitalActionData_t *pActionData,
                                                                    uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
-    struct cppIVRInput_IVRInput_004_GetDigitalActionData_params params =
+    struct IVRInput_IVRInput_004_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
@@ -86,7 +80,7 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_stea
 
     TRACE( "%p\n", _this );
 
-    cppIVRInput_IVRInput_004_GetDigitalActionData( &params );
+    VRCLIENT_CALL( IVRInput_IVRInput_004_GetDigitalActionData, &params );
 #ifdef __x86_64__
     return params._ret;
 #else
@@ -99,7 +93,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_stea
                                                                    w_InputDigitalActionData_t *pActionData,
                                                                    uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
-    struct cppIVRInput_IVRInput_005_GetDigitalActionData_params params =
+    struct IVRInput_IVRInput_005_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
@@ -110,7 +104,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_stea
 
     TRACE( "%p\n", _this );
 
-    cppIVRInput_IVRInput_005_GetDigitalActionData( &params );
+    VRCLIENT_CALL( IVRInput_IVRInput_005_GetDigitalActionData, &params );
 #ifdef __x86_64__
     return params._ret;
 #else
@@ -123,7 +117,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_stea
                                                                    w_InputDigitalActionData_t *pActionData,
                                                                    uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
-    struct cppIVRInput_IVRInput_006_GetDigitalActionData_params params =
+    struct IVRInput_IVRInput_006_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
@@ -134,7 +128,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_stea
 
     TRACE( "%p\n", _this );
 
-    cppIVRInput_IVRInput_006_GetDigitalActionData( &params );
+    VRCLIENT_CALL( IVRInput_IVRInput_006_GetDigitalActionData, &params );
 #ifdef __x86_64__
     return params._ret;
 #else
@@ -147,7 +141,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_stea
                                                                    w_InputDigitalActionData_t *pActionData,
                                                                    uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
-    struct cppIVRInput_IVRInput_007_GetDigitalActionData_params params =
+    struct IVRInput_IVRInput_007_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
@@ -158,7 +152,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_stea
 
     TRACE( "%p\n", _this );
 
-    cppIVRInput_IVRInput_007_GetDigitalActionData( &params );
+    VRCLIENT_CALL( IVRInput_IVRInput_007_GetDigitalActionData, &params );
 #ifdef __x86_64__
     return params._ret;
 #else
@@ -171,7 +165,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w_stea
                                                                    w_InputDigitalActionData_t *pActionData,
                                                                    uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
-    struct cppIVRInput_IVRInput_010_GetDigitalActionData_params params =
+    struct IVRInput_IVRInput_010_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
@@ -182,7 +176,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w_stea
 
     TRACE( "%p\n", _this );
 
-    cppIVRInput_IVRInput_010_GetDigitalActionData( &params );
+    VRCLIENT_CALL( IVRInput_IVRInput_010_GetDigitalActionData, &params );
 #ifdef __x86_64__
     return params._ret;
 #else
