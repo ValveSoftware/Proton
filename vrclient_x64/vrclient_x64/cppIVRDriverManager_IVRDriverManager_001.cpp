@@ -1,16 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRDriverManager_IVRDriverManager_001.h"
-struct u_IVRDriverManager_IVRDriverManager_001
-{
-#ifdef __cplusplus
-    virtual uint32_t GetDriverCount(  ) = 0;
-    virtual uint32_t GetDriverName( uint32_t, char *, uint32_t ) = 0;
-    virtual uint64_t GetDriverHandle( const char * ) = 0;
-    virtual bool IsEnabled( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRDriverManager_IVRDriverManager_001_GetDriverCount( struct cppIVRDriverManager_IVRDriverManager_001_GetDriverCount_params *params )
 {
     struct u_IVRDriverManager_IVRDriverManager_001 *iface = (struct u_IVRDriverManager_IVRDriverManager_001 *)params->linux_side;

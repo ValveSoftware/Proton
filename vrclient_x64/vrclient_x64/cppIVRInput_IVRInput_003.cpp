@@ -1,29 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRInput_IVRInput_003.h"
-struct u_IVRInput_IVRInput_003
-{
-#ifdef __cplusplus
-    virtual uint32_t SetActionManifestPath( const char * ) = 0;
-    virtual uint32_t GetActionSetHandle( const char *, uint64_t * ) = 0;
-    virtual uint32_t GetActionHandle( const char *, uint64_t * ) = 0;
-    virtual uint32_t GetInputSourceHandle( const char *, uint64_t * ) = 0;
-    virtual uint32_t UpdateActionState( VRActiveActionSet_t_1015 *, uint32_t, uint32_t ) = 0;
-    virtual uint32_t GetDigitalActionData( uint64_t, u_InputDigitalActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetAnalogActionData( uint64_t, u_InputAnalogActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetPoseActionData( uint64_t, uint32_t, float, u_InputPoseActionData_t *, uint32_t ) = 0;
-    virtual uint32_t GetSkeletalActionData( uint64_t, uint32_t, float, u_InputSkeletonActionData_t *, uint32_t, VRBoneTransform_t *, uint32_t ) = 0;
-    virtual uint32_t GetSkeletalActionDataCompressed( uint64_t, uint32_t, float, void *, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t UncompressSkeletalActionData( void *, uint32_t, uint32_t *, VRBoneTransform_t *, uint32_t ) = 0;
-    virtual uint32_t TriggerHapticVibrationAction( uint64_t, float, float, float, float ) = 0;
-    virtual uint32_t GetActionOrigins( uint64_t, uint64_t, uint64_t *, uint32_t ) = 0;
-    virtual uint32_t GetOriginLocalizedName( uint64_t, char *, uint32_t ) = 0;
-    virtual uint32_t GetOriginTrackedDeviceInfo( uint64_t, u_InputOriginInfo_t *, uint32_t ) = 0;
-    virtual uint32_t ShowActionOrigins( uint64_t, uint64_t ) = 0;
-    virtual uint32_t ShowBindingsForActionSet( VRActiveActionSet_t_1015 *, uint32_t, uint32_t, uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRInput_IVRInput_003_SetActionManifestPath( struct cppIVRInput_IVRInput_003_SetActionManifestPath_params *params )
 {
     struct u_IVRInput_IVRInput_003 *iface = (struct u_IVRInput_IVRInput_003 *)params->linux_side;

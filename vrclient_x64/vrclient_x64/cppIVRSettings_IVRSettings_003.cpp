@@ -1,23 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRSettings_IVRSettings_003.h"
-struct u_IVRSettings_IVRSettings_003
-{
-#ifdef __cplusplus
-    virtual const char * GetSettingsErrorNameFromEnum( uint32_t ) = 0;
-    virtual void SetBool( const char *, const char *, bool, uint32_t * ) = 0;
-    virtual void SetInt32( const char *, const char *, int32_t, uint32_t * ) = 0;
-    virtual void SetFloat( const char *, const char *, float, uint32_t * ) = 0;
-    virtual void SetString( const char *, const char *, const char *, uint32_t * ) = 0;
-    virtual bool GetBool( const char *, const char *, uint32_t * ) = 0;
-    virtual int32_t GetInt32( const char *, const char *, uint32_t * ) = 0;
-    virtual float GetFloat( const char *, const char *, uint32_t * ) = 0;
-    virtual void GetString( const char *, const char *, char *, uint32_t, uint32_t * ) = 0;
-    virtual void RemoveSection( const char *, uint32_t * ) = 0;
-    virtual void RemoveKeyInSection( const char *, const char *, uint32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum( struct cppIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum_params *params )
 {
     struct u_IVRSettings_IVRSettings_003 *iface = (struct u_IVRSettings_IVRSettings_003 *)params->linux_side;

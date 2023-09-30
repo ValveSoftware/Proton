@@ -1,36 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRCompositor_IVRCompositor_005.h"
-struct u_IVRCompositor_IVRCompositor_005
-{
-#ifdef __cplusplus
-    virtual uint32_t GetLastError( char *, uint32_t ) = 0;
-    virtual void SetVSync( bool ) = 0;
-    virtual bool GetVSync(  ) = 0;
-    virtual void SetGamma( float ) = 0;
-    virtual float GetGamma(  ) = 0;
-    virtual void SetGraphicsDevice( uint32_t, void * ) = 0;
-    virtual void WaitGetPoses( TrackedDevicePose_t *, uint32_t ) = 0;
-    virtual void Submit( uint32_t, void *, Compositor_TextureBounds * ) = 0;
-    virtual void ClearLastSubmittedFrame(  ) = 0;
-    virtual void GetOverlayDefaults( Compositor_OverlaySettings * ) = 0;
-    virtual void SetOverlay( void *, Compositor_OverlaySettings * ) = 0;
-    virtual void SetOverlayRaw( void *, uint32_t, uint32_t, uint32_t, Compositor_OverlaySettings * ) = 0;
-    virtual void SetOverlayFromFile( const char *, Compositor_OverlaySettings * ) = 0;
-    virtual void ClearOverlay(  ) = 0;
-    virtual bool GetFrameTiming( u_Compositor_FrameTiming_090 *, uint32_t ) = 0;
-    virtual void FadeToColor( float, float, float, float, float, bool ) = 0;
-    virtual void FadeGrid( float, bool ) = 0;
-    virtual void CompositorBringToFront(  ) = 0;
-    virtual void CompositorGoToBack(  ) = 0;
-    virtual void CompositorQuit(  ) = 0;
-    virtual bool IsFullscreen(  ) = 0;
-    virtual bool ComputeOverlayIntersection( const Compositor_OverlaySettings *, float, uint32_t, HmdVector3_t, HmdVector3_t, HmdVector2_t *, HmdVector3_t * ) = 0;
-    virtual void SetTrackingSpace( uint32_t ) = 0;
-    virtual uint32_t GetTrackingSpace(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRCompositor_IVRCompositor_005_GetLastError( struct cppIVRCompositor_IVRCompositor_005_GetLastError_params *params )
 {
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;

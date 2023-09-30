@@ -1,31 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
-struct u_IVRRenderModels_IVRRenderModels_006
-{
-#ifdef __cplusplus
-    virtual uint32_t LoadRenderModel_Async( const char *, u_RenderModel_t_0912 ** ) = 0;
-    virtual void FreeRenderModel( u_RenderModel_t_0912 * ) = 0;
-    virtual uint32_t LoadTexture_Async( int32_t, u_RenderModel_TextureMap_t_1237 ** ) = 0;
-    virtual void FreeTexture( u_RenderModel_TextureMap_t_1237 * ) = 0;
-    virtual uint32_t LoadTextureD3D11_Async( int32_t, void *, void ** ) = 0;
-    virtual uint32_t LoadIntoTextureD3D11_Async( int32_t, void * ) = 0;
-    virtual void FreeTextureD3D11( void * ) = 0;
-    virtual uint32_t GetRenderModelName( uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t GetRenderModelCount(  ) = 0;
-    virtual uint32_t GetComponentCount( const char * ) = 0;
-    virtual uint32_t GetComponentName( const char *, uint32_t, char *, uint32_t ) = 0;
-    virtual uint64_t GetComponentButtonMask( const char *, const char * ) = 0;
-    virtual uint32_t GetComponentRenderModelName( const char *, const char *, char *, uint32_t ) = 0;
-    virtual bool GetComponentStateForDevicePath( const char *, const char *, uint64_t, const RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t * ) = 0;
-    virtual bool GetComponentState( const char *, const char *, const u_VRControllerState001_t *, const RenderModel_ControllerMode_State_t *, RenderModel_ComponentState_t * ) = 0;
-    virtual bool RenderModelHasComponent( const char *, const char * ) = 0;
-    virtual uint32_t GetRenderModelThumbnailURL( const char *, char *, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t GetRenderModelOriginalPath( const char *, char *, uint32_t, uint32_t * ) = 0;
-    virtual const char * GetRenderModelErrorNameFromEnum( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async( struct cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async_params *params )
 {
     struct u_IVRRenderModels_IVRRenderModels_006 *iface = (struct u_IVRRenderModels_IVRRenderModels_006 *)params->linux_side;

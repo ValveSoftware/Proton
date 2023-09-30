@@ -1,20 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRTrackedCamera_IVRTrackedCamera_002.h"
-struct u_IVRTrackedCamera_IVRTrackedCamera_002
-{
-#ifdef __cplusplus
-    virtual const char * GetCameraErrorNameFromEnum( uint32_t ) = 0;
-    virtual uint32_t HasCamera( uint32_t, bool * ) = 0;
-    virtual uint32_t GetCameraFrameSize( uint32_t, uint32_t, uint32_t *, uint32_t *, uint32_t * ) = 0;
-    virtual uint32_t GetCameraIntrinisics( uint32_t, uint32_t, HmdVector2_t *, HmdVector2_t * ) = 0;
-    virtual uint32_t GetCameraProjection( uint32_t, uint32_t, float, float, HmdMatrix44_t * ) = 0;
-    virtual uint32_t AcquireVideoStreamingService( uint32_t, void ** ) = 0;
-    virtual uint32_t ReleaseVideoStreamingService( void * ) = 0;
-    virtual uint32_t GetVideoStreamFrameBuffer( void *, uint32_t, void *, uint32_t, u_CameraVideoStreamFrameHeader_t_100 *, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum( struct cppIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum_params *params )
 {
     struct u_IVRTrackedCamera_IVRTrackedCamera_002 *iface = (struct u_IVRTrackedCamera_IVRTrackedCamera_002 *)params->linux_side;

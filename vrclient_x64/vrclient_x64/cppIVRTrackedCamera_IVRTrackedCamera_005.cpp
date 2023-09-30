@@ -1,24 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRTrackedCamera_IVRTrackedCamera_005.h"
-struct u_IVRTrackedCamera_IVRTrackedCamera_005
-{
-#ifdef __cplusplus
-    virtual const char * GetCameraErrorNameFromEnum( uint32_t ) = 0;
-    virtual uint32_t HasCamera( uint32_t, bool * ) = 0;
-    virtual uint32_t GetCameraFrameSize( uint32_t, uint32_t, uint32_t *, uint32_t *, uint32_t * ) = 0;
-    virtual uint32_t GetCameraIntrinsics( uint32_t, uint32_t, uint32_t, HmdVector2_t *, HmdVector2_t * ) = 0;
-    virtual uint32_t GetCameraProjection( uint32_t, uint32_t, uint32_t, float, float, HmdMatrix44_t * ) = 0;
-    virtual uint32_t AcquireVideoStreamingService( uint32_t, uint64_t * ) = 0;
-    virtual uint32_t ReleaseVideoStreamingService( uint64_t ) = 0;
-    virtual uint32_t GetVideoStreamFrameBuffer( uint64_t, uint32_t, void *, uint32_t, u_CameraVideoStreamFrameHeader_t_1017 *, uint32_t ) = 0;
-    virtual uint32_t GetVideoStreamTextureSize( uint32_t, uint32_t, VRTextureBounds_t *, uint32_t *, uint32_t * ) = 0;
-    virtual uint32_t GetVideoStreamTextureD3D11( uint64_t, uint32_t, void *, void **, u_CameraVideoStreamFrameHeader_t_1017 *, uint32_t ) = 0;
-    virtual uint32_t GetVideoStreamTextureGL( uint64_t, uint32_t, uint32_t *, u_CameraVideoStreamFrameHeader_t_1017 *, uint32_t ) = 0;
-    virtual uint32_t ReleaseVideoStreamTextureGL( uint64_t, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum( struct cppIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum_params *params )
 {
     struct u_IVRTrackedCamera_IVRTrackedCamera_005 *iface = (struct u_IVRTrackedCamera_IVRTrackedCamera_005 *)params->linux_side;

@@ -1,32 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRCompositor_IVRCompositor_006.h"
-struct u_IVRCompositor_IVRCompositor_006
-{
-#ifdef __cplusplus
-    virtual uint32_t GetLastError( char *, uint32_t ) = 0;
-    virtual void SetVSync( bool ) = 0;
-    virtual bool GetVSync(  ) = 0;
-    virtual void SetGamma( float ) = 0;
-    virtual float GetGamma(  ) = 0;
-    virtual void SetGraphicsDevice( uint32_t, void * ) = 0;
-    virtual uint32_t WaitGetPoses( TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t ) = 0;
-    virtual uint32_t Submit( uint32_t, void *, VRTextureBounds_t * ) = 0;
-    virtual void ClearLastSubmittedFrame(  ) = 0;
-    virtual bool GetFrameTiming( u_Compositor_FrameTiming_090 *, uint32_t ) = 0;
-    virtual void FadeToColor( float, float, float, float, float, bool ) = 0;
-    virtual void FadeGrid( float, bool ) = 0;
-    virtual void CompositorBringToFront(  ) = 0;
-    virtual void CompositorGoToBack(  ) = 0;
-    virtual void CompositorQuit(  ) = 0;
-    virtual bool IsFullscreen(  ) = 0;
-    virtual void SetTrackingSpace( uint32_t ) = 0;
-    virtual uint32_t GetTrackingSpace(  ) = 0;
-    virtual uint32_t GetCurrentSceneFocusProcess(  ) = 0;
-    virtual bool CanRenderScene(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRCompositor_IVRCompositor_006_GetLastError( struct cppIVRCompositor_IVRCompositor_006_GetLastError_params *params )
 {
     struct u_IVRCompositor_IVRCompositor_006 *iface = (struct u_IVRCompositor_IVRCompositor_006 *)params->linux_side;

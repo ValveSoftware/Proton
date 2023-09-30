@@ -20,4 +20,6 @@ extern "C" {
 } /* extern "C" */
 #endif /* __cplusplus */
 
+#include "unix_private_generated.h"
+
 #endif /* __VRCLIENT_UNIX_PRIVATE_H */

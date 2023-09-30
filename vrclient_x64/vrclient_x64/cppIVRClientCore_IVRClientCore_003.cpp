@@ -1,19 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRClientCore_IVRClientCore_003.h"
-struct u_IVRClientCore_IVRClientCore_003
-{
-#ifdef __cplusplus
-    virtual uint32_t Init( uint32_t, const char * ) = 0;
-    virtual void Cleanup(  ) = 0;
-    virtual uint32_t IsInterfaceVersionValid( const char * ) = 0;
-    virtual void * GetGenericInterface( const char *, uint32_t * ) = 0;
-    virtual bool BIsHmdPresent(  ) = 0;
-    virtual const char * GetEnglishStringForHmdError( uint32_t ) = 0;
-    virtual const char * GetIDForVRInitError( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRClientCore_IVRClientCore_003_Init( struct cppIVRClientCore_IVRClientCore_003_Init_params *params )
 {
     struct u_IVRClientCore_IVRClientCore_003 *iface = (struct u_IVRClientCore_IVRClientCore_003 *)params->linux_side;
