@@ -74,6 +74,11 @@ struct w_steam_iface
     };
 };
 
+typedef struct w_steam_iface *(*iface_constructor)( void * );
+extern iface_constructor find_iface_constructor( const char *iface_version ) DECLSPEC_HIDDEN;
+typedef void (*iface_destructor)( struct w_steam_iface * );
+extern iface_destructor find_iface_destructor( const char *iface_version ) DECLSPEC_HIDDEN;
+
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 
 struct generic_interface
@@ -93,5 +98,7 @@ extern VkInstance_T *get_native_VkInstance( VkInstance_T *instance );
 extern VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device );
 extern VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device );
 extern VkQueue_T *get_native_VkQueue( VkQueue_T *queue );
+
+#include "vrclient_generated.h"
 
 #endif  /* __cplusplus */
