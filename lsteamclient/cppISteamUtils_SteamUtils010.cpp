@@ -2,50 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUtils_SteamUtils010.h"
 
-struct u_ISteamUtils_SteamUtils010
-{
-#ifdef __cplusplus
-    virtual uint32_t GetSecondsSinceAppActive(  ) = 0;
-    virtual uint32_t GetSecondsSinceComputerActive(  ) = 0;
-    virtual uint32_t GetConnectedUniverse(  ) = 0;
-    virtual uint32_t GetServerRealTime(  ) = 0;
-    virtual const char * GetIPCountry(  ) = 0;
-    virtual bool GetImageSize( int32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool GetImageRGBA( int32_t, uint8_t *, int32_t ) = 0;
-    virtual bool GetCSERIPPort( uint32_t *, uint16_t * ) = 0;
-    virtual uint8_t GetCurrentBatteryPower(  ) = 0;
-    virtual uint32_t GetAppID(  ) = 0;
-    virtual void SetOverlayNotificationPosition( uint32_t ) = 0;
-    virtual bool IsAPICallCompleted( uint64_t, bool * ) = 0;
-    virtual uint32_t GetAPICallFailureReason( uint64_t ) = 0;
-    virtual bool GetAPICallResult( uint64_t, void *, int32_t, int32_t, bool * ) = 0;
-    virtual void RunFrame(  ) = 0;
-    virtual uint32_t GetIPCCallCount(  ) = 0;
-    virtual void SetWarningMessageHook( void (*U_CDECL )(int32_t, const char *) ) = 0;
-    virtual bool IsOverlayEnabled(  ) = 0;
-    virtual bool BOverlayNeedsPresent(  ) = 0;
-    virtual uint64_t CheckFileSignature( const char * ) = 0;
-    virtual bool ShowGamepadTextInput( uint32_t, uint32_t, const char *, uint32_t, const char * ) = 0;
-    virtual uint32_t GetEnteredGamepadTextLength(  ) = 0;
-    virtual bool GetEnteredGamepadTextInput( char *, uint32_t ) = 0;
-    virtual const char * GetSteamUILanguage(  ) = 0;
-    virtual bool IsSteamRunningInVR(  ) = 0;
-    virtual void SetOverlayNotificationInset( int32_t, int32_t ) = 0;
-    virtual bool IsSteamInBigPictureMode(  ) = 0;
-    virtual void StartVRDashboard(  ) = 0;
-    virtual bool IsVRHeadsetStreamingEnabled(  ) = 0;
-    virtual void SetVRHeadsetStreamingEnabled( bool ) = 0;
-    virtual bool IsSteamChinaLauncher(  ) = 0;
-    virtual bool InitFilterText( uint32_t ) = 0;
-    virtual int32_t FilterText( uint32_t, CSteamID, const char *, char *, uint32_t ) = 0;
-    virtual uint32_t GetIPv6ConnectivityState( uint32_t ) = 0;
-    virtual bool IsSteamRunningOnSteamDeck(  ) = 0;
-    virtual bool ShowFloatingGamepadTextInput( uint32_t, int32_t, int32_t, int32_t, int32_t ) = 0;
-    virtual void SetGameLauncherMode( bool ) = 0;
-    virtual bool DismissFloatingGamepadTextInput(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive( struct cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive_params *params )
 {
     struct u_ISteamUtils_SteamUtils010 *iface = (struct u_ISteamUtils_SteamUtils010 *)params->linux_side;

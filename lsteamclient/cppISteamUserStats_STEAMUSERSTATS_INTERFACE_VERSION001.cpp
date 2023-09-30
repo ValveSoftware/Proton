@@ -2,34 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001.h"
 
-struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual uint32_t GetNumStats( CGameID ) = 0;
-    virtual const char * GetStatName( CGameID, uint32_t ) = 0;
-    virtual uint32_t GetStatType( CGameID, const char * ) = 0;
-    virtual uint32_t GetNumAchievements( CGameID ) = 0;
-    virtual const char * GetAchievementName( CGameID, uint32_t ) = 0;
-    virtual uint32_t GetNumGroupAchievements( CGameID ) = 0;
-    virtual const char * GetGroupAchievementName( CGameID, uint32_t ) = 0;
-    virtual bool RequestCurrentStats( CGameID ) = 0;
-    virtual bool GetStat( CGameID, const char *, int32_t * ) = 0;
-    virtual bool GetStat( CGameID, const char *, float * ) = 0;
-    virtual bool SetStat( CGameID, const char *, int32_t ) = 0;
-    virtual bool SetStat( CGameID, const char *, float ) = 0;
-    virtual bool UpdateAvgRateStat( CGameID, const char *, float, double ) = 0;
-    virtual bool GetAchievement( CGameID, const char *, bool * ) = 0;
-    virtual bool GetGroupAchievement( CGameID, const char *, bool * ) = 0;
-    virtual bool SetAchievement( CGameID, const char * ) = 0;
-    virtual bool SetGroupAchievement( CGameID, const char * ) = 0;
-    virtual bool StoreStats( CGameID ) = 0;
-    virtual bool ClearAchievement( CGameID, const char * ) = 0;
-    virtual bool ClearGroupAchievement( CGameID, const char * ) = 0;
-    virtual int32_t GetAchievementIcon( CGameID, const char * ) = 0;
-    virtual const char * GetAchievementDisplayAttribute( CGameID, const char *, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats_params *params )
 {
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;

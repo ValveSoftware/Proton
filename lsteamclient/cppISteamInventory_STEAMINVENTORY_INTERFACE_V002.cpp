@@ -2,49 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V002.h"
 
-struct u_ISteamInventory_STEAMINVENTORY_INTERFACE_V002
-{
-#ifdef __cplusplus
-    virtual uint32_t GetResultStatus( int32_t ) = 0;
-    virtual bool GetResultItems( int32_t, SteamItemDetails_t *, uint32_t * ) = 0;
-    virtual bool GetResultItemProperty( int32_t, uint32_t, const char *, char *, uint32_t * ) = 0;
-    virtual uint32_t GetResultTimestamp( int32_t ) = 0;
-    virtual bool CheckResultSteamID( int32_t, CSteamID ) = 0;
-    virtual void DestroyResult( int32_t ) = 0;
-    virtual bool GetAllItems( int32_t * ) = 0;
-    virtual bool GetItemsByID( int32_t *, const uint64_t *, uint32_t ) = 0;
-    virtual bool SerializeResult( int32_t, void *, uint32_t * ) = 0;
-    virtual bool DeserializeResult( int32_t *, const void *, uint32_t, bool ) = 0;
-    virtual bool GenerateItems( int32_t *, const int32_t *, const uint32_t *, uint32_t ) = 0;
-    virtual bool GrantPromoItems( int32_t * ) = 0;
-    virtual bool AddPromoItem( int32_t *, int32_t ) = 0;
-    virtual bool AddPromoItems( int32_t *, const int32_t *, uint32_t ) = 0;
-    virtual bool ConsumeItem( int32_t *, uint64_t, uint32_t ) = 0;
-    virtual bool ExchangeItems( int32_t *, const int32_t *, const uint32_t *, uint32_t, const uint64_t *, const uint32_t *, uint32_t ) = 0;
-    virtual bool TransferItemQuantity( int32_t *, uint64_t, uint32_t, uint64_t ) = 0;
-    virtual void SendItemDropHeartbeat(  ) = 0;
-    virtual bool TriggerItemDrop( int32_t *, int32_t ) = 0;
-    virtual bool TradeItems( int32_t *, CSteamID, const uint64_t *, const uint32_t *, uint32_t, const uint64_t *, const uint32_t *, uint32_t ) = 0;
-    virtual bool LoadItemDefinitions(  ) = 0;
-    virtual bool GetItemDefinitionIDs( int32_t *, uint32_t * ) = 0;
-    virtual bool GetItemDefinitionProperty( int32_t, const char *, char *, uint32_t * ) = 0;
-    virtual uint64_t RequestEligiblePromoItemDefinitionsIDs( CSteamID ) = 0;
-    virtual bool GetEligiblePromoItemDefinitionIDs( CSteamID, int32_t *, uint32_t * ) = 0;
-    virtual uint64_t StartPurchase( const int32_t *, const uint32_t *, uint32_t ) = 0;
-    virtual uint64_t RequestPrices(  ) = 0;
-    virtual uint32_t GetNumItemsWithPrices(  ) = 0;
-    virtual bool GetItemsWithPrices( int32_t *, uint64_t *, uint32_t ) = 0;
-    virtual bool GetItemPrice( int32_t, uint64_t * ) = 0;
-    virtual uint64_t StartUpdateProperties(  ) = 0;
-    virtual bool RemoveProperty( uint64_t, uint64_t, const char * ) = 0;
-    virtual bool SetProperty( uint64_t, uint64_t, const char *, const char * ) = 0;
-    virtual bool SetProperty( uint64_t, uint64_t, const char *, bool ) = 0;
-    virtual bool SetProperty( uint64_t, uint64_t, const char *, int64_t ) = 0;
-    virtual bool SetProperty( uint64_t, uint64_t, const char *, float ) = 0;
-    virtual bool SubmitUpdateProperties( uint64_t, int32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus_params *params )
 {
     struct u_ISteamInventory_STEAMINVENTORY_INTERFACE_V002 *iface = (struct u_ISteamInventory_STEAMINVENTORY_INTERFACE_V002 *)params->linux_side;

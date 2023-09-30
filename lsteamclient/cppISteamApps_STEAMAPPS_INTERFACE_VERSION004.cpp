@@ -2,26 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION004.h"
 
-struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION004
-{
-#ifdef __cplusplus
-    virtual bool BIsSubscribed(  ) = 0;
-    virtual bool BIsLowViolence(  ) = 0;
-    virtual bool BIsCybercafe(  ) = 0;
-    virtual bool BIsVACBanned(  ) = 0;
-    virtual const char * GetCurrentGameLanguage(  ) = 0;
-    virtual const char * GetAvailableGameLanguages(  ) = 0;
-    virtual bool BIsSubscribedApp( uint32_t ) = 0;
-    virtual bool BIsDlcInstalled( uint32_t ) = 0;
-    virtual uint32_t GetEarliestPurchaseUnixTime( uint32_t ) = 0;
-    virtual bool BIsSubscribedFromFreeWeekend(  ) = 0;
-    virtual int32_t GetDLCCount(  ) = 0;
-    virtual bool BGetDLCDataByIndex( int32_t, uint32_t *, bool *, char *, int32_t ) = 0;
-    virtual void InstallDLC( uint32_t ) = 0;
-    virtual void UninstallDLC( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed_params *params )
 {
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION004 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION004 *)params->linux_side;

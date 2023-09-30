@@ -2,29 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameServer_SteamGameServer003.h"
 
-struct u_ISteamGameServer_SteamGameServer003
-{
-#ifdef __cplusplus
-    virtual void LogOn(  ) = 0;
-    virtual void LogOff(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual bool BSecure(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual bool GSGetSteam2GetEncryptionKeyToSendToNewClient( void *, uint32_t *, uint32_t ) = 0;
-    virtual bool GSSendUserConnect( uint32_t, uint32_t, uint16_t, const void *, uint32_t ) = 0;
-    virtual bool GSRemoveUserConnect( uint32_t ) = 0;
-    virtual bool GSSendUserDisconnect( CSteamID, uint32_t ) = 0;
-    virtual void GSSetSpawnCount( uint32_t ) = 0;
-    virtual bool GSSetServerType( int32_t, uint32_t, uint32_t, uint16_t, uint16_t, uint16_t, const char *, const char *, bool ) = 0;
-    virtual bool GSUpdateStatus( int32_t, int32_t, int32_t, const char *, const char *, const char * ) = 0;
-    virtual bool GSCreateUnauthenticatedUser( CSteamID * ) = 0;
-    virtual bool GSSetUserData( CSteamID, const char *, uint32_t ) = 0;
-    virtual void GSUpdateSpectatorPort( uint16_t ) = 0;
-    virtual void GSSetGameType( const char * ) = 0;
-    virtual bool GSGetUserAchievementStatus( CSteamID, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameServer_SteamGameServer003_LogOn( struct cppISteamGameServer_SteamGameServer003_LogOn_params *params )
 {
     struct u_ISteamGameServer_SteamGameServer003 *iface = (struct u_ISteamGameServer_SteamGameServer003 *)params->linux_side;

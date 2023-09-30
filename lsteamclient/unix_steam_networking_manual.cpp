@@ -1,17 +1,17 @@
-#include "steamclient_structs.h"
+#include "unix_private.h"
 
 #include <stdlib.h>
 
-#include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.hpp"
-#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets002.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets004.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets006.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets008.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets009.hpp"
-#include "cppISteamNetworkingSockets_SteamNetworkingSockets012.hpp"
-#include "cppISteamNetworkingUtils_SteamNetworkingUtils003.hpp"
-#include "cppISteamNetworkingUtils_SteamNetworkingUtils004.hpp"
+#include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
+#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets002.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets004.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets006.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets008.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets009.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets012.h"
+#include "cppISteamNetworkingUtils_SteamNetworkingUtils003.h"
+#include "cppISteamNetworkingUtils_SteamNetworkingUtils004.h"
 
 static void receive_messages_utow_144( uint32_t count, u_SteamNetworkingMessage_t_144 **u_msgs,
                                        w_SteamNetworkingMessage_t_144 **w_msgs )

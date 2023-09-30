@@ -2,25 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameStats_SteamGameStats001.h"
 
-struct u_ISteamGameStats_SteamGameStats001
-{
-#ifdef __cplusplus
-    virtual uint64_t GetNewSession( int8_t, uint64_t, int32_t, uint32_t ) = 0;
-    virtual uint64_t EndSession( uint64_t, uint32_t, int32_t ) = 0;
-    virtual uint32_t AddSessionAttributeInt( uint64_t, const char *, int32_t ) = 0;
-    virtual uint32_t AddSessionAttributeString( uint64_t, const char *, const char * ) = 0;
-    virtual uint32_t AddSessionAttributeFloat( uint64_t, const char *, float ) = 0;
-    virtual uint32_t AddNewRow( uint64_t *, uint64_t, const char * ) = 0;
-    virtual uint32_t CommitRow( uint64_t ) = 0;
-    virtual uint32_t CommitOutstandingRows( uint64_t ) = 0;
-    virtual uint32_t AddRowAttributeInt( uint64_t, const char *, int32_t ) = 0;
-    virtual uint32_t AddRowAtributeString( uint64_t, const char *, const char * ) = 0;
-    virtual uint32_t AddRowAttributeFloat( uint64_t, const char *, float ) = 0;
-    virtual uint32_t AddSessionAttributeInt64( uint64_t, const char *, int64_t ) = 0;
-    virtual uint32_t AddRowAttributeInt64( uint64_t, const char *, int64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameStats_SteamGameStats001_GetNewSession( struct cppISteamGameStats_SteamGameStats001_GetNewSession_params *params )
 {
     struct u_ISteamGameStats_SteamGameStats001 *iface = (struct u_ISteamGameStats_SteamGameStats001 *)params->linux_side;

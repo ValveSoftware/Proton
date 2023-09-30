@@ -1,9 +1,6 @@
-#include "steamclient_private.h"
+#include "unix_private.h"
 
-#pragma push_macro( "strncpy" )
-#undef strncpy
-#include "cppISteamClient_SteamClient020.hpp"
-#pragma pop_macro( "strncpy" )
+#include "cppISteamClient_SteamClient020.h"
 
 void cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params )
 {

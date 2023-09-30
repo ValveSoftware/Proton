@@ -2,28 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers001.h"
 
-struct u_ISteamMatchmakingServers_SteamMatchMakingServers001
-{
-#ifdef __cplusplus
-    virtual void RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual gameserveritem_t_105 * GetServerDetails( uint32_t, int32_t ) = 0;
-    virtual void CancelQuery( uint32_t ) = 0;
-    virtual void RefreshQuery( uint32_t ) = 0;
-    virtual bool IsRefreshing( uint32_t ) = 0;
-    virtual int32_t GetServerCount( uint32_t ) = 0;
-    virtual void RefreshServer( uint32_t, int32_t ) = 0;
-    virtual int32_t PingServer( uint32_t, uint16_t, u_ISteamMatchmakingPingResponse * ) = 0;
-    virtual int32_t PlayerDetails( uint32_t, uint16_t, u_ISteamMatchmakingPlayersResponse * ) = 0;
-    virtual int32_t ServerRules( uint32_t, uint16_t, u_ISteamMatchmakingRulesResponse * ) = 0;
-    virtual void CancelServerQuery( int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList_params *params )
 {
     struct u_ISteamMatchmakingServers_SteamMatchMakingServers001 *iface = (struct u_ISteamMatchmakingServers_SteamMatchMakingServers001 *)params->linux_side;

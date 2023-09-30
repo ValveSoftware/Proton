@@ -2,15 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamGameCoordinator_SteamGameCoordinator001.h"
 
-struct u_ISteamGameCoordinator_SteamGameCoordinator001
-{
-#ifdef __cplusplus
-    virtual uint32_t SendMessage( uint32_t, const void *, uint32_t ) = 0;
-    virtual bool IsMessageAvailable( uint32_t * ) = 0;
-    virtual uint32_t RetrieveMessage( uint32_t *, void *, uint32_t, uint32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params *params )
 {
     struct u_ISteamGameCoordinator_SteamGameCoordinator001 *iface = (struct u_ISteamGameCoordinator_SteamGameCoordinator001 *)params->linux_side;

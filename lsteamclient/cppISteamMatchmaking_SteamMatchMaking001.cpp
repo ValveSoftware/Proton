@@ -2,34 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMatchmaking_SteamMatchMaking001.h"
 
-struct u_ISteamMatchmaking_SteamMatchMaking001
-{
-#ifdef __cplusplus
-    virtual int32_t GetFavoriteGameCount(  ) = 0;
-    virtual bool GetFavoriteGame( int32_t, uint32_t *, uint32_t *, uint16_t *, uint32_t *, uint32_t * ) = 0;
-    virtual int32_t AddFavoriteGame( uint32_t, uint32_t, uint16_t, uint32_t, uint32_t ) = 0;
-    virtual bool RemoveFavoriteGame( uint32_t, uint32_t, uint16_t, uint32_t ) = 0;
-    virtual bool GetFavoriteGame2( int32_t, uint32_t *, uint32_t *, uint16_t *, uint16_t *, uint32_t *, uint32_t * ) = 0;
-    virtual int32_t AddFavoriteGame2( uint32_t, uint32_t, uint16_t, uint16_t, uint32_t, uint32_t ) = 0;
-    virtual bool RemoveFavoriteGame2( uint32_t, uint32_t, uint16_t, uint16_t, uint32_t ) = 0;
-    virtual void RequestLobbyList( uint64_t, MatchMakingKeyValuePair_t *, uint32_t ) = 0;
-    virtual CSteamID GetLobbyByIndex( int32_t ) = 0;
-    virtual void CreateLobby( uint64_t, bool ) = 0;
-    virtual void JoinLobby( CSteamID ) = 0;
-    virtual void LeaveLobby( CSteamID ) = 0;
-    virtual bool InviteUserToLobby( CSteamID, CSteamID ) = 0;
-    virtual int32_t GetNumLobbyMembers( CSteamID ) = 0;
-    virtual CSteamID GetLobbyMemberByIndex( CSteamID, int32_t ) = 0;
-    virtual const char * GetLobbyData( CSteamID, const char * ) = 0;
-    virtual bool SetLobbyData( CSteamID, const char *, const char * ) = 0;
-    virtual const char * GetLobbyMemberData( CSteamID, CSteamID, const char * ) = 0;
-    virtual bool SetLobbyMemberData( CSteamID, const char *, const char * ) = 0;
-    virtual bool SendLobbyChatMsg( CSteamID, const void *, int32_t ) = 0;
-    virtual int32_t GetLobbyChatEntry( CSteamID, int32_t, CSteamID *, void *, int32_t, uint32_t * ) = 0;
-    virtual bool RequestLobbyData( CSteamID ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount( struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount_params *params )
 {
     struct u_ISteamMatchmaking_SteamMatchMaking001 *iface = (struct u_ISteamMatchmaking_SteamMatchMaking001 *)params->linux_side;

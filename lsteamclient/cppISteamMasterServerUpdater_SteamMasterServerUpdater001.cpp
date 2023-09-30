@@ -2,26 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMasterServerUpdater_SteamMasterServerUpdater001.h"
 
-struct u_ISteamMasterServerUpdater_SteamMasterServerUpdater001
-{
-#ifdef __cplusplus
-    virtual void SetActive( bool ) = 0;
-    virtual void SetHeartbeatInterval( int32_t ) = 0;
-    virtual bool HandleIncomingPacket( const void *, int32_t, uint32_t, uint16_t ) = 0;
-    virtual int32_t GetNextOutgoingPacket( void *, int32_t, uint32_t *, uint16_t * ) = 0;
-    virtual void SetBasicServerData( uint16_t, bool, const char *, const char *, uint16_t, bool, const char * ) = 0;
-    virtual void ClearAllKeyValues(  ) = 0;
-    virtual void SetKeyValue( const char *, const char * ) = 0;
-    virtual void NotifyShutdown(  ) = 0;
-    virtual bool WasRestartRequested(  ) = 0;
-    virtual void ForceHeartbeat(  ) = 0;
-    virtual bool AddMasterServer( const char * ) = 0;
-    virtual bool RemoveMasterServer( const char * ) = 0;
-    virtual int32_t GetNumMasterServers(  ) = 0;
-    virtual int32_t GetMasterServerAddress( int32_t, char *, int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive( struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params *params )
 {
     struct u_ISteamMasterServerUpdater_SteamMasterServerUpdater001 *iface = (struct u_ISteamMasterServerUpdater_SteamMasterServerUpdater001 *)params->linux_side;

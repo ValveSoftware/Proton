@@ -2,18 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamUser_SteamUser010.h"
 
-struct u_ISteamUser_SteamUser010
-{
-#ifdef __cplusplus
-    virtual int32_t GetHSteamUser(  ) = 0;
-    virtual bool BLoggedOn(  ) = 0;
-    virtual CSteamID GetSteamID(  ) = 0;
-    virtual int32_t InitiateGameConnection( void *, int32_t, CSteamID, uint32_t, uint16_t, bool ) = 0;
-    virtual void TerminateGameConnection( uint32_t, uint16_t ) = 0;
-    virtual void TrackAppUsageEvent( CGameID, int32_t, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamUser_SteamUser010_GetHSteamUser( struct cppISteamUser_SteamUser010_GetHSteamUser_params *params )
 {
     struct u_ISteamUser_SteamUser010 *iface = (struct u_ISteamUser_SteamUser010 *)params->linux_side;

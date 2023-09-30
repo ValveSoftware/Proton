@@ -2,21 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001.h"
 
-struct u_ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual bool BIsEnabled(  ) = 0;
-    virtual bool BIsPlaying(  ) = 0;
-    virtual uint32_t GetPlaybackStatus(  ) = 0;
-    virtual void Play(  ) = 0;
-    virtual void Pause(  ) = 0;
-    virtual void PlayPrevious(  ) = 0;
-    virtual void PlayNext(  ) = 0;
-    virtual void SetVolume( float ) = 0;
-    virtual float GetVolume(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params *params )
 {
     struct u_ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *iface = (struct u_ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *)params->linux_side;

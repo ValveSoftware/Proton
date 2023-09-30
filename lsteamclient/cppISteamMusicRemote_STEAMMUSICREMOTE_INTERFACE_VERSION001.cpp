@@ -2,44 +2,6 @@
 #include "unix_private.h"
 #include "cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001.h"
 
-struct u_ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001
-{
-#ifdef __cplusplus
-    virtual bool RegisterSteamMusicRemote( const char * ) = 0;
-    virtual bool DeregisterSteamMusicRemote(  ) = 0;
-    virtual bool BIsCurrentMusicRemote(  ) = 0;
-    virtual bool BActivationSuccess( bool ) = 0;
-    virtual bool SetDisplayName( const char * ) = 0;
-    virtual bool SetPNGIcon_64x64( void *, uint32_t ) = 0;
-    virtual bool EnablePlayPrevious( bool ) = 0;
-    virtual bool EnablePlayNext( bool ) = 0;
-    virtual bool EnableShuffled( bool ) = 0;
-    virtual bool EnableLooped( bool ) = 0;
-    virtual bool EnableQueue( bool ) = 0;
-    virtual bool EnablePlaylists( bool ) = 0;
-    virtual bool UpdatePlaybackStatus( uint32_t ) = 0;
-    virtual bool UpdateShuffled( bool ) = 0;
-    virtual bool UpdateLooped( bool ) = 0;
-    virtual bool UpdateVolume( float ) = 0;
-    virtual bool CurrentEntryWillChange(  ) = 0;
-    virtual bool CurrentEntryIsAvailable( bool ) = 0;
-    virtual bool UpdateCurrentEntryText( const char * ) = 0;
-    virtual bool UpdateCurrentEntryElapsedSeconds( int32_t ) = 0;
-    virtual bool UpdateCurrentEntryCoverArt( void *, uint32_t ) = 0;
-    virtual bool CurrentEntryDidChange(  ) = 0;
-    virtual bool QueueWillChange(  ) = 0;
-    virtual bool ResetQueueEntries(  ) = 0;
-    virtual bool SetQueueEntry( int32_t, int32_t, const char * ) = 0;
-    virtual bool SetCurrentQueueEntry( int32_t ) = 0;
-    virtual bool QueueDidChange(  ) = 0;
-    virtual bool PlaylistWillChange(  ) = 0;
-    virtual bool ResetPlaylistEntries(  ) = 0;
-    virtual bool SetPlaylistEntry( int32_t, int32_t, const char * ) = 0;
-    virtual bool SetCurrentPlaylistEntry( int32_t ) = 0;
-    virtual bool PlaylistDidChange(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote_params *params )
 {
     struct u_ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *iface = (struct u_ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *)params->linux_side;
