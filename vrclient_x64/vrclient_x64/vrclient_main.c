@@ -187,47 +187,16 @@ static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_
     return TRUE;
 }
 
-#include "win_constructors.h"
-#include "win_destructors.h"
-
-typedef void (*pfn_dtor)(struct w_steam_iface *);
-
-static const struct {
-    const char *iface_version;
-    struct w_steam_iface *(*ctor)(void *);
-    void (*dtor)(struct w_steam_iface *);
-} constructors[] = {
-#include "win_constructors_table.dat"
-};
-
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side)
 {
-    unsigned int i;
+    iface_constructor constructor;
 
     TRACE("trying to create %s\n", name);
 
-    if(!linux_side)
-        return NULL;
-
-    for(i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i){
-        if(!strcmp(name, constructors[i].iface_version))
-            return constructors[i].ctor(linux_side);
-    }
+    if (!linux_side) return NULL;
+    if ((constructor = find_iface_constructor( name ))) return constructor( linux_side );
 
     ERR("Don't recognize interface name: %s\n", name);
-
-    return NULL;
-}
-
-static pfn_dtor get_win_destructor(const char *name)
-{
-    unsigned int i;
-
-    for(i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i){
-        if(!strcmp(name, constructors[i].iface_version))
-            return constructors[i].dtor;
-    }
-
     return NULL;
 }
 
@@ -519,7 +488,7 @@ static void *ivrclientcore_get_generic_interface( void *object, const char *name
 {
     struct w_steam_iface *win_object;
     struct generic_interface *iface;
-    pfn_dtor destructor;
+    iface_destructor destructor;
 
     TRACE( "%p %p\n", object, name_and_version );
 
@@ -529,7 +498,7 @@ static void *ivrclientcore_get_generic_interface( void *object, const char *name
         return NULL;
     }
 
-    if ((destructor = get_win_destructor(name_and_version)))
+    if ((destructor = find_iface_destructor( name_and_version )))
     {
         EnterCriticalSection(&user_data->critical_section);
         if (array_reserve((void **)&user_data->created_interfaces,

@@ -7,6 +7,7 @@ EXTRADEFS = -DWINE_NO_LONG_TYPES -DGNUC
 
 SOURCES = \
 	vrclient_x64/flatapi.c \
+	vrclient_x64/vrclient_generated.c \
 	vrclient_x64/vrclient_main.c \
 	vrclient_x64/vrcompositor_manual.c \
 	vrclient_x64/vrinput_manual.c \
