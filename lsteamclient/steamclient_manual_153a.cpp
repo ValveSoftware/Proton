@@ -10,22 +10,8 @@ extern "C" {
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils004.hpp"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets012.hpp"
 #include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.hpp"
-#include "cppISteamInput_SteamInput006.hpp"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-
-static void (W_STDCALL *win_EnableActionEventCallbacks)( SteamInputActionEvent_t * );
-static void u_SteamInputActionEventCallbackPointer( SteamInputActionEvent_t *dat )
-{
-    if (win_EnableActionEventCallbacks) win_EnableActionEventCallbacks( dat );
-}
-
-void cppISteamInput_SteamInput006_EnableActionEventCallbacks( struct cppISteamInput_SteamInput006_EnableActionEventCallbacks_params *params )
-{
-    struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    win_EnableActionEventCallbacks = params->pCallback;
-    iface->EnableActionEventCallbacks( params->pCallback ? &u_SteamInputActionEventCallbackPointer : NULL );
-}
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params *params )
 {
@@ -169,33 +155,4 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( struct cp
     struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *iface = (struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *)params->linux_side;
     u_SteamNetworkingMessage_t_153a *u_ret = iface->AllocateMessage( params->cbAllocateBuffer );
     params->_ret = (w_SteamNetworkingMessage_t_153a *)network_message_lin_to_win( u_ret );
-}
-
-void cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin( struct cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin_params *params )
-{
-    struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    params->_ret = iface->GetGlyphPNGForActionOrigin( params->eOrigin, params->eSize, params->unFlags );
-    params->_ret = steamclient_isteaminput_getglyph_png( params->eOrigin, params->eSize,
-                                                        params->unFlags, params->_ret );
-}
-
-void cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin( struct cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin_params *params )
-{
-    struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    params->_ret = iface->GetGlyphSVGForActionOrigin( params->eOrigin, params->unFlags );
-    params->_ret = steamclient_isteaminput_getglyph_svg( params->eOrigin, params->unFlags, params->_ret );
-}
-
-void cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy( struct cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy_params *params )
-{
-    struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    params->_ret = iface->GetGlyphForActionOrigin_Legacy( params->eOrigin );
-    params->_ret = steamclient_isteaminput_getglyph( params->eOrigin, params->_ret );
-}
-
-void cppISteamInput_SteamInput006_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput006_GetGlyphForXboxOrigin_params *params )
-{
-    struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    params->_ret = iface->GetGlyphForXboxOrigin( params->eOrigin );
-    params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
 }
