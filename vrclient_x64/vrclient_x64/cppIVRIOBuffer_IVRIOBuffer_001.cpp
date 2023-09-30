@@ -1,17 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRIOBuffer_IVRIOBuffer_001.h"
-struct u_IVRIOBuffer_IVRIOBuffer_001
-{
-#ifdef __cplusplus
-    virtual uint32_t Open( const char *, uint32_t, uint32_t, uint32_t, uint64_t * ) = 0;
-    virtual uint32_t Close( uint64_t ) = 0;
-    virtual uint32_t Read( uint64_t, void *, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t Write( uint64_t, void *, uint32_t ) = 0;
-    virtual uint64_t PropertyContainer( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRIOBuffer_IVRIOBuffer_001_Open( struct cppIVRIOBuffer_IVRIOBuffer_001_Open_params *params )
 {
     struct u_IVRIOBuffer_IVRIOBuffer_001 *iface = (struct u_IVRIOBuffer_IVRIOBuffer_001 *)params->linux_side;

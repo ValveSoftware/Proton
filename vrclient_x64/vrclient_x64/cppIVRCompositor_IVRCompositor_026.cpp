@@ -1,63 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRCompositor_IVRCompositor_026.h"
-struct u_IVRCompositor_IVRCompositor_026
-{
-#ifdef __cplusplus
-    virtual void SetTrackingSpace( uint32_t ) = 0;
-    virtual uint32_t GetTrackingSpace(  ) = 0;
-    virtual uint32_t WaitGetPoses( TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t ) = 0;
-    virtual uint32_t GetLastPoses( TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t ) = 0;
-    virtual uint32_t GetLastPoseForTrackedDeviceIndex( uint32_t, TrackedDevicePose_t *, TrackedDevicePose_t * ) = 0;
-    virtual uint32_t Submit( uint32_t, const u_Texture_t *, const VRTextureBounds_t *, uint32_t ) = 0;
-    virtual void ClearLastSubmittedFrame(  ) = 0;
-    virtual void PostPresentHandoff(  ) = 0;
-    virtual bool GetFrameTiming( u_Compositor_FrameTiming_1017 *, uint32_t ) = 0;
-    virtual uint32_t GetFrameTimings( u_Compositor_FrameTiming_1017 *, uint32_t ) = 0;
-    virtual float GetFrameTimeRemaining(  ) = 0;
-    virtual void GetCumulativeStats( Compositor_CumulativeStats_100 *, uint32_t ) = 0;
-    virtual void FadeToColor( float, float, float, float, float, bool ) = 0;
-    virtual HmdColor_t GetCurrentFadeColor( bool ) = 0;
-    virtual void FadeGrid( float, bool ) = 0;
-    virtual float GetCurrentGridAlpha(  ) = 0;
-    virtual uint32_t SetSkyboxOverride( const u_Texture_t *, uint32_t ) = 0;
-    virtual void ClearSkyboxOverride(  ) = 0;
-    virtual void CompositorBringToFront(  ) = 0;
-    virtual void CompositorGoToBack(  ) = 0;
-    virtual void CompositorQuit(  ) = 0;
-    virtual bool IsFullscreen(  ) = 0;
-    virtual uint32_t GetCurrentSceneFocusProcess(  ) = 0;
-    virtual uint32_t GetLastFrameRenderer(  ) = 0;
-    virtual bool CanRenderScene(  ) = 0;
-    virtual void ShowMirrorWindow(  ) = 0;
-    virtual void HideMirrorWindow(  ) = 0;
-    virtual bool IsMirrorWindowVisible(  ) = 0;
-    virtual void CompositorDumpImages(  ) = 0;
-    virtual bool ShouldAppRenderWithLowResources(  ) = 0;
-    virtual void ForceInterleavedReprojectionOn( bool ) = 0;
-    virtual void ForceReconnectProcess(  ) = 0;
-    virtual void SuspendRendering( bool ) = 0;
-    virtual uint32_t GetMirrorTextureD3D11( uint32_t, void *, void ** ) = 0;
-    virtual void ReleaseMirrorTextureD3D11( void * ) = 0;
-    virtual uint32_t GetMirrorTextureGL( uint32_t, uint32_t *, void ** ) = 0;
-    virtual bool ReleaseSharedGLTexture( uint32_t, void * ) = 0;
-    virtual void LockGLSharedTextureForAccess( void * ) = 0;
-    virtual void UnlockGLSharedTextureForAccess( void * ) = 0;
-    virtual uint32_t GetVulkanInstanceExtensionsRequired( char *, uint32_t ) = 0;
-    virtual uint32_t GetVulkanDeviceExtensionsRequired( VkPhysicalDevice_T *, char *, uint32_t ) = 0;
-    virtual void SetExplicitTimingMode( uint32_t ) = 0;
-    virtual uint32_t SubmitExplicitTimingData(  ) = 0;
-    virtual bool IsMotionSmoothingEnabled(  ) = 0;
-    virtual bool IsMotionSmoothingSupported(  ) = 0;
-    virtual bool IsCurrentSceneFocusAppLoading(  ) = 0;
-    virtual uint32_t SetStageOverride_Async( const char *, const HmdMatrix34_t *, const Compositor_StageRenderSettings *, uint32_t ) = 0;
-    virtual void ClearStageOverride(  ) = 0;
-    virtual bool GetCompositorBenchmarkResults( Compositor_BenchmarkResults *, uint32_t ) = 0;
-    virtual uint32_t GetLastPosePredictionIDs( uint32_t *, uint32_t * ) = 0;
-    virtual uint32_t GetPosesForFrame( uint32_t, TrackedDevicePose_t *, uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRCompositor_IVRCompositor_026_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_026_SetTrackingSpace_params *params )
 {
     struct u_IVRCompositor_IVRCompositor_026 *iface = (struct u_IVRCompositor_IVRCompositor_026 *)params->linux_side;

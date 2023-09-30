@@ -1,21 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRHeadsetView_IVRHeadsetView_001.h"
-struct u_IVRHeadsetView_IVRHeadsetView_001
-{
-#ifdef __cplusplus
-    virtual void SetHeadsetViewSize( uint32_t, uint32_t ) = 0;
-    virtual void GetHeadsetViewSize( uint32_t *, uint32_t * ) = 0;
-    virtual void SetHeadsetViewMode( uint32_t ) = 0;
-    virtual uint32_t GetHeadsetViewMode(  ) = 0;
-    virtual void SetHeadsetViewCropped( bool ) = 0;
-    virtual bool GetHeadsetViewCropped(  ) = 0;
-    virtual float GetHeadsetViewAspectRatio(  ) = 0;
-    virtual void SetHeadsetViewBlendRange( float, float ) = 0;
-    virtual void GetHeadsetViewBlendRange( float *, float * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params *params )
 {
     struct u_IVRHeadsetView_IVRHeadsetView_001 *iface = (struct u_IVRHeadsetView_IVRHeadsetView_001 *)params->linux_side;

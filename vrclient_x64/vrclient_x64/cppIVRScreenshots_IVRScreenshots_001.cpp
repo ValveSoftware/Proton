@@ -1,19 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRScreenshots_IVRScreenshots_001.h"
-struct u_IVRScreenshots_IVRScreenshots_001
-{
-#ifdef __cplusplus
-    virtual uint32_t RequestScreenshot( uint32_t *, uint32_t, const char *, const char * ) = 0;
-    virtual uint32_t HookScreenshot( uint32_t *, int32_t ) = 0;
-    virtual uint32_t GetScreenshotPropertyType( uint32_t, uint32_t * ) = 0;
-    virtual uint32_t GetScreenshotPropertyFilename( uint32_t, uint32_t, char *, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t UpdateScreenshotProgress( uint32_t, float ) = 0;
-    virtual uint32_t TakeStereoScreenshot( uint32_t *, const char *, const char * ) = 0;
-    virtual uint32_t SubmitScreenshot( uint32_t, uint32_t, const char *, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot( struct cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot_params *params )
 {
     struct u_IVRScreenshots_IVRScreenshots_001 *iface = (struct u_IVRScreenshots_IVRScreenshots_001 *)params->linux_side;

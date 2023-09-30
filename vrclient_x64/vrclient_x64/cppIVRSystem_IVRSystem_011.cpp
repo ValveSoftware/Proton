@@ -1,58 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRSystem_IVRSystem_011.h"
-struct u_IVRSystem_IVRSystem_011
-{
-#ifdef __cplusplus
-    virtual void GetRecommendedRenderTargetSize( uint32_t *, uint32_t * ) = 0;
-    virtual HmdMatrix44_t GetProjectionMatrix( uint32_t, float, float, uint32_t ) = 0;
-    virtual void GetProjectionRaw( uint32_t, float *, float *, float *, float * ) = 0;
-    virtual DistortionCoordinates_t ComputeDistortion( uint32_t, float, float ) = 0;
-    virtual HmdMatrix34_t GetEyeToHeadTransform( uint32_t ) = 0;
-    virtual bool GetTimeSinceLastVsync( float *, uint64_t * ) = 0;
-    virtual int32_t GetD3D9AdapterIndex(  ) = 0;
-    virtual void GetDXGIOutputInfo( int32_t * ) = 0;
-    virtual bool IsDisplayOnDesktop(  ) = 0;
-    virtual bool SetDisplayVisibility( bool ) = 0;
-    virtual void GetDeviceToAbsoluteTrackingPose( uint32_t, float, TrackedDevicePose_t *, uint32_t ) = 0;
-    virtual void ResetSeatedZeroPose(  ) = 0;
-    virtual HmdMatrix34_t GetSeatedZeroPoseToStandingAbsoluteTrackingPose(  ) = 0;
-    virtual HmdMatrix34_t GetRawZeroPoseToStandingAbsoluteTrackingPose(  ) = 0;
-    virtual uint32_t GetSortedTrackedDeviceIndicesOfClass( uint32_t, uint32_t *, uint32_t, uint32_t ) = 0;
-    virtual uint32_t GetTrackedDeviceActivityLevel( uint32_t ) = 0;
-    virtual void ApplyTransform( TrackedDevicePose_t *, const TrackedDevicePose_t *, const HmdMatrix34_t * ) = 0;
-    virtual uint32_t GetTrackedDeviceIndexForControllerRole( uint32_t ) = 0;
-    virtual uint32_t GetControllerRoleForTrackedDeviceIndex( uint32_t ) = 0;
-    virtual uint32_t GetTrackedDeviceClass( uint32_t ) = 0;
-    virtual bool IsTrackedDeviceConnected( uint32_t ) = 0;
-    virtual bool GetBoolTrackedDeviceProperty( uint32_t, uint32_t, uint32_t * ) = 0;
-    virtual float GetFloatTrackedDeviceProperty( uint32_t, uint32_t, uint32_t * ) = 0;
-    virtual int32_t GetInt32TrackedDeviceProperty( uint32_t, uint32_t, uint32_t * ) = 0;
-    virtual uint64_t GetUint64TrackedDeviceProperty( uint32_t, uint32_t, uint32_t * ) = 0;
-    virtual HmdMatrix34_t GetMatrix34TrackedDeviceProperty( uint32_t, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t GetStringTrackedDeviceProperty( uint32_t, uint32_t, char *, uint32_t, uint32_t * ) = 0;
-    virtual const char * GetPropErrorNameFromEnum( uint32_t ) = 0;
-    virtual bool PollNextEvent( u_VREvent_t_0918 *, uint32_t ) = 0;
-    virtual bool PollNextEventWithPose( uint32_t, u_VREvent_t_0918 *, uint32_t, TrackedDevicePose_t * ) = 0;
-    virtual const char * GetEventTypeNameFromEnum( uint32_t ) = 0;
-    virtual u_HiddenAreaMesh_t GetHiddenAreaMesh( uint32_t ) = 0;
-    virtual bool GetControllerState( uint32_t, u_VRControllerState001_t * ) = 0;
-    virtual bool GetControllerStateWithPose( uint32_t, uint32_t, u_VRControllerState001_t *, TrackedDevicePose_t * ) = 0;
-    virtual void TriggerHapticPulse( uint32_t, uint32_t, uint16_t ) = 0;
-    virtual const char * GetButtonIdNameFromEnum( uint32_t ) = 0;
-    virtual const char * GetControllerAxisTypeNameFromEnum( uint32_t ) = 0;
-    virtual bool CaptureInputFocus(  ) = 0;
-    virtual void ReleaseInputFocus(  ) = 0;
-    virtual bool IsInputFocusCapturedByAnotherProcess(  ) = 0;
-    virtual uint32_t DriverDebugRequest( uint32_t, const char *, char *, uint32_t ) = 0;
-    virtual uint32_t PerformFirmwareUpdate( uint32_t ) = 0;
-    virtual void AcknowledgeQuit_Exiting(  ) = 0;
-    virtual void AcknowledgeQuit_UserPrompt(  ) = 0;
-    virtual void PerformanceTestEnableCapture( bool ) = 0;
-    virtual void PerformanceTestReportFidelityLevelChange( int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize( struct cppIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize_params *params )
 {
     struct u_IVRSystem_IVRSystem_011 *iface = (struct u_IVRSystem_IVRSystem_011 *)params->linux_side;

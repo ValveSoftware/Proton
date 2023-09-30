@@ -1,40 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRControlPanel_IVRControlPanel_006.h"
-struct u_IVRControlPanel_IVRControlPanel_006
-{
-#ifdef __cplusplus
-    virtual uint32_t undoc1(  ) = 0;
-    virtual uint32_t undoc2( uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t undoc3( const char * ) = 0;
-    virtual uint32_t undoc4( const char * ) = 0;
-    virtual uint32_t undoc5( const char *, uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t undoc6( const char *, const char *, char *, uint32_t ) = 0;
-    virtual uint32_t undoc7( const char *, const char *, char *, uint32_t ) = 0;
-    virtual bool undoc8( uint32_t ) = 0;
-    virtual void undoc9(  ) = 0;
-    virtual void undoc10(  ) = 0;
-    virtual bool undoc11( uint32_t ) = 0;
-    virtual void undoc12(  ) = 0;
-    virtual void undoc13( uint32_t ) = 0;
-    virtual void undoc14( uint32_t ) = 0;
-    virtual uint32_t undoc15(  ) = 0;
-    virtual void undoc16( bool ) = 0;
-    virtual bool undoc17(  ) = 0;
-    virtual uint32_t undoc18(  ) = 0;
-    virtual void undoc19( bool ) = 0;
-    virtual bool undoc20(  ) = 0;
-    virtual uint32_t undoc21(  ) = 0;
-    virtual void undoc22( uint64_t, const char *, uint32_t, uint32_t, const char * ) = 0;
-    virtual bool undoc23( const char * ) = 0;
-    virtual bool undoc24(  ) = 0;
-    virtual bool undoc25( bool ) = 0;
-    virtual uint64_t undoc26(  ) = 0;
-    virtual uint32_t undoc27( const char * ) = 0;
-    virtual void undoc28( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRControlPanel_IVRControlPanel_006_undoc1( struct cppIVRControlPanel_IVRControlPanel_006_undoc1_params *params )
 {
     struct u_IVRControlPanel_IVRControlPanel_006 *iface = (struct u_IVRControlPanel_IVRControlPanel_006 *)params->linux_side;

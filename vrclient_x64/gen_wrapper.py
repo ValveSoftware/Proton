@@ -871,13 +871,6 @@ def get_capi_thunk_params(method):
 def handle_class(klass):
     cppname = f"cpp{klass.full_name}"
 
-    ext = "cpp"
-    for method in klass.methods:
-        if type(method) is Destructor:
-            continue
-        if is_manual_method(klass, method, "u"):
-            ext = "hpp"
-
     with open(f"vrclient_x64/{cppname}.h", "w") as file:
         out = file.write
 
@@ -900,14 +893,12 @@ def handle_class(klass):
         out(u'} /* extern "C" */\n')
         out(u'#endif /* __cplusplus */\n')
 
-    with open(f"vrclient_x64/{cppname}.{ext}", "w") as file:
+    with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
         out(u'#include "unix_private.h"\n')
         out(f'#include "{cppname}.h"\n')
-
-        klass.write_definition(out, "u_")
 
         for method in klass.methods:
             if type(method) is Destructor:
@@ -1555,6 +1546,17 @@ with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
             out(f'typedef u64_{version} u_{version};\n')
             out(u'#endif\n')
             out(u'\n')
+
+
+with open("vrclient_x64/unix_private_generated.h", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+
+    for klass in all_classes.values():
+        sdkver = klass._sdkver
+        klass.write_definition(out, "u_")
+    out(u'\n')
 
 
 with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:

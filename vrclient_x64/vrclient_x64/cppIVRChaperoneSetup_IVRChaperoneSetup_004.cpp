@@ -1,28 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRChaperoneSetup_IVRChaperoneSetup_004.h"
-struct u_IVRChaperoneSetup_IVRChaperoneSetup_004
-{
-#ifdef __cplusplus
-    virtual bool CommitWorkingCopy( uint32_t ) = 0;
-    virtual void RevertWorkingCopy(  ) = 0;
-    virtual bool GetWorkingPlayAreaSize( float *, float * ) = 0;
-    virtual bool GetWorkingPlayAreaRect( HmdQuad_t * ) = 0;
-    virtual bool GetWorkingCollisionBoundsInfo( HmdQuad_t *, uint32_t * ) = 0;
-    virtual bool GetLiveCollisionBoundsInfo( HmdQuad_t *, uint32_t * ) = 0;
-    virtual bool GetWorkingSeatedZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual bool GetWorkingStandingZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual void SetWorkingPlayAreaSize( float, float ) = 0;
-    virtual void SetWorkingCollisionBoundsInfo( HmdQuad_t *, uint32_t ) = 0;
-    virtual void SetWorkingSeatedZeroPoseToRawTrackingPose( const HmdMatrix34_t * ) = 0;
-    virtual void SetWorkingStandingZeroPoseToRawTrackingPose( const HmdMatrix34_t * ) = 0;
-    virtual void ReloadFromDisk( uint32_t ) = 0;
-    virtual bool GetLiveSeatedZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual void SetWorkingWallTagInfo( uint8_t *, uint32_t ) = 0;
-    virtual bool GetLiveWallTagInfo( uint8_t *, uint32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy( struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params *params )
 {
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_004 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_004 *)params->linux_side;

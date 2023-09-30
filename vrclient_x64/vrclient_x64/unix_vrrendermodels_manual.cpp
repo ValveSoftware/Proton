@@ -1,9 +1,9 @@
 #include "unix_private.h"
 
-#include "cppIVRRenderModels_IVRRenderModels_002.hpp"
-#include "cppIVRRenderModels_IVRRenderModels_004.hpp"
-#include "cppIVRRenderModels_IVRRenderModels_005.hpp"
-#include "cppIVRRenderModels_IVRRenderModels_006.hpp"
+#include "cppIVRRenderModels_IVRRenderModels_002.h"
+#include "cppIVRRenderModels_IVRRenderModels_004.h"
+#include "cppIVRRenderModels_IVRRenderModels_005.h"
+#include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 /* LoadRenderModel(_Async) / FreeRenderModel */
 

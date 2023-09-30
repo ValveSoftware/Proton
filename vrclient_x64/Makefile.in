@@ -111,6 +111,10 @@ SOURCES = \
 	vrclient_x64/cppIVROverlay_IVROverlay_027.cpp \
 	vrclient_x64/cppIVROverlayView_IVROverlayView_003.cpp \
 	vrclient_x64/cppIVRRenderModels_IVRRenderModels_001.cpp \
+	vrclient_x64/cppIVRRenderModels_IVRRenderModels_002.cpp \
+	vrclient_x64/cppIVRRenderModels_IVRRenderModels_004.cpp \
+	vrclient_x64/cppIVRRenderModels_IVRRenderModels_005.cpp \
+	vrclient_x64/cppIVRRenderModels_IVRRenderModels_006.cpp \
 	vrclient_x64/cppIVRResources_IVRResources_001.cpp \
 	vrclient_x64/cppIVRScreenshots_IVRScreenshots_001.cpp \
 	vrclient_x64/cppIVRSettings_IVRSettings_001.cpp \
