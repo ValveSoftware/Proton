@@ -37,7 +37,9 @@ struct w_steam_iface
     void *u_iface;
 };
 
-#include "win_constructors.h"
+typedef struct w_steam_iface *(*iface_constructor)( void * );
+extern iface_constructor find_iface_constructor( const char *iface_version ) DECLSPEC_HIDDEN;
+extern struct w_steam_iface *create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001( void * ) DECLSPEC_HIDDEN;
 
 struct SteamInputActionEvent_t;
 typedef void (*CDECL win_SteamInputActionEventCallbackPointer)( struct SteamInputActionEvent_t * );
@@ -52,6 +54,8 @@ void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_ve
 
 extern void start_callback_thread(void) DECLSPEC_HIDDEN;
 extern void stop_callback_thread(void) DECLSPEC_HIDDEN;
+
+#include "steamclient_generated.h"
 
 #ifdef __cplusplus
 }
