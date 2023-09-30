@@ -1133,14 +1133,6 @@ def handle_class(klass):
         out(u'    return r;\n')
         out(u'}\n\n')
 
-    constructors = open("win_constructors.h", "a")
-    constructors.write(f"extern struct w_steam_iface *create_{winclassname}(void *);\n")
-
-    constructors = open("win_constructors_table.dat", "a")
-    for alias in VERSION_ALIASES.get(klass.version, []):
-        constructors.write(f"    {{\"{alias}\", &create_{winclassname}}}, /* alias */\n")
-    constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}}},\n")
-
 
 def parse(sources, sdkver, abi):
     args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
@@ -1320,6 +1312,46 @@ for klass in all_classes.values():
 for _, klass in sorted(all_classes.items()):
     sdkver = klass._sdkver
     handle_class(klass)
+
+
+with open("steamclient_generated.h", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+
+    for _, klass in sorted(all_classes.items()):
+        out(f"extern struct w_steam_iface *create_win{klass.full_name}(void *) DECLSPEC_HIDDEN;\n")
+
+
+with open("steamclient_generated.c", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'#include "steamclient_private.h"\n\n')
+
+    out(u'static const struct { const char *iface_version; iface_constructor ctor; } constructors[] =\n')
+    out(u'{\n')
+    for _, klass in sorted(all_classes.items()):
+        out(f'    {{"{klass.version}", &create_win{klass.full_name}}},\n')
+        for alias in VERSION_ALIASES.get(klass.version, []):
+            out(f'    {{"{alias}", &create_win{klass.full_name}}}, /* alias */\n')
+    out(u'};\n')
+    out(u'\n')
+    out(u'iface_constructor find_iface_constructor( const char *iface_version )\n')
+    out(u'{\n')
+    out(u'    int i;\n')
+    out(u'    for (i = 0; i < ARRAYSIZE(constructors); ++i)\n')
+    out(u'        if (!strcmp( iface_version, constructors[i].iface_version ))\n')
+    out(u'            return constructors[i].ctor;\n')
+    out(u'    return NULL;\n')
+    out(u'}\n')
+
+
+for name, klasses in all_classes.items():
+    if name not in SDK_CLASSES: continue
+    for sdkver, klass in klasses.items():
+        version = all_versions[sdkver][name[1:].upper()]
+        handle_class(sdkver, klass, version, SDK_CLASSES[name])
 
 
 declared = {}
