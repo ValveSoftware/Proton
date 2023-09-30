@@ -1075,141 +1075,6 @@ def get_field_attribute_str(field):
         return " __attribute__((aligned(8)))"
     return f" __attribute__((aligned({abis['w32'].align})))"
 
-generated_struct_handlers = []
-cpp_files_need_close_brace = []
-
-LIN_TO_WIN=1
-WIN_TO_LIN=2
-WRAPPERS=3
-
-#because of struct packing differences between win32 and linux, we
-#need to convert these structs from their linux layout to the win32
-#layout.
-def handle_struct(sdkver, struct):
-    handler_name = "%s_%s" % (struct.name, display_sdkver(sdkver))
-
-    if handler_name in generated_struct_handlers:
-        # we already have a handler for the struct struct of this size
-        return
-
-    which = set()
-
-    if struct_needs_conversion(struct.type.get_canonical()):
-        which.add(LIN_TO_WIN)
-        which.add(WIN_TO_LIN)
-
-    if len(which) == 0:
-        return
-
-    filename_base = "struct_converters_%s" % display_sdkver(sdkver)
-    cppname = "vrclient_x64/%s.cpp" % filename_base
-    file_exists = os.path.isfile(cppname)
-    cppfile = open(cppname, "a")
-    if not file_exists:
-        cppfile.write("#include <stdlib.h>\n");
-        cppfile.write("#include <string.h>\n");
-        cppfile.write("#include \"vrclient_private.h\"\n")
-        cppfile.write("#include \"vrclient_defs.h\"\n")
-        cppfile.write("#include \"openvr_%s/openvr.h\"\n" % sdkver)
-        cppfile.write("using namespace vr;\n")
-        cppfile.write("extern \"C\" {\n")
-        cppfile.write("#include \"struct_converters.h\"\n")
-        cpp_files_need_close_brace.append(cppname)
-
-    hfile = open("vrclient_x64/struct_converters.h", "a")
-
-    hfile.write("typedef struct win%s win%s;\n" % (handler_name, handler_name))
-
-    cppfile.write("#pragma pack(push, 8)\n")
-    cppfile.write("struct win%s {\n" % handler_name)
-    for m in struct.get_children():
-        if m.kind == CursorKind.FIELD_DECL:
-            if m.type.get_canonical().kind == TypeKind.CONSTANTARRAY:
-                cppfile.write("    %s %s[%u]" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-            elif m.type.get_canonical().kind == TypeKind.RECORD and \
-                    struct_needs_conversion(m.type.get_canonical()):
-                cppfile.write("    win%s_%s %s" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname))
-            else:
-                if m.type.get_canonical().kind == TypeKind.POINTER and \
-                        m.type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
-                    cppfile.write("    void *%s /*fn pointer*/ " % m.displayname)
-                else:
-                    cppfile.write("    %s %s" % (m.type.spelling, m.displayname))
-            cppfile.write(get_field_attribute_str(m) + ";\n")
-    if WRAPPERS in which:
-        cppfile.write("\n    %s *linux_side;\n" % struct.name)
-    cppfile.write("}  __attribute__ ((ms_struct));\n")
-    cppfile.write("#pragma pack(pop)\n\n")
-
-    def dump_converter(src, dst, size):
-        for m in struct.get_children():
-            if m.kind == CursorKind.FIELD_DECL:
-                if m.type.get_canonical().kind == TypeKind.CONSTANTARRAY:
-                    #TODO: if this is a struct, or packed differently, we'll have to
-                    # copy each element in a for-loop
-                    cppfile.write("    memcpy(" + dst + "->" + m.displayname + ", " + src + "->" + m.displayname + ", sizeof(" + dst + "->" + m.displayname + "));\n")
-                elif m.type.get_canonical().kind == TypeKind.RECORD and \
-                        struct_needs_conversion(m.type.get_canonical()):
-                    cppfile.write("    struct_" + strip_ns(m.type.spelling) + "_" + display_sdkver(sdkver) + "_" + src + "_to_" + dst + \
-                            "(&" + src + "->" + m.displayname + ", &" + dst + "->" + m.displayname + ");\n")
-                elif struct.name in STRUCTS_SIZE_FIELD and \
-                    m.displayname in STRUCTS_SIZE_FIELD[struct.name]:
-                        cppfile.write("    " + dst + "->" + m.displayname + " = sizeof(*" + dst + ");\n")
-                elif size and strip_ns(m.type.get_canonical().spelling) == "VREvent_Data_t":
-                    #truncate variable-length data struct at the end of the parent struct
-                    #XXX: dumb hard-coding. are the other types with lengths variable length?
-                    cppfile.write("    memcpy(&" + dst + "->data, &" + src + "->data, " + size + " - (((char*)&" + dst + "->data) - ((char*)" + dst + ")));\n")
-                else:
-                    cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
-
-    if strip_ns(struct.name) in STRUCTS_NEXT_IS_SIZE:
-        size_arg = "sz"
-        size_arg_type = ", uint32_t sz"
-    else:
-        size_arg = None
-        size_arg_type = ""
-
-    if LIN_TO_WIN in which:
-        hfile.write("extern void struct_%s_lin_to_win(void *l, void *w%s);\n" % (handler_name, size_arg_type))
-        cppfile.write("void struct_%s_lin_to_win(void *l, void *w%s)\n{\n" % (handler_name, size_arg_type))
-        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
-        dump_converter("lin", "win", size_arg)
-        cppfile.write("}\n\n")
-
-    if WIN_TO_LIN in which:
-        #XXX: should pass size param here, too
-        hfile.write("extern void struct_%s_win_to_lin(const void *w, void *l);\n" % handler_name)
-        cppfile.write("void struct_%s_win_to_lin(const void *w, void *l)\n{\n" % handler_name)
-        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
-        dump_converter("win", "lin", None)
-        cppfile.write("}\n\n")
-
-    if WRAPPERS in which:
-        hfile.write("extern struct win%s *struct_%s_wrap(void *l);\n" % (handler_name, handler_name))
-
-        cppfile.write("struct win%s *struct_%s_wrap(void *l)\n{\n" % (handler_name, handler_name))
-        cppfile.write("    struct win%s *win = (struct win%s *)malloc(sizeof(*win));\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.name, struct.name))
-
-        dump_converter("lin", "win", None)
-
-        cppfile.write("    win->linux_side = lin;\n");
-        cppfile.write("    return win;\n")
-
-        cppfile.write("}\n\n")
-
-        hfile.write("extern %s *struct_%s_unwrap(win%s *w);\n" % (struct.name, handler_name, handler_name))
-
-        cppfile.write("struct %s *struct_%s_unwrap(win%s *w)\n{\n" % (struct.name, handler_name, handler_name))
-        cppfile.write("    %s *ret = w->linux_side;\n" % struct.name)
-        cppfile.write("    free(w);\n")
-        cppfile.write("    return ret;\n")
-        cppfile.write("}\n\n")
-
-    generated_struct_handlers.append(handler_name)
-
 
 def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
     assert param_count >= 4
@@ -1600,12 +1465,6 @@ def classify_struct(name):
     return versions
 
 
-def generate(sdkver, structs):
-    print(f'generating SDK version {sdkver}...')
-    for child in structs['u32'].values():
-        handle_struct(sdkver, child)
-
-
 for i, sdkver in enumerate(SDK_VERSIONS):
     print(f'loading SDKs... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
     all_versions[sdkver], all_sources[sdkver] = load(sdkver)
@@ -1706,14 +1565,6 @@ for _, klass in sorted(all_classes.items()):
     sdkver = klass._sdkver
     handle_class(klass)
 
-
-for sdkver in SDK_VERSIONS:
-    generate(sdkver, all_records[sdkver])
-
-
-for f in cpp_files_need_close_brace:
-    m = open(f, "a")
-    m.write("\n}\n")
 
 with open("tests/main_autogen.c", "a") as f:
     f.write("    printf(\"All tests executed.\\n\");\n")
