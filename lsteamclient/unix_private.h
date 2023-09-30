@@ -59,9 +59,6 @@ typedef void (W_STDCALL *w_void_SteamAPI_PostAPIResultInProcess_t)(void);
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 
-bool after_shutdown( bool );
-int32_t after_steam_pipe_create( int32_t pipe );
-
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
