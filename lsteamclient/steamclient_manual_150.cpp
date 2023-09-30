@@ -9,8 +9,6 @@ extern "C" {
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets009.hpp"
 #include "cppISteamNetworkingMessages_SteamNetworkingMessages002.hpp"
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils003.hpp"
-#include "cppISteamInput_SteamInput001.hpp"
-#include "cppISteamController_SteamController007.hpp"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
@@ -154,32 +152,4 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( struct cpp
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType, params->scopeObj,
                                               params->eDataType, params->pArg );
     }
-}
-
-void cppISteamInput_SteamInput001_GetGlyphForActionOrigin( struct cppISteamInput_SteamInput001_GetGlyphForActionOrigin_params *params )
-{
-    struct u_ISteamInput_SteamInput001 *iface = (struct u_ISteamInput_SteamInput001 *)params->linux_side;
-    params->_ret = iface->GetGlyphForActionOrigin( params->eOrigin );
-    params->_ret = steamclient_isteaminput_getglyph( params->eOrigin, params->_ret );
-}
-
-void cppISteamInput_SteamInput001_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput001_GetGlyphForXboxOrigin_params *params )
-{
-    struct u_ISteamInput_SteamInput001 *iface = (struct u_ISteamInput_SteamInput001 *)params->linux_side;
-    params->_ret = iface->GetGlyphForXboxOrigin( params->eOrigin );
-    params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
-}
-
-void cppISteamController_SteamController007_GetGlyphForActionOrigin( struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params *params )
-{
-    struct u_ISteamController_SteamController007 *iface = (struct u_ISteamController_SteamController007 *)params->linux_side;
-    params->_ret = iface->GetGlyphForActionOrigin( params->eOrigin );
-    params->_ret = steamclient_isteamcontroller_getglyph( params->eOrigin, params->_ret );
-}
-
-void cppISteamController_SteamController007_GetGlyphForXboxOrigin( struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params *params )
-{
-    struct u_ISteamController_SteamController007 *iface = (struct u_ISteamController_SteamController007 *)params->linux_side;
-    params->_ret = iface->GetGlyphForXboxOrigin( params->eOrigin );
-    params->_ret = steamclient_isteaminput_getglyph_xbox( params->eOrigin, params->_ret );
 }
