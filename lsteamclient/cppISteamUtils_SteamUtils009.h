@@ -1,4 +1,12 @@
-struct cppISteamUtils_SteamUtils009;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive_params
 {
     void *linux_side;
@@ -265,3 +273,6 @@ struct cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState_params
 };
 extern void cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState( struct cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends015;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends015_GetPersonaName_params
 {
     void *linux_side;
@@ -592,3 +600,6 @@ struct cppISteamFriends_SteamFriends015_IsClanOfficialGameGroup_params
 };
 extern void cppISteamFriends_SteamFriends015_IsClanOfficialGameGroup( struct cppISteamFriends_SteamFriends015_IsClanOfficialGameGroup_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

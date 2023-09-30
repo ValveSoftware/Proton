@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
@@ -15,7 +12,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_C
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo, 16)
 
-uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, const void *pubData, uint32_t cubData, int32_t nSendFlags, int32_t nRemoteChannel)
+uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote, const void *pubData, uint32_t cubData, int32_t nSendFlags, int32_t nRemoteChannel)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params params =
     {
@@ -31,7 +28,7 @@ uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendM
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(struct w_steam_iface *_this, int32_t nLocalChannel, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(struct w_steam_iface *_this, int32_t nLocalChannel, w_SteamNetworkingMessage_t_153a **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params params =
     {
@@ -45,7 +42,7 @@ int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_Receiv
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote)
+bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser_params params =
     {
@@ -57,7 +54,7 @@ bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSes
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote)
+bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser_params params =
     {
@@ -69,7 +66,7 @@ bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseSess
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nLocalChannel)
+bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote, int32_t nLocalChannel)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser_params params =
     {
@@ -82,7 +79,7 @@ bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChan
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, SteamNetConnectionInfo_t *pConnectionInfo, SteamNetConnectionRealTimeStatus_t *pQuickStatus)
+uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote, SteamNetConnectionInfo_t_153a *pConnectionInfo, SteamNetConnectionRealTimeStatus_t *pQuickStatus)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo_params params =
     {

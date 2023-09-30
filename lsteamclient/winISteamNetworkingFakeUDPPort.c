@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
@@ -38,7 +35,7 @@ uint32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(struct w_steam_iface *_this, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(struct w_steam_iface *_this, w_SteamNetworkingMessage_t_153a **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params params =
     {

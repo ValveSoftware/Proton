@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V001.h"

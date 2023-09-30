@@ -1,4 +1,12 @@
-struct cppISteamClient_SteamClient016;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamClient_SteamClient016_CreateSteamPipe_params
 {
     void *linux_side;
@@ -304,3 +312,6 @@ struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInPro
 };
 extern void cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

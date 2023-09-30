@@ -1,4 +1,12 @@
-struct cppISteamUtils_SteamUtils004;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params
 {
     void *linux_side;
@@ -140,3 +148,6 @@ struct cppISteamUtils_SteamUtils004_IsOverlayEnabled_params
 };
 extern void cppISteamUtils_SteamUtils004_IsOverlayEnabled( struct cppISteamUtils_SteamUtils004_IsOverlayEnabled_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

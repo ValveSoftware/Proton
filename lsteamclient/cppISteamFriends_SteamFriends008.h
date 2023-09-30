@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends008;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends008_GetPersonaName_params
 {
     void *linux_side;
@@ -269,3 +277,6 @@ struct cppISteamFriends_SteamFriends008_GetUserRestrictions_params
 };
 extern void cppISteamFriends_SteamFriends008_GetUserRestrictions( struct cppISteamFriends_SteamFriends008_GetUserRestrictions_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

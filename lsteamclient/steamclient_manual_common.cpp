@@ -1,22 +1,6 @@
-#include "steamclient_private.h"
-
-#include "steam_defs.h"
-#pragma push_macro("__cdecl")
-#undef __cdecl
-#pragma push_macro("strncpy")
-#undef strncpy
-#include "steamworks_sdk_153a/steam_api.h"
-#include "steamworks_sdk_153a/steamnetworkingtypes.h"
-
-#pragma pop_macro("__cdecl")
-#pragma pop_macro("strncpy")
+#include "unix_private.h"
 
 extern "C" {
-#define SDKVER_153a
-#include "struct_converters.h"
-#include "cb_converters.h"
-#include "win_constructors.h"
-
 #define SDK_VERSION 1531
 #include "steamclient_manual_common.h"
 } /* extern "C" { */
@@ -26,20 +10,20 @@ extern "C" {
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 struct msg_wrapper {
-    struct winSteamNetworkingMessage_t_153a win_msg;
-    struct SteamNetworkingMessage_t *lin_msg;
+    w_SteamNetworkingMessage_t_153a win_msg;
+    u_SteamNetworkingMessage_t_153a *lin_msg;
 
     struct list mapping_entry;
-    void (*orig_FreeData)(SteamNetworkingMessage_t *);
-    void (*orig_Release)(SteamNetworkingMessage_t *);
+    void (*orig_FreeData)( u_SteamNetworkingMessage_t_153a * );
+    void (*orig_Release)( u_SteamNetworkingMessage_t_153a * );
 };
 
-/***** manual struct converter for SteamNetworkingMessage_t *****/
+/***** manual struct converter for SteamNetworkingMessage_t_153a *****/
 
 static struct list msg_lin_to_win_mapping = LIST_INIT(msg_lin_to_win_mapping);
 static pthread_mutex_t msg_lin_to_win_mapping_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static struct msg_wrapper *msg_wrapper_from_lin(struct SteamNetworkingMessage_t *lin_msg)
+static struct msg_wrapper *msg_wrapper_from_lin( u_SteamNetworkingMessage_t_153a *lin_msg )
 {
     struct msg_wrapper *msg = NULL, *m;
 
@@ -58,7 +42,7 @@ static struct msg_wrapper *msg_wrapper_from_lin(struct SteamNetworkingMessage_t 
     return msg;
 }
 
-static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_153a *win_msg)
+static void W_STDCALL win_FreeData( w_SteamNetworkingMessage_t_153a *win_msg )
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
     TRACE("%p\n", msg);
@@ -69,7 +53,7 @@ static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessag
     }
 }
 
-static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_153a *win_msg)
+static void W_STDCALL win_Release( w_SteamNetworkingMessage_t_153a *win_msg )
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
 
@@ -83,7 +67,7 @@ static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage
     HeapFree(GetProcessHeap(), 0, msg);
 }
 
-static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
+static void lin_FreeData( u_SteamNetworkingMessage_t_153a *lin_msg )
 {
     struct msg_wrapper *msg = msg_wrapper_from_lin(lin_msg);
     struct callback_data cb_data;
@@ -97,7 +81,7 @@ static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
     if (!is_native_thread())
     {
         TRACE("msg %p, callback %p.\n", msg, msg->win_msg.m_pfnFreeData);
-        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
+        msg->win_msg.m_pfnFreeData( &msg->win_msg );
         return;
     }
 
@@ -107,7 +91,7 @@ static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
     execute_callback(&cb_data);
 }
 
-static void lin_Release(struct SteamNetworkingMessage_t *lin_msg)
+static void lin_Release( u_SteamNetworkingMessage_t_153a *lin_msg )
 {
     struct msg_wrapper *msg = msg_wrapper_from_lin(lin_msg);
     struct callback_data cb_data;
@@ -121,7 +105,7 @@ static void lin_Release(struct SteamNetworkingMessage_t *lin_msg)
     if (!is_native_thread())
     {
         TRACE("msg %p, callback %p.\n", msg, msg->win_msg.m_pfnFreeData);
-        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnRelease)(&msg->win_msg);
+        msg->win_msg.m_pfnRelease( &msg->win_msg );
         return;
     }
 
@@ -133,7 +117,7 @@ static void lin_Release(struct SteamNetworkingMessage_t *lin_msg)
 
 void *network_message_lin_to_win_(void *msg_, unsigned int version)
 {
-    struct SteamNetworkingMessage_t *lin_msg = (struct SteamNetworkingMessage_t *)msg_;
+    u_SteamNetworkingMessage_t_153a *lin_msg = (u_SteamNetworkingMessage_t_153a *)msg_;
     struct msg_wrapper *msg;
 
     msg = (struct msg_wrapper *)HeapAlloc(GetProcessHeap(), 0, sizeof(*msg));
@@ -149,8 +133,8 @@ void *network_message_lin_to_win_(void *msg_, unsigned int version)
     msg->win_msg.m_nConnUserData = msg->lin_msg->m_nConnUserData;
     msg->win_msg.m_usecTimeReceived= msg->lin_msg->m_usecTimeReceived;
     msg->win_msg.m_nMessageNumber = msg->lin_msg->m_nMessageNumber;
-    msg->win_msg.m_pfnFreeData = (void*)win_FreeData;
-    msg->win_msg.m_pfnRelease = (void*)win_Release;
+    msg->win_msg.m_pfnFreeData = win_FreeData;
+    msg->win_msg.m_pfnRelease = win_Release;
     msg->win_msg.m_nChannel = msg->lin_msg->m_nChannel;
     if (version >= 1470)
     {
@@ -189,7 +173,7 @@ void lin_to_win_struct_SteamNetworkingMessage_t_(int n_messages, void **l, void 
 void *network_message_win_to_lin_(void *win_msg, unsigned int version)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
-    SteamNetworkingMessage_t *lin_msg = msg->lin_msg;
+    u_SteamNetworkingMessage_t_153a *lin_msg = msg->lin_msg;
 
     TRACE("msg %p, lin_msg %p.\n", msg, lin_msg);
 

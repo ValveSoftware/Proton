@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends014;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends014_GetPersonaName_params
 {
     void *linux_side;
@@ -528,3 +536,6 @@ struct cppISteamFriends_SteamFriends014_EnumerateFollowingList_params
 };
 extern void cppISteamFriends_SteamFriends014_EnumerateFollowingList( struct cppISteamFriends_SteamFriends014_EnumerateFollowingList_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

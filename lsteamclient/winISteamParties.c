@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamParties_SteamParties002.h"
@@ -44,7 +41,7 @@ uint64_t __thiscall winISteamParties_SteamParties002_GetBeaconByIndex(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamParties_SteamParties002_GetBeaconDetails(struct w_steam_iface *_this, uint64_t ulBeaconID, CSteamID *pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_158 *pLocation, char *pchMetadata, int32_t cchMetadata)
+bool __thiscall winISteamParties_SteamParties002_GetBeaconDetails(struct w_steam_iface *_this, uint64_t ulBeaconID, CSteamID *pSteamIDBeaconOwner, w_SteamPartyBeaconLocation_t *pLocation, char *pchMetadata, int32_t cchMetadata)
 {
     struct cppISteamParties_SteamParties002_GetBeaconDetails_params params =
     {
@@ -84,7 +81,7 @@ bool __thiscall winISteamParties_SteamParties002_GetNumAvailableBeaconLocations(
     return params._ret;
 }
 
-bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(struct w_steam_iface *_this, winSteamPartyBeaconLocation_t_158 *pLocationList, uint32_t uMaxNumLocations)
+bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(struct w_steam_iface *_this, w_SteamPartyBeaconLocation_t *pLocationList, uint32_t uMaxNumLocations)
 {
     struct cppISteamParties_SteamParties002_GetAvailableBeaconLocations_params params =
     {
@@ -97,7 +94,7 @@ bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(str
     return params._ret;
 }
 
-uint64_t __thiscall winISteamParties_SteamParties002_CreateBeacon(struct w_steam_iface *_this, uint32_t unOpenSlots, winSteamPartyBeaconLocation_t_158 *pBeaconLocation, const char *pchConnectString, const char *pchMetadata)
+uint64_t __thiscall winISteamParties_SteamParties002_CreateBeacon(struct w_steam_iface *_this, uint32_t unOpenSlots, w_SteamPartyBeaconLocation_t *pBeaconLocation, const char *pchConnectString, const char *pchMetadata)
 {
     struct cppISteamParties_SteamParties002_CreateBeacon_params params =
     {
@@ -161,7 +158,7 @@ bool __thiscall winISteamParties_SteamParties002_DestroyBeacon(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(struct w_steam_iface *_this, winSteamPartyBeaconLocation_t_158 BeaconLocation, uint32_t eData, char *pchDataStringOut, int32_t cchDataStringOut)
+bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(struct w_steam_iface *_this, w_SteamPartyBeaconLocation_t BeaconLocation, uint32_t eData, char *pchDataStringOut, int32_t cchDataStringOut)
 {
     struct cppISteamParties_SteamParties002_GetBeaconLocationData_params params =
     {

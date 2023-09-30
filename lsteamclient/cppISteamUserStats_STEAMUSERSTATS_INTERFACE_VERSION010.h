@@ -1,4 +1,12 @@
-struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats_params
 {
     void *linux_side;
@@ -255,7 +263,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeade
     bool _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
-    winLeaderboardEntry_t_119 *pLeaderboardEntry;
+    w_LeaderboardEntry_t_111x *pLeaderboardEntry;
     int32_t *pDetails;
     int32_t cDetailsMax;
 };
@@ -374,3 +382,6 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHisto
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

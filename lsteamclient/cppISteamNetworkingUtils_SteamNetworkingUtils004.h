@@ -1,8 +1,16 @@
-struct cppISteamNetworkingUtils_SteamNetworkingUtils004;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params
 {
     void *linux_side;
-    winSteamNetworkingMessage_t_158 *_ret;
+    w_SteamNetworkingMessage_t_153a *_ret;
     int32_t cbAllocateBuffer;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params *params );
@@ -127,7 +135,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP
     void *linux_side;
     uint32_t _ret;
     const SteamNetworkingIPAddr *fakeIP;
-    SteamNetworkingIdentity *pOutRealIdentity;
+    SteamNetworkingIdentity_144 *pOutRealIdentity;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_params *params );
 
@@ -205,7 +213,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAd
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString_params
 {
     void *linux_side;
-    const SteamNetworkingIdentity *identity;
+    const SteamNetworkingIdentity_144 *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -215,8 +223,11 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_
 {
     void *linux_side;
     bool _ret;
-    SteamNetworkingIdentity *pIdentity;
+    SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

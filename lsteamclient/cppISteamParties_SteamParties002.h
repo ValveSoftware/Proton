@@ -1,4 +1,12 @@
-struct cppISteamParties_SteamParties002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamParties_SteamParties002_GetNumActiveBeacons_params
 {
     void *linux_side;
@@ -20,7 +28,7 @@ struct cppISteamParties_SteamParties002_GetBeaconDetails_params
     bool _ret;
     uint64_t ulBeaconID;
     CSteamID *pSteamIDBeaconOwner;
-    winSteamPartyBeaconLocation_t_158 *pLocation;
+    w_SteamPartyBeaconLocation_t *pLocation;
     char *pchMetadata;
     int32_t cchMetadata;
 };
@@ -46,7 +54,7 @@ struct cppISteamParties_SteamParties002_GetAvailableBeaconLocations_params
 {
     void *linux_side;
     bool _ret;
-    winSteamPartyBeaconLocation_t_158 *pLocationList;
+    w_SteamPartyBeaconLocation_t *pLocationList;
     uint32_t uMaxNumLocations;
 };
 extern void cppISteamParties_SteamParties002_GetAvailableBeaconLocations( struct cppISteamParties_SteamParties002_GetAvailableBeaconLocations_params *params );
@@ -56,7 +64,7 @@ struct cppISteamParties_SteamParties002_CreateBeacon_params
     void *linux_side;
     uint64_t _ret;
     uint32_t unOpenSlots;
-    winSteamPartyBeaconLocation_t_158 *pBeaconLocation;
+    w_SteamPartyBeaconLocation_t *pBeaconLocation;
     const char *pchConnectString;
     const char *pchMetadata;
 };
@@ -99,10 +107,13 @@ struct cppISteamParties_SteamParties002_GetBeaconLocationData_params
 {
     void *linux_side;
     bool _ret;
-    winSteamPartyBeaconLocation_t_158 BeaconLocation;
+    w_SteamPartyBeaconLocation_t BeaconLocation;
     uint32_t eData;
     char *pchDataStringOut;
     int32_t cchDataStringOut;
 };
 extern void cppISteamParties_SteamParties002_GetBeaconLocationData( struct cppISteamParties_SteamParties002_GetBeaconLocationData_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

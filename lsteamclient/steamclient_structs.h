@@ -1,3 +1,6 @@
+#ifndef __STEAMCLIENT_STRUCTS_H
+#define __STEAMCLIENT_STRUCTS_H
+
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -50,6 +53,12 @@ extern "C"
 typedef struct { uint8_t _[8]; } CSteamID;
 typedef struct { uint8_t _[8]; } CGameID;
 typedef struct { uint8_t _[20]; } SteamIPAddress_t;
+typedef struct { uint8_t _[120]; } ScePadTriggerEffectParam;
+typedef char *SteamNetworkingErrMsg;
+
+typedef struct SteamDatagramRelayAuthTicket SteamDatagramRelayAuthTicket;
+typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
+typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordinatorServerLogin;
 
 #include "steamclient_structs_generated.h"
 
@@ -61,3 +70,5 @@ extern unsigned int steamclient_unix_path_to_dos_path( bool api_result, const ch
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
+
+#endif /* __STEAMCLIENT_STRUCTS_H */

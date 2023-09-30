@@ -1,4 +1,12 @@
-struct cppISteamUser_SteamUser009;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUser_SteamUser009_GetHSteamUser_params
 {
     void *linux_side;
@@ -57,3 +65,6 @@ struct cppISteamUser_SteamUser009_RefreshSteam2Login_params
 };
 extern void cppISteamUser_SteamUser009_RefreshSteam2Login( struct cppISteamUser_SteamUser009_RefreshSteam2Login_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,4 +1,12 @@
-struct cppISteamGameServerStats_SteamGameServerStats001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params
 {
     void *linux_side;
@@ -94,3 +102,6 @@ struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params
 };
 extern void cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats( struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

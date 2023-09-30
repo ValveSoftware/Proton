@@ -1,4 +1,12 @@
-struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed_params
 {
     void *linux_side;
@@ -189,3 +197,6 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId_params
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

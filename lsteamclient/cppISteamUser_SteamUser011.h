@@ -1,4 +1,12 @@
-struct cppISteamUser_SteamUser011;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUser_SteamUser011_GetHSteamUser_params
 {
     void *linux_side;
@@ -93,3 +101,6 @@ struct cppISteamUser_SteamUser011_DecompressVoice_params
 };
 extern void cppISteamUser_SteamUser011_DecompressVoice( struct cppISteamUser_SteamUser011_DecompressVoice_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

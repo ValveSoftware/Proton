@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer004;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer004_LogOn_params
 {
     void *linux_side;
@@ -117,3 +125,6 @@ struct cppISteamGameServer_SteamGameServer004_BGetUserAchievementStatus_params
 };
 extern void cppISteamGameServer_SteamGameServer004_BGetUserAchievementStatus( struct cppISteamGameServer_SteamGameServer004_BGetUserAchievementStatus_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

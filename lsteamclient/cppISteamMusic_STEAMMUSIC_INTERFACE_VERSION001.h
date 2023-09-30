@@ -1,4 +1,12 @@
-struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params
 {
     void *linux_side;
@@ -58,3 +66,6 @@ struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume_params
 };
 extern void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

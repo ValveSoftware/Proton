@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer002_LogOn_params
 {
     void *linux_side;
@@ -204,3 +212,6 @@ struct cppISteamGameServer_SteamGameServer002_GSSetGameType_params
 };
 extern void cppISteamGameServer_SteamGameServer002_GSSetGameType( struct cppISteamGameServer_SteamGameServer002_GSSetGameType_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

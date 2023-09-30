@@ -1,7 +1,7 @@
 /* Linux-to-Windows conversions (i.e. callbacks) here. */
+#include "unix_private.h"
 
-#include "steamclient_private.h"
-#include "steam_defs.h"
+#include "cxx.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
@@ -104,7 +104,7 @@ struct gccServerListResponse001Vtbl {
     gccServerListResponse001_RefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version)
+struct u_ISteamMatchmakingServerListResponse *create_LinuxISteamMatchmakingServerListResponse( void *win, const char *version )
 {
     struct gccServerListResponse *ret;
 
@@ -126,7 +126,7 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *ver
     }
     ret->win_side = (struct winServerListResponse*)win;
 
-    return ret;
+    return (struct u_ISteamMatchmakingServerListResponse *)ret;
 }
 
 /***** ISteamMatchmakingPingResponse *****/
@@ -139,10 +139,13 @@ struct gccPingResponse {
     struct winPingResponse *win_side;
 };
 
-void gccPingResponse_ServerResponded(struct gccPingResponse *_this, gameserveritem_t *server)
+struct gameserveritem_t;
+
+void gccPingResponse_ServerResponded( struct gccPingResponse *_this, struct gameserveritem_t *server )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC(_this->win_side, 0, void, (winPingResponse *, gameserveritem_t *), (_this->win_side, server));
+    CALL_VTBL_FUNC( _this->win_side, 0, void, (winPingResponse *, struct gameserveritem_t *),
+                    (_this->win_side, server) );
 }
 
 void gccPingResponse_ServerFailedToRespond(struct gccPingResponse *_this)
@@ -152,7 +155,7 @@ void gccPingResponse_ServerFailedToRespond(struct gccPingResponse *_this)
 }
 
 struct gccPingResponseVtbl {
-    void (*ServerResponded)(struct gccPingResponse *, gameserveritem_t *);
+    void (*ServerResponded)( struct gccPingResponse *, struct gameserveritem_t * );
 
     void (*ServerFailedToRespond)(struct gccPingResponse *);
 } gccPingResponse_vtbl = {
@@ -160,7 +163,7 @@ struct gccPingResponseVtbl {
     gccPingResponse_ServerFailedToRespond
 };
 
-void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version)
+struct u_ISteamMatchmakingPingResponse *create_LinuxISteamMatchmakingPingResponse( void *win, const char *version )
 {
     struct gccPingResponse *ret;
 
@@ -174,7 +177,7 @@ void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version)
     ret->vtable = &gccPingResponse_vtbl;
     ret->win_side = (struct winPingResponse*)win;
 
-    return ret;
+    return (struct u_ISteamMatchmakingPingResponse *)ret;
 }
 
 /***** ISteamMatchmakingPlayersResponse *****/
@@ -217,7 +220,7 @@ struct gccPlayersResponseVtbl {
     gccPlayersResponse_PlayersRefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version)
+struct u_ISteamMatchmakingPlayersResponse *create_LinuxISteamMatchmakingPlayersResponse( void *win, const char *version )
 {
     struct gccPlayersResponse *ret;
 
@@ -231,7 +234,7 @@ void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *versio
     ret->vtable = &gccPlayersResponse_vtbl;
     ret->win_side = (struct winPlayersResponse*)win;
 
-    return ret;
+    return (struct u_ISteamMatchmakingPlayersResponse *)ret;
 }
 
 /***** ISteamMatchmakingRulesResponse *****/
@@ -274,7 +277,7 @@ struct gccRulesResponseVtbl {
     gccRulesResponse_RulesRefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
+struct u_ISteamMatchmakingRulesResponse *create_LinuxISteamMatchmakingRulesResponse( void *win, const char *version )
 {
     struct gccRulesResponse *ret;
 
@@ -288,16 +291,16 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
     ret->vtable = &gccRulesResponse_vtbl;
     ret->win_side = (struct winRulesResponse*)win;
 
-    return ret;
+    return (struct u_ISteamMatchmakingRulesResponse *)ret;
 }
 
-void *create_LinuxISteamNetworkingConnectionCustomSignaling( void *win, const char *version )
+struct u_ISteamNetworkingConnectionCustomSignaling *create_LinuxISteamNetworkingConnectionCustomSignaling( void *win, const char *version )
 {
     FIXME( "not implemented!\n" );
     return NULL;
 }
 
-void *create_LinuxISteamNetworkingCustomSignalingRecvContext( void *win, const char *version )
+struct u_ISteamNetworkingCustomSignalingRecvContext *create_LinuxISteamNetworkingCustomSignalingRecvContext( void *win, const char *version )
 {
     FIXME( "not implemented!\n" );
     return NULL;
@@ -351,7 +354,7 @@ u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w
 /***** SteamAPI_CheckCallbackRegistered_t *****/
 static w_SteamAPI_CheckCallbackRegistered_t stored_SteamAPI_CheckCallbackRegistered_t;
 
-static uint32_t lin_SteamAPI_CheckCallbackRegistered_t( int cb )
+static uint32_t lin_SteamAPI_CheckCallbackRegistered_t( int32_t cb )
 {
     return stored_SteamAPI_CheckCallbackRegistered_t(cb);
 }

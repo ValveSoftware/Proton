@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends001_GetPersonaName_params
 {
     void *linux_side;
@@ -229,3 +237,6 @@ struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed2_params
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendGamePlayed2( struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed2_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

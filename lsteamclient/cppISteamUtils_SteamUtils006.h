@@ -1,4 +1,12 @@
-struct cppISteamUtils_SteamUtils006;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUtils_SteamUtils006_GetSecondsSinceAppActive_params
 {
     void *linux_side;
@@ -196,3 +204,6 @@ struct cppISteamUtils_SteamUtils006_IsSteamRunningInVR_params
 };
 extern void cppISteamUtils_SteamUtils006_IsSteamRunningInVR( struct cppISteamUtils_SteamUtils006_IsSteamRunningInVR_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamGameServer_SteamGameServer002.h"
@@ -4837,7 +4834,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetAdvertiseServerActive(
     cppISteamGameServer_SteamGameServer015_SetAdvertiseServerActive( &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSnid)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSnid)
 {
     struct cppISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params params =
     {

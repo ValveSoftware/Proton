@@ -1,4 +1,12 @@
-struct cppISteamGameCoordinator_SteamGameCoordinator001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params
 {
     void *linux_side;
@@ -28,3 +36,6 @@ struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params
 };
 extern void cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

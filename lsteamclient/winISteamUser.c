@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamUser_SteamUser004.h"
@@ -5916,7 +5913,7 @@ uint32_t __thiscall winISteamUser_SteamUser022_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity)
 {
     struct cppISteamUser_SteamUser022_GetAuthSessionTicket_params params =
     {
@@ -6405,7 +6402,7 @@ uint32_t __thiscall winISteamUser_SteamUser023_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity)
 {
     struct cppISteamUser_SteamUser023_GetAuthSessionTicket_params params =
     {

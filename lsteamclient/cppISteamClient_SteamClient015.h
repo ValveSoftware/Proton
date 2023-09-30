@@ -1,4 +1,12 @@
-struct cppISteamClient_SteamClient015;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamClient_SteamClient015_CreateSteamPipe_params
 {
     void *linux_side;
@@ -273,3 +281,6 @@ struct cppISteamClient_SteamClient015_GetISteamMusicRemote_params
 };
 extern void cppISteamClient_SteamClient015_GetISteamMusicRemote( struct cppISteamClient_SteamClient015_GetISteamMusicRemote_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

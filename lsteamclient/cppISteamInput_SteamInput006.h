@@ -1,4 +1,12 @@
-struct cppISteamInput_SteamInput006;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamInput_SteamInput006_Init_params
 {
     void *linux_side;
@@ -408,3 +416,6 @@ struct cppISteamInput_SteamInput006_SetDualSenseTriggerEffect_params
 };
 extern void cppISteamInput_SteamInput006_SetDualSenseTriggerEffect( struct cppISteamInput_SteamInput006_SetDualSenseTriggerEffect_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

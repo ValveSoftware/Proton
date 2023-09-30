@@ -1,4 +1,12 @@
-struct cppISteamNetworking_SteamNetworking003;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworking_SteamNetworking003_SendP2PPacket_params
 {
     void *linux_side;
@@ -195,3 +203,6 @@ struct cppISteamNetworking_SteamNetworking003_GetMaxPacketSize_params
 };
 extern void cppISteamNetworking_SteamNetworking003_GetMaxPacketSize( struct cppISteamNetworking_SteamNetworking003_GetMaxPacketSize_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
