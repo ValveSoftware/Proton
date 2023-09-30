@@ -260,7 +260,8 @@ static int load_vrclient(void)
 
     TRACE( "got openvr runtime path: %s\n", params.unix_path );
 
-    if (unix_vrclient_init( &params )) loaded = TRUE;
+    VRCLIENT_CALL( vrclient_init, &params );
+    if (params._ret) loaded = TRUE;
 
     HeapFree( GetProcessHeap(), 0, params.unix_path );
     return loaded;
@@ -268,16 +269,20 @@ static int load_vrclient(void)
 
 void *CDECL HmdSystemFactory(const char *name, int *return_code)
 {
+    struct vrclient_HmdSystemFactory_params params = {.name = name, .return_code = return_code};
     TRACE("name: %s, return_code: %p\n", name, return_code);
     if (!load_vrclient()) return NULL;
-    return create_win_interface( name, unix_HmdSystemFactory( name, return_code ) );
+    VRCLIENT_CALL( vrclient_HmdSystemFactory, &params );
+    return create_win_interface( name, params._ret );
 }
 
 void *CDECL VRClientCoreFactory(const char *name, int *return_code)
 {
+    struct vrclient_VRClientCoreFactory_params params = {.name = name, .return_code = return_code};
     TRACE("name: %s, return_code: %p\n", name, return_code);
     if (!load_vrclient()) return NULL;
-    return create_win_interface( name, unix_VRClientCoreFactory( name, return_code ) );
+    VRCLIENT_CALL( vrclient_VRClientCoreFactory, &params );
+    return create_win_interface( name, params._ret );
 }
 
 static bool is_hmd_present_reg(void)
