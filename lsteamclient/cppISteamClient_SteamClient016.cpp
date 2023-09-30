@@ -46,7 +46,6 @@ void cppISteamClient_SteamClient016_CreateSteamPipe( struct cppISteamClient_Stea
 {
     struct u_ISteamClient_SteamClient016 *iface = (struct u_ISteamClient_SteamClient016 *)params->linux_side;
     params->_ret = iface->CreateSteamPipe(  );
-    params->_ret = after_steam_pipe_create( params->_ret );
 }
 
 void cppISteamClient_SteamClient016_BReleaseSteamPipe( struct cppISteamClient_SteamClient016_BReleaseSteamPipe_params *params )
@@ -180,7 +179,6 @@ void cppISteamClient_SteamClient016_BShutdownIfAllPipesClosed( struct cppISteamC
 {
     struct u_ISteamClient_SteamClient016 *iface = (struct u_ISteamClient_SteamClient016 *)params->linux_side;
     params->_ret = iface->BShutdownIfAllPipesClosed(  );
-    params->_ret = after_shutdown( params->_ret );
 }
 
 void cppISteamClient_SteamClient016_GetISteamHTTP( struct cppISteamClient_SteamClient016_GetISteamHTTP_params *params )

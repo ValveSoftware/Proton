@@ -27,17 +27,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamMatchmakingServe
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_RunFrame, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetIPCCallCount, 4)
 
-int32_t __thiscall winISteamClient_SteamClient006_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient006_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient006_CreateSteamPipe( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamClient_SteamClient006_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct cppISteamClient_SteamClient006_BReleaseSteamPipe_params params =
@@ -368,17 +357,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_GetISteamApps, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_GetISteamNetworking, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_SetWarningMessageHook, 8)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_GetISteamRemoteStorage, 16)
-
-int32_t __thiscall winISteamClient_SteamClient007_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient007_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient007_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient007_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -732,17 +710,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient008_RunFrame, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient008_GetIPCCallCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient008_SetWarningMessageHook, 8)
 
-int32_t __thiscall winISteamClient_SteamClient008_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient008_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient008_CreateSteamPipe( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamClient_SteamClient008_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct cppISteamClient_SteamClient008_BReleaseSteamPipe_params params =
@@ -1080,17 +1047,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_GetISteamRemoteStorage, 1
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_RunFrame, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_GetIPCCallCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_SetWarningMessageHook, 8)
-
-int32_t __thiscall winISteamClient_SteamClient009_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient009_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient009_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient009_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -1448,17 +1404,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient010_SetWarningMessageHook, 8)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient010_BShutdownIfAllPipesClosed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient010_GetISteamHTTP, 16)
 
-int32_t __thiscall winISteamClient_SteamClient010_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient010_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient010_CreateSteamPipe( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamClient_SteamClient010_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct cppISteamClient_SteamClient010_BReleaseSteamPipe_params params =
@@ -1746,17 +1691,6 @@ void __thiscall winISteamClient_SteamClient010_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient010_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient010_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient010_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient010_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient010_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient010_GetISteamHTTP_params params =
@@ -1843,17 +1777,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_GetIPCCallCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_SetWarningMessageHook, 8)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_BShutdownIfAllPipesClosed, 4)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_GetISteamHTTP, 16)
-
-int32_t __thiscall winISteamClient_SteamClient011_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient011_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient011_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient011_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -2157,17 +2080,6 @@ void __thiscall winISteamClient_SteamClient011_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient011_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient011_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient011_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient011_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient011_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient011_GetISteamHTTP_params params =
@@ -2257,17 +2169,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_GetISteamHTTP, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_GetISteamUnifiedMessages, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_GetISteamController, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_GetISteamUGC, 16)
-
-int32_t __thiscall winISteamClient_SteamClient012_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient012_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient012_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient012_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -2556,17 +2457,6 @@ void __thiscall winISteamClient_SteamClient012_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient012_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient012_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient012_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient012_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient012_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient012_GetISteamHTTP_params params =
@@ -2706,17 +2596,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient013_GetISteamUGC, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient013_GetISteamInventory, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient013_GetISteamVideo, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient013_GetISteamAppList, 16)
-
-int32_t __thiscall winISteamClient_SteamClient013_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient013_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient013_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient013_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -3005,17 +2884,6 @@ void __thiscall winISteamClient_SteamClient013_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient013_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient013_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient013_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient013_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient013_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient013_GetISteamHTTP_params params =
@@ -3200,17 +3068,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_GetISteamController, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_GetISteamUGC, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_GetISteamAppList, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_GetISteamMusic, 16)
-
-int32_t __thiscall winISteamClient_SteamClient014_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient014_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient014_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient014_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -3499,17 +3356,6 @@ void __thiscall winISteamClient_SteamClient014_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient014_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient014_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient014_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient014_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient014_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient014_GetISteamHTTP_params params =
@@ -3681,17 +3527,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_GetISteamUGC, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_GetISteamAppList, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_GetISteamMusic, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_GetISteamMusicRemote, 16)
-
-int32_t __thiscall winISteamClient_SteamClient015_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient015_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient015_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient015_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -3980,17 +3815,6 @@ void __thiscall winISteamClient_SteamClient015_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient015_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient015_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient015_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient015_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient015_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient015_GetISteamHTTP_params params =
@@ -4182,17 +4006,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_GetISteamHTMLSurface, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess, 8)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess, 8)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess, 8)
-
-int32_t __thiscall winISteamClient_SteamClient016_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient016_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient016_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient016_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -4481,17 +4294,6 @@ void __thiscall winISteamClient_SteamClient016_SetWarningMessageHook(struct w_st
     cppISteamClient_SteamClient016_SetWarningMessageHook( &params );
 }
 
-bool __thiscall winISteamClient_SteamClient016_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient016_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient016_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
-}
-
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient016_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
 {
     struct cppISteamClient_SteamClient016_GetISteamHTTP_params params =
@@ -4738,17 +4540,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_Set_SteamAPI_CCheckCallba
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_GetISteamInventory, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_GetISteamVideo, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_GetISteamParentalSettings, 16)
-
-int32_t __thiscall winISteamClient_SteamClient017_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient017_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient017_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient017_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -5035,17 +4826,6 @@ void __thiscall winISteamClient_SteamClient017_SetWarningMessageHook(struct w_st
     };
     TRACE("%p\n", _this);
     cppISteamClient_SteamClient017_SetWarningMessageHook( &params );
-}
-
-bool __thiscall winISteamClient_SteamClient017_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient017_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient017_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
 }
 
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient017_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
@@ -5344,17 +5124,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient018_GetISteamVideo, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient018_GetISteamParentalSettings, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient018_GetISteamInput, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient018_GetISteamParties, 16)
-
-int32_t __thiscall winISteamClient_SteamClient018_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient018_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient018_CreateSteamPipe( &params );
-    return params._ret;
-}
 
 bool __thiscall winISteamClient_SteamClient018_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
@@ -5656,17 +5425,6 @@ void __thiscall winISteamClient_SteamClient018_SetWarningMessageHook(struct w_st
     };
     TRACE("%p\n", _this);
     cppISteamClient_SteamClient018_SetWarningMessageHook( &params );
-}
-
-bool __thiscall winISteamClient_SteamClient018_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient018_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient018_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
 }
 
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient018_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
@@ -6000,17 +5758,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient019_GetISteamInput, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient019_GetISteamParties, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient019_GetISteamRemotePlay, 16)
 
-int32_t __thiscall winISteamClient_SteamClient019_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient019_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient019_CreateSteamPipe( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamClient_SteamClient019_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct cppISteamClient_SteamClient019_BReleaseSteamPipe_params params =
@@ -6311,17 +6058,6 @@ void __thiscall winISteamClient_SteamClient019_SetWarningMessageHook(struct w_st
     };
     TRACE("%p\n", _this);
     cppISteamClient_SteamClient019_SetWarningMessageHook( &params );
-}
-
-bool __thiscall winISteamClient_SteamClient019_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient019_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient019_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
 }
 
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient019_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
@@ -6672,17 +6408,6 @@ DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient020_GetISteamParties, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient020_GetISteamRemotePlay, 16)
 DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient020_DestroyAllInterfaces, 4)
 
-int32_t __thiscall winISteamClient_SteamClient020_CreateSteamPipe(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient020_CreateSteamPipe_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient020_CreateSteamPipe( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamClient_SteamClient020_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct cppISteamClient_SteamClient020_BReleaseSteamPipe_params params =
@@ -6983,17 +6708,6 @@ void __thiscall winISteamClient_SteamClient020_SetWarningMessageHook(struct w_st
     };
     TRACE("%p\n", _this);
     cppISteamClient_SteamClient020_SetWarningMessageHook( &params );
-}
-
-bool __thiscall winISteamClient_SteamClient020_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
-{
-    struct cppISteamClient_SteamClient020_BShutdownIfAllPipesClosed_params params =
-    {
-        .linux_side = _this->u_iface,
-    };
-    TRACE("%p\n", _this);
-    cppISteamClient_SteamClient020_BShutdownIfAllPipesClosed( &params );
-    return params._ret;
 }
 
 void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient020_GetISteamHTTP(struct w_steam_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
