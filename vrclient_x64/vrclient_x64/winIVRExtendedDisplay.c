@@ -8,15 +8,13 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRExtendedDisplay_IVRExtendedDisplay_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds, 20)
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport, 24)
 DEFINE_THISCALL_WRAPPER(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, 12)
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(struct w_steam_iface *_this, int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params params =
+    struct IVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds_params params =
     {
         .linux_side = _this->u_iface,
         .pnX = pnX,
@@ -25,12 +23,12 @@ void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(str
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( &params );
+    VRCLIENT_CALL( IVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds, &params );
 }
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
-    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params params =
+    struct IVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
@@ -40,19 +38,19 @@ void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewpor
         .pnHeight = pnHeight,
     };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport( &params );
+    VRCLIENT_CALL( IVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport, &params );
 }
 
 void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex, int32_t *pnAdapterOutputIndex)
 {
-    struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params params =
+    struct IVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo_params params =
     {
         .linux_side = _this->u_iface,
         .pnAdapterIndex = pnAdapterIndex,
         .pnAdapterOutputIndex = pnAdapterOutputIndex,
     };
     TRACE("%p\n", _this);
-    cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo( &params );
+    VRCLIENT_CALL( IVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, &params );
 }
 
 extern vtable_ptr winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;

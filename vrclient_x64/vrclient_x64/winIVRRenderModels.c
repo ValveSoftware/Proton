@@ -8,8 +8,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "cppIVRRenderModels_IVRRenderModels_001.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_LoadRenderModel, 12)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_FreeRenderModel, 8)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_GetRenderModelName, 16)
@@ -17,31 +15,31 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_GetRenderModelCou
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_001_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_090 *pRenderModel)
 {
-    struct cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_001_LoadRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pRenderModel = pRenderModel,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_001_LoadRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_001_LoadRenderModel, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_001_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_090 *pRenderModel)
 {
-    struct cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_001_FreeRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pRenderModel = pRenderModel,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_001_FreeRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_001_FreeRenderModel, &params );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_001_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_001_GetRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_001_GetRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .unRenderModelIndex = unRenderModelIndex,
@@ -49,18 +47,18 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_001_GetRenderModelName(st
         .unRenderModelNameLen = unRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_001_GetRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_001_GetRenderModelName, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount(struct w_steam_iface *_this)
 {
-    struct cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount_params params =
+    struct IVRRenderModels_IVRRenderModels_001_GetRenderModelCount_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_001_GetRenderModelCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_001_GetRenderModelCount, &params );
     return params._ret;
 }
 
@@ -119,8 +117,6 @@ void destroy_winIVRRenderModels_IVRRenderModels_001_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRRenderModels_IVRRenderModels_002.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_LoadRenderModel, 12)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_FreeRenderModel, 8)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_LoadTexture, 12)
@@ -144,7 +140,7 @@ extern void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture(struct
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .unRenderModelIndex = unRenderModelIndex,
@@ -152,36 +148,36 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetRenderModelName(st
         .unRenderModelNameLen = unRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetRenderModelName, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetRenderModelCount(struct w_steam_iface *_this)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelCount_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetRenderModelCount_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetRenderModelCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetRenderModelCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentCount(struct w_steam_iface *_this, const char *pchRenderModelName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetComponentCount_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetComponentCount_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetComponentCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetComponentCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentName(struct w_steam_iface *_this, const char *pchRenderModelName, uint32_t unComponentIndex, char *pchComponentName, uint32_t unComponentNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetComponentName_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetComponentName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -190,26 +186,26 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentName(stru
         .unComponentNameLen = unComponentNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetComponentName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetComponentName, &params );
     return params._ret;
 }
 
 uint64_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetComponentButtonMask_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetComponentButtonMask, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, char *pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -218,13 +214,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentRenderMod
         .unComponentRenderModelNameLen = unComponentRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_GetComponentState_params params =
+    struct IVRRenderModels_IVRRenderModels_002_GetComponentState_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -233,20 +229,20 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(struct 
         .pComponentState = pComponentState,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_GetComponentState( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_GetComponentState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params params =
+    struct IVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_RenderModelHasComponent, &params );
     return params._ret;
 }
 
@@ -321,8 +317,6 @@ void destroy_winIVRRenderModels_IVRRenderModels_002_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRRenderModels_IVRRenderModels_004.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async, 12)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_FreeRenderModel, 8)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async, 12)
@@ -352,7 +346,7 @@ extern void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11(s
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .unRenderModelIndex = unRenderModelIndex,
@@ -360,36 +354,36 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetRenderModelName(st
         .unRenderModelNameLen = unRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetRenderModelName, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetRenderModelCount(struct w_steam_iface *_this)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetRenderModelCount_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetRenderModelCount_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetRenderModelCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetRenderModelCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentCount(struct w_steam_iface *_this, const char *pchRenderModelName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetComponentCount_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetComponentCount_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetComponentCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetComponentCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentName(struct w_steam_iface *_this, const char *pchRenderModelName, uint32_t unComponentIndex, char *pchComponentName, uint32_t unComponentNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetComponentName_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetComponentName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -398,26 +392,26 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentName(stru
         .unComponentNameLen = unComponentNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetComponentName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetComponentName, &params );
     return params._ret;
 }
 
 uint64_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetComponentButtonMask_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetComponentButtonMask, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, char *pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -426,13 +420,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentRenderMod
         .unComponentRenderModelNameLen = unComponentRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_GetComponentState_params params =
+    struct IVRRenderModels_IVRRenderModels_004_GetComponentState_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -442,20 +436,20 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(struct 
         .pComponentState = pComponentState,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_GetComponentState( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_GetComponentState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent_params params =
+    struct IVRRenderModels_IVRRenderModels_004_RenderModelHasComponent_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_RenderModelHasComponent, &params );
     return params._ret;
 }
 
@@ -534,8 +528,6 @@ void destroy_winIVRRenderModels_IVRRenderModels_004_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRRenderModels_IVRRenderModels_005.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async, 12)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_FreeRenderModel, 8)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async, 12)
@@ -571,7 +563,7 @@ extern void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11(s
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .unRenderModelIndex = unRenderModelIndex,
@@ -579,36 +571,36 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelName(st
         .unRenderModelNameLen = unRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetRenderModelName, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelCount(struct w_steam_iface *_this)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelCount_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetRenderModelCount_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetRenderModelCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetRenderModelCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentCount(struct w_steam_iface *_this, const char *pchRenderModelName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetComponentCount_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetComponentCount_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetComponentCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetComponentCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentName(struct w_steam_iface *_this, const char *pchRenderModelName, uint32_t unComponentIndex, char *pchComponentName, uint32_t unComponentNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetComponentName_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetComponentName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -617,26 +609,26 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentName(stru
         .unComponentNameLen = unComponentNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetComponentName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetComponentName, &params );
     return params._ret;
 }
 
 uint64_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetComponentButtonMask_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetComponentButtonMask, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, char *pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -645,13 +637,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentRenderMod
         .unComponentRenderModelNameLen = unComponentRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetComponentState_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetComponentState_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -661,26 +653,26 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(struct 
         .pComponentState = pComponentState,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetComponentState( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetComponentState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent_params params =
+    struct IVRRenderModels_IVRRenderModels_005_RenderModelHasComponent_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_RenderModelHasComponent, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL(struct w_steam_iface *_this, const char *pchRenderModelName, char *pchThumbnailURL, uint32_t unThumbnailURLLen, uint32_t *peError)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -689,13 +681,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbna
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath(struct w_steam_iface *_this, const char *pchRenderModelName, char *pchOriginalPath, uint32_t unOriginalPathLen, uint32_t *peError)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -704,19 +696,19 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelOrigina
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath, &params );
     return params._ret;
 }
 
 const char * __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
-    struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum_params params =
+    struct IVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .error = error,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum, &params );
     return params._ret;
 }
 
@@ -803,8 +795,6 @@ void destroy_winIVRRenderModels_IVRRenderModels_005_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
-#include "cppIVRRenderModels_IVRRenderModels_006.h"
-
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async, 12)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeRenderModel, 8)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async, 12)
@@ -841,7 +831,7 @@ extern void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11(s
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .unRenderModelIndex = unRenderModelIndex,
@@ -849,36 +839,36 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelName(st
         .unRenderModelNameLen = unRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetRenderModelName, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelCount(struct w_steam_iface *_this)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelCount_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetRenderModelCount_params params =
     {
         .linux_side = _this->u_iface,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetRenderModelCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetRenderModelCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentCount(struct w_steam_iface *_this, const char *pchRenderModelName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentCount_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentCount_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentCount( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentCount, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentName(struct w_steam_iface *_this, const char *pchRenderModelName, uint32_t unComponentIndex, char *pchComponentName, uint32_t unComponentNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentName_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -887,26 +877,26 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentName(stru
         .unComponentNameLen = unComponentNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentName, &params );
     return params._ret;
 }
 
 uint64_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentButtonMask(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentButtonMask_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentButtonMask_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentButtonMask( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentButtonMask, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, char *pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -915,13 +905,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentRenderMod
         .unComponentRenderModelNameLen = unComponentRenderModelNameLen,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, uint64_t devicePath, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -931,13 +921,13 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevic
         .pComponentState = pComponentState,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetComponentState_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetComponentState_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -947,26 +937,26 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(struct 
         .pComponentState = pComponentState,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetComponentState( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetComponentState, &params );
     return params._ret;
 }
 
 bool __thiscall winIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent_params params =
+    struct IVRRenderModels_IVRRenderModels_006_RenderModelHasComponent_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
         .pchComponentName = pchComponentName,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_RenderModelHasComponent, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL(struct w_steam_iface *_this, const char *pchRenderModelName, char *pchThumbnailURL, uint32_t unThumbnailURLLen, uint32_t *peError)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -975,13 +965,13 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelThumbna
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetRenderModelThumbnailURL, &params );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath(struct w_steam_iface *_this, const char *pchRenderModelName, char *pchOriginalPath, uint32_t unOriginalPathLen, uint32_t *peError)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -990,19 +980,19 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelOrigina
         .peError = peError,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath, &params );
     return params._ret;
 }
 
 const char * __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
-    struct cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum_params params =
+    struct IVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum_params params =
     {
         .linux_side = _this->u_iface,
         .error = error,
     };
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum, &params );
     return params._ret;
 }
 

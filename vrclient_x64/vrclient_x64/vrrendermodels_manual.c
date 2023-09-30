@@ -9,14 +9,6 @@
 #include "dxvk-interop.h"
 #include "vrclient_private.h"
 
-#include "flatapi.h"
-
-#include "cppIVRRenderModels_IVRRenderModels_001.h"
-#include "cppIVRRenderModels_IVRRenderModels_002.h"
-#include "cppIVRRenderModels_IVRRenderModels_004.h"
-#include "cppIVRRenderModels_IVRRenderModels_005.h"
-#include "cppIVRRenderModels_IVRRenderModels_006.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 static uint32_t load_into_texture_d3d11( ID3D11Texture2D *texture, const w_RenderModel_TextureMap_t_1237 *data )
@@ -309,7 +301,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct w
                                                                         w_RenderModel_t_0912 **ppRenderModel )
 {
     struct render_model *model;
-    struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_002_LoadRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -317,20 +309,20 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct w
     };
     TRACE( "%p\n", _this );
     if (ppRenderModel && (model = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*model) ))) *ppRenderModel = &model->w_0912;
-    cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_LoadRenderModel, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeRenderModel( struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel )
 {
     struct render_model *model = CONTAINING_RECORD( pRenderModel, struct render_model, w_0912 );
-    struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_002_FreeRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pRenderModel = pRenderModel,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_FreeRenderModel, &params );
     HeapFree( GetProcessHeap(), 0, model );
 }
 
@@ -338,7 +330,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async
                                                                                   w_RenderModel_t_0912 **ppRenderModel )
 {
     struct render_model *model;
-    struct cppIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -346,20 +338,20 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async
     };
     TRACE( "%p\n", _this );
     if (ppRenderModel && (model = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*model) ))) *ppRenderModel = &model->w_0912;
-    cppIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeRenderModel( struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel )
 {
     struct render_model *model = CONTAINING_RECORD( pRenderModel, struct render_model, w_0912 );
-    struct cppIVRRenderModels_IVRRenderModels_004_FreeRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_004_FreeRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pRenderModel = pRenderModel,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_004_FreeRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_FreeRenderModel, &params );
     HeapFree( GetProcessHeap(), 0, model );
 }
 
@@ -367,7 +359,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async
                                                                                   w_RenderModel_t_0912 **ppRenderModel )
 {
     struct render_model *model;
-    struct cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -375,20 +367,20 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async
     };
     TRACE( "%p\n", _this );
     if (ppRenderModel && (model = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*model) ))) *ppRenderModel = &model->w_0912;
-    cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeRenderModel( struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel )
 {
     struct render_model *model = CONTAINING_RECORD( pRenderModel, struct render_model, w_0912 );
-    struct cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_005_FreeRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pRenderModel = pRenderModel,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_FreeRenderModel, &params );
     HeapFree( GetProcessHeap(), 0, model );
 }
 
@@ -396,7 +388,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async
                                                                                   w_RenderModel_t_0912 **ppRenderModel )
 {
     struct render_model *model;
-    struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params params =
     {
         .linux_side = _this->u_iface,
         .pchRenderModelName = pchRenderModelName,
@@ -404,20 +396,20 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async
     };
     TRACE( "%p\n", _this );
     if (ppRenderModel && (model = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*model) ))) *ppRenderModel = &model->w_0912;
-    cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel( struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel )
 {
     struct render_model *model = CONTAINING_RECORD( pRenderModel, struct render_model, w_0912 );
-    struct cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel_params params =
+    struct IVRRenderModels_IVRRenderModels_006_FreeRenderModel_params params =
     {
         .linux_side = _this->u_iface,
         .pRenderModel = pRenderModel,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_FreeRenderModel, &params );
     HeapFree( GetProcessHeap(), 0, model );
 }
 
@@ -427,7 +419,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture( struct w_ste
                                                                     w_RenderModel_TextureMap_t_090 **ppTexture )
 {
     struct render_model_texture_map *map;
-    struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params params =
+    struct IVRRenderModels_IVRRenderModels_002_LoadTexture_params params =
     {
         .linux_side = _this->u_iface,
         .textureId = textureId,
@@ -435,28 +427,28 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture( struct w_ste
     };
     TRACE( "%p\n", _this );
     if (ppTexture && (map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*map) ))) *ppTexture = &map->w_090;
-    cppIVRRenderModels_IVRRenderModels_002_LoadTexture( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_LoadTexture, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture( struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture )
 {
     struct render_model_texture_map *map = CONTAINING_RECORD( pTexture, struct render_model_texture_map, w_090 );
-    struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params params =
+    struct IVRRenderModels_IVRRenderModels_002_FreeTexture_params params =
     {
         .linux_side = _this->u_iface,
         .pTexture = pTexture,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_002_FreeTexture( &params );
-    HeapFree( GetProcessHeap(), 0, model );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_FreeTexture, &params );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                               w_RenderModel_TextureMap_t_090 **ppTexture )
 {
     struct render_model_texture_map *map;
-    struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params params =
     {
         .linux_side = _this->u_iface,
         .textureId = textureId,
@@ -464,28 +456,28 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( st
     };
     TRACE( "%p\n", _this );
     if (ppTexture && (map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*map) ))) *ppTexture = &map->w_090;
-    cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_LoadTexture_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTexture( struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture )
 {
     struct render_model_texture_map *map = CONTAINING_RECORD( pTexture, struct render_model_texture_map, w_090 );
-    struct cppIVRRenderModels_IVRRenderModels_004_FreeTexture_params params =
+    struct IVRRenderModels_IVRRenderModels_004_FreeTexture_params params =
     {
         .linux_side = _this->u_iface,
         .pTexture = pTexture,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_004_FreeTexture( &params );
-    HeapFree( GetProcessHeap(), 0, model );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_FreeTexture, &params );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                               w_RenderModel_TextureMap_t_090 **ppTexture )
 {
     struct render_model_texture_map *map;
-    struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params params =
     {
         .linux_side = _this->u_iface,
         .textureId = textureId,
@@ -493,28 +485,28 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( st
     };
     TRACE( "%p\n", _this );
     if (ppTexture && (map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*map) ))) *ppTexture = &map->w_090;
-    cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_LoadTexture_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTexture( struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture )
 {
     struct render_model_texture_map *map = CONTAINING_RECORD( pTexture, struct render_model_texture_map, w_090 );
-    struct cppIVRRenderModels_IVRRenderModels_005_FreeTexture_params params =
+    struct IVRRenderModels_IVRRenderModels_005_FreeTexture_params params =
     {
         .linux_side = _this->u_iface,
         .pTexture = pTexture,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_005_FreeTexture( &params );
-    HeapFree( GetProcessHeap(), 0, model );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_FreeTexture, &params );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                               w_RenderModel_TextureMap_t_1237 **ppTexture )
 {
     struct render_model_texture_map *map;
-    struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params params =
+    struct IVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params params =
     {
         .linux_side = _this->u_iface,
         .textureId = textureId,
@@ -522,19 +514,19 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( st
     };
     TRACE( "%p\n", _this );
     if (ppTexture && (map = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*map) ))) *ppTexture = &map->w_1237;
-    cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( &params );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_LoadTexture_Async, &params );
     return params._ret;
 }
 
 void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture( struct w_steam_iface *_this, w_RenderModel_TextureMap_t_1237 *pTexture )
 {
     struct render_model_texture_map *map = CONTAINING_RECORD( pTexture, struct render_model_texture_map, w_1237 );
-    struct cppIVRRenderModels_IVRRenderModels_006_FreeTexture_params params =
+    struct IVRRenderModels_IVRRenderModels_006_FreeTexture_params params =
     {
         .linux_side = _this->u_iface,
         .pTexture = pTexture,
     };
     TRACE( "%p\n", _this );
-    cppIVRRenderModels_IVRRenderModels_006_FreeTexture( &params );
-    HeapFree( GetProcessHeap(), 0, model );
+    VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_FreeTexture, &params );
+    HeapFree( GetProcessHeap(), 0, map );
 }
