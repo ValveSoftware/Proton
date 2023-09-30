@@ -984,18 +984,6 @@ def handle_class(klass):
         out(u'    HeapFree(GetProcessHeap(), 0, object);\n')
         out(u'}\n\n')
 
-    constructors = open("vrclient_x64/win_constructors.h", "a")
-    constructors.write(f'extern struct w_steam_iface *create_{winclassname}(void *);\n')
-    constructors.write(f'extern struct w_steam_iface *create_{winclassname}_FnTable(void *);\n')
-
-    destructors = open("vrclient_x64/win_destructors.h", "a")
-    destructors.write(f'extern void destroy_{winclassname}(struct w_steam_iface *);\n')
-    destructors.write(f'extern void destroy_{winclassname}_FnTable(struct w_steam_iface *);\n')
-
-    constructors = open("vrclient_x64/win_constructors_table.dat", "a")
-    constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}, &destroy_{winclassname}}},\n")
-    constructors.write(f"    {{\"FnTable:{klass.version}\", &create_{winclassname}_FnTable, &destroy_{winclassname}_FnTable}},\n")
-
 
 def canonical_typename(cursor):
     if type(cursor) in (Cursor, Struct):
@@ -1391,6 +1379,63 @@ for _, klass in sorted(all_classes.items()):
 
 generate_flatapi_c()
 
+
+with open("vrclient_x64/vrclient_generated.h", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+
+    for _, klass in sorted(all_classes.items()):
+        out(f"extern struct w_steam_iface *create_win{klass.full_name}(void *);\n")
+        out(f"extern struct w_steam_iface *create_win{klass.full_name}_FnTable(void *);\n")
+        out(f"extern void destroy_win{klass.full_name}(struct w_steam_iface *);\n")
+        out(f"extern void destroy_win{klass.full_name}_FnTable(struct w_steam_iface *);\n")
+
+
+with open("vrclient_x64/vrclient_generated.c", "w") as file:
+    out = file.write
+
+    out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'#include "vrclient_private.h"\n\n')
+
+    out(u'static const struct { const char *iface_version; iface_constructor ctor; } constructors[] =\n')
+    out(u'{\n')
+    for _, klass in sorted(all_classes.items()):
+        out(f'    {{"{klass.version}", create_win{klass.full_name}}},\n')
+        out(f'    {{"FnTable:{klass.version}", create_win{klass.full_name}_FnTable}},\n')
+    out(u'};\n')
+    out(u'\n')
+    out(u'iface_constructor find_iface_constructor( const char *iface_version )\n')
+    out(u'{\n')
+    out(u'    int i;\n')
+    out(u'    for (i = 0; i < ARRAYSIZE(constructors); ++i)\n')
+    out(u'        if (!strcmp( iface_version, constructors[i].iface_version ))\n')
+    out(u'            return constructors[i].ctor;\n')
+    out(u'    return NULL;\n')
+    out(u'}\n')
+    out(u'\n')
+    out(u'static const struct { const char *iface_version; iface_destructor dtor; } destructors[] =\n')
+    out(u'{\n')
+    for _, klass in sorted(all_classes.items()):
+        out(f'    {{"{klass.version}", destroy_win{klass.full_name}}},\n')
+        out(f'    {{"FnTable:{klass.version}", destroy_win{klass.full_name}_FnTable}},\n')
+    out(u'};\n')
+    out(u'\n')
+    out(u'iface_destructor find_iface_destructor( const char *iface_version )\n')
+    out(u'{\n')
+    out(u'    int i;\n')
+    out(u'    for (i = 0; i < ARRAYSIZE(destructors); ++i)\n')
+    out(u'        if (!strcmp( iface_version, destructors[i].iface_version ))\n')
+    out(u'            return destructors[i].dtor;\n')
+    out(u'    return NULL;\n')
+    out(u'}\n')
+
+
+for name, klasses in all_classes.items():
+    if name not in SDK_CLASSES: continue
+    for sdkver, klass in klasses.items():
+        version = all_versions[sdkver][name[1:].upper()]
+        handle_class(sdkver, klass, version, SDK_CLASSES[name])
 
 declared = {}
 
