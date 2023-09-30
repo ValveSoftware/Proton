@@ -1,4 +1,12 @@
-struct cppISteamGameStats_SteamGameStats001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameStats_SteamGameStats001_GetNewSession_params
 {
     void *linux_side;
@@ -126,3 +134,6 @@ struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64_params
 };
 extern void cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64( struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

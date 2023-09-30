@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends006;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends006_GetPersonaName_params
 {
     void *linux_side;
@@ -205,3 +213,6 @@ struct cppISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog_params
 };
 extern void cppISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog( struct cppISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

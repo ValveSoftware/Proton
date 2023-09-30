@@ -7,7 +7,7 @@
 #include "steamworks_sdk_127/isteamgameserverstats.h"
 #include "steamworks_sdk_127/isteamgamecoordinator.h"
 #pragma pop_macro("__cdecl")
-#include "steamclient_private.h"
+#include "unixlib.h"
 extern "C" {
 #define SDKVER_127
 #include "struct_converters.h"

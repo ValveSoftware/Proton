@@ -1,4 +1,12 @@
-struct cppISteamMatchmaking_SteamMatchMaking008;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamMatchmaking_SteamMatchMaking008_GetFavoriteGameCount_params
 {
     void *linux_side;
@@ -329,3 +337,6 @@ struct cppISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner_params
 };
 extern void cppISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner( struct cppISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

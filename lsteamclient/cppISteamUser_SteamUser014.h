@@ -1,4 +1,12 @@
-struct cppISteamUser_SteamUser014;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUser_SteamUser014_GetHSteamUser_params
 {
     void *linux_side;
@@ -185,3 +193,6 @@ struct cppISteamUser_SteamUser014_GetEncryptedAppTicket_params
 };
 extern void cppISteamUser_SteamUser014_GetEncryptedAppTicket( struct cppISteamUser_SteamUser014_GetEncryptedAppTicket_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

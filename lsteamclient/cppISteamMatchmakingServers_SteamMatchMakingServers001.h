@@ -1,11 +1,19 @@
-struct cppISteamMatchmakingServers_SteamMatchMakingServers001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList_params
 {
     void *linux_side;
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList_params *params );
 
@@ -13,7 +21,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerLi
 {
     void *linux_side;
     uint32_t iApp;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList_params *params );
 
@@ -23,7 +31,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServ
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList_params *params );
 
@@ -33,7 +41,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesSe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList_params *params );
 
@@ -43,7 +51,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServ
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList_params *params );
 
@@ -53,14 +61,14 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorSe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList_params *params );
 
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params
 {
     void *linux_side;
-    gameserveritem_t *_ret;
+    gameserveritem_t_105 *_ret;
     uint32_t eType;
     int32_t iServer;
 };
@@ -110,7 +118,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer_params
     int32_t _ret;
     uint32_t unIP;
     uint16_t usPort;
-    void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingPingResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer_params *params );
 
@@ -120,7 +128,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails_para
     int32_t _ret;
     uint32_t unIP;
     uint16_t usPort;
-    void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingPlayersResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails_params *params );
 
@@ -130,7 +138,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules_params
     int32_t _ret;
     uint32_t unIP;
     uint16_t usPort;
-    void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse;
+    w_ISteamMatchmakingRulesResponse *pRequestServersResponse;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules_params *params );
 
@@ -141,3 +149,6 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery_
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

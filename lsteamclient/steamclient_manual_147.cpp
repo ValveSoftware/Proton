@@ -1,4 +1,4 @@
-#include "steamclient_private.h"
+#include "unix_private.h"
 
 extern "C"
 {
@@ -6,40 +6,34 @@ extern "C"
 #include "steamclient_manual_common.h"
 }
 
-#pragma push_macro("__cdecl")
-#undef __cdecl
-#pragma push_macro("strncpy")
-#undef strncpy
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets006.hpp"
-#pragma pop_macro("__cdecl")
-#pragma pop_macro("strncpy")
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection_params *params )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
-    SteamNetworkingMessage_t *lin_ppOutMessages[params->nMaxMessages];
-    params->_ret = iface->ReceiveMessagesOnConnection( params->hConn, lin_ppOutMessages, params->nMaxMessages );
-    lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, lin_ppOutMessages,
+    struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
+    u_SteamNetworkingMessage_t_147 *u_ppOutMessages[params->nMaxMessages];
+    params->_ret = iface->ReceiveMessagesOnConnection( params->hConn, u_ppOutMessages, params->nMaxMessages );
+    lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, u_ppOutMessages,
                                                 params->ppOutMessages, params->nMaxMessages );
 }
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket( struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket_params *params )
 {
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
-    SteamNetworkingMessage_t *lin_ppOutMessages[params->nMaxMessages];
-    params->_ret = iface->ReceiveMessagesOnListenSocket( params->hSocket, lin_ppOutMessages, params->nMaxMessages );
-    lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, lin_ppOutMessages,
+    struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
+    u_SteamNetworkingMessage_t_147 *u_ppOutMessages[params->nMaxMessages];
+    params->_ret = iface->ReceiveMessagesOnListenSocket( params->hSocket, u_ppOutMessages, params->nMaxMessages );
+    lin_to_win_struct_SteamNetworkingMessage_t( params->_ret, u_ppOutMessages,
                                                 params->ppOutMessages, params->nMaxMessages );
 }
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages( struct cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages_params *params )
 {
 #define MAX_SEND_MESSAGES 64
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct cppISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
+    struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets006 *)params->linux_side;
     /* use the stack to avoid heap allocation */
-    struct SteamNetworkingMessage_t *lin_msgs[MAX_SEND_MESSAGES];
+    u_SteamNetworkingMessage_t_147 *u_msgs[MAX_SEND_MESSAGES];
     int i;
 
     if (params->nMessages > MAX_SEND_MESSAGES)
@@ -52,9 +46,9 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages( struct c
     while (params->nMessages)
     {
         for (i = 0; i < params->nMessages && i < MAX_SEND_MESSAGES; ++i)
-            lin_msgs[i] = (SteamNetworkingMessage_t *)network_message_win_to_lin( params->pMessages[i] );
+            u_msgs[i] = (u_SteamNetworkingMessage_t_147 *)network_message_win_to_lin( params->pMessages[i] );
 
-        iface->SendMessages( i, lin_msgs, params->pOutMessageNumberOrResult );
+        iface->SendMessages( i, u_msgs, params->pOutMessageNumberOrResult );
 
         params->nMessages -= i;
         params->pMessages += i;

@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001.h"
@@ -1499,7 +1496,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry_params params =
     {
@@ -1927,7 +1924,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2399,7 +2396,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2874,7 +2871,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3378,7 +3375,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_113 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3892,7 +3889,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_119 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry_params params =
     {
@@ -4561,7 +4558,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_148a *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry_params params =
     {
@@ -5234,7 +5231,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_158 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry_params params =
     {

@@ -118,15 +118,11 @@ typedef struct ISteamNetworkingConnectionSignaling ISteamNetworkingConnectionSig
 
 /* structs below are PODs with identical size & layout across platforms */
 
-typedef struct CSteamID { unsigned char a[8]; } CSteamID;
-typedef struct CGameID { unsigned char a[8]; } CGameID;
 typedef struct RemoteStorageUpdatePublishedFileRequest_t { unsigned char a[40]; } RemoteStorageUpdatePublishedFileRequest_t;
 typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerAnalogActionData_t;
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
 typedef struct SteamNetworkPingLocation_t { uint8 m_data[ 512 ]; } SteamNetworkPingLocation_t;
-typedef struct SteamIPAddress_t { uint8 m_data[20]; } SteamIPAddress_t;
-typedef struct ScePadTriggerEffectParam { uint8 m_data[120]; } ScePadTriggerEffectParam;
 
 #pragma pack( push, 1 )
 
@@ -170,41 +166,9 @@ typedef struct InputMotionData_t
 	float rotVelZ;
 } InputMotionData_t;
 
-typedef struct SteamNetworkingIPAddr
-{
-	union
-	{
-		uint8 m_ipv6[ 16 ];
-		struct
-		{
-			uint64 m_8zeros;
-			uint16 m_0000;
-			uint16 m_ffff;
-			uint8 m_ip[ 4 ];
-		} m_ipv4;
-	} ip;
-	uint16 m_port;
-} SteamNetworkingIPAddr;
-
 #define k_cchMaxGenericString 32
 #define k_cchMaxXboxPairwiseID 32
 #define k_cbMaxGenericBytes 32
-
-typedef struct SteamNetworkingIdentity
-{
-	ESteamNetworkingIdentityType m_eType;
-
-	int m_cbSize;
-
-	union {
-		uint64 m_steamID64;
-		char m_szGenericString[ k_cchMaxGenericString ];
-		char m_szXboxPairwiseID[ k_cchMaxXboxPairwiseID ];
-		uint8 m_genericBytes[ k_cbMaxGenericBytes ];
-		SteamNetworkingIPAddr m_ip;
-		uint32 m_reserved[ 32 ];
-	} data;
-} SteamNetworkingIdentity;
 
 #pragma pack( pop )
 
@@ -231,16 +195,11 @@ typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 typedef struct SteamNetAuthenticationStatus_t SteamNetAuthenticationStatus_t;
 typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordinatorServerLogin;
 typedef struct SteamRelayNetworkStatus_t SteamRelayNetworkStatus_t;
-typedef struct SteamIPAddress_t SteamIPAddress_t;
 typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
-typedef struct SteamNetworkingMessage_t SteamNetworkingMessage_t;
 typedef struct SteamInputActionEvent_t SteamInputActionEvent_t;
 typedef struct SteamNetConnectionRealTimeLaneStatus_t SteamNetConnectionRealTimeLaneStatus_t;
 typedef struct SteamNetworkingFakeIPResult_t SteamNetworkingFakeIPResult_t;
 
-typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
-typedef void *SteamAPIWarningMessageHook_t;
-typedef void *SteamAPI_PostAPIResultInProcess_t; //unused
 typedef void (*FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 typedef uint8 Salt_t[8];

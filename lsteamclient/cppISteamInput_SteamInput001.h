@@ -1,4 +1,12 @@
-struct cppISteamInput_SteamInput001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamInput_SteamInput001_Init_params
 {
     void *linux_side;
@@ -296,3 +304,6 @@ struct cppISteamInput_SteamInput001_GetRemotePlaySessionID_params
 };
 extern void cppISteamInput_SteamInput001_GetRemotePlaySessionID( struct cppISteamInput_SteamInput001_GetRemotePlaySessionID_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

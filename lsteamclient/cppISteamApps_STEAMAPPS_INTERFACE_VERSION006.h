@@ -1,4 +1,12 @@
-struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed_params
 {
     void *linux_side;
@@ -172,3 +180,6 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam_params
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer015;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer015_InitGameServer_params
 {
     void *linux_side;
@@ -185,7 +193,7 @@ struct cppISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
-    const SteamNetworkingIdentity *pSnid;
+    const SteamNetworkingIdentity_144 *pSnid;
 };
 extern void cppISteamGameServer_SteamGameServer015_GetAuthSessionTicket( struct cppISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params *params );
 
@@ -337,3 +345,6 @@ struct cppISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECA
 };
 extern void cppISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECATED( struct cppISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECATED_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

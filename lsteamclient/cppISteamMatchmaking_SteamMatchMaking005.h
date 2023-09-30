@@ -1,4 +1,12 @@
-struct cppISteamMatchmaking_SteamMatchMaking005;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount_params
 {
     void *linux_side;
@@ -276,3 +284,6 @@ struct cppISteamMatchmaking_SteamMatchMaking005_GetLobbyDistance_params
 };
 extern void cppISteamMatchmaking_SteamMatchMaking005_GetLobbyDistance( struct cppISteamMatchmaking_SteamMatchMaking005_GetLobbyDistance_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

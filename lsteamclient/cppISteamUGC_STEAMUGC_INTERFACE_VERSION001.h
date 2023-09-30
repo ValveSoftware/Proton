@@ -1,4 +1,12 @@
-struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params
 {
     void *linux_side;
@@ -39,7 +47,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params
     bool _ret;
     uint64_t handle;
     uint32_t index;
-    winSteamUGCDetails_t_128 *pDetails;
+    w_SteamUGCDetails_t_126 *pDetails;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params *params );
 
@@ -131,3 +139,6 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails_params
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

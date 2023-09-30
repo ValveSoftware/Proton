@@ -1,4 +1,12 @@
-struct cppISteamClient_SteamClient009;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamClient_SteamClient009_CreateSteamPipe_params
 {
     void *linux_side;
@@ -196,3 +204,6 @@ struct cppISteamClient_SteamClient009_SetWarningMessageHook_params
 };
 extern void cppISteamClient_SteamClient009_SetWarningMessageHook( struct cppISteamClient_SteamClient009_SetWarningMessageHook_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

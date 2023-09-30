@@ -1,6 +1,6 @@
 /* This file is auto-generated, do not edit. */
 
-#include "steamclient_structs.h"
+#include "unix_private.h"
 
 C_ASSERT( sizeof(SteamNetworkingIPAddr) >= 18 );
 C_ASSERT( offsetof(SteamNetworkingIPAddr, data) == 0 );

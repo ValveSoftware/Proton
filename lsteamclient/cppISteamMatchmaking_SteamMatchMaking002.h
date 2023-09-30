@@ -1,4 +1,12 @@
-struct cppISteamMatchmaking_SteamMatchMaking002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGameCount_params
 {
     void *linux_side;
@@ -185,3 +193,6 @@ struct cppISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer_params
 };
 extern void cppISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer( struct cppISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

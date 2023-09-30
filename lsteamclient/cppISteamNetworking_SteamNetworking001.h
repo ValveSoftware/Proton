@@ -1,4 +1,12 @@
-struct cppISteamNetworking_SteamNetworking001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworking_SteamNetworking001_CreateListenSocket_params
 {
     void *linux_side;
@@ -122,3 +130,6 @@ struct cppISteamNetworking_SteamNetworking001_GetListenSocketInfo_params
 };
 extern void cppISteamNetworking_SteamNetworking001_GetListenSocketInfo( struct cppISteamNetworking_SteamNetworking001_GetListenSocketInfo_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

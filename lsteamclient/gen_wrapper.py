@@ -677,8 +677,7 @@ class Class:
         out(u'{\n')
         out(u'#ifdef __cplusplus\n')
         for method in self.methods:
-            types = [declspec(p, "", prefix if prefix != "cpp" else None)
-                     for p in method.get_arguments()]
+            types = [declspec(p, "", prefix) for p in method.get_arguments()]
 
             # CGameID -> CGameID &
             # Windows side follows the prototype in the header while Linux
@@ -690,7 +689,7 @@ class Class:
             if type(method) is Destructor:
                 out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
             else:
-                method_name = f'{declspec(method.result_type, "", None)} {method.spelling}'
+                method_name = f'{declspec(method.result_type, "", prefix)} {method.spelling}'
                 out(f'    virtual {method_name}( {", ".join(types)} ) = 0;\n')
         out(u'#endif /* __cplusplus */\n')
         out(u'};\n\n')
@@ -774,7 +773,7 @@ def param_needs_conversion(decl):
 
 
 def callconv(cursor, prefix):
-    if type(cursor) is not Cursor or prefix is None:
+    if type(cursor) is not Cursor:
         return ''
     canon = cursor.type.get_canonical()
     if canon.kind != TypeKind.POINTER:
@@ -831,15 +830,13 @@ def declspec(decl, name, prefix, wrapped=False):
         return f'uint{decl.get_size() * 8}_t{name}'
 
     type_name = decl.spelling.removeprefix("const ")
-    if prefix not in (None, "win") and decl.kind == TypeKind.RECORD \
+    if decl.kind == TypeKind.RECORD \
        and type_name in all_versions[sdkver] \
        and type_name not in EXEMPT_STRUCTS:
         if type_name in unique_structs:
             return f'{const}{all_versions[sdkver][type_name]}{name}'
         return f'{const}{prefix}{all_versions[sdkver][type_name]}{name}'
 
-    if prefix == "win" and param_needs_conversion(decl):
-        return f"{const}win{type_name}_{sdkver}{name}"
     if type_name.startswith('ISteam'):
         return f'{const}void /*{type_name}*/{name}'
     if type_name in ('void', 'bool', 'char', 'float', 'double'):
@@ -858,11 +855,11 @@ def handle_method_hpp(method, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*_ret" if returns_record else "_ret"
-    ret = f'{declspec(method.result_type, ret, "win")}'
+    ret = f'{declspec(method.result_type, ret, "w_")}'
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
 
     if method.result_type.kind != TypeKind.VOID:
         params = [ret] + params
@@ -895,7 +892,7 @@ def handle_method_cpp(method, classname, cppname, out):
 
     out(f'void {cppname}_{method.name}( struct {cppname}_{method.name}_params *params )\n')
     out(u'{\n')
-    out(f'    struct {cppname} *iface = (struct {cppname} *)params->linux_side;\n')
+    out(f'    struct u_{klass.full_name} *iface = (struct u_{klass.full_name} *)params->linux_side;\n')
 
     params = list(zip(names[1:], method.get_arguments()))
     for i, (name, param) in enumerate(params[:-1]):
@@ -918,33 +915,29 @@ def handle_method_cpp(method, classname, cppname, out):
     need_output = {}
 
     for name, param in sorted(need_convert.items()):
-        type_name = underlying_typename(param)
-
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {declspec(param, f"lin_{name}", None)};\n')
-            out(f'    win_to_lin_struct_{type_name}_{sdkver}( &params->{name}, &lin_{name} );\n')
+            out(f'    {declspec(param.type, f"u_{name}", "u_")} = params->{name};\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
+            out(f'    {declspec(pointee, f"lin_{name}", "u_")};\n')
             continue
 
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
-        out(f'    win_to_lin_struct_{type_name}_{sdkver}( params->{name}, &lin_{name} );\n')
+        out(f'    {declspec(pointee, f"u_{name}", "u_")} = *params->{name};\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            out(f'    {declspec(param, f"lin_{name}", "u_")} = manual_convert_{name}( params->{name} );\n')
+            out(f'    {declspec(param, f"u_{name}", "u_")} = manual_convert_{name}( params->{name} );\n')
         else:
-            out(f'    {declspec(param, f"lin_{name}", "u_")} = manual_convert_{method.name}_{name}( params->{name} );\n')
+            out(f'    {declspec(param, f"u_{name}", "u_")} = manual_convert_{method.name}_{name}( params->{name} );\n')
 
     for name, param in sorted(need_wrapper.items()):
-        out(f'    {declspec(param, f"lin_{name}", None)} = create_Linux{underlying_type(param.type).spelling}(params->{name}, "{classname}_{klass.version}");\n')
+        out(f'    {declspec(param, f"u_{name}", "u_")} = create_Linux{underlying_type(param.type).spelling}( params->{name}, "{classname}_{klass.version}" );\n')
 
     if returns_void:
         out(u'    ')
@@ -955,9 +948,9 @@ def handle_method_cpp(method, classname, cppname, out):
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
-        if name in need_convert: return f"{pfx}lin_{name}"
-        if name in manual_convert: return f"lin_{name}"
-        if name in need_wrapper: return f"lin_{name}"
+        if name in need_convert: return f"{pfx}u_{name}"
+        if name in manual_convert: return f"u_{name}"
+        if name in need_wrapper: return f"u_{name}"
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
@@ -972,8 +965,7 @@ def handle_method_cpp(method, classname, cppname, out):
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 
     for name, param in sorted(need_output.items()):
-        type_name = underlying_typename(param)
-        out(f'    lin_to_win_struct_{type_name}_{sdkver}( &lin_{name}, params->{name} );\n')
+        out(f'    *params->{name} = u_{name};\n')
 
     if method.result_type.kind != TypeKind.VOID:
         post_exec = post_execution_function(classname, method.spelling)
@@ -1000,14 +992,14 @@ def handle_method_c(method, winclassname, cppname, out):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
     ret = "*" if returns_record else ""
-    ret = f'{declspec(method.result_type, ret, "win")} '
+    ret = f'{declspec(method.result_type, ret, "w_")} '
 
     names = [p.spelling if p.spelling != "" else f'_{chr(0x61 + i)}'
              for i, p in enumerate(method.get_arguments())]
-    params = [declspec(p, names[i], "win") for i, p in enumerate(method.get_arguments())]
+    params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
 
     if returns_record:
-        params = [f'{declspec(method.result_type, "*_ret", "win")}'] + params
+        params = [f'{declspec(method.result_type, "*_ret", "w_")}'] + params
         names = ['_ret'] + names
 
     params = ['struct w_steam_iface *_this'] + params
@@ -1086,35 +1078,33 @@ def handle_class(klass):
     with open(f"{cppname}.h", "w") as file:
         out = file.write
 
-        out(f'struct {cppname};\n')
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include <stdarg.h>\n')
+        out(u'#include <stddef.h>\n')
+        out(u'#include <stdint.h>\n')
+        out(u'\n')
+        out(u'#ifdef __cplusplus\n')
+        out(u'extern "C" {\n')
+        out(u'#endif /* __cplusplus */\n')
+        out(u'\n')
 
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
             handle_method_hpp(method, cppname, out)
 
+        out(u'#ifdef __cplusplus\n')
+        out(u'} /* extern "C" */\n')
+        out(u'#endif /* __cplusplus */\n')
+
     with open(f"{cppname}.{ext}", "w") as file:
         out = file.write
 
-        out(u'#include "steam_defs.h"\n')
-        out(u'#pragma push_macro("__cdecl")\n')
-        out(u'#undef __cdecl\n')
-        out(u'#define __cdecl\n')
-        out(f'#include "steamworks_sdk_{klass._sdkver}/steam_api.h"\n')
-        if os.path.isfile(f"steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"):
-            out(f'#include "steamworks_sdk_{klass._sdkver}/steamnetworkingtypes.h"\n')
-        if klass.filename != "steam_api.h":
-            out(f'#include "steamworks_sdk_{klass._sdkver}/{klass.filename}"\n')
-        out(u'#pragma pop_macro("__cdecl")\n')
-        out(u'#include "steamclient_private.h"\n')
-        out(u'#ifdef __cplusplus\n')
-        out(u'extern "C" {\n')
-        out(u'#endif\n')
-        out(f'#define SDKVER_{klass._sdkver}\n')
-        out(u'#include "struct_converters.h"\n')
+        out(u'/* This file is auto-generated, do not edit. */\n')
+        out(u'#include "unix_private.h"\n')
         out(f'#include "{cppname}.h"\n\n')
 
-        klass.write_definition(out, "cpp")
+        klass.write_definition(out, "u_")
 
         for method in klass.methods:
             if type(method) is Destructor:
@@ -1123,9 +1113,6 @@ def handle_class(klass):
                 continue
             handle_method_cpp(method, klass.name, cppname, out)
 
-        out(u'#ifdef __cplusplus\n')
-        out(u'}\n')
-        out(u'#endif\n')
 
     winclassname = f"win{klass.full_name}"
     with open(f"win{klass.name}.c", "a") as file:
@@ -1348,7 +1335,7 @@ def handle_struct(sdkver, struct):
         if os.path.isfile(f"steamworks_sdk_{sdkver}/steamnetworkingtypes.h"):
             cppfile.write(f"#include \"steamworks_sdk_{sdkver}/steamnetworkingtypes.h\"\n")
         cppfile.write("#pragma pop_macro(\"__cdecl\")\n")
-        cppfile.write("#include \"steamclient_private.h\"\n")
+        cppfile.write("#include \"unixlib.h\"\n")
         cppfile.write("extern \"C\" {\n")
         cppfile.write(f"#define SDKVER_{sdkver}\n")
         cppfile.write("#include \"struct_converters.h\"\n")
@@ -1586,9 +1573,6 @@ for klass in all_classes.values():
         out(u'/* This file is auto-generated, do not edit. */\n')
         out(u'#include "steamclient_private.h"\n')
         out(u'\n')
-        out(u'#include "steam_defs.h"\n')
-        out(u'#include "struct_converters.h"\n')
-        out(u'\n')
         out(u'WINE_DEFAULT_DEBUG_CHANNEL(steamclient);\n')
         out(u'\n')
 
@@ -1713,7 +1697,7 @@ with open('unixlib_generated.cpp', 'w') as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
-    out(u'#include "steamclient_structs.h"\n\n')
+    out(u'#include "unix_private.h"\n\n')
 
     for name in sorted(unique_structs, key=struct_order):
         for sdkver, abis in all_structs[name].items():

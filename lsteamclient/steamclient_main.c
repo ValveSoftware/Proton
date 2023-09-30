@@ -19,8 +19,9 @@
 #include <X11/keysym.h>
 #endif
 
-#include "steam_defs.h"
 #include "steamclient_private.h"
+
+#include "wine/list.h"
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -868,7 +869,7 @@ static DWORD WINAPI callback_thread(void *dummy)
 
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
-static bool (*steamclient_BGetCallback)( int32_t a, CallbackMsg_t *b, int32_t *c );
+static bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
 static bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
 static bool (*steamclient_FreeLastCallback)( int32_t );
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
@@ -989,7 +990,7 @@ static void *last_cb = NULL;
 bool CDECL Steam_BGetCallback( int32_t pipe, struct winCallbackMsg_t *win_msg, int32_t *ignored )
 {
     bool ret;
-    CallbackMsg_t lin_msg;
+    u_CallbackMsg_t lin_msg;
 
     TRACE("%u, %p, %p\n", pipe, win_msg, ignored);
 

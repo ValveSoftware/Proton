@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends010;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends010_GetPersonaName_params
 {
     void *linux_side;
@@ -487,3 +495,6 @@ struct cppISteamFriends_SteamFriends010_GetFriendMessage_params
 };
 extern void cppISteamFriends_SteamFriends010_GetFriendMessage( struct cppISteamFriends_SteamFriends010_GetFriendMessage_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -5645,7 +5645,7 @@ struct u_ISteamNetworkingConnectionCustomSignaling
 struct w_ISteamNetworkingCustomSignalingRecvContext
 {
 #ifdef __cplusplus
-    virtual void /*ISteamNetworkingConnectionCustomSignaling*/ * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
+    virtual w_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
     virtual void SendRejectionSignal( const SteamNetworkingIdentity_144 *, const void *, int32_t ) = 0;
 #endif /* __cplusplus */
 };
@@ -5653,7 +5653,7 @@ struct w_ISteamNetworkingCustomSignalingRecvContext
 struct u_ISteamNetworkingCustomSignalingRecvContext
 {
 #ifdef __cplusplus
-    virtual void /*ISteamNetworkingConnectionCustomSignaling*/ * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
+    virtual u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
     virtual void SendRejectionSignal( const SteamNetworkingIdentity_144 *, const void *, int32_t ) = 0;
 #endif /* __cplusplus */
 };

@@ -1,4 +1,12 @@
-struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort_params
 {
     void *linux_side;
@@ -20,7 +28,7 @@ struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessa
 {
     void *linux_side;
     int32_t _ret;
-    winSteamNetworkingMessage_t_158 **ppOutMessages;
+    w_SteamNetworkingMessage_t_153a **ppOutMessages;
     int32_t nMaxMessages;
 };
 extern void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params *params );
@@ -32,3 +40,6 @@ struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleClea
 };
 extern void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

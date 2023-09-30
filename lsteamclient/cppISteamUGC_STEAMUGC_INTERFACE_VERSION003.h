@@ -1,4 +1,12 @@
-struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest_params
 {
     void *linux_side;
@@ -39,7 +47,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params
     bool _ret;
     uint64_t handle;
     uint32_t index;
-    winSteamUGCDetails_t_132 *pDetails;
+    w_SteamUGCDetails_t_128x *pDetails;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params *params );
 
@@ -191,7 +199,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params
     void *linux_side;
     bool _ret;
     uint64_t updateHandle;
-    const SteamParamStringArray_t *pTags;
+    const w_SteamParamStringArray_t *pTags;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params *params );
 
@@ -288,3 +296,6 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo_params
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

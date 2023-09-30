@@ -1,4 +1,12 @@
-struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous_params
 {
     void *linux_side;
@@ -68,3 +76,6 @@ struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_PostConnectionStateMsg_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

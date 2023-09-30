@@ -1,4 +1,12 @@
-struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params
 {
     void *linux_side;
@@ -45,3 +53,6 @@ struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode_par
 };
 extern void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode( struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

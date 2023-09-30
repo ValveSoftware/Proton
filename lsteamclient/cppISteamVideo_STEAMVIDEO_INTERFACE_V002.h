@@ -1,4 +1,12 @@
-struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL_params
 {
     void *linux_side;
@@ -31,3 +39,6 @@ struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params
 };
 extern void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

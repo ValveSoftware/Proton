@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION001.h"
@@ -69,7 +66,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_128 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_126 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params params =
     {
@@ -325,7 +322,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_130 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params params =
     {
@@ -546,7 +543,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags_params params =
     {
@@ -827,7 +824,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_132 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params params =
     {
@@ -1048,7 +1045,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params params =
     {
@@ -1332,7 +1329,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_132x *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult_params params =
     {
@@ -1553,7 +1550,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags_params params =
     {
@@ -1888,7 +1885,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_133b *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult_params params =
     {
@@ -2252,7 +2249,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags_params params =
     {
@@ -2630,7 +2627,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_133x *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult_params params =
     {
@@ -3020,7 +3017,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags_params params =
     {
@@ -3435,7 +3432,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_136 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult_params params =
     {
@@ -3883,7 +3880,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags_params params =
     {
@@ -4364,7 +4361,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_137 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult_params params =
     {
@@ -4814,7 +4811,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags_params params =
     {
@@ -5376,7 +5373,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_139 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult_params params =
     {
@@ -5839,7 +5836,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags_params params =
     {
@@ -6449,7 +6446,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_142 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult_params params =
     {
@@ -6925,7 +6922,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags_params params =
     {
@@ -7636,7 +7633,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_144 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult_params params =
     {
@@ -8112,7 +8109,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags_params params =
     {
@@ -8840,7 +8837,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_146 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult_params params =
     {
@@ -9332,7 +9329,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags_params params =
     {
@@ -10075,7 +10072,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_150 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult_params params =
     {
@@ -10254,7 +10251,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup_params params =
     {
@@ -10580,7 +10577,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags_params params =
     {
@@ -11329,7 +11326,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_152 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult_params params =
     {
@@ -11553,7 +11550,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup_params params =
     {
@@ -11879,7 +11876,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags_params params =
     {
@@ -12657,7 +12654,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_155 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult_params params =
     {
@@ -12881,7 +12878,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup_params params =
     {
@@ -13235,7 +13232,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags_params params =
     {
@@ -14018,7 +14015,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_157 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult_params params =
     {
@@ -14257,7 +14254,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup_params params =
     {
@@ -14611,7 +14608,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags_params params =
     {
@@ -15424,7 +15421,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUGCReque
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_158 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_128x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult_params params =
     {
@@ -15663,7 +15660,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup_params params =
     {
@@ -16017,7 +16014,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags, bool bAllowAdminTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags, bool bAllowAdminTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags_params params =
     {

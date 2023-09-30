@@ -1,4 +1,12 @@
-struct cppISteamClient_SteamClient013;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamClient_SteamClient013_CreateSteamPipe_params
 {
     void *linux_side;
@@ -273,3 +281,6 @@ struct cppISteamClient_SteamClient013_GetISteamAppList_params
 };
 extern void cppISteamClient_SteamClient013_GetISteamAppList( struct cppISteamClient_SteamClient013_GetISteamAppList_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

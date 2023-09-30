@@ -1,4 +1,12 @@
-struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats_params
 {
     void *linux_side;
@@ -111,3 +119,6 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievemen
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
