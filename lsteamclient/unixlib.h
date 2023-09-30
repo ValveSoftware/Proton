@@ -8,8 +8,11 @@
 
 #include <windef.h>
 #include <winbase.h>
+#include <winternl.h>
 
 #include "steamclient_structs.h"
+
+#include "wine/unixlib.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -103,8 +106,15 @@ extern void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetwor
 extern void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg );
 extern void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg );
 
+typedef NTSTATUS (*unixlib_entry_t)( void *args );
+extern const unixlib_entry_t __wine_unix_call_funcs[];
+
+#define STEAMCLIENT_CALL( code, args ) __wine_unix_call_funcs[unix_ ## code]( args )
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
+
+#include "unixlib_generated.h"
 
 #endif /* __STEAMCLIENT_UNIXLIB_H */
