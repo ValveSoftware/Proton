@@ -9,7 +9,7 @@
 #include "steamworks_sdk_153a/isteamgamecoordinator.h"
 #include "steamworks_sdk_153a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
-#include "steamclient_private.h"
+#include "unixlib.h"
 extern "C" {
 #define SDKVER_153a
 #include "struct_converters.h"

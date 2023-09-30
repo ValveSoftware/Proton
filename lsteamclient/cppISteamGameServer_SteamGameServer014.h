@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer014;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer014_InitGameServer_params
 {
     void *linux_side;
@@ -336,3 +344,6 @@ struct cppISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECA
 };
 extern void cppISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED( struct cppISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

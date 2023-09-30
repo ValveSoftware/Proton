@@ -1,4 +1,12 @@
-struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot_params
 {
     void *linux_side;
@@ -61,3 +69,6 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFi
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamFriends_SteamFriends001.h"

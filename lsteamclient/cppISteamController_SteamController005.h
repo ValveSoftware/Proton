@@ -1,4 +1,12 @@
-struct cppISteamController_SteamController005;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamController_SteamController005_Init_params
 {
     void *linux_side;
@@ -228,3 +236,6 @@ struct cppISteamController_SteamController005_GetGlyphForActionOrigin_params
 };
 extern void cppISteamController_SteamController005_GetGlyphForActionOrigin( struct cppISteamController_SteamController005_GetGlyphForActionOrigin_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

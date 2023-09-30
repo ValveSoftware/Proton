@@ -1,4 +1,12 @@
-struct cppISteamUser_SteamUser023;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUser_SteamUser023_GetHSteamUser_params
 {
     void *linux_side;
@@ -124,7 +132,7 @@ struct cppISteamUser_SteamUser023_GetAuthSessionTicket_params
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
-    const SteamNetworkingIdentity *pSteamNetworkingIdentity;
+    const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity;
 };
 extern void cppISteamUser_SteamUser023_GetAuthSessionTicket( struct cppISteamUser_SteamUser023_GetAuthSessionTicket_params *params );
 
@@ -278,3 +286,6 @@ struct cppISteamUser_SteamUser023_BSetDurationControlOnlineState_params
 };
 extern void cppISteamUser_SteamUser023_BSetDurationControlOnlineState( struct cppISteamUser_SteamUser023_BSetDurationControlOnlineState_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

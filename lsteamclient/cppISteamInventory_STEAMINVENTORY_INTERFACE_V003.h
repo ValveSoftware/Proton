@@ -1,4 +1,12 @@
-struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus_params
 {
     void *linux_side;
@@ -364,3 +372,6 @@ struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem_params
 };
 extern void cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

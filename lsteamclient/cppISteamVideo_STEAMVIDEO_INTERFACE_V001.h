@@ -1,4 +1,12 @@
-struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params
 {
     void *linux_side;
@@ -14,3 +22,6 @@ struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params
 };
 extern void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

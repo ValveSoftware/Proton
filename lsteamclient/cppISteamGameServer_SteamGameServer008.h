@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer008;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer008_LogOn_params
 {
     void *linux_side;
@@ -139,3 +147,6 @@ struct cppISteamGameServer_SteamGameServer008_GetPublicIP_params
 };
 extern void cppISteamGameServer_SteamGameServer008_GetPublicIP( struct cppISteamGameServer_SteamGameServer008_GetPublicIP_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

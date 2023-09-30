@@ -1,4 +1,12 @@
-struct cppISteamGameServer_SteamGameServer011;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamGameServer_SteamGameServer011_InitGameServer_params
 {
     void *linux_side;
@@ -337,3 +345,6 @@ struct cppISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility_para
 };
 extern void cppISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility( struct cppISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

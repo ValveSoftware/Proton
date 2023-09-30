@@ -1,4 +1,12 @@
-struct cppISteamNetworkingUtils_SteamNetworkingUtils001;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamNetworkingUtils_SteamNetworkingUtils001_GetLocalPingLocation_params
 {
     void *linux_side;
@@ -171,7 +179,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIPAd
 struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString_params
 {
     void *linux_side;
-    const SteamNetworkingIdentity *identity;
+    const SteamNetworkingIdentity_144 *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -181,8 +189,11 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_
 {
     void *linux_side;
     bool _ret;
-    SteamNetworkingIdentity *pIdentity;
+    SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString( struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

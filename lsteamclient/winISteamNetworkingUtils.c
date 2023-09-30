@@ -1,9 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "steamclient_private.h"
 
-#include "steam_defs.h"
-#include "struct_converters.h"
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils001.h"
@@ -276,7 +273,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworking
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity *identity, char *buf, uint32_t cbBuf)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identity, char *buf, uint32_t cbBuf)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString_params params =
     {
@@ -289,7 +286,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworking
     cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity *pIdentity, const char *pszStr)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity_144 *pIdentity, const char *pszStr)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString_params params =
     {
@@ -618,7 +615,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworking
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity *identity, char *buf, uint32_t cbBuf)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identity, char *buf, uint32_t cbBuf)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString_params params =
     {
@@ -631,7 +628,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworking
     cppISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity *pIdentity, const char *pszStr)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity_144 *pIdentity, const char *pszStr)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString_params params =
     {
@@ -715,7 +712,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils003_destructor, 4)
 
-winSteamNetworkingMessage_t_152 * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(struct w_steam_iface *_this, int32_t cbAllocateBuffer)
+w_SteamNetworkingMessage_t_147 * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(struct w_steam_iface *_this, int32_t cbAllocateBuffer)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params params =
     {
@@ -973,7 +970,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworking
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity *identity, char *buf, uint32_t cbBuf)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identity, char *buf, uint32_t cbBuf)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString_params params =
     {
@@ -986,7 +983,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworking
     cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity *pIdentity, const char *pszStr)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity_144 *pIdentity, const char *pszStr)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString_params params =
     {
@@ -1074,7 +1071,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_destructor, 4)
 
-winSteamNetworkingMessage_t_158 * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(struct w_steam_iface *_this, int32_t cbAllocateBuffer)
+w_SteamNetworkingMessage_t_153a * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(struct w_steam_iface *_this, int32_t cbAllocateBuffer)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params params =
     {
@@ -1257,7 +1254,7 @@ uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4Fake
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *fakeIP, SteamNetworkingIdentity *pOutRealIdentity)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *fakeIP, SteamNetworkingIdentity_144 *pOutRealIdentity)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_params params =
     {
@@ -1369,7 +1366,7 @@ uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetwor
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity *identity, char *buf, uint32_t cbBuf)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identity, char *buf, uint32_t cbBuf)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString_params params =
     {
@@ -1382,7 +1379,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworking
     cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity *pIdentity, const char *pszStr)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString(struct w_steam_iface *_this, SteamNetworkingIdentity_144 *pIdentity, const char *pszStr)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString_params params =
     {

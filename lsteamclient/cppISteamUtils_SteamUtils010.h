@@ -1,4 +1,12 @@
-struct cppISteamUtils_SteamUtils010;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive_params
 {
     void *linux_side;
@@ -300,3 +308,6 @@ struct cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params
 };
 extern void cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput( struct cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

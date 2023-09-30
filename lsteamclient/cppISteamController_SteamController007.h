@@ -1,4 +1,12 @@
-struct cppISteamController_SteamController007;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamController_SteamController007_Init_params
 {
     void *linux_side;
@@ -288,3 +296,6 @@ struct cppISteamController_SteamController007_GetControllerBindingRevision_param
 };
 extern void cppISteamController_SteamController007_GetControllerBindingRevision( struct cppISteamController_SteamController007_GetControllerBindingRevision_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

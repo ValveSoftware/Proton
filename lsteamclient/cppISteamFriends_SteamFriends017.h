@@ -1,4 +1,12 @@
-struct cppISteamFriends_SteamFriends017;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamFriends_SteamFriends017_GetPersonaName_params
 {
     void *linux_side;
@@ -659,3 +667,6 @@ struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params
 };
 extern void cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint( struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

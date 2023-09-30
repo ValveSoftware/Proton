@@ -1,4 +1,12 @@
-struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats_params
 {
     void *linux_side;
@@ -245,7 +253,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeade
     bool _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
-    LeaderboardEntry_t *pLeaderboardEntry;
+    w_LeaderboardEntry_t_104 *pLeaderboardEntry;
     int32_t *pDetails;
     int32_t cDetailsMax;
 };
@@ -270,3 +278,6 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrent
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

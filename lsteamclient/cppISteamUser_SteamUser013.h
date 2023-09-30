@@ -1,4 +1,12 @@
-struct cppISteamUser_SteamUser013;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamUser_SteamUser013_GetHSteamUser_params
 {
     void *linux_side;
@@ -150,3 +158,6 @@ struct cppISteamUser_SteamUser013_UserHasLicenseForApp_params
 };
 extern void cppISteamUser_SteamUser013_UserHasLicenseForApp( struct cppISteamUser_SteamUser013_UserHasLicenseForApp_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */

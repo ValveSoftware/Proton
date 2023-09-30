@@ -1,4 +1,12 @@
-struct cppISteamController_SteamController004;
+/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 struct cppISteamController_SteamController004_Init_params
 {
     void *linux_side;
@@ -192,3 +200,6 @@ struct cppISteamController_SteamController004_ShowAnalogActionOrigins_params
 };
 extern void cppISteamController_SteamController004_ShowAnalogActionOrigins( struct cppISteamController_SteamController004_ShowAnalogActionOrigins_params *params );
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
