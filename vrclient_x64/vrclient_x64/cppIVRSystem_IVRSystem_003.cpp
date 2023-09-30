@@ -132,13 +132,19 @@ void cppIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(
 void cppIVRSystem_IVRSystem_003_LoadRenderModel( struct cppIVRSystem_IVRSystem_003_LoadRenderModel_params *params )
 {
     struct u_IVRSystem_IVRSystem_003 *iface = (struct u_IVRSystem_IVRSystem_003 *)params->linux_side;
-    params->_ret = (bool)iface->LoadRenderModel( params->pchRenderModelName, struct_RenderModel_t_090_unwrap( params->pRenderModel ) );
+    u_RenderModel_t_090 u_pRenderModel;
+    if (params->pRenderModel) u_pRenderModel = *params->pRenderModel;
+    params->_ret = (bool)iface->LoadRenderModel( params->pchRenderModelName, params->pRenderModel ? &u_pRenderModel : nullptr );
+    if (params->pRenderModel) *params->pRenderModel = u_pRenderModel;
 }
 
 void cppIVRSystem_IVRSystem_003_FreeRenderModel( struct cppIVRSystem_IVRSystem_003_FreeRenderModel_params *params )
 {
     struct u_IVRSystem_IVRSystem_003 *iface = (struct u_IVRSystem_IVRSystem_003 *)params->linux_side;
-    iface->FreeRenderModel( struct_RenderModel_t_090_unwrap( params->pRenderModel ) );
+    u_RenderModel_t_090 u_pRenderModel;
+    if (params->pRenderModel) u_pRenderModel = *params->pRenderModel;
+    iface->FreeRenderModel( params->pRenderModel ? &u_pRenderModel : nullptr );
+    if (params->pRenderModel) *params->pRenderModel = u_pRenderModel;
 }
 
 void cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass_params *params )

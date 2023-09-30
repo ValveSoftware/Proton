@@ -5,6 +5,7 @@
 #include <linux/limits.h>
 
 #ifndef __cplusplus
+#include "unixlib.h"
 #include "wine/debug.h"
 #include "cxx.h"
 #else
