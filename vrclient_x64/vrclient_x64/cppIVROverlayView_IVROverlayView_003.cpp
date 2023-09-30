@@ -1,16 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVROverlayView_IVROverlayView_003.h"
-struct u_IVROverlayView_IVROverlayView_003
-{
-#ifdef __cplusplus
-    virtual uint32_t AcquireOverlayView( uint64_t, u_VRNativeDevice_t *, u_VROverlayView_t *, uint32_t ) = 0;
-    virtual uint32_t ReleaseOverlayView( u_VROverlayView_t * ) = 0;
-    virtual void PostOverlayEvent( uint64_t, const u_VREvent_t_1168 * ) = 0;
-    virtual bool IsViewingPermitted( uint64_t ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVROverlayView_IVROverlayView_003_AcquireOverlayView( struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params *params )
 {
     struct u_IVROverlayView_IVROverlayView_003 *iface = (struct u_IVROverlayView_IVROverlayView_003 *)params->linux_side;

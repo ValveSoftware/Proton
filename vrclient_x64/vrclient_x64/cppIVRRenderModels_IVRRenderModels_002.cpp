@@ -1,24 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRRenderModels_IVRRenderModels_002.h"
-struct u_IVRRenderModels_IVRRenderModels_002
-{
-#ifdef __cplusplus
-    virtual bool LoadRenderModel( const char *, u_RenderModel_t_0912 ** ) = 0;
-    virtual void FreeRenderModel( u_RenderModel_t_0912 * ) = 0;
-    virtual bool LoadTexture( int32_t, u_RenderModel_TextureMap_t_090 ** ) = 0;
-    virtual void FreeTexture( u_RenderModel_TextureMap_t_090 * ) = 0;
-    virtual uint32_t GetRenderModelName( uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t GetRenderModelCount(  ) = 0;
-    virtual uint32_t GetComponentCount( const char * ) = 0;
-    virtual uint32_t GetComponentName( const char *, uint32_t, char *, uint32_t ) = 0;
-    virtual uint64_t GetComponentButtonMask( const char *, const char * ) = 0;
-    virtual uint32_t GetComponentRenderModelName( const char *, const char *, char *, uint32_t ) = 0;
-    virtual bool GetComponentState( const char *, const char *, const u_VRControllerState001_t *, RenderModel_ComponentState_t * ) = 0;
-    virtual bool RenderModelHasComponent( const char *, const char * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName( struct cppIVRRenderModels_IVRRenderModels_002_GetRenderModelName_params *params )
 {
     struct u_IVRRenderModels_IVRRenderModels_002 *iface = (struct u_IVRRenderModels_IVRRenderModels_002 *)params->linux_side;

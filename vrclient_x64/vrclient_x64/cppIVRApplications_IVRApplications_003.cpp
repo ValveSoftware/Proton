@@ -1,33 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRApplications_IVRApplications_003.h"
-struct u_IVRApplications_IVRApplications_003
-{
-#ifdef __cplusplus
-    virtual uint32_t AddApplicationManifest( const char *, bool ) = 0;
-    virtual uint32_t RemoveApplicationManifest( const char * ) = 0;
-    virtual bool IsApplicationInstalled( const char * ) = 0;
-    virtual uint32_t GetApplicationCount(  ) = 0;
-    virtual uint32_t GetApplicationKeyByIndex( uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t GetApplicationKeyByProcessId( uint32_t, char *, uint32_t ) = 0;
-    virtual uint32_t LaunchApplication( const char * ) = 0;
-    virtual uint32_t LaunchDashboardOverlay( const char * ) = 0;
-    virtual uint32_t IdentifyApplication( uint32_t, const char * ) = 0;
-    virtual uint32_t GetApplicationProcessId( const char * ) = 0;
-    virtual const char * GetApplicationsErrorNameFromEnum( uint32_t ) = 0;
-    virtual uint32_t GetApplicationPropertyString( const char *, uint32_t, char *, uint32_t, uint32_t * ) = 0;
-    virtual bool GetApplicationPropertyBool( const char *, uint32_t, uint32_t * ) = 0;
-    virtual uint64_t GetApplicationPropertyUint64( const char *, uint32_t, uint32_t * ) = 0;
-    virtual uint32_t SetApplicationAutoLaunch( const char *, bool ) = 0;
-    virtual bool GetApplicationAutoLaunch( const char * ) = 0;
-    virtual uint32_t GetStartingApplication( char *, uint32_t ) = 0;
-    virtual uint32_t GetTransitionState(  ) = 0;
-    virtual uint32_t PerformApplicationPrelaunchCheck( const char * ) = 0;
-    virtual const char * GetApplicationsTransitionStateNameFromEnum( uint32_t ) = 0;
-    virtual bool IsQuitUserPromptRequested(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRApplications_IVRApplications_003_AddApplicationManifest( struct cppIVRApplications_IVRApplications_003_AddApplicationManifest_params *params )
 {
     struct u_IVRApplications_IVRApplications_003 *iface = (struct u_IVRApplications_IVRApplications_003 *)params->linux_side;

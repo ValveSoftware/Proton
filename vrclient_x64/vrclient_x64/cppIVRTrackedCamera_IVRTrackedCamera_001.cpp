@@ -1,30 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRTrackedCamera_IVRTrackedCamera_001.h"
-struct u_IVRTrackedCamera_IVRTrackedCamera_001
-{
-#ifdef __cplusplus
-    virtual bool HasCamera( uint32_t ) = 0;
-    virtual bool GetCameraFirmwareDescription( uint32_t, char *, uint32_t ) = 0;
-    virtual bool GetCameraFrameDimensions( uint32_t, uint32_t, uint32_t *, uint32_t * ) = 0;
-    virtual bool SetCameraVideoStreamFormat( uint32_t, uint32_t ) = 0;
-    virtual uint32_t GetCameraVideoStreamFormat( uint32_t ) = 0;
-    virtual bool EnableCameraForStreaming( uint32_t, bool ) = 0;
-    virtual bool StartVideoStream( uint32_t ) = 0;
-    virtual bool StopVideoStream( uint32_t ) = 0;
-    virtual bool IsVideoStreamActive( uint32_t ) = 0;
-    virtual float GetVideoStreamElapsedTime( uint32_t ) = 0;
-    virtual const u_CameraVideoStreamFrame_t_0914 * GetVideoStreamFrame( uint32_t ) = 0;
-    virtual bool ReleaseVideoStreamFrame( uint32_t, const u_CameraVideoStreamFrame_t_0914 * ) = 0;
-    virtual bool SetAutoExposure( uint32_t, bool ) = 0;
-    virtual bool PauseVideoStream( uint32_t ) = 0;
-    virtual bool ResumeVideoStream( uint32_t ) = 0;
-    virtual bool IsVideoStreamPaused( uint32_t ) = 0;
-    virtual bool GetCameraDistortion( uint32_t, float, float, float *, float * ) = 0;
-    virtual bool GetCameraProjection( uint32_t, float, float, float, float, HmdMatrix44_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera( struct cppIVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params *params )
 {
     struct u_IVRTrackedCamera_IVRTrackedCamera_001 *iface = (struct u_IVRTrackedCamera_IVRTrackedCamera_001 *)params->linux_side;

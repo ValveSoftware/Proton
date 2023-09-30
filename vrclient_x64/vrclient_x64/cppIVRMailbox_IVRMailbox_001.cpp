@@ -1,16 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRMailbox_IVRMailbox_001.h"
-struct u_IVRMailbox_IVRMailbox_001
-{
-#ifdef __cplusplus
-    virtual uint32_t undoc1( const char *, uint64_t * ) = 0;
-    virtual uint32_t undoc2( uint64_t ) = 0;
-    virtual uint32_t undoc3( uint64_t, const char *, const char * ) = 0;
-    virtual uint32_t undoc4( uint64_t, char *, uint32_t, uint32_t * ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRMailbox_IVRMailbox_001_undoc1( struct cppIVRMailbox_IVRMailbox_001_undoc1_params *params )
 {
     struct u_IVRMailbox_IVRMailbox_001 *iface = (struct u_IVRMailbox_IVRMailbox_001 *)params->linux_side;

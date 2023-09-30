@@ -1,32 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 #include "cppIVRChaperoneSetup_IVRChaperoneSetup_006.h"
-struct u_IVRChaperoneSetup_IVRChaperoneSetup_006
-{
-#ifdef __cplusplus
-    virtual bool CommitWorkingCopy( uint32_t ) = 0;
-    virtual void RevertWorkingCopy(  ) = 0;
-    virtual bool GetWorkingPlayAreaSize( float *, float * ) = 0;
-    virtual bool GetWorkingPlayAreaRect( HmdQuad_t * ) = 0;
-    virtual bool GetWorkingCollisionBoundsInfo( HmdQuad_t *, uint32_t * ) = 0;
-    virtual bool GetLiveCollisionBoundsInfo( HmdQuad_t *, uint32_t * ) = 0;
-    virtual bool GetWorkingSeatedZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual bool GetWorkingStandingZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual void SetWorkingPlayAreaSize( float, float ) = 0;
-    virtual void SetWorkingCollisionBoundsInfo( HmdQuad_t *, uint32_t ) = 0;
-    virtual void SetWorkingPerimeter( HmdVector2_t *, uint32_t ) = 0;
-    virtual void SetWorkingSeatedZeroPoseToRawTrackingPose( const HmdMatrix34_t * ) = 0;
-    virtual void SetWorkingStandingZeroPoseToRawTrackingPose( const HmdMatrix34_t * ) = 0;
-    virtual void ReloadFromDisk( uint32_t ) = 0;
-    virtual bool GetLiveSeatedZeroPoseToRawTrackingPose( HmdMatrix34_t * ) = 0;
-    virtual bool ExportLiveToBuffer( char *, uint32_t * ) = 0;
-    virtual bool ImportFromBufferToWorking( const char *, uint32_t ) = 0;
-    virtual void ShowWorkingSetPreview(  ) = 0;
-    virtual void HideWorkingSetPreview(  ) = 0;
-    virtual void RoomSetupStarting(  ) = 0;
-#endif /* __cplusplus */
-};
-
 void cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy( struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy_params *params )
 {
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_006 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_006 *)params->linux_side;
