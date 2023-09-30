@@ -2,7 +2,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"

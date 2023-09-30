@@ -96,17 +96,12 @@ SDK_SOURCES = {
             "IVRHeadsetView",
             "IVROverlayView",
             "IVRClientCore",
-        ], [ #vrclient-allocated structs
-            "RenderModel_t",
-            "RenderModel_TextureMap_t",
-        ],
+        ]
     ],
 }
 
 SDK_CLASSES = {klass: source for source, value in SDK_SOURCES.items()
                for klass in value[0]}
-SDK_STRUCTS = {klass: source for source, value in SDK_SOURCES.items()
-               for klass in value[1]}
 
 # these structs are manually confirmed to be equivalent
 EXEMPT_STRUCTS = {
@@ -220,23 +215,29 @@ unique_structs = []
 
 
 MANUAL_METHODS = {
-    "IVRClientCore_BIsHmdPresent": True,
-    "IVRClientCore_Init": True,
-    "IVRClientCore_GetGenericInterface": True,
-    "IVRClientCore_Cleanup": True,
-    "IVRSystem_GetDXGIOutputInfo": True,
-    "IVRSystem_GetOutputDevice": lambda ver, abi: ver > 16,
-    "IVRCompositor_Submit": lambda ver, abi: ver > 8,
-    "IVRCompositor_SetSkyboxOverride": lambda ver, abi: ver > 8,
-    "IVRCompositor_PostPresentHandoff": True,
-    "IVRCompositor_WaitGetPoses": lambda ver, abi: ver > 15 and ver < 27,
-    "IVRCompositor_GetVulkanDeviceExtensionsRequired": True,
-    "IVRRenderModels_LoadTextureD3D11_Async": True,
-    "IVRRenderModels_FreeTextureD3D11": True,
-    "IVRRenderModels_LoadIntoTextureD3D11_Async": True,
-    "IVRMailbox_undoc3": True,
-    "IVROverlay_SetOverlayTexture": True,
-    "IVRInput_GetDigitalActionData": lambda ver, abi: ver > 3,
+    "IVRClientCore_BIsHmdPresent": lambda ver, abi: abi == 'w',
+    "IVRClientCore_Init": lambda ver, abi: abi == 'w',
+    "IVRClientCore_GetGenericInterface": lambda ver, abi: abi == 'w',
+    "IVRClientCore_Cleanup": lambda ver, abi: abi == 'w',
+    "IVRSystem_GetDXGIOutputInfo": lambda ver, abi: abi == 'w',
+    "IVRSystem_GetOutputDevice": lambda ver, abi: abi == 'w' and ver > 16,
+    "IVRCompositor_Submit": lambda ver, abi: abi == 'w' and ver > 8,
+    "IVRCompositor_SetSkyboxOverride": lambda ver, abi: abi == 'w' and ver > 8,
+    "IVRCompositor_PostPresentHandoff": lambda ver, abi: abi == 'w',
+    "IVRCompositor_WaitGetPoses": lambda ver, abi: abi == 'w' and ver > 15 and ver < 27,
+    "IVRCompositor_GetVulkanDeviceExtensionsRequired": lambda ver, abi: abi == 'w',
+    "IVRRenderModels_LoadTextureD3D11_Async": lambda ver, abi: abi == 'w',
+    "IVRRenderModels_FreeTextureD3D11": lambda ver, abi: abi == 'w',
+    "IVRRenderModels_LoadIntoTextureD3D11_Async": lambda ver, abi: abi == 'w',
+    "IVRRenderModels_LoadTexture": True,
+    "IVRRenderModels_LoadTexture_Async": True,
+    "IVRRenderModels_FreeTexture": True,
+    "IVRRenderModels_LoadRenderModel": lambda ver, abi: ver > 1,
+    "IVRRenderModels_LoadRenderModel_Async": True,
+    "IVRRenderModels_FreeRenderModel": lambda ver, abi: ver > 1,
+    "IVRMailbox_undoc3": lambda ver, abi: abi == 'w',
+    "IVROverlay_SetOverlayTexture": lambda ver, abi: abi == 'w',
+    "IVRInput_GetDigitalActionData": lambda ver, abi: abi == 'w' and ver > 3,
 }
 
 
@@ -714,12 +715,9 @@ def handle_method_cpp(method, classname, cppname, out):
         if strip_ns(underlying_typename(param)) not in SIZED_STRUCTS | EXEMPT_STRUCTS:
             print('Warning:', strip_ns(underlying_typename(param)), name, 'following', prev_name)
 
-    need_unwrap = {}
     need_output = {}
 
     for name, param in sorted(need_convert.items()):
-        type_name = strip_ns(underlying_typename(param))
-
         if param.type.kind != TypeKind.POINTER:
             out(f'    {declspec(param, f"u_{name}", "u_")} = params->{name};\n')
             continue
@@ -728,10 +726,6 @@ def handle_method_cpp(method, classname, cppname, out):
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
             out(f'    {declspec(pointee, f"u_{name}", "u_")};\n')
-            continue
-
-        if type_name in SDK_STRUCTS:
-            need_unwrap[name] = param
             continue
 
         if not pointee.is_const_qualified():
@@ -774,7 +768,6 @@ def handle_method_cpp(method, classname, cppname, out):
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in size_fixup: return f"u_{name}"
-        if name in need_unwrap: return f'struct_{all_versions[sdkver][type_name]}_unwrap( params->{name} )'
         if name in need_convert: return f"params->{name} ? {pfx}u_{name} : nullptr"
         return f'params->{name}'
 
@@ -782,11 +775,6 @@ def handle_method_cpp(method, classname, cppname, out):
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 
     for name, param in sorted(need_output.items()):
-        type_name = strip_ns(underlying_typename(param))
-        if type_name in SDK_STRUCTS:
-            out(u'    if (params->_ret == 0)\n')
-            out(f'        *params->{name} = struct_{all_versions[sdkver][type_name]}_wrap( u_{name} );\n')
-            continue
         out(f'    if (params->{name}) *params->{name} = u_{name};\n')
 
     out(u'}\n\n')
@@ -883,6 +871,13 @@ def get_capi_thunk_params(method):
 def handle_class(klass):
     cppname = f"cpp{klass.full_name}"
 
+    ext = "cpp"
+    for method in klass.methods:
+        if type(method) is Destructor:
+            continue
+        if is_manual_method(klass, method, "u"):
+            ext = "hpp"
+
     with open(f"vrclient_x64/{cppname}.h", "w") as file:
         out = file.write
 
@@ -905,7 +900,7 @@ def handle_class(klass):
         out(u'} /* extern "C" */\n')
         out(u'#endif /* __cplusplus */\n')
 
-    with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
+    with open(f"vrclient_x64/{cppname}.{ext}", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
@@ -916,6 +911,8 @@ def handle_class(klass):
 
         for method in klass.methods:
             if type(method) is Destructor:
+                continue
+            if is_manual_method(klass, method, "u"):
                 continue
             handle_method_cpp(method, klass.name, cppname, out)
 
@@ -1100,9 +1097,6 @@ def handle_struct(sdkver, struct):
     if struct_needs_conversion(struct.type.get_canonical()):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
-
-    if strip_ns(struct.name) in SDK_STRUCTS:
-        which.add(WRAPPERS)
 
     if len(which) == 0:
         return
@@ -1700,7 +1694,6 @@ for klass in all_classes.values():
         out(u'#include <stdarg.h>\n')
         out(u'#include <stdint.h>\n')
         out(u'\n')
-        out(u'#include "vrclient_structs.h"\n')
         out(u'#include "vrclient_private.h"\n')
         out(u'\n')
         out(u'#include "flatapi.h"\n')

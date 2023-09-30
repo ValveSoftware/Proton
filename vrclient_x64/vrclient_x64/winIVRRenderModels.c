@@ -2,7 +2,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "flatapi.h"
@@ -137,53 +136,13 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_GetComponentRende
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_GetComponentState, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent, 12)
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pchRenderModelName = pchRenderModelName,
-        .ppRenderModel = ppRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel( &params );
-    return params._ret;
-}
+extern bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pRenderModel = pRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_FreeRenderModel( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel);
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params params =
-    {
-        .linux_side = _this->u_iface,
-        .textureId = textureId,
-        .ppTexture = ppTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_LoadTexture( &params );
-    return params._ret;
-}
+extern bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_002_FreeTexture_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pTexture = pTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_002_FreeTexture( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture);
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetRenderModelName(struct w_steam_iface *_this, uint32_t unRenderModelIndex, char *pchRenderModelName, uint32_t unRenderModelNameLen)
 {
@@ -383,53 +342,13 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_GetComponentRende
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_GetComponentState, 24)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent, 12)
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pchRenderModelName = pchRenderModelName,
-        .ppRenderModel = ppRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_004_FreeRenderModel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pRenderModel = pRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_FreeRenderModel( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel);
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .textureId = textureId,
-        .ppTexture = ppTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_004_FreeTexture_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pTexture = pTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_FreeTexture( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture);
 
 extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async(struct w_steam_iface *_this, int32_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 
@@ -642,53 +561,13 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelThu
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum, 8)
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pchRenderModelName = pchRenderModelName,
-        .ppRenderModel = ppRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pRenderModel = pRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel);
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .textureId = textureId,
-        .ppTexture = ppTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_005_FreeTexture_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pTexture = pTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_FreeTexture( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture);
 
 extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(struct w_steam_iface *_this, int32_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 
@@ -954,53 +833,13 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelThu
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum, 8)
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pchRenderModelName = pchRenderModelName,
-        .ppRenderModel = ppRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel)
-{
-    struct cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pRenderModel = pRenderModel,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel);
 
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_1237 **ppTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params params =
-    {
-        .linux_side = _this->u_iface,
-        .textureId = textureId,
-        .ppTexture = ppTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_1237 **ppTexture);
 
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_1237 *pTexture)
-{
-    struct cppIVRRenderModels_IVRRenderModels_006_FreeTexture_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pTexture = pTexture,
-    };
-    TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_FreeTexture( &params );
-}
+extern void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_1237 *pTexture);
 
 extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(struct w_steam_iface *_this, int32_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 

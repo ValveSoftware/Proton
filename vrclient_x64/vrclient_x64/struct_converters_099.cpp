@@ -11,8 +11,6 @@ struct winRenderModel_TextureMap_t_099 {
     uint16_t unWidth;
     uint16_t unHeight;
     const uint8_t * rubTextureMapData;
-
-    RenderModel_TextureMap_t *linux_side;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
@@ -34,24 +32,6 @@ void struct_RenderModel_TextureMap_t_099_win_to_lin(const void *w, void *l)
     lin->rubTextureMapData = win->rubTextureMapData;
 }
 
-struct winRenderModel_TextureMap_t_099 *struct_RenderModel_TextureMap_t_099_wrap(void *l)
-{
-    struct winRenderModel_TextureMap_t_099 *win = (struct winRenderModel_TextureMap_t_099 *)malloc(sizeof(*win));
-    RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
-    win->unWidth = lin->unWidth;
-    win->unHeight = lin->unHeight;
-    win->rubTextureMapData = lin->rubTextureMapData;
-    win->linux_side = lin;
-    return win;
-}
-
-struct RenderModel_TextureMap_t *struct_RenderModel_TextureMap_t_099_unwrap(winRenderModel_TextureMap_t_099 *w)
-{
-    RenderModel_TextureMap_t *ret = w->linux_side;
-    free(w);
-    return ret;
-}
-
 #pragma pack(push, 8)
 struct winRenderModel_t_099 {
     uint64_t ulInternalHandle;
@@ -60,8 +40,6 @@ struct winRenderModel_t_099 {
     const uint16_t * rIndexData;
     uint32_t unTriangleCount;
     winRenderModel_TextureMap_t_099 diffuseTexture __attribute__((aligned(4)));
-
-    RenderModel_t *linux_side;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
@@ -87,27 +65,6 @@ void struct_RenderModel_t_099_win_to_lin(const void *w, void *l)
     lin->rIndexData = win->rIndexData;
     lin->unTriangleCount = win->unTriangleCount;
     struct_RenderModel_TextureMap_t_099_win_to_lin(&win->diffuseTexture, &lin->diffuseTexture);
-}
-
-struct winRenderModel_t_099 *struct_RenderModel_t_099_wrap(void *l)
-{
-    struct winRenderModel_t_099 *win = (struct winRenderModel_t_099 *)malloc(sizeof(*win));
-    RenderModel_t *lin = (RenderModel_t *)l;
-    win->ulInternalHandle = lin->ulInternalHandle;
-    win->rVertexData = lin->rVertexData;
-    win->unVertexCount = lin->unVertexCount;
-    win->rIndexData = lin->rIndexData;
-    win->unTriangleCount = lin->unTriangleCount;
-    struct_RenderModel_TextureMap_t_099_lin_to_win(&lin->diffuseTexture, &win->diffuseTexture);
-    win->linux_side = lin;
-    return win;
-}
-
-struct RenderModel_t *struct_RenderModel_t_099_unwrap(winRenderModel_t_099 *w)
-{
-    RenderModel_t *ret = w->linux_side;
-    free(w);
-    return ret;
 }
 
 #pragma pack(push, 8)

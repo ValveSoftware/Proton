@@ -1,4 +1,3 @@
-#include "vrclient_structs.h"
 #include "vrclient_private.h"
 
 #include "cppIVRSystem_IVRSystem_003.h"
