@@ -5,6 +5,7 @@ EXTRADLLFLAGS = -mcygwin -static-libgcc -static-libstdc++ -ldl
 EXTRADEFS = -DWINE_NO_LONG_TYPES -DSTEAM_API_EXPORTS -Dprivate=public -Dprotected=public
 
 SOURCES = \
+	steam_client_manual.c \
 	steamclient_main.c \
 	steamclient_wrappers.c \
 	winISteamAppList.c \

@@ -51,6 +51,9 @@ void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_ve
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
 void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
 
+extern void start_callback_thread(void) DECLSPEC_HIDDEN;
+extern void stop_callback_thread(void) DECLSPEC_HIDDEN;
+
 #ifdef __cplusplus
 }
 #endif

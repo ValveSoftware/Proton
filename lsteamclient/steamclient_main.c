@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <limits.h>
 #include <stdint.h>
-#include <pthread.h>
 #include <assert.h>
 
 #define __USE_GNU
@@ -21,26 +20,12 @@
 
 #include "steamclient_private.h"
 
-#include "wine/list.h"
-
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 char g_tmppath[PATH_MAX];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
-static HANDLE callback_thread_handle;
-
-#define MAX_CALLBACK_QUEUE_SIZE 4
-struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
-static unsigned int callback_queue_size;
-static bool callback_queue_done;
-static pthread_mutex_t callback_queue_mutex;
-static pthread_cond_t callback_queue_callback_event;
-static pthread_cond_t callback_queue_ready_event;
-static pthread_cond_t callback_queue_complete_event;
 
 static void * (WINAPI *p_NtCurrentTeb)(void);
 
@@ -86,22 +71,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             init_ntdll_so_funcs();
             break;
         case DLL_PROCESS_DETACH:
-            if (callback_thread_handle)
-            {
-                /* Unfortunately we don't have a clear place to shutdown the thread so just kill it. */
-                /* An explicit sync events and handle cleanup is to protect from unloading and loading
-                 * .so again which may end up not actually reloading anyting and leaving the values of our static
-                 * variables. */
-                TerminateThread(callback_thread_handle, -1);
-                WaitForSingleObject(callback_thread_handle, INFINITE);
-                pthread_mutex_destroy(&callback_queue_mutex);
-                pthread_cond_destroy(&callback_queue_callback_event);
-                pthread_cond_destroy(&callback_queue_ready_event);
-                pthread_cond_destroy(&callback_queue_complete_event);
-                CloseHandle(callback_thread_handle);
-                callback_thread_handle = NULL;
-                TRACE("Terminated callback thread.\n");
-            }
+            stop_callback_thread();
             CloseHandle(steam_overlay_event);
             break;
     }
@@ -759,114 +729,6 @@ done:
     return ret;
 }
 
-void execute_callback(struct callback_data *cb_data)
-{
-    /* No TRACEs or other Wine calls here, this is executed from Unix native thread
-     * which is not initialized by Wine. */
-    cb_data->complete = FALSE;
-    pthread_mutex_lock(&callback_queue_mutex);
-    while (!callback_queue_done && callback_queue_size == MAX_CALLBACK_QUEUE_SIZE)
-        pthread_cond_wait(&callback_queue_ready_event, &callback_queue_mutex);
-    if (callback_queue_done)
-    {
-        pthread_mutex_unlock(&callback_queue_mutex);
-        return;
-    }
-    callback_queue[callback_queue_size++] = cb_data;
-    pthread_cond_broadcast(&callback_queue_callback_event);
-    while (!callback_queue_done && !cb_data->complete)
-        pthread_cond_wait(&callback_queue_complete_event, &callback_queue_mutex);
-    pthread_mutex_unlock(&callback_queue_mutex);
-}
-
-static bool get_next_callback( struct callback_data *cb_data, uint64_t *cookie )
-{
-    bool ret;
-
-    pthread_mutex_lock(&callback_queue_mutex);
-    while (!callback_queue_done && !callback_queue_size)
-        pthread_cond_wait(&callback_queue_callback_event, &callback_queue_mutex);
-
-    if ((ret = !callback_queue_done))
-    {
-        assert(callback_queue_size);
-        --callback_queue_size;
-        *cookie = (uint64_t)(ULONG_PTR)callback_queue[callback_queue_size];
-        *cb_data = *callback_queue[callback_queue_size];
-    }
-    pthread_cond_broadcast(&callback_queue_ready_event);
-    pthread_mutex_unlock(&callback_queue_mutex);
-    return ret;
-}
-
-static void callback_complete( uint64_t cookie )
-{
-    struct callback_data *cb_data = (struct callback_data *)(ULONG_PTR)cookie;
-
-    pthread_mutex_lock(&callback_queue_mutex);
-    cb_data->complete = TRUE;
-    pthread_cond_broadcast(&callback_queue_complete_event);
-    pthread_mutex_unlock(&callback_queue_mutex);
-}
-
-static void finish_callback_thread(void)
-{
-    if (!callback_thread_handle)
-        return;
-    pthread_mutex_lock(&callback_queue_mutex);
-    callback_queue_done = TRUE;
-    pthread_cond_broadcast(&callback_queue_callback_event);
-    pthread_cond_broadcast(&callback_queue_complete_event);
-    pthread_mutex_unlock(&callback_queue_mutex);
-
-    WaitForSingleObject(callback_thread_handle, INFINITE);
-    CloseHandle(callback_thread_handle);
-    callback_thread_handle = NULL;
-}
-
-typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)( uint32_t nType, const char *pszMsg );
-typedef void (CDECL *win_SteamAPIWarningMessageHook_t)(int, const char *pszMsg);
-
-static DWORD WINAPI callback_thread(void *dummy)
-{
-    struct callback_data cb_data;
-    uint64_t cookie;
-
-    while (get_next_callback( &cb_data, &cookie))
-    {
-        switch (cb_data.type)
-        {
-            case SOCKET_DEBUG_OUTPUT:
-                TRACE("SOCKET_DEBUG_OUTPUT func %p, type %u, msg %s.\n",
-                        cb_data.func, cb_data.sockets_debug_output.type,
-                        wine_dbgstr_a(cb_data.sockets_debug_output.msg));
-                ((win_FSteamNetworkingSocketsDebugOutput)cb_data.func)(cb_data.sockets_debug_output.type,
-                        cb_data.sockets_debug_output.msg);
-                callback_complete(cookie);
-                break;
-            case STEAM_API_WARNING_HOOK:
-                TRACE("STEAM_API_WARNING_HOOK func %p, type %u, msg %s.\n",
-                        cb_data.func, cb_data.steam_api_warning_hook.severity,
-                        wine_dbgstr_a(cb_data.steam_api_warning_hook.msg));
-                ((win_SteamAPIWarningMessageHook_t)cb_data.func)(cb_data.steam_api_warning_hook.severity,
-                        cb_data.steam_api_warning_hook.msg);
-                callback_complete(cookie);
-                break;
-            case STEAM_API_CALLBACK_ONE_PARAM:
-                TRACE("STEAM_API_CALLBACK_ONE_PARAM func %p, param %p.\n",
-                        cb_data.func, cb_data.steam_api_callback_one_param.param);
-                ((void (WINAPI *)(void *))cb_data.func)(cb_data.steam_api_callback_one_param.param);
-                callback_complete(cookie);
-                break;
-            default:
-                ERR("Unexpected callback type %u.\n", cb_data.type);
-                break;
-        }
-    }
-    TRACE("exiting.\n");
-    return 0;
-}
-
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
 static bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
@@ -879,7 +741,6 @@ static void (*steamclient_NotifyMissingInterface)( int32_t hSteamPipe, const cha
 static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
-    DWORD callback_thread_id;
 
     if(steamclient_lib)
         return 1;
@@ -952,13 +813,7 @@ static int load_steamclient(void)
         return 0;
     }
 
-    pthread_mutex_init(&callback_queue_mutex, NULL);
-    pthread_cond_init(&callback_queue_callback_event, NULL);
-    pthread_cond_init(&callback_queue_ready_event, NULL);
-    pthread_cond_init(&callback_queue_complete_event, NULL);
-
-    callback_thread_handle = CreateThread(NULL, 0, callback_thread, NULL, 0, &callback_thread_id);
-    TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
+    start_callback_thread();
 
     return 1;
 }
@@ -1141,35 +996,6 @@ int CDECL Breakpad_SteamWriteMiniDumpSetComment(const char *comment)
 void CDECL Breakpad_SteamWriteMiniDumpUsingExceptionInfoWithBuildId(int a, int b)
 {
     TRACE("\n");
-}
-
-bool after_shutdown(bool ret)
-{
-    TRACE("ret %d.\n", ret);
-
-    if (!ret)
-        return 0;
-    finish_callback_thread();
-    return ret;
-}
-
-int32_t after_steam_pipe_create( int32_t pipe )
-{
-    DWORD callback_thread_id;
-
-    TRACE("pipe %#x.\n", pipe);
-
-    if (!pipe)
-        return 0;
-
-    if (callback_thread_handle)
-        return pipe;
-
-    callback_queue_done = FALSE;
-    callback_thread_handle = CreateThread(NULL, 0, callback_thread, NULL, 0, &callback_thread_id);
-    TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
-
-    return pipe;
 }
 
 bool CDECL Steam_IsKnownInterface( const char *pchVersion )

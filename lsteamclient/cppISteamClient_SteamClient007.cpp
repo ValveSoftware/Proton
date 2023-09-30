@@ -34,7 +34,6 @@ void cppISteamClient_SteamClient007_CreateSteamPipe( struct cppISteamClient_Stea
 {
     struct u_ISteamClient_SteamClient007 *iface = (struct u_ISteamClient_SteamClient007 *)params->linux_side;
     params->_ret = iface->CreateSteamPipe(  );
-    params->_ret = after_steam_pipe_create( params->_ret );
 }
 
 void cppISteamClient_SteamClient007_BReleaseSteamPipe( struct cppISteamClient_SteamClient007_BReleaseSteamPipe_params *params )

@@ -228,13 +228,11 @@ MANUAL_METHODS = {
     "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'u',
     "ISteamNetworkingFakeUDPPort_ReceiveMessages": lambda ver, abi: abi == 'u',
 
+    "ISteamClient_BShutdownIfAllPipesClosed": lambda ver, abi: abi == 'w',
+    "ISteamClient_CreateSteamPipe": lambda ver, abi: abi == 'w',
     "ISteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess": lambda ver, abi: abi == 'u' and ver >= 20,
 }
 
-POST_EXEC_FUNCS = {
-    "ISteamClient_BShutdownIfAllPipesClosed" : "after_shutdown",
-    "ISteamClient_CreateSteamPipe" : "after_steam_pipe_create",
-}
 
 DEFINE_INTERFACE_VERSION = re.compile(r'^#define\s*(?P<name>STEAM(?:\w*)_VERSION(?:\w*))\s*"(?P<version>.*)"')
 
@@ -249,9 +247,6 @@ def is_manual_method(klass, method, abi):
         return needs_manual(int(version[0]), abi)
     return needs_manual
 
-
-def post_execution_function(classname, method_name):
-    return POST_EXEC_FUNCS.get(classname + "_" + method_name, None)
 
 # manual converters for simple types (function pointers)
 MANUAL_TYPES = [
@@ -956,9 +951,6 @@ def handle_method_cpp(method, classname, cppname, out):
     for name, param in sorted(need_output.items()):
         out(f'    *params->{name} = u_{name};\n')
 
-    if method.result_type.kind != TypeKind.VOID:
-        post_exec = post_execution_function(classname, method.spelling)
-        if post_exec: out(f'    params->_ret = {post_exec}( params->_ret );\n')
     out(u'}\n\n')
 
 
