@@ -78,3 +78,23 @@ bool unix_steamclient_next_callback( struct callback *callback, uint32_t *size )
 
     return !!ptr;
 }
+
+bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback, int w_callback_len,
+                                  int id, bool *failed )
+{
+    int u_callback_len = w_callback_len;
+    void *u_callback;
+    bool ret;
+
+    if (!(u_callback = alloc_callback_wtou( id, w_callback, &u_callback_len ))) return false;
+
+    ret = steamclient_GetAPICallResult( pipe, call, u_callback, u_callback_len, id, failed );
+
+    if (ret && u_callback != w_callback)
+    {
+        convert_callback_utow( id, u_callback, u_callback_len, w_callback, w_callback_len );
+        HeapFree( GetProcessHeap(), 0, u_callback );
+    }
+
+    return ret;
+}
