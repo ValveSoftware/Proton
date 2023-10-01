@@ -61,6 +61,10 @@ struct callback
 
 extern bool unix_steamclient_next_callback( struct callback *callback, uint32_t *length );
 
+extern bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
+extern bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
+                                         int w_callback_len, int id, bool *failed );
+
 struct networking_message_pool;
 struct networking_message
 {

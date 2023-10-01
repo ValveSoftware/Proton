@@ -462,6 +462,15 @@ class Struct:
         [f._type.set_used(order - 1) for f in self.fields]
 
     @property
+    def callback_id(self):
+        is_enum = lambda c: c.kind == CursorKind.ENUM_DECL
+        enums = filter(is_enum, self._cursor.get_children())
+        is_callback = lambda c: c.displayname == "k_iCallback"
+        callbacks = [k for c in enums for k in filter(is_callback, c.get_children())]
+        if len(callbacks): return int(callbacks[0].enum_value)
+        return None
+
+    @property
     def padded_fields(self):
         if self._fields: return self._fields
 
@@ -1667,6 +1676,8 @@ with open('unixlib_generated.cpp', 'w') as file:
     out(u'/* This file is auto-generated, do not edit. */\n\n')
     out(u'#include "unix_private.h"\n\n')
 
+    callbacks = []
+
     for name in sorted(unique_structs, key=struct_order):
         for sdkver, abis in all_structs[name].items():
             if name not in all_versions[sdkver]: continue
@@ -1689,6 +1700,10 @@ with open('unixlib_generated.cpp', 'w') as file:
 
             if type(abis['w64']) is Class:
                 continue
+
+            cbid = abis["w64"].callback_id
+            if cbid is not None and (abis["w64"] != abis["u64"] or abis["w32"] != abis["u32"]):
+                callbacks += [(cbid, sdkver, abis)]
 
             abis['w64'].write_checks(out, "w64_")
             abis['u64'].write_checks(out, "u64_")
@@ -1723,34 +1738,73 @@ with open('unixlib_generated.cpp', 'w') as file:
                 abis['u32'].write_converter('w32_', path_conv_fields)
                 out(u'#endif\n\n')
 
+    out(u'void *alloc_callback_wtou(int id, void *callback, int *callback_len)\n')
+    out(u'{\n')
+    out(u'    int len;\n')
+    out(u'\n')
+    out(u'#define MAKE_CASE(id, wlen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24)\n')
+    out(u'    switch (MAKE_CASE(id, *callback_len))\n')
+    out(u'    {\n')
+    out(u'#ifdef __i386__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["u32"].name, (cbid, abis["w32"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["w32"].size}): len = {abis["u32"].size}; break; /* {name} */\n')
+        else:
+            out(f'    /* case MAKE_CASE({cbid}, {abis["w32"].size}): len = {abis["u32"].size}; break; {name} */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'#ifdef __x86_64__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["u64"].name, (cbid, abis["w64"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["w64"].size}): len = {abis["u64"].size}; break; /* {name} */\n')
+        else:
+            out(f'    /* case MAKE_CASE({cbid}, {abis["w64"].size}): len = {abis["u64"].size}; break; {name} */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'    default: return callback;\n')
+    out(u'    }\n')
+    out(u'#undef MAKE_CASE\n')
+    out(u'\n')
+    out(u'    callback = HeapAlloc( GetProcessHeap(), 0, len );\n')
+    out(u'    *callback_len = len;\n')
+    out(u'    return callback;\n')
+    out(u'}\n')
+    out(u'\n')
 
-getapifile = open("cb_getapi_table.dat", "w")
-cbsizefile = open("cb_getapi_sizes.dat", "w")
-
-cbsizefile.write("#ifdef __i386__\n")
-getapifile.write("#ifdef __i386__\n")
-for cb in sorted(cb_table.keys()):
-    cbsizefile.write(f"case {cb}: /* {cb_table[cb][1][0][1]} */\n")
-    cbsizefile.write(f"    return {cb_table[cb][0]};\n")
-    getapifile.write(f"case {cb}:\n")
-    getapifile.write("    switch(callback_len){\n")
-    getapifile.write("    default:\n") # the first one should be the latest, should best support future SDK versions
-    for (size, name) in cb_table[cb][1]:
-        getapifile.write(f"    case {size}: cb_{name}(lin_callback, callback); break;\n")
-    getapifile.write("    }\n    break;\n")
-cbsizefile.write("#endif\n")
-getapifile.write("#endif\n")
-
-cbsizefile.write("#ifdef __x86_64__\n")
-getapifile.write("#ifdef __x86_64__\n")
-for cb in sorted(cb_table64.keys()):
-    cbsizefile.write(f"case {cb}: /* {cb_table64[cb][1][0][1]} */\n")
-    cbsizefile.write(f"    return {cb_table64[cb][0]};\n")
-    getapifile.write(f"case {cb}:\n")
-    getapifile.write("    switch(callback_len){\n")
-    getapifile.write("    default:\n") # the first one should be the latest, should best support future SDK versions
-    for (size, name) in cb_table64[cb][1]:
-        getapifile.write(f"    case {size}: cb_{name}(lin_callback, callback); break;\n")
-    getapifile.write("    }\n    break;\n")
-cbsizefile.write("#endif\n")
-getapifile.write("#endif\n")
+    out(u'void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len)\n')
+    out(u'{\n')
+    out(u'#define MAKE_CASE(id, wlen, ulen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24) | (uint64_t)(ulen)\n')
+    out(u'    switch (MAKE_CASE(id, w_callback_len, u_callback_len))\n')
+    out(u'    {\n')
+    out(u'#ifdef __i386__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["u32"].name, (cbid, abis["w32"].size, abis["u32"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["w32"].size}, {abis["u32"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break;\n')
+        else:
+            out(f'    /* case MAKE_CASE({cbid}, {abis["w32"].size}, {abis["u32"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break; */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'#ifdef __x86_64__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["u64"].name, (cbid, abis["w64"].size, abis["u64"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["w64"].size}, {abis["u64"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break;\n')
+        else:
+            out(f'    /* case MAKE_CASE({cbid}, {abis["w64"].size}, {abis["u64"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break; */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'    default: memcpy( w_callback, u_callback, u_callback_len ); break;\n')
+    out(u'    }\n')
+    out(u'#undef MAKE_CASE\n')
+    out(u'}\n')
