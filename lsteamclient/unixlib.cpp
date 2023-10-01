@@ -79,6 +79,24 @@ bool unix_steamclient_next_callback( struct callback *callback, uint32_t *size )
     return !!ptr;
 }
 
+bool unix_Steam_BGetCallback( uint32_t pipe, w_CallbackMsg_t *w_msg, int32_t *ignored, u_CallbackMsg_t *u_msg )
+{
+    if (!steamclient_BGetCallback( pipe, u_msg, ignored )) return false;
+    callback_message_utow( u_msg, w_msg );
+    return true;
+}
+
+void unix_callback_message_receive( u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )
+{
+    convert_callback_utow( u_msg->m_iCallback, (void *)u_msg->m_pubParam, u_msg->m_cubParam,
+                           (void *)w_msg->m_pubParam, w_msg->m_cubParam );
+}
+
+bool unix_Steam_FreeLastCallback( uint32_t pipe )
+{
+    return steamclient_FreeLastCallback( pipe );
+}
+
 bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback, int w_callback_len,
                                   int id, bool *failed )
 {
