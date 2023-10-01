@@ -1142,237 +1142,6 @@ def handle_class(klass):
     constructors.write(f"    {{\"{klass.version}\", &create_{winclassname}}},\n")
 
 
-generated_cb_handlers = []
-generated_cb_ids = []
-cpp_files_need_close_brace = []
-cb_table = {}
-cb_table64 = {}
-
-def get_field_attribute_str(field):
-    if field.type.kind != TypeKind.RECORD: return ""
-    name = canonical_typename(field)
-    return f" __attribute__((aligned({find_struct_abis(name)['w32'].align})))"
-
-#because of struct packing differences between win32 and linux, we
-#need to convert these structs from their linux layout to the win32
-#layout.
-def handle_struct(sdkver, struct):
-    members = struct.get_children()
-    cb_num = None
-    has_fields = False
-    for c in members:
-        if c.kind == CursorKind.ENUM_DECL:
-            enums = c.get_children()
-            for e in enums:
-                if e.displayname == "k_iCallback":
-                    cb_num = e.enum_value
-        if c.kind == CursorKind.FIELD_DECL:
-            has_fields = True
-
-    w2l_handler_name = None
-    l2w_handler_name = None
-
-    name = canonical_typename(struct)
-    abis = find_struct_abis(name)
-
-    def dump_win_struct(to_file, name):
-        to_file.write("#pragma pack( push, 8 )\n")
-        to_file.write(f"struct win{name} {{\n")
-        for m in struct.get_children():
-            if m.kind == CursorKind.FIELD_DECL:
-                if m.type.kind == TypeKind.CONSTANTARRAY:
-                    to_file.write(f"    {m.type.element_type.spelling} {m.displayname}[{m.type.element_count}];\n")
-                elif m.type.kind == TypeKind.RECORD and \
-                        struct_needs_conversion(m.type):
-                    to_file.write(f"    win{m.type.spelling}_{sdkver} {m.displayname};\n")
-                else:
-                    if m.type.kind == TypeKind.POINTER and \
-                            (m.type.get_pointee().kind == TypeKind.UNEXPOSED or m.type.get_pointee().kind == TypeKind.FUNCTIONPROTO):
-                        to_file.write(f"    void *{m.displayname}; /*fn pointer*/\n")
-                    else:
-                        to_file.write(f"    {m.type.spelling} {m.displayname}{get_field_attribute_str(m)};\n")
-        to_file.write("}  __attribute__ ((ms_struct));\n")
-        to_file.write("#pragma pack( pop )\n")
-
-    if cb_num is None:
-        hfile = open("struct_converters.h", "a")
-
-        if not has_fields:
-            return
-        if struct.name == "":
-            return
-        if not struct_needs_conversion(struct.type):
-            return
-
-        struct_name = f"{struct.name}_{sdkver}"
-
-        if struct_name in converted_structs:
-            return
-        converted_structs.append(struct_name)
-
-        w2l_handler_name = f"win_to_lin_struct_{struct_name}"
-        l2w_handler_name = f"lin_to_win_struct_{struct_name}"
-        l2w_handler_name64 = None
-
-        hfile.write(f"#if defined(SDKVER_{sdkver}) || !defined(__cplusplus)\n")
-        dump_win_struct(hfile, struct_name)
-        hfile.write(f"typedef struct win{struct_name} win{struct_name};\n")
-        hfile.write(f"struct {struct.name};\n")
-
-        if canonical_typename(struct) in MANUAL_STRUCTS:
-            hfile.write("#endif\n\n")
-            return
-
-        hfile.write(f"extern void {w2l_handler_name}(const struct win{struct_name} *w, struct {struct.name} *l);\n")
-        hfile.write(f"extern void {l2w_handler_name}(const struct {struct.name} *l, struct win{struct_name} *w);\n")
-        hfile.write("#endif\n\n")
-    else:
-        #for callbacks, we use the windows struct size in the cb dispatch switch
-        size = {a: abis[a].size for a in abis.keys()}
-
-        struct_name = f"{struct.name}_{size['w32']}"
-        l2w_handler_name = f"cb_{struct_name}"
-        if size['w64'] != size['w32']:
-            struct_name64 = f"{struct.name}_{size['w64']}"
-            l2w_handler_name64 = f"cb_{struct_name64}"
-        else:
-            l2w_handler_name64 = None
-        if l2w_handler_name in generated_cb_handlers:
-            # we already have a handler for the callback struct of this size
-            return
-        if not struct_needs_conversion(struct.type):
-            return
-
-        cb_id = cb_num | (size['u32'] << 16)
-        cb_id64 = cb_num | (size['u64'] << 16)
-        if cb_id in generated_cb_ids:
-            # either this cb changed name, or steam used the same ID for different structs
-            return
-
-        generated_cb_ids.append(cb_id)
-
-        datfile = open("cb_converters.dat", "a")
-        if l2w_handler_name64:
-            datfile.write("#ifdef __i386__\n")
-            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {size['w32']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
-            datfile.write("#endif\n")
-
-            datfile.write("#ifdef __x86_64__\n")
-            datfile.write(f"case 0x{cb_id64:08x}: win_msg->m_cubParam = {size['w64']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name64}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
-            datfile.write("#endif\n")
-        else:
-            datfile.write(f"case 0x{cb_id:08x}: win_msg->m_cubParam = {size['w32']}; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); {l2w_handler_name}((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n")
-
-        generated_cb_handlers.append(l2w_handler_name)
-
-        if not cb_num in cb_table.keys():
-            # latest SDK linux size, list of windows struct sizes and names
-            cb_table[cb_num] = (size['u32'], [])
-            if l2w_handler_name64:
-                cb_table64[cb_num] = (size['u64'], [])
-            else:
-                cb_table64[cb_num] = (size['u32'], [])
-        cb_table[cb_num][1].append((size['w32'], struct_name))
-        if l2w_handler_name64:
-            cb_table64[cb_num][1].append((size['w64'], struct_name64))
-        else:
-            cb_table64[cb_num][1].append((size['w32'], struct_name))
-
-        hfile = open("cb_converters.h", "a")
-        hfile.write(f"struct {struct.name};\n")
-        if l2w_handler_name64:
-            hfile.write("#ifdef __i386__\n")
-            hfile.write(f"struct win{struct_name};\n")
-            hfile.write(f"extern void {l2w_handler_name}(const struct {struct.name} *l, struct win{struct_name} *w);\n")
-            hfile.write("#endif\n")
-            hfile.write("#ifdef __x86_64__\n")
-            hfile.write(f"struct win{struct_name64};\n")
-            hfile.write(f"extern void {l2w_handler_name64}(const struct {struct.name} *l, struct win{struct_name64} *w);\n")
-            hfile.write("#endif\n\n")
-        else:
-            hfile.write(f"struct win{struct_name};\n")
-            hfile.write(f"extern void {l2w_handler_name}(const struct {struct.name} *l, struct win{struct_name} *w);\n\n")
-
-    cppname = f"struct_converters_{sdkver}.cpp"
-    file_exists = os.path.isfile(cppname)
-    cppfile = open(cppname, "a")
-    if not file_exists:
-        cppfile.write("#include \"steam_defs.h\"\n")
-        cppfile.write("#pragma push_macro(\"__cdecl\")\n")
-        cppfile.write("#undef __cdecl\n")
-        cppfile.write("#define __cdecl\n")
-        cppfile.write(f"#include \"steamworks_sdk_{sdkver}/steam_api.h\"\n")
-        cppfile.write(f"#include \"steamworks_sdk_{sdkver}/isteamgameserver.h\"\n")
-        if os.path.isfile(f"steamworks_sdk_{sdkver}/isteamnetworkingsockets.h"):
-            cppfile.write(f"#include \"steamworks_sdk_{sdkver}/isteamnetworkingsockets.h\"\n")
-        if os.path.isfile(f"steamworks_sdk_{sdkver}/isteamgameserverstats.h"):
-            cppfile.write(f"#include \"steamworks_sdk_{sdkver}/isteamgameserverstats.h\"\n")
-        if os.path.isfile(f"steamworks_sdk_{sdkver}/isteamgamecoordinator.h"):
-            cppfile.write(f"#include \"steamworks_sdk_{sdkver}/isteamgamecoordinator.h\"\n")
-        if os.path.isfile(f"steamworks_sdk_{sdkver}/steamnetworkingtypes.h"):
-            cppfile.write(f"#include \"steamworks_sdk_{sdkver}/steamnetworkingtypes.h\"\n")
-        cppfile.write("#pragma pop_macro(\"__cdecl\")\n")
-        cppfile.write("#include \"unixlib.h\"\n")
-        cppfile.write("extern \"C\" {\n")
-        cppfile.write(f"#define SDKVER_{sdkver}\n")
-        cppfile.write("#include \"struct_converters.h\"\n")
-        cpp_files_need_close_brace.append(cppname)
-
-    path_conv_fields = PATH_CONV_STRUCTS.get(struct.type.spelling, {})
-
-    def handle_field(m, src, dst):
-        if m.kind == CursorKind.FIELD_DECL:
-            if m.type.kind == TypeKind.CONSTANTARRAY:
-                assert(m.type.element_type.kind != TypeKind.RECORD or \
-                        not struct_needs_conversion(m.type.element_type))
-                cppfile.write(f"    memcpy({dst}->{m.displayname}, {src}->{m.displayname}, sizeof({dst}->{m.displayname}));\n")
-            elif m.type.kind == TypeKind.RECORD and \
-                    struct_needs_conversion(m.type):
-                cppfile.write(f"    {src}_to_{dst}_struct_{m.type.spelling}_{sdkver}(&{src}->{m.displayname}, &{dst}->{m.displayname});\n")
-            elif m.displayname in path_conv_fields:
-                cppfile.write(f"    steamclient_unix_path_to_dos_path(1, {src}->{m.displayname}, g_tmppath, sizeof(g_tmppath), 1);\n")
-                cppfile.write(f"    {dst}->{m.displayname} = g_tmppath;\n")
-            else:
-                cppfile.write(f"    {dst}->{m.displayname} = {src}->{m.displayname};\n")
-
-    if not cb_num is None:
-        if l2w_handler_name64:
-            cppfile.write("#ifdef __i386__\n")
-            dump_win_struct(cppfile, struct_name)
-            cppfile.write("#endif\n")
-            cppfile.write("#ifdef __x86_64__\n")
-            dump_win_struct(cppfile, struct_name64)
-            cppfile.write("#endif\n")
-        else:
-            dump_win_struct(cppfile, struct_name)
-
-    if w2l_handler_name:
-        cppfile.write(f"void {w2l_handler_name}(const struct win{struct_name} *win, struct {struct.name} *lin)\n{{\n")
-        for m in struct.get_children():
-            handle_field(m, "win", "lin")
-        cppfile.write("}\n\n")
-
-    if l2w_handler_name64:
-        cppfile.write("#ifdef __x86_64__\n")
-        cppfile.write(f"void {l2w_handler_name64}(const struct {struct.name} *lin, struct win{struct_name64} *win)\n{{\n")
-        for m in struct.get_children():
-            handle_field(m, "lin", "win")
-        cppfile.write("}\n")
-        cppfile.write("#endif\n\n")
-
-    if l2w_handler_name:
-        if l2w_handler_name64:
-            cppfile.write("#ifdef __i386__\n")
-        cppfile.write(f"void {l2w_handler_name}(const struct {struct.name} *lin, struct win{struct_name} *win)\n{{\n")
-        for m in struct.get_children():
-            handle_field(m, "lin", "win")
-        cppfile.write("}\n")
-        if l2w_handler_name64:
-            cppfile.write("#endif\n\n")
-        else:
-            cppfile.write("\n")
-
-
 def parse(sources, sdkver, abi):
     args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
     if abi[0] == 'w':
@@ -1455,12 +1224,6 @@ def classify_struct(name):
     if len(set(versions.values())) == 1:
         versions = {sdkver: name for sdkver in versions.keys()}
     return versions
-
-
-def generate(sdkver, structs):
-    print(f'generating SDK version {sdkver}...')
-    for child in structs['u32'].values():
-        handle_struct(sdkver, child)
 
 
 for i, sdkver in enumerate(SDK_VERSIONS):
@@ -1557,25 +1320,6 @@ for klass in all_classes.values():
 for _, klass in sorted(all_classes.items()):
     sdkver = klass._sdkver
     handle_class(klass)
-
-
-with open('struct_converters.h', 'w') as file:
-    out = file.write
-
-    out(u'#ifndef __STRUCT_CONVERTERS_H\n')
-    out(u'#define __STRUCT_CONVERTERS_H\n')
-
-for sdkver in SDK_VERSIONS:
-    generate(sdkver, all_records[sdkver])
-
-for f in cpp_files_need_close_brace:
-    m = open(f, "a")
-    m.write("\n}\n")
-
-with open('struct_converters.h', 'a') as file:
-    out = file.write
-
-    out(u'#endif /* __STRUCT_CONVERTERS_H */\n')
 
 
 declared = {}
@@ -1737,6 +1481,44 @@ with open('unixlib_generated.cpp', 'w') as file:
                 out(u'\n')
                 abis['u32'].write_converter('w32_', path_conv_fields)
                 out(u'#endif\n\n')
+
+    out(u'void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )\n')
+    out(u'{\n')
+    out(u'    int len;\n')
+    out(u'\n')
+    out(u'#define MAKE_CASE(id, wlen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24)\n')
+    out(u'    switch (MAKE_CASE(u_msg->m_iCallback, u_msg->m_cubParam))\n')
+    out(u'    {\n')
+    out(u'#ifdef __i386__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["w32"].name, (cbid, abis["u32"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["u32"].size}): len = {abis["w32"].size}; break; /* {name} */\n')
+        else:
+            out(f'    /* Conflict: case MAKE_CASE({cbid}, {abis["u32"].size}): len = {abis["w32"].size}; break; */ /* {name} */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'#ifdef __x86_64__\n')
+    values = set()
+    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
+        name, value = abis["w64"].name, (cbid, abis["u64"].size)
+        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+        if value not in values:
+            out(f'    case MAKE_CASE({cbid}, {abis["u64"].size}): len = {abis["w64"].size}; break; /* {name} */\n')
+        else:
+            out(f'    /* Conflict: case MAKE_CASE({cbid}, {abis["u64"].size}): len = {abis["w64"].size}; break; */ /* {name} */\n')
+        values.add(value)
+    out(u'#endif\n')
+    out(u'    default: len = u_msg->m_cubParam; break;\n')
+    out(u'    }\n')
+    out(u'#undef MAKE_CASE\n')
+    out(u'\n')
+    out(u'    w_msg->m_iCallback = u_msg->m_iCallback;\n')
+    out(u'    w_msg->m_cubParam = len;\n')
+    out(u'}\n')
+    out(u'\n')
 
     out(u'void *alloc_callback_wtou(int id, void *callback, int *callback_len)\n')
     out(u'{\n')

@@ -9,9 +9,7 @@
 #include <windef.h>
 #include <winbase.h>
 
-#ifndef STEAM_API_H
 #include "steamclient_structs.h"
-#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -29,7 +27,6 @@ extern void steamclient_free_path_array( const char **path_array );
 #define PATH_MAX 4096
 extern char g_tmppath[PATH_MAX];
 
-#ifndef STEAM_API_H
 enum callback_type
 {
     SOCKETS_DEBUG_OUTPUT = 1,
@@ -65,6 +62,13 @@ extern bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int
 extern bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
                                          int w_callback_len, int id, bool *failed );
 
+extern bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
+extern bool unix_Steam_BGetCallback( uint32_t pipe, w_CallbackMsg_t *w_msg, int32_t *ignored, u_CallbackMsg_t *u_msg );
+extern void unix_callback_message_receive( u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg );
+
+extern bool (*steamclient_FreeLastCallback)( int32_t );
+extern bool unix_Steam_FreeLastCallback( uint32_t pipe );
+
 struct networking_message_pool;
 struct networking_message
 {
@@ -91,7 +95,6 @@ extern void unix_networking_messages_receive_147( uint32_t count, w_SteamNetwork
 extern void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **w_msgs );
 extern void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg );
 extern void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg );
-#endif
 
 #ifdef __cplusplus
 } /* extern "C" */
