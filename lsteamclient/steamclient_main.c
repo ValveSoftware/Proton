@@ -690,9 +690,9 @@ done:
 
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
-static bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
+bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
 bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
-static bool (*steamclient_FreeLastCallback)( int32_t );
+bool (*steamclient_FreeLastCallback)( int32_t );
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static bool (*steamclient_IsKnownInterface)( const char *pchVersion );
 static void (*steamclient_NotifyMissingInterface)( int32_t hSteamPipe, const char *pchVersion );
@@ -812,24 +812,24 @@ static void execute_pending_callbacks(void)
     free( callback );
 }
 
-#include "cb_converters.h"
+static void *last_callback_data;
 
-#pragma pack( push, 8 )
-struct winCallbackMsg_t
+bool CDECL Steam_FreeLastCallback( int32_t pipe )
 {
-    int32_t m_hSteamUser;
-    int m_iCallback;
-    uint8_t *m_pubParam;
-    int m_cubParam;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
+    TRACE( "%u\n", pipe );
 
-static void *last_cb = NULL;
+    if (!load_steamclient()) return 0;
 
-bool CDECL Steam_BGetCallback( int32_t pipe, struct winCallbackMsg_t *win_msg, int32_t *ignored )
+    HeapFree( GetProcessHeap(), 0, last_callback_data );
+    last_callback_data = NULL;
+
+    return unix_Steam_FreeLastCallback( pipe );
+}
+
+bool CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *ignored )
 {
+    u_CallbackMsg_t u_msg;
     bool ret;
-    u_CallbackMsg_t lin_msg;
 
     TRACE("%u, %p, %p\n", pipe, win_msg, ignored);
 
@@ -839,47 +839,34 @@ bool CDECL Steam_BGetCallback( int32_t pipe, struct winCallbackMsg_t *win_msg, i
     execute_pending_callbacks();
 
 next_event:
-    ret = steamclient_BGetCallback(pipe, &lin_msg, ignored);
+    if (!(ret = unix_Steam_BGetCallback( pipe, win_msg, ignored, &u_msg ))) return FALSE;
 
-    if(ret){
-        bool need_free = TRUE;
-        win_msg->m_hSteamUser = lin_msg.m_hSteamUser;
-        win_msg->m_iCallback = lin_msg.m_iCallback;
+    if (!(win_msg->m_pubParam = HeapAlloc( GetProcessHeap(), 0, win_msg->m_cubParam ))) return FALSE;
+    last_callback_data = win_msg->m_pubParam;
+    unix_callback_message_receive( &u_msg, win_msg );
 
-        if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
+    if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
+    {
+        uint8_t activated = *(uint8_t *)win_msg->m_pubParam;
+        FIXME( "HACK: Steam overlay %sactivated, %sabling all input events.\n",
+               activated ? "" : "de", activated ? "dis" : "en" );
+        if (activated)
         {
-            uint8_t activated = *(uint8_t *)lin_msg.m_pubParam;
-            FIXME("HACK: Steam overlay %sactivated, %sabling all input events.\n", activated ? "" : "de", activated ? "dis" : "en");
-            if (activated)
-            {
-                SetEvent(steam_overlay_event);
-                keybd_event(VK_LSHIFT, 0x2a /* lshift scancode */, KEYEVENTF_KEYUP, 0);
-                keybd_event(VK_RSHIFT, 0x36 /* rshift scancode */, KEYEVENTF_KEYUP, 0);
-                keybd_event(VK_TAB, 0x0f /* tab scancode */, KEYEVENTF_KEYUP, 0);
-            }
-            else
-            {
-                if (WaitForSingleObject(steam_overlay_event, 0) == WAIT_TIMEOUT)
-                {
-                    FIXME("Spurious steam overlay deactivate event, skipping.\n");
-                    steamclient_FreeLastCallback(pipe);
-                    goto next_event;
-                }
-                ResetEvent(steam_overlay_event);
-            }
+            SetEvent( steam_overlay_event );
+            keybd_event( VK_LSHIFT, 0x2a /* lshift scancode */, KEYEVENTF_KEYUP, 0 );
+            keybd_event( VK_RSHIFT, 0x36 /* rshift scancode */, KEYEVENTF_KEYUP, 0 );
+            keybd_event( VK_TAB, 0x0f /* tab scancode */, KEYEVENTF_KEYUP, 0 );
         }
-
-        switch(win_msg->m_iCallback | (lin_msg.m_cubParam << 16)){
-#include "cb_converters.dat"
-            default:
-                /* structs are compatible */
-                need_free = FALSE;
-                win_msg->m_cubParam = lin_msg.m_cubParam;
-                win_msg->m_pubParam = lin_msg.m_pubParam;
-                break;
+        else
+        {
+            if (WaitForSingleObject( steam_overlay_event, 0 ) == WAIT_TIMEOUT)
+            {
+                FIXME( "Spurious steam overlay deactivate event, skipping.\n" );
+                Steam_FreeLastCallback( pipe );
+                goto next_event;
+            }
+            ResetEvent( steam_overlay_event );
         }
-        if(need_free)
-            last_cb = win_msg->m_pubParam;
     }
 
     execute_pending_callbacks();
@@ -894,19 +881,6 @@ bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback
     if (!load_steamclient()) return FALSE;
 
     return unix_Steam_GetAPICallResult( pipe, call, w_callback, w_callback_len, id, failed );
-}
-
-bool CDECL Steam_FreeLastCallback( int32_t pipe )
-{
-    TRACE("%u\n", pipe);
-
-    if(!load_steamclient())
-        return 0;
-
-    HeapFree(GetProcessHeap(), 0, last_cb);
-    last_cb = NULL;
-
-    return steamclient_FreeLastCallback(pipe);
 }
 
 void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
