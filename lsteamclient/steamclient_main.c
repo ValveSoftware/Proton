@@ -691,7 +691,7 @@ done:
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
 static bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
-static bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
+bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
 static bool (*steamclient_FreeLastCallback)( int32_t );
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static bool (*steamclient_IsKnownInterface)( const char *pchVersion );
@@ -886,53 +886,14 @@ next_event:
     return ret;
 }
 
-static int get_callback_len(int cb)
-{
-    switch(cb){
-#include "cb_getapi_sizes.dat"
-    }
-    return 0;
-}
-
-void *alloc_callback_wtou( int id, void *callback, int *callback_len )
-{
-    int len;
-
-    if (!(len = get_callback_len( id ))) return callback;
-    callback = HeapAlloc( GetProcessHeap(), 0, len );
-    *callback_len = len;
-
-    return callback;
-}
-
-void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, void *callback, int callback_len )
-{
-    switch (id)
-    {
-#include "cb_getapi_table.dat"
-    }
-}
-
 bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
                                    int w_callback_len, int id, bool *failed )
 {
-    int u_callback_len = w_callback_len;
-    void *u_callback;
-    bool ret;
-
     TRACE( "%u, x, %p, %u, %u, %p\n", pipe, w_callback, w_callback_len, id, failed );
 
     if (!load_steamclient()) return FALSE;
 
-    if (!(u_callback = alloc_callback_wtou( id, w_callback, &u_callback_len ))) return FALSE;
-    ret = steamclient_GetAPICallResult( pipe, call, u_callback, u_callback_len, id, failed );
-
-    if (ret && u_callback != w_callback)
-    {
-        convert_callback_utow( id, u_callback, u_callback_len, w_callback, w_callback_len );
-        HeapFree( GetProcessHeap(), 0, u_callback );
-    }
-    return ret;
+    return unix_Steam_GetAPICallResult( pipe, call, w_callback, w_callback_len, id, failed );
 }
 
 bool CDECL Steam_FreeLastCallback( int32_t pipe )
