@@ -227,8 +227,6 @@ MANUAL_METHODS = {
     "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'w',
     "ISteamNetworkingFakeUDPPort_ReceiveMessages": True,
 
-    "ISteamClient_BShutdownIfAllPipesClosed": lambda ver, abi: abi == 'w',
-    "ISteamClient_CreateSteamPipe": lambda ver, abi: abi == 'w',
     "ISteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess": lambda ver, abi: abi == 'u' and ver >= 20,
 
     "ISteamUtils_GetAPICallResult": lambda ver, abi: abi == 'u',

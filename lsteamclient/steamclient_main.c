@@ -38,7 +38,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
             break;
         case DLL_PROCESS_DETACH:
-            stop_callback_thread();
             CloseHandle(steam_overlay_event);
             break;
     }
@@ -773,8 +772,6 @@ static int load_steamclient(void)
         return 0;
     }
 
-    start_callback_thread();
-
     return 1;
 }
 
@@ -786,6 +783,33 @@ void *CDECL CreateInterface(const char *name, int *return_code)
         return NULL;
 
     return create_win_interface(name, steamclient_CreateInterface(name, return_code));
+}
+
+static void execute_pending_callbacks(void)
+{
+    struct callback *callback = NULL;
+    uint32_t callback_size = 0;
+
+    while (unix_steamclient_next_callback( callback, &callback_size ))
+    {
+        if (!callback || callback_size > callback->size)
+            callback = realloc( callback, callback_size );
+        else switch (callback->type)
+        {
+        case SOCKETS_DEBUG_OUTPUT:
+            TRACE( "SOCKETS_DEBUG_OUTPUT func %p, type %u, msg %s.\n", callback->sockets_debug_output.pfnFunc,
+                   callback->sockets_debug_output.type, wine_dbgstr_a( callback->sockets_debug_output.msg ) );
+            callback->sockets_debug_output.pfnFunc( callback->sockets_debug_output.type, callback->sockets_debug_output.msg );
+            break;
+        case WARNING_MESSAGE_HOOK:
+            TRACE( "WARNING_MESSAGE_HOOK func %p, severity %d, msg %s.\n", callback->warning_message_hook.pFunction,
+                   callback->warning_message_hook.severity, wine_dbgstr_a( callback->warning_message_hook.msg ) );
+            callback->warning_message_hook.pFunction( callback->warning_message_hook.severity, callback->warning_message_hook.msg );
+            break;
+        }
+    }
+
+    free( callback );
 }
 
 #include "cb_converters.h"
@@ -811,6 +835,8 @@ bool CDECL Steam_BGetCallback( int32_t pipe, struct winCallbackMsg_t *win_msg, i
 
     if(!load_steamclient())
         return 0;
+
+    execute_pending_callbacks();
 
 next_event:
     ret = steamclient_BGetCallback(pipe, &lin_msg, ignored);
@@ -856,6 +882,7 @@ next_event:
             last_cb = win_msg->m_pubParam;
     }
 
+    execute_pending_callbacks();
     return ret;
 }
 

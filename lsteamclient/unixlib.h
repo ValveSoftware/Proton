@@ -29,37 +29,38 @@ extern void steamclient_free_path_array( const char **path_array );
 #define PATH_MAX 4096
 extern char g_tmppath[PATH_MAX];
 
+#ifndef STEAM_API_H
 enum callback_type
 {
-    SOCKET_DEBUG_OUTPUT = 1,
-    STEAM_API_WARNING_HOOK,
+    SOCKETS_DEBUG_OUTPUT = 1,
+    WARNING_MESSAGE_HOOK,
 };
 
-struct callback_data
+struct callback
 {
     enum callback_type type;
-    void *func;
-    int complete;
+    uint32_t size;
+
     union
     {
         struct
         {
-            unsigned int type;
-            const char *msg;
-        }
-        sockets_debug_output;
+            void (*W_STDCALL pfnFunc)( uint32_t, const char * );
+            uint32_t type;
+            const char msg[1];
+        } sockets_debug_output;
+
         struct
         {
-            int severity;
-            const char *msg;
-        }
-        steam_api_warning_hook;
+            void (*W_CDECL pFunction)( int32_t, const char * );
+            int32_t severity;
+            const char msg[1];
+        } warning_message_hook;
     };
 };
 
-void execute_callback(struct callback_data *cb_data);
+extern bool unix_steamclient_next_callback( struct callback *callback, uint32_t *length );
 
-#ifndef STEAM_API_H
 struct networking_message_pool;
 struct networking_message
 {

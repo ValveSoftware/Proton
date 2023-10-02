@@ -56,6 +56,11 @@ u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamA
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
 void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
 
+extern void queue_sockets_debug_output( void (*W_STDCALL pfnFunc)( uint32_t, const char * ),
+                                        uint32_t type, const char *msg );
+extern void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char * ),
+                                        int32_t severity, const char *msg );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
