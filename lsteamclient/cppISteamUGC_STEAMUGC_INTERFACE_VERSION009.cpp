@@ -88,6 +88,7 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview( v
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION009 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION009 *)params->linux_side;
     params->_ret = iface->GetQueryUGCAdditionalPreview( params->handle, params->index, params->previewIndex, params->pchURLOrVideoID, params->cchURLSize, params->pchOriginalFileName, params->cchOriginalFileNameSize, params->pPreviewType );
+    steamclient_unix_path_to_dos_path( params->_ret, params->pchURLOrVideoID, params->pchURLOrVideoID, params->cchURLSize, 1 );
     return 0;
 }
 
@@ -488,6 +489,7 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo( void *args 
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION009 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION009 *)params->linux_side;
     params->_ret = iface->GetItemInstallInfo( params->nPublishedFileID, params->punSizeOnDisk, params->pchFolder, params->cchFolderSize, params->punTimeStamp );
+    steamclient_unix_path_to_dos_path( params->_ret, params->pchFolder, params->pchFolder, params->cchFolderSize, 0 );
     return 0;
 }
 

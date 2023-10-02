@@ -54,6 +54,7 @@ NTSTATUS ISteamUser_SteamUser012_GetUserDataFolder( void *args )
     struct ISteamUser_SteamUser012_GetUserDataFolder_params *params = (struct ISteamUser_SteamUser012_GetUserDataFolder_params *)args;
     struct u_ISteamUser_SteamUser012 *iface = (struct u_ISteamUser_SteamUser012 *)params->linux_side;
     params->_ret = iface->GetUserDataFolder( params->pchBuffer, params->cubBuffer );
+    steamclient_unix_path_to_dos_path( params->_ret, params->pchBuffer, params->pchBuffer, params->cubBuffer, 0 );
     return 0;
 }
 

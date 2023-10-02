@@ -1831,7 +1831,6 @@ bool __thiscall winISteamUser_SteamUser011_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser011_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -2017,7 +2016,6 @@ bool __thiscall winISteamUser_SteamUser012_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser012_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -2272,7 +2270,6 @@ bool __thiscall winISteamUser_SteamUser013_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser013_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -2550,7 +2547,6 @@ bool __thiscall winISteamUser_SteamUser014_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser014_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -2884,7 +2880,6 @@ bool __thiscall winISteamUser_SteamUser015_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser015_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -3231,7 +3226,6 @@ bool __thiscall winISteamUser_SteamUser016_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser016_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -3582,7 +3576,6 @@ bool __thiscall winISteamUser_SteamUser017_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser017_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -3960,7 +3953,6 @@ bool __thiscall winISteamUser_SteamUser018_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser018_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -4355,7 +4347,6 @@ bool __thiscall winISteamUser_SteamUser019_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser019_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -4800,7 +4791,6 @@ bool __thiscall winISteamUser_SteamUser020_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser020_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -5270,7 +5260,6 @@ bool __thiscall winISteamUser_SteamUser021_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser021_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -5753,7 +5742,6 @@ bool __thiscall winISteamUser_SteamUser022_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser022_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
@@ -6238,7 +6226,6 @@ bool __thiscall winISteamUser_SteamUser023_GetUserDataFolder(struct w_steam_ifac
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUser_SteamUser023_GetUserDataFolder, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchBuffer, pchBuffer, cubBuffer, 0 );
     return params._ret;
 }
 
