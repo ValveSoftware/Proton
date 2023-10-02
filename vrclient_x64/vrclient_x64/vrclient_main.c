@@ -1,8 +1,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define __USE_GNU
-#include <dlfcn.h>
 #include <limits.h>
 #include <stdint.h>
 
@@ -197,9 +195,10 @@ struct w_steam_iface *create_win_interface(const char *name, void *linux_side)
 static int load_vrclient(void)
 {
     static const WCHAR PROTON_VR_RUNTIME_W[] = {'P','R','O','T','O','N','_','V','R','_','R','U','N','T','I','M','E',0};
+    static const WCHAR winevulkanW[] = {'w','i','n','e','v','u','l','k','a','n','.','d','l','l',0};
     static BOOL loaded;
 
-    struct vrclient_init_params params = {0};
+    struct vrclient_init_params params = {.winevulkan = LoadLibraryW( winevulkanW )};
     WCHAR pathW[PATH_MAX];
     DWORD sz;
 
@@ -281,100 +280,33 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface( name, unix_VRClientCoreFactory( name, return_code ) );
 }
 
-static VkDevice_T *(WINAPI *p_get_native_VkDevice)( VkDevice_T * );
-static VkInstance_T *(WINAPI *p_get_native_VkInstance)( VkInstance_T * );
-static VkPhysicalDevice_T *(WINAPI *p_get_native_VkPhysicalDevice)( VkPhysicalDevice_T * );
-static VkPhysicalDevice_T *(WINAPI *p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
-static VkQueue_T *(WINAPI *p_get_native_VkQueue)( VkQueue_T * );
-
-static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
-{
-    unixlib_handle_t unix_funcs;
-    NTSTATUS status;
-    Dl_info info;
-
-    status = NtQueryVirtualMemory(GetCurrentProcess(), hvulkan, (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
-            &unix_funcs, sizeof(unix_funcs), NULL);
-    if (status)
-    {
-        WINE_ERR("NtQueryVirtualMemory status %#x.\n", (int)status);
-        return NULL;
-    }
-    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
-    {
-        WINE_ERR("dladdr failed.\n");
-        return NULL;
-    }
-    WINE_TRACE("path %s.\n", info.dli_fname);
-    return dlopen(info.dli_fname, RTLD_NOW);
-}
-
-static void load_vk_unwrappers(void)
-{
-    static HMODULE h = NULL;
-    void *unix_handle;
-
-    if(h)
-        /* already loaded */
-        return;
-
-    h = LoadLibraryA("winevulkan");
-    if(!h){
-        ERR("unable to load winevulkan\n");
-        return;
-    }
-
-    if (!(unix_handle = get_winevulkan_unix_lib_handle(h)))
-    {
-        ERR("Unable to open winevulkan.so.\n");
-        return;
-    }
-
-#define L( name )                                                                                  \
-    if (!(p_##name = dlsym( unix_handle, "__wine_" #name )))                                       \
-    {                                                                                              \
-        ERR( "%s not found.\n", #name );                                                           \
-        dlclose( unix_handle );                                                                    \
-        return;                                                                                    \
-    }
-
-    L(get_native_VkDevice);
-    L(get_native_VkInstance);
-    L(get_native_VkPhysicalDevice);
-    L(get_wrapped_VkPhysicalDevice);
-    L(get_native_VkQueue);
-#undef L
-
-    dlclose(unix_handle);
-}
-
 VkDevice_T *get_native_VkDevice( VkDevice_T *device )
 {
-    load_vk_unwrappers();
+    load_vrclient();
     return p_get_native_VkDevice( device );
 }
 
 VkInstance_T *get_native_VkInstance( VkInstance_T *instance )
 {
-    load_vk_unwrappers();
+    load_vrclient();
     return p_get_native_VkInstance( instance );
 }
 
 VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device )
 {
-    load_vk_unwrappers();
+    load_vrclient();
     return p_get_native_VkPhysicalDevice( device );
 }
 
 VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device )
 {
-    load_vk_unwrappers();
+    load_vrclient();
     return p_get_wrapped_VkPhysicalDevice( instance, device );
 }
 
 VkQueue_T *get_native_VkQueue( VkQueue_T *queue )
 {
-    load_vk_unwrappers();
+    load_vrclient();
     return p_get_native_VkQueue( queue );
 }
 
