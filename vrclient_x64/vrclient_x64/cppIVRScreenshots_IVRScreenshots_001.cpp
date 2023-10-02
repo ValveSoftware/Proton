@@ -5,7 +5,11 @@ NTSTATUS IVRScreenshots_IVRScreenshots_001_RequestScreenshot( void *args )
 {
     struct IVRScreenshots_IVRScreenshots_001_RequestScreenshot_params *params = (struct IVRScreenshots_IVRScreenshots_001_RequestScreenshot_params *)args;
     struct u_IVRScreenshots_IVRScreenshots_001 *iface = (struct u_IVRScreenshots_IVRScreenshots_001 *)params->linux_side;
-    params->_ret = (uint32_t)iface->RequestScreenshot( params->pOutScreenshotHandle, params->type, params->pchPreviewFilename, params->pchVRFilename );
+    char *u_pchPreviewFilename = vrclient_dos_to_unix_path( params->pchPreviewFilename );
+    char *u_pchVRFilename = vrclient_dos_to_unix_path( params->pchVRFilename );
+    params->_ret = (uint32_t)iface->RequestScreenshot( params->pOutScreenshotHandle, params->type, u_pchPreviewFilename, u_pchVRFilename );
+    vrclient_free_path( u_pchPreviewFilename );
+    vrclient_free_path( u_pchVRFilename );
     return 0;
 }
 
@@ -45,7 +49,11 @@ NTSTATUS IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot( void *args )
 {
     struct IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot_params *params = (struct IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot_params *)args;
     struct u_IVRScreenshots_IVRScreenshots_001 *iface = (struct u_IVRScreenshots_IVRScreenshots_001 *)params->linux_side;
-    params->_ret = (uint32_t)iface->TakeStereoScreenshot( params->pOutScreenshotHandle, params->pchPreviewFilename, params->pchVRFilename );
+    char *u_pchPreviewFilename = vrclient_dos_to_unix_path( params->pchPreviewFilename );
+    char *u_pchVRFilename = vrclient_dos_to_unix_path( params->pchVRFilename );
+    params->_ret = (uint32_t)iface->TakeStereoScreenshot( params->pOutScreenshotHandle, u_pchPreviewFilename, u_pchVRFilename );
+    vrclient_free_path( u_pchPreviewFilename );
+    vrclient_free_path( u_pchVRFilename );
     return 0;
 }
 
@@ -53,7 +61,11 @@ NTSTATUS IVRScreenshots_IVRScreenshots_001_SubmitScreenshot( void *args )
 {
     struct IVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params *params = (struct IVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params *)args;
     struct u_IVRScreenshots_IVRScreenshots_001 *iface = (struct u_IVRScreenshots_IVRScreenshots_001 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SubmitScreenshot( params->screenshotHandle, params->type, params->pchSourcePreviewFilename, params->pchSourceVRFilename );
+    char *u_pchSourcePreviewFilename = vrclient_dos_to_unix_path( params->pchSourcePreviewFilename );
+    char *u_pchSourceVRFilename = vrclient_dos_to_unix_path( params->pchSourceVRFilename );
+    params->_ret = (uint32_t)iface->SubmitScreenshot( params->screenshotHandle, params->type, u_pchSourcePreviewFilename, u_pchSourceVRFilename );
+    vrclient_free_path( u_pchSourcePreviewFilename );
+    vrclient_free_path( u_pchSourceVRFilename );
     return 0;
 }
 

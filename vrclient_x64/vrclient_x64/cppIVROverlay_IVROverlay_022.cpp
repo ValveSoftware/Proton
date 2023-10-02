@@ -505,7 +505,9 @@ NTSTATUS IVROverlay_IVROverlay_022_SetOverlayFromFile( void *args )
 {
     struct IVROverlay_IVROverlay_022_SetOverlayFromFile_params *params = (struct IVROverlay_IVROverlay_022_SetOverlayFromFile_params *)args;
     struct u_IVROverlay_IVROverlay_022 *iface = (struct u_IVROverlay_IVROverlay_022 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayFromFile( params->ulOverlayHandle, params->pchFilePath );
+    char *u_pchFilePath = vrclient_dos_to_unix_path( params->pchFilePath );
+    params->_ret = (uint32_t)iface->SetOverlayFromFile( params->ulOverlayHandle, u_pchFilePath );
+    vrclient_free_path( u_pchFilePath );
     return 0;
 }
 
