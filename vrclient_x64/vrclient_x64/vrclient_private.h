@@ -95,12 +95,6 @@ extern w_Texture_t vrclient_translate_texture_dxvk( const w_Texture_t *texture, 
                                                     VkImageLayout *image_layout, VkImageCreateInfo *image_info );
 #endif /* __dxvk_interop_h__ */
 
-extern VkDevice_T *get_native_VkDevice( VkDevice_T *device );
-extern VkInstance_T *get_native_VkInstance( VkInstance_T *instance );
-extern VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device );
-extern VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device );
-extern VkQueue_T *get_native_VkQueue( VkQueue_T *queue );
-
 #include "vrclient_generated.h"
 
 #endif  /* __cplusplus */
