@@ -1,14 +1,6 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
-NTSTATUS IVRClientCore_IVRClientCore_002_Init( void *args )
-{
-    struct IVRClientCore_IVRClientCore_002_Init_params *params = (struct IVRClientCore_IVRClientCore_002_Init_params *)args;
-    struct u_IVRClientCore_IVRClientCore_002 *iface = (struct u_IVRClientCore_IVRClientCore_002 *)params->linux_side;
-    params->_ret = (uint32_t)iface->Init( params->eApplicationType );
-    return 0;
-}
-
 NTSTATUS IVRClientCore_IVRClientCore_002_Cleanup( void *args )
 {
     struct IVRClientCore_IVRClientCore_002_Cleanup_params *params = (struct IVRClientCore_IVRClientCore_002_Cleanup_params *)args;
