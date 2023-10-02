@@ -236,7 +236,7 @@ MANUAL_METHODS = {
     "IVRRenderModels_LoadRenderModel_Async": True,
     "IVRRenderModels_FreeRenderModel": lambda ver, abi: ver > 1,
     "IVRMailbox_undoc3": lambda ver, abi: abi == 'w',
-    "IVROverlay_SetOverlayTexture": lambda ver, abi: abi == 'w',
+    "IVROverlay_SetOverlayTexture": True,
     "IVRInput_GetDigitalActionData": lambda ver, abi: abi == 'w' and ver > 3,
 }
 

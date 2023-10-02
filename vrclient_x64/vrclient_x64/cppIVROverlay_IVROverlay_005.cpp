@@ -316,14 +316,6 @@ NTSTATUS IVROverlay_IVROverlay_005_IsFocusOverlay( void *args )
     return 0;
 }
 
-NTSTATUS IVROverlay_IVROverlay_005_SetOverlayTexture( void *args )
-{
-    struct IVROverlay_IVROverlay_005_SetOverlayTexture_params *params = (struct IVROverlay_IVROverlay_005_SetOverlayTexture_params *)args;
-    struct u_IVROverlay_IVROverlay_005 *iface = (struct u_IVROverlay_IVROverlay_005 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->eTextureType, params->pTexture );
-    return 0;
-}
-
 NTSTATUS IVROverlay_IVROverlay_005_ClearOverlayTexture( void *args )
 {
     struct IVROverlay_IVROverlay_005_ClearOverlayTexture_params *params = (struct IVROverlay_IVROverlay_005_ClearOverlayTexture_params *)args;

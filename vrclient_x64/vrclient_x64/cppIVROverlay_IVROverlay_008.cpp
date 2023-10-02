@@ -356,14 +356,6 @@ NTSTATUS IVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor( void *args )
     return 0;
 }
 
-NTSTATUS IVROverlay_IVROverlay_008_SetOverlayTexture( void *args )
-{
-    struct IVROverlay_IVROverlay_008_SetOverlayTexture_params *params = (struct IVROverlay_IVROverlay_008_SetOverlayTexture_params *)args;
-    struct u_IVROverlay_IVROverlay_008 *iface = (struct u_IVROverlay_IVROverlay_008 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->pTexture );
-    return 0;
-}
-
 NTSTATUS IVROverlay_IVROverlay_008_ClearOverlayTexture( void *args )
 {
     struct IVROverlay_IVROverlay_008_ClearOverlayTexture_params *params = (struct IVROverlay_IVROverlay_008_ClearOverlayTexture_params *)args;
