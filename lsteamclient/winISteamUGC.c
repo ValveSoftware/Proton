@@ -558,10 +558,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -573,10 +571,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -1056,10 +1052,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -1071,10 +1065,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -1557,10 +1549,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -1572,10 +1562,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -2252,10 +2240,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -2267,10 +2253,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -3016,10 +3000,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -3031,10 +3013,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -3875,10 +3855,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -3890,10 +3868,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -4114,10 +4090,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -4802,10 +4776,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -4817,10 +4789,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -4860,10 +4830,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -4889,10 +4857,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -5113,10 +5079,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -5823,10 +5787,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -5838,10 +5800,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -5881,10 +5841,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -5910,10 +5868,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -6134,10 +6090,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -6905,10 +6859,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -6920,10 +6872,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -6963,10 +6913,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -6992,10 +6940,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -7216,10 +7162,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -8088,10 +8032,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -8103,10 +8045,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -8159,10 +8099,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -8188,10 +8126,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -8412,10 +8348,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -9304,10 +9238,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -9319,10 +9251,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -9387,10 +9317,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -9416,10 +9344,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -9640,10 +9566,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -10548,10 +10472,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -10563,10 +10485,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -10631,10 +10551,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -10660,10 +10578,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -10884,10 +10800,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -11843,10 +11757,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -11858,10 +11770,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -11926,10 +11836,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -11955,10 +11863,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -12179,10 +12085,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -13195,10 +13099,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -13210,10 +13112,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -13278,10 +13178,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -13307,10 +13205,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -13531,10 +13427,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -14567,10 +14461,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -14582,10 +14474,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -14650,10 +14540,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -14679,10 +14567,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -14929,10 +14815,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 
@@ -15970,10 +15854,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent(struct
         .handle = handle,
         .pszContentFolder = pszContentFolder,
     };
-    params.pszContentFolder = steamclient_dos_to_unix_path( pszContentFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent, &params );
-    steamclient_free_path( params.pszContentFolder );
     return params._ret;
 }
 
@@ -15985,10 +15867,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview(struct
         .handle = handle,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -16053,10 +15933,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile(st
         .pszPreviewFile = pszPreviewFile,
         .type = type,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -16082,10 +15960,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile
         .index = index,
         .pszPreviewFile = pszPreviewFile,
     };
-    params.pszPreviewFile = steamclient_dos_to_unix_path( pszPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile, &params );
-    steamclient_free_path( params.pszPreviewFile );
     return params._ret;
 }
 
@@ -16332,10 +16208,8 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameS
         .unWorkshopDepotID = unWorkshopDepotID,
         .pszFolder = pszFolder,
     };
-    params.pszFolder = steamclient_dos_to_unix_path( pszFolder, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer, &params );
-    steamclient_free_path( params.pszFolder );
     return params._ret;
 }
 

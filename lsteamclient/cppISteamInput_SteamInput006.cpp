@@ -21,7 +21,9 @@ NTSTATUS ISteamInput_SteamInput006_SetInputActionManifestFilePath( void *args )
 {
     struct ISteamInput_SteamInput006_SetInputActionManifestFilePath_params *params = (struct ISteamInput_SteamInput006_SetInputActionManifestFilePath_params *)args;
     struct u_ISteamInput_SteamInput006 *iface = (struct u_ISteamInput_SteamInput006 *)params->linux_side;
-    params->_ret = iface->SetInputActionManifestFilePath( params->pchInputActionManifestAbsolutePath );
+    char *u_pchInputActionManifestAbsolutePath = steamclient_dos_to_unix_path( params->pchInputActionManifestAbsolutePath, 0 );
+    params->_ret = iface->SetInputActionManifestFilePath( u_pchInputActionManifestAbsolutePath );
+    steamclient_free_path( u_pchInputActionManifestAbsolutePath );
     return 0;
 }
 

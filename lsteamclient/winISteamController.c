@@ -17,10 +17,8 @@ bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struc
         .linux_side = _this->u_iface,
         .pchAbsolutePathToControllerConfigVDF = pchAbsolutePathToControllerConfigVDF,
     };
-    params.pchAbsolutePathToControllerConfigVDF = steamclient_dos_to_unix_path( pchAbsolutePathToControllerConfigVDF, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init, &params );
-    steamclient_free_path( params.pchAbsolutePathToControllerConfigVDF );
     return params._ret;
 }
 

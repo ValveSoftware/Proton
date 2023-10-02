@@ -743,10 +743,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils005_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 
@@ -1087,10 +1085,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils006_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 
@@ -1456,10 +1452,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils007_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 
@@ -1841,10 +1835,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils008_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 
@@ -2255,10 +2247,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils009_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 
@@ -2750,10 +2740,8 @@ uint64_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_ste
         .linux_side = _this->u_iface,
         .szFileName = szFileName,
     };
-    params.szFileName = steamclient_dos_to_unix_path( szFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils010_CheckFileSignature, &params );
-    steamclient_free_path( params.szFileName );
     return params._ret;
 }
 

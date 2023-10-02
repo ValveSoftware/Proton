@@ -5,7 +5,9 @@ NTSTATUS ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init( void *args )
 {
     struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params *params = (struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params *)args;
     struct u_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION *iface = (struct u_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION *)params->linux_side;
-    params->_ret = iface->Init( params->pchAbsolutePathToControllerConfigVDF );
+    char *u_pchAbsolutePathToControllerConfigVDF = steamclient_dos_to_unix_path( params->pchAbsolutePathToControllerConfigVDF, 0 );
+    params->_ret = iface->Init( u_pchAbsolutePathToControllerConfigVDF );
+    steamclient_free_path( u_pchAbsolutePathToControllerConfigVDF );
     return 0;
 }
 

@@ -221,7 +221,11 @@ NTSTATUS ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWork
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile_params *params = (struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile_params *)args;
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *)params->linux_side;
-    params->_ret = iface->PublishWorkshopFile( params->pchFile, params->pchPreviewFile, params->nConsumerAppId, params->pchTitle, params->pchDescription, params->eVisibility, params->pTags, params->eWorkshopFileType );
+    char *u_pchFile = steamclient_dos_to_unix_path( params->pchFile, 0 );
+    char *u_pchPreviewFile = steamclient_dos_to_unix_path( params->pchPreviewFile, 0 );
+    params->_ret = iface->PublishWorkshopFile( u_pchFile, u_pchPreviewFile, params->nConsumerAppId, params->pchTitle, params->pchDescription, params->eVisibility, params->pTags, params->eWorkshopFileType );
+    steamclient_free_path( u_pchFile );
+    steamclient_free_path( u_pchPreviewFile );
     return 0;
 }
 
@@ -237,7 +241,9 @@ NTSTATUS ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePubli
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile_params *params = (struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile_params *)args;
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *)params->linux_side;
-    params->_ret = iface->UpdatePublishedFileFile( params->updateHandle, params->pchFile );
+    char *u_pchFile = steamclient_dos_to_unix_path( params->pchFile, 0 );
+    params->_ret = iface->UpdatePublishedFileFile( params->updateHandle, u_pchFile );
+    steamclient_free_path( u_pchFile );
     return 0;
 }
 
@@ -245,7 +251,9 @@ NTSTATUS ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePubli
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile_params *params = (struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile_params *)args;
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *)params->linux_side;
-    params->_ret = iface->UpdatePublishedFilePreviewFile( params->updateHandle, params->pchPreviewFile );
+    char *u_pchPreviewFile = steamclient_dos_to_unix_path( params->pchPreviewFile, 0 );
+    params->_ret = iface->UpdatePublishedFilePreviewFile( params->updateHandle, u_pchPreviewFile );
+    steamclient_free_path( u_pchPreviewFile );
     return 0;
 }
 
@@ -381,7 +389,9 @@ NTSTATUS ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVide
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo_params *params = (struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo_params *)args;
     struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *iface = (struct u_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *)params->linux_side;
-    params->_ret = iface->PublishVideo( params->eVideoProvider, params->pchVideoAccount, params->pchVideoIdentifier, params->pchPreviewFile, params->nConsumerAppId, params->pchTitle, params->pchDescription, params->eVisibility, params->pTags );
+    char *u_pchPreviewFile = steamclient_dos_to_unix_path( params->pchPreviewFile, 0 );
+    params->_ret = iface->PublishVideo( params->eVideoProvider, params->pchVideoAccount, params->pchVideoIdentifier, u_pchPreviewFile, params->nConsumerAppId, params->pchTitle, params->pchDescription, params->eVisibility, params->pTags );
+    steamclient_free_path( u_pchPreviewFile );
     return 0;
 }
 

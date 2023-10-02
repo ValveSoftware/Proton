@@ -205,7 +205,9 @@ NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails( void *args )
 {
     struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails_params *)args;
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *)params->linux_side;
-    params->_ret = iface->GetFileDetails( params->pszFileName );
+    char *u_pszFileName = steamclient_dos_to_unix_path( params->pszFileName, 0 );
+    params->_ret = iface->GetFileDetails( u_pszFileName );
+    steamclient_free_path( u_pszFileName );
     return 0;
 }
 

@@ -95,10 +95,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Load
         .pchURL = pchURL,
         .pchPostData = pchPostData,
     };
-    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL, &params );
-    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(struct w_steam_iface *_this, uint32_t unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
@@ -422,10 +420,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_File
         .unBrowserHandle = unBrowserHandle,
         .pchSelectedFiles = pchSelectedFiles,
     };
-    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse, &params );
-    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
@@ -573,10 +569,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Load
         .pchURL = pchURL,
         .pchPostData = pchPostData,
     };
-    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL, &params );
-    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(struct w_steam_iface *_this, uint32_t unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
@@ -931,10 +925,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_File
         .unBrowserHandle = unBrowserHandle,
         .pchSelectedFiles = pchSelectedFiles,
     };
-    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse, &params );
-    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
@@ -1085,10 +1077,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Load
         .pchURL = pchURL,
         .pchPostData = pchPostData,
     };
-    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL, &params );
-    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(struct w_steam_iface *_this, uint32_t unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
@@ -1455,10 +1445,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_File
         .unBrowserHandle = unBrowserHandle,
         .pchSelectedFiles = pchSelectedFiles,
     };
-    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse, &params );
-    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
@@ -1611,10 +1599,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Load
         .pchURL = pchURL,
         .pchPostData = pchPostData,
     };
-    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL, &params );
-    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(struct w_steam_iface *_this, uint32_t unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
@@ -1993,10 +1979,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_File
         .unBrowserHandle = unBrowserHandle,
         .pchSelectedFiles = pchSelectedFiles,
     };
-    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse, &params );
-    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
@@ -2151,10 +2135,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Load
         .pchURL = pchURL,
         .pchPostData = pchPostData,
     };
-    params.pchURL = steamclient_dos_to_unix_path( pchURL, 1 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL, &params );
-    steamclient_free_path( params.pchURL );
 }
 
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(struct w_steam_iface *_this, uint32_t unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
@@ -2545,10 +2527,8 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_File
         .unBrowserHandle = unBrowserHandle,
         .pchSelectedFiles = pchSelectedFiles,
     };
-    params.pchSelectedFiles = steamclient_dos_to_unix_path_array( pchSelectedFiles );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse, &params );
-    steamclient_free_path_array( params.pchSelectedFiles );
 }
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;

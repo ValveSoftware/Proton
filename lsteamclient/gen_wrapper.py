@@ -931,6 +931,14 @@ def handle_method_cpp(method, classname, out):
         if underlying_typename(param) not in SIZED_STRUCTS | EXEMPT_STRUCTS:
             print('Warning:', underlying_typename(param), name, 'following', prev_name)
 
+    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
+
+    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
+        if conv['array']:
+            out(f'    const char **u_{name} = steamclient_dos_to_unix_path_array( params->{name} );\n')
+        else:
+            out(f'    char *u_{name} = steamclient_dos_to_unix_path( params->{name}, {int(conv["url"])} );\n')
+
     need_output = {}
 
     for name, param in sorted(need_convert.items()):
@@ -969,6 +977,7 @@ def handle_method_cpp(method, classname, out):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}u_{name}"
         if name in manual_convert: return f"u_{name}"
+        if name in path_conv_wtou: return f"u_{name}"
         if name in need_wrapper: return f"u_{name}"
         return f'params->{name}'
 
@@ -985,6 +994,12 @@ def handle_method_cpp(method, classname, out):
 
     for name, param in sorted(need_output.items()):
         out(f'    *params->{name} = u_{name};\n')
+
+    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
+        if conv["array"]:
+            out(f'    steamclient_free_path_array( u_{name} );\n')
+        else:
+            out(f'    steamclient_free_path( u_{name} );\n')
 
     out(u'    return 0;\n')
     out(u'}\n\n')
@@ -1032,13 +1047,6 @@ def handle_method_c(klass, method, winclassname, out):
     out(u'    };\n')
 
     path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
-    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
-
-    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
-        if conv['array']:
-            out(f'    params.{name} = steamclient_dos_to_unix_path_array( {name} );\n')
-        else:
-            out(f'    params.{name} = steamclient_dos_to_unix_path( {name}, {int(conv["url"])} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -1056,12 +1064,6 @@ def handle_method_c(klass, method, winclassname, out):
         if "ret_size" in path_conv_utow:
             out(u'params._ret = ')
         out(f'steamclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]}, {int(conv["url"])} );\n')
-
-    for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
-        if conv["array"]:
-            out(f'    steamclient_free_path_array( params.{name} );\n')
-        else:
-            out(f'    steamclient_free_path( params.{name} );\n')
 
     if not returns_void:
         out(u'    return params._ret;\n')

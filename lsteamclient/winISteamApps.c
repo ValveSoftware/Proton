@@ -1798,10 +1798,8 @@ uint64_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(
         .linux_side = _this->u_iface,
         .pszFileName = pszFileName,
     };
-    params.pszFileName = steamclient_dos_to_unix_path( pszFileName, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails, &params );
-    steamclient_free_path( params.pszFileName );
     return params._ret;
 }
 

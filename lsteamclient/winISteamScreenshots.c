@@ -35,12 +35,8 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_A
         .nWidth = nWidth,
         .nHeight = nHeight,
     };
-    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary, &params );
-    steamclient_free_path( params.pchFilename );
-    steamclient_free_path( params.pchThumbnailFilename );
     return params._ret;
 }
 
@@ -148,12 +144,8 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_A
         .nWidth = nWidth,
         .nHeight = nHeight,
     };
-    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary, &params );
-    steamclient_free_path( params.pchFilename );
-    steamclient_free_path( params.pchThumbnailFilename );
     return params._ret;
 }
 
@@ -277,12 +269,8 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_A
         .nWidth = nWidth,
         .nHeight = nHeight,
     };
-    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    params.pchThumbnailFilename = steamclient_dos_to_unix_path( pchThumbnailFilename, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary, &params );
-    steamclient_free_path( params.pchFilename );
-    steamclient_free_path( params.pchThumbnailFilename );
     return params._ret;
 }
 
@@ -366,12 +354,8 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_A
         .pchFilename = pchFilename,
         .pchVRFilename = pchVRFilename,
     };
-    params.pchFilename = steamclient_dos_to_unix_path( pchFilename, 0 );
-    params.pchVRFilename = steamclient_dos_to_unix_path( pchVRFilename, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary, &params );
-    steamclient_free_path( params.pchFilename );
-    steamclient_free_path( params.pchVRFilename );
     return params._ret;
 }
 
