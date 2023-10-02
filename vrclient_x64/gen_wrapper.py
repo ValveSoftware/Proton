@@ -514,7 +514,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
     path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.spelling}_{method.spelling}', {})
 
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
-        out(f'    const char *u_{name} = vrclient_dos_to_unix_path( {name} );\n')
+        out(f'    params.{name} = vrclient_dos_to_unix_path( {name} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -530,7 +530,7 @@ def handle_method_c(klass, method, winclassname, cppname, out):
         out(f'vrclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]} );\n')
 
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
-        out(f'    vrclient_free_path( u_{name} );\n')
+        out(f'    vrclient_free_path( params.{name} );\n')
 
     if not returns_void:
         out(u'    return params._ret;\n')

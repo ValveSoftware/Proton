@@ -316,10 +316,10 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_if
         .linux_side = _this->u_iface,
         .a = a,
     };
-    const char *u_a = vrclient_dos_to_unix_path( a );
+    params.a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc23( &params );
-    vrclient_free_path( u_a );
+    vrclient_free_path( params.a );
     return params._ret;
 }
 
@@ -364,10 +364,10 @@ EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(str
         .linux_side = _this->u_iface,
         .a = a,
     };
-    const char *u_a = vrclient_dos_to_unix_path( a );
+    params.a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
     cppIVRControlPanel_IVRControlPanel_006_undoc27( &params );
-    vrclient_free_path( u_a );
+    vrclient_free_path( params.a );
     return params._ret;
 }
 
