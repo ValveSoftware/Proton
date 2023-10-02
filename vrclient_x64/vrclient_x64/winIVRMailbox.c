@@ -59,18 +59,16 @@ uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_t
 
 extern vtable_ptr winIVRMailbox_IVRMailbox_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRMailbox_IVRMailbox_001, 0, ".?AVIVRMailbox@@")
+
+__ASM_BLOCK_BEGIN(winIVRMailbox_IVRMailbox_001_vtables)
     __ASM_VTABLE(winIVRMailbox_IVRMailbox_001,
         VTABLE_ADD_FUNC(winIVRMailbox_IVRMailbox_001_undoc1)
         VTABLE_ADD_FUNC(winIVRMailbox_IVRMailbox_001_undoc2)
         VTABLE_ADD_FUNC(winIVRMailbox_IVRMailbox_001_undoc3)
         VTABLE_ADD_FUNC(winIVRMailbox_IVRMailbox_001_undoc4)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRMailbox_IVRMailbox_001(void *u_iface)
 {
@@ -114,3 +112,9 @@ void destroy_winIVRMailbox_IVRMailbox_001_FnTable(struct w_steam_iface *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRMailbox_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRMailbox_IVRMailbox_001_rtti( base );
+#endif /* __x86_64__ */
+}

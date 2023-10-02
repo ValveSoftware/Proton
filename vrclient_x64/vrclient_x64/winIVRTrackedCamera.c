@@ -265,9 +265,9 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(str
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_001, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_001_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_001,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription)
@@ -288,9 +288,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_001(void *u_iface)
 {
@@ -475,9 +473,9 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrame
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_002, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_002_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_002,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera)
@@ -488,9 +486,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_002(void *u_iface)
 {
@@ -731,9 +727,9 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamT
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_003, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_003_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_003,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera)
@@ -748,9 +744,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_003(void *u_iface)
 {
@@ -995,9 +989,9 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamT
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_004, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_004_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_004,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera)
@@ -1012,9 +1006,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_004(void *u_iface)
 {
@@ -1261,9 +1253,9 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamT
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_005, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_005_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_005,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_005_HasCamera)
@@ -1278,9 +1270,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_005(void *u_iface)
 {
@@ -1551,9 +1541,9 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSp
 
 extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRTrackedCamera_IVRTrackedCamera_006, 0, ".?AVIVRTrackedCamera@@")
+
+__ASM_BLOCK_BEGIN(winIVRTrackedCamera_IVRTrackedCamera_006_vtables)
     __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_006,
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_006_HasCamera)
@@ -1570,9 +1560,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_006_SetCameraTrackingSpace)
         VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRTrackedCamera_IVRTrackedCamera_006(void *u_iface)
 {
@@ -1626,3 +1614,14 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_006_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRTrackedCamera_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRTrackedCamera_IVRTrackedCamera_001_rtti( base );
+    init_winIVRTrackedCamera_IVRTrackedCamera_002_rtti( base );
+    init_winIVRTrackedCamera_IVRTrackedCamera_003_rtti( base );
+    init_winIVRTrackedCamera_IVRTrackedCamera_004_rtti( base );
+    init_winIVRTrackedCamera_IVRTrackedCamera_005_rtti( base );
+    init_winIVRTrackedCamera_IVRTrackedCamera_006_rtti( base );
+#endif /* __x86_64__ */
+}

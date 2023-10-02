@@ -931,17 +931,17 @@ def handle_class(klass):
                 continue
             handle_method_c(klass, method, winclassname, cppname, out)
 
-        out(f'extern vtable_ptr {winclassname}_vtable;\n\n')
-        out(u'#ifndef __GNUC__\n')
-        out(u'void __asm_dummy_vtables(void) {\n')
-        out(u'#endif\n')
+        out(f'extern vtable_ptr {winclassname}_vtable;\n')
+        out(u'\n')
+        out(f'DEFINE_RTTI_DATA0({winclassname}, 0, \".?AV{klass.name}@@\")\n')
+        out(u'\n')
+        out(f'__ASM_BLOCK_BEGIN({winclassname}_vtables)\n')
         out(f'    __ASM_VTABLE({winclassname},\n')
         for method in sorted(klass.methods, key=lambda x: (x._index, -x._override)):
             out(f'        VTABLE_ADD_FUNC({winclassname}_{method.name})\n')
         out(u'    );\n')
-        out(u'#ifndef __GNUC__\n')
-        out(u'}\n')
-        out(u'#endif\n\n')
+        out(u'__ASM_BLOCK_END\n')
+        out(u'\n')
         out(f'struct w_steam_iface *create_{winclassname}(void *u_iface)\n')
         out(u'{\n')
         out(u'    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));\n')
@@ -1380,6 +1380,25 @@ for _, klass in sorted(all_classes.items()):
 generate_flatapi_c()
 
 
+for name in sorted(set(k.name for k in all_classes.values())):
+    with open(f"vrclient_x64/win{name}.c", "a") as file:
+        out = file.write
+        out(f'void init_win{name}_rtti( char *base )\n')
+        out(u'{\n')
+        out(u'#ifdef __x86_64__\n')
+
+for _, klass in sorted(all_classes.items()):
+    with open(f"vrclient_x64/win{klass.name}.c", "a") as file:
+        out = file.write
+        out(f'    init_win{klass.full_name}_rtti( base );\n')
+
+for name in sorted(set(k.name for k in all_classes.values())):
+    with open(f"vrclient_x64/win{name}.c", "a") as file:
+        out = file.write
+        out(u'#endif /* __x86_64__ */\n')
+        out(u'}\n')
+
+
 with open("vrclient_x64/vrclient_generated.h", "w") as file:
     out = file.write
 
@@ -1428,6 +1447,15 @@ with open("vrclient_x64/vrclient_generated.c", "w") as file:
     out(u'        if (!strcmp( iface_version, destructors[i].iface_version ))\n')
     out(u'            return destructors[i].dtor;\n')
     out(u'    return NULL;\n')
+    out(u'}\n\n')
+
+    for name in sorted(set(k.name for k in all_classes.values())):
+        out(f'extern void init_win{name}_rtti( char * );\n')
+    out(u'\n')
+    out(u'void init_rtti( char *base )\n')
+    out(u'{\n')
+    for name in sorted(set(k.name for k in all_classes.values())):
+        out(f'    init_win{name}_rtti( base );\n')
     out(u'}\n')
 
 

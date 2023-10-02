@@ -79,6 +79,8 @@ extern iface_constructor find_iface_constructor( const char *iface_version ) DEC
 typedef void (*iface_destructor)( struct w_steam_iface * );
 extern iface_destructor find_iface_destructor( const char *iface_version ) DECLSPEC_HIDDEN;
 
+extern void init_rtti( char *base ) DECLSPEC_HIDDEN;
+
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 
 struct generic_interface
