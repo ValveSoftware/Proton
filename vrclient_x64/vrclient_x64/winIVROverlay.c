@@ -564,9 +564,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess(st
 
 extern vtable_ptr winIVROverlay_IVROverlay_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_001, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_001_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_001,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_001_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_001_CreateOverlay)
@@ -609,9 +609,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_001(void *u_iface)
 {
@@ -1280,9 +1278,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess
 
 extern vtable_ptr winIVROverlay_IVROverlay_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_002, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_002_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_002,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_002_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_002_CreateOverlay)
@@ -1327,9 +1325,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_002(void *u_iface)
 {
@@ -2061,9 +2057,9 @@ void __thiscall winIVROverlay_IVROverlay_003_ShowDashboard(struct w_steam_iface 
 
 extern vtable_ptr winIVROverlay_IVROverlay_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_003, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_003_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_003,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_003_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_003_CreateOverlay)
@@ -2112,9 +2108,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_003_ShowDashboard)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_003(void *u_iface)
 {
@@ -2880,9 +2874,9 @@ void __thiscall winIVROverlay_IVROverlay_004_ShowDashboard(struct w_steam_iface 
 
 extern vtable_ptr winIVROverlay_IVROverlay_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_004, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_004_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_004,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_004_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_004_CreateOverlay)
@@ -2933,9 +2927,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_004_ShowDashboard)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_004(void *u_iface)
 {
@@ -3759,9 +3751,9 @@ void __thiscall winIVROverlay_IVROverlay_005_HideKeyboard(struct w_steam_iface *
 
 extern vtable_ptr winIVROverlay_IVROverlay_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_005, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_005_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_005,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_005_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_005_CreateOverlay)
@@ -3816,9 +3808,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_005_GetKeyboardText)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_005_HideKeyboard)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_005(void *u_iface)
 {
@@ -4721,9 +4711,9 @@ void __thiscall winIVROverlay_IVROverlay_007_HideKeyboard(struct w_steam_iface *
 
 extern vtable_ptr winIVROverlay_IVROverlay_007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_007, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_007_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_007,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_007_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_007_CreateOverlay)
@@ -4783,9 +4773,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_007_GetKeyboardText)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_007_HideKeyboard)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_007(void *u_iface)
 {
@@ -5735,9 +5723,9 @@ void __thiscall winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay(struc
 
 extern vtable_ptr winIVROverlay_IVROverlay_008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_008, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_008_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_008,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_008_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_008_CreateOverlay)
@@ -5800,9 +5788,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_008_SetKeyboardTransformAbsolute)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_008(void *u_iface)
 {
@@ -6799,9 +6785,9 @@ void __thiscall winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay(struc
 
 extern vtable_ptr winIVROverlay_IVROverlay_010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_010, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_010_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_010,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_010_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_010_CreateOverlay)
@@ -6867,9 +6853,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_010_SetKeyboardTransformAbsolute)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_010(void *u_iface)
 {
@@ -7930,9 +7914,9 @@ void __thiscall winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay(struc
 
 extern vtable_ptr winIVROverlay_IVROverlay_011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_011, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_011_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_011,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_011_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_011_CreateOverlay)
@@ -8002,9 +7986,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_011_SetKeyboardTransformAbsolute)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_011(void *u_iface)
 {
@@ -9084,9 +9066,9 @@ void __thiscall winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay(struc
 
 extern vtable_ptr winIVROverlay_IVROverlay_012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_012, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_012_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_012,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_012_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_012_CreateOverlay)
@@ -9157,9 +9139,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_012_SetKeyboardTransformAbsolute)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_012(void *u_iface)
 {
@@ -10312,9 +10292,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask(stru
 
 extern vtable_ptr winIVROverlay_IVROverlay_013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_013, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_013_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_013,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_013_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_013_CreateOverlay)
@@ -10390,9 +10370,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_013(void *u_iface)
 {
@@ -11583,9 +11561,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowMessageOverlay(struct w_ste
 
 extern vtable_ptr winIVROverlay_IVROverlay_014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_014, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_014_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_014,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_014_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_014_CreateOverlay)
@@ -11663,9 +11641,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_014_GetOverlayFlags)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_014_ShowMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_014(void *u_iface)
 {
@@ -12945,9 +12921,9 @@ void __thiscall winIVROverlay_IVROverlay_016_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_016, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_016_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_016,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_016_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_016_CreateOverlay)
@@ -13031,9 +13007,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_016_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_016_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_016(void *u_iface)
 {
@@ -14351,9 +14325,9 @@ void __thiscall winIVROverlay_IVROverlay_017_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_017, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_017_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_017,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_017_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_017_CreateOverlay)
@@ -14439,9 +14413,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_017_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_017_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_017(void *u_iface)
 {
@@ -15747,9 +15719,9 @@ void __thiscall winIVROverlay_IVROverlay_018_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_018_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_018, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_018_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_018,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_018_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_018_CreateOverlay)
@@ -15834,9 +15806,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_018_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_018_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_018(void *u_iface)
 {
@@ -17141,9 +17111,9 @@ void __thiscall winIVROverlay_IVROverlay_019_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_019_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_019, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_019_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_019,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_019_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_019_CreateOverlay)
@@ -17228,9 +17198,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_019_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_019_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_019(void *u_iface)
 {
@@ -18510,9 +18478,9 @@ void __thiscall winIVROverlay_IVROverlay_020_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_020_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_020, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_020_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_020,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_CreateOverlay)
@@ -18595,9 +18563,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_020(void *u_iface)
 {
@@ -19819,9 +19785,9 @@ void __thiscall winIVROverlay_IVROverlay_021_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_021_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_021, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_021_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_021,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_CreateOverlay)
@@ -19900,9 +19866,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_021(void *u_iface)
 {
@@ -21205,9 +21169,9 @@ void __thiscall winIVROverlay_IVROverlay_022_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_022_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_022, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_022_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_022,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_022_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_022_CreateOverlay)
@@ -21292,9 +21256,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_022_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_022_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_022(void *u_iface)
 {
@@ -22539,9 +22501,9 @@ void __thiscall winIVROverlay_IVROverlay_024_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_024_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_024, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_024_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_024,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_024_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_024_CreateOverlay)
@@ -22622,9 +22584,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_024_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_024_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_024(void *u_iface)
 {
@@ -23882,9 +23842,9 @@ void __thiscall winIVROverlay_IVROverlay_025_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_025_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_025, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_025_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_025,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_025_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_025_CreateOverlay)
@@ -23966,9 +23926,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_025_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_025_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_025(void *u_iface)
 {
@@ -25268,9 +25226,9 @@ void __thiscall winIVROverlay_IVROverlay_026_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_026_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_026, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_026_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_026,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_026_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_026_CreateOverlay)
@@ -25355,9 +25313,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_026_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_026_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_026(void *u_iface)
 {
@@ -26630,9 +26586,9 @@ void __thiscall winIVROverlay_IVROverlay_027_CloseMessageOverlay(struct w_steam_
 
 extern vtable_ptr winIVROverlay_IVROverlay_027_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlay_IVROverlay_027, 0, ".?AVIVROverlay@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlay_IVROverlay_027_vtables)
     __ASM_VTABLE(winIVROverlay_IVROverlay_027,
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_027_FindOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_027_CreateOverlay)
@@ -26715,9 +26671,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_027_ShowMessageOverlay)
         VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_027_CloseMessageOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlay_IVROverlay_027(void *u_iface)
 {
@@ -26837,3 +26791,31 @@ void destroy_winIVROverlay_IVROverlay_027_FnTable(struct w_steam_iface *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVROverlay_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVROverlay_IVROverlay_001_rtti( base );
+    init_winIVROverlay_IVROverlay_002_rtti( base );
+    init_winIVROverlay_IVROverlay_003_rtti( base );
+    init_winIVROverlay_IVROverlay_004_rtti( base );
+    init_winIVROverlay_IVROverlay_005_rtti( base );
+    init_winIVROverlay_IVROverlay_007_rtti( base );
+    init_winIVROverlay_IVROverlay_008_rtti( base );
+    init_winIVROverlay_IVROverlay_010_rtti( base );
+    init_winIVROverlay_IVROverlay_011_rtti( base );
+    init_winIVROverlay_IVROverlay_012_rtti( base );
+    init_winIVROverlay_IVROverlay_013_rtti( base );
+    init_winIVROverlay_IVROverlay_014_rtti( base );
+    init_winIVROverlay_IVROverlay_016_rtti( base );
+    init_winIVROverlay_IVROverlay_017_rtti( base );
+    init_winIVROverlay_IVROverlay_018_rtti( base );
+    init_winIVROverlay_IVROverlay_019_rtti( base );
+    init_winIVROverlay_IVROverlay_020_rtti( base );
+    init_winIVROverlay_IVROverlay_021_rtti( base );
+    init_winIVROverlay_IVROverlay_022_rtti( base );
+    init_winIVROverlay_IVROverlay_024_rtti( base );
+    init_winIVROverlay_IVROverlay_025_rtti( base );
+    init_winIVROverlay_IVROverlay_026_rtti( base );
+    init_winIVROverlay_IVROverlay_027_rtti( base );
+#endif /* __x86_64__ */
+}

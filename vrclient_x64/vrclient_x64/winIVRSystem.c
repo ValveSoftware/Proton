@@ -536,9 +536,9 @@ bool __thiscall winIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess(
 
 extern vtable_ptr winIVRSystem_IVRSystem_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_003, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_003_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_003,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_003_GetWindowBounds)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_003_GetRecommendedRenderTargetSize)
@@ -579,9 +579,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_003_ReleaseInputFocus)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_003(void *u_iface)
 {
@@ -1160,9 +1158,9 @@ uint32_t __thiscall winIVRSystem_IVRSystem_004_DriverDebugRequest(struct w_steam
 
 extern vtable_ptr winIVRSystem_IVRSystem_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_004, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_004_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_004,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_004_GetWindowBounds)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_004_GetRecommendedRenderTargetSize)
@@ -1201,9 +1199,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_004_IsInputFocusCapturedByAnotherProcess)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_004_DriverDebugRequest)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_004(void *u_iface)
 {
@@ -1796,9 +1792,9 @@ uint32_t __thiscall winIVRSystem_IVRSystem_005_DriverDebugRequest(struct w_steam
 
 extern vtable_ptr winIVRSystem_IVRSystem_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_005, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_005_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_005,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_005_GetWindowBounds)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize)
@@ -1838,9 +1834,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_005_DriverDebugRequest)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_005(void *u_iface)
 {
@@ -2498,9 +2492,9 @@ bool __thiscall winIVRSystem_IVRSystem_006_SetDisplayVisibility(struct w_steam_i
 
 extern vtable_ptr winIVRSystem_IVRSystem_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_006, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_006_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_006,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_006_GetWindowBounds)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_006_GetRecommendedRenderTargetSize)
@@ -2545,9 +2539,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_006_IsDisplayOnDesktop)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_006_SetDisplayVisibility)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_006(void *u_iface)
 {
@@ -3202,9 +3194,9 @@ void __thiscall winIVRSystem_IVRSystem_009_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_009, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_009_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_009,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_009_GetProjectionMatrix)
@@ -3249,9 +3241,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_009_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_009_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_009(void *u_iface)
 {
@@ -3956,9 +3946,9 @@ void __thiscall winIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelCha
 
 extern vtable_ptr winIVRSystem_IVRSystem_010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_010, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_010_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_010,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_010_GetProjectionMatrix)
@@ -4007,9 +3997,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_010_PerformanceTestEnableCapture)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_010(void *u_iface)
 {
@@ -4720,9 +4708,9 @@ void __thiscall winIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelCha
 
 extern vtable_ptr winIVRSystem_IVRSystem_011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_011, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_011_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_011,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_011_GetProjectionMatrix)
@@ -4771,9 +4759,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_011_PerformanceTestEnableCapture)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_011(void *u_iface)
 {
@@ -5460,9 +5446,9 @@ void __thiscall winIVRSystem_IVRSystem_012_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_012, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_012_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_012,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_012_GetProjectionMatrix)
@@ -5509,9 +5495,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_012_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_012_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_012(void *u_iface)
 {
@@ -6199,9 +6183,9 @@ void __thiscall winIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_014, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_014_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_014,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_014_GetProjectionMatrix)
@@ -6248,9 +6232,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_014_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_014(void *u_iface)
 {
@@ -6937,9 +6919,9 @@ void __thiscall winIVRSystem_IVRSystem_015_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_015, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_015_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_015,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_015_GetProjectionMatrix)
@@ -6986,9 +6968,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_015_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_015_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_015(void *u_iface)
 {
@@ -7688,9 +7668,9 @@ void __thiscall winIVRSystem_IVRSystem_016_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_016, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_016_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_016,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_016_GetProjectionMatrix)
@@ -7738,9 +7718,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_016_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_016_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_016(void *u_iface)
 {
@@ -8431,9 +8409,9 @@ void __thiscall winIVRSystem_IVRSystem_017_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_017, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_017_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_017,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_017_GetProjectionMatrix)
@@ -8481,9 +8459,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_017_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_017_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_017(void *u_iface)
 {
@@ -9205,9 +9181,9 @@ void __thiscall winIVRSystem_IVRSystem_019_AcknowledgeQuit_UserPrompt(struct w_s
 
 extern vtable_ptr winIVRSystem_IVRSystem_019_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_019, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_019_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_019,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_019_GetProjectionMatrix)
@@ -9257,9 +9233,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_019_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_019_AcknowledgeQuit_UserPrompt)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_019(void *u_iface)
 {
@@ -9993,9 +9967,9 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetRuntimeVersion(struct w_st
 
 extern vtable_ptr winIVRSystem_IVRSystem_020_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_020, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_020_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_020,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetProjectionMatrix)
@@ -10046,9 +10020,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetAppContainerFilePaths)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetRuntimeVersion)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_020(void *u_iface)
 {
@@ -10772,9 +10744,9 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetRuntimeVersion(struct w_st
 
 extern vtable_ptr winIVRSystem_IVRSystem_021_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_021, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_021_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_021,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_021_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_021_GetProjectionMatrix)
@@ -10824,9 +10796,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_021_GetAppContainerFilePaths)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_021_GetRuntimeVersion)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_021(void *u_iface)
 {
@@ -11538,9 +11508,9 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetRuntimeVersion(struct w_st
 
 extern vtable_ptr winIVRSystem_IVRSystem_022_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSystem_IVRSystem_022, 0, ".?AVIVRSystem@@")
+
+__ASM_BLOCK_BEGIN(winIVRSystem_IVRSystem_022_vtables)
     __ASM_VTABLE(winIVRSystem_IVRSystem_022,
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_022_GetRecommendedRenderTargetSize)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_022_GetProjectionMatrix)
@@ -11589,9 +11559,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_022_GetAppContainerFilePaths)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_022_GetRuntimeVersion)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSystem_IVRSystem_022(void *u_iface)
 {
@@ -11677,3 +11645,24 @@ void destroy_winIVRSystem_IVRSystem_022_FnTable(struct w_steam_iface *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRSystem_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRSystem_IVRSystem_003_rtti( base );
+    init_winIVRSystem_IVRSystem_004_rtti( base );
+    init_winIVRSystem_IVRSystem_005_rtti( base );
+    init_winIVRSystem_IVRSystem_006_rtti( base );
+    init_winIVRSystem_IVRSystem_009_rtti( base );
+    init_winIVRSystem_IVRSystem_010_rtti( base );
+    init_winIVRSystem_IVRSystem_011_rtti( base );
+    init_winIVRSystem_IVRSystem_012_rtti( base );
+    init_winIVRSystem_IVRSystem_014_rtti( base );
+    init_winIVRSystem_IVRSystem_015_rtti( base );
+    init_winIVRSystem_IVRSystem_016_rtti( base );
+    init_winIVRSystem_IVRSystem_017_rtti( base );
+    init_winIVRSystem_IVRSystem_019_rtti( base );
+    init_winIVRSystem_IVRSystem_020_rtti( base );
+    init_winIVRSystem_IVRSystem_021_rtti( base );
+    init_winIVRSystem_IVRSystem_022_rtti( base );
+#endif /* __x86_64__ */
+}

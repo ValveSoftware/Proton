@@ -220,9 +220,9 @@ bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo(st
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperoneSetup_IVRChaperoneSetup_004, 0, ".?AVIVRChaperoneSetup@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperoneSetup_IVRChaperoneSetup_004_vtables)
     __ASM_VTABLE(winIVRChaperoneSetup_IVRChaperoneSetup_004,
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy)
@@ -241,9 +241,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperoneSetup_IVRChaperoneSetup_004(void *u_iface)
 {
@@ -567,9 +565,9 @@ bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWor
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperoneSetup_IVRChaperoneSetup_005, 0, ".?AVIVRChaperoneSetup@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperoneSetup_IVRChaperoneSetup_005_vtables)
     __ASM_VTABLE(winIVRChaperoneSetup_IVRChaperoneSetup_005,
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy)
@@ -592,9 +590,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperoneSetup_IVRChaperoneSetup_005(void *u_iface)
 {
@@ -913,9 +909,9 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(str
 
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperoneSetup_IVRChaperoneSetup_006, 0, ".?AVIVRChaperoneSetup@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperoneSetup_IVRChaperoneSetup_006_vtables)
     __ASM_VTABLE(winIVRChaperoneSetup_IVRChaperoneSetup_006,
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy)
@@ -938,9 +934,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperoneSetup_IVRChaperoneSetup_006(void *u_iface)
 {
@@ -1000,3 +994,11 @@ void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_006_FnTable(struct w_steam_i
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRChaperoneSetup_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRChaperoneSetup_IVRChaperoneSetup_004_rtti( base );
+    init_winIVRChaperoneSetup_IVRChaperoneSetup_005_rtti( base );
+    init_winIVRChaperoneSetup_IVRChaperoneSetup_006_rtti( base );
+#endif /* __x86_64__ */
+}

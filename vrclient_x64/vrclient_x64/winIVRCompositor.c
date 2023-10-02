@@ -325,9 +325,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_005_GetTrackingSpace(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_005, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_005_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_005,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_005_GetLastError)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_005_SetVSync)
@@ -354,9 +354,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_005_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_005_GetTrackingSpace)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_005(void *u_iface)
 {
@@ -679,9 +677,9 @@ bool __thiscall winIVRCompositor_IVRCompositor_006_CanRenderScene(struct w_steam
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_006, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_006_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_006,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_006_GetLastError)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_006_SetVSync)
@@ -704,9 +702,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_006_GetCurrentSceneFocusProcess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_006_CanRenderScene)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_006(void *u_iface)
 {
@@ -1014,9 +1010,9 @@ bool __thiscall winIVRCompositor_IVRCompositor_007_CanRenderScene(struct w_steam
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_007, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_007_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_007,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_007_GetLastError)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_007_SetVSync)
@@ -1038,9 +1034,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_007_GetCurrentSceneFocusProcess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_007_CanRenderScene)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_007(void *u_iface)
 {
@@ -1435,9 +1429,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_008_GetLastFrameRenderer(stru
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_008, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_008_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_008,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_008_GetLastError)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_008_SetVSync)
@@ -1466,9 +1460,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_008_GetFrameTimeRemaining)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_008_GetLastFrameRenderer)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_008(void *u_iface)
 {
@@ -1808,9 +1800,9 @@ void __thiscall winIVRCompositor_IVRCompositor_009_CompositorDumpImages(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_009, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_009_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_009,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_009_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_009_GetTrackingSpace)
@@ -1837,9 +1829,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_009_IsMirrorWindowVisible)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_009_CompositorDumpImages)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_009(void *u_iface)
 {
@@ -2177,9 +2167,9 @@ void __thiscall winIVRCompositor_IVRCompositor_010_CompositorDumpImages(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_010, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_010_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_010,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_010_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_010_GetTrackingSpace)
@@ -2206,9 +2196,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_010_IsMirrorWindowVisible)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_010_CompositorDumpImages)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_010(void *u_iface)
 {
@@ -2546,9 +2534,9 @@ void __thiscall winIVRCompositor_IVRCompositor_011_CompositorDumpImages(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_011, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_011_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_011,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_011_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_011_GetTrackingSpace)
@@ -2575,9 +2563,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_011_CompositorDumpImages)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_011(void *u_iface)
 {
@@ -2942,9 +2928,9 @@ bool __thiscall winIVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResourc
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_012, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_012_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_012,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_012_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_012_GetTrackingSpace)
@@ -2973,9 +2959,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_012_CompositorDumpImages)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_012(void *u_iface)
 {
@@ -3354,9 +3338,9 @@ void __thiscall winIVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionO
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_013, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_013_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_013,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_013_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_013_GetTrackingSpace)
@@ -3386,9 +3370,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_013(void *u_iface)
 {
@@ -3791,9 +3773,9 @@ void __thiscall winIVRCompositor_IVRCompositor_014_SuspendRendering(struct w_ste
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_014, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_014_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_014,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_014_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_014_GetTrackingSpace)
@@ -3825,9 +3807,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_014_ForceReconnectProcess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_014_SuspendRendering)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_014(void *u_iface)
 {
@@ -4340,9 +4320,9 @@ void __thiscall winIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAcces
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_015, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_015_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_015,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_015_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_015_GetTrackingSpace)
@@ -4382,9 +4362,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAccess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_015(void *u_iface)
 {
@@ -4865,9 +4843,9 @@ void __thiscall winIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAcces
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_016, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_016_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_016,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_016_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_016_GetTrackingSpace)
@@ -4905,9 +4883,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_016(void *u_iface)
 {
@@ -5400,9 +5376,9 @@ void __thiscall winIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAcces
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_017, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_017_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_017,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_017_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_017_GetTrackingSpace)
@@ -5441,9 +5417,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_017(void *u_iface)
 {
@@ -5963,9 +5937,9 @@ void __thiscall winIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAcces
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_018_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_018, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_018_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_018,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_018_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_018_GetTrackingSpace)
@@ -6006,9 +5980,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_018(void *u_iface)
 {
@@ -6547,9 +6519,9 @@ extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExt
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_019_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_019, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_019_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_019,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_019_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_019_GetTrackingSpace)
@@ -6592,9 +6564,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensionsRequired)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_019(void *u_iface)
 {
@@ -7147,9 +7117,9 @@ extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExt
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_020_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_020, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_020_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_020,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_020_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_020_GetTrackingSpace)
@@ -7193,9 +7163,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_020_GetVulkanInstanceExtensionsRequired)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_020(void *u_iface)
 {
@@ -7773,9 +7741,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_021_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_021, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_021_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_021,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_021_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_021_GetTrackingSpace)
@@ -7821,9 +7789,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_021(void *u_iface)
 {
@@ -8439,9 +8405,9 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_022_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_022, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_022_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_022,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_GetTrackingSpace)
@@ -8490,9 +8456,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_022(void *u_iface)
 {
@@ -9140,9 +9104,9 @@ void __thiscall winIVRCompositor_IVRCompositor_024_ClearStageOverride(struct w_s
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_024_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_024, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_024_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_024,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_024_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_024_GetTrackingSpace)
@@ -9193,9 +9157,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_024_SetStageOverride_Async)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_024_ClearStageOverride)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_024(void *u_iface)
 {
@@ -9888,9 +9850,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetPosesForFrame(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_026_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_026, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_026_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_026,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_026_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_026_GetTrackingSpace)
@@ -9944,9 +9906,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_026_GetLastPosePredictionIDs)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_026_GetPosesForFrame)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_026(void *u_iface)
 {
@@ -10655,9 +10615,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetPosesForFrame(struct w
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_027_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_027, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_027_vtables)
     __ASM_VTABLE(winIVRCompositor_IVRCompositor_027,
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_027_SetTrackingSpace)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_027_GetTrackingSpace)
@@ -10711,9 +10671,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_027_GetPosesForFrame)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRCompositor_IVRCompositor_027(void *u_iface)
 {
@@ -10804,3 +10762,29 @@ void destroy_winIVRCompositor_IVRCompositor_027_FnTable(struct w_steam_iface *ob
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRCompositor_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRCompositor_IVRCompositor_005_rtti( base );
+    init_winIVRCompositor_IVRCompositor_006_rtti( base );
+    init_winIVRCompositor_IVRCompositor_007_rtti( base );
+    init_winIVRCompositor_IVRCompositor_008_rtti( base );
+    init_winIVRCompositor_IVRCompositor_009_rtti( base );
+    init_winIVRCompositor_IVRCompositor_010_rtti( base );
+    init_winIVRCompositor_IVRCompositor_011_rtti( base );
+    init_winIVRCompositor_IVRCompositor_012_rtti( base );
+    init_winIVRCompositor_IVRCompositor_013_rtti( base );
+    init_winIVRCompositor_IVRCompositor_014_rtti( base );
+    init_winIVRCompositor_IVRCompositor_015_rtti( base );
+    init_winIVRCompositor_IVRCompositor_016_rtti( base );
+    init_winIVRCompositor_IVRCompositor_017_rtti( base );
+    init_winIVRCompositor_IVRCompositor_018_rtti( base );
+    init_winIVRCompositor_IVRCompositor_019_rtti( base );
+    init_winIVRCompositor_IVRCompositor_020_rtti( base );
+    init_winIVRCompositor_IVRCompositor_021_rtti( base );
+    init_winIVRCompositor_IVRCompositor_022_rtti( base );
+    init_winIVRCompositor_IVRCompositor_024_rtti( base );
+    init_winIVRCompositor_IVRCompositor_026_rtti( base );
+    init_winIVRCompositor_IVRCompositor_027_rtti( base );
+#endif /* __x86_64__ */
+}

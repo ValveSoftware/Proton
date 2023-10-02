@@ -29,6 +29,8 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+CREATE_TYPE_INFO_VTABLE;
+
 struct compositor_data compositor_data = {0};
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
@@ -39,6 +41,10 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     {
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
+#ifdef __x86_64__
+            init_type_info_rtti( (char *)instance );
+            init_rtti( (char *)instance );
+#endif /* __x86_64__ */
             break;
 
         case DLL_PROCESS_DETACH:

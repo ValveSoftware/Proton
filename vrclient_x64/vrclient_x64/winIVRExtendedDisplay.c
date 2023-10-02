@@ -57,17 +57,15 @@ void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo(s
 
 extern vtable_ptr winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRExtendedDisplay_IVRExtendedDisplay_001, 0, ".?AVIVRExtendedDisplay@@")
+
+__ASM_BLOCK_BEGIN(winIVRExtendedDisplay_IVRExtendedDisplay_001_vtables)
     __ASM_VTABLE(winIVRExtendedDisplay_IVRExtendedDisplay_001,
         VTABLE_ADD_FUNC(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds)
         VTABLE_ADD_FUNC(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport)
         VTABLE_ADD_FUNC(winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *u_iface)
 {
@@ -110,3 +108,9 @@ void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(struct w_steam
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRExtendedDisplay_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRExtendedDisplay_IVRExtendedDisplay_001_rtti( base );
+#endif /* __x86_64__ */
+}

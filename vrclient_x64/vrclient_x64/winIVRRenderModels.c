@@ -66,18 +66,16 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount(s
 
 extern vtable_ptr winIVRRenderModels_IVRRenderModels_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRRenderModels_IVRRenderModels_001, 0, ".?AVIVRRenderModels@@")
+
+__ASM_BLOCK_BEGIN(winIVRRenderModels_IVRRenderModels_001_vtables)
     __ASM_VTABLE(winIVRRenderModels_IVRRenderModels_001,
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_001_LoadRenderModel)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_001_FreeRenderModel)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_001_GetRenderModelName)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRRenderModels_IVRRenderModels_001(void *u_iface)
 {
@@ -254,9 +252,9 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(s
 
 extern vtable_ptr winIVRRenderModels_IVRRenderModels_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRRenderModels_IVRRenderModels_002, 0, ".?AVIVRRenderModels@@")
+
+__ASM_BLOCK_BEGIN(winIVRRenderModels_IVRRenderModels_002_vtables)
     __ASM_VTABLE(winIVRRenderModels_IVRRenderModels_002,
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_002_LoadRenderModel)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_002_FreeRenderModel)
@@ -271,9 +269,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_002_GetComponentState)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRRenderModels_IVRRenderModels_002(void *u_iface)
 {
@@ -465,9 +461,9 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent(s
 
 extern vtable_ptr winIVRRenderModels_IVRRenderModels_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRRenderModels_IVRRenderModels_004, 0, ".?AVIVRRenderModels@@")
+
+__ASM_BLOCK_BEGIN(winIVRRenderModels_IVRRenderModels_004_vtables)
     __ASM_VTABLE(winIVRRenderModels_IVRRenderModels_004,
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_004_FreeRenderModel)
@@ -484,9 +480,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_004_GetComponentState)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRRenderModels_IVRRenderModels_004(void *u_iface)
 {
@@ -728,9 +722,9 @@ const char * __thiscall winIVRRenderModels_IVRRenderModels_005_GetRenderModelErr
 
 extern vtable_ptr winIVRRenderModels_IVRRenderModels_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRRenderModels_IVRRenderModels_005, 0, ".?AVIVRRenderModels@@")
+
+__ASM_BLOCK_BEGIN(winIVRRenderModels_IVRRenderModels_005_vtables)
     __ASM_VTABLE(winIVRRenderModels_IVRRenderModels_005,
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_005_FreeRenderModel)
@@ -751,9 +745,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRRenderModels_IVRRenderModels_005(void *u_iface)
 {
@@ -1016,9 +1008,9 @@ const char * __thiscall winIVRRenderModels_IVRRenderModels_006_GetRenderModelErr
 
 extern vtable_ptr winIVRRenderModels_IVRRenderModels_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRRenderModels_IVRRenderModels_006, 0, ".?AVIVRRenderModels@@")
+
+__ASM_BLOCK_BEGIN(winIVRRenderModels_IVRRenderModels_006_vtables)
     __ASM_VTABLE(winIVRRenderModels_IVRRenderModels_006,
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_006_FreeRenderModel)
@@ -1040,9 +1032,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath)
         VTABLE_ADD_FUNC(winIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRRenderModels_IVRRenderModels_006(void *u_iface)
 {
@@ -1101,3 +1091,13 @@ void destroy_winIVRRenderModels_IVRRenderModels_006_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRRenderModels_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRRenderModels_IVRRenderModels_001_rtti( base );
+    init_winIVRRenderModels_IVRRenderModels_002_rtti( base );
+    init_winIVRRenderModels_IVRRenderModels_004_rtti( base );
+    init_winIVRRenderModels_IVRRenderModels_005_rtti( base );
+    init_winIVRRenderModels_IVRRenderModels_006_rtti( base );
+#endif /* __x86_64__ */
+}

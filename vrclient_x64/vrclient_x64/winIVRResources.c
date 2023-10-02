@@ -44,16 +44,14 @@ uint32_t __thiscall winIVRResources_IVRResources_001_GetResourceFullPath(struct 
 
 extern vtable_ptr winIVRResources_IVRResources_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRResources_IVRResources_001, 0, ".?AVIVRResources@@")
+
+__ASM_BLOCK_BEGIN(winIVRResources_IVRResources_001_vtables)
     __ASM_VTABLE(winIVRResources_IVRResources_001,
         VTABLE_ADD_FUNC(winIVRResources_IVRResources_001_LoadSharedResource)
         VTABLE_ADD_FUNC(winIVRResources_IVRResources_001_GetResourceFullPath)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRResources_IVRResources_001(void *u_iface)
 {
@@ -95,3 +93,9 @@ void destroy_winIVRResources_IVRResources_001_FnTable(struct w_steam_iface *obje
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRResources_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRResources_IVRResources_001_rtti( base );
+#endif /* __x86_64__ */
+}
