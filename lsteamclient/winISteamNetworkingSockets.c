@@ -2784,19 +2784,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMes
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_153a *const *pMessages, int64_t *pOutMessageNumberOrResult)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages_params params =
-    {
-        .linux_side = _this->u_iface,
-        .nMessages = nMessages,
-        .pMessages = pMessages,
-        .pOutMessageNumberOrResult = pOutMessageNumberOrResult,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( &params );
-}
-
 uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection_params params =
@@ -2806,20 +2793,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMe
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection( &params );
-    return params._ret;
-}
-
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, w_SteamNetworkingMessage_t_153a **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hConn = hConn,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection( &params );
     return params._ret;
 }
 
@@ -2977,20 +2950,6 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionPollGroup( &params );
-    return params._ret;
-}
-
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup, w_SteamNetworkingMessage_t_153a **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hPollGroup = hPollGroup,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup( &params );
     return params._ret;
 }
 

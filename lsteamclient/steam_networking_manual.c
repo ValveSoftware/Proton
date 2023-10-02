@@ -1,12 +1,15 @@
 #include "steamclient_private.h"
 
 #include "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001.h"
+#include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets002.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets004.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets006.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets008.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets009.h"
+#include "cppISteamNetworkingSockets_SteamNetworkingSockets012.h"
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils003.h"
+#include "cppISteamNetworkingUtils_SteamNetworkingUtils004.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
@@ -168,6 +171,72 @@ static bool networking_message_pool_receive_147( uint32_t capacity, uint32_t cou
     {
         if (!networking_message_pool_alloc_data( count, pool )) return false;
         unix_networking_messages_receive_147( count, messages );
+    }
+
+    return true;
+}
+
+static void W_STDCALL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkingMessage_t_153a *msg )
+{
+    struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
+
+    if (msg->m_pData) SecureZeroMemory( msg->m_pData, msg->m_cbSize );
+    if (!message->pool) HeapFree( GetProcessHeap(), 0, msg->m_pData );
+}
+
+static void W_STDCALL w_SteamNetworkingMessage_t_153a_Release( w_SteamNetworkingMessage_t_153a *msg )
+{
+    struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
+
+    if (msg->m_pfnFreeData) msg->m_pfnFreeData( msg );
+    SecureZeroMemory( msg, sizeof(*msg) );
+
+    if (message->pool) networking_message_pool_release( message->pool );
+    else
+    {
+        unix_networking_message_release_153a( msg );
+        HeapFree( GetProcessHeap(), 0, message );
+    }
+}
+
+static w_SteamNetworkingMessage_t_153a *networking_message_init_153a( struct networking_message *message,
+                                                                      struct networking_message_pool *pool )
+{
+    message->pool = pool;
+    message->p_data = &message->w_msg_153a.m_pData;
+    message->p_size = (uint32_t *)&message->w_msg_153a.m_cbSize;
+    message->w_msg_153a.m_pfnFreeData = w_SteamNetworkingMessage_t_153a_FreeData;
+    message->w_msg_153a.m_pfnRelease = w_SteamNetworkingMessage_t_153a_Release;
+    return &message->w_msg_153a;
+}
+
+static bool networking_message_pool_create_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
+{
+    uint32_t size = offsetof( struct networking_message_pool, messages[count] );
+    struct networking_message_pool *pool;
+
+    if (!(pool = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, size )))
+    {
+        ERR( "Failed to allocate memory for networking messages\n" );
+        return false;
+    }
+    pool->ref = count;
+
+    while (count--) messages[count] = networking_message_init_153a( &pool->messages[count], pool );
+    return true;
+}
+
+static bool networking_message_pool_receive_153a( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
+{
+    struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_153a )->pool;
+    uint32_t i;
+
+    for (i = count; i < capacity; i++) messages[i]->m_pfnRelease( messages[i] );
+
+    if (count)
+    {
+        if (!networking_message_pool_alloc_data( count, pool )) return false;
+        unix_networking_messages_receive_153a( count, messages );
     }
 
     return true;
@@ -478,4 +547,136 @@ void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_Des
     TRACE( "%p\n", _this );
     cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort( &params );
     HeapFree( GetProcessHeap(), 0, _this );
+}
+
+int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( struct w_steam_iface *_this,
+                                                                                                 w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                 int32_t nMaxMessages )
+{
+    struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params params =
+    {
+        .linux_side = _this->u_iface,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+/* ISteamNetworkingMessages_SteamNetworkingMessages002 */
+
+int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( struct w_steam_iface *_this, int32_t nLocalChannel,
+                                                                                                    w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                    int32_t nMaxMessages )
+{
+    struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nLocalChannel = nLocalChannel,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+/* ISteamNetworkingSockets_SteamNetworkingSockets012 */
+
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection( struct w_steam_iface *_this,
+                                                                                                     uint32_t hConn, w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                     int32_t nMaxMessages )
+{
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hConn = hConn,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection( &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup( struct w_steam_iface *_this, uint32_t hPollGroup,
+                                                                                                    w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                    int32_t nMaxMessages )
+{
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hPollGroup = hPollGroup,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup( &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+/* ISteamNetworkingUtils_SteamNetworkingUtils004 */
+
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(struct w_steam_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_153a *const *pMessages, int64_t *pOutMessageNumberOrResult)
+{
+    struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nMessages = nMessages,
+        .pMessages = pMessages,
+        .pOutMessageNumberOrResult = pOutMessageNumberOrResult,
+    };
+    int64_t i;
+
+    TRACE("%p\n", _this);
+
+    cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( &params );
+    for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
+}
+
+w_SteamNetworkingMessage_t_153a *__thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( struct w_steam_iface *_this, int32_t cbAllocateBuffer )
+{
+    struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params params =
+    {
+        .linux_side = _this->u_iface,
+        .cbAllocateBuffer = cbAllocateBuffer,
+    };
+    struct networking_message *message;
+
+    TRACE( "%p\n", _this );
+
+    if (!(message = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*message) ))) return NULL;
+    if ((message->w_msg_153a.m_cbSize = cbAllocateBuffer) &&
+        !(message->w_msg_153a.m_pData = HeapAlloc( GetProcessHeap(), 0, cbAllocateBuffer )))
+    {
+        HeapFree( GetProcessHeap(), 0, message );
+        return NULL;
+    }
+    message->w_msg_153a.m_pfnFreeData = w_SteamNetworkingMessage_t_153a_FreeData;
+    message->w_msg_153a.m_pfnRelease = w_SteamNetworkingMessage_t_153a_Release;
+    params._ret = &message->w_msg_153a;
+
+    cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( &params );
+    return params._ret;
 }

@@ -28,20 +28,6 @@ uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendM
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(struct w_steam_iface *_this, int32_t nLocalChannel, w_SteamNetworkingMessage_t_153a **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params params =
-    {
-        .linux_side = _this->u_iface,
-        .nLocalChannel = nLocalChannel,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser(struct w_steam_iface *_this, const SteamNetworkingIdentity_144 *identityRemote)
 {
     struct cppISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser_params params =

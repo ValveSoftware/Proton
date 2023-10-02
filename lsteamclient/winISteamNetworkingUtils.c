@@ -1059,18 +1059,6 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils004_destructor, 4)
 
-w_SteamNetworkingMessage_t_153a * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(struct w_steam_iface *_this, int32_t cbAllocateBuffer)
-{
-    struct cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage_params params =
-    {
-        .linux_side = _this->u_iface,
-        .cbAllocateBuffer = cbAllocateBuffer,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params params =
