@@ -49,12 +49,6 @@ struct vrclient_init_params
     char *unix_path;
 };
 
-extern VkDevice_T *(WINAPI *p_get_native_VkDevice)( VkDevice_T * );
-extern VkInstance_T *(WINAPI *p_get_native_VkInstance)( VkInstance_T * );
-extern VkPhysicalDevice_T *(WINAPI *p_get_native_VkPhysicalDevice)( VkPhysicalDevice_T * );
-extern VkPhysicalDevice_T *(WINAPI *p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
-extern VkQueue_T *(WINAPI *p_get_native_VkQueue)( VkQueue_T * );
-
 extern bool unix_vrclient_init( struct vrclient_init_params *params );
 extern void *unix_HmdSystemFactory( const char *name, int *return_code );
 extern void *unix_VRClientCoreFactory( const char *name, int *return_code );

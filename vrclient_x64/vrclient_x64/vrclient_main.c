@@ -280,36 +280,6 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface( name, unix_VRClientCoreFactory( name, return_code ) );
 }
 
-VkDevice_T *get_native_VkDevice( VkDevice_T *device )
-{
-    load_vrclient();
-    return p_get_native_VkDevice( device );
-}
-
-VkInstance_T *get_native_VkInstance( VkInstance_T *instance )
-{
-    load_vrclient();
-    return p_get_native_VkInstance( instance );
-}
-
-VkPhysicalDevice_T *get_native_VkPhysicalDevice( VkPhysicalDevice_T *device )
-{
-    load_vrclient();
-    return p_get_native_VkPhysicalDevice( device );
-}
-
-VkPhysicalDevice_T *get_wrapped_VkPhysicalDevice( VkInstance_T *instance, VkPhysicalDevice_T *device )
-{
-    load_vrclient();
-    return p_get_wrapped_VkPhysicalDevice( instance, device );
-}
-
-VkQueue_T *get_native_VkQueue( VkQueue_T *queue )
-{
-    load_vrclient();
-    return p_get_native_VkQueue( queue );
-}
-
 static bool is_hmd_present_reg(void)
 {
     DWORD type, value, wait_status, size;
