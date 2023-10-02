@@ -1236,12 +1236,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchDescription = pchDescription,
         .pTags = pTags,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -1726,12 +1722,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -1755,10 +1747,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -1770,10 +1760,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -1991,10 +1979,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -2454,12 +2440,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -2483,10 +2465,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -2498,10 +2478,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -2721,10 +2699,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -3238,12 +3214,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -3267,10 +3239,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -3282,10 +3252,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -3505,10 +3473,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -4027,12 +3993,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -4056,10 +4018,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -4071,10 +4031,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -4294,10 +4252,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -4818,12 +4774,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -4847,10 +4799,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -4862,10 +4812,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -5085,10 +5033,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -5144,10 +5090,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 
@@ -5626,12 +5570,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -5655,10 +5595,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -5670,10 +5608,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -5894,10 +5830,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -5953,10 +5887,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 
@@ -6436,12 +6368,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -6465,10 +6393,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -6480,10 +6406,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -6704,10 +6628,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -6763,10 +6685,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 
@@ -7291,12 +7211,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -7320,10 +7236,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -7335,10 +7249,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -7559,10 +7471,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -7618,10 +7528,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 
@@ -8149,12 +8057,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -8178,10 +8082,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -8193,10 +8095,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -8417,10 +8317,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -8476,10 +8374,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 
@@ -9011,12 +8907,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
         .eWorkshopFileType = eWorkshopFileType,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishWorkshopFile, &params );
-    steamclient_free_path( params.pchFile );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -9040,10 +8932,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
         .updateHandle = updateHandle,
         .pchFile = pchFile,
     };
-    params.pchFile = steamclient_dos_to_unix_path( pchFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile, &params );
-    steamclient_free_path( params.pchFile );
     return params._ret;
 }
 
@@ -9055,10 +8945,8 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
         .updateHandle = updateHandle,
         .pchPreviewFile = pchPreviewFile,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -9279,10 +9167,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eVisibility = eVisibility,
         .pTags = pTags,
     };
-    params.pchPreviewFile = steamclient_dos_to_unix_path( pchPreviewFile, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishVideo, &params );
-    steamclient_free_path( params.pchPreviewFile );
     return params._ret;
 }
 
@@ -9338,10 +9224,8 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchLocation = pchLocation,
         .unPriority = unPriority,
     };
-    params.pchLocation = steamclient_dos_to_unix_path( pchLocation, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownloadToLocation, &params );
-    steamclient_free_path( params.pchLocation );
     return params._ret;
 }
 

@@ -13,7 +13,11 @@ NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotTo
 {
     struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params *params = (struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params *)args;
     struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *iface = (struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->AddScreenshotToLibrary( params->pchFilename, params->pchThumbnailFilename, params->nWidth, params->nHeight );
+    char *u_pchFilename = steamclient_dos_to_unix_path( params->pchFilename, 0 );
+    char *u_pchThumbnailFilename = steamclient_dos_to_unix_path( params->pchThumbnailFilename, 0 );
+    params->_ret = iface->AddScreenshotToLibrary( u_pchFilename, u_pchThumbnailFilename, params->nWidth, params->nHeight );
+    steamclient_free_path( u_pchFilename );
+    steamclient_free_path( u_pchThumbnailFilename );
     return 0;
 }
 

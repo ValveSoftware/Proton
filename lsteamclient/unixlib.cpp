@@ -1,5 +1,6 @@
 #include "unix_private.h"
 
+#include <winnls.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <dlfcn.h>
@@ -226,4 +227,126 @@ NTSTATUS steamclient_Steam_NotifyMissingInterface( void *args )
     struct steamclient_Steam_NotifyMissingInterface_params *params = (struct steamclient_Steam_NotifyMissingInterface_params *)args;
     p_Steam_NotifyMissingInterface( params->pipe, params->version );
     return 0;
+}
+
+#define IS_ABSOLUTE( x ) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
+
+char *steamclient_dos_to_unix_path( const char *src, int is_url )
+{
+    static const char file_prot[] = "file://";
+    char buffer[4096], *dst = buffer;
+    uint32_t len;
+
+    if (!src) return NULL;
+
+    *dst = 0;
+    if (!*src) goto done;
+
+    if (is_url)
+    {
+        if (strncmp( src, file_prot, 7 ) != 0)
+        {
+            strcpy( dst, src );
+            goto done;
+        }
+
+        src += 7;
+        memcpy( dst, file_prot, sizeof(file_prot) );
+        dst += 7;
+    }
+
+    if (IS_ABSOLUTE( src ))
+    {
+        /* absolute path, use wine conversion */
+        WCHAR srcW[PATH_MAX] = {0};
+        char *unix_path;
+        uint32_t r;
+
+        r = MultiByteToWideChar( CP_UNIXCP, 0, src, -1, srcW, PATH_MAX );
+        if (r == 0) return NULL;
+
+        unix_path = wine_get_unix_file_name( srcW );
+        if (!unix_path)
+        {
+            WARN( "Unable to convert DOS filename to unix: %s\n", src );
+            return NULL;
+        }
+
+        lstrcpynA( dst, unix_path, PATH_MAX );
+        HeapFree( GetProcessHeap(), 0, unix_path );
+    }
+    else
+    {
+        /* relative path, just fix up backslashes */
+        const char *s;
+        char *d;
+
+        for (s = src, d = dst; *s; ++s, ++d)
+        {
+            if (*s == '\\') *d = '/';
+            else *d = *s;
+        }
+
+        *d = 0;
+    }
+
+done:
+    len = strlen( buffer ) + 1;
+    if (!(dst = (char *)HeapAlloc( GetProcessHeap(), 0, len ))) return NULL;
+    memcpy( dst, buffer, len );
+
+    return dst;
+}
+
+void steamclient_free_path( char *path )
+{
+    HeapFree( GetProcessHeap(), 0, path );
+}
+
+const char **steamclient_dos_to_unix_path_array( const char **src )
+{
+    size_t len;
+    const char **s;
+    char **out, **o;
+    WCHAR scratch[PATH_MAX] = {0};
+
+    if (!src) return NULL;
+
+    len = sizeof(char *); /* NUL */
+    for (s = src; *s; ++s) len += sizeof(char *);
+
+    out = (char **)HeapAlloc( GetProcessHeap(), 0, len );
+
+    for (s = src, o = out; *s; ++s, ++o)
+    {
+        if (IS_ABSOLUTE( *s ))
+        {
+            MultiByteToWideChar( CP_UNIXCP, 0, *s, -1, scratch, PATH_MAX );
+            *o = wine_get_unix_file_name( scratch );
+        }
+        else
+        {
+            const char *r;
+            char *l;
+            *o = (char *)HeapAlloc( GetProcessHeap(), 0, strlen( *s ) + 1 );
+            for (r = *s, l = *o; *r; ++l, ++r)
+            {
+                if (*r == '\\') *l = '/';
+                else *l = *r;
+            }
+            *l = 0;
+        }
+    }
+
+    *o = NULL;
+
+    return (const char **)out;
+}
+
+void steamclient_free_path_array( const char **path_array )
+{
+    const char **path;
+    if (!path_array) return;
+    for (path = path_array; *path; path++) HeapFree( GetProcessHeap(), 0, *(char **)path );
+    HeapFree( GetProcessHeap(), 0, path_array );
 }
