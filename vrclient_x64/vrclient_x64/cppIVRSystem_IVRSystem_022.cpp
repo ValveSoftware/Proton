@@ -65,14 +65,6 @@ NTSTATUS IVRSystem_IVRSystem_022_GetDXGIOutputInfo( void *args )
     return 0;
 }
 
-NTSTATUS IVRSystem_IVRSystem_022_GetOutputDevice( void *args )
-{
-    struct IVRSystem_IVRSystem_022_GetOutputDevice_params *params = (struct IVRSystem_IVRSystem_022_GetOutputDevice_params *)args;
-    struct u_IVRSystem_IVRSystem_022 *iface = (struct u_IVRSystem_IVRSystem_022 *)params->linux_side;
-    iface->GetOutputDevice( params->pnDevice, params->textureType, params->pInstance );
-    return 0;
-}
-
 NTSTATUS IVRSystem_IVRSystem_022_IsDisplayOnDesktop( void *args )
 {
     struct IVRSystem_IVRSystem_022_IsDisplayOnDesktop_params *params = (struct IVRSystem_IVRSystem_022_IsDisplayOnDesktop_params *)args;

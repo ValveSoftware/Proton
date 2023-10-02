@@ -321,14 +321,6 @@ NTSTATUS IVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensionsRequired( vo
     return 0;
 }
 
-NTSTATUS IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired( void *args )
-{
-    struct IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired_params *params = (struct IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired_params *)args;
-    struct u_IVRCompositor_IVRCompositor_026 *iface = (struct u_IVRCompositor_IVRCompositor_026 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetVulkanDeviceExtensionsRequired( params->pPhysicalDevice, params->pchValue, params->unBufferSize );
-    return 0;
-}
-
 NTSTATUS IVRCompositor_IVRCompositor_026_SetExplicitTimingMode( void *args )
 {
     struct IVRCompositor_IVRCompositor_026_SetExplicitTimingMode_params *params = (struct IVRCompositor_IVRCompositor_026_SetExplicitTimingMode_params *)args;
