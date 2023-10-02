@@ -101,7 +101,9 @@ NTSTATUS IVRCompositor_IVRCompositor_005_SetOverlayFromFile( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_SetOverlayFromFile_params *params = (struct IVRCompositor_IVRCompositor_005_SetOverlayFromFile_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    iface->SetOverlayFromFile( params->pchFilePath, params->pSettings );
+    char *u_pchFilePath = vrclient_dos_to_unix_path( params->pchFilePath );
+    iface->SetOverlayFromFile( u_pchFilePath, params->pSettings );
+    vrclient_free_path( u_pchFilePath );
     return 0;
 }
 

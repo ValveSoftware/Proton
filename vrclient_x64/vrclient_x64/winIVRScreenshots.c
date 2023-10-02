@@ -26,12 +26,8 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struc
         .pchPreviewFilename = pchPreviewFilename,
         .pchVRFilename = pchVRFilename,
     };
-    params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
-    params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_RequestScreenshot, &params );
-    vrclient_free_path( params.pchPreviewFilename );
-    vrclient_free_path( params.pchVRFilename );
     return params._ret;
 }
 
@@ -100,12 +96,8 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(st
         .pchPreviewFilename = pchPreviewFilename,
         .pchVRFilename = pchVRFilename,
     };
-    params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
-    params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, &params );
-    vrclient_free_path( params.pchPreviewFilename );
-    vrclient_free_path( params.pchVRFilename );
     return params._ret;
 }
 
@@ -119,12 +111,8 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct
         .pchSourcePreviewFilename = pchSourcePreviewFilename,
         .pchSourceVRFilename = pchSourceVRFilename,
     };
-    params.pchSourcePreviewFilename = vrclient_dos_to_unix_path( pchSourcePreviewFilename );
-    params.pchSourceVRFilename = vrclient_dos_to_unix_path( pchSourceVRFilename );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_SubmitScreenshot, &params );
-    vrclient_free_path( params.pchSourcePreviewFilename );
-    vrclient_free_path( params.pchSourceVRFilename );
     return params._ret;
 }
 

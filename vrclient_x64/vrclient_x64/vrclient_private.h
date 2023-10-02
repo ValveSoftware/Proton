@@ -12,17 +12,6 @@
 typedef void (*vtable_ptr)(void);
 #endif
 
-#if __cplusplus
-extern "C" {
-#endif
-
-char *vrclient_dos_to_unix_path( const char *src );
-void vrclient_free_path( const char *path );
-
-#if __cplusplus
-}
-#endif
-
 unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes);
 void *create_LinuxMatchmakingServerListResponse(void *win);
 

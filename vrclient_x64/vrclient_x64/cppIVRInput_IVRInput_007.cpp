@@ -5,7 +5,9 @@ NTSTATUS IVRInput_IVRInput_007_SetActionManifestPath( void *args )
 {
     struct IVRInput_IVRInput_007_SetActionManifestPath_params *params = (struct IVRInput_IVRInput_007_SetActionManifestPath_params *)args;
     struct u_IVRInput_IVRInput_007 *iface = (struct u_IVRInput_IVRInput_007 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetActionManifestPath( params->pchActionManifestPath );
+    char *u_pchActionManifestPath = vrclient_dos_to_unix_path( params->pchActionManifestPath );
+    params->_ret = (uint32_t)iface->SetActionManifestPath( u_pchActionManifestPath );
+    vrclient_free_path( u_pchActionManifestPath );
     return 0;
 }
 

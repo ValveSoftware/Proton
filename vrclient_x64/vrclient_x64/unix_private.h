@@ -29,6 +29,9 @@ extern NTSTATUS vrclient_init( void *args );
 extern NTSTATUS vrclient_HmdSystemFactory( void *args );
 extern NTSTATUS vrclient_VRClientCoreFactory( void *args );
 
+extern char *vrclient_dos_to_unix_path( const char *src );
+extern void vrclient_free_path( char *path );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

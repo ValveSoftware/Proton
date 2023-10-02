@@ -731,6 +731,10 @@ def handle_method_cpp(method, classname, out):
         if strip_ns(underlying_typename(param)) not in SIZED_STRUCTS | EXEMPT_STRUCTS:
             print('Warning:', strip_ns(underlying_typename(param)), name, 'following', prev_name)
 
+    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
+    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
+        out(f'    char *u_{name} = vrclient_dos_to_unix_path( params->{name} );\n')
+
     need_output = {}
 
     for name, param in sorted(need_convert.items()):
@@ -784,6 +788,7 @@ def handle_method_cpp(method, classname, out):
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in size_fixup: return f"u_{name}"
+        if name in path_conv_wtou: return f"u_{name}"
         if name in need_convert: return f"params->{name} ? {pfx}u_{name} : nullptr"
         return f'params->{name}'
 
@@ -792,6 +797,9 @@ def handle_method_cpp(method, classname, out):
 
     for name, param in sorted(need_output.items()):
         out(f'    if (params->{name}) *params->{name} = u_{name};\n')
+
+    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
+        out(f'    vrclient_free_path( u_{name} );\n')
 
     out(u'    return 0;\n')
     out(u'}\n\n')
@@ -844,10 +852,6 @@ def handle_method_c(klass, method, winclassname, out):
     out(u'    };\n')
 
     path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
-    path_conv_wtou = PATH_CONV_METHODS_WTOU.get(f'{klass.name}_{method.spelling}', {})
-
-    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
-        out(f'    params.{name} = vrclient_dos_to_unix_path( {name} );\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
 
@@ -861,9 +865,6 @@ def handle_method_c(klass, method, winclassname, out):
         if "ret_size" in path_conv_utow:
             out(u'params._ret = ')
         out(f'vrclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]} );\n')
-
-    for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
-        out(f'    vrclient_free_path( params.{name} );\n')
 
     if not returns_void:
         out(u'    return params._ret;\n')

@@ -349,7 +349,9 @@ NTSTATUS IVRCompositor_IVRCompositor_024_SetStageOverride_Async( void *args )
 {
     struct IVRCompositor_IVRCompositor_024_SetStageOverride_Async_params *params = (struct IVRCompositor_IVRCompositor_024_SetStageOverride_Async_params *)args;
     struct u_IVRCompositor_IVRCompositor_024 *iface = (struct u_IVRCompositor_IVRCompositor_024 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetStageOverride_Async( params->pchRenderModelPath, params->pTransform, params->pRenderSettings, params->nSizeOfRenderSettings );
+    char *u_pchRenderModelPath = vrclient_dos_to_unix_path( params->pchRenderModelPath );
+    params->_ret = (uint32_t)iface->SetStageOverride_Async( u_pchRenderModelPath, params->pTransform, params->pRenderSettings, params->nSizeOfRenderSettings );
+    vrclient_free_path( u_pchRenderModelPath );
     return 0;
 }
 
