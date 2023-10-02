@@ -44,6 +44,10 @@ static void load_overlay_texture_dxvk( const w_Texture_t *texture, struct set_ov
 
     state->texture = vrclient_translate_texture_dxvk( texture, &state->vkdata, state->dxvk_surface, &state->dxvk_device,
                                                       &state->image_layout, &image_info );
+    state->vkdata.m_pDevice = get_native_VkDevice( state->vkdata.m_pDevice );
+    state->vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice( state->vkdata.m_pPhysicalDevice );
+    state->vkdata.m_pInstance = get_native_VkInstance( state->vkdata.m_pInstance );
+    state->vkdata.m_pQueue = get_native_VkQueue( state->vkdata.m_pQueue );
 
     state->subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     state->subresources.baseMipLevel = 0;
