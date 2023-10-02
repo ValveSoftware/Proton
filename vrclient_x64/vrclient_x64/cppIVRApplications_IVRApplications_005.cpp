@@ -5,7 +5,9 @@ NTSTATUS IVRApplications_IVRApplications_005_AddApplicationManifest( void *args 
 {
     struct IVRApplications_IVRApplications_005_AddApplicationManifest_params *params = (struct IVRApplications_IVRApplications_005_AddApplicationManifest_params *)args;
     struct u_IVRApplications_IVRApplications_005 *iface = (struct u_IVRApplications_IVRApplications_005 *)params->linux_side;
-    params->_ret = (uint32_t)iface->AddApplicationManifest( params->pchApplicationManifestFullPath, params->bTemporary );
+    char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( params->pchApplicationManifestFullPath );
+    params->_ret = (uint32_t)iface->AddApplicationManifest( u_pchApplicationManifestFullPath, params->bTemporary );
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return 0;
 }
 
@@ -13,7 +15,9 @@ NTSTATUS IVRApplications_IVRApplications_005_RemoveApplicationManifest( void *ar
 {
     struct IVRApplications_IVRApplications_005_RemoveApplicationManifest_params *params = (struct IVRApplications_IVRApplications_005_RemoveApplicationManifest_params *)args;
     struct u_IVRApplications_IVRApplications_005 *iface = (struct u_IVRApplications_IVRApplications_005 *)params->linux_side;
-    params->_ret = (uint32_t)iface->RemoveApplicationManifest( params->pchApplicationManifestFullPath );
+    char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( params->pchApplicationManifestFullPath );
+    params->_ret = (uint32_t)iface->RemoveApplicationManifest( u_pchApplicationManifestFullPath );
+    vrclient_free_path( u_pchApplicationManifestFullPath );
     return 0;
 }
 

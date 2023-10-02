@@ -87,68 +87,6 @@ unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, ch
     return r == 0 ? 0 : r - 1;
 }
 
-#define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
-
-char *vrclient_dos_to_unix_path( const char *src )
-{
-    char buffer[4096], *dst = buffer;
-    uint32_t len;
-
-    if (!src) return NULL;
-
-    *dst = 0;
-    if (!*src) goto done;
-
-    if(IS_ABSOLUTE(src)){
-        /* absolute path, use wine conversion */
-        WCHAR srcW[PATH_MAX];
-        char *unix_path;
-        uint32_t r;
-
-        r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
-        if(r == 0)
-            return NULL;
-
-        unix_path = wine_get_unix_file_name(srcW);
-        if(!unix_path){
-            WARN("Unable to convert DOS filename to unix: %s\n", src);
-            return NULL;
-        }
-
-        if (!realpath(unix_path, dst))
-        {
-            ERR("Could not get real path for %s.\n", unix_path);
-            lstrcpynA(dst, unix_path, PATH_MAX);
-        }
-
-        HeapFree(GetProcessHeap(), 0, unix_path);
-    }else{
-        /* relative path, just fix up backslashes */
-        const char *s;
-        char *d;
-
-        for(s = src, d = dst; *src; ++s, ++d){
-            if(*s == '\\')
-                *d = '/';
-            else
-                *d = *s;
-        }
-
-        *d = 0;
-    }
-
-done:
-    len = strlen( buffer );
-    if (!(dst = HeapAlloc( GetProcessHeap(), 0, len + 1 ))) return NULL;
-    memcpy( dst, buffer, len + 1 );
-    return dst;
-}
-
-void vrclient_free_path( const char *path )
-{
-    HeapFree( GetProcessHeap(), 0, (char *)path );
-}
-
 static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)
 {
     SIZE_T max_capacity, new_capacity;

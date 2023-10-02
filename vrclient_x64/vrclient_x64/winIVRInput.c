@@ -33,10 +33,8 @@ uint32_t __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_003_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -382,10 +380,8 @@ uint32_t __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_004_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -746,10 +742,8 @@ uint32_t __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_005_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -1217,10 +1211,8 @@ uint32_t __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_006_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -1709,10 +1701,8 @@ uint32_t __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_007_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -2240,10 +2230,8 @@ uint32_t __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w_stea
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRInput_IVRInput_010_SetActionManifestPath, &params );
-    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 

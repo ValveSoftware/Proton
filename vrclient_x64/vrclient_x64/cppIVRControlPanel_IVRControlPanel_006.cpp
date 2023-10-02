@@ -181,7 +181,9 @@ NTSTATUS IVRControlPanel_IVRControlPanel_006_undoc23( void *args )
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc23_params *params = (struct IVRControlPanel_IVRControlPanel_006_undoc23_params *)args;
     struct u_IVRControlPanel_IVRControlPanel_006 *iface = (struct u_IVRControlPanel_IVRControlPanel_006 *)params->linux_side;
-    params->_ret = (bool)iface->undoc23( params->a );
+    char *u_a = vrclient_dos_to_unix_path( params->a );
+    params->_ret = (bool)iface->undoc23( u_a );
+    vrclient_free_path( u_a );
     return 0;
 }
 
@@ -213,7 +215,9 @@ NTSTATUS IVRControlPanel_IVRControlPanel_006_undoc27( void *args )
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc27_params *params = (struct IVRControlPanel_IVRControlPanel_006_undoc27_params *)args;
     struct u_IVRControlPanel_IVRControlPanel_006 *iface = (struct u_IVRControlPanel_IVRControlPanel_006 *)params->linux_side;
-    params->_ret = (uint32_t)iface->undoc27( params->a );
+    char *u_a = vrclient_dos_to_unix_path( params->a );
+    params->_ret = (uint32_t)iface->undoc27( u_a );
+    vrclient_free_path( u_a );
     return 0;
 }
 

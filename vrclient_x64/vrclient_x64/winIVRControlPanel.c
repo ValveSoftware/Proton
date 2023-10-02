@@ -306,10 +306,8 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_if
         .linux_side = _this->u_iface,
         .a = a,
     };
-    params.a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc23, &params );
-    vrclient_free_path( params.a );
     return params._ret;
 }
 
@@ -354,10 +352,8 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_stea
         .linux_side = _this->u_iface,
         .a = a,
     };
-    params.a = vrclient_dos_to_unix_path( a );
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc27, &params );
-    vrclient_free_path( params.a );
     return params._ret;
 }
 
