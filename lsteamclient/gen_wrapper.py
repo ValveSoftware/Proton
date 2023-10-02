@@ -204,8 +204,8 @@ MANUAL_STRUCTS = [
 MANUAL_METHODS = {
     #TODO: 001 005 007
     #NOTE: 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
-    "ISteamNetworkingSockets_ReceiveMessagesOnConnection": lambda ver, abi: abi == 'u',
-    "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_ReceiveMessagesOnConnection": lambda ver, abi: abi == 'u' or ver <= 4,
+    "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": lambda ver, abi: abi == 'u' or ver <= 4,
     "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": lambda ver, abi: abi == 'u',
     "ISteamNetworkingSockets_SendMessages": lambda ver, abi: abi == 'u',
 

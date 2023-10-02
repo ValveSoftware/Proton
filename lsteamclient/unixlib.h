@@ -9,6 +9,10 @@
 #include <windef.h>
 #include <winbase.h>
 
+#ifndef STEAM_API_H
+#include "steamclient_structs.h"
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -61,6 +65,21 @@ struct callback_data
 
 void execute_callback(struct callback_data *cb_data);
 bool is_native_thread(void);
+
+#ifndef STEAM_API_H
+struct networking_message_pool;
+struct networking_message
+{
+    struct networking_message_pool *pool;
+    void **p_data;
+    uint32_t *p_size;
+
+    u_SteamNetworkingMessage_t_144 *u_msg_144;
+    w_SteamNetworkingMessage_t_144 w_msg_144;
+};
+
+extern void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMessage_t_144 **w_msgs );
+#endif
 
 #ifdef __cplusplus
 } /* extern "C" */
