@@ -313,11 +313,3 @@ NTSTATUS IVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensionsRequired( vo
     return 0;
 }
 
-NTSTATUS IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired( void *args )
-{
-    struct IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired_params *params = (struct IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired_params *)args;
-    struct u_IVRCompositor_IVRCompositor_019 *iface = (struct u_IVRCompositor_IVRCompositor_019 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetVulkanDeviceExtensionsRequired( params->pPhysicalDevice, params->pchValue, params->unBufferSize );
-    return 0;
-}
-
