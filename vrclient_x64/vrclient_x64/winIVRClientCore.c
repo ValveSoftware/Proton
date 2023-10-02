@@ -64,9 +64,9 @@ const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(s
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRClientCore_IVRClientCore_002, 0, ".?AVIVRClientCore@@")
+
+__ASM_BLOCK_BEGIN(winIVRClientCore_IVRClientCore_002_vtables)
     __ASM_VTABLE(winIVRClientCore_IVRClientCore_002,
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_002_Init)
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_002_Cleanup)
@@ -76,9 +76,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError)
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRClientCore_IVRClientCore_002(void *u_iface)
 {
@@ -181,9 +179,9 @@ const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(s
 
 extern vtable_ptr winIVRClientCore_IVRClientCore_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRClientCore_IVRClientCore_003, 0, ".?AVIVRClientCore@@")
+
+__ASM_BLOCK_BEGIN(winIVRClientCore_IVRClientCore_003_vtables)
     __ASM_VTABLE(winIVRClientCore_IVRClientCore_003,
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_003_Init)
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_003_Cleanup)
@@ -193,9 +191,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError)
         VTABLE_ADD_FUNC(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRClientCore_IVRClientCore_003(void *u_iface)
 {
@@ -242,3 +238,10 @@ void destroy_winIVRClientCore_IVRClientCore_003_FnTable(struct w_steam_iface *ob
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRClientCore_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRClientCore_IVRClientCore_002_rtti( base );
+    init_winIVRClientCore_IVRClientCore_003_rtti( base );
+#endif /* __x86_64__ */
+}

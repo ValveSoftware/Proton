@@ -132,9 +132,9 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct
 
 extern vtable_ptr winIVRScreenshots_IVRScreenshots_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRScreenshots_IVRScreenshots_001, 0, ".?AVIVRScreenshots@@")
+
+__ASM_BLOCK_BEGIN(winIVRScreenshots_IVRScreenshots_001_vtables)
     __ASM_VTABLE(winIVRScreenshots_IVRScreenshots_001,
         VTABLE_ADD_FUNC(winIVRScreenshots_IVRScreenshots_001_RequestScreenshot)
         VTABLE_ADD_FUNC(winIVRScreenshots_IVRScreenshots_001_HookScreenshot)
@@ -144,9 +144,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot)
         VTABLE_ADD_FUNC(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRScreenshots_IVRScreenshots_001(void *u_iface)
 {
@@ -193,3 +191,9 @@ void destroy_winIVRScreenshots_IVRScreenshots_001_FnTable(struct w_steam_iface *
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRScreenshots_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRScreenshots_IVRScreenshots_001_rtti( base );
+#endif /* __x86_64__ */
+}

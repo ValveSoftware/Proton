@@ -376,9 +376,9 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc28(struct w_steam_if
 
 extern vtable_ptr winIVRControlPanel_IVRControlPanel_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRControlPanel_IVRControlPanel_006, 0, ".?AVIVRControlPanel@@")
+
+__ASM_BLOCK_BEGIN(winIVRControlPanel_IVRControlPanel_006_vtables)
     __ASM_VTABLE(winIVRControlPanel_IVRControlPanel_006,
         VTABLE_ADD_FUNC(winIVRControlPanel_IVRControlPanel_006_undoc1)
         VTABLE_ADD_FUNC(winIVRControlPanel_IVRControlPanel_006_undoc2)
@@ -409,9 +409,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRControlPanel_IVRControlPanel_006_undoc27)
         VTABLE_ADD_FUNC(winIVRControlPanel_IVRControlPanel_006_undoc28)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRControlPanel_IVRControlPanel_006(void *u_iface)
 {
@@ -479,3 +477,9 @@ void destroy_winIVRControlPanel_IVRControlPanel_006_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRControlPanel_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRControlPanel_IVRControlPanel_006_rtti( base );
+#endif /* __x86_64__ */
+}

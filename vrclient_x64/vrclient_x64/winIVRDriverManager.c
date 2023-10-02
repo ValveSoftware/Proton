@@ -66,18 +66,16 @@ bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_stea
 
 extern vtable_ptr winIVRDriverManager_IVRDriverManager_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRDriverManager_IVRDriverManager_001, 0, ".?AVIVRDriverManager@@")
+
+__ASM_BLOCK_BEGIN(winIVRDriverManager_IVRDriverManager_001_vtables)
     __ASM_VTABLE(winIVRDriverManager_IVRDriverManager_001,
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverCount)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverName)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverHandle)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_IsEnabled)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRDriverManager_IVRDriverManager_001(void *u_iface)
 {
@@ -121,3 +119,9 @@ void destroy_winIVRDriverManager_IVRDriverManager_001_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRDriverManager_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRDriverManager_IVRDriverManager_001_rtti( base );
+#endif /* __x86_64__ */
+}

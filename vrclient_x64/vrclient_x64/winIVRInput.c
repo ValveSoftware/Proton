@@ -279,9 +279,9 @@ uint32_t __thiscall winIVRInput_IVRInput_003_ShowBindingsForActionSet(struct w_s
 
 extern vtable_ptr winIVRInput_IVRInput_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_003, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_003_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_003,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_003_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_003_GetActionSetHandle)
@@ -301,9 +301,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_003_ShowActionOrigins)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_003_ShowBindingsForActionSet)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_003(void *u_iface)
 {
@@ -638,9 +636,9 @@ uint32_t __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(struct w_s
 
 extern vtable_ptr winIVRInput_IVRInput_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_004, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_004_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_004,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetActionSetHandle)
@@ -661,9 +659,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_ShowActionOrigins)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_ShowBindingsForActionSet)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_004(void *u_iface)
 {
@@ -1098,9 +1094,9 @@ bool __thiscall winIVRInput_IVRInput_005_IsUsingLegacyInput(struct w_steam_iface
 
 extern vtable_ptr winIVRInput_IVRInput_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_005, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_005_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_005,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_GetActionSetHandle)
@@ -1128,9 +1124,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_ShowBindingsForActionSet)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_IsUsingLegacyInput)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_005(void *u_iface)
 {
@@ -1590,9 +1584,9 @@ bool __thiscall winIVRInput_IVRInput_006_IsUsingLegacyInput(struct w_steam_iface
 
 extern vtable_ptr winIVRInput_IVRInput_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_006, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_006_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_006,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_006_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_006_GetActionSetHandle)
@@ -1621,9 +1615,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_006_ShowBindingsForActionSet)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_006_IsUsingLegacyInput)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_006(void *u_iface)
 {
@@ -2117,9 +2109,9 @@ uint32_t __thiscall winIVRInput_IVRInput_007_OpenBindingUI(struct w_steam_iface 
 
 extern vtable_ptr winIVRInput_IVRInput_007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_007, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_007_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_007,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_GetActionSetHandle)
@@ -2150,9 +2142,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_IsUsingLegacyInput)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_OpenBindingUI)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_007(void *u_iface)
 {
@@ -2707,9 +2697,9 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetBindingVariant(struct w_steam_if
 
 extern vtable_ptr winIVRInput_IVRInput_010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRInput_IVRInput_010, 0, ".?AVIVRInput@@")
+
+__ASM_BLOCK_BEGIN(winIVRInput_IVRInput_010_vtables)
     __ASM_VTABLE(winIVRInput_IVRInput_010,
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_010_SetActionManifestPath)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_010_GetActionSetHandle)
@@ -2744,9 +2734,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_010_OpenBindingUI)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_010_GetBindingVariant)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRInput_IVRInput_010(void *u_iface)
 {
@@ -2818,3 +2806,14 @@ void destroy_winIVRInput_IVRInput_010_FnTable(struct w_steam_iface *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRInput_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRInput_IVRInput_003_rtti( base );
+    init_winIVRInput_IVRInput_004_rtti( base );
+    init_winIVRInput_IVRInput_005_rtti( base );
+    init_winIVRInput_IVRInput_006_rtti( base );
+    init_winIVRInput_IVRInput_007_rtti( base );
+    init_winIVRInput_IVRInput_010_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -68,18 +68,16 @@ bool __thiscall winIVROverlayView_IVROverlayView_003_IsViewingPermitted(struct w
 
 extern vtable_ptr winIVROverlayView_IVROverlayView_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVROverlayView_IVROverlayView_003, 0, ".?AVIVROverlayView@@")
+
+__ASM_BLOCK_BEGIN(winIVROverlayView_IVROverlayView_003_vtables)
     __ASM_VTABLE(winIVROverlayView_IVROverlayView_003,
         VTABLE_ADD_FUNC(winIVROverlayView_IVROverlayView_003_AcquireOverlayView)
         VTABLE_ADD_FUNC(winIVROverlayView_IVROverlayView_003_ReleaseOverlayView)
         VTABLE_ADD_FUNC(winIVROverlayView_IVROverlayView_003_PostOverlayEvent)
         VTABLE_ADD_FUNC(winIVROverlayView_IVROverlayView_003_IsViewingPermitted)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVROverlayView_IVROverlayView_003(void *u_iface)
 {
@@ -123,3 +121,9 @@ void destroy_winIVROverlayView_IVROverlayView_003_FnTable(struct w_steam_iface *
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVROverlayView_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVROverlayView_IVROverlayView_003_rtti( base );
+#endif /* __x86_64__ */
+}

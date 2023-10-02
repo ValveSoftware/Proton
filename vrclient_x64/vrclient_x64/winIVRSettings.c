@@ -192,9 +192,9 @@ void __thiscall winIVRSettings_IVRSettings_001_RemoveKeyInSection(struct w_steam
 
 extern vtable_ptr winIVRSettings_IVRSettings_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSettings_IVRSettings_001, 0, ".?AVIVRSettings@@")
+
+__ASM_BLOCK_BEGIN(winIVRSettings_IVRSettings_001_vtables)
     __ASM_VTABLE(winIVRSettings_IVRSettings_001,
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_001_Sync)
@@ -209,9 +209,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_001_RemoveSection)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_001_RemoveKeyInSection)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSettings_IVRSettings_001(void *u_iface)
 {
@@ -443,9 +441,9 @@ void __thiscall winIVRSettings_IVRSettings_002_RemoveKeyInSection(struct w_steam
 
 extern vtable_ptr winIVRSettings_IVRSettings_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSettings_IVRSettings_002, 0, ".?AVIVRSettings@@")
+
+__ASM_BLOCK_BEGIN(winIVRSettings_IVRSettings_002_vtables)
     __ASM_VTABLE(winIVRSettings_IVRSettings_002,
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_002_Sync)
@@ -460,9 +458,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_002_RemoveSection)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_002_RemoveKeyInSection)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSettings_IVRSettings_002(void *u_iface)
 {
@@ -680,9 +676,9 @@ void __thiscall winIVRSettings_IVRSettings_003_RemoveKeyInSection(struct w_steam
 
 extern vtable_ptr winIVRSettings_IVRSettings_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRSettings_IVRSettings_003, 0, ".?AVIVRSettings@@")
+
+__ASM_BLOCK_BEGIN(winIVRSettings_IVRSettings_003_vtables)
     __ASM_VTABLE(winIVRSettings_IVRSettings_003,
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromEnum)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_003_SetBool)
@@ -696,9 +692,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_003_RemoveSection)
         VTABLE_ADD_FUNC(winIVRSettings_IVRSettings_003_RemoveKeyInSection)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRSettings_IVRSettings_003(void *u_iface)
 {
@@ -749,3 +743,11 @@ void destroy_winIVRSettings_IVRSettings_003_FnTable(struct w_steam_iface *object
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRSettings_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRSettings_IVRSettings_001_rtti( base );
+    init_winIVRSettings_IVRSettings_002_rtti( base );
+    init_winIVRSettings_IVRSettings_003_rtti( base );
+#endif /* __x86_64__ */
+}

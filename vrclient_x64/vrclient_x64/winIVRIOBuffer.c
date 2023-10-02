@@ -87,9 +87,9 @@ uint64_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer(struct w_st
 
 extern vtable_ptr winIVRIOBuffer_IVRIOBuffer_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRIOBuffer_IVRIOBuffer_001, 0, ".?AVIVRIOBuffer@@")
+
+__ASM_BLOCK_BEGIN(winIVRIOBuffer_IVRIOBuffer_001_vtables)
     __ASM_VTABLE(winIVRIOBuffer_IVRIOBuffer_001,
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_001_Open)
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_001_Close)
@@ -97,9 +97,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_001_Write)
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRIOBuffer_IVRIOBuffer_001(void *u_iface)
 {
@@ -236,9 +234,9 @@ bool __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(struct w_steam_iface *
 
 extern vtable_ptr winIVRIOBuffer_IVRIOBuffer_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRIOBuffer_IVRIOBuffer_002, 0, ".?AVIVRIOBuffer@@")
+
+__ASM_BLOCK_BEGIN(winIVRIOBuffer_IVRIOBuffer_002_vtables)
     __ASM_VTABLE(winIVRIOBuffer_IVRIOBuffer_002,
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_002_Open)
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_002_Close)
@@ -247,9 +245,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer)
         VTABLE_ADD_FUNC(winIVRIOBuffer_IVRIOBuffer_002_HasReaders)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRIOBuffer_IVRIOBuffer_002(void *u_iface)
 {
@@ -295,3 +291,10 @@ void destroy_winIVRIOBuffer_IVRIOBuffer_002_FnTable(struct w_steam_iface *object
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRIOBuffer_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRIOBuffer_IVRIOBuffer_001_rtti( base );
+    init_winIVRIOBuffer_IVRIOBuffer_002_rtti( base );
+#endif /* __x86_64__ */
+}

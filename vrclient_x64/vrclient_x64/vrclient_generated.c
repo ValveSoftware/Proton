@@ -455,3 +455,50 @@ iface_destructor find_iface_destructor( const char *iface_version )
             return destructors[i].dtor;
     return NULL;
 }
+
+extern void init_winIVRApplications_rtti( char * );
+extern void init_winIVRChaperone_rtti( char * );
+extern void init_winIVRChaperoneSetup_rtti( char * );
+extern void init_winIVRClientCore_rtti( char * );
+extern void init_winIVRCompositor_rtti( char * );
+extern void init_winIVRControlPanel_rtti( char * );
+extern void init_winIVRDriverManager_rtti( char * );
+extern void init_winIVRExtendedDisplay_rtti( char * );
+extern void init_winIVRHeadsetView_rtti( char * );
+extern void init_winIVRIOBuffer_rtti( char * );
+extern void init_winIVRInput_rtti( char * );
+extern void init_winIVRMailbox_rtti( char * );
+extern void init_winIVRNotifications_rtti( char * );
+extern void init_winIVROverlay_rtti( char * );
+extern void init_winIVROverlayView_rtti( char * );
+extern void init_winIVRRenderModels_rtti( char * );
+extern void init_winIVRResources_rtti( char * );
+extern void init_winIVRScreenshots_rtti( char * );
+extern void init_winIVRSettings_rtti( char * );
+extern void init_winIVRSystem_rtti( char * );
+extern void init_winIVRTrackedCamera_rtti( char * );
+
+void init_rtti( char *base )
+{
+    init_winIVRApplications_rtti( base );
+    init_winIVRChaperone_rtti( base );
+    init_winIVRChaperoneSetup_rtti( base );
+    init_winIVRClientCore_rtti( base );
+    init_winIVRCompositor_rtti( base );
+    init_winIVRControlPanel_rtti( base );
+    init_winIVRDriverManager_rtti( base );
+    init_winIVRExtendedDisplay_rtti( base );
+    init_winIVRHeadsetView_rtti( base );
+    init_winIVRIOBuffer_rtti( base );
+    init_winIVRInput_rtti( base );
+    init_winIVRMailbox_rtti( base );
+    init_winIVRNotifications_rtti( base );
+    init_winIVROverlay_rtti( base );
+    init_winIVROverlayView_rtti( base );
+    init_winIVRRenderModels_rtti( base );
+    init_winIVRResources_rtti( base );
+    init_winIVRScreenshots_rtti( base );
+    init_winIVRSettings_rtti( base );
+    init_winIVRSystem_rtti( base );
+    init_winIVRTrackedCamera_rtti( base );
+}

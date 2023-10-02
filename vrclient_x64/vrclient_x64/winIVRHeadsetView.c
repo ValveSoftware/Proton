@@ -125,9 +125,9 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange(st
 
 extern vtable_ptr winIVRHeadsetView_IVRHeadsetView_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRHeadsetView_IVRHeadsetView_001, 0, ".?AVIVRHeadsetView@@")
+
+__ASM_BLOCK_BEGIN(winIVRHeadsetView_IVRHeadsetView_001_vtables)
     __ASM_VTABLE(winIVRHeadsetView_IVRHeadsetView_001,
         VTABLE_ADD_FUNC(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize)
         VTABLE_ADD_FUNC(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize)
@@ -139,9 +139,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewBlendRange)
         VTABLE_ADD_FUNC(winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewBlendRange)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRHeadsetView_IVRHeadsetView_001(void *u_iface)
 {
@@ -190,3 +188,9 @@ void destroy_winIVRHeadsetView_IVRHeadsetView_001_FnTable(struct w_steam_iface *
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRHeadsetView_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRHeadsetView_IVRHeadsetView_001_rtti( base );
+#endif /* __x86_64__ */
+}

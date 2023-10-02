@@ -303,9 +303,9 @@ const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsTr
 
 extern vtable_ptr winIVRApplications_IVRApplications_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_001, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_001_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_001,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_001_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_001_RemoveApplicationManifest)
@@ -329,9 +329,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_001(void *u_iface)
 {
@@ -672,9 +670,9 @@ bool __thiscall winIVRApplications_IVRApplications_002_IsQuitUserPromptRequested
 
 extern vtable_ptr winIVRApplications_IVRApplications_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_002, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_002_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_002,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_002_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_002_RemoveApplicationManifest)
@@ -697,9 +695,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_002_IsQuitUserPromptRequested)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_002(void *u_iface)
 {
@@ -1054,9 +1050,9 @@ bool __thiscall winIVRApplications_IVRApplications_003_IsQuitUserPromptRequested
 
 extern vtable_ptr winIVRApplications_IVRApplications_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_003, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_003_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_003,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_003_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_003_RemoveApplicationManifest)
@@ -1080,9 +1076,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_003_IsQuitUserPromptRequested)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_003(void *u_iface)
 {
@@ -1466,9 +1460,9 @@ uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchInternalProcess
 
 extern vtable_ptr winIVRApplications_IVRApplications_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_004, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_004_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_004,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_004_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_004_RemoveApplicationManifest)
@@ -1494,9 +1488,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_004_IsQuitUserPromptRequested)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_004_LaunchInternalProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_004(void *u_iface)
 {
@@ -1898,9 +1890,9 @@ uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchInternalProcess
 
 extern vtable_ptr winIVRApplications_IVRApplications_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_005, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_005_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_005,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_005_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_005_RemoveApplicationManifest)
@@ -1927,9 +1919,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_005_IsQuitUserPromptRequested)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_005_LaunchInternalProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_005(void *u_iface)
 {
@@ -2432,9 +2422,9 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_GetCurrentSceneProces
 
 extern vtable_ptr winIVRApplications_IVRApplications_006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_006, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_006_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_006,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_006_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_006_RemoveApplicationManifest)
@@ -2468,9 +2458,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_006_LaunchInternalProcess)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_006_GetCurrentSceneProcessId)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_006(void *u_iface)
 {
@@ -2968,9 +2956,9 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_GetCurrentSceneProces
 
 extern vtable_ptr winIVRApplications_IVRApplications_007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRApplications_IVRApplications_007, 0, ".?AVIVRApplications@@")
+
+__ASM_BLOCK_BEGIN(winIVRApplications_IVRApplications_007_vtables)
     __ASM_VTABLE(winIVRApplications_IVRApplications_007,
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_AddApplicationManifest)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_RemoveApplicationManifest)
@@ -3003,9 +2991,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchInternalProcess)
         VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRApplications_IVRApplications_007(void *u_iface)
 {
@@ -3075,3 +3061,15 @@ void destroy_winIVRApplications_IVRApplications_007_FnTable(struct w_steam_iface
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRApplications_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRApplications_IVRApplications_001_rtti( base );
+    init_winIVRApplications_IVRApplications_002_rtti( base );
+    init_winIVRApplications_IVRApplications_003_rtti( base );
+    init_winIVRApplications_IVRApplications_004_rtti( base );
+    init_winIVRApplications_IVRApplications_005_rtti( base );
+    init_winIVRApplications_IVRApplications_006_rtti( base );
+    init_winIVRApplications_IVRApplications_007_rtti( base );
+#endif /* __x86_64__ */
+}

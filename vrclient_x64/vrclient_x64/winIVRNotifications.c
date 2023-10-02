@@ -60,17 +60,15 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_001_DismissNotification
 
 extern vtable_ptr winIVRNotifications_IVRNotifications_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRNotifications_IVRNotifications_001, 0, ".?AVIVRNotifications@@")
+
+__ASM_BLOCK_BEGIN(winIVRNotifications_IVRNotifications_001_vtables)
     __ASM_VTABLE(winIVRNotifications_IVRNotifications_001,
         VTABLE_ADD_FUNC(winIVRNotifications_IVRNotifications_001_GetErrorString)
         VTABLE_ADD_FUNC(winIVRNotifications_IVRNotifications_001_CreateNotification)
         VTABLE_ADD_FUNC(winIVRNotifications_IVRNotifications_001_DismissNotification)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRNotifications_IVRNotifications_001(void *u_iface)
 {
@@ -150,16 +148,14 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_002_RemoveNotification(
 
 extern vtable_ptr winIVRNotifications_IVRNotifications_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRNotifications_IVRNotifications_002, 0, ".?AVIVRNotifications@@")
+
+__ASM_BLOCK_BEGIN(winIVRNotifications_IVRNotifications_002_vtables)
     __ASM_VTABLE(winIVRNotifications_IVRNotifications_002,
         VTABLE_ADD_FUNC(winIVRNotifications_IVRNotifications_002_CreateNotification)
         VTABLE_ADD_FUNC(winIVRNotifications_IVRNotifications_002_RemoveNotification)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRNotifications_IVRNotifications_002(void *u_iface)
 {
@@ -201,3 +197,10 @@ void destroy_winIVRNotifications_IVRNotifications_002_FnTable(struct w_steam_ifa
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRNotifications_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRNotifications_IVRNotifications_001_rtti( base );
+    init_winIVRNotifications_IVRNotifications_002_rtti( base );
+#endif /* __x86_64__ */
+}

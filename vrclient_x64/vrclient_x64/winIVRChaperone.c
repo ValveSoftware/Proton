@@ -125,9 +125,9 @@ void __thiscall winIVRChaperone_IVRChaperone_002_ForceBoundsVisible(struct w_ste
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperone_IVRChaperone_002, 0, ".?AVIVRChaperone@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperone_IVRChaperone_002_vtables)
     __ASM_VTABLE(winIVRChaperone_IVRChaperone_002,
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_002_GetCalibrationState)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo)
@@ -139,9 +139,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_002_AreBoundsVisible)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_002_ForceBoundsVisible)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperone_IVRChaperone_002(void *u_iface)
 {
@@ -296,9 +294,9 @@ void __thiscall winIVRChaperone_IVRChaperone_003_ForceBoundsVisible(struct w_ste
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperone_IVRChaperone_003, 0, ".?AVIVRChaperone@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperone_IVRChaperone_003_vtables)
     __ASM_VTABLE(winIVRChaperone_IVRChaperone_003,
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_003_GetCalibrationState)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize)
@@ -309,9 +307,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_003_AreBoundsVisible)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_003_ForceBoundsVisible)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperone_IVRChaperone_003(void *u_iface)
 {
@@ -477,9 +473,9 @@ void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(struct w_steam_if
 
 extern vtable_ptr winIVRChaperone_IVRChaperone_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winIVRChaperone_IVRChaperone_004, 0, ".?AVIVRChaperone@@")
+
+__ASM_BLOCK_BEGIN(winIVRChaperone_IVRChaperone_004_vtables)
     __ASM_VTABLE(winIVRChaperone_IVRChaperone_004,
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetCalibrationState)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize)
@@ -491,9 +487,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible)
         VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_ResetZeroPose)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winIVRChaperone_IVRChaperone_004(void *u_iface)
 {
@@ -542,3 +536,11 @@ void destroy_winIVRChaperone_IVRChaperone_004_FnTable(struct w_steam_iface *obje
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+void init_winIVRChaperone_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winIVRChaperone_IVRChaperone_002_rtti( base );
+    init_winIVRChaperone_IVRChaperone_003_rtti( base );
+    init_winIVRChaperone_IVRChaperone_004_rtti( base );
+#endif /* __x86_64__ */
+}
