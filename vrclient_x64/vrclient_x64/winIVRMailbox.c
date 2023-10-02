@@ -38,7 +38,19 @@ uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_t
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, uint64_t a, const char *b, const char *c);
+uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, uint64_t a, const char *b, const char *c)
+{
+    struct IVRMailbox_IVRMailbox_001_undoc3_params params =
+    {
+        .linux_side = _this->u_iface,
+        .a = a,
+        .b = b,
+        .c = c,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRMailbox_IVRMailbox_001_undoc3, &params );
+    return params._ret;
+}
 
 uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, uint64_t a, char *b, uint32_t c, uint32_t *d)
 {

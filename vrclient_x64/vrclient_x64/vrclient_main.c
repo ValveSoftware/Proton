@@ -533,17 +533,12 @@ uint32_t __thiscall winIVRClientCore_IVRClientCore_003_Init( struct w_steam_ifac
         .eApplicationType = eApplicationType,
         .pStartupInfo = pStartupInfo,
     };
-    char *startup_info_converted;
 
     TRACE( "%p\n", _this );
 
-    startup_info_converted = json_convert_startup_info( pStartupInfo );
-    if (startup_info_converted) params.pStartupInfo = startup_info_converted;
     InitializeCriticalSection( &_this->user_data.critical_section );
 
     VRCLIENT_CALL( IVRClientCore_IVRClientCore_003_Init, &params );
-
-    free( startup_info_converted );
 
     if (params._ret) WARN( "error %#x\n", params._ret );
     else compositor_data.client_core_linux_side = params.linux_side;
@@ -607,23 +602,4 @@ bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam
     }
 
     return TRUE;
-}
-
-uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3( struct w_steam_iface *_this, uint64_t a,
-                                                         const char *b, const char *c )
-{
-    struct IVRMailbox_IVRMailbox_001_undoc3_params params =
-    {
-        .linux_side = _this->u_iface,
-        .a = a,
-        .b = b,
-        .c = json_convert_paths(c),
-    };
-
-    TRACE( "%p\n", _this );
-
-    VRCLIENT_CALL( IVRMailbox_IVRMailbox_001_undoc3, &params );
-    free( (char *)params.c );
-
-    return params._ret;
 }

@@ -22,6 +22,9 @@ extern VkPhysicalDevice_T *(WINAPI *p_get_native_VkPhysicalDevice)( VkPhysicalDe
 extern VkPhysicalDevice_T *(WINAPI *p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
 extern VkQueue_T *(WINAPI *p_get_native_VkQueue)( VkQueue_T * );
 
+extern char *json_convert_startup_info(const char *startup_info);
+extern char *json_convert_paths(const char *input);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
