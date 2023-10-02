@@ -193,10 +193,10 @@ void __thiscall winIVRCompositor_IVRCompositor_005_SetOverlayFromFile(struct w_s
         .pchFilePath = pchFilePath,
         .pSettings = pSettings,
     };
-    const char *u_pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
+    params.pchFilePath = vrclient_dos_to_unix_path( pchFilePath );
     TRACE("%p\n", _this);
     cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile( &params );
-    vrclient_free_path( u_pchFilePath );
+    vrclient_free_path( params.pchFilePath );
 }
 
 void __thiscall winIVRCompositor_IVRCompositor_005_ClearOverlay(struct w_steam_iface *_this)
@@ -9129,10 +9129,10 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverrid
         .pRenderSettings = pRenderSettings,
         .nSizeOfRenderSettings = nSizeOfRenderSettings,
     };
-    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
+    params.pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
     cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async( &params );
-    vrclient_free_path( u_pchRenderModelPath );
+    vrclient_free_path( params.pchRenderModelPath );
     return params._ret;
 }
 
@@ -9837,10 +9837,10 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverrid
         .pRenderSettings = pRenderSettings,
         .nSizeOfRenderSettings = nSizeOfRenderSettings,
     };
-    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
+    params.pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
     cppIVRCompositor_IVRCompositor_026_SetStageOverride_Async( &params );
-    vrclient_free_path( u_pchRenderModelPath );
+    vrclient_free_path( params.pchRenderModelPath );
     return params._ret;
 }
 
@@ -10604,10 +10604,10 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverrid
         .pRenderSettings = pRenderSettings,
         .nSizeOfRenderSettings = nSizeOfRenderSettings,
     };
-    const char *u_pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
+    params.pchRenderModelPath = vrclient_dos_to_unix_path( pchRenderModelPath );
     TRACE("%p\n", _this);
     cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async( &params );
-    vrclient_free_path( u_pchRenderModelPath );
+    vrclient_free_path( params.pchRenderModelPath );
     return params._ret;
 }
 
