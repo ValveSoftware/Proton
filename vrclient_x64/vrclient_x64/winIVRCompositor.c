@@ -6485,7 +6485,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_019_vtable;
 
@@ -7081,7 +7093,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_020_vtable;
 
@@ -7681,7 +7705,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 void __thiscall winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(struct w_steam_iface *_this, bool bExplicitTimingMode)
 {
@@ -8310,7 +8346,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 void __thiscall winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
@@ -8980,7 +9028,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 void __thiscall winIVRCompositor_IVRCompositor_024_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
@@ -9684,7 +9744,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 void __thiscall winIVRCompositor_IVRCompositor_026_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
@@ -10447,7 +10519,19 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanInstanceExtensio
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
 
 void __thiscall winIVRCompositor_IVRCompositor_027_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {

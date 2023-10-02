@@ -7923,7 +7923,18 @@ int32_t __thiscall winIVRSystem_IVRSystem_017_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
+void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance)
+{
+    struct IVRSystem_IVRSystem_017_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRSystem_IVRSystem_017_GetOutputDevice, &params );
+}
 
 bool __thiscall winIVRSystem_IVRSystem_017_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -8664,7 +8675,18 @@ int32_t __thiscall winIVRSystem_IVRSystem_019_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
+void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance)
+{
+    struct IVRSystem_IVRSystem_019_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRSystem_IVRSystem_019_GetOutputDevice, &params );
+}
 
 bool __thiscall winIVRSystem_IVRSystem_019_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -9439,7 +9461,18 @@ int32_t __thiscall winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
+void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance)
+{
+    struct IVRSystem_IVRSystem_020_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRSystem_IVRSystem_020_GetOutputDevice, &params );
+}
 
 bool __thiscall winIVRSystem_IVRSystem_020_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -10224,7 +10257,18 @@ int32_t __thiscall winIVRSystem_IVRSystem_021_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
+void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance)
+{
+    struct IVRSystem_IVRSystem_021_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRSystem_IVRSystem_021_GetOutputDevice, &params );
+}
 
 bool __thiscall winIVRSystem_IVRSystem_021_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -10996,7 +11040,18 @@ int32_t __thiscall winIVRSystem_IVRSystem_022_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
+void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance)
+{
+    struct IVRSystem_IVRSystem_022_GetOutputDevice_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRSystem_IVRSystem_022_GetOutputDevice, &params );
+}
 
 bool __thiscall winIVRSystem_IVRSystem_022_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {

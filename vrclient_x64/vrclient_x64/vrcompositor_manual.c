@@ -878,21 +878,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride( struct
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses( struct w_steam_iface *_this,
                                                                      TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                      TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
@@ -957,21 +942,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride( struct
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_SetSkyboxOverride, &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return params._ret;
-}
-
-uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, &params );
     return params._ret;
 }
 
@@ -1074,21 +1044,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride( struct
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired, &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses( struct w_steam_iface *_this,
                                                                      TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                      TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
@@ -1185,21 +1140,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride( struct
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_SetSkyboxOverride, &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return params._ret;
-}
-
-uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, &params );
     return params._ret;
 }
 
@@ -1302,21 +1242,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride( struct
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired, &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses( struct w_steam_iface *_this,
                                                                      TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
                                                                      TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
@@ -1416,21 +1341,6 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride( struct
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired, &params );
-    return params._ret;
-}
-
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_iface *_this,
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
@@ -1492,20 +1402,5 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride( struct
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_SetSkyboxOverride, &params );
     set_skybox_override_done( pTextures, unTextureCount );
-    return params._ret;
-}
-
-uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired( struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice,
-                                                                                          char *pchValue, uint32_t unBufferSize )
-{
-    struct IVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pPhysicalDevice = get_native_VkPhysicalDevice( pPhysicalDevice ),
-        .pchValue = pchValue,
-        .unBufferSize = unBufferSize,
-    };
-    TRACE( "%p\n", _this );
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired, &params );
     return params._ret;
 }
