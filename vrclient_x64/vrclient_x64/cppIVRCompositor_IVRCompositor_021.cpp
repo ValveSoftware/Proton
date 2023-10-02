@@ -129,14 +129,6 @@ NTSTATUS IVRCompositor_IVRCompositor_021_GetCurrentGridAlpha( void *args )
     return 0;
 }
 
-NTSTATUS IVRCompositor_IVRCompositor_021_SetSkyboxOverride( void *args )
-{
-    struct IVRCompositor_IVRCompositor_021_SetSkyboxOverride_params *params = (struct IVRCompositor_IVRCompositor_021_SetSkyboxOverride_params *)args;
-    struct u_IVRCompositor_IVRCompositor_021 *iface = (struct u_IVRCompositor_IVRCompositor_021 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetSkyboxOverride( params->pTextures, params->unTextureCount );
-    return 0;
-}
-
 NTSTATUS IVRCompositor_IVRCompositor_021_ClearSkyboxOverride( void *args )
 {
     struct IVRCompositor_IVRCompositor_021_ClearSkyboxOverride_params *params = (struct IVRCompositor_IVRCompositor_021_ClearSkyboxOverride_params *)args;
