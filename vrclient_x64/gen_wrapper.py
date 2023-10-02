@@ -216,7 +216,7 @@ unique_structs = []
 
 MANUAL_METHODS = {
     "IVRClientCore_BIsHmdPresent": lambda ver, abi: abi == 'w',
-    "IVRClientCore_Init": lambda ver, abi: abi == 'w',
+    "IVRClientCore_Init": lambda ver, abi: True,
     "IVRClientCore_GetGenericInterface": lambda ver, abi: abi == 'w',
     "IVRClientCore_Cleanup": lambda ver, abi: abi == 'w',
     "IVRSystem_GetDXGIOutputInfo": lambda ver, abi: abi == 'w',
@@ -235,7 +235,7 @@ MANUAL_METHODS = {
     "IVRRenderModels_LoadRenderModel": lambda ver, abi: ver > 1,
     "IVRRenderModels_LoadRenderModel_Async": True,
     "IVRRenderModels_FreeRenderModel": lambda ver, abi: ver > 1,
-    "IVRMailbox_undoc3": lambda ver, abi: abi == 'w',
+    "IVRMailbox_undoc3": lambda ver, abi: abi == 'u',
     "IVROverlay_SetOverlayTexture": True,
     "IVRInput_GetDigitalActionData": lambda ver, abi: abi == 'w' and ver > 3,
 }

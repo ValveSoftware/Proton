@@ -144,6 +144,7 @@ SOURCES = \
 	vrclient_x64/cppIVRTrackedCamera_IVRTrackedCamera_006.cpp \
 	vrclient_x64/json_converter.cpp \
 	vrclient_x64/jsoncpp.cpp \
+	vrclient_x64/unix_vrclientcore_manual.cpp \
 	vrclient_x64/unix_vrcompositor_manual.cpp \
 	vrclient_x64/unix_vroverlay_manual.cpp \
 	vrclient_x64/unix_vrrendermodels_manual.cpp \

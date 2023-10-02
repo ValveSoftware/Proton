@@ -16,9 +16,6 @@ typedef void (*vtable_ptr)(void);
 extern "C" {
 #endif
 
-char *json_convert_paths(const char *input);
-char *json_convert_startup_info(const char *startup_info);
-
 char *vrclient_dos_to_unix_path( const char *src );
 void vrclient_free_path( const char *path );
 
