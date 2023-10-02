@@ -197,11 +197,6 @@ static const w_Texture_t *set_skybox_override_d3d11_init( const w_Texture_t *tex
 
         state->textures[i] = vrclient_translate_texture_dxvk( texture, &state->vkdata[i], dxvk_surface,
                                                               &dxvk_device, &image_layout, &image_info );
-        state->vkdata[i].m_pDevice = get_native_VkDevice( state->vkdata[i].m_pDevice );
-        state->vkdata[i].m_pPhysicalDevice = get_native_VkPhysicalDevice( state->vkdata[i].m_pPhysicalDevice );
-        state->vkdata[i].m_pInstance = get_native_VkInstance( state->vkdata[i].m_pInstance );
-        state->vkdata[i].m_pQueue = get_native_VkQueue( state->vkdata[i].m_pQueue );
-
         if (compositor_data.dxvk_device && dxvk_device != compositor_data.dxvk_device)
         {
             ERR( "Invalid dxvk_device %p, previous %p.\n", dxvk_device, compositor_data.dxvk_device );
