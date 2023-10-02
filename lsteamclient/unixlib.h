@@ -74,11 +74,21 @@ struct networking_message
     void **p_data;
     uint32_t *p_size;
 
-    u_SteamNetworkingMessage_t_144 *u_msg_144;
-    w_SteamNetworkingMessage_t_144 w_msg_144;
+    union
+    {
+        u_SteamNetworkingMessage_t_144 *u_msg_144;
+        u_SteamNetworkingMessage_t_147 *u_msg_147;
+    };
+    union
+    {
+        w_SteamNetworkingMessage_t_144 w_msg_144;
+        w_SteamNetworkingMessage_t_147 w_msg_147;
+    };
 };
 
 extern void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMessage_t_144 **w_msgs );
+extern void unix_networking_messages_receive_147( uint32_t count, w_SteamNetworkingMessage_t_147 **w_msgs );
+extern void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg );
 #endif
 
 #ifdef __cplusplus
