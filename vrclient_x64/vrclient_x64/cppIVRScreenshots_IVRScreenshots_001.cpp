@@ -34,6 +34,7 @@ NTSTATUS IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename( void *
     struct IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename_params *params = (struct IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename_params *)args;
     struct u_IVRScreenshots_IVRScreenshots_001 *iface = (struct u_IVRScreenshots_IVRScreenshots_001 *)params->linux_side;
     params->_ret = (uint32_t)iface->GetScreenshotPropertyFilename( params->screenshotHandle, params->filenameType, params->pchFilename, params->cchFilename, params->pError );
+    params->_ret = vrclient_unix_path_to_dos_path( params->_ret, params->pchFilename, params->pchFilename, params->cchFilename );
     return 0;
 }
 

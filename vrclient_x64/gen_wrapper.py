@@ -798,6 +798,14 @@ def handle_method_cpp(method, classname, out):
     for name, param in sorted(need_output.items()):
         out(f'    if (params->{name}) *params->{name} = u_{name};\n')
 
+    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
+
+    for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
+        out(u'    ')
+        if "ret_size" in path_conv_utow:
+            out(u'params->_ret = ')
+        out(f'vrclient_unix_path_to_dos_path( params->_ret, params->{name}, params->{name}, params->{conv["len"]} );\n')
+
     for name in filter(lambda x: x in names, sorted(path_conv_wtou)):
         out(f'    vrclient_free_path( u_{name} );\n')
 
@@ -851,20 +859,12 @@ def handle_method_c(klass, method, winclassname, out):
         out(f'        .{name} = {name},\n')
     out(u'    };\n')
 
-    path_conv_utow = PATH_CONV_METHODS_UTOW.get(f'{klass.name}_{method.spelling}', {})
-
     out(u'    TRACE("%p\\n", _this);\n')
 
     if 'eTextureType' in names:
         out(u'    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
     out(f'    VRCLIENT_CALL( {method.full_name}, &params );\n')
-
-    for name, conv in filter(lambda x: x[0] in names, path_conv_utow.items()):
-        out(u'    ')
-        if "ret_size" in path_conv_utow:
-            out(u'params._ret = ')
-        out(f'vrclient_unix_path_to_dos_path( params._ret, {name}, {name}, {conv["len"]} );\n')
 
     if not returns_void:
         out(u'    return params._ret;\n')
