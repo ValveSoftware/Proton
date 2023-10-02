@@ -70,7 +70,6 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFi
     };
     TRACE("%p\n", _this);
     VRCLIENT_CALL( IVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, &params );
-    params._ret = vrclient_unix_path_to_dos_path( params._ret, pchFilename, pchFilename, cchFilename );
     return params._ret;
 }
 

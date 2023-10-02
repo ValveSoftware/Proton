@@ -31,6 +31,7 @@ extern NTSTATUS vrclient_VRClientCoreFactory( void *args );
 
 extern char *vrclient_dos_to_unix_path( const char *src );
 extern void vrclient_free_path( char *path );
+extern unsigned int vrclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst, uint32_t dst_bytes );
 
 #ifdef __cplusplus
 } /* extern "C" */
