@@ -9,6 +9,8 @@
 #include "cppISteamUtils_SteamUtils009.hpp"
 #include "cppISteamUtils_SteamUtils010.hpp"
 
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
+
 /* ISteamUtils_SteamUtils002 */
 
 void cppISteamUtils_SteamUtils002_GetAPICallResult( struct cppISteamUtils_SteamUtils002_GetAPICallResult_params *params )

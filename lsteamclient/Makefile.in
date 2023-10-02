@@ -5,7 +5,6 @@ EXTRADLLFLAGS = -mcygwin -static-libgcc -static-libstdc++ -ldl
 EXTRADEFS = -DWINE_NO_LONG_TYPES -DSTEAM_API_EXPORTS -Dprivate=public -Dprotected=public
 
 SOURCES = \
-	steam_client_manual.c \
 	steam_input_manual.c \
 	steam_networking_manual.c \
 	steamclient_main.c \
@@ -284,4 +283,5 @@ SOURCES = \
 	unix_steam_input_manual.cpp \
 	unix_steam_networking_manual.cpp \
 	unix_steam_utils_manual.cpp \
+	unixlib.cpp \
 	unixlib_generated.cpp \

@@ -311,14 +311,7 @@ static w_FSteamNetworkingSocketsDebugOutput stored_FSteamNetworkingSocketsDebugO
 
 static void lin_FSteamNetworkingSocketsDebugOutput( uint32_t nType, const char *pszMsg )
 {
-    struct callback_data cb_data = { 0 };
-    /* Only Unix native calls from here (not even TRACE):
-     * this is native Unix thread which is not initialized by Wine. */
-    cb_data.type = SOCKET_DEBUG_OUTPUT;
-    cb_data.func = stored_FSteamNetworkingSocketsDebugOutput;
-    cb_data.sockets_debug_output.type = nType;
-    cb_data.sockets_debug_output.msg = pszMsg;
-    execute_callback(&cb_data);
+    queue_sockets_debug_output( stored_FSteamNetworkingSocketsDebugOutput, nType, pszMsg );
 }
 
 u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput win_func )
@@ -332,14 +325,7 @@ static w_SteamAPIWarningMessageHook_t stored_SteamAPIWarningMessageHook_t;
 
 static void lin_SteamAPIWarningMessageHook_t(int severity, const char *msg)
 {
-    struct callback_data cb_data = { 0 };
-    /* Only Unix native calls from here (not even TRACE):
-     * this is native Unix thread which is not initialized by Wine. */
-    cb_data.type = STEAM_API_WARNING_HOOK;
-    cb_data.func = stored_SteamAPIWarningMessageHook_t;
-    cb_data.steam_api_warning_hook.severity = severity;
-    cb_data.steam_api_warning_hook.msg = msg;
-    execute_callback(&cb_data);
+    queue_warning_message_hook( stored_SteamAPIWarningMessageHook_t, severity, msg );
 }
 
 u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w_SteamAPIWarningMessageHook_t win_func )
