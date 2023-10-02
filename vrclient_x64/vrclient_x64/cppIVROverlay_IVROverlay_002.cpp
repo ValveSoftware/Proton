@@ -268,14 +268,6 @@ NTSTATUS IVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse( vo
     return 0;
 }
 
-NTSTATUS IVROverlay_IVROverlay_002_SetOverlayTexture( void *args )
-{
-    struct IVROverlay_IVROverlay_002_SetOverlayTexture_params *params = (struct IVROverlay_IVROverlay_002_SetOverlayTexture_params *)args;
-    struct u_IVROverlay_IVROverlay_002 *iface = (struct u_IVROverlay_IVROverlay_002 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->eTextureType, params->pTexture );
-    return 0;
-}
-
 NTSTATUS IVROverlay_IVROverlay_002_ClearOverlayTexture( void *args )
 {
     struct IVROverlay_IVROverlay_002_ClearOverlayTexture_params *params = (struct IVROverlay_IVROverlay_002_ClearOverlayTexture_params *)args;

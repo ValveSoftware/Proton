@@ -469,14 +469,6 @@ NTSTATUS IVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride( void *arg
     return 0;
 }
 
-NTSTATUS IVROverlay_IVROverlay_027_SetOverlayTexture( void *args )
-{
-    struct IVROverlay_IVROverlay_027_SetOverlayTexture_params *params = (struct IVROverlay_IVROverlay_027_SetOverlayTexture_params *)args;
-    struct u_IVROverlay_IVROverlay_027 *iface = (struct u_IVROverlay_IVROverlay_027 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->pTexture );
-    return 0;
-}
-
 NTSTATUS IVROverlay_IVROverlay_027_ClearOverlayTexture( void *args )
 {
     struct IVROverlay_IVROverlay_027_ClearOverlayTexture_params *params = (struct IVROverlay_IVROverlay_027_ClearOverlayTexture_params *)args;
