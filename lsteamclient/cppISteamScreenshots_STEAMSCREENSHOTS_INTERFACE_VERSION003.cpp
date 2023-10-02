@@ -13,7 +13,11 @@ NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotTo
 {
     struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params *params = (struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params *)args;
     struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *iface = (struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *)params->linux_side;
-    params->_ret = iface->AddScreenshotToLibrary( params->pchFilename, params->pchThumbnailFilename, params->nWidth, params->nHeight );
+    char *u_pchFilename = steamclient_dos_to_unix_path( params->pchFilename, 0 );
+    char *u_pchThumbnailFilename = steamclient_dos_to_unix_path( params->pchThumbnailFilename, 0 );
+    params->_ret = iface->AddScreenshotToLibrary( u_pchFilename, u_pchThumbnailFilename, params->nWidth, params->nHeight );
+    steamclient_free_path( u_pchFilename );
+    steamclient_free_path( u_pchThumbnailFilename );
     return 0;
 }
 
@@ -69,7 +73,11 @@ NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshot
 {
     struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params *params = (struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params *)args;
     struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *iface = (struct u_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *)params->linux_side;
-    params->_ret = iface->AddVRScreenshotToLibrary( params->eType, params->pchFilename, params->pchVRFilename );
+    char *u_pchFilename = steamclient_dos_to_unix_path( params->pchFilename, 0 );
+    char *u_pchVRFilename = steamclient_dos_to_unix_path( params->pchVRFilename, 0 );
+    params->_ret = iface->AddVRScreenshotToLibrary( params->eType, u_pchFilename, u_pchVRFilename );
+    steamclient_free_path( u_pchFilename );
+    steamclient_free_path( u_pchVRFilename );
     return 0;
 }
 

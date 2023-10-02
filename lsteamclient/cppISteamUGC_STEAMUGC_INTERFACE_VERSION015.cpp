@@ -375,7 +375,9 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent( void *args )
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *)params->linux_side;
-    params->_ret = iface->SetItemContent( params->handle, params->pszContentFolder );
+    char *u_pszContentFolder = steamclient_dos_to_unix_path( params->pszContentFolder, 0 );
+    params->_ret = iface->SetItemContent( params->handle, u_pszContentFolder );
+    steamclient_free_path( u_pszContentFolder );
     return 0;
 }
 
@@ -383,7 +385,9 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview( void *args )
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *)params->linux_side;
-    params->_ret = iface->SetItemPreview( params->handle, params->pszPreviewFile );
+    char *u_pszPreviewFile = steamclient_dos_to_unix_path( params->pszPreviewFile, 0 );
+    params->_ret = iface->SetItemPreview( params->handle, u_pszPreviewFile );
+    steamclient_free_path( u_pszPreviewFile );
     return 0;
 }
 
@@ -423,7 +427,9 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile( void *args 
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *)params->linux_side;
-    params->_ret = iface->AddItemPreviewFile( params->handle, params->pszPreviewFile, params->type );
+    char *u_pszPreviewFile = steamclient_dos_to_unix_path( params->pszPreviewFile, 0 );
+    params->_ret = iface->AddItemPreviewFile( params->handle, u_pszPreviewFile, params->type );
+    steamclient_free_path( u_pszPreviewFile );
     return 0;
 }
 
@@ -439,7 +445,9 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile( void *ar
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *)params->linux_side;
-    params->_ret = iface->UpdateItemPreviewFile( params->handle, params->index, params->pszPreviewFile );
+    char *u_pszPreviewFile = steamclient_dos_to_unix_path( params->pszPreviewFile, 0 );
+    params->_ret = iface->UpdateItemPreviewFile( params->handle, params->index, u_pszPreviewFile );
+    steamclient_free_path( u_pszPreviewFile );
     return 0;
 }
 
@@ -575,7 +583,9 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer( voi
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION015 *)params->linux_side;
-    params->_ret = iface->BInitWorkshopForGameServer( params->unWorkshopDepotID, params->pszFolder );
+    char *u_pszFolder = steamclient_dos_to_unix_path( params->pszFolder, 0 );
+    params->_ret = iface->BInitWorkshopForGameServer( params->unWorkshopDepotID, u_pszFolder );
+    steamclient_free_path( u_pszFolder );
     return 0;
 }
 

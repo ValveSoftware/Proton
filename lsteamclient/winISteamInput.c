@@ -1091,10 +1091,8 @@ bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(stru
         .linux_side = _this->u_iface,
         .pchInputActionManifestAbsolutePath = pchInputActionManifestAbsolutePath,
     };
-    params.pchInputActionManifestAbsolutePath = steamclient_dos_to_unix_path( pchInputActionManifestAbsolutePath, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_SetInputActionManifestFilePath, &params );
-    steamclient_free_path( params.pchInputActionManifestAbsolutePath );
     return params._ret;
 }
 
@@ -1748,10 +1746,8 @@ bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(stru
         .linux_side = _this->u_iface,
         .pchInputActionManifestAbsolutePath = pchInputActionManifestAbsolutePath,
     };
-    params.pchInputActionManifestAbsolutePath = steamclient_dos_to_unix_path( pchInputActionManifestAbsolutePath, 0 );
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_SetInputActionManifestFilePath, &params );
-    steamclient_free_path( params.pchInputActionManifestAbsolutePath );
     return params._ret;
 }
 

@@ -78,6 +78,11 @@ extern NTSTATUS steamclient_networking_messages_receive_153a( void * );
 extern NTSTATUS steamclient_networking_message_release_147( void * );
 extern NTSTATUS steamclient_networking_message_release_153a( void * );
 
+extern char *steamclient_dos_to_unix_path( const char *src, int is_url );
+extern void steamclient_free_path( char *path_array );
+extern const char **steamclient_dos_to_unix_path_array( const char **src_array );
+extern void steamclient_free_path_array( const char **path_array );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

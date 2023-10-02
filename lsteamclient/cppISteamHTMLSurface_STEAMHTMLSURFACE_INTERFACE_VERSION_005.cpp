@@ -37,7 +37,9 @@ NTSTATUS ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL( void 
 {
     struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL_params *params = (struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL_params *)args;
     struct u_ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *iface = (struct u_ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *)params->linux_side;
-    iface->LoadURL( params->unBrowserHandle, params->pchURL, params->pchPostData );
+    char *u_pchURL = steamclient_dos_to_unix_path( params->pchURL, 1 );
+    iface->LoadURL( params->unBrowserHandle, u_pchURL, params->pchPostData );
+    steamclient_free_path( u_pchURL );
     return 0;
 }
 
@@ -295,7 +297,9 @@ NTSTATUS ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialog
 {
     struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse_params *params = (struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse_params *)args;
     struct u_ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *iface = (struct u_ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *)params->linux_side;
-    iface->FileLoadDialogResponse( params->unBrowserHandle, params->pchSelectedFiles );
+    const char **u_pchSelectedFiles = steamclient_dos_to_unix_path_array( params->pchSelectedFiles );
+    iface->FileLoadDialogResponse( params->unBrowserHandle, u_pchSelectedFiles );
+    steamclient_free_path_array( u_pchSelectedFiles );
     return 0;
 }
 

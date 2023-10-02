@@ -150,7 +150,9 @@ NTSTATUS ISteamUtils_SteamUtils005_CheckFileSignature( void *args )
 {
     struct ISteamUtils_SteamUtils005_CheckFileSignature_params *params = (struct ISteamUtils_SteamUtils005_CheckFileSignature_params *)args;
     struct u_ISteamUtils_SteamUtils005 *iface = (struct u_ISteamUtils_SteamUtils005 *)params->linux_side;
-    params->_ret = iface->CheckFileSignature( params->szFileName );
+    char *u_szFileName = steamclient_dos_to_unix_path( params->szFileName, 0 );
+    params->_ret = iface->CheckFileSignature( u_szFileName );
+    steamclient_free_path( u_szFileName );
     return 0;
 }
 
