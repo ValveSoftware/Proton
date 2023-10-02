@@ -83,6 +83,9 @@ extern void steamclient_free_path( char *path_array );
 extern const char **steamclient_dos_to_unix_path_array( const char **src_array );
 extern void steamclient_free_path_array( const char **path_array );
 
+extern unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst,
+                                                       uint32_t dst_bytes, int is_url );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

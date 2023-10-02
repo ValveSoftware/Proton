@@ -58,7 +58,6 @@ int32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInst
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir, &params );
-    params._ret = steamclient_unix_path_to_dos_path( params._ret, pchDirectory, pchDirectory, cchNameMax, 0 );
     return params._ret;
 }
 

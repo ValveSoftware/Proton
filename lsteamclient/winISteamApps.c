@@ -727,7 +727,6 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDi
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir, &params );
-    params._ret = steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderBufferSize, 0 );
     return params._ret;
 }
 
@@ -1027,7 +1026,6 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDi
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir, &params );
-    params._ret = steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderBufferSize, 0 );
     return params._ret;
 }
 
@@ -1355,7 +1353,6 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDi
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir, &params );
-    params._ret = steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderBufferSize, 0 );
     return params._ret;
 }
 
@@ -1716,7 +1713,6 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDi
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir, &params );
-    params._ret = steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderBufferSize, 0 );
     return params._ret;
 }
 
