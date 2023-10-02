@@ -421,14 +421,6 @@ NTSTATUS IVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform( void *args )
     return 0;
 }
 
-NTSTATUS IVROverlay_IVROverlay_021_SetOverlayTexture( void *args )
-{
-    struct IVROverlay_IVROverlay_021_SetOverlayTexture_params *params = (struct IVROverlay_IVROverlay_021_SetOverlayTexture_params *)args;
-    struct u_IVROverlay_IVROverlay_021 *iface = (struct u_IVROverlay_IVROverlay_021 *)params->linux_side;
-    params->_ret = (uint32_t)iface->SetOverlayTexture( params->ulOverlayHandle, params->pTexture );
-    return 0;
-}
-
 NTSTATUS IVROverlay_IVROverlay_021_ClearOverlayTexture( void *args )
 {
     struct IVROverlay_IVROverlay_021_ClearOverlayTexture_params *params = (struct IVROverlay_IVROverlay_021_ClearOverlayTexture_params *)args;
