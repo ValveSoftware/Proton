@@ -30,6 +30,7 @@ NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir( void 
     struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params *)args;
     struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *iface = (struct u_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *)params->linux_side;
     params->_ret = iface->GetAppInstallDir( params->nAppID, params->pchDirectory, params->cchNameMax );
+    params->_ret = steamclient_unix_path_to_dos_path( params->_ret, params->pchDirectory, params->pchDirectory, params->cchNameMax, 0 );
     return 0;
 }
 

@@ -46,9 +46,6 @@ typedef void (*CDECL win_SteamInputActionEventCallbackPointer)( struct SteamInpu
 void lin_SteamInputActionEventCallbackPointer( struct SteamInputActionEvent_t *dat );
 
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
-unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst,
-                                                uint32_t dst_bytes, int is_url );
-
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
 void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version);
 

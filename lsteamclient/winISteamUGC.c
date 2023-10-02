@@ -663,7 +663,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -1158,7 +1157,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -1667,7 +1665,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -1956,7 +1953,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -2384,7 +2380,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -2690,7 +2685,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -3169,7 +3163,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -3487,7 +3480,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -4051,7 +4043,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -4408,7 +4399,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -5040,7 +5030,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -5406,7 +5395,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -6051,7 +6039,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -6465,7 +6452,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -7123,7 +7109,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -7638,7 +7623,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -8309,7 +8293,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -8828,7 +8811,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -9527,7 +9509,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -10049,7 +10030,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -10761,7 +10741,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -11334,7 +11313,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -12046,7 +12024,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -12648,7 +12625,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -13388,7 +13364,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -13995,7 +13970,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -14776,7 +14750,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 
@@ -15387,7 +15360,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditional
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditionalPreview, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchURLOrVideoID, pchURLOrVideoID, cchURLSize, 1 );
     return params._ret;
 }
 
@@ -16169,7 +16141,6 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo(st
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo, &params );
-    steamclient_unix_path_to_dos_path( params._ret, pchFolder, pchFolder, cchFolderSize, 0 );
     return params._ret;
 }
 

@@ -350,3 +350,59 @@ void steamclient_free_path_array( const char **path_array )
     for (path = path_array; *path; path++) HeapFree( GetProcessHeap(), 0, *(char **)path );
     HeapFree( GetProcessHeap(), 0, path_array );
 }
+
+/* Returns:
+ *  - if successful, the number of bytes written to dst, including the NULL terminator;
+ *  - 0 if failed;
+ *  - PATH_MAX if insufficient output buffer (TODO: should be actual required length including NULL terminator). */
+unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst, uint32_t dst_bytes, int is_url )
+{
+    static const char file_prot[] = "file://";
+    WCHAR *dosW;
+    uint32_t r;
+
+    if (!src || !*src || !api_result || !dst || !dst_bytes)
+    {
+        if (dst && dst_bytes) *dst = 0;
+        return api_result ? PATH_MAX : 0;
+    }
+
+    if (is_url)
+    {
+        /* convert only file: URLs */
+        if (strncmp( src, file_prot, 7 ))
+        {
+            r = strlen( src ) + 1;
+            if (r > dst_bytes) *dst = 0;
+            else memmove( dst, src, r );
+            return r;
+        }
+        if (dst_bytes < sizeof(file_prot))
+        {
+            *dst = 0;
+            return PATH_MAX;
+        }
+        memmove( dst, src, 7 );
+        src += 7;
+        dst += 7;
+        dst_bytes -= 7;
+    }
+
+    dosW = wine_get_dos_file_name( src );
+    if (!dosW)
+    {
+        WARN( "Unable to convert unix filename to DOS: %s.\n", debugstr_a(src) );
+        *dst = 0;
+        return 0;
+    }
+
+    r = WideCharToMultiByte( CP_ACP, 0, dosW, -1, dst, dst_bytes, NULL, NULL );
+    if (!r)
+    {
+        *dst = 0;
+        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) r = PATH_MAX;
+    }
+    HeapFree( GetProcessHeap(), 0, dosW );
+
+    return r;
+}

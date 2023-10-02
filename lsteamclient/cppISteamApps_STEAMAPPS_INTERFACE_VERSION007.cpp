@@ -150,6 +150,7 @@ NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir( void *args 
     struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir_params *)args;
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION007 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION007 *)params->linux_side;
     params->_ret = iface->GetAppInstallDir( params->appID, params->pchFolder, params->cchFolderBufferSize );
+    params->_ret = steamclient_unix_path_to_dos_path( params->_ret, params->pchFolder, params->pchFolder, params->cchFolderBufferSize, 0 );
     return 0;
 }
 
