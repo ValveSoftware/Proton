@@ -201,34 +201,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hConn = hConn,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection( &params );
-    return params._ret;
-}
-
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, uint32_t hSocket, w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hSocket = hSocket,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket( &params );
-    return params._ret;
-}
-
 bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t_144 *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo_params params =
@@ -647,34 +619,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_FlushMe
     };
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection( &params );
-    return params._ret;
-}
-
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hConn = hConn,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection( &params );
-    return params._ret;
-}
-
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, uint32_t hSocket, w_SteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
-{
-    struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hSocket = hSocket,
-        .ppOutMessages = ppOutMessages,
-        .nMaxMessages = nMaxMessages,
-    };
-    TRACE("%p\n", _this);
-    cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket( &params );
     return params._ret;
 }
 
