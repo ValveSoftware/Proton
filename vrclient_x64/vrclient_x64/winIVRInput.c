@@ -43,10 +43,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_003_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -396,10 +396,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_004_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -764,10 +764,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_005_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -1239,10 +1239,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_006_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -1735,10 +1735,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_007_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 
@@ -2270,10 +2270,10 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w
         .linux_side = _this->u_iface,
         .pchActionManifestPath = pchActionManifestPath,
     };
-    const char *u_pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
+    params.pchActionManifestPath = vrclient_dos_to_unix_path( pchActionManifestPath );
     TRACE("%p\n", _this);
     cppIVRInput_IVRInput_010_SetActionManifestPath( &params );
-    vrclient_free_path( u_pchActionManifestPath );
+    vrclient_free_path( params.pchActionManifestPath );
     return params._ret;
 }
 

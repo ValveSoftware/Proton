@@ -48,10 +48,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_001_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -62,10 +62,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_001_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -431,10 +431,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_002_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -445,10 +445,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_002_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -799,10 +799,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_003_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -813,10 +813,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_003_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -1185,10 +1185,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_004_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -1199,10 +1199,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_004_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -1602,10 +1602,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_005_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -1616,10 +1616,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_005_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -2043,10 +2043,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_006_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -2057,10 +2057,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_006_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -2590,10 +2590,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_AddApplica
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
         .bTemporary = bTemporary,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_007_AddApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 
@@ -2604,10 +2604,10 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_RemoveAppl
         .linux_side = _this->u_iface,
         .pchApplicationManifestFullPath = pchApplicationManifestFullPath,
     };
-    const char *u_pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
+    params.pchApplicationManifestFullPath = vrclient_dos_to_unix_path( pchApplicationManifestFullPath );
     TRACE("%p\n", _this);
     cppIVRApplications_IVRApplications_007_RemoveApplicationManifest( &params );
-    vrclient_free_path( u_pchApplicationManifestFullPath );
+    vrclient_free_path( params.pchApplicationManifestFullPath );
     return params._ret;
 }
 

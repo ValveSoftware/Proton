@@ -36,12 +36,12 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreen
         .pchPreviewFilename = pchPreviewFilename,
         .pchVRFilename = pchVRFilename,
     };
-    const char *u_pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
-    const char *u_pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
+    params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
+    params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
     cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot( &params );
-    vrclient_free_path( u_pchPreviewFilename );
-    vrclient_free_path( u_pchVRFilename );
+    vrclient_free_path( params.pchPreviewFilename );
+    vrclient_free_path( params.pchVRFilename );
     return params._ret;
 }
 
@@ -110,12 +110,12 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScr
         .pchPreviewFilename = pchPreviewFilename,
         .pchVRFilename = pchVRFilename,
     };
-    const char *u_pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
-    const char *u_pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
+    params.pchPreviewFilename = vrclient_dos_to_unix_path( pchPreviewFilename );
+    params.pchVRFilename = vrclient_dos_to_unix_path( pchVRFilename );
     TRACE("%p\n", _this);
     cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot( &params );
-    vrclient_free_path( u_pchPreviewFilename );
-    vrclient_free_path( u_pchVRFilename );
+    vrclient_free_path( params.pchPreviewFilename );
+    vrclient_free_path( params.pchVRFilename );
     return params._ret;
 }
 
@@ -129,12 +129,12 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreens
         .pchSourcePreviewFilename = pchSourcePreviewFilename,
         .pchSourceVRFilename = pchSourceVRFilename,
     };
-    const char *u_pchSourcePreviewFilename = vrclient_dos_to_unix_path( pchSourcePreviewFilename );
-    const char *u_pchSourceVRFilename = vrclient_dos_to_unix_path( pchSourceVRFilename );
+    params.pchSourcePreviewFilename = vrclient_dos_to_unix_path( pchSourcePreviewFilename );
+    params.pchSourceVRFilename = vrclient_dos_to_unix_path( pchSourceVRFilename );
     TRACE("%p\n", _this);
     cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot( &params );
-    vrclient_free_path( u_pchSourcePreviewFilename );
-    vrclient_free_path( u_pchSourceVRFilename );
+    vrclient_free_path( params.pchSourcePreviewFilename );
+    vrclient_free_path( params.pchSourceVRFilename );
     return params._ret;
 }
 
