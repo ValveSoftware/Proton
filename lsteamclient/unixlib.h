@@ -78,17 +78,21 @@ struct networking_message
     {
         u_SteamNetworkingMessage_t_144 *u_msg_144;
         u_SteamNetworkingMessage_t_147 *u_msg_147;
+        u_SteamNetworkingMessage_t_153a *u_msg_153a;
     };
     union
     {
         w_SteamNetworkingMessage_t_144 w_msg_144;
         w_SteamNetworkingMessage_t_147 w_msg_147;
+        w_SteamNetworkingMessage_t_153a w_msg_153a;
     };
 };
 
 extern void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMessage_t_144 **w_msgs );
 extern void unix_networking_messages_receive_147( uint32_t count, w_SteamNetworkingMessage_t_147 **w_msgs );
+extern void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **w_msgs );
 extern void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg );
+extern void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg );
 #endif
 
 #ifdef __cplusplus

@@ -204,15 +204,15 @@ MANUAL_STRUCTS = [
 MANUAL_METHODS = {
     #TODO: 001 005 007
     #NOTE: 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
-    "ISteamNetworkingSockets_ReceiveMessagesOnConnection": lambda ver, abi: abi == 'u' or ver <= 9,
-    "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": lambda ver, abi: abi == 'u' or ver <= 9,
-    "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": lambda ver, abi: abi == 'u' or ver <= 9,
-    "ISteamNetworkingSockets_SendMessages": lambda ver, abi: abi == 'u' or ver <= 9,
+    "ISteamNetworkingSockets_ReceiveMessagesOnConnection": True,
+    "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": True,
+    "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": True,
+    "ISteamNetworkingSockets_SendMessages": True,
 
-    "ISteamNetworkingUtils_AllocateMessage": lambda ver, abi: abi == 'u' or ver <= 3,
+    "ISteamNetworkingUtils_AllocateMessage": True,
     "ISteamNetworkingUtils_SetConfigValue": lambda ver, abi: abi == 'u' and ver >= 3,
 
-    "ISteamNetworkingMessages_ReceiveMessagesOnChannel": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingMessages_ReceiveMessagesOnChannel": True,
 
     "ISteamInput_EnableActionEventCallbacks": lambda ver, abi: abi == 'u',
     "ISteamInput_GetGlyphForActionOrigin": True,
@@ -225,7 +225,7 @@ MANUAL_METHODS = {
     "ISteamController_GetGlyphForXboxOrigin": True,
 
     "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'w',
-    "ISteamNetworkingFakeUDPPort_ReceiveMessages": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingFakeUDPPort_ReceiveMessages": True,
 
     "ISteamClient_BShutdownIfAllPipesClosed": lambda ver, abi: abi == 'w',
     "ISteamClient_CreateSteamPipe": lambda ver, abi: abi == 'w',
