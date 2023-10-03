@@ -352,6 +352,10 @@ static void execute_pending_callbacks(void)
                    params.callback->warning_message_hook.severity, wine_dbgstr_a( params.callback->warning_message_hook.msg ) );
             params.callback->warning_message_hook.pFunction( params.callback->warning_message_hook.severity, params.callback->warning_message_hook.msg );
             break;
+        case CALL_CDECL_FUNC_DATA:
+            TRACE( "CALL_CDECL_FUNC_DATA func %p, data %p.\n", params.callback->call_cdecl_func_data.pFunc, params.callback->call_cdecl_func_data.data );
+            params.callback->call_cdecl_func_data.pFunc( params.callback->call_cdecl_func_data.data );
+            break;
         case CALL_IFACE_VTABLE_0:
             TRACE( "CALL_IFACE_VTABLE_0 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
                    params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
