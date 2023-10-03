@@ -242,7 +242,6 @@ SOURCES = \
 	cppISteamUtils_SteamUtils010.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V001.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V002.cpp \
-	unix_steam_client_manual.cpp \
 	unix_steam_input_manual.cpp \
 	unix_steam_networking_manual.cpp \
 	unix_steam_utils_manual.cpp \

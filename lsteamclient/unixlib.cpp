@@ -16,9 +16,10 @@ struct callback_entry
 static struct list callbacks = LIST_INIT( callbacks );
 static pthread_mutex_t callbacks_lock = PTHREAD_MUTEX_INITIALIZER;
 
-void queue_sockets_debug_output( void (*W_STDCALL pfnFunc)( uint32_t, const char * ), uint32_t type, const char *msg )
+static w_FSteamNetworkingSocketsDebugOutput w_steam_networking_socket_debug_output;
+static void u_steam_networking_socket_debug_output( uint32_t nType, const char *pszMsg )
 {
-    uint32_t msg_size = strlen( msg ) + 1, size = msg_size;
+    uint32_t msg_size = strlen( pszMsg ) + 1, size = msg_size;
     struct callback_entry *entry;
 
     size += sizeof(struct callback_entry);
@@ -28,16 +29,23 @@ void queue_sockets_debug_output( void (*W_STDCALL pfnFunc)( uint32_t, const char
     size -= offsetof( struct callback_entry, callback );
     entry->callback.size = size;
 
-    entry->callback.sockets_debug_output.pfnFunc = pfnFunc;
-    entry->callback.sockets_debug_output.type = type;
-    memcpy( (char *)entry->callback.sockets_debug_output.msg, msg, msg_size );
+    entry->callback.sockets_debug_output.pfnFunc = w_steam_networking_socket_debug_output;
+    entry->callback.sockets_debug_output.type = nType;
+    memcpy( (char *)entry->callback.sockets_debug_output.msg, pszMsg, msg_size );
 
     pthread_mutex_lock( &callbacks_lock );
     list_add_tail( &callbacks, &entry->entry );
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char * ), int32_t severity, const char *msg )
+u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput w_func )
+{
+    w_steam_networking_socket_debug_output = w_func;
+    return &u_steam_networking_socket_debug_output;
+}
+
+static w_SteamAPIWarningMessageHook_t w_steam_api_warning_message_hook;
+static void u_steam_api_warning_message_hook( int severity, const char *msg )
 {
     uint32_t msg_size = strlen( msg ) + 1, size = msg_size;
     struct callback_entry *entry;
@@ -49,13 +57,82 @@ void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char 
     size -= offsetof( struct callback_entry, callback );
     entry->callback.size = size;
 
-    entry->callback.warning_message_hook.pFunction = pFunction;
+    entry->callback.warning_message_hook.pFunction = w_steam_api_warning_message_hook;
     entry->callback.warning_message_hook.severity = severity;
     memcpy( (char *)entry->callback.warning_message_hook.msg, msg, msg_size );
 
     pthread_mutex_lock( &callbacks_lock );
     list_add_tail( &callbacks, &entry->entry );
     pthread_mutex_unlock( &callbacks_lock );
+}
+
+u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w_SteamAPIWarningMessageHook_t w_func )
+{
+    w_steam_api_warning_message_hook = w_func;
+    return &u_steam_api_warning_message_hook;
+}
+
+static uint32_t U_STDCALL u_steam_api_check_callback_registered( int32_t v )
+{
+    return 1;
+}
+
+u_SteamAPI_CheckCallbackRegistered_t manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( w_SteamAPI_CheckCallbackRegistered_t w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_steam_api_check_callback_registered;
+}
+
+static uint32_t U_CDECL u_steam_api_check_callback_registered_156( int32_t v )
+{
+    return 1;
+}
+
+u_SteamAPI_CheckCallbackRegistered_t_156 manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func_156( w_SteamAPI_CheckCallbackRegistered_t_156 w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_steam_api_check_callback_registered_156;
+}
+
+static void U_STDCALL u_steam_api_post_api_result_in_process( uint64_t a, void *b, uint32_t c, int d )
+{
+}
+
+u_SteamAPI_PostAPIResultInProcess_t manual_convert_Set_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_steam_api_post_api_result_in_process;
+}
+
+u_SteamAPI_PostAPIResultInProcess_t manual_convert_Remove_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_steam_api_post_api_result_in_process;
+}
+
+static void U_STDCALL u_void_steam_api_post_api_result_in_process(void)
+{
+}
+
+u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_void_steam_api_post_api_result_in_process;
+}
+
+u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t w_func )
+{
+    FIXME("not implemented!\n");
+    return &u_void_steam_api_post_api_result_in_process;
+}
+
+NTSTATUS ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess( void *args )
+{
+    struct ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params = (struct ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *)args;
+    struct u_ISteamClient_SteamClient020 *iface = (struct u_ISteamClient_SteamClient020 *)params->linux_side;
+    uint32_t (*U_CDECL lin_func)(int32_t) = manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func_156( params->func );
+    iface->Set_SteamAPI_CCheckCallbackRegisteredInProcess( lin_func );
+    return 0;
 }
 
 NTSTATUS steamclient_next_callback( void *args )
