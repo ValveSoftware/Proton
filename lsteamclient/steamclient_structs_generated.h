@@ -2539,12 +2539,18 @@ typedef struct u_ISteamMatchmakingRulesResponse u32_ISteamMatchmakingRulesRespon
 typedef struct w_ISteamMatchmakingRulesResponse w_ISteamMatchmakingRulesResponse;
 typedef struct w_ISteamMatchmakingRulesResponse w64_ISteamMatchmakingRulesResponse;
 typedef struct w_ISteamMatchmakingRulesResponse w32_ISteamMatchmakingRulesResponse;
-typedef struct u_ISteamMatchmakingServerListResponse u_ISteamMatchmakingServerListResponse;
-typedef struct u_ISteamMatchmakingServerListResponse u64_ISteamMatchmakingServerListResponse;
-typedef struct u_ISteamMatchmakingServerListResponse u32_ISteamMatchmakingServerListResponse;
-typedef struct w_ISteamMatchmakingServerListResponse w_ISteamMatchmakingServerListResponse;
-typedef struct w_ISteamMatchmakingServerListResponse w64_ISteamMatchmakingServerListResponse;
-typedef struct w_ISteamMatchmakingServerListResponse w32_ISteamMatchmakingServerListResponse;
+typedef struct u_ISteamMatchmakingServerListResponse_106 u_ISteamMatchmakingServerListResponse_106;
+typedef struct u_ISteamMatchmakingServerListResponse_106 u64_ISteamMatchmakingServerListResponse_106;
+typedef struct u_ISteamMatchmakingServerListResponse_106 u32_ISteamMatchmakingServerListResponse_106;
+typedef struct w_ISteamMatchmakingServerListResponse_106 w_ISteamMatchmakingServerListResponse_106;
+typedef struct w_ISteamMatchmakingServerListResponse_106 w64_ISteamMatchmakingServerListResponse_106;
+typedef struct w_ISteamMatchmakingServerListResponse_106 w32_ISteamMatchmakingServerListResponse_106;
+typedef struct u_ISteamMatchmakingServerListResponse_099u u_ISteamMatchmakingServerListResponse_099u;
+typedef struct u_ISteamMatchmakingServerListResponse_099u u64_ISteamMatchmakingServerListResponse_099u;
+typedef struct u_ISteamMatchmakingServerListResponse_099u u32_ISteamMatchmakingServerListResponse_099u;
+typedef struct w_ISteamMatchmakingServerListResponse_099u w_ISteamMatchmakingServerListResponse_099u;
+typedef struct w_ISteamMatchmakingServerListResponse_099u w64_ISteamMatchmakingServerListResponse_099u;
+typedef struct w_ISteamMatchmakingServerListResponse_099u w32_ISteamMatchmakingServerListResponse_099u;
 typedef struct u_ISteamNetworkingConnectionCustomSignaling u_ISteamNetworkingConnectionCustomSignaling;
 typedef struct u_ISteamNetworkingConnectionCustomSignaling u64_ISteamNetworkingConnectionCustomSignaling;
 typedef struct u_ISteamNetworkingConnectionCustomSignaling u32_ISteamNetworkingConnectionCustomSignaling;
@@ -5608,7 +5614,7 @@ struct u_ISteamMatchmakingRulesResponse
 #endif /* __cplusplus */
 };
 
-struct w_ISteamMatchmakingServerListResponse
+struct w_ISteamMatchmakingServerListResponse_106
 {
 #ifdef __cplusplus
     virtual void ServerResponded( void *, int32_t ) = 0;
@@ -5617,12 +5623,30 @@ struct w_ISteamMatchmakingServerListResponse
 #endif /* __cplusplus */
 };
 
-struct u_ISteamMatchmakingServerListResponse
+struct u_ISteamMatchmakingServerListResponse_106
 {
 #ifdef __cplusplus
     virtual void ServerResponded( void *, int32_t ) = 0;
     virtual void ServerFailedToRespond( void *, int32_t ) = 0;
     virtual void RefreshComplete( void *, uint32_t ) = 0;
+#endif /* __cplusplus */
+};
+
+struct w_ISteamMatchmakingServerListResponse_099u
+{
+#ifdef __cplusplus
+    virtual void ServerResponded( int32_t ) = 0;
+    virtual void ServerFailedToRespond( int32_t ) = 0;
+    virtual void RefreshComplete( uint32_t ) = 0;
+#endif /* __cplusplus */
+};
+
+struct u_ISteamMatchmakingServerListResponse_099u
+{
+#ifdef __cplusplus
+    virtual void ServerResponded( int32_t ) = 0;
+    virtual void ServerFailedToRespond( int32_t ) = 0;
+    virtual void RefreshComplete( uint32_t ) = 0;
 #endif /* __cplusplus */
 };
 

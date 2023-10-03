@@ -16,6 +16,71 @@ struct callback_entry
 static struct list callbacks = LIST_INIT( callbacks );
 static pthread_mutex_t callbacks_lock = PTHREAD_MUTEX_INITIALIZER;
 
+extern void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1, uint64_t arg2 )
+{
+    struct callback_entry *entry;
+    uint32_t size = 0;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)malloc( size ))) return;
+
+    entry->callback.type = type;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.call_iface_vtable.iface = w_iface;
+    entry->callback.call_iface_vtable.arg0 = arg0;
+    entry->callback.call_iface_vtable.arg1 = arg1;
+    entry->callback.call_iface_vtable.arg2 = arg2;
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+extern void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_iface, const char *pchName, int nScore, float flTimePlayed )
+{
+    uint32_t name_size = strlen( pchName ) + 1, size = name_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)malloc( size ))) return;
+
+    entry->callback.type = CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.add_player_to_list.iface = w_iface;
+    entry->callback.add_player_to_list.score = nScore;
+    entry->callback.add_player_to_list.time_played = flTimePlayed;
+    memcpy( (char *)entry->callback.add_player_to_list.name, pchName, name_size );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_iface, const char *pchRule, const char *pchValue )
+{
+    uint32_t rule_size = strlen( pchRule ) + 1, value_size = strlen( pchValue ) + 1, size = rule_size + value_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)malloc( size ))) return;
+
+    entry->callback.type = CALL_IFACE_VTABLE_0_RULES_RESPONDED;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.rules_responded.iface = w_iface;
+    memcpy( (char *)entry->callback.rules_responded.rule_and_value, pchRule, rule_size );
+    memcpy( (char *)entry->callback.rules_responded.rule_and_value + rule_size, pchValue, value_size );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
 static w_FSteamNetworkingSocketsDebugOutput w_steam_networking_socket_debug_output;
 static void u_steam_networking_socket_debug_output( uint32_t nType, const char *pszMsg )
 {

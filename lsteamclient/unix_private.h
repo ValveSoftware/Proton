@@ -18,12 +18,10 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-extern struct u_ISteamMatchmakingServerListResponse *create_LinuxISteamMatchmakingServerListResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
-extern struct u_ISteamMatchmakingPingResponse *create_LinuxISteamMatchmakingPingResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
-extern struct u_ISteamMatchmakingPlayersResponse *create_LinuxISteamMatchmakingPlayersResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
-extern struct u_ISteamMatchmakingRulesResponse *create_LinuxISteamMatchmakingRulesResponse( void *win, const char *version ) DECLSPEC_HIDDEN;
-extern struct u_ISteamNetworkingConnectionCustomSignaling *create_LinuxISteamNetworkingConnectionCustomSignaling(void *win, const char *version) DECLSPEC_HIDDEN;
-extern struct u_ISteamNetworkingCustomSignalingRecvContext *create_LinuxISteamNetworkingCustomSignalingRecvContext(void *win, const char *version) DECLSPEC_HIDDEN;
+struct w_steam_iface;
+extern void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1, uint64_t arg2 );
+extern void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_iface, const char *pchName, int nScore, float flTimePlayed );
+extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_iface, const char *pchRule, const char *pchValue );
 
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 

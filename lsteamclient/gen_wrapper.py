@@ -225,6 +225,18 @@ MANUAL_METHODS = {
     "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": True,
     "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": True,
     "ISteamNetworkingSockets_SendMessages": True,
+    "ISteamNetworkingSockets_ConnectP2PCustomSignaling": lambda ver, abi: abi == 'u' and ver <= 8,
+    "ISteamNetworkingSockets_ReceivedP2PCustomSignal": lambda ver, abi: abi == 'u' and ver <= 8,
+
+    "ISteamMatchmakingServers_PingServer": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_PlayerDetails": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestFavoritesServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestFriendsServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestHistoryServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestInternetServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestLANServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_RequestSpectatorServerList": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_ServerRules": lambda ver, abi: abi == 'u',
 
     "ISteamNetworkingUtils_AllocateMessage": True,
     "ISteamNetworkingUtils_SetConfigValue": lambda ver, abi: abi == 'u' and ver >= 3,
@@ -279,17 +291,6 @@ MANUAL_PARAMS = [
 ]
 
 converted_structs = []
-
-# callback classes for which we have a linux wrapper
-WRAPPED_CLASSES = [
-    "ISteamMatchmakingServerListResponse",
-    "ISteamMatchmakingPingResponse",
-    "ISteamMatchmakingPlayersResponse",
-    "ISteamMatchmakingRulesResponse",
-    "ISteamNetworkingFakeUDPPort",
-    "ISteamNetworkingConnectionCustomSignaling",
-    "ISteamNetworkingCustomSignalingRecvContext",
-]
 
 all_classes = {}
 all_records = {}
@@ -617,6 +618,11 @@ class Method:
     def get_arguments(self):
         return self._cursor.get_arguments()
 
+    def needs_conversion(self, other):
+        if len(list(self.get_arguments())) != len(list(other.get_arguments())):
+            return True
+        return False # FIXME
+
     def write_params(self, out):
         returns_record = self.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -710,7 +716,13 @@ class Class:
         self._decl_order = order
 
     def needs_conversion(self, other):
-        return self._abi[0] != other._abi[0]
+        if self._abi[0] != other._abi[0]:
+            return True
+        if len(self.methods) != len(other.methods):
+            return True
+        if any(m.needs_conversion(n) for m, n in zip(self.methods, other.methods)):
+            return True
+        return False
 
     def write_definition(self, out, prefix):
         out(f'struct {prefix}{self.full_name}\n')
@@ -807,8 +819,7 @@ def underlying_type(decl):
 
 def param_needs_conversion(decl):
     decl = underlying_type(decl)
-    return decl.spelling not in WRAPPED_CLASSES and \
-           decl.kind == TypeKind.RECORD and \
+    return decl.kind == TypeKind.RECORD and \
            struct_needs_conversion(decl)
 
 
@@ -900,8 +911,6 @@ def handle_method_cpp(method, classname, out):
 
     need_convert = {n: p for n, p in zip(names, method.get_arguments())
                     if param_needs_conversion(p)}
-    need_wrapper = {n: p for n, p in zip(names, method.get_arguments())
-                    if underlying_typename(p) in WRAPPED_CLASSES}
     manual_convert = {n: p for n, p in zip(names, method.get_arguments())
                       if underlying_type(p).spelling in MANUAL_TYPES
                       or p.spelling in MANUAL_PARAMS}
@@ -963,9 +972,6 @@ def handle_method_cpp(method, classname, out):
         else:
             out(f'    {declspec(param, f"u_{name}", "u_")} = manual_convert_{method.name}_{name}( params->{name} );\n')
 
-    for name, param in sorted(need_wrapper.items()):
-        out(f'    {declspec(param, f"u_{name}", "u_")} = create_Linux{underlying_type(param.type).spelling}( params->{name}, "{classname}_{klass.version}" );\n')
-
     if returns_void:
         out(u'    ')
     elif returns_record:
@@ -978,7 +984,6 @@ def handle_method_cpp(method, classname, out):
         if name in need_convert: return f"{pfx}u_{name}"
         if name in manual_convert: return f"u_{name}"
         if name in path_conv_wtou: return f"u_{name}"
-        if name in need_wrapper: return f"u_{name}"
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
@@ -1116,10 +1121,7 @@ def handle_class(klass):
         out(u'\n')
         out(f'struct w_steam_iface *create_{winclassname}(void *u_iface)\n')
         out(u'{\n')
-        if klass.name in WRAPPED_CLASSES:
-            out(u'    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), 0, sizeof(struct w_steam_iface));\n')
-        else:
-            out(f'    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "{klass.version}");\n')
+        out(f'    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "{klass.version}");\n')
         out(u'    TRACE("-> %p\\n", r);\n')
         out(f'    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(klass.methods)}, "{klass.version}");\n')
         out(u'    r->u_iface = u_iface;\n')
@@ -1183,6 +1185,10 @@ def classify_struct(name):
     versions = {}
     unique = True
 
+    def set_class_version(abis, version):
+        for abi in filter(lambda x: type(x) is Class, abis):
+            abi.version = version
+
     for sdkver in filter(lambda v: v in structs, reversed(SDK_VERSIONS)):
         abis = [structs[sdkver][a] for a in ABIS]
 
@@ -1198,16 +1204,22 @@ def classify_struct(name):
         compat = next((k for k, v in prev if is_always_compatible(v)), None)
         if compat:
             versions[sdkver] = versions[compat]
+            set_class_version(abis, compat)
         else:
             [abi.set_used() for abi in abis] # make sure order is computed
             versions[sdkver] = f"{name}_{sdkver}"
             prev += [(sdkver, abis)]
+            set_class_version(abis, sdkver)
 
     if unique:
         unique_structs.append(name)
 
     if len(set(versions.values())) == 1:
         versions = {sdkver: name for sdkver in versions.keys()}
+        for sdkver in filter(lambda v: v in structs, reversed(SDK_VERSIONS)):
+            abis = [structs[sdkver][a] for a in ABIS]
+            set_class_version(abis, "")
+
     return versions
 
 

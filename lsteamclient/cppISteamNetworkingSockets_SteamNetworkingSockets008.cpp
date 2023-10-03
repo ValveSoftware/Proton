@@ -257,24 +257,6 @@ NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets008_GetGameCoordinatorSer
     return 0;
 }
 
-NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling( void *args )
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling_params *)args;
-    struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *)params->linux_side;
-    u_ISteamNetworkingConnectionCustomSignaling *u_pSignaling = create_LinuxISteamNetworkingConnectionCustomSignaling( params->pSignaling, "ISteamNetworkingSockets_SteamNetworkingSockets008" );
-    params->_ret = iface->ConnectP2PCustomSignaling( u_pSignaling, params->pPeerIdentity, params->nOptions, params->pOptions );
-    return 0;
-}
-
-NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal( void *args )
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal_params *)args;
-    struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets008 *)params->linux_side;
-    u_ISteamNetworkingCustomSignalingRecvContext *u_pContext = create_LinuxISteamNetworkingCustomSignalingRecvContext( params->pContext, "ISteamNetworkingSockets_SteamNetworkingSockets008" );
-    params->_ret = iface->ReceivedP2PCustomSignal( params->pMsg, params->cbMsg, u_pContext );
-    return 0;
-}
-
 NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest( void *args )
 {
     struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest_params *)args;
