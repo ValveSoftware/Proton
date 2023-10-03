@@ -147,12 +147,12 @@ struct u_ISteamMatchmaking_SteamMatchMaking001
 struct u_ISteamMatchmakingServers_SteamMatchMakingServers001
 {
 #ifdef __cplusplus
-    virtual void RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
+    virtual void RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
+    virtual void RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
+    virtual void RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
+    virtual void RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
+    virtual void RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
+    virtual void RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_099u * ) = 0;
     virtual gameserveritem_t_105 * GetServerDetails( uint32_t, int32_t ) = 0;
     virtual void CancelQuery( uint32_t ) = 0;
     virtual void RefreshQuery( uint32_t ) = 0;
@@ -1196,12 +1196,12 @@ struct u_ISteamUser_SteamUser013
 struct u_ISteamMatchmakingServers_SteamMatchMakingServers002
 {
 #ifdef __cplusplus
-    virtual void * RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
-    virtual void * RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse * ) = 0;
+    virtual void * RequestInternetServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
+    virtual void * RequestLANServerList( uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
+    virtual void * RequestFriendsServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
+    virtual void * RequestFavoritesServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
+    virtual void * RequestHistoryServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
+    virtual void * RequestSpectatorServerList( uint32_t, MatchMakingKeyValuePair_t **, uint32_t, u_ISteamMatchmakingServerListResponse_106 * ) = 0;
     virtual void ReleaseRequest( void * ) = 0;
     virtual gameserveritem_t_105 * GetServerDetails( void *, int32_t ) = 0;
     virtual void CancelQuery( void * ) = 0;

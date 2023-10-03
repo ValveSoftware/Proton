@@ -17,6 +17,34 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 CREATE_TYPE_INFO_VTABLE;
 
+#ifdef __ASM_USE_THISCALL_WRAPPER
+
+#define DEFINE_VTBL_WRAPPER(off)            \
+    __ASM_GLOBAL_FUNC(vtbl_wrapper_ ## off, \
+        "popl %eax\n\t"                     \
+        "popl %ecx\n\t"                     \
+        "pushl %eax\n\t"                    \
+        "movl 0(%ecx), %eax\n\t"            \
+        "jmp *" #off "(%eax)\n\t")
+
+DEFINE_VTBL_WRAPPER(0);
+DEFINE_VTBL_WRAPPER(4);
+DEFINE_VTBL_WRAPPER(8);
+DEFINE_VTBL_WRAPPER(12);
+DEFINE_VTBL_WRAPPER(16);
+DEFINE_VTBL_WRAPPER(20);
+DEFINE_VTBL_WRAPPER(24);
+DEFINE_VTBL_WRAPPER(28);
+DEFINE_VTBL_WRAPPER(32);
+DEFINE_VTBL_WRAPPER(36);
+DEFINE_VTBL_WRAPPER(40);
+DEFINE_VTBL_WRAPPER(44);
+DEFINE_VTBL_WRAPPER(48);
+DEFINE_VTBL_WRAPPER(52);
+DEFINE_VTBL_WRAPPER(56);
+
+#endif
+
 char g_tmppath[PATH_MAX];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
@@ -324,6 +352,40 @@ static void execute_pending_callbacks(void)
                    params.callback->warning_message_hook.severity, wine_dbgstr_a( params.callback->warning_message_hook.msg ) );
             params.callback->warning_message_hook.pFunction( params.callback->warning_message_hook.severity, params.callback->warning_message_hook.msg );
             break;
+        case CALL_IFACE_VTABLE_0:
+            TRACE( "CALL_IFACE_VTABLE_0 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+                   params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
+            CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 0, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
+                            params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
+            break;
+        case CALL_IFACE_VTABLE_1:
+            TRACE( "CALL_IFACE_VTABLE_1 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+                   params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
+            CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 4, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
+                            params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
+            break;
+        case CALL_IFACE_VTABLE_2:
+            TRACE( "CALL_IFACE_VTABLE_2 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+                   params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
+            CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 8, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
+                            params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
+            break;
+
+        case CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST:
+            TRACE( "CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST iface %p, name %s, score %u, time_played %f.\n", params.callback->add_player_to_list.iface,
+                   params.callback->add_player_to_list.name, params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played );
+            CALL_VTBL_FUNC( params.callback->add_player_to_list.iface, 0, void, (void *, const char *, int32_t, float), (params.callback->add_player_to_list.iface,
+                            params.callback->add_player_to_list.name, params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played) );
+            break;
+        case CALL_IFACE_VTABLE_0_RULES_RESPONDED:
+        {
+            const char *value = params.callback->rules_responded.rule_and_value + strlen( params.callback->rules_responded.rule_and_value ) + 1;
+            TRACE( "CALL_IFACE_VTABLE_0_RULES_RESPONDED iface %p, rule %s, value %s.\n", params.callback->rules_responded.iface,
+                   params.callback->rules_responded.rule_and_value, value );
+            CALL_VTBL_FUNC( params.callback->rules_responded.iface, 0, void, (void *, const char *, const char *), (params.callback->rules_responded.iface,
+                            params.callback->rules_responded.rule_and_value, value) );
+            break;
+        }
         }
     }
 

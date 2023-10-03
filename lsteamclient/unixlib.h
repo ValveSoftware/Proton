@@ -34,6 +34,11 @@ enum callback_type
 {
     SOCKETS_DEBUG_OUTPUT = 1,
     WARNING_MESSAGE_HOOK,
+    CALL_IFACE_VTABLE_0,
+    CALL_IFACE_VTABLE_1,
+    CALL_IFACE_VTABLE_2,
+    CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST,
+    CALL_IFACE_VTABLE_0_RULES_RESPONDED,
 };
 
 struct callback
@@ -56,6 +61,28 @@ struct callback
             int32_t severity;
             const char msg[1];
         } warning_message_hook;
+
+        struct
+        {
+            struct w_steam_iface *iface;
+            uint64_t arg0;
+            uint64_t arg1;
+            uint64_t arg2;
+        } call_iface_vtable;
+
+        struct
+        {
+            struct w_steam_iface *iface;
+            int32_t score;
+            float time_played;
+            const char name[1];
+        } add_player_to_list;
+
+        struct
+        {
+            struct w_steam_iface *iface;
+            const char rule_and_value[1];
+        } rules_responded;
     };
 };
 
