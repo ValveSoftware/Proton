@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod( void *args )
 {
     struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params *params = (struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params *)args;

@@ -62,7 +62,7 @@ typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordina
 #include "steamclient_structs_generated.h"
 
 #define PATH_MAX 4096
-extern char g_tmppath[PATH_MAX];
+extern char *g_tmppath;
 
 #ifdef __cplusplus
 } /* extern "C" */

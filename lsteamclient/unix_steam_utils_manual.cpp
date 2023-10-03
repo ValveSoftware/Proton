@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 /* ISteamUtils_SteamUtils002 */
@@ -23,7 +27,7 @@ NTSTATUS ISteamUtils_SteamUtils002_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -50,7 +54,7 @@ NTSTATUS ISteamUtils_SteamUtils004_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -77,7 +81,7 @@ NTSTATUS ISteamUtils_SteamUtils005_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -104,7 +108,7 @@ NTSTATUS ISteamUtils_SteamUtils006_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -131,7 +135,7 @@ NTSTATUS ISteamUtils_SteamUtils007_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -158,7 +162,7 @@ NTSTATUS ISteamUtils_SteamUtils008_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -185,7 +189,7 @@ NTSTATUS ISteamUtils_SteamUtils009_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;
@@ -212,7 +216,7 @@ NTSTATUS ISteamUtils_SteamUtils010_GetAPICallResult( void *args )
     {
         convert_callback_utow( params->iCallbackExpected, u_callback, u_callback_len,
                                params->pCallback, params->cubCallback );
-        HeapFree( GetProcessHeap(), 0, u_callback );
+        free( u_callback );
     }
 
     return 0;

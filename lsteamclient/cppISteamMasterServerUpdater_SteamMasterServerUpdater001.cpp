@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive( void *args )
 {
     struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params *params = (struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params *)args;

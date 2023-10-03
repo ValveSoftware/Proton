@@ -45,7 +45,7 @@ DEFINE_VTBL_WRAPPER(56);
 
 #endif
 
-char g_tmppath[PATH_MAX];
+static char temp_path_buffer[PATH_MAX];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
@@ -63,6 +63,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             init_type_info_rtti( (char *)instance );
             init_rtti( (char *)instance );
 #endif /* __x86_64__ */
+            __wine_init_unix_call();
             break;
         case DLL_PROCESS_DETACH:
             CloseHandle(steam_overlay_event);
@@ -306,7 +307,7 @@ done:
 static int load_steamclient(void)
 {
     char steam_app_id[4096], ignore_child_processes[4096];
-    struct steamclient_init_params params = {0};
+    struct steamclient_init_params params = {.g_tmppath = temp_path_buffer};
 
     if (!GetEnvironmentVariableA("SteamAppId", steam_app_id, ARRAY_SIZE(steam_app_id)))
         params.steam_app_id_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
@@ -357,19 +358,19 @@ static void execute_pending_callbacks(void)
             params.callback->call_cdecl_func_data.pFunc( params.callback->call_cdecl_func_data.data );
             break;
         case CALL_IFACE_VTABLE_0:
-            TRACE( "CALL_IFACE_VTABLE_0 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+            TRACE( "CALL_IFACE_VTABLE_0 iface %p, arg0 %#I64x, arg1 %#I64x, arg2 %#I64x.\n", params.callback->call_iface_vtable.iface,
                    params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
             CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 0, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
                             params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
             break;
         case CALL_IFACE_VTABLE_1:
-            TRACE( "CALL_IFACE_VTABLE_1 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+            TRACE( "CALL_IFACE_VTABLE_1 iface %p, arg0 %#I64x, arg1 %#I64x, arg2 %#I64x.\n", params.callback->call_iface_vtable.iface,
                    params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
             CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 4, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
                             params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
             break;
         case CALL_IFACE_VTABLE_2:
-            TRACE( "CALL_IFACE_VTABLE_2 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
+            TRACE( "CALL_IFACE_VTABLE_2 iface %p, arg0 %#I64x, arg1 %#I64x, arg2 %#I64x.\n", params.callback->call_iface_vtable.iface,
                    params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
             CALL_VTBL_FUNC( params.callback->call_iface_vtable.iface, 8, void, (void *, intptr_t, intptr_t, intptr_t), (params.callback->call_iface_vtable.iface,
                             params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamClient_SteamClient019_CreateSteamPipe( void *args )
 {
     struct ISteamClient_SteamClient019_CreateSteamPipe_params *params = (struct ISteamClient_SteamClient019_CreateSteamPipe_params *)args;

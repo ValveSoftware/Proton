@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamParties_SteamParties002_GetNumActiveBeacons( void *args )
 {
     struct ISteamParties_SteamParties002_GetNumActiveBeacons_params *params = (struct ISteamParties_SteamParties002_GetNumActiveBeacons_params *)args;

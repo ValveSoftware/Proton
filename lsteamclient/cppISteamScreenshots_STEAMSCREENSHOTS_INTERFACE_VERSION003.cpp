@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot( void *args )
 {
     struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params *params = (struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params *)args;

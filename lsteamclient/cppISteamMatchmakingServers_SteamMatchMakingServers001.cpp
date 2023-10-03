@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails( void *args )
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params *params = (struct ISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params *)args;

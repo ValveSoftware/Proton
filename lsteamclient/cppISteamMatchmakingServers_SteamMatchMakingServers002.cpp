@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest( void *args )
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params *params = (struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params *)args;

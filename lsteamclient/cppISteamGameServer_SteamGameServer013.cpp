@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamGameServer_SteamGameServer013_InitGameServer( void *args )
 {
     struct ISteamGameServer_SteamGameServer013_InitGameServer_params *params = (struct ISteamGameServer_SteamGameServer013_InitGameServer_params *)args;

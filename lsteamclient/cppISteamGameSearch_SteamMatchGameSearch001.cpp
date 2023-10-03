@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams( void *args )
 {
     struct ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params *params = (struct ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params *)args;

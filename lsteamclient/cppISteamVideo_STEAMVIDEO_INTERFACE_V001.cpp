@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL( void *args )
 {
     struct ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params *params = (struct ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params *)args;

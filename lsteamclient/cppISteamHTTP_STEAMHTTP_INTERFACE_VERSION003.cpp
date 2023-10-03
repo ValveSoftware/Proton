@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest( void *args )
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest_params *params = (struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest_params *)args;

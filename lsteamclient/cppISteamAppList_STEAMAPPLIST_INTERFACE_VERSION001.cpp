@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps( void *args )
 {
     struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *params = (struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params *)args;

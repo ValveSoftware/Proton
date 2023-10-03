@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser( void *args )
 {
     struct ISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params *params = (struct ISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params *)args;

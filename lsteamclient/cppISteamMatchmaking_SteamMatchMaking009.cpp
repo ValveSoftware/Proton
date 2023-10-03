@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount( void *args )
 {
     struct ISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount_params *params = (struct ISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount_params *)args;

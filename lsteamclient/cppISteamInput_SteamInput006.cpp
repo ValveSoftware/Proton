@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamInput_SteamInput006_Init( void *args )
 {
     struct ISteamInput_SteamInput006_Init_params *params = (struct ISteamInput_SteamInput006_Init_params *)args;

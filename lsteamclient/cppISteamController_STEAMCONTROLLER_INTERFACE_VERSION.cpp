@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init( void *args )
 {
     struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params *params = (struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params *)args;

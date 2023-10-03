@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamNetworking_SteamNetworking002_CreateListenSocket( void *args )
 {
     struct ISteamNetworking_SteamNetworking002_CreateListenSocket_params *params = (struct ISteamNetworking_SteamNetworking002_CreateListenSocket_params *)args;

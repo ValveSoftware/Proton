@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamFriends_SteamFriends005_GetPersonaName( void *args )
 {
     struct ISteamFriends_SteamFriends005_GetPersonaName_params *params = (struct ISteamFriends_SteamFriends005_GetPersonaName_params *)args;

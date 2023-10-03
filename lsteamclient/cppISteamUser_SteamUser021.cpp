@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamUser_SteamUser021_GetHSteamUser( void *args )
 {
     struct ISteamUser_SteamUser021_GetHSteamUser_params *params = (struct ISteamUser_SteamUser021_GetHSteamUser_params *)args;

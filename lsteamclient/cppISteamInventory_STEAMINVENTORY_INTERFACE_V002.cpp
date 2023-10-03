@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus( void *args )
 {
     struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus_params *params = (struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus_params *)args;

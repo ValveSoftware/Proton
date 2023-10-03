@@ -307,6 +307,7 @@ $(eval $(call rules-cmake,glslang,64))
 ##
 
 LSTEAMCLIENT_DEPENDS = wine
+LSTEAMCLIENT_LDFLAGS = -static-libgcc -static-libstdc++
 
 $(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
 $(eval $(call rules-makedep,lsteamclient,32))

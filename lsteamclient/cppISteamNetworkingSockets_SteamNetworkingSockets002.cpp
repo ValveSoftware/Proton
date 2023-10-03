@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP( void *args )
 {
     struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP_params *)args;

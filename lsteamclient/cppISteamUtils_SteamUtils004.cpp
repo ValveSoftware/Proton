@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamUtils_SteamUtils004_GetSecondsSinceAppActive( void *args )
 {
     struct ISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params *params = (struct ISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params *)args;

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamGameCoordinator_SteamGameCoordinator001_SendMessage( void *args )
 {
     struct ISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params *params = (struct ISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params *)args;

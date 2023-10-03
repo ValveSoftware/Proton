@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 #include <unordered_map>
 
 #ifdef __linux__
@@ -202,7 +206,7 @@ static const char *glyph_cache_lookup( glyph_cache &cache, const char *lin_path,
 
     if (cache.find( key ) == cache.end())
     {
-        char *dos_path = (char *)HeapAlloc( GetProcessHeap(), 0, PATH_MAX );
+        char *dos_path = (char *)malloc( PATH_MAX );
         steamclient_unix_path_to_dos_path( 1, lin_path, dos_path, PATH_MAX, 0 );
         cache[key] = dos_path;
     }

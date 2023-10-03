@@ -1,5 +1,9 @@
 /* This file is auto-generated, do not edit. */
 
+#if 0
+#pragma makedep unix
+#endif
+
 #include "unix_private.h"
 
 extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
@@ -19013,7 +19017,7 @@ void *alloc_callback_wtou(int id, void *callback, int *callback_len)
     }
 #undef MAKE_CASE
 
-    callback = HeapAlloc( GetProcessHeap(), 0, len );
+    callback = malloc( len );
     *callback_len = len;
     return callback;
 }

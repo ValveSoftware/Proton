@@ -1084,6 +1084,10 @@ def handle_class(klass):
         out(u'/* This file is auto-generated, do not edit. */\n')
         out(u'#include "unix_private.h"\n\n')
 
+        out(u'#if 0\n')
+        out(u'#pragma makedep unix\n')
+        out(u'#endif\n\n')
+
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
@@ -1548,6 +1552,10 @@ with open('unixlib_generated.cpp', 'w') as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'#if 0\n')
+    out(u'#pragma makedep unix\n')
+    out(u'#endif\n')
+    out(u'\n')
     out(u'#include "unix_private.h"\n\n')
 
     out(u'extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =\n')
@@ -1695,7 +1703,7 @@ with open('unixlib_generated.cpp', 'w') as file:
     out(u'    }\n')
     out(u'#undef MAKE_CASE\n')
     out(u'\n')
-    out(u'    callback = HeapAlloc( GetProcessHeap(), 0, len );\n')
+    out(u'    callback = malloc( len );\n')
     out(u'    *callback_len = len;\n')
     out(u'    return callback;\n')
     out(u'}\n')

@@ -1,6 +1,8 @@
 #include "unix_private.h"
 
-#include <stdlib.h>
+#if 0
+#pragma makedep unix
+#endif
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 

@@ -10,6 +10,8 @@
 #include "steamclient_structs.h"
 #include "unixlib.h"
 
+#include <stdlib.h>
+
 #include "wine/debug.h"
 #include "wine/list.h"
 

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus( void *args )
 {
     struct ISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params *params = (struct ISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params *)args;

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamNetworking_SteamNetworking004_SendP2PPacket( void *args )
 {
     struct ISteamNetworking_SteamNetworking004_SendP2PPacket_params *params = (struct ISteamNetworking_SteamNetworking004_SendP2PPacket_params *)args;

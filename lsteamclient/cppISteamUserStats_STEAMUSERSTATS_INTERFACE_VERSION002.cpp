@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats( void *args )
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats_params *)args;

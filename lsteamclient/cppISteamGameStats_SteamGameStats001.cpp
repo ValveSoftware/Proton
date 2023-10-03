@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamGameStats_SteamGameStats001_GetNewSession( void *args )
 {
     struct ISteamGameStats_SteamGameStats001_GetNewSession_params *params = (struct ISteamGameStats_SteamGameStats001_GetNewSession_params *)args;

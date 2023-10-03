@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed( void *args )
 {
     struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed_params *)args;
