@@ -57,11 +57,6 @@ void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
 void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
 
-extern void queue_sockets_debug_output( void (*W_STDCALL pfnFunc)( uint32_t, const char * ),
-                                        uint32_t type, const char *msg );
-extern void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char * ),
-                                        int32_t severity, const char *msg );
-
 extern NTSTATUS steamclient_init( void * );
 extern NTSTATUS steamclient_next_callback( void * );
 extern NTSTATUS steamclient_CreateInterface( void * );
