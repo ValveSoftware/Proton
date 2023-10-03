@@ -23,6 +23,9 @@ extern void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_
 extern void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_iface, const char *pchName, int nScore, float flTimePlayed );
 extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_iface, const char *pchRule, const char *pchValue );
 
+typedef void (*W_CDECL w_cdecl_func)( void * );
+extern void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_size );
+
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 
 typedef void (U_CDECL *u_SteamAPIWarningMessageHook_t)( int32_t, const char * );

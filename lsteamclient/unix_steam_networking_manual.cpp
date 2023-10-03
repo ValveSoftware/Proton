@@ -296,55 +296,42 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage( void *ar
     return 0;
 }
 
-typedef void (*CDECL win_FnSteamNetConnectionStatusChanged)( w_SteamNetConnectionStatusChangedCallback_t_151 * );
-static win_FnSteamNetConnectionStatusChanged win_SteamNetConnectionStatusChanged;
-static void lin_SteamNetConnectionStatusChanged( u_SteamNetConnectionStatusChangedCallback_t_151 *u_dat )
+static void (*W_CDECL w_SteamNetConnectionStatusChanged)( w_SteamNetConnectionStatusChangedCallback_t_151 * );
+static void U_CDECL u_SteamNetConnectionStatusChanged( u_SteamNetConnectionStatusChangedCallback_t_151 *u_dat )
 {
-    win_FnSteamNetConnectionStatusChanged fn = win_SteamNetConnectionStatusChanged;
-    if (fn)
-    {
-        w_SteamNetConnectionStatusChangedCallback_t_151 w_dat = *u_dat;
-        fn( &w_dat );
-    }
+    w_SteamNetConnectionStatusChangedCallback_t_151 w_dat = *u_dat;
+    if (w_SteamNetConnectionStatusChanged) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetConnectionStatusChanged, &w_dat, sizeof(w_dat) );
 }
 
-typedef void (*CDECL win_FnSteamNetAuthenticationStatusChanged)( SteamNetAuthenticationStatus_t * );
-static win_FnSteamNetAuthenticationStatusChanged win_SteamNetAuthenticationStatusChanged;
-static void lin_SteamNetAuthenticationStatusChanged( SteamNetAuthenticationStatus_t *dat )
+static void (*W_CDECL w_SteamNetAuthenticationStatusChanged)( SteamNetAuthenticationStatus_t * );
+static void U_CDECL u_SteamNetAuthenticationStatusChanged( SteamNetAuthenticationStatus_t *dat )
 {
-    win_FnSteamNetAuthenticationStatusChanged fn = win_SteamNetAuthenticationStatusChanged;
-    if (fn) fn( dat );
+    if (w_SteamNetAuthenticationStatusChanged) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetAuthenticationStatusChanged, dat, sizeof(*dat) );
 }
 
-typedef void (*CDECL win_FnSteamRelayNetworkStatusChanged)( SteamRelayNetworkStatus_t * );
-static win_FnSteamRelayNetworkStatusChanged win_SteamRelayNetworkStatusChanged;
-static void lin_SteamRelayNetworkStatusChanged( SteamRelayNetworkStatus_t *dat )
+static void (*W_CDECL w_SteamRelayNetworkStatusChanged)( SteamRelayNetworkStatus_t * );
+static void U_CDECL u_SteamRelayNetworkStatusChanged( SteamRelayNetworkStatus_t *dat )
 {
-    win_FnSteamRelayNetworkStatusChanged fn = win_SteamRelayNetworkStatusChanged;
-    if (fn) fn( dat );
+    if (w_SteamRelayNetworkStatusChanged) queue_cdecl_func_callback( (w_cdecl_func)w_SteamRelayNetworkStatusChanged, dat, sizeof(*dat) );
 }
 
-typedef void (*CDECL win_FnSteamNetworkingMessagesSessionRequest)( SteamNetworkingMessagesSessionRequest_t_151 * );
-static win_FnSteamNetworkingMessagesSessionRequest win_SteamNetworkingMessagesSessionRequest;
-static void lin_SteamNetworkingMessagesSessionRequest( SteamNetworkingMessagesSessionRequest_t_151 *dat )
+static void (*W_CDECL w_SteamNetworkingMessagesSessionRequest)( SteamNetworkingMessagesSessionRequest_t_151 * );
+static void U_CDECL u_SteamNetworkingMessagesSessionRequest( SteamNetworkingMessagesSessionRequest_t_151 *dat )
 {
-    win_FnSteamNetworkingMessagesSessionRequest fn = win_SteamNetworkingMessagesSessionRequest;
-    if (fn) fn( dat );
+    if (w_SteamNetworkingMessagesSessionRequest) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetworkingMessagesSessionRequest, dat, sizeof(*dat) );
 }
 
-typedef void (*CDECL win_FnSteamNetworkingMessagesSessionFailed)( SteamNetworkingMessagesSessionFailed_t_151 * );
-static win_FnSteamNetworkingMessagesSessionFailed win_SteamNetworkingMessagesSessionFailed;
-static void lin_SteamNetworkingMessagesSessionFailed( SteamNetworkingMessagesSessionFailed_t_151 *dat )
+static void (*W_CDECL w_SteamNetworkingMessagesSessionFailed)( SteamNetworkingMessagesSessionFailed_t_151 * );
+static void U_CDECL u_SteamNetworkingMessagesSessionFailed( SteamNetworkingMessagesSessionFailed_t_151 *dat )
 {
-    win_FnSteamNetworkingMessagesSessionFailed fn = win_SteamNetworkingMessagesSessionFailed;
-    if (fn) fn( dat );
+    if (w_SteamNetworkingMessagesSessionFailed) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetworkingMessagesSessionFailed, dat, sizeof(*dat) );
 }
 
 NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( void *args )
 {
     struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params *params = (struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params *)args;
     struct u_ISteamNetworkingUtils_SteamNetworkingUtils003 *iface = (struct u_ISteamNetworkingUtils_SteamNetworkingUtils003 *)params->linux_side;
-    void *lin_fn; /* api requires passing pointer-to-pointer */
+    void *u_fn; /* api requires passing pointer-to-pointer */
 
     switch (params->eValue)
     {
@@ -356,11 +343,11 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( void *arg
     }                                                                                              \
     else                                                                                           \
     {                                                                                              \
-        if (*(void **)params->pArg == NULL) lin_fn = NULL;                                         \
-        else lin_fn = (void *)&lin_##y;                                                            \
+        if (*(void **)params->pArg == NULL) u_fn = NULL;                                           \
+        else u_fn = (void *)&u_##y;                                                                \
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,                  \
-                                              params->scopeObj, params->eDataType, &lin_fn );      \
-        if (params->_ret) win_##y = *(win_Fn##y *)params->pArg;                                    \
+                                              params->scopeObj, params->eDataType, &u_fn );        \
+        if (params->_ret) w_##y = *(decltype(w_##y) *)params->pArg;                                \
     }
 
     case 201 /*ConnectionStatusChanged*/: CASE( SteamNetConnectionStatusChanged )
@@ -548,24 +535,17 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( void *ar
     return 0;
 }
 
-typedef void (*CDECL win_FnSteamNetConnectionStatusChanged_153a)( w_SteamNetConnectionStatusChangedCallback_t_153a * );
-static win_FnSteamNetConnectionStatusChanged_153a win_SteamNetConnectionStatusChanged_153a;
-static void lin_SteamNetConnectionStatusChanged_153a( u_SteamNetConnectionStatusChangedCallback_t_153a *u_dat )
+static void (*W_CDECL w_SteamNetConnectionStatusChanged_153a)( w_SteamNetConnectionStatusChangedCallback_t_153a * );
+static void U_CDECL u_SteamNetConnectionStatusChanged_153a( u_SteamNetConnectionStatusChangedCallback_t_153a *u_dat )
 {
-    win_FnSteamNetConnectionStatusChanged_153a fn = win_SteamNetConnectionStatusChanged_153a;
-    if (fn)
-    {
-        w_SteamNetConnectionStatusChangedCallback_t_153a w_dat = *u_dat;
-        fn( &w_dat );
-    }
+    w_SteamNetConnectionStatusChangedCallback_t_153a w_dat = *u_dat;
+    if (w_SteamNetConnectionStatusChanged_153a) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetConnectionStatusChanged_153a, &w_dat, sizeof(w_dat) );
 }
 
-typedef void (*CDECL win_FnSteamNetworkingMessagesSessionFailed_153a)( SteamNetworkingMessagesSessionFailed_t_153a * );
-static win_FnSteamNetworkingMessagesSessionFailed_153a win_SteamNetworkingMessagesSessionFailed_153a;
-static void lin_SteamNetworkingMessagesSessionFailed_153a( SteamNetworkingMessagesSessionFailed_t_153a *dat )
+static void (*W_CDECL w_SteamNetworkingMessagesSessionFailed_153a)( SteamNetworkingMessagesSessionFailed_t_153a * );
+static void U_CDECL u_SteamNetworkingMessagesSessionFailed_153a( SteamNetworkingMessagesSessionFailed_t_153a *dat )
 {
-    win_FnSteamNetworkingMessagesSessionFailed_153a fn = win_SteamNetworkingMessagesSessionFailed_153a;
-    if (fn) fn( dat );
+    if (w_SteamNetworkingMessagesSessionFailed_153a) queue_cdecl_func_callback( (w_cdecl_func)w_SteamNetworkingMessagesSessionFailed_153a, dat, sizeof(*dat) );
 }
 
 NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( void *args )
@@ -573,7 +553,7 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( void *arg
     struct ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params *params = (struct ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params *)args;
     struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *iface = (struct u_ISteamNetworkingUtils_SteamNetworkingUtils004 *)params->linux_side;
     bool ret;
-    void *lin_fn; /* api requires passing pointer-to-pointer */
+    void *u_fn; /* api requires passing pointer-to-pointer */
 
     switch (params->eValue)
     {
@@ -586,11 +566,11 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( void *arg
     }                                                                                              \
     else                                                                                           \
     {                                                                                              \
-        if (*(void **)params->pArg == NULL) lin_fn = NULL;                                         \
-        else lin_fn = (void *)&lin_##y;                                                            \
+        if (*(void **)params->pArg == NULL) u_fn = NULL;                                           \
+        else u_fn = (void *)&u_##y;                                                                \
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,                  \
-                                              params->scopeObj, params->eDataType, &lin_fn );      \
-        if (params->_ret) win_##y = *(win_Fn##y *)params->pArg;                                    \
+                                              params->scopeObj, params->eDataType, &u_fn );        \
+        if (params->_ret) w_##y = *(decltype(w_##y) *)params->pArg;                                \
     }
 
     case 201 /*ConnectionStatusChanged*/: CASE( SteamNetConnectionStatusChanged_153a )
