@@ -356,6 +356,10 @@ static void execute_pending_callbacks(void)
             TRACE( "CALL_CDECL_FUNC_DATA func %p, data %p.\n", params.callback->call_cdecl_func_data.pFunc, params.callback->call_cdecl_func_data.data );
             params.callback->call_cdecl_func_data.pFunc( params.callback->call_cdecl_func_data.data );
             break;
+        case CALL_STDCALL_FUNC_DATA:
+            TRACE( "CALL_STDCALL_FUNC_DATA func %p, data %p.\n", params.callback->call_stdcall_func_data.pFunc, params.callback->call_stdcall_func_data.data );
+            params.callback->call_stdcall_func_data.pFunc( params.callback->call_stdcall_func_data.data );
+            break;
         case CALL_IFACE_VTABLE_0:
             TRACE( "CALL_IFACE_VTABLE_0 iface %p, arg0 %#jx, arg1 %#jx, arg2 %#jx.\n", params.callback->call_iface_vtable.iface,
                    params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2 );
