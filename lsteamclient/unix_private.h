@@ -25,6 +25,8 @@ extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_ifa
 
 typedef void (*W_CDECL w_cdecl_func)( void * );
 extern void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_size );
+typedef void (*W_STDCALL w_stdcall_func)( void * );
+extern void queue_stdcall_func_callback( w_stdcall_func func, void *data, uint32_t data_size );
 
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 

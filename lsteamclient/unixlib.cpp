@@ -123,6 +123,26 @@ void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_siz
     pthread_mutex_unlock( &callbacks_lock );
 }
 
+void queue_stdcall_func_callback( w_stdcall_func func, void *data, uint32_t data_size )
+{
+    uint32_t size = data_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)malloc( size ))) return;
+
+    entry->callback.type = CALL_STDCALL_FUNC_DATA;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.call_stdcall_func_data.pFunc = func;
+    memcpy( (char *)entry->callback.call_stdcall_func_data.data, data, data_size );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
 u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput w_func )
 {
     w_steam_networking_socket_debug_output = w_func;
