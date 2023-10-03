@@ -315,9 +315,9 @@ NTSTATUS ISteamInput_SteamInput002_GetGlyphForXboxOrigin( void *args )
 /* ISteamInput_SteamInput005 */
 
 static void (W_STDCALL *w_EnableActionEventCallbacks_152)( SteamInputActionEvent_t * );
-static void u_SteamInputActionEventCallbackPointer_152( SteamInputActionEvent_t *dat )
+static void U_STDCALL u_SteamInputActionEventCallbackPointer_152( SteamInputActionEvent_t *dat )
 {
-    if (w_EnableActionEventCallbacks_152) w_EnableActionEventCallbacks_152( dat );
+    if (w_EnableActionEventCallbacks_152) queue_stdcall_func_callback( (w_stdcall_func)w_EnableActionEventCallbacks_152, dat, sizeof(*dat) );
 }
 
 NTSTATUS ISteamInput_SteamInput005_EnableActionEventCallbacks( void *args )
