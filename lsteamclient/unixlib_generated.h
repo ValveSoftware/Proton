@@ -36885,14 +36885,14 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServer
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList_params
 {
     struct u_steam_iface *linux_side;
     uint32_t iApp;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList_params
@@ -36901,7 +36901,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerL
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList_params
@@ -36910,7 +36910,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList_params
@@ -36919,7 +36919,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerL
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList_params
@@ -36928,7 +36928,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_099u *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params
@@ -37012,7 +37012,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServer
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList_params
@@ -37020,7 +37020,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList_
     struct u_steam_iface *linux_side;
     void *_ret;
     uint32_t iApp;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList_params
@@ -37030,7 +37030,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerL
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList_params
@@ -37040,7 +37040,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList_params
@@ -37050,7 +37050,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerL
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList_params
@@ -37060,7 +37060,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServe
     uint32_t iApp;
     MatchMakingKeyValuePair_t **ppchFilters;
     uint32_t nFilters;
-    w_ISteamMatchmakingServerListResponse *pRequestServersResponse;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
 };
 
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params

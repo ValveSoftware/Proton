@@ -9,7 +9,6 @@ SOURCES = \
 	steam_networking_manual.c \
 	steamclient_generated.c \
 	steamclient_main.c \
-	steamclient_wrappers.c \
 	winISteamAppList.c \
 	winISteamApps.c \
 	winISteamAppTicket.c \
