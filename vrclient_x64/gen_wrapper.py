@@ -889,7 +889,7 @@ def get_capi_thunk_params(method):
 def handle_class(klass):
     cppname = f"cpp{klass.full_name}"
 
-    with open(f"vrclient_x64/{cppname}.cpp", "w") as file:
+    with open(f"{cppname}.cpp", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
@@ -903,7 +903,7 @@ def handle_class(klass):
             handle_method_cpp(method, klass.name, out)
 
     winclassname = f'win{klass.full_name}'
-    with open(f'vrclient_x64/win{klass.name}.c', 'a') as file:
+    with open(f'win{klass.name}.c', 'a') as file:
         out = file.write
 
         for method in klass.methods:
@@ -1094,7 +1094,7 @@ def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
     l(r'extern void %s(void);' % name);
 
 def generate_flatapi_c():
-    with open("vrclient_x64/flatapi.c", "w") as f:
+    with open("flatapi.c", "w") as f:
         f.write(r"""/* This file is auto-generated, do not edit. */
 
 #include <stdarg.h>
@@ -1342,7 +1342,7 @@ print('classifying structs... 100%')
 
 
 for klass in all_classes.values():
-    with open(f"vrclient_x64/win{klass.name}.c", "w") as file:
+    with open(f"win{klass.name}.c", "w") as file:
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
@@ -1365,25 +1365,25 @@ generate_flatapi_c()
 
 
 for name in sorted(set(k.name for k in all_classes.values())):
-    with open(f"vrclient_x64/win{name}.c", "a") as file:
+    with open(f"win{name}.c", "a") as file:
         out = file.write
         out(f'void init_win{name}_rtti( char *base )\n')
         out(u'{\n')
         out(u'#ifdef __x86_64__\n')
 
 for _, klass in sorted(all_classes.items()):
-    with open(f"vrclient_x64/win{klass.name}.c", "a") as file:
+    with open(f"win{klass.name}.c", "a") as file:
         out = file.write
         out(f'    init_win{klass.full_name}_rtti( base );\n')
 
 for name in sorted(set(k.name for k in all_classes.values())):
-    with open(f"vrclient_x64/win{name}.c", "a") as file:
+    with open(f"win{name}.c", "a") as file:
         out = file.write
         out(u'#endif /* __x86_64__ */\n')
         out(u'}\n')
 
 
-with open("vrclient_x64/vrclient_generated.h", "w") as file:
+with open("vrclient_generated.h", "w") as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
@@ -1395,7 +1395,7 @@ with open("vrclient_x64/vrclient_generated.h", "w") as file:
         out(f"extern void destroy_win{klass.full_name}_FnTable(struct w_steam_iface *);\n")
 
 
-with open("vrclient_x64/vrclient_generated.c", "w") as file:
+with open("vrclient_generated.c", "w") as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
@@ -1451,7 +1451,7 @@ for name, klasses in all_classes.items():
 
 declared = {}
 
-with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
+with open('vrclient_structs_generated.h', 'w') as file:
     out = file.write
 
     for name in sorted(unique_structs, key=struct_order):
@@ -1544,7 +1544,7 @@ with open('vrclient_x64/vrclient_structs_generated.h', 'w') as file:
 all_methods = [(k, m) for _, k in sorted(all_classes.items())
                for m in k.methods]
 
-with open("vrclient_x64/unix_private_generated.h", "w") as file:
+with open("unix_private_generated.h", "w") as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
@@ -1570,7 +1570,7 @@ with open("vrclient_x64/unix_private_generated.h", "w") as file:
     out(u'#endif /* __cplusplus */\n')
 
 
-with open(u"vrclient_x64/unixlib_generated.h", "w") as file:
+with open(u"unixlib_generated.h", "w") as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n')
@@ -1605,7 +1605,7 @@ with open(u"vrclient_x64/unixlib_generated.h", "w") as file:
     out(u'#endif /* __cplusplus */\n')
 
 
-with open('vrclient_x64/unixlib_generated.cpp', 'w') as file:
+with open('unixlib_generated.cpp', 'w') as file:
     out = file.write
 
     out(u'/* This file is auto-generated, do not edit. */\n\n')
