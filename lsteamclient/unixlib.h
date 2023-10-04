@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <assert.h>
 
 #include <windef.h>
 #include <winbase.h>
@@ -206,7 +207,13 @@ struct networking_message
 
 #include <poppack.h>
 
-#define STEAMCLIENT_CALL( code, args ) WINE_UNIX_CALL( unix_ ## code, args )
+#define STEAMCLIENT_CALL( code, args )                                     \
+    ({                                                                     \
+        NTSTATUS status = WINE_UNIX_CALL( unix_ ## code, args );           \
+        if (status) WARN( #code " failed, status %#x\n", (UINT)status );   \
+        assert( !status );                                                 \
+        status;                                                            \
+    })
 
 #ifdef __cplusplus
 } /* extern "C" */
