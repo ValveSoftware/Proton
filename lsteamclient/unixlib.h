@@ -21,6 +21,8 @@ extern "C"
 #define PATH_MAX 4096
 extern char g_tmppath[PATH_MAX];
 
+#include <pshpack1.h>
+
 struct steamclient_init_params
 {
     const char *steam_app_id;
@@ -210,6 +212,8 @@ struct networking_message
         w_SteamNetworkingMessage_t_153a w_msg_153a;
     };
 };
+
+#include <poppack.h>
 
 typedef NTSTATUS (*unixlib_entry_t)( void *args );
 extern const unixlib_entry_t __wine_unix_call_funcs[];
