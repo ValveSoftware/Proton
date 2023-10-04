@@ -5,7 +5,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy( void *args )
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->CommitWorkingCopy( params->configFile );
+    params->_ret = iface->CommitWorkingCopy( params->configFile );
     return 0;
 }
 
@@ -21,7 +21,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize( void *a
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetWorkingPlayAreaSize( params->pSizeX, params->pSizeZ );
+    params->_ret = iface->GetWorkingPlayAreaSize( params->pSizeX, params->pSizeZ );
     return 0;
 }
 
@@ -29,7 +29,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect( void *a
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetWorkingPlayAreaRect( params->rect );
+    params->_ret = iface->GetWorkingPlayAreaRect( params->rect );
     return 0;
 }
 
@@ -37,7 +37,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo( 
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetWorkingCollisionBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
+    params->_ret = iface->GetWorkingCollisionBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
     return 0;
 }
 
@@ -45,7 +45,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo( voi
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetLiveCollisionBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
+    params->_ret = iface->GetLiveCollisionBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
     return 0;
 }
 
@@ -53,7 +53,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTr
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetWorkingSeatedZeroPoseToRawTrackingPose( params->pmatSeatedZeroPoseToRawTrackingPose );
+    params->_ret = iface->GetWorkingSeatedZeroPoseToRawTrackingPose( params->pmatSeatedZeroPoseToRawTrackingPose );
     return 0;
 }
 
@@ -61,7 +61,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRaw
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetWorkingStandingZeroPoseToRawTrackingPose( params->pmatStandingZeroPoseToRawTrackingPose );
+    params->_ret = iface->GetWorkingStandingZeroPoseToRawTrackingPose( params->pmatStandingZeroPoseToRawTrackingPose );
     return 0;
 }
 
@@ -109,7 +109,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrack
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetLiveSeatedZeroPoseToRawTrackingPose( params->pmatSeatedZeroPoseToRawTrackingPose );
+    params->_ret = iface->GetLiveSeatedZeroPoseToRawTrackingPose( params->pmatSeatedZeroPoseToRawTrackingPose );
     return 0;
 }
 
@@ -125,7 +125,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetLiveCollisionBoundsTagsInfo( params->pTagsBuffer, params->punTagCount );
+    params->_ret = iface->GetLiveCollisionBoundsTagsInfo( params->pTagsBuffer, params->punTagCount );
     return 0;
 }
 
@@ -133,7 +133,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo( v
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->SetWorkingPhysicalBoundsInfo( params->pQuadsBuffer, params->unQuadsCount );
+    params->_ret = iface->SetWorkingPhysicalBoundsInfo( params->pQuadsBuffer, params->unQuadsCount );
     return 0;
 }
 
@@ -141,7 +141,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo( void
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetLivePhysicalBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
+    params->_ret = iface->GetLivePhysicalBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
     return 0;
 }
 
@@ -149,7 +149,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer( void *args 
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->ExportLiveToBuffer( params->pBuffer, params->pnBufferLength );
+    params->_ret = iface->ExportLiveToBuffer( params->pBuffer, params->pnBufferLength );
     return 0;
 }
 
@@ -157,7 +157,7 @@ NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking( void
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking_params *)args;
     struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *iface = (struct u_IVRChaperoneSetup_IVRChaperoneSetup_005 *)params->linux_side;
-    params->_ret = (bool)iface->ImportFromBufferToWorking( params->pBuffer, params->nImportFlags );
+    params->_ret = iface->ImportFromBufferToWorking( params->pBuffer, params->nImportFlags );
     return 0;
 }
 

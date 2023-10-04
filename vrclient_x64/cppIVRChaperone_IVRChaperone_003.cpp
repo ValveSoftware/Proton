@@ -5,7 +5,7 @@ NTSTATUS IVRChaperone_IVRChaperone_003_GetCalibrationState( void *args )
 {
     struct IVRChaperone_IVRChaperone_003_GetCalibrationState_params *params = (struct IVRChaperone_IVRChaperone_003_GetCalibrationState_params *)args;
     struct u_IVRChaperone_IVRChaperone_003 *iface = (struct u_IVRChaperone_IVRChaperone_003 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetCalibrationState(  );
+    params->_ret = iface->GetCalibrationState(  );
     return 0;
 }
 
@@ -13,7 +13,7 @@ NTSTATUS IVRChaperone_IVRChaperone_003_GetPlayAreaSize( void *args )
 {
     struct IVRChaperone_IVRChaperone_003_GetPlayAreaSize_params *params = (struct IVRChaperone_IVRChaperone_003_GetPlayAreaSize_params *)args;
     struct u_IVRChaperone_IVRChaperone_003 *iface = (struct u_IVRChaperone_IVRChaperone_003 *)params->linux_side;
-    params->_ret = (bool)iface->GetPlayAreaSize( params->pSizeX, params->pSizeZ );
+    params->_ret = iface->GetPlayAreaSize( params->pSizeX, params->pSizeZ );
     return 0;
 }
 
@@ -21,7 +21,7 @@ NTSTATUS IVRChaperone_IVRChaperone_003_GetPlayAreaRect( void *args )
 {
     struct IVRChaperone_IVRChaperone_003_GetPlayAreaRect_params *params = (struct IVRChaperone_IVRChaperone_003_GetPlayAreaRect_params *)args;
     struct u_IVRChaperone_IVRChaperone_003 *iface = (struct u_IVRChaperone_IVRChaperone_003 *)params->linux_side;
-    params->_ret = (bool)iface->GetPlayAreaRect( params->rect );
+    params->_ret = iface->GetPlayAreaRect( params->rect );
     return 0;
 }
 
@@ -53,7 +53,7 @@ NTSTATUS IVRChaperone_IVRChaperone_003_AreBoundsVisible( void *args )
 {
     struct IVRChaperone_IVRChaperone_003_AreBoundsVisible_params *params = (struct IVRChaperone_IVRChaperone_003_AreBoundsVisible_params *)args;
     struct u_IVRChaperone_IVRChaperone_003 *iface = (struct u_IVRChaperone_IVRChaperone_003 *)params->linux_side;
-    params->_ret = (bool)iface->AreBoundsVisible(  );
+    params->_ret = iface->AreBoundsVisible(  );
     return 0;
 }
 

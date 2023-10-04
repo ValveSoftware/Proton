@@ -5,7 +5,7 @@ NTSTATUS IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum( void *args )
 {
     struct IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params *params = (struct IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params *)args;
     struct u_IVRSettings_IVRSettings_001 *iface = (struct u_IVRSettings_IVRSettings_001 *)params->linux_side;
-    params->_ret = (const char *)iface->GetSettingsErrorNameFromEnum( params->eError );
+    params->_ret = iface->GetSettingsErrorNameFromEnum( params->eError );
     return 0;
 }
 
@@ -13,7 +13,7 @@ NTSTATUS IVRSettings_IVRSettings_001_Sync( void *args )
 {
     struct IVRSettings_IVRSettings_001_Sync_params *params = (struct IVRSettings_IVRSettings_001_Sync_params *)args;
     struct u_IVRSettings_IVRSettings_001 *iface = (struct u_IVRSettings_IVRSettings_001 *)params->linux_side;
-    params->_ret = (bool)iface->Sync( params->bForce, params->peError );
+    params->_ret = iface->Sync( params->bForce, params->peError );
     return 0;
 }
 
@@ -21,7 +21,7 @@ NTSTATUS IVRSettings_IVRSettings_001_GetBool( void *args )
 {
     struct IVRSettings_IVRSettings_001_GetBool_params *params = (struct IVRSettings_IVRSettings_001_GetBool_params *)args;
     struct u_IVRSettings_IVRSettings_001 *iface = (struct u_IVRSettings_IVRSettings_001 *)params->linux_side;
-    params->_ret = (bool)iface->GetBool( params->pchSection, params->pchSettingsKey, params->bDefaultValue, params->peError );
+    params->_ret = iface->GetBool( params->pchSection, params->pchSettingsKey, params->bDefaultValue, params->peError );
     return 0;
 }
 
@@ -37,7 +37,7 @@ NTSTATUS IVRSettings_IVRSettings_001_GetInt32( void *args )
 {
     struct IVRSettings_IVRSettings_001_GetInt32_params *params = (struct IVRSettings_IVRSettings_001_GetInt32_params *)args;
     struct u_IVRSettings_IVRSettings_001 *iface = (struct u_IVRSettings_IVRSettings_001 *)params->linux_side;
-    params->_ret = (int32_t)iface->GetInt32( params->pchSection, params->pchSettingsKey, params->nDefaultValue, params->peError );
+    params->_ret = iface->GetInt32( params->pchSection, params->pchSettingsKey, params->nDefaultValue, params->peError );
     return 0;
 }
 
@@ -53,7 +53,7 @@ NTSTATUS IVRSettings_IVRSettings_001_GetFloat( void *args )
 {
     struct IVRSettings_IVRSettings_001_GetFloat_params *params = (struct IVRSettings_IVRSettings_001_GetFloat_params *)args;
     struct u_IVRSettings_IVRSettings_001 *iface = (struct u_IVRSettings_IVRSettings_001 *)params->linux_side;
-    params->_ret = (float)iface->GetFloat( params->pchSection, params->pchSettingsKey, params->flDefaultValue, params->peError );
+    params->_ret = iface->GetFloat( params->pchSection, params->pchSettingsKey, params->flDefaultValue, params->peError );
     return 0;
 }
 
