@@ -5,7 +5,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_GetLastError( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_GetLastError_params *params = (struct IVRCompositor_IVRCompositor_005_GetLastError_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetLastError( params->pchBuffer, params->unBufferSize );
+    params->_ret = iface->GetLastError( params->pchBuffer, params->unBufferSize );
     return 0;
 }
 
@@ -21,7 +21,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_GetVSync( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_GetVSync_params *params = (struct IVRCompositor_IVRCompositor_005_GetVSync_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (bool)iface->GetVSync(  );
+    params->_ret = iface->GetVSync(  );
     return 0;
 }
 
@@ -37,7 +37,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_GetGamma( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_GetGamma_params *params = (struct IVRCompositor_IVRCompositor_005_GetGamma_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (float)iface->GetGamma(  );
+    params->_ret = iface->GetGamma(  );
     return 0;
 }
 
@@ -121,7 +121,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_GetFrameTiming( void *args )
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
     u_Compositor_FrameTiming_090 u_pTiming;
     if (params->pTiming) u_pTiming = *params->pTiming;
-    params->_ret = (bool)iface->GetFrameTiming( params->pTiming ? &u_pTiming : nullptr, params->unFramesAgo );
+    params->_ret = iface->GetFrameTiming( params->pTiming ? &u_pTiming : nullptr, params->unFramesAgo );
     if (params->pTiming) *params->pTiming = u_pTiming;
     return 0;
 }
@@ -170,7 +170,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_IsFullscreen( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_IsFullscreen_params *params = (struct IVRCompositor_IVRCompositor_005_IsFullscreen_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (bool)iface->IsFullscreen(  );
+    params->_ret = iface->IsFullscreen(  );
     return 0;
 }
 
@@ -178,7 +178,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_ComputeOverlayIntersection( void *args 
 {
     struct IVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params *params = (struct IVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (bool)iface->ComputeOverlayIntersection( params->pSettings, params->fAspectRatio, params->eOrigin, params->vSource, params->vDirection, params->pvecIntersectionUV, params->pvecIntersectionTrackingSpace );
+    params->_ret = iface->ComputeOverlayIntersection( params->pSettings, params->fAspectRatio, params->eOrigin, params->vSource, params->vDirection, params->pvecIntersectionUV, params->pvecIntersectionTrackingSpace );
     return 0;
 }
 
@@ -194,7 +194,7 @@ NTSTATUS IVRCompositor_IVRCompositor_005_GetTrackingSpace( void *args )
 {
     struct IVRCompositor_IVRCompositor_005_GetTrackingSpace_params *params = (struct IVRCompositor_IVRCompositor_005_GetTrackingSpace_params *)args;
     struct u_IVRCompositor_IVRCompositor_005 *iface = (struct u_IVRCompositor_IVRCompositor_005 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetTrackingSpace(  );
+    params->_ret = iface->GetTrackingSpace(  );
     return 0;
 }
 

@@ -784,7 +784,7 @@ def handle_method_cpp(method, classname, out):
     elif returns_record:
         out(u'    *params->_ret = ')
     else:
-        out(f'    params->_ret = ({declspec(method.result_type, "", "w_")})') # FIXME
+        out(u'    params->_ret = ')
 
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''

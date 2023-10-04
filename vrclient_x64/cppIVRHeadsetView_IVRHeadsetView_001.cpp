@@ -29,7 +29,7 @@ NTSTATUS IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode( void *args )
 {
     struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params *params = (struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params *)args;
     struct u_IVRHeadsetView_IVRHeadsetView_001 *iface = (struct u_IVRHeadsetView_IVRHeadsetView_001 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetHeadsetViewMode(  );
+    params->_ret = iface->GetHeadsetViewMode(  );
     return 0;
 }
 
@@ -45,7 +45,7 @@ NTSTATUS IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped( void *args )
 {
     struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params *params = (struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params *)args;
     struct u_IVRHeadsetView_IVRHeadsetView_001 *iface = (struct u_IVRHeadsetView_IVRHeadsetView_001 *)params->linux_side;
-    params->_ret = (bool)iface->GetHeadsetViewCropped(  );
+    params->_ret = iface->GetHeadsetViewCropped(  );
     return 0;
 }
 
@@ -53,7 +53,7 @@ NTSTATUS IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio( void *args
 {
     struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio_params *params = (struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio_params *)args;
     struct u_IVRHeadsetView_IVRHeadsetView_001 *iface = (struct u_IVRHeadsetView_IVRHeadsetView_001 *)params->linux_side;
-    params->_ret = (float)iface->GetHeadsetViewAspectRatio(  );
+    params->_ret = iface->GetHeadsetViewAspectRatio(  );
     return 0;
 }
 
