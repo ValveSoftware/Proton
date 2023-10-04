@@ -45,7 +45,7 @@ void __thiscall winISteamGameServer_SteamGameServer002_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer002_BLoggedOn_params params =
     {
@@ -67,7 +67,7 @@ void __thiscall winISteamGameServer_SteamGameServer002_GSSetSpawnCount(struct w_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSSetSpawnCount, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient(struct w_steam_iface *_this, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient(struct w_steam_iface *_this, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey)
 {
     struct ISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient_params params =
     {
@@ -81,7 +81,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionK
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect(struct w_steam_iface *_this, uint32_t unUserID, const void *pvRawKey, uint32_t unKeyLen, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect(struct w_steam_iface *_this, uint32_t unUserID, const void *pvRawKey, uint32_t unKeyLen, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie)
 {
     struct ISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect_params params =
     {
@@ -99,7 +99,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect(s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unIPPublic, const void *pvCookie, uint32_t cubCookie)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unIPPublic, const void *pvCookie, uint32_t cubCookie)
 {
     struct ISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect_params params =
     {
@@ -114,7 +114,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect(s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSRemoveUserConnect(struct w_steam_iface *_this, uint32_t unUserID)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSRemoveUserConnect(struct w_steam_iface *_this, uint32_t unUserID)
 {
     struct ISteamGameServer_SteamGameServer002_GSRemoveUserConnect_params params =
     {
@@ -126,7 +126,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSRemoveUserConnect(struc
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSendUserDisconnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unUserID)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSendUserDisconnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unUserID)
 {
     struct ISteamGameServer_SteamGameServer002_GSSendUserDisconnect_params params =
     {
@@ -139,7 +139,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSendUserDisconnect(stru
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSendUserStatusResponse(struct w_steam_iface *_this, CSteamID steamID, int32_t nSecondsConnected, int32_t nSecondsSinceLast)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSendUserStatusResponse(struct w_steam_iface *_this, CSteamID steamID, int32_t nSecondsConnected, int32_t nSecondsSinceLast)
 {
     struct ISteamGameServer_SteamGameServer002_GSSendUserStatusResponse_params params =
     {
@@ -153,7 +153,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSendUserStatusResponse(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus(struct w_steam_iface *_this, int32_t nAppIdServed, uint32_t unServerFlags, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, int32_t unGamePort, const char *pchServerName, const char *pchGameDir, const char *pchMapName, const char *pchVersion)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus(struct w_steam_iface *_this, int32_t nAppIdServed, uint32_t unServerFlags, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, int32_t unGamePort, const char *pchServerName, const char *pchGameDir, const char *pchMapName, const char *pchVersion)
 {
     struct ISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus_params params =
     {
@@ -174,7 +174,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus(stru
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pchMapName)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pchMapName)
 {
     struct ISteamGameServer_SteamGameServer002_GSUpdateStatus_params params =
     {
@@ -190,7 +190,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer002_BSecure_params params =
     {
@@ -213,7 +213,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer002_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint32_t unGamePort, const char *pchGameDir, const char *pchVersion)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint32_t unGamePort, const char *pchGameDir, const char *pchVersion)
 {
     struct ISteamGameServer_SteamGameServer002_GSSetServerType_params params =
     {
@@ -230,7 +230,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType2(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType2(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer002_GSSetServerType2_params params =
     {
@@ -250,7 +250,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType2(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus2(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus2(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName)
 {
     struct ISteamGameServer_SteamGameServer002_GSUpdateStatus2_params params =
     {
@@ -267,7 +267,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus2(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser(struct w_steam_iface *_this, CSteamID *pSteamID)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser(struct w_steam_iface *_this, CSteamID *pSteamID)
 {
     struct ISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser_params params =
     {
@@ -279,7 +279,7 @@ bool __thiscall winISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUs
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer002_GSSetUserData(struct w_steam_iface *_this, CSteamID steamID, const char *pPlayerName, uint32_t nFrags)
+int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetUserData(struct w_steam_iface *_this, CSteamID steamID, const char *pPlayerName, uint32_t nFrags)
 {
     struct ISteamGameServer_SteamGameServer002_GSSetUserData_params params =
     {
@@ -392,7 +392,7 @@ void __thiscall winISteamGameServer_SteamGameServer003_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer003_BLoggedOn_params params =
     {
@@ -403,7 +403,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer003_BSecure_params params =
     {
@@ -426,7 +426,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer003_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient(struct w_steam_iface *_this, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient(struct w_steam_iface *_this, void *pvEncryptionKey, uint32_t *pcbEncryptionKey, uint32_t cbMaxEncryptionKey)
 {
     struct ISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient_params params =
     {
@@ -440,7 +440,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionK
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSSendUserConnect(struct w_steam_iface *_this, uint32_t unUserID, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSendUserConnect(struct w_steam_iface *_this, uint32_t unUserID, uint32_t unIPPublic, uint16_t usPort, const void *pvCookie, uint32_t cubCookie)
 {
     struct ISteamGameServer_SteamGameServer003_GSSendUserConnect_params params =
     {
@@ -456,7 +456,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSSendUserConnect(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSRemoveUserConnect(struct w_steam_iface *_this, uint32_t unUserID)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSRemoveUserConnect(struct w_steam_iface *_this, uint32_t unUserID)
 {
     struct ISteamGameServer_SteamGameServer003_GSRemoveUserConnect_params params =
     {
@@ -468,7 +468,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSRemoveUserConnect(struc
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSSendUserDisconnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unUserID)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSendUserDisconnect(struct w_steam_iface *_this, CSteamID steamID, uint32_t unUserID)
 {
     struct ISteamGameServer_SteamGameServer003_GSSendUserDisconnect_params params =
     {
@@ -492,7 +492,7 @@ void __thiscall winISteamGameServer_SteamGameServer003_GSSetSpawnCount(struct w_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSSetSpawnCount, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer003_GSSetServerType_params params =
     {
@@ -512,7 +512,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSSetServerType(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSUpdateStatus(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSUpdateStatus(struct w_steam_iface *_this, int32_t cPlayers, int32_t cPlayersMax, int32_t cBotPlayers, const char *pchServerName, const char *pSpectatorServerName, const char *pchMapName)
 {
     struct ISteamGameServer_SteamGameServer003_GSUpdateStatus_params params =
     {
@@ -529,7 +529,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSUpdateStatus(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser(struct w_steam_iface *_this, CSteamID *pSteamID)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser(struct w_steam_iface *_this, CSteamID *pSteamID)
 {
     struct ISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser_params params =
     {
@@ -541,7 +541,7 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUs
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSSetUserData(struct w_steam_iface *_this, CSteamID steamID, const char *pPlayerName, uint32_t nFrags)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSetUserData(struct w_steam_iface *_this, CSteamID steamID, const char *pPlayerName, uint32_t nFrags)
 {
     struct ISteamGameServer_SteamGameServer003_GSSetUserData_params params =
     {
@@ -577,7 +577,7 @@ void __thiscall winISteamGameServer_SteamGameServer003_GSSetGameType(struct w_st
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSSetGameType, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
+int8_t __thiscall winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
 {
     struct ISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus_params params =
     {
@@ -660,7 +660,7 @@ void __thiscall winISteamGameServer_SteamGameServer004_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer004_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer004_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer004_BLoggedOn_params params =
     {
@@ -671,7 +671,7 @@ bool __thiscall winISteamGameServer_SteamGameServer004_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer004_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer004_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer004_BSecure_params params =
     {
@@ -731,7 +731,7 @@ void __thiscall winISteamGameServer_SteamGameServer004_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer004_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer004_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer004_BUpdateUserData_params params =
     {
@@ -745,7 +745,7 @@ bool __thiscall winISteamGameServer_SteamGameServer004_BUpdateUserData(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer004_BSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer004_BSetServerType(struct w_steam_iface *_this, int32_t nGameAppId, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer004_BSetServerType_params params =
     {
@@ -803,7 +803,7 @@ void __thiscall winISteamGameServer_SteamGameServer004_SetGameType(struct w_stea
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_SetGameType, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer004_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
+int8_t __thiscall winISteamGameServer_SteamGameServer004_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
 {
     struct ISteamGameServer_SteamGameServer004_BGetUserAchievementStatus_params params =
     {
@@ -883,7 +883,7 @@ void __thiscall winISteamGameServer_SteamGameServer005_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer005_BLoggedOn_params params =
     {
@@ -894,7 +894,7 @@ bool __thiscall winISteamGameServer_SteamGameServer005_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer005_BSecure_params params =
     {
@@ -917,7 +917,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer005_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate_params params =
     {
@@ -955,7 +955,7 @@ void __thiscall winISteamGameServer_SteamGameServer005_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer005_BUpdateUserData_params params =
     {
@@ -969,7 +969,7 @@ bool __thiscall winISteamGameServer_SteamGameServer005_BUpdateUserData(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer005_BSetServerType_params params =
     {
@@ -1026,7 +1026,7 @@ void __thiscall winISteamGameServer_SteamGameServer005_SetGameType(struct w_stea
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_SetGameType, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer005_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
+int8_t __thiscall winISteamGameServer_SteamGameServer005_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
 {
     struct ISteamGameServer_SteamGameServer005_BGetUserAchievementStatus_params params =
     {
@@ -1109,7 +1109,7 @@ void __thiscall winISteamGameServer_SteamGameServer008_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer008_BLoggedOn_params params =
     {
@@ -1120,7 +1120,7 @@ bool __thiscall winISteamGameServer_SteamGameServer008_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer008_BSecure_params params =
     {
@@ -1143,7 +1143,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer008_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer008_SendUserConnectAndAuthenticate_params params =
     {
@@ -1181,7 +1181,7 @@ void __thiscall winISteamGameServer_SteamGameServer008_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer008_BUpdateUserData_params params =
     {
@@ -1195,7 +1195,7 @@ bool __thiscall winISteamGameServer_SteamGameServer008_BUpdateUserData(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer008_BSetServerType_params params =
     {
@@ -1252,7 +1252,7 @@ void __thiscall winISteamGameServer_SteamGameServer008_SetGameType(struct w_stea
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_SetGameType, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
 {
     struct ISteamGameServer_SteamGameServer008_BGetUserAchievementStatus_params params =
     {
@@ -1275,7 +1275,7 @@ void __thiscall winISteamGameServer_SteamGameServer008_GetGameplayStats(struct w
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_GetGameplayStats, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer008_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer008_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer008_RequestUserGroupStatus_params params =
     {
@@ -1374,7 +1374,7 @@ void __thiscall winISteamGameServer_SteamGameServer009_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer009_BLoggedOn_params params =
     {
@@ -1385,7 +1385,7 @@ bool __thiscall winISteamGameServer_SteamGameServer009_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer009_BSecure_params params =
     {
@@ -1408,7 +1408,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer009_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer009_SendUserConnectAndAuthenticate_params params =
     {
@@ -1446,7 +1446,7 @@ void __thiscall winISteamGameServer_SteamGameServer009_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer009_BUpdateUserData_params params =
     {
@@ -1460,7 +1460,7 @@ bool __thiscall winISteamGameServer_SteamGameServer009_BUpdateUserData(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer009_BSetServerType_params params =
     {
@@ -1517,7 +1517,7 @@ void __thiscall winISteamGameServer_SteamGameServer009_SetGameType(struct w_stea
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_SetGameType, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_BGetUserAchievementStatus(struct w_steam_iface *_this, CSteamID steamID, const char *pchAchievementName)
 {
     struct ISteamGameServer_SteamGameServer009_BGetUserAchievementStatus_params params =
     {
@@ -1540,7 +1540,7 @@ void __thiscall winISteamGameServer_SteamGameServer009_GetGameplayStats(struct w
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_GetGameplayStats, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer009_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer009_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer009_RequestUserGroupStatus_params params =
     {
@@ -1669,7 +1669,7 @@ void __thiscall winISteamGameServer_SteamGameServer010_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer010_BLoggedOn_params params =
     {
@@ -1680,7 +1680,7 @@ bool __thiscall winISteamGameServer_SteamGameServer010_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer010_BSecure_params params =
     {
@@ -1703,7 +1703,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer010_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate_params params =
     {
@@ -1741,7 +1741,7 @@ void __thiscall winISteamGameServer_SteamGameServer010_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer010_BUpdateUserData_params params =
     {
@@ -1755,7 +1755,7 @@ bool __thiscall winISteamGameServer_SteamGameServer010_BUpdateUserData(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, bool bLANMode)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_BSetServerType(struct w_steam_iface *_this, uint32_t unServerFlags, uint32_t unGameIP, uint16_t unGamePort, uint16_t unSpectatorPort, uint16_t usQueryPort, const char *pchGameDir, const char *pchVersion, int8_t bLANMode)
 {
     struct ISteamGameServer_SteamGameServer010_BSetServerType_params params =
     {
@@ -1833,7 +1833,7 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer010_GetServerReputation(s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer010_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer010_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer010_RequestUserGroupStatus_params params =
     {
@@ -2017,7 +2017,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer011_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct ISteamGameServer_SteamGameServer011_InitGameServer_params params =
     {
@@ -2067,7 +2067,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetModDir(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetModDir, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer011_SetDedicatedServer(struct w_steam_iface *_this, bool bDedicated)
+void __thiscall winISteamGameServer_SteamGameServer011_SetDedicatedServer(struct w_steam_iface *_this, int8_t bDedicated)
 {
     struct ISteamGameServer_SteamGameServer011_SetDedicatedServer_params params =
     {
@@ -2110,7 +2110,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer011_BLoggedOn_params params =
     {
@@ -2121,7 +2121,7 @@ bool __thiscall winISteamGameServer_SteamGameServer011_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer011_BSecure_params params =
     {
@@ -2144,7 +2144,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer011_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_WasRestartRequested(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_WasRestartRequested(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer011_WasRestartRequested_params params =
     {
@@ -2199,7 +2199,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetMapName(struct w_steam
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetMapName, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer011_SetPasswordProtected(struct w_steam_iface *_this, bool bPasswordProtected)
+void __thiscall winISteamGameServer_SteamGameServer011_SetPasswordProtected(struct w_steam_iface *_this, int8_t bPasswordProtected)
 {
     struct ISteamGameServer_SteamGameServer011_SetPasswordProtected_params params =
     {
@@ -2287,7 +2287,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetRegion(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetRegion, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer011_SendUserConnectAndAuthenticate_params params =
     {
@@ -2325,7 +2325,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer011_BUpdateUserData_params params =
     {
@@ -2402,7 +2402,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer011_UserHasLicenseForApp(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer011_RequestUserGroupStatus_params params =
     {
@@ -2447,7 +2447,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer011_GetPublicIP(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer011_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
+int8_t __thiscall winISteamGameServer_SteamGameServer011_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct ISteamGameServer_SteamGameServer011_HandleIncomingPacket_params params =
     {
@@ -2477,7 +2477,7 @@ int32_t __thiscall winISteamGameServer_SteamGameServer011_GetNextOutgoingPacket(
     return params._ret;
 }
 
-void __thiscall winISteamGameServer_SteamGameServer011_EnableHeartbeats(struct w_steam_iface *_this, bool bActive)
+void __thiscall winISteamGameServer_SteamGameServer011_EnableHeartbeats(struct w_steam_iface *_this, int8_t bActive)
 {
     struct ISteamGameServer_SteamGameServer011_EnableHeartbeats_params params =
     {
@@ -2640,7 +2640,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer012_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct ISteamGameServer_SteamGameServer012_InitGameServer_params params =
     {
@@ -2690,7 +2690,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetModDir(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetModDir, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer012_SetDedicatedServer(struct w_steam_iface *_this, bool bDedicated)
+void __thiscall winISteamGameServer_SteamGameServer012_SetDedicatedServer(struct w_steam_iface *_this, int8_t bDedicated)
 {
     struct ISteamGameServer_SteamGameServer012_SetDedicatedServer_params params =
     {
@@ -2732,7 +2732,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer012_BLoggedOn_params params =
     {
@@ -2743,7 +2743,7 @@ bool __thiscall winISteamGameServer_SteamGameServer012_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer012_BSecure_params params =
     {
@@ -2766,7 +2766,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer012_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_WasRestartRequested(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_WasRestartRequested(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer012_WasRestartRequested_params params =
     {
@@ -2821,7 +2821,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetMapName(struct w_steam
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetMapName, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer012_SetPasswordProtected(struct w_steam_iface *_this, bool bPasswordProtected)
+void __thiscall winISteamGameServer_SteamGameServer012_SetPasswordProtected(struct w_steam_iface *_this, int8_t bPasswordProtected)
 {
     struct ISteamGameServer_SteamGameServer012_SetPasswordProtected_params params =
     {
@@ -2909,7 +2909,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetRegion(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetRegion, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer012_SendUserConnectAndAuthenticate_params params =
     {
@@ -2947,7 +2947,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer012_BUpdateUserData_params params =
     {
@@ -3024,7 +3024,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer012_UserHasLicenseForApp(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer012_RequestUserGroupStatus_params params =
     {
@@ -3069,7 +3069,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer012_GetPublicIP(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer012_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
+int8_t __thiscall winISteamGameServer_SteamGameServer012_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct ISteamGameServer_SteamGameServer012_HandleIncomingPacket_params params =
     {
@@ -3099,7 +3099,7 @@ int32_t __thiscall winISteamGameServer_SteamGameServer012_GetNextOutgoingPacket(
     return params._ret;
 }
 
-void __thiscall winISteamGameServer_SteamGameServer012_EnableHeartbeats(struct w_steam_iface *_this, bool bActive)
+void __thiscall winISteamGameServer_SteamGameServer012_EnableHeartbeats(struct w_steam_iface *_this, int8_t bActive)
 {
     struct ISteamGameServer_SteamGameServer012_EnableHeartbeats_params params =
     {
@@ -3262,7 +3262,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer013_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct ISteamGameServer_SteamGameServer013_InitGameServer_params params =
     {
@@ -3312,7 +3312,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetModDir(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetModDir, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer013_SetDedicatedServer(struct w_steam_iface *_this, bool bDedicated)
+void __thiscall winISteamGameServer_SteamGameServer013_SetDedicatedServer(struct w_steam_iface *_this, int8_t bDedicated)
 {
     struct ISteamGameServer_SteamGameServer013_SetDedicatedServer_params params =
     {
@@ -3354,7 +3354,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer013_BLoggedOn_params params =
     {
@@ -3365,7 +3365,7 @@ bool __thiscall winISteamGameServer_SteamGameServer013_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer013_BSecure_params params =
     {
@@ -3388,7 +3388,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer013_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_WasRestartRequested(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_WasRestartRequested(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer013_WasRestartRequested_params params =
     {
@@ -3443,7 +3443,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetMapName(struct w_steam
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetMapName, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer013_SetPasswordProtected(struct w_steam_iface *_this, bool bPasswordProtected)
+void __thiscall winISteamGameServer_SteamGameServer013_SetPasswordProtected(struct w_steam_iface *_this, int8_t bPasswordProtected)
 {
     struct ISteamGameServer_SteamGameServer013_SetPasswordProtected_params params =
     {
@@ -3531,7 +3531,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetRegion(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetRegion, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate_params params =
     {
@@ -3569,7 +3569,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_SendUserDisconnect(struct
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SendUserDisconnect, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer013_BUpdateUserData_params params =
     {
@@ -3646,7 +3646,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer013_UserHasLicenseForApp(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer013_RequestUserGroupStatus_params params =
     {
@@ -3692,7 +3692,7 @@ SteamIPAddress_t * __thiscall winISteamGameServer_SteamGameServer013_GetPublicIP
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer013_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
+int8_t __thiscall winISteamGameServer_SteamGameServer013_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct ISteamGameServer_SteamGameServer013_HandleIncomingPacket_params params =
     {
@@ -3722,7 +3722,7 @@ int32_t __thiscall winISteamGameServer_SteamGameServer013_GetNextOutgoingPacket(
     return params._ret;
 }
 
-void __thiscall winISteamGameServer_SteamGameServer013_EnableHeartbeats(struct w_steam_iface *_this, bool bActive)
+void __thiscall winISteamGameServer_SteamGameServer013_EnableHeartbeats(struct w_steam_iface *_this, int8_t bActive)
 {
     struct ISteamGameServer_SteamGameServer013_EnableHeartbeats_params params =
     {
@@ -3885,7 +3885,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_BUpdateUserData, 
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_SetMasterServerHeartbeatInterval_DEPRECATED, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED, 4)
 
-bool __thiscall winISteamGameServer_SteamGameServer014_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct ISteamGameServer_SteamGameServer014_InitGameServer_params params =
     {
@@ -3935,7 +3935,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetModDir(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetModDir, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer014_SetDedicatedServer(struct w_steam_iface *_this, bool bDedicated)
+void __thiscall winISteamGameServer_SteamGameServer014_SetDedicatedServer(struct w_steam_iface *_this, int8_t bDedicated)
 {
     struct ISteamGameServer_SteamGameServer014_SetDedicatedServer_params params =
     {
@@ -3977,7 +3977,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer014_BLoggedOn_params params =
     {
@@ -3988,7 +3988,7 @@ bool __thiscall winISteamGameServer_SteamGameServer014_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer014_BSecure_params params =
     {
@@ -4011,7 +4011,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer014_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_WasRestartRequested(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_WasRestartRequested(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer014_WasRestartRequested_params params =
     {
@@ -4066,7 +4066,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetMapName(struct w_steam
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetMapName, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer014_SetPasswordProtected(struct w_steam_iface *_this, bool bPasswordProtected)
+void __thiscall winISteamGameServer_SteamGameServer014_SetPasswordProtected(struct w_steam_iface *_this, int8_t bPasswordProtected)
 {
     struct ISteamGameServer_SteamGameServer014_SetPasswordProtected_params params =
     {
@@ -4154,7 +4154,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetRegion(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetRegion, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer014_SetAdvertiseServerActive(struct w_steam_iface *_this, bool bActive)
+void __thiscall winISteamGameServer_SteamGameServer014_SetAdvertiseServerActive(struct w_steam_iface *_this, int8_t bActive)
 {
     struct ISteamGameServer_SteamGameServer014_SetAdvertiseServerActive_params params =
     {
@@ -4228,7 +4228,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer014_UserHasLicenseForApp(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer014_RequestUserGroupStatus_params params =
     {
@@ -4274,7 +4274,7 @@ SteamIPAddress_t * __thiscall winISteamGameServer_SteamGameServer014_GetPublicIP
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct ISteamGameServer_SteamGameServer014_HandleIncomingPacket_params params =
     {
@@ -4328,7 +4328,7 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer014_ComputeNewPlayerCompa
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_SendUserConnectAndAuthenticate_DEPRECATED(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_SendUserConnectAndAuthenticate_DEPRECATED(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer014_SendUserConnectAndAuthenticate_DEPRECATED_params params =
     {
@@ -4366,7 +4366,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_SendUserDisconnect_DEPREC
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SendUserDisconnect_DEPRECATED, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer014_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer014_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer014_BUpdateUserData_params params =
     {
@@ -4508,7 +4508,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_BUpdateUserData, 
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_SetMasterServerHeartbeatInterval_DEPRECATED, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECATED, 4)
 
-bool __thiscall winISteamGameServer_SteamGameServer015_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct ISteamGameServer_SteamGameServer015_InitGameServer_params params =
     {
@@ -4558,7 +4558,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetModDir(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetModDir, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer015_SetDedicatedServer(struct w_steam_iface *_this, bool bDedicated)
+void __thiscall winISteamGameServer_SteamGameServer015_SetDedicatedServer(struct w_steam_iface *_this, int8_t bDedicated)
 {
     struct ISteamGameServer_SteamGameServer015_SetDedicatedServer_params params =
     {
@@ -4600,7 +4600,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_LogOff(struct w_steam_ifa
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_LogOff, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_BLoggedOn(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_BLoggedOn(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer015_BLoggedOn_params params =
     {
@@ -4611,7 +4611,7 @@ bool __thiscall winISteamGameServer_SteamGameServer015_BLoggedOn(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_BSecure(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_BSecure(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer015_BSecure_params params =
     {
@@ -4634,7 +4634,7 @@ CSteamID * __thiscall winISteamGameServer_SteamGameServer015_GetSteamID(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_WasRestartRequested(struct w_steam_iface *_this)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_WasRestartRequested(struct w_steam_iface *_this)
 {
     struct ISteamGameServer_SteamGameServer015_WasRestartRequested_params params =
     {
@@ -4689,7 +4689,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetMapName(struct w_steam
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetMapName, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer015_SetPasswordProtected(struct w_steam_iface *_this, bool bPasswordProtected)
+void __thiscall winISteamGameServer_SteamGameServer015_SetPasswordProtected(struct w_steam_iface *_this, int8_t bPasswordProtected)
 {
     struct ISteamGameServer_SteamGameServer015_SetPasswordProtected_params params =
     {
@@ -4777,7 +4777,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetRegion(struct w_steam_
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetRegion, &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer015_SetAdvertiseServerActive(struct w_steam_iface *_this, bool bActive)
+void __thiscall winISteamGameServer_SteamGameServer015_SetAdvertiseServerActive(struct w_steam_iface *_this, int8_t bActive)
 {
     struct ISteamGameServer_SteamGameServer015_SetAdvertiseServerActive_params params =
     {
@@ -4852,7 +4852,7 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer015_UserHasLicenseForApp(
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_RequestUserGroupStatus(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDGroup)
 {
     struct ISteamGameServer_SteamGameServer015_RequestUserGroupStatus_params params =
     {
@@ -4898,7 +4898,7 @@ SteamIPAddress_t * __thiscall winISteamGameServer_SteamGameServer015_GetPublicIP
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct ISteamGameServer_SteamGameServer015_HandleIncomingPacket_params params =
     {
@@ -4952,7 +4952,7 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer015_ComputeNewPlayerCompa
     return params._ret;
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_SendUserConnectAndAuthenticate_DEPRECATED(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_SendUserConnectAndAuthenticate_DEPRECATED(struct w_steam_iface *_this, uint32_t unIPClient, const void *pvAuthBlob, uint32_t cubAuthBlobSize, CSteamID *pSteamIDUser)
 {
     struct ISteamGameServer_SteamGameServer015_SendUserConnectAndAuthenticate_DEPRECATED_params params =
     {
@@ -4990,7 +4990,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SendUserDisconnect_DEPREC
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SendUserDisconnect_DEPRECATED, &params );
 }
 
-bool __thiscall winISteamGameServer_SteamGameServer015_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
+int8_t __thiscall winISteamGameServer_SteamGameServer015_BUpdateUserData(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchPlayerName, uint32_t uScore)
 {
     struct ISteamGameServer_SteamGameServer015_BUpdateUserData_params params =
     {

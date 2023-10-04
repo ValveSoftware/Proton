@@ -10,7 +10,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Ge
 DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse, 16)
 DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode, 8)
 
-bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struct w_steam_iface *_this, const char *pchAbsolutePathToControllerConfigVDF)
+int8_t __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struct w_steam_iface *_this, const char *pchAbsolutePathToControllerConfigVDF)
 {
     struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params params =
     {
@@ -22,7 +22,7 @@ bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(struc
     return params._ret;
 }
 
-bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown_params params =
     {
@@ -43,7 +43,7 @@ void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(s
     STEAMCLIENT_CALL( ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame, &params );
 }
 
-bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerIndex, SteamControllerState001_t *pState)
+int8_t __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerIndex, SteamControllerState001_t *pState)
 {
     struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState_params params =
     {
@@ -122,7 +122,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_StopAnalogActionM
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerHapticPulse, 20)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerRepeatedHapticPulse, 32)
 
-bool __thiscall winISteamController_SteamController003_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController003_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController003_Init_params params =
     {
@@ -133,7 +133,7 @@ bool __thiscall winISteamController_SteamController003_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController003_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController003_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController003_Shutdown_params params =
     {
@@ -166,7 +166,7 @@ int32_t __thiscall winISteamController_SteamController003_GetConnectedController
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController003_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController003_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController003_ShowBindingPanel_params params =
     {
@@ -395,7 +395,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_GetMotionData, 16
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_ShowDigitalActionOrigins, 32)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_ShowAnalogActionOrigins, 32)
 
-bool __thiscall winISteamController_SteamController004_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController004_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController004_Init_params params =
     {
@@ -406,7 +406,7 @@ bool __thiscall winISteamController_SteamController004_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController004_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController004_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController004_Shutdown_params params =
     {
@@ -439,7 +439,7 @@ int32_t __thiscall winISteamController_SteamController004_GetConnectedController
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController004_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController004_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController004_ShowBindingPanel_params params =
     {
@@ -647,7 +647,7 @@ ControllerMotionData_t * __thiscall winISteamController_SteamController004_GetMo
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController004_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController004_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController004_ShowDigitalActionOrigins_params params =
     {
@@ -663,7 +663,7 @@ bool __thiscall winISteamController_SteamController004_ShowDigitalActionOrigins(
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController004_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController004_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController004_ShowAnalogActionOrigins_params params =
     {
@@ -746,7 +746,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_ShowAnalogActionO
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_GetStringForActionOrigin, 8)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_GetGlyphForActionOrigin, 8)
 
-bool __thiscall winISteamController_SteamController005_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController005_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController005_Init_params params =
     {
@@ -757,7 +757,7 @@ bool __thiscall winISteamController_SteamController005_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController005_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController005_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController005_Shutdown_params params =
     {
@@ -790,7 +790,7 @@ int32_t __thiscall winISteamController_SteamController005_GetConnectedController
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController005_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController005_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController005_ShowBindingPanel_params params =
     {
@@ -1026,7 +1026,7 @@ ControllerMotionData_t * __thiscall winISteamController_SteamController005_GetMo
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController005_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController005_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController005_ShowDigitalActionOrigins_params params =
     {
@@ -1042,7 +1042,7 @@ bool __thiscall winISteamController_SteamController005_ShowDigitalActionOrigins(
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController005_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController005_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController005_ShowAnalogActionOrigins_params params =
     {
@@ -1146,7 +1146,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetStringForActio
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetGlyphForActionOrigin, 8)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetInputTypeForHandle, 12)
 
-bool __thiscall winISteamController_SteamController006_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController006_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController006_Init_params params =
     {
@@ -1157,7 +1157,7 @@ bool __thiscall winISteamController_SteamController006_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController006_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController006_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController006_Shutdown_params params =
     {
@@ -1190,7 +1190,7 @@ int32_t __thiscall winISteamController_SteamController006_GetConnectedController
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController006_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController006_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController006_ShowBindingPanel_params params =
     {
@@ -1474,7 +1474,7 @@ ControllerMotionData_t * __thiscall winISteamController_SteamController006_GetMo
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController006_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController006_ShowDigitalActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t digitalActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController006_ShowDigitalActionOrigins_params params =
     {
@@ -1490,7 +1490,7 @@ bool __thiscall winISteamController_SteamController006_ShowDigitalActionOrigins(
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController006_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
+int8_t __thiscall winISteamController_SteamController006_ShowAnalogActionOrigins(struct w_steam_iface *_this, uint64_t controllerHandle, uint64_t analogActionHandle, float flScale, float flXPosition, float flYPosition)
 {
     struct ISteamController_SteamController006_ShowAnalogActionOrigins_params params =
     {
@@ -1614,7 +1614,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController007_GetActionOriginFr
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController007_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController007_GetControllerBindingRevision, 20)
 
-bool __thiscall winISteamController_SteamController007_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController007_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController007_Init_params params =
     {
@@ -1625,7 +1625,7 @@ bool __thiscall winISteamController_SteamController007_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController007_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController007_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController007_Shutdown_params params =
     {
@@ -1918,7 +1918,7 @@ void __thiscall winISteamController_SteamController007_SetLEDColor(struct w_stea
     STEAMCLIENT_CALL( ISteamController_SteamController007_SetLEDColor, &params );
 }
 
-bool __thiscall winISteamController_SteamController007_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController007_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController007_ShowBindingPanel_params params =
     {
@@ -2004,7 +2004,7 @@ uint32_t __thiscall winISteamController_SteamController007_TranslateActionOrigin
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController007_GetControllerBindingRevision(struct w_steam_iface *_this, uint64_t controllerHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamController_SteamController007_GetControllerBindingRevision(struct w_steam_iface *_this, uint64_t controllerHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamController_SteamController007_GetControllerBindingRevision_params params =
     {
@@ -2105,7 +2105,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_SteamController008_GetActionOriginFr
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController008_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController008_GetControllerBindingRevision, 20)
 
-bool __thiscall winISteamController_SteamController008_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController008_Init(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController008_Init_params params =
     {
@@ -2116,7 +2116,7 @@ bool __thiscall winISteamController_SteamController008_Init(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController008_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamController_SteamController008_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamController_SteamController008_Shutdown_params params =
     {
@@ -2409,7 +2409,7 @@ void __thiscall winISteamController_SteamController008_SetLEDColor(struct w_stea
     STEAMCLIENT_CALL( ISteamController_SteamController008_SetLEDColor, &params );
 }
 
-bool __thiscall winISteamController_SteamController008_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
+int8_t __thiscall winISteamController_SteamController008_ShowBindingPanel(struct w_steam_iface *_this, uint64_t controllerHandle)
 {
     struct ISteamController_SteamController008_ShowBindingPanel_params params =
     {
@@ -2495,7 +2495,7 @@ uint32_t __thiscall winISteamController_SteamController008_TranslateActionOrigin
     return params._ret;
 }
 
-bool __thiscall winISteamController_SteamController008_GetControllerBindingRevision(struct w_steam_iface *_this, uint64_t controllerHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamController_SteamController008_GetControllerBindingRevision(struct w_steam_iface *_this, uint64_t controllerHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamController_SteamController008_GetControllerBindingRevision_params params =
     {

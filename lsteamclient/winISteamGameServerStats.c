@@ -26,7 +26,7 @@ uint64_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUser
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_params params =
     {
@@ -40,7 +40,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(str
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_2_params params =
     {
@@ -54,7 +54,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_GetUserAchievement_params params =
     {
@@ -68,7 +68,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievem
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t nData)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_params params =
     {
@@ -82,7 +82,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(str
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float fData)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float fData)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_2_params params =
     {
@@ -96,7 +96,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2(s
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat_params params =
     {
@@ -111,7 +111,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRa
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_SetUserAchievement_params params =
     {
@@ -124,7 +124,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchievem
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
+int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName)
 {
     struct ISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement_params params =
     {

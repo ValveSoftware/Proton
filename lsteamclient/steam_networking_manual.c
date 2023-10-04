@@ -20,7 +20,7 @@ static void networking_message_pool_release( struct networking_message_pool *poo
     }
 }
 
-static bool networking_message_pool_alloc_data( uint32_t count, struct networking_message_pool *pool )
+static BOOL networking_message_pool_alloc_data( uint32_t count, struct networking_message_pool *pool )
 {
     uint32_t i, size;
     char *ptr;
@@ -29,7 +29,7 @@ static bool networking_message_pool_alloc_data( uint32_t count, struct networkin
     if (!(pool->message_data = HeapAlloc( GetProcessHeap(), 0, size )))
     {
         ERR( "Failed to allocate memory for networking messages\n" );
-        return false;
+        return FALSE;
     }
 
     for (i = 0, ptr = pool->message_data; i < count; i++)
@@ -38,7 +38,7 @@ static bool networking_message_pool_alloc_data( uint32_t count, struct networkin
         ptr += *pool->messages[i].p_size;
     }
 
-    return true;
+    return TRUE;
 }
 
 static void W_STDCALL w_SteamNetworkingMessage_t_144_FreeData( w_SteamNetworkingMessage_t_144 *msg )
@@ -67,7 +67,7 @@ static w_SteamNetworkingMessage_t_144 *networking_message_init_144( struct netwo
     return &message->w_msg_144;
 }
 
-static bool networking_message_pool_create_144( uint32_t count, w_SteamNetworkingMessage_t_144 **messages )
+static BOOL networking_message_pool_create_144( uint32_t count, w_SteamNetworkingMessage_t_144 **messages )
 {
     uint32_t size = offsetof( struct networking_message_pool, messages[count] );
     struct networking_message_pool *pool;
@@ -75,15 +75,15 @@ static bool networking_message_pool_create_144( uint32_t count, w_SteamNetworkin
     if (!(pool = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, size )))
     {
         ERR( "Failed to allocate memory for networking messages\n" );
-        return false;
+        return FALSE;
     }
     pool->ref = count;
 
     while (count--) messages[count] = networking_message_init_144( &pool->messages[count], pool );
-    return true;
+    return TRUE;
 }
 
-static bool networking_message_pool_receive_144( int32_t capacity, int32_t count, w_SteamNetworkingMessage_t_144 **messages )
+static BOOL networking_message_pool_receive_144( int32_t capacity, int32_t count, w_SteamNetworkingMessage_t_144 **messages )
 {
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_144 )->pool;
     int32_t i;
@@ -93,11 +93,11 @@ static bool networking_message_pool_receive_144( int32_t capacity, int32_t count
     if (count > 0)
     {
         struct steamclient_networking_messages_receive_144_params params = {.count = count, .w_msgs = messages};
-        if (!networking_message_pool_alloc_data( count, pool )) return false;
+        if (!networking_message_pool_alloc_data( count, pool )) return FALSE;
         STEAMCLIENT_CALL( steamclient_networking_messages_receive_144, &params );
     }
 
-    return true;
+    return TRUE;
 }
 
 static void W_STDCALL w_SteamNetworkingMessage_t_147_FreeData( w_SteamNetworkingMessage_t_147 *msg )
@@ -135,7 +135,7 @@ static w_SteamNetworkingMessage_t_147 *networking_message_init_147( struct netwo
     return &message->w_msg_147;
 }
 
-static bool networking_message_pool_create_147( uint32_t count, w_SteamNetworkingMessage_t_147 **messages )
+static BOOL networking_message_pool_create_147( uint32_t count, w_SteamNetworkingMessage_t_147 **messages )
 {
     uint32_t size = offsetof( struct networking_message_pool, messages[count] );
     struct networking_message_pool *pool;
@@ -143,15 +143,15 @@ static bool networking_message_pool_create_147( uint32_t count, w_SteamNetworkin
     if (!(pool = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, size )))
     {
         ERR( "Failed to allocate memory for networking messages\n" );
-        return false;
+        return FALSE;
     }
     pool->ref = count;
 
     while (count--) messages[count] = networking_message_init_147( &pool->messages[count], pool );
-    return true;
+    return TRUE;
 }
 
-static bool networking_message_pool_receive_147( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_147 **messages )
+static BOOL networking_message_pool_receive_147( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_147 **messages )
 {
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_147 )->pool;
     uint32_t i;
@@ -161,11 +161,11 @@ static bool networking_message_pool_receive_147( uint32_t capacity, uint32_t cou
     if (count)
     {
         struct steamclient_networking_messages_receive_147_params params = {.count = count, .w_msgs = messages};
-        if (!networking_message_pool_alloc_data( count, pool )) return false;
+        if (!networking_message_pool_alloc_data( count, pool )) return FALSE;
         STEAMCLIENT_CALL( steamclient_networking_messages_receive_147, &params );
     }
 
-    return true;
+    return TRUE;
 }
 
 static void W_STDCALL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkingMessage_t_153a *msg )
@@ -203,7 +203,7 @@ static w_SteamNetworkingMessage_t_153a *networking_message_init_153a( struct net
     return &message->w_msg_153a;
 }
 
-static bool networking_message_pool_create_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
+static BOOL networking_message_pool_create_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
 {
     uint32_t size = offsetof( struct networking_message_pool, messages[count] );
     struct networking_message_pool *pool;
@@ -211,15 +211,15 @@ static bool networking_message_pool_create_153a( uint32_t count, w_SteamNetworki
     if (!(pool = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, size )))
     {
         ERR( "Failed to allocate memory for networking messages\n" );
-        return false;
+        return FALSE;
     }
     pool->ref = count;
 
     while (count--) messages[count] = networking_message_init_153a( &pool->messages[count], pool );
-    return true;
+    return TRUE;
 }
 
-static bool networking_message_pool_receive_153a( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
+static BOOL networking_message_pool_receive_153a( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
 {
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_153a )->pool;
     uint32_t i;
@@ -229,11 +229,11 @@ static bool networking_message_pool_receive_153a( uint32_t capacity, uint32_t co
     if (count)
     {
         struct steamclient_networking_messages_receive_153a_params params = {.count = count, .w_msgs = messages};
-        if (!networking_message_pool_alloc_data( count, pool )) return false;
+        if (!networking_message_pool_alloc_data( count, pool )) return FALSE;
         STEAMCLIENT_CALL( steamclient_networking_messages_receive_153a, &params );
     }
 
-    return true;
+    return TRUE;
 }
 
 /* ISteamNetworkingSockets_SteamNetworkingSockets002 */

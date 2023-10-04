@@ -17,7 +17,7 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL(struct w_st
     STEAMCLIENT_CALL( ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL, &params );
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(struct w_steam_iface *_this, int32_t *pnNumViewers)
+int8_t __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(struct w_steam_iface *_this, int32_t *pnNumViewers)
 {
     struct ISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params params =
     {
@@ -65,7 +65,7 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(struct w_st
     STEAMCLIENT_CALL( ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL, &params );
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(struct w_steam_iface *_this, int32_t *pnNumViewers)
+int8_t __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting(struct w_steam_iface *_this, int32_t *pnNumViewers)
 {
     struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params params =
     {
@@ -88,7 +88,7 @@ void __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings(struct w
     STEAMCLIENT_CALL( ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings, &params );
 }
 
-bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, uint32_t unVideoAppID, char *pchBuffer, int32_t *pnBufferSize)
+int8_t __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(struct w_steam_iface *_this, uint32_t unVideoAppID, char *pchBuffer, int32_t *pnBufferSize)
 {
     struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params params =
     {
