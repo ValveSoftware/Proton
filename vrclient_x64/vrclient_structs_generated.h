@@ -204,8 +204,8 @@ struct VREvent_Process_t_1210
 {
     uint32_t pid;
     uint32_t oldPid;
-    bool bForced;
-    bool bConnectionLost;
+    int8_t bForced;
+    int8_t bConnectionLost;
     uint8_t __pad_10[2];
 };
 #pragma pack( pop )
@@ -216,7 +216,7 @@ struct VREvent_Process_t_0912
 {
     uint32_t pid;
     uint32_t oldPid;
-    bool bForced;
+    int8_t bForced;
     uint8_t __pad_9[3];
 };
 #pragma pack( pop )
@@ -329,7 +329,7 @@ typedef struct VREvent_SeatedZeroPoseReset_t VREvent_SeatedZeroPoseReset_t;
 #pragma pack( push, 1 )
 struct VREvent_SeatedZeroPoseReset_t
 {
-    bool bResetBySystemMenu;
+    int8_t bResetBySystemMenu;
 };
 #pragma pack( pop )
 
@@ -369,7 +369,7 @@ typedef struct VREvent_TouchPadMove_t VREvent_TouchPadMove_t;
 #pragma pack( push, 4 )
 struct VREvent_TouchPadMove_t
 {
-    bool bFingerDown;
+    int8_t bFingerDown;
     uint8_t __pad_1[3];
     float flSecondsFingerDown;
     float fValueXFirst;
@@ -395,8 +395,8 @@ struct TrackedDevicePose_t
     HmdVector3_t vVelocity;
     HmdVector3_t vAngularVelocity;
     uint32_t eTrackingResult;
-    bool bPoseIsValid;
-    bool bDeviceIsConnected;
+    int8_t bPoseIsValid;
+    int8_t bDeviceIsConnected;
     uint8_t __pad_78[2];
 };
 #pragma pack( pop )
@@ -1129,8 +1129,8 @@ typedef struct Compositor_OverlaySettings Compositor_OverlaySettings;
 struct Compositor_OverlaySettings
 {
     uint32_t size;
-    bool curved;
-    bool antialias;
+    int8_t curved;
+    int8_t antialias;
     uint8_t __pad_6[2];
     float scale;
     float distance;
@@ -1155,9 +1155,9 @@ struct Compositor_StageRenderSettings
     float m_flVignetteInnerRadius;
     float m_flVignetteOuterRadius;
     float m_flFresnelStrength;
-    bool m_bBackfaceCulling;
-    bool m_bGreyscale;
-    bool m_bWireframe;
+    int8_t m_bBackfaceCulling;
+    int8_t m_bGreyscale;
+    int8_t m_bWireframe;
     uint8_t __pad_47[1];
 };
 #pragma pack( pop )
@@ -1261,7 +1261,7 @@ typedef struct RenderModel_ControllerMode_State_t RenderModel_ControllerMode_Sta
 #pragma pack( push, 1 )
 struct RenderModel_ControllerMode_State_t
 {
-    bool bScrollWheelVisible;
+    int8_t bScrollWheelVisible;
 };
 #pragma pack( pop )
 
@@ -2517,7 +2517,7 @@ struct w64_CameraVideoStreamFrame_t_0914
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
     uint64_t m_nFrameCaptureTicks;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_73[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     W64_ARRAY(float, 4, m_Pad);
@@ -2546,7 +2546,7 @@ struct u64_CameraVideoStreamFrame_t_0914
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
     uint64_t m_nFrameCaptureTicks;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_69[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U64_ARRAY(float, 4, m_Pad);
@@ -2575,7 +2575,7 @@ struct w32_CameraVideoStreamFrame_t_0914
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
     uint64_t m_nFrameCaptureTicks;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_73[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     W32_ARRAY(float, 4, m_Pad);
@@ -2603,7 +2603,7 @@ struct u32_CameraVideoStreamFrame_t_0914
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
     uint64_t m_nFrameCaptureTicks;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_69[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U32_ARRAY(float, 4, m_Pad);
@@ -2636,7 +2636,7 @@ struct w64_CameraVideoStreamFrame_t_0912
     uint32_t m_nImageDataSize;
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_49[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     W64_ARRAY(float, 4, m_Pad);
@@ -2661,7 +2661,7 @@ struct u64_CameraVideoStreamFrame_t_0912
     uint32_t m_nImageDataSize;
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_49[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     U64_ARRAY(float, 4, m_Pad);
@@ -2685,7 +2685,7 @@ struct w32_CameraVideoStreamFrame_t_0912
     uint32_t m_nImageDataSize;
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
-    bool m_bPoseIsValid;
+    int8_t m_bPoseIsValid;
     uint8_t __pad_49[3];
     HmdMatrix34_t m_matDeviceToAbsoluteTracking;
     W32_ARRAY(float, 4, m_Pad);
@@ -3741,7 +3741,7 @@ struct u_IVRSpatialAnchors_IVRSpatialAnchors_001
 #pragma pack( push, 8 )
 struct w64_InputAnalogActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     float x;
@@ -3758,7 +3758,7 @@ struct w64_InputAnalogActionData_t
 #pragma pack( push, 8 )
 struct w32_InputAnalogActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     float x;
@@ -3778,7 +3778,7 @@ struct w32_InputAnalogActionData_t
 #pragma pack( push, 4 )
 struct u32_InputAnalogActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
     float x;
@@ -3806,11 +3806,11 @@ typedef u64_InputAnalogActionData_t u_InputAnalogActionData_t;
 #pragma pack( push, 8 )
 struct w64_InputDigitalActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
-    bool bState;
-    bool bChanged;
+    int8_t bState;
+    int8_t bChanged;
     uint8_t __pad_18[2];
     float fUpdateTime;
 };
@@ -3819,11 +3819,11 @@ struct w64_InputDigitalActionData_t
 #pragma pack( push, 8 )
 struct w32_InputDigitalActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
-    bool bState;
-    bool bChanged;
+    int8_t bState;
+    int8_t bChanged;
     uint8_t __pad_18[2];
     float fUpdateTime;
 #ifdef __cplusplus
@@ -3835,11 +3835,11 @@ struct w32_InputDigitalActionData_t
 #pragma pack( push, 4 )
 struct u32_InputDigitalActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
-    bool bState;
-    bool bChanged;
+    int8_t bState;
+    int8_t bChanged;
     uint8_t __pad_14[2];
     float fUpdateTime;
 #ifdef __cplusplus
@@ -3904,7 +3904,7 @@ typedef u64_InputOriginInfo_t u_InputOriginInfo_t;
 #pragma pack( push, 8 )
 struct w64_InputPoseActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     TrackedDevicePose_t pose;
@@ -3914,7 +3914,7 @@ struct w64_InputPoseActionData_t
 #pragma pack( push, 8 )
 struct w32_InputPoseActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     TrackedDevicePose_t pose;
@@ -3927,7 +3927,7 @@ struct w32_InputPoseActionData_t
 #pragma pack( push, 4 )
 struct u32_InputPoseActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
     TrackedDevicePose_t pose;
@@ -3949,7 +3949,7 @@ typedef u64_InputPoseActionData_t u_InputPoseActionData_t;
 #pragma pack( push, 8 )
 struct w64_InputSkeletalActionData_t_113b
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
 };
@@ -3958,7 +3958,7 @@ struct w64_InputSkeletalActionData_t_113b
 #pragma pack( push, 8 )
 struct w32_InputSkeletalActionData_t_113b
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
 #ifdef __cplusplus
@@ -3970,7 +3970,7 @@ struct w32_InputSkeletalActionData_t_113b
 #pragma pack( push, 4 )
 struct u32_InputSkeletalActionData_t_113b
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
 #ifdef __cplusplus
@@ -3991,7 +3991,7 @@ typedef u64_InputSkeletalActionData_t_113b u_InputSkeletalActionData_t_113b;
 #pragma pack( push, 8 )
 struct w64_InputSkeletalActionData_t_1016
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     uint32_t boneCount;
@@ -4002,7 +4002,7 @@ struct w64_InputSkeletalActionData_t_1016
 #pragma pack( push, 8 )
 struct w32_InputSkeletalActionData_t_1016
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
     uint32_t boneCount;
@@ -4016,7 +4016,7 @@ struct w32_InputSkeletalActionData_t_1016
 #pragma pack( push, 4 )
 struct u32_InputSkeletalActionData_t_1016
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
     uint32_t boneCount;
@@ -4038,7 +4038,7 @@ typedef u64_InputSkeletalActionData_t_1016 u_InputSkeletalActionData_t_1016;
 #pragma pack( push, 8 )
 struct w64_InputSkeletonActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
 };
@@ -4047,7 +4047,7 @@ struct w64_InputSkeletonActionData_t
 #pragma pack( push, 8 )
 struct w32_InputSkeletonActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[7];
     uint64_t activeOrigin;
 #ifdef __cplusplus
@@ -4059,7 +4059,7 @@ struct w32_InputSkeletonActionData_t
 #pragma pack( push, 4 )
 struct u32_InputSkeletonActionData_t
 {
-    bool bActive;
+    int8_t bActive;
     uint8_t __pad_1[3];
     uint64_t activeOrigin;
 #ifdef __cplusplus

@@ -13,7 +13,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_FreeRenderModel, 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_GetRenderModelName, 16)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount, 4)
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_001_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_090 *pRenderModel)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_001_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_090 *pRenderModel)
 {
     struct IVRRenderModels_IVRRenderModels_001_LoadRenderModel_params params =
     {
@@ -130,11 +130,11 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_GetComponentRende
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_GetComponentState, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent, 12)
 
-extern bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
+extern int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel(struct w_steam_iface *_this, const char *pchRenderModelName, w_RenderModel_t_0912 **ppRenderModel);
 
 extern void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeRenderModel(struct w_steam_iface *_this, w_RenderModel_t_0912 *pRenderModel);
 
-extern bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture);
+extern int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture(struct w_steam_iface *_this, int32_t textureId, w_RenderModel_TextureMap_t_090 **ppTexture);
 
 extern void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture(struct w_steam_iface *_this, w_RenderModel_TextureMap_t_090 *pTexture);
 
@@ -218,7 +218,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentRenderMod
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, RenderModel_ComponentState_t *pComponentState)
 {
     struct IVRRenderModels_IVRRenderModels_002_GetComponentState_params params =
     {
@@ -233,7 +233,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_002_GetComponentState(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
     struct IVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params params =
     {
@@ -424,7 +424,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentRenderMod
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     struct IVRRenderModels_IVRRenderModels_004_GetComponentState_params params =
     {
@@ -440,7 +440,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_004_GetComponentState(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
     struct IVRRenderModels_IVRRenderModels_004_RenderModelHasComponent_params params =
     {
@@ -641,7 +641,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentRenderMod
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     struct IVRRenderModels_IVRRenderModels_005_GetComponentState_params params =
     {
@@ -657,7 +657,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_005_GetComponentState(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
     struct IVRRenderModels_IVRRenderModels_005_RenderModelHasComponent_params params =
     {
@@ -909,7 +909,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentRenderMod
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, uint64_t devicePath, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, uint64_t devicePath, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     struct IVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath_params params =
     {
@@ -925,7 +925,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentStateForDevic
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const w_VRControllerState001_t *pControllerState, const RenderModel_ControllerMode_State_t *pState, RenderModel_ComponentState_t *pComponentState)
 {
     struct IVRRenderModels_IVRRenderModels_006_GetComponentState_params params =
     {
@@ -941,7 +941,7 @@ bool __thiscall winIVRRenderModels_IVRRenderModels_006_GetComponentState(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_006_RenderModelHasComponent(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName)
 {
     struct IVRRenderModels_IVRRenderModels_006_RenderModelHasComponent_params params =
     {
