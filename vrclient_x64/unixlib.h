@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <stddef.h>
+#include <assert.h>
 
 #include <windef.h>
 #include <winbase.h>
@@ -16,6 +17,8 @@
 extern "C"
 {
 #endif /* __cplusplus */
+
+#include <pshpack1.h>
 
 struct render_model
 {
@@ -63,6 +66,8 @@ struct vrclient_VRClientCoreFactory_params
     const char *name;
     int *return_code;
 };
+
+#include <poppack.h>
 
 typedef NTSTATUS (*unixlib_entry_t)( void *args );
 extern const unixlib_entry_t __wine_unix_call_funcs[];

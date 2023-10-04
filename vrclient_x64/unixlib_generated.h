@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <pshpack1.h>
+
 struct IVRApplications_IVRApplications_001_AddApplicationManifest_params
 {
     void *linux_side;
@@ -28855,6 +28857,8 @@ struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraTrackingSpace_params
     void *linux_side;
     uint32_t _ret;
 };
+
+#include <poppack.h>
 
 enum unix_funcs
 {
