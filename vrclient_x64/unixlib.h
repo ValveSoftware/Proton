@@ -69,7 +69,13 @@ struct vrclient_VRClientCoreFactory_params
 
 #include <poppack.h>
 
-#define VRCLIENT_CALL( code, args ) WINE_UNIX_CALL( unix_ ## code, args )
+#define VRCLIENT_CALL( code, args )                                        \
+    ({                                                                     \
+        NTSTATUS status = WINE_UNIX_CALL( unix_ ## code, args );           \
+        if (status) WARN( #code " failed, status %#x\n", (UINT)status );   \
+        assert( !status );                                                 \
+        status;                                                            \
+    })
 
 #ifdef __cplusplus
 } /* extern "C" */
