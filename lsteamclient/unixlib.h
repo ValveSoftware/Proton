@@ -4,7 +4,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #include <windef.h>
 #include <winbase.h>
@@ -25,9 +24,9 @@ extern char g_tmppath[PATH_MAX];
 struct steamclient_init_params
 {
     const char *steam_app_id;
-    bool steam_app_id_unset;
+    int8_t steam_app_id_unset;
     const char *ignore_child_processes;
-    bool ignore_child_processes_unset;
+    int8_t ignore_child_processes_unset;
 };
 
 enum callback_type
@@ -102,7 +101,7 @@ struct callback
 
 struct steamclient_next_callback_params
 {
-    bool _ret;
+    int8_t _ret;
     struct callback *callback;
     uint32_t size;
 };
@@ -116,18 +115,18 @@ struct steamclient_CreateInterface_params
 
 struct steamclient_Steam_GetAPICallResult_params
 {
-    bool _ret;
+    int8_t _ret;
     int32_t pipe;
     uint64_t call;
     void *w_callback;
     int w_callback_len;
     int id;
-    bool *failed;
+    int8_t *failed;
 };
 
 struct steamclient_Steam_BGetCallback_params
 {
-    bool _ret;
+    int8_t _ret;
     uint32_t pipe;
     w_CallbackMsg_t *w_msg;
     int32_t *ignored;
@@ -142,7 +141,7 @@ struct steamclient_callback_message_receive_params
 
 struct steamclient_Steam_FreeLastCallback_params
 {
-    bool _ret;
+    int8_t _ret;
     uint32_t pipe;
 };
 
@@ -153,7 +152,7 @@ struct steamclient_Steam_ReleaseThreadLocalMemory_params
 
 struct steamclient_Steam_IsKnownInterface_params
 {
-    bool _ret;
+    int8_t _ret;
     const char *version;
 };
 

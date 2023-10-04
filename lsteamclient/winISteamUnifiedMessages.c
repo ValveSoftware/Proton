@@ -24,7 +24,7 @@ uint64_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(struct w_steam_iface *_this, uint64_t hHandle, uint32_t *punResponseSize, uint32_t *peResult)
+int8_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo(struct w_steam_iface *_this, uint64_t hHandle, uint32_t *punResponseSize, uint32_t *peResult)
 {
     struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params params =
     {
@@ -38,7 +38,7 @@ bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(struct w_steam_iface *_this, uint64_t hHandle, void *pResponseBuffer, uint32_t unResponseBufferSize, bool bAutoRelease)
+int8_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData(struct w_steam_iface *_this, uint64_t hHandle, void *pResponseBuffer, uint32_t unResponseBufferSize, int8_t bAutoRelease)
 {
     struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params params =
     {
@@ -53,7 +53,7 @@ bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(struct w_steam_iface *_this, uint64_t hHandle)
+int8_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod(struct w_steam_iface *_this, uint64_t hHandle)
 {
     struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params params =
     {
@@ -65,7 +65,7 @@ bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(struct w_steam_iface *_this, const char *pchServiceNotification, const void *pNotificationBuffer, uint32_t unNotificationBufferSize)
+int8_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification(struct w_steam_iface *_this, const char *pchServiceNotification, const void *pNotificationBuffer, uint32_t unNotificationBufferSize)
 {
     struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params params =
     {

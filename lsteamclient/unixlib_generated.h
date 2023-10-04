@@ -2,7 +2,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,25 +59,25 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetCurrentGameLanguage_params
@@ -96,32 +95,32 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetCurrentGameLanguage_params
@@ -139,39 +138,39 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetCurrentGameLanguage_params
@@ -189,14 +188,14 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -210,7 +209,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime_par
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWeekend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount_params
@@ -222,10 +221,10 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDLC;
     uint32_t *pAppID;
-    bool *pbAvailable;
+    int8_t *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -245,25 +244,25 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentGameLanguage_params
@@ -281,14 +280,14 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -302,7 +301,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime_par
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedFromFreeWeekend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount_params
@@ -314,10 +313,10 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDLC;
     uint32_t *pAppID;
-    bool *pbAvailable;
+    int8_t *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -343,7 +342,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey_pa
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -351,8 +350,8 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bMissingFilesOnly;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots_params
@@ -375,32 +374,32 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentGameLanguage_params
@@ -418,14 +417,14 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -439,7 +438,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime_par
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedFromFreeWeekend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount_params
@@ -451,10 +450,10 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDLC;
     uint32_t *pAppID;
-    bool *pbAvailable;
+    int8_t *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -480,7 +479,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey_pa
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -488,8 +487,8 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bMissingFilesOnly;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots_params
@@ -513,7 +512,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -533,25 +532,25 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentGameLanguage_params
@@ -569,14 +568,14 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -590,7 +589,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime_par
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedFromFreeWeekend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount_params
@@ -602,10 +601,10 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDLC;
     uint32_t *pAppID;
-    bool *pbAvailable;
+    int8_t *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -631,7 +630,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey_pa
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -639,8 +638,8 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bMissingFilesOnly;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots_params
@@ -664,7 +663,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -684,7 +683,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -699,25 +698,25 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentGameLanguage_params
@@ -735,14 +734,14 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailableGameLanguages_param
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -756,7 +755,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime_par
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFreeWeekend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount_params
@@ -768,10 +767,10 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDLC;
     uint32_t *pAppID;
-    bool *pbAvailable;
+    int8_t *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -797,7 +796,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey_pa
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchName;
     int32_t cchNameBufferSize;
 };
@@ -805,8 +804,8 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bMissingFilesOnly;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots_params
@@ -830,7 +829,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t appID;
 };
 
@@ -850,7 +849,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -885,13 +884,13 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *punSecondsAllowed;
     uint32_t *punSecondsPlayed;
 };
@@ -899,7 +898,7 @@ struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial_params
 struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
 };
 
@@ -919,14 +918,14 @@ struct ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicket
 struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAbsolutePathToControllerConfigVDF;
 };
 
 struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame_params
@@ -937,7 +936,7 @@ struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame_params
 struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerIndex;
     SteamControllerState001_t *pState;
 };
@@ -959,13 +958,13 @@ struct ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode_params
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser_params
@@ -1115,7 +1114,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus_para
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bHasKeyFocus;
+    int8_t bHasKeyFocus;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource_params
@@ -1141,8 +1140,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find_params
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
     const char *pchSearchStr;
-    bool bCurrentlyInFind;
-    bool bReverse;
+    int8_t bCurrentlyInFind;
+    int8_t bReverse;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind_params
@@ -1163,14 +1162,14 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartReques
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bAllowed;
+    int8_t bAllowed;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bResult;
+    int8_t bResult;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse_params
@@ -1183,13 +1182,13 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogRe
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser_params
@@ -1339,7 +1338,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus_para
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bHasKeyFocus;
+    int8_t bHasKeyFocus;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ViewSource_params
@@ -1365,8 +1364,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find_params
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
     const char *pchSearchStr;
-    bool bCurrentlyInFind;
-    bool bReverse;
+    int8_t bCurrentlyInFind;
+    int8_t bReverse;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind_params
@@ -1391,8 +1390,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie_params
     const char *pchValue;
     const char *pchPath;
     uint32_t nExpires;
-    bool bSecure;
-    bool bHTTPOnly;
+    int8_t bSecure;
+    int8_t bHTTPOnly;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor_params
@@ -1408,14 +1407,14 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartReques
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bAllowed;
+    int8_t bAllowed;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bResult;
+    int8_t bResult;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse_params
@@ -1428,13 +1427,13 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogRe
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser_params
@@ -1584,7 +1583,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus_para
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bHasKeyFocus;
+    int8_t bHasKeyFocus;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ViewSource_params
@@ -1610,8 +1609,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find_params
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
     const char *pchSearchStr;
-    bool bCurrentlyInFind;
-    bool bReverse;
+    int8_t bCurrentlyInFind;
+    int8_t bReverse;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind_params
@@ -1636,8 +1635,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie_params
     const char *pchValue;
     const char *pchPath;
     uint32_t nExpires;
-    bool bSecure;
-    bool bHTTPOnly;
+    int8_t bSecure;
+    int8_t bHTTPOnly;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor_params
@@ -1653,21 +1652,21 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMod
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bBackgroundMode;
+    int8_t bBackgroundMode;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bAllowed;
+    int8_t bAllowed;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bResult;
+    int8_t bResult;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse_params
@@ -1680,13 +1679,13 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogRe
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser_params
@@ -1836,7 +1835,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus_para
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bHasKeyFocus;
+    int8_t bHasKeyFocus;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ViewSource_params
@@ -1862,8 +1861,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find_params
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
     const char *pchSearchStr;
-    bool bCurrentlyInFind;
-    bool bReverse;
+    int8_t bCurrentlyInFind;
+    int8_t bReverse;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind_params
@@ -1888,8 +1887,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie_params
     const char *pchValue;
     const char *pchPath;
     uint32_t nExpires;
-    bool bSecure;
-    bool bHTTPOnly;
+    int8_t bSecure;
+    int8_t bHTTPOnly;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor_params
@@ -1905,7 +1904,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMod
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bBackgroundMode;
+    int8_t bBackgroundMode;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor_params
@@ -1919,14 +1918,14 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartReques
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bAllowed;
+    int8_t bAllowed;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bResult;
+    int8_t bResult;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse_params
@@ -1939,13 +1938,13 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogRe
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser_params
@@ -2059,7 +2058,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown_params
     uint32_t unBrowserHandle;
     uint32_t nNativeKeyCode;
     uint32_t eHTMLKeyModifiers;
-    bool bIsSystemKey;
+    int8_t bIsSystemKey;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp_params
@@ -2096,7 +2095,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetKeyFocus_para
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bHasKeyFocus;
+    int8_t bHasKeyFocus;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ViewSource_params
@@ -2122,8 +2121,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find_params
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
     const char *pchSearchStr;
-    bool bCurrentlyInFind;
-    bool bReverse;
+    int8_t bCurrentlyInFind;
+    int8_t bReverse;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind_params
@@ -2148,8 +2147,8 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie_params
     const char *pchValue;
     const char *pchPath;
     uint32_t nExpires;
-    bool bSecure;
-    bool bHTTPOnly;
+    int8_t bSecure;
+    int8_t bHTTPOnly;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor_params
@@ -2165,7 +2164,7 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetBackgroundMod
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bBackgroundMode;
+    int8_t bBackgroundMode;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetDPIScalingFactor_params
@@ -2185,14 +2184,14 @@ struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartReques
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bAllowed;
+    int8_t bAllowed;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse_params
 {
     struct u_steam_iface *linux_side;
     uint32_t unBrowserHandle;
-    bool bResult;
+    int8_t bResult;
 };
 
 struct ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse_params
@@ -2213,7 +2212,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t ulContextValue;
 };
@@ -2221,7 +2220,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTimeout_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t unTimeoutSeconds;
 };
@@ -2229,7 +2228,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTi
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     const char *pchHeaderValue;
@@ -2238,7 +2237,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParameter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchParamName;
     const char *pchParamValue;
@@ -2247,7 +2246,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParamete
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t *pCallHandle;
 };
@@ -2255,21 +2254,21 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_DeferHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_PrioritizeHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint32_t *unResponseHeaderSize;
@@ -2278,7 +2277,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint8_t *pHeaderValueBuffer;
@@ -2288,7 +2287,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodySize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t *unBodySize;
 };
@@ -2296,7 +2295,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodySize_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint8_t *pBodyDataBuffer;
     uint32_t unBufferSize;
@@ -2305,14 +2304,14 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     float *pflPercentOut;
 };
@@ -2320,7 +2319,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchContentType;
     uint8_t *pubBody;
@@ -2338,7 +2337,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t ulContextValue;
 };
@@ -2346,7 +2345,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t unTimeoutSeconds;
 };
@@ -2354,7 +2353,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTi
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     const char *pchHeaderValue;
@@ -2363,7 +2362,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParameter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchParamName;
     const char *pchParamValue;
@@ -2372,7 +2371,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParamete
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t *pCallHandle;
 };
@@ -2380,7 +2379,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndStreamResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t *pCallHandle;
 };
@@ -2388,21 +2387,21 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndStreamRespons
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_DeferHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_PrioritizeHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint32_t *unResponseHeaderSize;
@@ -2411,7 +2410,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint8_t *pHeaderValueBuffer;
@@ -2421,7 +2420,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t *unBodySize;
 };
@@ -2429,7 +2428,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint8_t *pBodyDataBuffer;
     uint32_t unBufferSize;
@@ -2438,7 +2437,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t cOffset;
     uint8_t *pBodyDataBuffer;
@@ -2448,14 +2447,14 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyDat
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProgressPct_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     float *pflPercentOut;
 };
@@ -2463,7 +2462,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProgressPct_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchContentType;
     uint8_t *pubBody;
@@ -2474,20 +2473,20 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bAllowResponsesToModify;
+    int8_t bAllowResponsesToModify;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseCookieContainer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hCookieContainer;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hCookieContainer;
     const char *pchHost;
     const char *pchUrl;
@@ -2497,7 +2496,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCookieContainer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t hCookieContainer;
 };
@@ -2505,7 +2504,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCookieContainer_p
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchUserAgentInfo;
 };
@@ -2513,15 +2512,15 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo_par
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
-    bool bRequireVerifiedCertificate;
+    int8_t bRequireVerifiedCertificate;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t unMilliseconds;
 };
@@ -2529,9 +2528,9 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTimedOut_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
-    bool *pbWasTimedOut;
+    int8_t *pbWasTimedOut;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest_params
@@ -2545,7 +2544,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t ulContextValue;
 };
@@ -2553,7 +2552,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetworkActivityTimeout_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t unTimeoutSeconds;
 };
@@ -2561,7 +2560,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetworkActivityTi
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     const char *pchHeaderValue;
@@ -2570,7 +2569,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParameter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchParamName;
     const char *pchParamValue;
@@ -2579,7 +2578,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParamete
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t *pCallHandle;
 };
@@ -2587,7 +2586,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndStreamResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint64_t *pCallHandle;
 };
@@ -2595,21 +2594,21 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndStreamRespons
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_DeferHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_PrioritizeHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint32_t *unResponseHeaderSize;
@@ -2618,7 +2617,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize_param
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchHeaderName;
     uint8_t *pHeaderValueBuffer;
@@ -2628,7 +2627,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodySize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t *unBodySize;
 };
@@ -2636,7 +2635,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodySize_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint8_t *pBodyDataBuffer;
     uint32_t unBufferSize;
@@ -2645,7 +2644,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodyData_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingResponseBodyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t cOffset;
     uint8_t *pBodyDataBuffer;
@@ -2655,14 +2654,14 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingResponseBodyDat
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseHTTPRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProgressPct_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     float *pflPercentOut;
 };
@@ -2670,7 +2669,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProgressPct_para
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPostBody_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchContentType;
     uint8_t *pubBody;
@@ -2681,20 +2680,20 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateCookieContainer_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bAllowResponsesToModify;
+    int8_t bAllowResponsesToModify;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseCookieContainer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hCookieContainer;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hCookieContainer;
     const char *pchHost;
     const char *pchUrl;
@@ -2704,7 +2703,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie_params
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCookieContainer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t hCookieContainer;
 };
@@ -2712,7 +2711,7 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCookieContainer_p
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     const char *pchUserAgentInfo;
 };
@@ -2720,15 +2719,15 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo_par
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRequiresVerifiedCertificate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
-    bool bRequireVerifiedCertificate;
+    int8_t bRequireVerifiedCertificate;
 };
 
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
     uint32_t unMilliseconds;
 };
@@ -2736,9 +2735,9 @@ struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS
 struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTimedOut_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hRequest;
-    bool *pbWasTimedOut;
+    int8_t *pbWasTimedOut;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus_params
@@ -2751,7 +2750,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     SteamItemDetails_t *pOutItemsArray;
     uint32_t *punOutItemsArraySize;
@@ -2767,7 +2766,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_CheckResultSteamID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     CSteamID steamIDExpected;
 };
@@ -2781,14 +2780,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_DestroyResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetAllItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const uint64_t *pInstanceIDs;
     uint32_t unCountInstanceIDs;
@@ -2797,7 +2796,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     void *pOutBuffer;
     uint32_t *punOutBufferSize;
@@ -2806,17 +2805,17 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pOutResultHandle;
     const void *pBuffer;
     uint32_t unBufferSize;
-    bool bRESERVED_MUST_BE_FALSE;
+    int8_t bRESERVED_MUST_BE_FALSE;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GenerateItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     const uint32_t *punArrayQuantity;
@@ -2826,14 +2825,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GenerateItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GrantPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t itemDef;
 };
@@ -2841,7 +2840,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     uint32_t unArrayLength;
@@ -2850,7 +2849,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemConsume;
     uint32_t unQuantity;
@@ -2859,7 +2858,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayGenerate;
     const uint32_t *punArrayGenerateQuantity;
@@ -2872,7 +2871,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_TransferItemQuantity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemIdSource;
     uint32_t unQuantity;
@@ -2887,7 +2886,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_SendItemDropHeartbeat_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_TriggerItemDrop_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t dropListDefinition;
 };
@@ -2895,7 +2894,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_TriggerItemDrop_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_TradeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     CSteamID steamIDTradePartner;
     const uint64_t *pArrayGive;
@@ -2909,13 +2908,13 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_TradeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_LoadItemDefinitions_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
 };
@@ -2923,7 +2922,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionIDs_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDefinition;
     const char *pchPropertyName;
     char *pchValueBuffer;
@@ -2940,7 +2939,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_RequestEligiblePromoItemDef
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
@@ -2956,7 +2955,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     SteamItemDetails_t *pOutItemsArray;
     uint32_t *punOutItemsArraySize;
@@ -2965,7 +2964,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     uint32_t unItemIndex;
     const char *pchPropertyName;
@@ -2983,7 +2982,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultTimestamp_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_CheckResultSteamID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     CSteamID steamIDExpected;
 };
@@ -2997,14 +2996,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_DestroyResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetAllItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const uint64_t *pInstanceIDs;
     uint32_t unCountInstanceIDs;
@@ -3013,7 +3012,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     void *pOutBuffer;
     uint32_t *punOutBufferSize;
@@ -3022,17 +3021,17 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pOutResultHandle;
     const void *pBuffer;
     uint32_t unBufferSize;
-    bool bRESERVED_MUST_BE_FALSE;
+    int8_t bRESERVED_MUST_BE_FALSE;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GenerateItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     const uint32_t *punArrayQuantity;
@@ -3042,14 +3041,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GenerateItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GrantPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t itemDef;
 };
@@ -3057,7 +3056,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     uint32_t unArrayLength;
@@ -3066,7 +3065,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemConsume;
     uint32_t unQuantity;
@@ -3075,7 +3074,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayGenerate;
     const uint32_t *punArrayGenerateQuantity;
@@ -3088,7 +3087,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_TransferItemQuantity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemIdSource;
     uint32_t unQuantity;
@@ -3103,7 +3102,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SendItemDropHeartbeat_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_TriggerItemDrop_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t dropListDefinition;
 };
@@ -3111,7 +3110,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_TriggerItemDrop_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_TradeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     CSteamID steamIDTradePartner;
     const uint64_t *pArrayGive;
@@ -3125,13 +3124,13 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_TradeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_LoadItemDefinitions_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
 };
@@ -3139,7 +3138,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionIDs_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDefinition;
     const char *pchPropertyName;
     char *pchValueBuffer;
@@ -3156,7 +3155,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_RequestEligiblePromoItemDef
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetEligiblePromoItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
@@ -3186,7 +3185,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetNumItemsWithPrices_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPrices_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pArrayItemDefs;
     uint64_t *pPrices;
     uint32_t unArrayLength;
@@ -3195,7 +3194,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPrices_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemPrice_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDefinition;
     uint64_t *pPrice;
 };
@@ -3209,7 +3208,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_StartUpdateProperties_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_RemoveProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3218,7 +3217,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_RemoveProperty_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3228,17 +3227,17 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
-    bool bValue;
+    int8_t bValue;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3248,7 +3247,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3258,7 +3257,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdateProperties_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     int32_t *pResultHandle;
 };
@@ -3273,7 +3272,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     SteamItemDetails_t *pOutItemsArray;
     uint32_t *punOutItemsArraySize;
@@ -3282,7 +3281,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     uint32_t unItemIndex;
     const char *pchPropertyName;
@@ -3300,7 +3299,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_CheckResultSteamID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     CSteamID steamIDExpected;
 };
@@ -3314,14 +3313,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_DestroyResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetAllItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const uint64_t *pInstanceIDs;
     uint32_t unCountInstanceIDs;
@@ -3330,7 +3329,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t resultHandle;
     void *pOutBuffer;
     uint32_t *punOutBufferSize;
@@ -3339,17 +3338,17 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pOutResultHandle;
     const void *pBuffer;
     uint32_t unBufferSize;
-    bool bRESERVED_MUST_BE_FALSE;
+    int8_t bRESERVED_MUST_BE_FALSE;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     const uint32_t *punArrayQuantity;
@@ -3359,14 +3358,14 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GrantPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t itemDef;
 };
@@ -3374,7 +3373,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayItemDefs;
     uint32_t unArrayLength;
@@ -3383,7 +3382,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemConsume;
     uint32_t unQuantity;
@@ -3392,7 +3391,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const int32_t *pArrayGenerate;
     const uint32_t *punArrayGenerateQuantity;
@@ -3405,7 +3404,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     uint64_t itemIdSource;
     uint32_t unQuantity;
@@ -3420,7 +3419,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SendItemDropHeartbeat_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     int32_t dropListDefinition;
 };
@@ -3428,7 +3427,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     CSteamID steamIDTradePartner;
     const uint64_t *pArrayGive;
@@ -3442,13 +3441,13 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_LoadItemDefinitions_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
 };
@@ -3456,7 +3455,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDefinition;
     const char *pchPropertyName;
     char *pchValueBuffer;
@@ -3473,7 +3472,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_RequestEligiblePromoItemDef
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     int32_t *pItemDefIDs;
     uint32_t *punItemDefIDsArraySize;
@@ -3503,7 +3502,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pArrayItemDefs;
     uint64_t *pCurrentPrices;
     uint64_t *pBasePrices;
@@ -3513,7 +3512,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iDefinition;
     uint64_t *pCurrentPrice;
     uint64_t *pBasePrice;
@@ -3528,7 +3527,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartUpdateProperties_param
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3537,7 +3536,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3547,17 +3546,17 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
-    bool bValue;
+    int8_t bValue;
 };
 
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3567,7 +3566,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint64_t nItemID;
     const char *pchPropertyName;
@@ -3577,7 +3576,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4_params
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     int32_t *pResultHandle;
 };
@@ -3585,7 +3584,7 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties_para
 struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pResultHandle;
     const char *pchItemToken;
 };
@@ -3593,40 +3592,40 @@ struct ISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem_params
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_DeregisterSteamMusicRemote_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCurrentMusicRemote_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchDisplayName;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pvBuffer;
     uint32_t cbBufferLength;
 };
@@ -3634,104 +3633,104 @@ struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64_
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nStatus;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bValue;
+    int8_t _ret;
+    int8_t bValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateVolume_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     float flValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryWillChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAvailable;
+    int8_t _ret;
+    int8_t bAvailable;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchText;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nValue;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pvBuffer;
     uint32_t cbBufferLength;
 };
@@ -3739,25 +3738,25 @@ struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntr
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryDidChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueWillChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetQueueEntries_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nID;
     int32_t nPosition;
     const char *pchEntryText;
@@ -3766,32 +3765,32 @@ struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_par
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nID;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_QueueDidChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistWillChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_ResetPlaylistEntries_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nID;
     int32_t nPosition;
     const char *pchEntryText;
@@ -3800,26 +3799,26 @@ struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry_
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nID;
 };
 
 struct ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_PlaylistDidChange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus_params
@@ -3863,40 +3862,40 @@ struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume_params
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
 };
 
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
 };
 
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eFeature;
 };
 
 struct ISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eFeature;
 };
 
@@ -3937,7 +3936,7 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFor
 struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unSessionID;
     int32_t *pnResolutionX;
     int32_t *pnResolutionY;
@@ -3946,7 +3945,7 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientRe
 struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
@@ -3987,7 +3986,7 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_GetSessionClientFor
 struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unSessionID;
     int32_t *pnResolutionX;
     int32_t *pnResolutionY;
@@ -3996,21 +3995,21 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientRe
 struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bShowOverlay;
+    int8_t _ret;
+    int8_t bShowOverlay;
 };
 
 struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4035,14 +4034,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4063,7 +4062,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4071,7 +4070,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4096,7 +4095,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4117,7 +4116,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4125,7 +4124,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4143,14 +4142,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4164,14 +4163,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4206,7 +4205,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4214,19 +4213,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCDownload_params
@@ -4239,7 +4238,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -4272,7 +4271,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCH
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4290,14 +4289,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4311,7 +4310,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -4319,14 +4318,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatfo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4368,7 +4367,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4376,19 +4375,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload_params
@@ -4401,7 +4400,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -4434,7 +4433,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCH
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4452,14 +4451,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4473,7 +4472,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -4481,14 +4480,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatfo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4530,7 +4529,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4538,19 +4537,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCDownload_params
@@ -4563,7 +4562,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -4670,7 +4669,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -4688,14 +4687,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4709,7 +4708,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -4717,14 +4716,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatfo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -4766,7 +4765,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -4774,19 +4773,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCDownload_params
@@ -4799,7 +4798,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -4808,7 +4807,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -4862,7 +4861,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -4870,7 +4869,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -4878,7 +4877,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -4886,7 +4885,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -4894,7 +4893,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -4902,7 +4901,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -4959,7 +4958,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -4976,7 +4975,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUserPublishedItemVoteDetails_params
@@ -5040,7 +5039,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePubl
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -5058,14 +5057,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5079,7 +5078,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -5087,14 +5086,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatfo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5136,7 +5135,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -5144,19 +5143,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCDownload_params
@@ -5169,7 +5168,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -5178,7 +5177,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -5232,7 +5231,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -5240,7 +5239,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -5248,7 +5247,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -5256,7 +5255,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -5264,7 +5263,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -5272,7 +5271,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -5329,7 +5328,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -5346,7 +5345,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUserPublishedItemVoteDetails_params
@@ -5412,7 +5411,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePubl
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -5430,14 +5429,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5451,7 +5450,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -5466,7 +5465,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -5475,28 +5474,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5538,7 +5537,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -5546,19 +5545,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCDownload_params
@@ -5571,7 +5570,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -5580,7 +5579,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -5634,7 +5633,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -5642,7 +5641,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -5650,7 +5649,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -5658,7 +5657,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -5666,7 +5665,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -5674,7 +5673,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -5731,7 +5730,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -5748,7 +5747,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUserPublishedItemVoteDetails_params
@@ -5814,7 +5813,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePubl
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -5832,14 +5831,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5853,7 +5852,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -5868,7 +5867,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -5877,28 +5876,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -5940,7 +5939,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -5948,19 +5947,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCDownload_params
@@ -5973,7 +5972,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -5982,7 +5981,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -6037,7 +6036,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -6045,7 +6044,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -6053,7 +6052,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -6061,7 +6060,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -6069,7 +6068,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -6077,7 +6076,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -6134,7 +6133,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -6151,7 +6150,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUserPublishedItemVoteDetails_params
@@ -6217,7 +6216,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePubl
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -6235,14 +6234,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -6256,7 +6255,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -6271,7 +6270,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -6280,28 +6279,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -6343,7 +6342,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -6351,19 +6350,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownload_params
@@ -6377,7 +6376,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -6386,7 +6385,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -6441,7 +6440,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -6449,7 +6448,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -6457,7 +6456,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -6465,7 +6464,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -6473,7 +6472,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -6481,7 +6480,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -6538,7 +6537,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -6555,7 +6554,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUserPublishedItemVoteDetails_params
@@ -6630,7 +6629,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadTo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -6648,14 +6647,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -6669,7 +6668,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -6684,7 +6683,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -6693,28 +6692,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -6756,7 +6755,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -6764,19 +6763,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownload_params
@@ -6790,7 +6789,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -6799,7 +6798,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -6854,7 +6853,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -6862,7 +6861,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -6870,7 +6869,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -6878,7 +6877,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -6886,7 +6885,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -6894,7 +6893,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -6952,7 +6951,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -6969,7 +6968,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUserPublishedItemVoteDetails_params
@@ -7044,7 +7043,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadTo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -7062,14 +7061,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -7083,7 +7082,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -7098,7 +7097,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -7107,28 +7106,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -7170,7 +7169,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -7178,19 +7177,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownload_params
@@ -7204,7 +7203,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -7213,7 +7212,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -7269,7 +7268,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -7277,7 +7276,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -7285,7 +7284,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -7293,7 +7292,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -7301,7 +7300,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -7309,7 +7308,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -7367,7 +7366,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -7384,7 +7383,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUserPublishedItemVoteDetails_params
@@ -7459,7 +7458,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadTo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -7495,7 +7494,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hReadCall;
     void *pvBuffer;
     uint32_t cubToRead;
@@ -7504,14 +7503,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -7525,7 +7524,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -7540,7 +7539,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -7549,28 +7548,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -7612,7 +7611,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnTotalBytes;
     int32_t *puAvailableBytes;
 };
@@ -7620,19 +7619,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownload_params
@@ -7646,7 +7645,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -7655,7 +7654,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -7711,7 +7710,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -7719,7 +7718,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -7727,7 +7726,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -7735,7 +7734,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -7743,7 +7742,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -7751,7 +7750,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -7809,7 +7808,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -7826,7 +7825,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUserPublishedItemVoteDetails_params
@@ -7901,7 +7900,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadTo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -7937,7 +7936,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hReadCall;
     void *pvBuffer;
     uint32_t cubToRead;
@@ -7946,14 +7945,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -7967,7 +7966,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -7982,7 +7981,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -7991,28 +7990,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -8054,7 +8053,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t *pnTotalBytes;
     uint64_t *puAvailableBytes;
 };
@@ -8062,19 +8061,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownload_params
@@ -8088,7 +8087,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -8097,7 +8096,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -8153,7 +8152,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -8161,7 +8160,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -8169,7 +8168,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -8177,7 +8176,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -8185,7 +8184,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -8193,7 +8192,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -8251,7 +8250,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -8268,7 +8267,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUserPublishedItemVoteDetails_params
@@ -8343,7 +8342,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadTo
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     const void *pvData;
     int32_t cubData;
@@ -8379,7 +8378,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hReadCall;
     void *pvBuffer;
     uint32_t cubToRead;
@@ -8388,14 +8387,14 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -8409,7 +8408,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileShare_par
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
     uint32_t eRemoteStoragePlatform;
 };
@@ -8424,7 +8423,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
     const void *pvData;
     int32_t cubData;
@@ -8433,28 +8432,28 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStre
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamClose_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamCancel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t writeHandle;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchFile;
 };
 
@@ -8496,7 +8495,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileNameAn
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t *pnTotalBytes;
     uint64_t *puAvailableBytes;
 };
@@ -8504,19 +8503,19 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota_para
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForAccount_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetCloudEnabledForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownload_params
@@ -8530,7 +8529,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownload_p
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     int32_t *pnBytesDownloaded;
     int32_t *pnBytesExpected;
@@ -8539,7 +8538,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloa
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hContent;
     uint32_t *pnAppID;
     char **ppchName;
@@ -8595,7 +8594,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_CreatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchFile;
 };
@@ -8603,7 +8602,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchPreviewFile;
 };
@@ -8611,7 +8610,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchTitle;
 };
@@ -8619,7 +8618,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchDescription;
 };
@@ -8627,7 +8626,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     uint32_t eVisibility;
 };
@@ -8635,7 +8634,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublish
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     w_SteamParamStringArray_t *pTags;
 };
@@ -8693,7 +8692,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UnsubscribePu
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const char *pchChangeDescription;
 };
@@ -8710,7 +8709,7 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdateUserPub
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t unPublishedFileId;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUserPublishedItemVoteDetails_params
@@ -8800,13 +8799,13 @@ struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetLocalFileC
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params
@@ -8837,13 +8836,13 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots_params
 {
     struct u_steam_iface *linux_side;
-    bool bHook;
+    int8_t bHook;
 };
 
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     const char *pchLocation;
 };
@@ -8851,7 +8850,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation_param
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     CSteamID steamID;
 };
@@ -8884,13 +8883,13 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots_params
 {
     struct u_steam_iface *linux_side;
-    bool bHook;
+    int8_t bHook;
 };
 
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     const char *pchLocation;
 };
@@ -8898,7 +8897,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_param
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     CSteamID steamID;
 };
@@ -8906,7 +8905,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     uint64_t unPublishedFileID;
 };
@@ -8939,13 +8938,13 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots_params
 {
     struct u_steam_iface *linux_side;
-    bool bHook;
+    int8_t bHook;
 };
 
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     const char *pchLocation;
 };
@@ -8953,7 +8952,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation_param
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     CSteamID steamID;
 };
@@ -8961,7 +8960,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser_params
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hScreenshot;
     uint64_t unPublishedFileID;
 };
@@ -8969,7 +8968,7 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile_
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params
@@ -9015,7 +9014,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_126 *pDetails;
@@ -9024,14 +9023,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9039,7 +9038,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9047,23 +9046,23 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -9071,15 +9070,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -9087,7 +9086,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -9133,7 +9132,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -9142,14 +9141,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9157,7 +9156,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9165,23 +9164,23 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -9189,7 +9188,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -9197,15 +9196,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -9213,7 +9212,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -9245,7 +9244,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -9253,7 +9252,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -9261,7 +9260,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -9269,7 +9268,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -9277,7 +9276,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -9285,7 +9284,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -9338,7 +9337,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -9348,10 +9347,10 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool *pbNeedsUpdate;
-    bool *pbIsDownloading;
+    int8_t *pbNeedsUpdate;
+    int8_t *pbIsDownloading;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
 };
@@ -9390,7 +9389,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -9399,14 +9398,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9414,7 +9413,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9422,23 +9421,23 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -9446,7 +9445,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -9454,15 +9453,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -9470,7 +9469,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -9502,7 +9501,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -9510,7 +9509,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -9518,7 +9517,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -9526,7 +9525,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -9534,7 +9533,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -9542,7 +9541,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -9595,21 +9594,21 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItems_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
     uint32_t cchFolderSize;
-    bool *pbLegacyItem;
+    int8_t *pbLegacyItem;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool *pbNeedsUpdate;
-    bool *pbIsDownloading;
+    int8_t *pbNeedsUpdate;
+    int8_t *pbIsDownloading;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
 };
@@ -9648,7 +9647,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -9657,14 +9656,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9672,7 +9671,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -9680,23 +9679,23 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -9704,7 +9703,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -9712,15 +9711,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -9728,7 +9727,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -9760,7 +9759,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -9768,7 +9767,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -9776,7 +9775,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -9784,7 +9783,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -9792,7 +9791,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -9800,7 +9799,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -9860,7 +9859,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -9871,7 +9870,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -9880,9 +9879,9 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest_params
@@ -9927,7 +9926,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -9936,7 +9935,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -9946,7 +9945,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -9956,7 +9955,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -9966,7 +9965,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -9984,26 +9983,26 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
     char *pchURLOrVideoID;
     uint32_t cchURLSize;
-    bool *pbIsImage;
+    int8_t *pbIsImage;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10011,7 +10010,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10019,47 +10018,47 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -10067,7 +10066,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -10075,15 +10074,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -10091,7 +10090,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -10123,7 +10122,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -10131,7 +10130,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -10139,7 +10138,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -10147,7 +10146,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -10155,7 +10154,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -10163,7 +10162,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -10171,7 +10170,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -10247,7 +10246,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -10258,7 +10257,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -10267,9 +10266,9 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest_params
@@ -10314,7 +10313,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -10323,7 +10322,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -10333,7 +10332,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -10343,7 +10342,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -10353,7 +10352,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -10371,26 +10370,26 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
     char *pchURLOrVideoID;
     uint32_t cchURLSize;
-    bool *pbIsImage;
+    int8_t *pbIsImage;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10398,7 +10397,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10406,47 +10405,47 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -10454,7 +10453,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -10462,7 +10461,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -10470,15 +10469,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -10486,7 +10485,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -10518,7 +10517,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -10526,7 +10525,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -10534,7 +10533,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -10542,7 +10541,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -10550,7 +10549,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -10558,7 +10557,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -10566,7 +10565,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -10574,7 +10573,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -10601,7 +10600,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetUserItemVote_params
@@ -10665,7 +10664,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -10676,7 +10675,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -10685,9 +10684,9 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUserUGCRequest_params
@@ -10732,7 +10731,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -10741,7 +10740,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -10751,7 +10750,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -10761,7 +10760,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -10771,7 +10770,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -10789,13 +10788,13 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
     char *pchURLOrVideoID;
     uint32_t cchURLSize;
-    bool *pbIsImage;
+    int8_t *pbIsImage;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKeyValueTags_params
@@ -10809,7 +10808,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -10822,14 +10821,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10837,7 +10836,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -10845,55 +10844,55 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -10901,7 +10900,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -10909,7 +10908,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -10917,15 +10916,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -10933,7 +10932,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -10941,7 +10940,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -10974,7 +10973,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -10982,7 +10981,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -10990,7 +10989,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -10998,7 +10997,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -11006,7 +11005,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -11014,7 +11013,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -11022,7 +11021,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -11030,7 +11029,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -11038,7 +11037,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -11046,7 +11045,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -11074,7 +11073,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetUserItemVote_params
@@ -11138,7 +11137,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -11149,7 +11148,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -11158,15 +11157,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -11174,7 +11173,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUserUGCRequest_params
@@ -11219,7 +11218,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -11228,7 +11227,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -11238,7 +11237,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -11248,7 +11247,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -11258,7 +11257,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -11276,7 +11275,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -11298,7 +11297,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -11311,14 +11310,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -11326,7 +11325,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -11334,55 +11333,55 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -11390,7 +11389,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -11398,7 +11397,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -11406,15 +11405,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -11422,7 +11421,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -11430,7 +11429,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -11463,7 +11462,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -11471,7 +11470,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -11479,7 +11478,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -11487,7 +11486,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -11495,7 +11494,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -11503,7 +11502,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -11511,7 +11510,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -11519,7 +11518,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -11527,7 +11526,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -11535,7 +11534,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -11544,7 +11543,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -11553,7 +11552,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -11561,7 +11560,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -11570,7 +11569,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -11579,7 +11578,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -11606,7 +11605,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetUserItemVote_params
@@ -11670,7 +11669,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -11681,7 +11680,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -11690,15 +11689,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -11706,7 +11705,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUserUGCRequest_params
@@ -11751,7 +11750,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -11760,7 +11759,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -11770,7 +11769,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -11780,7 +11779,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -11790,7 +11789,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -11808,7 +11807,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -11830,7 +11829,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -11843,14 +11842,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -11858,7 +11857,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -11866,63 +11865,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -11930,7 +11929,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -11938,7 +11937,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -11946,15 +11945,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -11962,7 +11961,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -11970,7 +11969,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -12003,7 +12002,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -12011,7 +12010,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -12019,7 +12018,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -12027,7 +12026,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -12035,7 +12034,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -12043,7 +12042,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -12051,7 +12050,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -12059,7 +12058,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -12067,7 +12066,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -12075,7 +12074,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -12084,7 +12083,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -12093,7 +12092,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -12101,7 +12100,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -12110,7 +12109,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -12119,7 +12118,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -12146,7 +12145,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetUserItemVote_params
@@ -12210,7 +12209,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -12221,7 +12220,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -12230,15 +12229,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -12246,7 +12245,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlaytimeTracking_params
@@ -12313,7 +12312,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -12322,7 +12321,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -12332,7 +12331,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -12342,7 +12341,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -12352,7 +12351,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -12370,7 +12369,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -12392,7 +12391,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -12405,14 +12404,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -12420,7 +12419,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -12428,63 +12427,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -12492,7 +12491,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -12500,7 +12499,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -12508,7 +12507,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -12516,15 +12515,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -12532,7 +12531,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -12540,7 +12539,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -12573,7 +12572,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -12581,7 +12580,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -12589,7 +12588,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -12597,7 +12596,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -12605,7 +12604,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -12613,7 +12612,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -12621,7 +12620,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -12629,7 +12628,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -12637,7 +12636,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -12645,7 +12644,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -12654,7 +12653,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -12663,7 +12662,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -12671,7 +12670,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -12680,7 +12679,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -12689,7 +12688,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -12716,7 +12715,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetUserItemVote_params
@@ -12780,7 +12779,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -12791,7 +12790,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -12800,15 +12799,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -12816,7 +12815,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartPlaytimeTracking_params
@@ -12940,7 +12939,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -12949,7 +12948,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -12959,7 +12958,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -12969,7 +12968,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -12979,7 +12978,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -12997,7 +12996,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -13019,7 +13018,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -13032,14 +13031,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -13047,7 +13046,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -13055,63 +13054,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -13119,7 +13118,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -13127,7 +13126,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -13135,7 +13134,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -13143,15 +13142,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -13159,7 +13158,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -13167,7 +13166,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -13200,7 +13199,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -13208,7 +13207,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -13216,7 +13215,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -13224,7 +13223,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -13232,7 +13231,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -13240,7 +13239,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -13248,7 +13247,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -13256,7 +13255,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -13264,15 +13263,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -13280,7 +13279,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -13289,7 +13288,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -13298,7 +13297,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -13306,7 +13305,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -13315,7 +13314,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -13324,7 +13323,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -13351,7 +13350,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetUserItemVote_params
@@ -13415,7 +13414,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -13426,7 +13425,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -13435,15 +13434,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -13451,7 +13450,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartPlaytimeTracking_params
@@ -13575,7 +13574,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -13584,7 +13583,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -13594,7 +13593,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -13604,7 +13603,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -13614,7 +13613,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -13632,7 +13631,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -13654,7 +13653,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -13667,7 +13666,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -13678,14 +13677,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -13693,7 +13692,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -13701,63 +13700,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -13765,7 +13764,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -13773,7 +13772,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -13781,7 +13780,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -13789,15 +13788,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -13805,7 +13804,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -13813,7 +13812,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -13846,7 +13845,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -13854,7 +13853,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -13862,7 +13861,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -13870,7 +13869,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -13878,7 +13877,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -13886,7 +13885,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -13894,7 +13893,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -13902,7 +13901,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -13910,22 +13909,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -13933,7 +13932,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -13942,7 +13941,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -13951,7 +13950,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -13959,7 +13958,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -13968,7 +13967,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -13977,7 +13976,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -14004,7 +14003,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetUserItemVote_params
@@ -14068,7 +14067,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -14079,7 +14078,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -14088,15 +14087,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -14104,7 +14103,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartPlaytimeTracking_params
@@ -14228,7 +14227,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -14237,7 +14236,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -14247,7 +14246,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -14257,7 +14256,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -14267,7 +14266,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -14285,7 +14284,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -14307,7 +14306,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -14320,7 +14319,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -14331,14 +14330,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -14346,7 +14345,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const w_SteamParamStringArray_t *pTagGroups;
 };
@@ -14354,7 +14353,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -14362,63 +14361,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -14426,7 +14425,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -14434,7 +14433,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -14442,7 +14441,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -14450,15 +14449,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -14466,7 +14465,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -14474,7 +14473,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -14507,7 +14506,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -14515,7 +14514,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -14523,7 +14522,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -14531,7 +14530,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -14539,7 +14538,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -14547,7 +14546,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -14555,7 +14554,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -14563,7 +14562,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -14571,22 +14570,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -14594,7 +14593,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -14603,7 +14602,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -14612,7 +14611,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -14620,7 +14619,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -14629,7 +14628,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -14638,7 +14637,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -14665,7 +14664,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetUserItemVote_params
@@ -14729,7 +14728,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -14740,7 +14739,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -14749,15 +14748,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -14765,7 +14764,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartPlaytimeTracking_params
@@ -14889,7 +14888,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -14906,7 +14905,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -14917,7 +14916,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -14928,7 +14927,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -14938,7 +14937,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -14948,7 +14947,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -14958,7 +14957,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -14976,7 +14975,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -14998,7 +14997,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -15011,7 +15010,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -15022,14 +15021,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -15037,7 +15036,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const w_SteamParamStringArray_t *pTagGroups;
 };
@@ -15045,7 +15044,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -15053,63 +15052,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -15117,7 +15116,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -15125,7 +15124,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -15133,7 +15132,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -15141,15 +15140,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -15157,7 +15156,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -15165,7 +15164,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -15198,7 +15197,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -15206,7 +15205,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -15214,7 +15213,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -15222,7 +15221,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -15230,7 +15229,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -15238,7 +15237,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -15246,7 +15245,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -15254,7 +15253,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -15262,22 +15261,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -15285,7 +15284,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -15294,7 +15293,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -15303,7 +15302,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -15311,7 +15310,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -15320,7 +15319,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -15329,7 +15328,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -15356,7 +15355,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetUserItemVote_params
@@ -15420,7 +15419,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -15431,7 +15430,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -15440,15 +15439,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -15456,7 +15455,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartPlaytimeTracking_params
@@ -15530,7 +15529,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus_params
@@ -15592,7 +15591,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -15609,7 +15608,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -15620,7 +15619,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplayName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -15631,7 +15630,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplayName_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -15641,7 +15640,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -15651,7 +15650,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -15661,7 +15660,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -15679,7 +15678,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -15701,7 +15700,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -15714,7 +15713,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -15725,14 +15724,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -15740,7 +15739,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const w_SteamParamStringArray_t *pTagGroups;
 };
@@ -15748,7 +15747,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -15756,63 +15755,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -15820,7 +15819,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -15828,7 +15827,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -15836,7 +15835,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -15844,15 +15843,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -15860,7 +15859,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -15868,7 +15867,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -15877,7 +15876,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -15886,7 +15885,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -15919,7 +15918,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -15927,7 +15926,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -15935,7 +15934,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -15943,7 +15942,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -15951,7 +15950,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -15959,7 +15958,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -15967,7 +15966,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -15975,7 +15974,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -15983,22 +15982,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -16006,7 +16005,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -16015,7 +16014,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -16024,7 +16023,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -16032,7 +16031,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -16041,7 +16040,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -16050,7 +16049,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -16077,7 +16076,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetUserItemVote_params
@@ -16141,7 +16140,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -16152,7 +16151,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -16161,15 +16160,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -16177,7 +16176,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartPlaytimeTracking_params
@@ -16251,7 +16250,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_DeleteItem_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_ShowWorkshopEULA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus_params
@@ -16313,7 +16312,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -16330,7 +16329,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -16341,7 +16340,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -16352,7 +16351,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -16362,7 +16361,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -16372,7 +16371,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -16382,7 +16381,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -16400,7 +16399,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -16422,7 +16421,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -16435,7 +16434,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -16456,14 +16455,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors_par
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -16471,7 +16470,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const w_SteamParamStringArray_t *pTagGroups;
 };
@@ -16479,7 +16478,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -16487,63 +16486,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -16551,7 +16550,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -16559,7 +16558,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -16567,7 +16566,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -16575,15 +16574,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -16591,7 +16590,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -16599,7 +16598,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -16608,7 +16607,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -16617,7 +16616,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -16650,7 +16649,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -16658,7 +16657,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -16666,7 +16665,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -16674,7 +16673,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -16682,7 +16681,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -16690,7 +16689,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
 };
@@ -16698,7 +16697,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -16706,7 +16705,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -16714,22 +16713,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -16737,7 +16736,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -16746,7 +16745,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -16755,7 +16754,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -16763,7 +16762,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -16772,7 +16771,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -16781,7 +16780,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -16789,7 +16788,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t descid;
 };
@@ -16797,7 +16796,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveContentDescriptor_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t descid;
 };
@@ -16824,7 +16823,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetUserItemVote_params
@@ -16888,7 +16887,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -16899,7 +16898,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -16908,15 +16907,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -16924,7 +16923,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking_params
@@ -16998,7 +16997,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_DeleteItem_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_ShowWorkshopEULA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus_params
@@ -17060,7 +17059,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUGCRequest_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     w_SteamUGCDetails_t_128x *pDetails;
@@ -17077,7 +17076,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -17088,7 +17087,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplayName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t indexTag;
@@ -17099,7 +17098,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplayName_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchURL;
@@ -17109,7 +17108,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     char *pchMetadata;
@@ -17119,7 +17118,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint64_t *pvecPublishedFileID;
@@ -17129,7 +17128,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCStatistic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t eStatType;
@@ -17147,7 +17146,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumAdditionalPreviews_
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditionalPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t previewIndex;
@@ -17169,7 +17168,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     uint32_t keyValueTagIndex;
@@ -17182,7 +17181,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pchKey;
@@ -17203,14 +17202,14 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCContentDescriptors_par
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ReleaseQueryUGCRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -17218,7 +17217,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const w_SteamParamStringArray_t *pTagGroups;
 };
@@ -17226,7 +17225,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pTagName;
 };
@@ -17234,63 +17233,63 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnOnlyIDs_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnOnlyIDs;
+    int8_t bReturnOnlyIDs;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnKeyValueTags;
+    int8_t bReturnKeyValueTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnLongDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnLongDescription;
+    int8_t bReturnLongDescription;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnMetadata;
+    int8_t bReturnMetadata;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnChildren_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnChildren;
+    int8_t bReturnChildren;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnAdditionalPreviews_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnAdditionalPreviews;
+    int8_t bReturnAdditionalPreviews;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnTotalOnly_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bReturnTotalOnly;
+    int8_t bReturnTotalOnly;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -17298,7 +17297,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStats_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -17306,7 +17305,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unMaxAgeSeconds;
 };
@@ -17314,7 +17313,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedResponse_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pMatchCloudFileName;
 };
@@ -17322,15 +17321,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetMatchAnyTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bMatchAnyTag;
+    int8_t bMatchAnyTag;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pSearchText;
 };
@@ -17338,7 +17337,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t unDays;
 };
@@ -17346,7 +17345,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -17355,7 +17354,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRange_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t rtStart;
     uint32_t rtEnd;
@@ -17364,7 +17363,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRange_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pKey;
     const char *pValue;
@@ -17397,7 +17396,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartItemUpdate_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchTitle;
 };
@@ -17405,7 +17404,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchDescription;
 };
@@ -17413,7 +17412,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchLanguage;
 };
@@ -17421,7 +17420,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchMetaData;
 };
@@ -17429,7 +17428,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t eVisibility;
 };
@@ -17437,16 +17436,16 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t updateHandle;
     const w_SteamParamStringArray_t *pTags;
-    bool bAllowAdminTags;
+    int8_t bAllowAdminTags;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszContentFolder;
 };
@@ -17454,7 +17453,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
 };
@@ -17462,22 +17461,22 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowLegacyUpload_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
-    bool bAllowLegacyUpload;
+    int8_t bAllowLegacyUpload;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAllItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
 };
@@ -17485,7 +17484,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pchKey;
     const char *pchValue;
@@ -17494,7 +17493,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszPreviewFile;
     uint32_t type;
@@ -17503,7 +17502,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     const char *pszVideoID;
 };
@@ -17511,7 +17510,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszPreviewFile;
@@ -17520,7 +17519,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
     const char *pszVideoID;
@@ -17529,7 +17528,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t index;
 };
@@ -17537,7 +17536,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t descid;
 };
@@ -17545,7 +17544,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveContentDescriptor_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t handle;
     uint32_t descid;
 };
@@ -17572,7 +17571,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetUserItemVote_params
     struct u_steam_iface *linux_side;
     uint64_t _ret;
     uint64_t nPublishedFileID;
-    bool bVoteUp;
+    int8_t bVoteUp;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserItemVote_params
@@ -17636,7 +17635,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemState_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punSizeOnDisk;
     char *pchFolder;
@@ -17647,7 +17646,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
@@ -17656,15 +17655,15 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_DownloadItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t nPublishedFileID;
-    bool bHighPriority;
+    int8_t bHighPriority;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unWorkshopDepotID;
     const char *pszFolder;
 };
@@ -17672,7 +17671,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SuspendDownloads_params
 {
     struct u_steam_iface *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartPlaytimeTracking_params
@@ -17746,7 +17745,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_DeleteItem_params
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus_params
@@ -17776,7 +17775,7 @@ struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMetho
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hHandle;
     uint32_t *punResponseSize;
     uint32_t *peResult;
@@ -17785,24 +17784,24 @@ struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethod
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hHandle;
     void *pResponseBuffer;
     uint32_t unResponseBufferSize;
-    bool bAutoRelease;
+    int8_t bAutoRelease;
 };
 
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hHandle;
 };
 
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchServiceNotification;
     const void *pNotificationBuffer;
     uint32_t unNotificationBufferSize;
@@ -17864,14 +17863,14 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementNa
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     int32_t *pData;
@@ -17880,7 +17879,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float *pData;
@@ -17889,7 +17888,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     int32_t nData;
@@ -17898,7 +17897,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float fData;
@@ -17907,7 +17906,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float flCountThisSession;
@@ -17917,25 +17916,25 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -17943,7 +17942,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -17951,14 +17950,14 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement_p
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -17966,7 +17965,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -18029,14 +18028,14 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementName_pa
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     int32_t *pData;
@@ -18045,7 +18044,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float *pData;
@@ -18054,7 +18053,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     int32_t nData;
@@ -18063,7 +18062,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float fData;
@@ -18072,7 +18071,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     float flCountThisSession;
@@ -18082,16 +18081,16 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -18099,7 +18098,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
 };
@@ -18107,7 +18106,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
 };
 
@@ -18131,7 +18130,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CGameID nGameID;
     const char *pchName;
     uint32_t nCurProgress;
@@ -18141,13 +18140,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementPr
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -18155,7 +18154,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -18163,7 +18162,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -18171,7 +18170,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -18179,7 +18178,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -18188,29 +18187,29 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon_params
@@ -18231,7 +18230,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -18240,13 +18239,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementPr
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -18254,7 +18253,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -18262,7 +18261,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -18270,7 +18269,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -18278,7 +18277,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -18287,29 +18286,29 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon_params
@@ -18330,7 +18329,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -18346,7 +18345,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -18355,7 +18354,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -18364,22 +18363,22 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -18387,7 +18386,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -18395,7 +18394,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -18403,7 +18402,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -18411,7 +18410,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -18420,29 +18419,29 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon_params
@@ -18463,7 +18462,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -18479,7 +18478,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -18488,7 +18487,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -18497,17 +18496,17 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard_params
@@ -18567,7 +18566,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_104 *pLeaderboardEntry;
@@ -18588,13 +18587,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScor
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -18602,7 +18601,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -18610,7 +18609,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -18618,7 +18617,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -18626,7 +18625,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -18635,29 +18634,29 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon_params
@@ -18678,7 +18677,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -18694,7 +18693,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -18703,7 +18702,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -18712,17 +18711,17 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard_params
@@ -18782,7 +18781,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_104 *pLeaderboardEntry;
@@ -18810,13 +18809,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPla
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -18824,7 +18823,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -18832,7 +18831,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -18840,7 +18839,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -18848,7 +18847,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -18857,38 +18856,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementIcon_params
@@ -18909,7 +18908,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -18925,7 +18924,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -18934,7 +18933,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -18943,27 +18942,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard_params
@@ -19023,7 +19022,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_104 *pLeaderboardEntry;
@@ -19051,13 +19050,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPla
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -19065,7 +19064,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -19073,7 +19072,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -19081,7 +19080,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -19089,7 +19088,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -19098,38 +19097,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementIcon_params
@@ -19150,7 +19149,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -19166,7 +19165,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -19175,7 +19174,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -19184,27 +19183,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard_params
@@ -19264,7 +19263,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_111x *pLeaderboardEntry;
@@ -19300,13 +19299,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPla
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -19314,7 +19313,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -19322,7 +19321,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -19330,7 +19329,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -19338,7 +19337,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -19347,38 +19346,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementIcon_params
@@ -19399,7 +19398,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -19415,7 +19414,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -19424,7 +19423,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -19433,27 +19432,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard_params
@@ -19522,7 +19521,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_111x *pLeaderboardEntry;
@@ -19558,13 +19557,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPla
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -19572,7 +19571,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -19580,7 +19579,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -19588,7 +19587,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -19596,7 +19595,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -19605,38 +19604,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon_params
@@ -19657,7 +19656,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -19673,7 +19672,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -19682,7 +19681,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -19691,27 +19690,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard_params
@@ -19780,7 +19779,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_111x *pLeaderboardEntry;
@@ -19826,7 +19825,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchiev
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo_params
@@ -19837,13 +19836,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAc
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pflPercent;
 };
@@ -19858,7 +19857,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats_pa
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     int64_t *pData;
 };
@@ -19866,7 +19865,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     double *pData;
 };
@@ -19892,13 +19891,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -19906,7 +19905,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -19914,7 +19913,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -19922,7 +19921,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -19930,7 +19929,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -19939,38 +19938,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementIcon_params
@@ -19991,7 +19990,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -20020,7 +20019,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -20029,7 +20028,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -20038,27 +20037,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard_params
@@ -20127,7 +20126,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_123 *pLeaderboardEntry;
@@ -20173,7 +20172,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchiev
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo_params
@@ -20184,13 +20183,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAc
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pflPercent;
 };
@@ -20205,7 +20204,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats_pa
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     int64_t *pData;
 };
@@ -20213,7 +20212,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     double *pData;
 };
@@ -20239,13 +20238,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pData;
 };
@@ -20253,7 +20252,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pData;
 };
@@ -20261,7 +20260,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t nData;
 };
@@ -20269,7 +20268,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float fData;
 };
@@ -20277,7 +20276,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float flCountThisSession;
     double dSessionLength;
@@ -20286,38 +20285,38 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat_par
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementIcon_params
@@ -20338,7 +20337,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementDisplay
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     uint32_t nCurProgress;
     uint32_t nMaxProgress;
@@ -20367,7 +20366,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats_para
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -20376,7 +20375,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -20385,27 +20384,27 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
     uint32_t *punUnlockTime;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAchievementsToo;
+    int8_t _ret;
+    int8_t bAchievementsToo;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard_params
@@ -20474,7 +20473,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEn
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamLeaderboardEntries;
     int32_t index;
     w_LeaderboardEntry_t_123 *pLeaderboardEntry;
@@ -20520,7 +20519,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchiev
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo_params
@@ -20531,13 +20530,13 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAc
     char *pchName;
     uint32_t unNameBufLen;
     float *pflPercent;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pflPercent;
 };
@@ -20552,7 +20551,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats_pa
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     int64_t *pData;
 };
@@ -20560,7 +20559,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_params
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchStatName;
     double *pData;
 };
@@ -20586,7 +20585,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     int32_t *pnMinProgress;
     int32_t *pnMaxProgress;
@@ -20595,7 +20594,7 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgres
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchName;
     float *pfMinProgress;
     float *pfMaxProgress;
@@ -20610,7 +20609,7 @@ struct ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params
 struct ISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnNumViewers;
 };
 
@@ -20623,7 +20622,7 @@ struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL_params
 struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pnNumViewers;
 };
 
@@ -20636,7 +20635,7 @@ struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings_params
 struct ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unVideoAppID;
     char *pchBuffer;
     int32_t *pnBufferSize;
@@ -20651,7 +20650,7 @@ struct ISteamClient_SteamClient006_CreateSteamPipe_params
 struct ISteamClient_SteamClient006_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -20813,7 +20812,7 @@ struct ISteamClient_SteamClient007_CreateSteamPipe_params
 struct ISteamClient_SteamClient007_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -20987,7 +20986,7 @@ struct ISteamClient_SteamClient008_CreateSteamPipe_params
 struct ISteamClient_SteamClient008_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -21153,7 +21152,7 @@ struct ISteamClient_SteamClient009_CreateSteamPipe_params
 struct ISteamClient_SteamClient009_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -21328,7 +21327,7 @@ struct ISteamClient_SteamClient010_CreateSteamPipe_params
 struct ISteamClient_SteamClient010_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -21497,7 +21496,7 @@ struct ISteamClient_SteamClient010_SetWarningMessageHook_params
 struct ISteamClient_SteamClient010_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient010_GetISteamHTTP_params
@@ -21518,7 +21517,7 @@ struct ISteamClient_SteamClient011_CreateSteamPipe_params
 struct ISteamClient_SteamClient011_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -21696,7 +21695,7 @@ struct ISteamClient_SteamClient011_SetWarningMessageHook_params
 struct ISteamClient_SteamClient011_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient011_GetISteamHTTP_params
@@ -21717,7 +21716,7 @@ struct ISteamClient_SteamClient012_CreateSteamPipe_params
 struct ISteamClient_SteamClient012_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -21886,7 +21885,7 @@ struct ISteamClient_SteamClient012_SetWarningMessageHook_params
 struct ISteamClient_SteamClient012_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient012_GetISteamHTTP_params
@@ -21934,7 +21933,7 @@ struct ISteamClient_SteamClient013_CreateSteamPipe_params
 struct ISteamClient_SteamClient013_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -22103,7 +22102,7 @@ struct ISteamClient_SteamClient013_SetWarningMessageHook_params
 struct ISteamClient_SteamClient013_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient013_GetISteamHTTP_params
@@ -22178,7 +22177,7 @@ struct ISteamClient_SteamClient014_CreateSteamPipe_params
 struct ISteamClient_SteamClient014_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -22347,7 +22346,7 @@ struct ISteamClient_SteamClient014_SetWarningMessageHook_params
 struct ISteamClient_SteamClient014_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient014_GetISteamHTTP_params
@@ -22413,7 +22412,7 @@ struct ISteamClient_SteamClient015_CreateSteamPipe_params
 struct ISteamClient_SteamClient015_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -22582,7 +22581,7 @@ struct ISteamClient_SteamClient015_SetWarningMessageHook_params
 struct ISteamClient_SteamClient015_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient015_GetISteamHTTP_params
@@ -22657,7 +22656,7 @@ struct ISteamClient_SteamClient016_CreateSteamPipe_params
 struct ISteamClient_SteamClient016_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -22826,7 +22825,7 @@ struct ISteamClient_SteamClient016_SetWarningMessageHook_params
 struct ISteamClient_SteamClient016_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient016_GetISteamHTTP_params
@@ -22928,7 +22927,7 @@ struct ISteamClient_SteamClient017_CreateSteamPipe_params
 struct ISteamClient_SteamClient017_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -23097,7 +23096,7 @@ struct ISteamClient_SteamClient017_SetWarningMessageHook_params
 struct ISteamClient_SteamClient017_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient017_GetISteamHTTP_params
@@ -23226,7 +23225,7 @@ struct ISteamClient_SteamClient018_CreateSteamPipe_params
 struct ISteamClient_SteamClient018_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -23404,7 +23403,7 @@ struct ISteamClient_SteamClient018_SetWarningMessageHook_params
 struct ISteamClient_SteamClient018_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient018_GetISteamHTTP_params
@@ -23551,7 +23550,7 @@ struct ISteamClient_SteamClient019_CreateSteamPipe_params
 struct ISteamClient_SteamClient019_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -23729,7 +23728,7 @@ struct ISteamClient_SteamClient019_SetWarningMessageHook_params
 struct ISteamClient_SteamClient019_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient019_GetISteamHTTP_params
@@ -23885,7 +23884,7 @@ struct ISteamClient_SteamClient020_CreateSteamPipe_params
 struct ISteamClient_SteamClient020_BReleaseSteamPipe_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t hSteamPipe;
 };
 
@@ -24063,7 +24062,7 @@ struct ISteamClient_SteamClient020_SetWarningMessageHook_params
 struct ISteamClient_SteamClient020_BShutdownIfAllPipesClosed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamClient_SteamClient020_GetISteamHTTP_params
@@ -24218,13 +24217,13 @@ struct ISteamClient_SteamClient020_DestroyAllInterfaces_params
 struct ISteamController_SteamController003_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController003_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController003_RunFrame_params
@@ -24242,7 +24241,7 @@ struct ISteamController_SteamController003_GetConnectedControllers_params
 struct ISteamController_SteamController003_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -24346,13 +24345,13 @@ struct ISteamController_SteamController003_TriggerRepeatedHapticPulse_params
 struct ISteamController_SteamController004_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController004_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController004_RunFrame_params
@@ -24370,7 +24369,7 @@ struct ISteamController_SteamController004_GetConnectedControllers_params
 struct ISteamController_SteamController004_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -24495,7 +24494,7 @@ struct ISteamController_SteamController004_GetMotionData_params
 struct ISteamController_SteamController004_ShowDigitalActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t digitalActionHandle;
     float flScale;
@@ -24506,7 +24505,7 @@ struct ISteamController_SteamController004_ShowDigitalActionOrigins_params
 struct ISteamController_SteamController004_ShowAnalogActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t analogActionHandle;
     float flScale;
@@ -24517,13 +24516,13 @@ struct ISteamController_SteamController004_ShowAnalogActionOrigins_params
 struct ISteamController_SteamController005_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController005_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController005_RunFrame_params
@@ -24541,7 +24540,7 @@ struct ISteamController_SteamController005_GetConnectedControllers_params
 struct ISteamController_SteamController005_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -24684,7 +24683,7 @@ struct ISteamController_SteamController005_GetMotionData_params
 struct ISteamController_SteamController005_ShowDigitalActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t digitalActionHandle;
     float flScale;
@@ -24695,7 +24694,7 @@ struct ISteamController_SteamController005_ShowDigitalActionOrigins_params
 struct ISteamController_SteamController005_ShowAnalogActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t analogActionHandle;
     float flScale;
@@ -24720,13 +24719,13 @@ struct ISteamController_SteamController005_GetGlyphForActionOrigin_params
 struct ISteamController_SteamController006_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController006_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController006_RunFrame_params
@@ -24744,7 +24743,7 @@ struct ISteamController_SteamController006_GetConnectedControllers_params
 struct ISteamController_SteamController006_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -24915,7 +24914,7 @@ struct ISteamController_SteamController006_GetMotionData_params
 struct ISteamController_SteamController006_ShowDigitalActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t digitalActionHandle;
     float flScale;
@@ -24926,7 +24925,7 @@ struct ISteamController_SteamController006_ShowDigitalActionOrigins_params
 struct ISteamController_SteamController006_ShowAnalogActionOrigins_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     uint64_t analogActionHandle;
     float flScale;
@@ -24958,13 +24957,13 @@ struct ISteamController_SteamController006_GetInputTypeForHandle_params
 struct ISteamController_SteamController007_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController007_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController007_RunFrame_params
@@ -25146,7 +25145,7 @@ struct ISteamController_SteamController007_SetLEDColor_params
 struct ISteamController_SteamController007_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -25204,7 +25203,7 @@ struct ISteamController_SteamController007_TranslateActionOrigin_params
 struct ISteamController_SteamController007_GetControllerBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -25213,13 +25212,13 @@ struct ISteamController_SteamController007_GetControllerBindingRevision_params
 struct ISteamController_SteamController008_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController008_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamController_SteamController008_RunFrame_params
@@ -25401,7 +25400,7 @@ struct ISteamController_SteamController008_SetLEDColor_params
 struct ISteamController_SteamController008_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
 };
 
@@ -25459,7 +25458,7 @@ struct ISteamController_SteamController008_TranslateActionOrigin_params
 struct ISteamController_SteamController008_GetControllerBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t controllerHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -25492,21 +25491,21 @@ struct ISteamFriends_SteamFriends001_SetPersonaState_params
 struct ISteamFriends_SteamFriends001_AddFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
 struct ISteamFriends_SteamFriends001_RemoveFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
 struct ISteamFriends_SteamFriends001_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
@@ -25527,7 +25526,7 @@ struct ISteamFriends_SteamFriends001_GetFriendPersonaState_params
 struct ISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t *pnGameID;
     uint32_t *punGameIP;
@@ -25607,7 +25606,7 @@ struct ISteamFriends_SteamFriends001_GetChatMessage_params
 struct ISteamFriends_SteamFriends001_SendMsgToFriend_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint32_t eChatEntryType;
     const void *pvMsgBody;
@@ -25637,7 +25636,7 @@ struct ISteamFriends_SteamFriends001_ClearChatHistory_params
 struct ISteamFriends_SteamFriends001_InviteFriendByEmail_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchEmailAccount;
 };
 
@@ -25650,7 +25649,7 @@ struct ISteamFriends_SteamFriends001_GetBlockedFriendCount_params
 struct ISteamFriends_SteamFriends001_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint64_t *pulGameID;
     uint32_t *punGameIP;
@@ -25660,7 +25659,7 @@ struct ISteamFriends_SteamFriends001_GetFriendGamePlayed_params
 struct ISteamFriends_SteamFriends001_GetFriendGamePlayed2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint64_t *pulGameID;
     uint32_t *punGameIP;
@@ -25747,7 +25746,7 @@ struct ISteamFriends_SteamFriends002_GetFriendRegValue_params
 struct ISteamFriends_SteamFriends002_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint64_t *pulGameID;
     uint32_t *punGameIP;
@@ -25766,21 +25765,21 @@ struct ISteamFriends_SteamFriends002_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends002_AddFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
 struct ISteamFriends_SteamFriends002_RemoveFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
 };
 
 struct ISteamFriends_SteamFriends002_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -25795,7 +25794,7 @@ struct ISteamFriends_SteamFriends002_AddFriendByName_params
 struct ISteamFriends_SteamFriends002_InviteFriendByEmail_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchEmailAccount;
 };
 
@@ -25813,7 +25812,7 @@ struct ISteamFriends_SteamFriends002_GetChatMessage_params
 struct ISteamFriends_SteamFriends002_SendMsgToFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint32_t eChatEntryType;
     const void *pvMsgBody;
@@ -25863,7 +25862,7 @@ struct ISteamFriends_SteamFriends002_GetClanName_params
 struct ISteamFriends_SteamFriends002_InviteFriendToClan_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     CSteamID steamIDClan;
 };
@@ -25871,9 +25870,9 @@ struct ISteamFriends_SteamFriends002_InviteFriendToClan_params
 struct ISteamFriends_SteamFriends002_AcknowledgeInviteToClan_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
-    bool bAcceptOrDenyClanInvite;
+    int8_t bAcceptOrDenyClanInvite;
 };
 
 struct ISteamFriends_SteamFriends002_GetFriendCountFromSource_params
@@ -25955,7 +25954,7 @@ struct ISteamFriends_SteamFriends003_GetFriendAvatar_params
 struct ISteamFriends_SteamFriends003_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint64_t *pulGameID;
     uint32_t *punGameIP;
@@ -25974,7 +25973,7 @@ struct ISteamFriends_SteamFriends003_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends003_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26017,7 +26016,7 @@ struct ISteamFriends_SteamFriends003_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends003_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26026,7 +26025,7 @@ struct ISteamFriends_SteamFriends003_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends003_ActivateGameOverlay_params
@@ -26100,7 +26099,7 @@ struct ISteamFriends_SteamFriends004_GetFriendAvatar_params
 struct ISteamFriends_SteamFriends004_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     uint64_t *pulGameID;
     uint32_t *punGameIP;
@@ -26119,7 +26118,7 @@ struct ISteamFriends_SteamFriends004_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends004_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26162,7 +26161,7 @@ struct ISteamFriends_SteamFriends004_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends004_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26171,7 +26170,7 @@ struct ISteamFriends_SteamFriends004_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends004_ActivateGameOverlay_params
@@ -26245,7 +26244,7 @@ struct ISteamFriends_SteamFriends005_GetFriendAvatar_params
 struct ISteamFriends_SteamFriends005_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -26261,7 +26260,7 @@ struct ISteamFriends_SteamFriends005_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends005_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26304,7 +26303,7 @@ struct ISteamFriends_SteamFriends005_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends005_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26313,7 +26312,7 @@ struct ISteamFriends_SteamFriends005_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends005_ActivateGameOverlay_params
@@ -26412,7 +26411,7 @@ struct ISteamFriends_SteamFriends006_GetFriendAvatar_params
 struct ISteamFriends_SteamFriends006_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -26428,7 +26427,7 @@ struct ISteamFriends_SteamFriends006_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends006_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26478,7 +26477,7 @@ struct ISteamFriends_SteamFriends006_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends006_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26487,7 +26486,7 @@ struct ISteamFriends_SteamFriends006_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends006_ActivateGameOverlay_params
@@ -26584,7 +26583,7 @@ struct ISteamFriends_SteamFriends007_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends007_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -26600,7 +26599,7 @@ struct ISteamFriends_SteamFriends007_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends007_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26650,7 +26649,7 @@ struct ISteamFriends_SteamFriends007_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends007_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26659,7 +26658,7 @@ struct ISteamFriends_SteamFriends007_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends007_ActivateGameOverlay_params
@@ -26777,7 +26776,7 @@ struct ISteamFriends_SteamFriends008_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends008_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -26793,7 +26792,7 @@ struct ISteamFriends_SteamFriends008_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends008_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -26843,7 +26842,7 @@ struct ISteamFriends_SteamFriends008_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends008_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -26852,7 +26851,7 @@ struct ISteamFriends_SteamFriends008_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends008_ActivateGameOverlay_params
@@ -26916,9 +26915,9 @@ struct ISteamFriends_SteamFriends008_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends008_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends008_RequestClanOfficerList_params
@@ -27013,7 +27012,7 @@ struct ISteamFriends_SteamFriends009_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends009_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -27029,7 +27028,7 @@ struct ISteamFriends_SteamFriends009_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends009_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -27079,7 +27078,7 @@ struct ISteamFriends_SteamFriends009_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends009_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -27088,7 +27087,7 @@ struct ISteamFriends_SteamFriends009_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends009_ActivateGameOverlay_params
@@ -27152,9 +27151,9 @@ struct ISteamFriends_SteamFriends009_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends009_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends009_RequestClanOfficerList_params
@@ -27195,7 +27194,7 @@ struct ISteamFriends_SteamFriends009_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends009_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -27231,7 +27230,7 @@ struct ISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex_params
 struct ISteamFriends_SteamFriends009_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -27320,7 +27319,7 @@ struct ISteamFriends_SteamFriends010_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends010_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -27336,7 +27335,7 @@ struct ISteamFriends_SteamFriends010_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends010_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -27371,7 +27370,7 @@ struct ISteamFriends_SteamFriends010_GetClanTag_params
 struct ISteamFriends_SteamFriends010_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -27404,7 +27403,7 @@ struct ISteamFriends_SteamFriends010_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends010_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -27413,7 +27412,7 @@ struct ISteamFriends_SteamFriends010_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends010_ActivateGameOverlay_params
@@ -27477,9 +27476,9 @@ struct ISteamFriends_SteamFriends010_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends010_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends010_RequestClanOfficerList_params
@@ -27520,7 +27519,7 @@ struct ISteamFriends_SteamFriends010_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends010_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -27556,7 +27555,7 @@ struct ISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex_params
 struct ISteamFriends_SteamFriends010_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -27598,7 +27597,7 @@ struct ISteamFriends_SteamFriends010_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends010_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -27620,7 +27619,7 @@ struct ISteamFriends_SteamFriends010_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends010_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -27640,7 +27639,7 @@ struct ISteamFriends_SteamFriends010_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends010_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -27648,35 +27647,35 @@ struct ISteamFriends_SteamFriends010_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends010_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends010_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends010_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends010_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -27749,7 +27748,7 @@ struct ISteamFriends_SteamFriends011_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends011_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -27765,7 +27764,7 @@ struct ISteamFriends_SteamFriends011_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends011_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -27800,7 +27799,7 @@ struct ISteamFriends_SteamFriends011_GetClanTag_params
 struct ISteamFriends_SteamFriends011_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -27833,7 +27832,7 @@ struct ISteamFriends_SteamFriends011_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends011_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -27842,7 +27841,7 @@ struct ISteamFriends_SteamFriends011_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends011_ActivateGameOverlay_params
@@ -27906,9 +27905,9 @@ struct ISteamFriends_SteamFriends011_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends011_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends011_RequestClanOfficerList_params
@@ -27949,7 +27948,7 @@ struct ISteamFriends_SteamFriends011_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends011_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -27991,7 +27990,7 @@ struct ISteamFriends_SteamFriends011_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends011_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -28033,7 +28032,7 @@ struct ISteamFriends_SteamFriends011_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends011_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -28055,7 +28054,7 @@ struct ISteamFriends_SteamFriends011_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends011_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -28075,7 +28074,7 @@ struct ISteamFriends_SteamFriends011_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends011_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -28083,35 +28082,35 @@ struct ISteamFriends_SteamFriends011_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends011_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends011_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends011_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends011_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends011_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -28206,7 +28205,7 @@ struct ISteamFriends_SteamFriends012_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends012_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -28222,7 +28221,7 @@ struct ISteamFriends_SteamFriends012_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends012_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -28257,7 +28256,7 @@ struct ISteamFriends_SteamFriends012_GetClanTag_params
 struct ISteamFriends_SteamFriends012_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -28290,7 +28289,7 @@ struct ISteamFriends_SteamFriends012_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends012_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -28299,7 +28298,7 @@ struct ISteamFriends_SteamFriends012_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends012_ActivateGameOverlay_params
@@ -28363,9 +28362,9 @@ struct ISteamFriends_SteamFriends012_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends012_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends012_RequestClanOfficerList_params
@@ -28406,7 +28405,7 @@ struct ISteamFriends_SteamFriends012_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends012_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -28448,7 +28447,7 @@ struct ISteamFriends_SteamFriends012_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends012_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -28490,7 +28489,7 @@ struct ISteamFriends_SteamFriends012_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends012_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -28512,7 +28511,7 @@ struct ISteamFriends_SteamFriends012_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends012_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -28532,7 +28531,7 @@ struct ISteamFriends_SteamFriends012_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends012_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -28540,35 +28539,35 @@ struct ISteamFriends_SteamFriends012_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends012_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends012_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends012_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends012_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -28663,7 +28662,7 @@ struct ISteamFriends_SteamFriends013_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends013_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -28679,7 +28678,7 @@ struct ISteamFriends_SteamFriends013_GetFriendPersonaNameHistory_params
 struct ISteamFriends_SteamFriends013_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -28714,7 +28713,7 @@ struct ISteamFriends_SteamFriends013_GetClanTag_params
 struct ISteamFriends_SteamFriends013_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -28747,7 +28746,7 @@ struct ISteamFriends_SteamFriends013_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends013_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -28756,7 +28755,7 @@ struct ISteamFriends_SteamFriends013_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends013_ActivateGameOverlay_params
@@ -28821,9 +28820,9 @@ struct ISteamFriends_SteamFriends013_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends013_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends013_RequestClanOfficerList_params
@@ -28864,7 +28863,7 @@ struct ISteamFriends_SteamFriends013_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends013_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -28906,7 +28905,7 @@ struct ISteamFriends_SteamFriends013_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends013_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -28948,7 +28947,7 @@ struct ISteamFriends_SteamFriends013_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends013_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -28970,7 +28969,7 @@ struct ISteamFriends_SteamFriends013_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends013_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -28990,7 +28989,7 @@ struct ISteamFriends_SteamFriends013_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends013_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -28998,35 +28997,35 @@ struct ISteamFriends_SteamFriends013_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends013_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends013_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends013_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends013_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends013_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -29121,7 +29120,7 @@ struct ISteamFriends_SteamFriends014_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends014_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -29144,7 +29143,7 @@ struct ISteamFriends_SteamFriends014_GetPlayerNickname_params
 struct ISteamFriends_SteamFriends014_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -29179,7 +29178,7 @@ struct ISteamFriends_SteamFriends014_GetClanTag_params
 struct ISteamFriends_SteamFriends014_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -29212,7 +29211,7 @@ struct ISteamFriends_SteamFriends014_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends014_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -29221,7 +29220,7 @@ struct ISteamFriends_SteamFriends014_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends014_ActivateGameOverlay_params
@@ -29286,9 +29285,9 @@ struct ISteamFriends_SteamFriends014_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends014_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends014_RequestClanOfficerList_params
@@ -29329,7 +29328,7 @@ struct ISteamFriends_SteamFriends014_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends014_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -29371,7 +29370,7 @@ struct ISteamFriends_SteamFriends014_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends014_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -29413,7 +29412,7 @@ struct ISteamFriends_SteamFriends014_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends014_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -29435,7 +29434,7 @@ struct ISteamFriends_SteamFriends014_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends014_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -29455,7 +29454,7 @@ struct ISteamFriends_SteamFriends014_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends014_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -29463,35 +29462,35 @@ struct ISteamFriends_SteamFriends014_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends014_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends014_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends014_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends014_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends014_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -29586,7 +29585,7 @@ struct ISteamFriends_SteamFriends015_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends015_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -29651,7 +29650,7 @@ struct ISteamFriends_SteamFriends015_GetFriendsGroupMembersList_params
 struct ISteamFriends_SteamFriends015_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -29686,7 +29685,7 @@ struct ISteamFriends_SteamFriends015_GetClanTag_params
 struct ISteamFriends_SteamFriends015_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -29719,7 +29718,7 @@ struct ISteamFriends_SteamFriends015_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends015_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -29728,7 +29727,7 @@ struct ISteamFriends_SteamFriends015_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends015_ActivateGameOverlay_params
@@ -29793,9 +29792,9 @@ struct ISteamFriends_SteamFriends015_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends015_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends015_RequestClanOfficerList_params
@@ -29836,7 +29835,7 @@ struct ISteamFriends_SteamFriends015_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends015_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -29878,7 +29877,7 @@ struct ISteamFriends_SteamFriends015_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends015_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -29920,7 +29919,7 @@ struct ISteamFriends_SteamFriends015_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends015_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -29942,7 +29941,7 @@ struct ISteamFriends_SteamFriends015_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends015_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -29962,7 +29961,7 @@ struct ISteamFriends_SteamFriends015_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends015_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -29970,35 +29969,35 @@ struct ISteamFriends_SteamFriends015_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends015_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends015_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends015_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends015_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends015_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -30038,14 +30037,14 @@ struct ISteamFriends_SteamFriends015_EnumerateFollowingList_params
 struct ISteamFriends_SteamFriends015_IsClanPublic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
 struct ISteamFriends_SteamFriends015_IsClanOfficialGameGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -30107,7 +30106,7 @@ struct ISteamFriends_SteamFriends017_GetFriendPersonaName_params
 struct ISteamFriends_SteamFriends017_GetFriendGamePlayed_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     FriendGameInfo_t *pFriendGameInfo;
 };
@@ -30172,7 +30171,7 @@ struct ISteamFriends_SteamFriends017_GetFriendsGroupMembersList_params
 struct ISteamFriends_SteamFriends017_HasFriend_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     int32_t iFriendFlags;
 };
@@ -30207,7 +30206,7 @@ struct ISteamFriends_SteamFriends017_GetClanTag_params
 struct ISteamFriends_SteamFriends017_GetClanActivityCounts_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
     int32_t *pnOnline;
     int32_t *pnInGame;
@@ -30240,7 +30239,7 @@ struct ISteamFriends_SteamFriends017_GetFriendFromSourceByIndex_params
 struct ISteamFriends_SteamFriends017_IsUserInSource_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDSource;
 };
@@ -30249,7 +30248,7 @@ struct ISteamFriends_SteamFriends017_SetInGameVoiceSpeaking_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDUser;
-    bool bSpeaking;
+    int8_t bSpeaking;
 };
 
 struct ISteamFriends_SteamFriends017_ActivateGameOverlay_params
@@ -30315,9 +30314,9 @@ struct ISteamFriends_SteamFriends017_GetLargeFriendAvatar_params
 struct ISteamFriends_SteamFriends017_RequestUserInformation_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
-    bool bRequireNameOnly;
+    int8_t bRequireNameOnly;
 };
 
 struct ISteamFriends_SteamFriends017_RequestClanOfficerList_params
@@ -30358,7 +30357,7 @@ struct ISteamFriends_SteamFriends017_GetUserRestrictions_params
 struct ISteamFriends_SteamFriends017_SetRichPresence_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchKey;
     const char *pchValue;
 };
@@ -30400,7 +30399,7 @@ struct ISteamFriends_SteamFriends017_RequestFriendRichPresence_params
 struct ISteamFriends_SteamFriends017_InviteUserToGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchConnectString;
 };
@@ -30442,7 +30441,7 @@ struct ISteamFriends_SteamFriends017_JoinClanChatRoom_params
 struct ISteamFriends_SteamFriends017_LeaveClanChatRoom_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -30464,7 +30463,7 @@ struct ISteamFriends_SteamFriends017_GetChatMemberByIndex_params
 struct ISteamFriends_SteamFriends017_SendClanChatMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     const char *pchText;
 };
@@ -30484,7 +30483,7 @@ struct ISteamFriends_SteamFriends017_GetClanChatMessage_params
 struct ISteamFriends_SteamFriends017_IsClanChatAdmin_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
     CSteamID steamIDUser;
 };
@@ -30492,35 +30491,35 @@ struct ISteamFriends_SteamFriends017_IsClanChatAdmin_params
 struct ISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends017_OpenClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends017_CloseClanChatWindowInSteam_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClanChat;
 };
 
 struct ISteamFriends_SteamFriends017_SetListenForFriendsMessages_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bInterceptEnabled;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
 };
 
 struct ISteamFriends_SteamFriends017_ReplyToFriendMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDFriend;
     const char *pchMsgToSend;
 };
@@ -30560,14 +30559,14 @@ struct ISteamFriends_SteamFriends017_EnumerateFollowingList_params
 struct ISteamFriends_SteamFriends017_IsClanPublic_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
 struct ISteamFriends_SteamFriends017_IsClanOfficialGameGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDClan;
 };
 
@@ -30586,7 +30585,7 @@ struct ISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInvite
 struct ISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchProtocol;
 };
 
@@ -30606,7 +30605,7 @@ struct ISteamFriends_SteamFriends017_RequestEquippedProfileItems_params
 struct ISteamFriends_SteamFriends017_BHasEquippedProfileItem_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     uint32_t itemType;
 };
@@ -30641,7 +30640,7 @@ struct ISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params
 struct ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pcubMsgSize;
 };
 
@@ -30668,7 +30667,7 @@ struct ISteamGameServer_SteamGameServer002_LogOff_params
 struct ISteamGameServer_SteamGameServer002_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer002_GSSetSpawnCount_params
@@ -30680,7 +30679,7 @@ struct ISteamGameServer_SteamGameServer002_GSSetSpawnCount_params
 struct ISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNewClient_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pvEncryptionKey;
     uint32_t *pcbEncryptionKey;
     uint32_t cbMaxEncryptionKey;
@@ -30689,7 +30688,7 @@ struct ISteamGameServer_SteamGameServer002_GSGetSteam2GetEncryptionKeyToSendToNe
 struct ISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unUserID;
     const void *pvRawKey;
     uint32_t unKeyLen;
@@ -30702,7 +30701,7 @@ struct ISteamGameServer_SteamGameServer002_GSSendSteam2UserConnect_params
 struct ISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     uint32_t unIPPublic;
     const void *pvCookie;
@@ -30712,14 +30711,14 @@ struct ISteamGameServer_SteamGameServer002_GSSendSteam3UserConnect_params
 struct ISteamGameServer_SteamGameServer002_GSRemoveUserConnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unUserID;
 };
 
 struct ISteamGameServer_SteamGameServer002_GSSendUserDisconnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     uint32_t unUserID;
 };
@@ -30727,7 +30726,7 @@ struct ISteamGameServer_SteamGameServer002_GSSendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer002_GSSendUserStatusResponse_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     int32_t nSecondsConnected;
     int32_t nSecondsSinceLast;
@@ -30736,7 +30735,7 @@ struct ISteamGameServer_SteamGameServer002_GSSendUserStatusResponse_params
 struct ISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nAppIdServed;
     uint32_t unServerFlags;
     int32_t cPlayers;
@@ -30752,7 +30751,7 @@ struct ISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus_params
 struct ISteamGameServer_SteamGameServer002_GSUpdateStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t cPlayers;
     int32_t cPlayersMax;
     int32_t cBotPlayers;
@@ -30763,7 +30762,7 @@ struct ISteamGameServer_SteamGameServer002_GSUpdateStatus_params
 struct ISteamGameServer_SteamGameServer002_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer002_GetSteamID_params
@@ -30775,7 +30774,7 @@ struct ISteamGameServer_SteamGameServer002_GetSteamID_params
 struct ISteamGameServer_SteamGameServer002_GSSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameAppId;
     uint32_t unServerFlags;
     uint32_t unGameIP;
@@ -30787,7 +30786,7 @@ struct ISteamGameServer_SteamGameServer002_GSSetServerType_params
 struct ISteamGameServer_SteamGameServer002_GSSetServerType2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameAppId;
     uint32_t unServerFlags;
     uint32_t unGameIP;
@@ -30796,13 +30795,13 @@ struct ISteamGameServer_SteamGameServer002_GSSetServerType2_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer002_GSUpdateStatus2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t cPlayers;
     int32_t cPlayersMax;
     int32_t cBotPlayers;
@@ -30814,14 +30813,14 @@ struct ISteamGameServer_SteamGameServer002_GSUpdateStatus2_params
 struct ISteamGameServer_SteamGameServer002_GSCreateUnauthenticatedUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID *pSteamID;
 };
 
 struct ISteamGameServer_SteamGameServer002_GSSetUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pPlayerName;
     uint32_t nFrags;
@@ -30852,13 +30851,13 @@ struct ISteamGameServer_SteamGameServer003_LogOff_params
 struct ISteamGameServer_SteamGameServer003_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer003_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer003_GetSteamID_params
@@ -30870,7 +30869,7 @@ struct ISteamGameServer_SteamGameServer003_GetSteamID_params
 struct ISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pvEncryptionKey;
     uint32_t *pcbEncryptionKey;
     uint32_t cbMaxEncryptionKey;
@@ -30879,7 +30878,7 @@ struct ISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNe
 struct ISteamGameServer_SteamGameServer003_GSSendUserConnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unUserID;
     uint32_t unIPPublic;
     uint16_t usPort;
@@ -30890,14 +30889,14 @@ struct ISteamGameServer_SteamGameServer003_GSSendUserConnect_params
 struct ISteamGameServer_SteamGameServer003_GSRemoveUserConnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unUserID;
 };
 
 struct ISteamGameServer_SteamGameServer003_GSSendUserDisconnect_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     uint32_t unUserID;
 };
@@ -30911,7 +30910,7 @@ struct ISteamGameServer_SteamGameServer003_GSSetSpawnCount_params
 struct ISteamGameServer_SteamGameServer003_GSSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameAppId;
     uint32_t unServerFlags;
     uint32_t unGameIP;
@@ -30920,13 +30919,13 @@ struct ISteamGameServer_SteamGameServer003_GSSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer003_GSUpdateStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t cPlayers;
     int32_t cPlayersMax;
     int32_t cBotPlayers;
@@ -30938,14 +30937,14 @@ struct ISteamGameServer_SteamGameServer003_GSUpdateStatus_params
 struct ISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID *pSteamID;
 };
 
 struct ISteamGameServer_SteamGameServer003_GSSetUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pPlayerName;
     uint32_t nFrags;
@@ -30966,7 +30965,7 @@ struct ISteamGameServer_SteamGameServer003_GSSetGameType_params
 struct ISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pchAchievementName;
 };
@@ -30984,13 +30983,13 @@ struct ISteamGameServer_SteamGameServer004_LogOff_params
 struct ISteamGameServer_SteamGameServer004_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer004_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer004_GetSteamID_params
@@ -31023,7 +31022,7 @@ struct ISteamGameServer_SteamGameServer004_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer004_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31032,7 +31031,7 @@ struct ISteamGameServer_SteamGameServer004_BUpdateUserData_params
 struct ISteamGameServer_SteamGameServer004_BSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameAppId;
     uint32_t unServerFlags;
     uint32_t unGameIP;
@@ -31041,7 +31040,7 @@ struct ISteamGameServer_SteamGameServer004_BSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer004_UpdateServerStatus_params
@@ -31070,7 +31069,7 @@ struct ISteamGameServer_SteamGameServer004_SetGameType_params
 struct ISteamGameServer_SteamGameServer004_BGetUserAchievementStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pchAchievementName;
 };
@@ -31088,13 +31087,13 @@ struct ISteamGameServer_SteamGameServer005_LogOff_params
 struct ISteamGameServer_SteamGameServer005_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer005_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer005_GetSteamID_params
@@ -31106,7 +31105,7 @@ struct ISteamGameServer_SteamGameServer005_GetSteamID_params
 struct ISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -31128,7 +31127,7 @@ struct ISteamGameServer_SteamGameServer005_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer005_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31137,7 +31136,7 @@ struct ISteamGameServer_SteamGameServer005_BUpdateUserData_params
 struct ISteamGameServer_SteamGameServer005_BSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unServerFlags;
     uint32_t unGameIP;
     uint16_t unGamePort;
@@ -31145,7 +31144,7 @@ struct ISteamGameServer_SteamGameServer005_BSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer005_UpdateServerStatus_params
@@ -31174,7 +31173,7 @@ struct ISteamGameServer_SteamGameServer005_SetGameType_params
 struct ISteamGameServer_SteamGameServer005_BGetUserAchievementStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pchAchievementName;
 };
@@ -31192,13 +31191,13 @@ struct ISteamGameServer_SteamGameServer008_LogOff_params
 struct ISteamGameServer_SteamGameServer008_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer008_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer008_GetSteamID_params
@@ -31210,7 +31209,7 @@ struct ISteamGameServer_SteamGameServer008_GetSteamID_params
 struct ISteamGameServer_SteamGameServer008_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -31232,7 +31231,7 @@ struct ISteamGameServer_SteamGameServer008_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer008_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31241,7 +31240,7 @@ struct ISteamGameServer_SteamGameServer008_BUpdateUserData_params
 struct ISteamGameServer_SteamGameServer008_BSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unServerFlags;
     uint32_t unGameIP;
     uint16_t unGamePort;
@@ -31249,7 +31248,7 @@ struct ISteamGameServer_SteamGameServer008_BSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer008_UpdateServerStatus_params
@@ -31278,7 +31277,7 @@ struct ISteamGameServer_SteamGameServer008_SetGameType_params
 struct ISteamGameServer_SteamGameServer008_BGetUserAchievementStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pchAchievementName;
 };
@@ -31291,7 +31290,7 @@ struct ISteamGameServer_SteamGameServer008_GetGameplayStats_params
 struct ISteamGameServer_SteamGameServer008_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -31315,13 +31314,13 @@ struct ISteamGameServer_SteamGameServer009_LogOff_params
 struct ISteamGameServer_SteamGameServer009_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer009_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer009_GetSteamID_params
@@ -31333,7 +31332,7 @@ struct ISteamGameServer_SteamGameServer009_GetSteamID_params
 struct ISteamGameServer_SteamGameServer009_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -31355,7 +31354,7 @@ struct ISteamGameServer_SteamGameServer009_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer009_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31364,7 +31363,7 @@ struct ISteamGameServer_SteamGameServer009_BUpdateUserData_params
 struct ISteamGameServer_SteamGameServer009_BSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unServerFlags;
     uint32_t unGameIP;
     uint16_t unGamePort;
@@ -31372,7 +31371,7 @@ struct ISteamGameServer_SteamGameServer009_BSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer009_UpdateServerStatus_params
@@ -31401,7 +31400,7 @@ struct ISteamGameServer_SteamGameServer009_SetGameType_params
 struct ISteamGameServer_SteamGameServer009_BGetUserAchievementStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamID;
     const char *pchAchievementName;
 };
@@ -31414,7 +31413,7 @@ struct ISteamGameServer_SteamGameServer009_GetGameplayStats_params
 struct ISteamGameServer_SteamGameServer009_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -31452,13 +31451,13 @@ struct ISteamGameServer_SteamGameServer010_LogOff_params
 struct ISteamGameServer_SteamGameServer010_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer010_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer010_GetSteamID_params
@@ -31470,7 +31469,7 @@ struct ISteamGameServer_SteamGameServer010_GetSteamID_params
 struct ISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -31492,7 +31491,7 @@ struct ISteamGameServer_SteamGameServer010_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer010_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31501,7 +31500,7 @@ struct ISteamGameServer_SteamGameServer010_BUpdateUserData_params
 struct ISteamGameServer_SteamGameServer010_BSetServerType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unServerFlags;
     uint32_t unGameIP;
     uint16_t unGamePort;
@@ -31509,7 +31508,7 @@ struct ISteamGameServer_SteamGameServer010_BSetServerType_params
     uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
-    bool bLANMode;
+    int8_t bLANMode;
 };
 
 struct ISteamGameServer_SteamGameServer010_UpdateServerStatus_params
@@ -31549,7 +31548,7 @@ struct ISteamGameServer_SteamGameServer010_GetServerReputation_params
 struct ISteamGameServer_SteamGameServer010_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -31607,7 +31606,7 @@ struct ISteamGameServer_SteamGameServer010_CancelAuthTicket_params
 struct ISteamGameServer_SteamGameServer011_InitGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIP;
     uint16_t usGamePort;
     uint16_t usQueryPort;
@@ -31637,7 +31636,7 @@ struct ISteamGameServer_SteamGameServer011_SetModDir_params
 struct ISteamGameServer_SteamGameServer011_SetDedicatedServer_params
 {
     struct u_steam_iface *linux_side;
-    bool bDedicated;
+    int8_t bDedicated;
 };
 
 struct ISteamGameServer_SteamGameServer011_LogOn_params
@@ -31660,13 +31659,13 @@ struct ISteamGameServer_SteamGameServer011_LogOff_params
 struct ISteamGameServer_SteamGameServer011_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer011_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer011_GetSteamID_params
@@ -31678,7 +31677,7 @@ struct ISteamGameServer_SteamGameServer011_GetSteamID_params
 struct ISteamGameServer_SteamGameServer011_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer011_SetMaxPlayerCount_params
@@ -31708,7 +31707,7 @@ struct ISteamGameServer_SteamGameServer011_SetMapName_params
 struct ISteamGameServer_SteamGameServer011_SetPasswordProtected_params
 {
     struct u_steam_iface *linux_side;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
 };
 
 struct ISteamGameServer_SteamGameServer011_SetSpectatorPort_params
@@ -31756,7 +31755,7 @@ struct ISteamGameServer_SteamGameServer011_SetRegion_params
 struct ISteamGameServer_SteamGameServer011_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -31778,7 +31777,7 @@ struct ISteamGameServer_SteamGameServer011_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer011_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -31825,7 +31824,7 @@ struct ISteamGameServer_SteamGameServer011_UserHasLicenseForApp_params
 struct ISteamGameServer_SteamGameServer011_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -31850,7 +31849,7 @@ struct ISteamGameServer_SteamGameServer011_GetPublicIP_params
 struct ISteamGameServer_SteamGameServer011_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -31870,7 +31869,7 @@ struct ISteamGameServer_SteamGameServer011_GetNextOutgoingPacket_params
 struct ISteamGameServer_SteamGameServer011_EnableHeartbeats_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamGameServer_SteamGameServer011_SetHeartbeatInterval_params
@@ -31901,7 +31900,7 @@ struct ISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility_params
 struct ISteamGameServer_SteamGameServer012_InitGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIP;
     uint16_t usGamePort;
     uint16_t usQueryPort;
@@ -31931,7 +31930,7 @@ struct ISteamGameServer_SteamGameServer012_SetModDir_params
 struct ISteamGameServer_SteamGameServer012_SetDedicatedServer_params
 {
     struct u_steam_iface *linux_side;
-    bool bDedicated;
+    int8_t bDedicated;
 };
 
 struct ISteamGameServer_SteamGameServer012_LogOn_params
@@ -31953,13 +31952,13 @@ struct ISteamGameServer_SteamGameServer012_LogOff_params
 struct ISteamGameServer_SteamGameServer012_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer012_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer012_GetSteamID_params
@@ -31971,7 +31970,7 @@ struct ISteamGameServer_SteamGameServer012_GetSteamID_params
 struct ISteamGameServer_SteamGameServer012_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer012_SetMaxPlayerCount_params
@@ -32001,7 +32000,7 @@ struct ISteamGameServer_SteamGameServer012_SetMapName_params
 struct ISteamGameServer_SteamGameServer012_SetPasswordProtected_params
 {
     struct u_steam_iface *linux_side;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
 };
 
 struct ISteamGameServer_SteamGameServer012_SetSpectatorPort_params
@@ -32049,7 +32048,7 @@ struct ISteamGameServer_SteamGameServer012_SetRegion_params
 struct ISteamGameServer_SteamGameServer012_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -32071,7 +32070,7 @@ struct ISteamGameServer_SteamGameServer012_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer012_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -32118,7 +32117,7 @@ struct ISteamGameServer_SteamGameServer012_UserHasLicenseForApp_params
 struct ISteamGameServer_SteamGameServer012_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -32143,7 +32142,7 @@ struct ISteamGameServer_SteamGameServer012_GetPublicIP_params
 struct ISteamGameServer_SteamGameServer012_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -32163,7 +32162,7 @@ struct ISteamGameServer_SteamGameServer012_GetNextOutgoingPacket_params
 struct ISteamGameServer_SteamGameServer012_EnableHeartbeats_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamGameServer_SteamGameServer012_SetHeartbeatInterval_params
@@ -32194,7 +32193,7 @@ struct ISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility_params
 struct ISteamGameServer_SteamGameServer013_InitGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIP;
     uint16_t usGamePort;
     uint16_t usQueryPort;
@@ -32224,7 +32223,7 @@ struct ISteamGameServer_SteamGameServer013_SetModDir_params
 struct ISteamGameServer_SteamGameServer013_SetDedicatedServer_params
 {
     struct u_steam_iface *linux_side;
-    bool bDedicated;
+    int8_t bDedicated;
 };
 
 struct ISteamGameServer_SteamGameServer013_LogOn_params
@@ -32246,13 +32245,13 @@ struct ISteamGameServer_SteamGameServer013_LogOff_params
 struct ISteamGameServer_SteamGameServer013_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer013_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer013_GetSteamID_params
@@ -32264,7 +32263,7 @@ struct ISteamGameServer_SteamGameServer013_GetSteamID_params
 struct ISteamGameServer_SteamGameServer013_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer013_SetMaxPlayerCount_params
@@ -32294,7 +32293,7 @@ struct ISteamGameServer_SteamGameServer013_SetMapName_params
 struct ISteamGameServer_SteamGameServer013_SetPasswordProtected_params
 {
     struct u_steam_iface *linux_side;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
 };
 
 struct ISteamGameServer_SteamGameServer013_SetSpectatorPort_params
@@ -32342,7 +32341,7 @@ struct ISteamGameServer_SteamGameServer013_SetRegion_params
 struct ISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -32364,7 +32363,7 @@ struct ISteamGameServer_SteamGameServer013_SendUserDisconnect_params
 struct ISteamGameServer_SteamGameServer013_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -32411,7 +32410,7 @@ struct ISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params
 struct ISteamGameServer_SteamGameServer013_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -32436,7 +32435,7 @@ struct ISteamGameServer_SteamGameServer013_GetPublicIP_params
 struct ISteamGameServer_SteamGameServer013_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -32456,7 +32455,7 @@ struct ISteamGameServer_SteamGameServer013_GetNextOutgoingPacket_params
 struct ISteamGameServer_SteamGameServer013_EnableHeartbeats_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamGameServer_SteamGameServer013_SetHeartbeatInterval_params
@@ -32487,7 +32486,7 @@ struct ISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility_params
 struct ISteamGameServer_SteamGameServer014_InitGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIP;
     uint16_t usGamePort;
     uint16_t usQueryPort;
@@ -32517,7 +32516,7 @@ struct ISteamGameServer_SteamGameServer014_SetModDir_params
 struct ISteamGameServer_SteamGameServer014_SetDedicatedServer_params
 {
     struct u_steam_iface *linux_side;
-    bool bDedicated;
+    int8_t bDedicated;
 };
 
 struct ISteamGameServer_SteamGameServer014_LogOn_params
@@ -32539,13 +32538,13 @@ struct ISteamGameServer_SteamGameServer014_LogOff_params
 struct ISteamGameServer_SteamGameServer014_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer014_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer014_GetSteamID_params
@@ -32557,7 +32556,7 @@ struct ISteamGameServer_SteamGameServer014_GetSteamID_params
 struct ISteamGameServer_SteamGameServer014_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer014_SetMaxPlayerCount_params
@@ -32587,7 +32586,7 @@ struct ISteamGameServer_SteamGameServer014_SetMapName_params
 struct ISteamGameServer_SteamGameServer014_SetPasswordProtected_params
 {
     struct u_steam_iface *linux_side;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
 };
 
 struct ISteamGameServer_SteamGameServer014_SetSpectatorPort_params
@@ -32635,7 +32634,7 @@ struct ISteamGameServer_SteamGameServer014_SetRegion_params
 struct ISteamGameServer_SteamGameServer014_SetAdvertiseServerActive_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamGameServer_SteamGameServer014_GetAuthSessionTicket_params
@@ -32679,7 +32678,7 @@ struct ISteamGameServer_SteamGameServer014_UserHasLicenseForApp_params
 struct ISteamGameServer_SteamGameServer014_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -32704,7 +32703,7 @@ struct ISteamGameServer_SteamGameServer014_GetPublicIP_params
 struct ISteamGameServer_SteamGameServer014_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -32738,7 +32737,7 @@ struct ISteamGameServer_SteamGameServer014_ComputeNewPlayerCompatibility_params
 struct ISteamGameServer_SteamGameServer014_SendUserConnectAndAuthenticate_DEPRECATED_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -32760,7 +32759,7 @@ struct ISteamGameServer_SteamGameServer014_SendUserDisconnect_DEPRECATED_params
 struct ISteamGameServer_SteamGameServer014_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -32780,7 +32779,7 @@ struct ISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED
 struct ISteamGameServer_SteamGameServer015_InitGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIP;
     uint16_t usGamePort;
     uint16_t usQueryPort;
@@ -32810,7 +32809,7 @@ struct ISteamGameServer_SteamGameServer015_SetModDir_params
 struct ISteamGameServer_SteamGameServer015_SetDedicatedServer_params
 {
     struct u_steam_iface *linux_side;
-    bool bDedicated;
+    int8_t bDedicated;
 };
 
 struct ISteamGameServer_SteamGameServer015_LogOn_params
@@ -32832,13 +32831,13 @@ struct ISteamGameServer_SteamGameServer015_LogOff_params
 struct ISteamGameServer_SteamGameServer015_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer015_BSecure_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer015_GetSteamID_params
@@ -32850,7 +32849,7 @@ struct ISteamGameServer_SteamGameServer015_GetSteamID_params
 struct ISteamGameServer_SteamGameServer015_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamGameServer_SteamGameServer015_SetMaxPlayerCount_params
@@ -32880,7 +32879,7 @@ struct ISteamGameServer_SteamGameServer015_SetMapName_params
 struct ISteamGameServer_SteamGameServer015_SetPasswordProtected_params
 {
     struct u_steam_iface *linux_side;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
 };
 
 struct ISteamGameServer_SteamGameServer015_SetSpectatorPort_params
@@ -32928,7 +32927,7 @@ struct ISteamGameServer_SteamGameServer015_SetRegion_params
 struct ISteamGameServer_SteamGameServer015_SetAdvertiseServerActive_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params
@@ -32973,7 +32972,7 @@ struct ISteamGameServer_SteamGameServer015_UserHasLicenseForApp_params
 struct ISteamGameServer_SteamGameServer015_RequestUserGroupStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     CSteamID steamIDGroup;
 };
@@ -32998,7 +32997,7 @@ struct ISteamGameServer_SteamGameServer015_GetPublicIP_params
 struct ISteamGameServer_SteamGameServer015_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -33032,7 +33031,7 @@ struct ISteamGameServer_SteamGameServer015_ComputeNewPlayerCompatibility_params
 struct ISteamGameServer_SteamGameServer015_SendUserConnectAndAuthenticate_DEPRECATED_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unIPClient;
     const void *pvAuthBlob;
     uint32_t cubAuthBlobSize;
@@ -33054,7 +33053,7 @@ struct ISteamGameServer_SteamGameServer015_SendUserDisconnect_DEPRECATED_params
 struct ISteamGameServer_SteamGameServer015_BUpdateUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
     uint32_t uScore;
@@ -33081,7 +33080,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params
 struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t *pData;
@@ -33090,7 +33089,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_params
 struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float *pData;
@@ -33099,16 +33098,16 @@ struct ISteamGameServerStats_SteamGameServerStats001_GetUserStat_2_params
 struct ISteamGameServerStats_SteamGameServerStats001_GetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    bool *pbAchieved;
+    int8_t *pbAchieved;
 };
 
 struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     int32_t nData;
@@ -33117,7 +33116,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_params
 struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float fData;
@@ -33126,7 +33125,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_SetUserStat_2_params
 struct ISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
     float flCountThisSession;
@@ -33136,7 +33135,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat_param
 struct ISteamGameServerStats_SteamGameServerStats001_SetUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
 };
@@ -33144,7 +33143,7 @@ struct ISteamGameServerStats_SteamGameServerStats001_SetUserAchievement_params
 struct ISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDUser;
     const char *pchName;
 };
@@ -33273,13 +33272,13 @@ struct ISteamGameStats_SteamGameStats001_AddRowAttributeInt64_params
 struct ISteamInput_SteamInput001_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput001_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput001_RunFrame_params
@@ -33461,7 +33460,7 @@ struct ISteamInput_SteamInput001_TriggerRepeatedHapticPulse_params
 struct ISteamInput_SteamInput001_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
 };
 
@@ -33519,7 +33518,7 @@ struct ISteamInput_SteamInput001_TranslateActionOrigin_params
 struct ISteamInput_SteamInput001_GetDeviceBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -33535,13 +33534,13 @@ struct ISteamInput_SteamInput001_GetRemotePlaySessionID_params
 struct ISteamInput_SteamInput002_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput002_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput002_RunFrame_params
@@ -33723,7 +33722,7 @@ struct ISteamInput_SteamInput002_TriggerRepeatedHapticPulse_params
 struct ISteamInput_SteamInput002_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
 };
 
@@ -33781,7 +33780,7 @@ struct ISteamInput_SteamInput002_TranslateActionOrigin_params
 struct ISteamInput_SteamInput002_GetDeviceBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -33797,41 +33796,41 @@ struct ISteamInput_SteamInput002_GetRemotePlaySessionID_params
 struct ISteamInput_SteamInput005_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bExplicitlyCallRunFrame;
+    int8_t _ret;
+    int8_t bExplicitlyCallRunFrame;
 };
 
 struct ISteamInput_SteamInput005_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput005_SetInputActionManifestFilePath_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchInputActionManifestAbsolutePath;
 };
 
 struct ISteamInput_SteamInput005_RunFrame_params
 {
     struct u_steam_iface *linux_side;
-    bool bReservedValue;
+    int8_t bReservedValue;
 };
 
 struct ISteamInput_SteamInput005_BWaitForData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bWaitForever;
+    int8_t _ret;
+    int8_t bWaitForever;
     uint32_t unTimeout;
 };
 
 struct ISteamInput_SteamInput005_BNewDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput005_GetConnectedControllers_params
@@ -34071,7 +34070,7 @@ struct ISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse_params
 struct ISteamInput_SteamInput005_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
 };
 
@@ -34129,7 +34128,7 @@ struct ISteamInput_SteamInput005_TranslateActionOrigin_params
 struct ISteamInput_SteamInput005_GetDeviceBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -34151,41 +34150,41 @@ struct ISteamInput_SteamInput005_GetSessionInputConfigurationSettings_params
 struct ISteamInput_SteamInput006_Init_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bExplicitlyCallRunFrame;
+    int8_t _ret;
+    int8_t bExplicitlyCallRunFrame;
 };
 
 struct ISteamInput_SteamInput006_Shutdown_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput006_SetInputActionManifestFilePath_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchInputActionManifestAbsolutePath;
 };
 
 struct ISteamInput_SteamInput006_RunFrame_params
 {
     struct u_steam_iface *linux_side;
-    bool bReservedValue;
+    int8_t bReservedValue;
 };
 
 struct ISteamInput_SteamInput006_BWaitForData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bWaitForever;
+    int8_t _ret;
+    int8_t bWaitForever;
     uint32_t unTimeout;
 };
 
 struct ISteamInput_SteamInput006_BNewDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamInput_SteamInput006_GetConnectedControllers_params
@@ -34425,7 +34424,7 @@ struct ISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse_params
 struct ISteamInput_SteamInput006_ShowBindingPanel_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
 };
 
@@ -34483,7 +34482,7 @@ struct ISteamInput_SteamInput006_TranslateActionOrigin_params
 struct ISteamInput_SteamInput006_GetDeviceBindingRevision_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t inputHandle;
     int32_t *pMajor;
     int32_t *pMinor;
@@ -34512,7 +34511,7 @@ struct ISteamInput_SteamInput006_SetDualSenseTriggerEffect_params
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params
 {
     struct u_steam_iface *linux_side;
-    bool bActive;
+    int8_t bActive;
 };
 
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval_params
@@ -34524,7 +34523,7 @@ struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterva
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pData;
     int32_t cbData;
     uint32_t srcIP;
@@ -34545,11 +34544,11 @@ struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData_
 {
     struct u_steam_iface *linux_side;
     uint16_t nProtocolVersion;
-    bool bDedicatedServer;
+    int8_t bDedicatedServer;
     const char *pRegionName;
     const char *pProductName;
     uint16_t nMaxReportedClients;
-    bool bPasswordProtected;
+    int8_t bPasswordProtected;
     const char *pGameDescription;
 };
 
@@ -34573,7 +34572,7 @@ struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_NotifyShutdown_para
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_WasRestartRequested_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat_params
@@ -34584,14 +34583,14 @@ struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_ForceHeartbeat_para
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pServerAddress;
 };
 
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pServerAddress;
 };
 
@@ -34725,7 +34724,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -34748,7 +34747,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -34758,7 +34757,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -34783,7 +34782,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2_params
 struct ISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -34810,7 +34809,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_CreateLobby_params
 {
     struct u_steam_iface *linux_side;
     uint64_t ulGameID;
-    bool bPrivate;
+    int8_t bPrivate;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking001_JoinLobby_params
@@ -34828,7 +34827,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking001_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -34859,7 +34858,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking001_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -34877,7 +34876,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking001_SetLobbyMemberData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -34886,7 +34885,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -34907,7 +34906,7 @@ struct ISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking001_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -34920,7 +34919,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -34945,7 +34944,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -34968,7 +34967,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_GetLobbyByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking002_CreateLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool bPrivate;
+    int8_t bPrivate;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking002_JoinLobby_params
@@ -34986,7 +34985,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking002_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -35017,7 +35016,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking002_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -35043,7 +35042,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking002_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -35064,7 +35063,7 @@ struct ISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking002_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -35086,7 +35085,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -35111,7 +35110,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -35154,7 +35153,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking003_CreateLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool bPrivate;
+    int8_t bPrivate;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking003_JoinLobby_params
@@ -35172,7 +35171,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking003_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -35203,7 +35202,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking003_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -35229,7 +35228,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -35250,7 +35249,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking003_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -35266,7 +35265,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -35276,7 +35275,7 @@ struct ISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -35292,13 +35291,13 @@ struct ISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled_params
 {
     struct u_steam_iface *linux_side;
     CSteamID steamIDLobby;
-    bool bVoiceEnabled;
+    int8_t bVoiceEnabled;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking004_GetFavoriteGameCount_params
@@ -35310,7 +35309,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -35335,7 +35334,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -35378,7 +35377,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking004_CreateLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool bPrivate;
+    int8_t bPrivate;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking004_JoinLobby_params
@@ -35396,7 +35395,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking004_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -35427,7 +35426,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking004_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -35453,7 +35452,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking004_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -35474,7 +35473,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking004_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -35490,7 +35489,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -35500,7 +35499,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking004_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -35515,7 +35514,7 @@ struct ISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking004_RequestFriendsLobbies_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount_params
@@ -35527,7 +35526,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -35552,7 +35551,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -35620,7 +35619,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking005_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -35651,7 +35650,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking005_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -35677,7 +35676,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking005_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -35698,7 +35697,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking005_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -35714,7 +35713,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking005_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -35724,7 +35723,7 @@ struct ISteamMatchmaking_SteamMatchMaking005_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking005_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -35739,13 +35738,13 @@ struct ISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking005_RequestFriendsLobbies_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking005_SetLobbyType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t eLobbyType;
 };
@@ -35773,7 +35772,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -35798,7 +35797,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -35864,7 +35863,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking006_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -35895,7 +35894,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking006_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -35921,7 +35920,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking006_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -35942,7 +35941,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking006_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -35958,7 +35957,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking006_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -35968,7 +35967,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking006_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -35983,7 +35982,7 @@ struct ISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking006_SetLobbyType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t eLobbyType;
 };
@@ -36004,7 +36003,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -36029,7 +36028,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -36103,7 +36102,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking007_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -36134,7 +36133,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -36150,7 +36149,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyDataCount_params
 struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t iLobbyData;
     char *pchKey;
@@ -36162,7 +36161,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyDataByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking007_DeleteLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
 };
@@ -36187,7 +36186,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking007_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -36208,7 +36207,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking007_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -36224,7 +36223,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -36234,7 +36233,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -36249,7 +36248,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t eLobbyType;
 };
@@ -36257,9 +36256,9 @@ struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyType_params
 struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyJoinable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
-    bool bLobbyJoinable;
+    int8_t bLobbyJoinable;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner_params
@@ -36272,7 +36271,7 @@ struct ISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner_params
 struct ISteamMatchmaking_SteamMatchMaking007_SetLobbyOwner_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDNewOwner;
 };
@@ -36286,7 +36285,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -36311,7 +36310,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -36397,7 +36396,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking008_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -36428,7 +36427,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -36444,7 +36443,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyDataCount_params
 struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t iLobbyData;
     char *pchKey;
@@ -36456,7 +36455,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyDataByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking008_DeleteLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
 };
@@ -36481,7 +36480,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking008_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -36502,7 +36501,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking008_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -36518,7 +36517,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -36528,7 +36527,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -36543,7 +36542,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t eLobbyType;
 };
@@ -36551,9 +36550,9 @@ struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyType_params
 struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyJoinable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
-    bool bLobbyJoinable;
+    int8_t bLobbyJoinable;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner_params
@@ -36566,7 +36565,7 @@ struct ISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner_params
 struct ISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDNewOwner;
 };
@@ -36580,7 +36579,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount_params
 struct ISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iGame;
     uint32_t *pnAppID;
     uint32_t *pnIP;
@@ -36605,7 +36604,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame_params
 struct ISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
@@ -36697,7 +36696,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_LeaveLobby_params
 struct ISteamMatchmaking_SteamMatchMaking009_InviteUserToLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDInvitee;
 };
@@ -36728,7 +36727,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyData_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
     const char *pchValue;
@@ -36744,7 +36743,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyDataCount_params
 struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyDataByIndex_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t iLobbyData;
     char *pchKey;
@@ -36756,7 +36755,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyDataByIndex_params
 struct ISteamMatchmaking_SteamMatchMaking009_DeleteLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const char *pchKey;
 };
@@ -36781,7 +36780,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyMemberData_params
 struct ISteamMatchmaking_SteamMatchMaking009_SendLobbyChatMsg_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
     int32_t cubMsgBody;
@@ -36802,7 +36801,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry_params
 struct ISteamMatchmaking_SteamMatchMaking009_RequestLobbyData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
 };
 
@@ -36818,7 +36817,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyGameServer_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t *punGameServerIP;
     uint16_t *punGameServerPort;
@@ -36828,7 +36827,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyGameServer_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyMemberLimit_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     int32_t cMaxMembers;
 };
@@ -36843,7 +36842,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberLimit_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyType_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     uint32_t eLobbyType;
 };
@@ -36851,9 +36850,9 @@ struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyType_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyJoinable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
-    bool bLobbyJoinable;
+    int8_t bLobbyJoinable;
 };
 
 struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyOwner_params
@@ -36866,7 +36865,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_GetLobbyOwner_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyOwner_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDNewOwner;
 };
@@ -36874,7 +36873,7 @@ struct ISteamMatchmaking_SteamMatchMaking009_SetLobbyOwner_params
 struct ISteamMatchmaking_SteamMatchMaking009_SetLinkedLobby_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDLobby;
     CSteamID steamIDLobbyDependent;
 };
@@ -36954,7 +36953,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery_params
 struct ISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eType;
 };
 
@@ -37092,7 +37091,7 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQuery_params
 struct ISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *hRequest;
 };
 
@@ -37173,33 +37172,33 @@ struct ISteamNetworking_SteamNetworking001_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking001_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking001_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking001_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -37207,7 +37206,7 @@ struct ISteamNetworking_SteamNetworking001_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking001_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37217,7 +37216,7 @@ struct ISteamNetworking_SteamNetworking001_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking001_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -37226,7 +37225,7 @@ struct ISteamNetworking_SteamNetworking001_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking001_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37237,7 +37236,7 @@ struct ISteamNetworking_SteamNetworking001_RetrieveData_params
 struct ISteamNetworking_SteamNetworking001_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -37248,7 +37247,7 @@ struct ISteamNetworking_SteamNetworking001_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking001_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pnIP;
     uint16_t *pnPort;
@@ -37261,7 +37260,7 @@ struct ISteamNetworking_SteamNetworking002_CreateListenSocket_params
     int32_t nVirtualP2PPort;
     uint32_t nIP;
     uint16_t nPort;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket_params
@@ -37271,7 +37270,7 @@ struct ISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket_params
     CSteamID steamIDTarget;
     int32_t nVirtualPort;
     int32_t nTimeoutSec;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking002_CreateConnectionSocket_params
@@ -37286,33 +37285,33 @@ struct ISteamNetworking_SteamNetworking002_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking002_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking002_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking002_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking002_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -37320,7 +37319,7 @@ struct ISteamNetworking_SteamNetworking002_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking002_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37330,7 +37329,7 @@ struct ISteamNetworking_SteamNetworking002_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking002_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -37339,7 +37338,7 @@ struct ISteamNetworking_SteamNetworking002_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking002_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37350,7 +37349,7 @@ struct ISteamNetworking_SteamNetworking002_RetrieveData_params
 struct ISteamNetworking_SteamNetworking002_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -37361,7 +37360,7 @@ struct ISteamNetworking_SteamNetworking002_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking002_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pnIP;
     uint16_t *pnPort;
@@ -37384,7 +37383,7 @@ struct ISteamNetworking_SteamNetworking002_GetMaxPacketSize_params
 struct ISteamNetworking_SteamNetworking003_SendP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     const void *pubData;
     uint32_t cubData;
@@ -37394,14 +37393,14 @@ struct ISteamNetworking_SteamNetworking003_SendP2PPacket_params
 struct ISteamNetworking_SteamNetworking003_IsP2PPacketAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pcubMsgSize;
 };
 
 struct ISteamNetworking_SteamNetworking003_ReadP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pubDest;
     uint32_t cubDest;
     uint32_t *pcubMsgSize;
@@ -37411,21 +37410,21 @@ struct ISteamNetworking_SteamNetworking003_ReadP2PPacket_params
 struct ISteamNetworking_SteamNetworking003_AcceptP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking003_CloseP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking003_GetP2PSessionState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     P2PSessionState_t *pConnectionState;
 };
@@ -37437,7 +37436,7 @@ struct ISteamNetworking_SteamNetworking003_CreateListenSocket_params
     int32_t nVirtualP2PPort;
     uint32_t nIP;
     uint16_t nPort;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket_params
@@ -37447,7 +37446,7 @@ struct ISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket_params
     CSteamID steamIDTarget;
     int32_t nVirtualPort;
     int32_t nTimeoutSec;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking003_CreateConnectionSocket_params
@@ -37462,33 +37461,33 @@ struct ISteamNetworking_SteamNetworking003_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking003_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking003_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking003_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -37496,7 +37495,7 @@ struct ISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking003_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37506,7 +37505,7 @@ struct ISteamNetworking_SteamNetworking003_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking003_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -37515,7 +37514,7 @@ struct ISteamNetworking_SteamNetworking003_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking003_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37526,7 +37525,7 @@ struct ISteamNetworking_SteamNetworking003_RetrieveData_params
 struct ISteamNetworking_SteamNetworking003_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -37537,7 +37536,7 @@ struct ISteamNetworking_SteamNetworking003_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking003_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pnIP;
     uint16_t *pnPort;
@@ -37560,7 +37559,7 @@ struct ISteamNetworking_SteamNetworking003_GetMaxPacketSize_params
 struct ISteamNetworking_SteamNetworking004_SendP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     const void *pubData;
     uint32_t cubData;
@@ -37571,7 +37570,7 @@ struct ISteamNetworking_SteamNetworking004_SendP2PPacket_params
 struct ISteamNetworking_SteamNetworking004_IsP2PPacketAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pcubMsgSize;
     int32_t nVirtualPort;
 };
@@ -37579,7 +37578,7 @@ struct ISteamNetworking_SteamNetworking004_IsP2PPacketAvailable_params
 struct ISteamNetworking_SteamNetworking004_ReadP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pubDest;
     uint32_t cubDest;
     uint32_t *pcubMsgSize;
@@ -37590,21 +37589,21 @@ struct ISteamNetworking_SteamNetworking004_ReadP2PPacket_params
 struct ISteamNetworking_SteamNetworking004_AcceptP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking004_CloseP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking004_GetP2PSessionState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     P2PSessionState_t *pConnectionState;
 };
@@ -37616,7 +37615,7 @@ struct ISteamNetworking_SteamNetworking004_CreateListenSocket_params
     int32_t nVirtualP2PPort;
     uint32_t nIP;
     uint16_t nPort;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket_params
@@ -37626,7 +37625,7 @@ struct ISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket_params
     CSteamID steamIDTarget;
     int32_t nVirtualPort;
     int32_t nTimeoutSec;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking004_CreateConnectionSocket_params
@@ -37641,33 +37640,33 @@ struct ISteamNetworking_SteamNetworking004_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking004_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking004_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking004_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking004_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -37675,7 +37674,7 @@ struct ISteamNetworking_SteamNetworking004_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking004_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37685,7 +37684,7 @@ struct ISteamNetworking_SteamNetworking004_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking004_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -37694,7 +37693,7 @@ struct ISteamNetworking_SteamNetworking004_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking004_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37705,7 +37704,7 @@ struct ISteamNetworking_SteamNetworking004_RetrieveData_params
 struct ISteamNetworking_SteamNetworking004_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -37716,7 +37715,7 @@ struct ISteamNetworking_SteamNetworking004_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking004_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pnIP;
     uint16_t *pnPort;
@@ -37739,7 +37738,7 @@ struct ISteamNetworking_SteamNetworking004_GetMaxPacketSize_params
 struct ISteamNetworking_SteamNetworking005_SendP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     const void *pubData;
     uint32_t cubData;
@@ -37750,7 +37749,7 @@ struct ISteamNetworking_SteamNetworking005_SendP2PPacket_params
 struct ISteamNetworking_SteamNetworking005_IsP2PPacketAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pcubMsgSize;
     int32_t nChannel;
 };
@@ -37758,7 +37757,7 @@ struct ISteamNetworking_SteamNetworking005_IsP2PPacketAvailable_params
 struct ISteamNetworking_SteamNetworking005_ReadP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pubDest;
     uint32_t cubDest;
     uint32_t *pcubMsgSize;
@@ -37769,21 +37768,21 @@ struct ISteamNetworking_SteamNetworking005_ReadP2PPacket_params
 struct ISteamNetworking_SteamNetworking005_AcceptP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking005_CloseP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking005_CloseP2PChannelWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     int32_t nChannel;
 };
@@ -37791,7 +37790,7 @@ struct ISteamNetworking_SteamNetworking005_CloseP2PChannelWithUser_params
 struct ISteamNetworking_SteamNetworking005_GetP2PSessionState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     P2PSessionState_t *pConnectionState;
 };
@@ -37799,8 +37798,8 @@ struct ISteamNetworking_SteamNetworking005_GetP2PSessionState_params
 struct ISteamNetworking_SteamNetworking005_AllowP2PPacketRelay_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAllow;
+    int8_t _ret;
+    int8_t bAllow;
 };
 
 struct ISteamNetworking_SteamNetworking005_CreateListenSocket_params
@@ -37810,7 +37809,7 @@ struct ISteamNetworking_SteamNetworking005_CreateListenSocket_params
     int32_t nVirtualP2PPort;
     uint32_t nIP;
     uint16_t nPort;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket_params
@@ -37820,7 +37819,7 @@ struct ISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket_params
     CSteamID steamIDTarget;
     int32_t nVirtualPort;
     int32_t nTimeoutSec;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking005_CreateConnectionSocket_params
@@ -37835,33 +37834,33 @@ struct ISteamNetworking_SteamNetworking005_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking005_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking005_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking005_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking005_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -37869,7 +37868,7 @@ struct ISteamNetworking_SteamNetworking005_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking005_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37879,7 +37878,7 @@ struct ISteamNetworking_SteamNetworking005_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking005_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -37888,7 +37887,7 @@ struct ISteamNetworking_SteamNetworking005_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking005_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -37899,7 +37898,7 @@ struct ISteamNetworking_SteamNetworking005_RetrieveData_params
 struct ISteamNetworking_SteamNetworking005_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -37910,7 +37909,7 @@ struct ISteamNetworking_SteamNetworking005_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking005_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pnIP;
     uint16_t *pnPort;
@@ -37933,7 +37932,7 @@ struct ISteamNetworking_SteamNetworking005_GetMaxPacketSize_params
 struct ISteamNetworking_SteamNetworking006_SendP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     const void *pubData;
     uint32_t cubData;
@@ -37944,7 +37943,7 @@ struct ISteamNetworking_SteamNetworking006_SendP2PPacket_params
 struct ISteamNetworking_SteamNetworking006_IsP2PPacketAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pcubMsgSize;
     int32_t nChannel;
 };
@@ -37952,7 +37951,7 @@ struct ISteamNetworking_SteamNetworking006_IsP2PPacketAvailable_params
 struct ISteamNetworking_SteamNetworking006_ReadP2PPacket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pubDest;
     uint32_t cubDest;
     uint32_t *pcubMsgSize;
@@ -37963,21 +37962,21 @@ struct ISteamNetworking_SteamNetworking006_ReadP2PPacket_params
 struct ISteamNetworking_SteamNetworking006_AcceptP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking006_CloseP2PSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
 };
 
 struct ISteamNetworking_SteamNetworking006_CloseP2PChannelWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     int32_t nChannel;
 };
@@ -37985,7 +37984,7 @@ struct ISteamNetworking_SteamNetworking006_CloseP2PChannelWithUser_params
 struct ISteamNetworking_SteamNetworking006_GetP2PSessionState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     CSteamID steamIDRemote;
     P2PSessionState_t *pConnectionState;
 };
@@ -37993,8 +37992,8 @@ struct ISteamNetworking_SteamNetworking006_GetP2PSessionState_params
 struct ISteamNetworking_SteamNetworking006_AllowP2PPacketRelay_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
-    bool bAllow;
+    int8_t _ret;
+    int8_t bAllow;
 };
 
 struct ISteamNetworking_SteamNetworking006_CreateListenSocket_params
@@ -38004,7 +38003,7 @@ struct ISteamNetworking_SteamNetworking006_CreateListenSocket_params
     int32_t nVirtualP2PPort;
     SteamIPAddress_t nIP;
     uint16_t nPort;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking006_CreateP2PConnectionSocket_params
@@ -38014,7 +38013,7 @@ struct ISteamNetworking_SteamNetworking006_CreateP2PConnectionSocket_params
     CSteamID steamIDTarget;
     int32_t nVirtualPort;
     int32_t nTimeoutSec;
-    bool bAllowUseOfPacketRelay;
+    int8_t bAllowUseOfPacketRelay;
 };
 
 struct ISteamNetworking_SteamNetworking006_CreateConnectionSocket_params
@@ -38029,33 +38028,33 @@ struct ISteamNetworking_SteamNetworking006_CreateConnectionSocket_params
 struct ISteamNetworking_SteamNetworking006_DestroySocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking006_DestroyListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
-    bool bNotifyRemoteEnd;
+    int8_t bNotifyRemoteEnd;
 };
 
 struct ISteamNetworking_SteamNetworking006_SendDataOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubData;
     uint32_t cubData;
-    bool bReliable;
+    int8_t bReliable;
 };
 
 struct ISteamNetworking_SteamNetworking006_IsDataAvailableOnSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     uint32_t *pcubMsgSize;
 };
@@ -38063,7 +38062,7 @@ struct ISteamNetworking_SteamNetworking006_IsDataAvailableOnSocket_params
 struct ISteamNetworking_SteamNetworking006_RetrieveDataFromSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -38073,7 +38072,7 @@ struct ISteamNetworking_SteamNetworking006_RetrieveDataFromSocket_params
 struct ISteamNetworking_SteamNetworking006_IsDataAvailable_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     uint32_t *pcubMsgSize;
     uint32_t *phSocket;
@@ -38082,7 +38081,7 @@ struct ISteamNetworking_SteamNetworking006_IsDataAvailable_params
 struct ISteamNetworking_SteamNetworking006_RetrieveData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     void *pubDest;
     uint32_t cubDest;
@@ -38093,7 +38092,7 @@ struct ISteamNetworking_SteamNetworking006_RetrieveData_params
 struct ISteamNetworking_SteamNetworking006_GetSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     CSteamID *pSteamIDRemote;
     int32_t *peSocketStatus;
@@ -38104,7 +38103,7 @@ struct ISteamNetworking_SteamNetworking006_GetSocketInfo_params
 struct ISteamNetworking_SteamNetworking006_GetListenSocketInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hListenSocket;
     SteamIPAddress_t *pnIP;
     uint16_t *pnPort;
@@ -38176,21 +38175,21 @@ struct ISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChan
 struct ISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const SteamNetworkingIdentity_144 *identityRemote;
 };
 
 struct ISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const SteamNetworkingIdentity_144 *identityRemote;
 };
 
 struct ISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const SteamNetworkingIdentity_144 *identityRemote;
     int32_t nLocalChannel;
 };
@@ -38243,24 +38242,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -38282,7 +38281,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -38326,7 +38325,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListen
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_144 *pInfo;
 };
@@ -38334,7 +38333,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetQuickConnectionStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetworkingQuickConnectionStatus *pStats;
 };
@@ -38351,7 +38350,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -38359,10 +38358,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -38370,14 +38369,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -38415,7 +38414,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDedicatedServe
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDedicatedServerAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamDatagramHostedAddress *pRouting;
 };
 
@@ -38465,24 +38464,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -38504,7 +38503,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -38548,7 +38547,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListen
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_144 *pInfo;
 };
@@ -38556,7 +38555,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionInfo_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetQuickConnectionStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetworkingQuickConnectionStatus *pStats;
 };
@@ -38573,7 +38572,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -38581,10 +38580,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -38592,7 +38591,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
@@ -38612,7 +38611,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetAuthenticationStatus
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -38717,24 +38716,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -38756,7 +38755,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -38809,7 +38808,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListen
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_144 *pInfo;
 };
@@ -38817,7 +38816,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionInfo_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetQuickConnectionStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetworkingQuickConnectionStatus *pStats;
 };
@@ -38834,7 +38833,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -38842,10 +38841,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -38853,7 +38852,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
@@ -38873,7 +38872,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetAuthenticationStatus
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -38948,7 +38947,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignali
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pMsg;
     int32_t cbMsg;
     w_ISteamNetworkingCustomSignalingRecvContext *pContext;
@@ -39001,24 +39000,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -39040,7 +39039,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -39084,7 +39083,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnec
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_144 *pInfo;
 };
@@ -39092,7 +39091,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickConnectionStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetworkingQuickConnectionStatus *pStats;
 };
@@ -39109,7 +39108,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -39117,10 +39116,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -39128,7 +39127,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
@@ -39154,14 +39153,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_CreatePollGroup_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPollGroup;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     uint32_t hPollGroup;
 };
@@ -39178,7 +39177,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGr
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -39253,7 +39252,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignali
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pMsg;
     int32_t cbMsg;
     w_ISteamNetworkingCustomSignalingRecvContext *pContext;
@@ -39262,7 +39261,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pcbBlob;
     void *pBlob;
     char (*errMsg)[1024];
@@ -39271,7 +39270,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest_p
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pCertificate;
     int32_t cbCertificate;
     char (*errMsg)[1024];
@@ -39324,24 +39323,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -39363,7 +39362,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -39407,7 +39406,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnec
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_144 *pInfo;
 };
@@ -39415,7 +39414,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionInfo_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickConnectionStatus_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetworkingQuickConnectionStatus *pStats;
 };
@@ -39432,7 +39431,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -39440,10 +39439,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -39451,7 +39450,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
@@ -39477,14 +39476,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_CreatePollGroup_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_DestroyPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPollGroup;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     uint32_t hPollGroup;
 };
@@ -39501,7 +39500,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGr
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -39577,7 +39576,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignali
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pMsg;
     int32_t cbMsg;
     void /*ISteamNetworkingSignalingRecvContext*/ *pContext;
@@ -39586,7 +39585,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pcbBlob;
     void *pBlob;
     char (*errMsg)[1024];
@@ -39595,7 +39594,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest_p
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pCertificate;
     int32_t cbCertificate;
     char (*errMsg)[1024];
@@ -39653,24 +39652,24 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_AcceptConnection_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnection_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int32_t nReason;
     const char *pszDebug;
-    bool bEnableLinger;
+    int8_t bEnableLinger;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_CloseListenSocket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionUserData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     int64_t nUserData;
 };
@@ -39692,7 +39691,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName_param
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPeer;
     char *pszName;
     int32_t nMaxLen;
@@ -39736,7 +39735,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnec
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     SteamNetConnectionInfo_t_153a *pInfo;
 };
@@ -39763,7 +39762,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetDetailedConnectionSt
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSocketAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hSocket;
     SteamNetworkingIPAddr *address;
 };
@@ -39771,10 +39770,10 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSocketAddress_
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
-    bool bUseNetworkLoopback;
+    int8_t bUseNetworkLoopback;
     const SteamNetworkingIdentity_144 *pIdentity1;
     const SteamNetworkingIdentity_144 *pIdentity2;
 };
@@ -39792,7 +39791,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConfigureConnectionLane
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetIdentity_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
 };
 
@@ -39818,14 +39817,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_CreatePollGroup_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_DestroyPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hPollGroup;
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionPollGroup_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t hConn;
     uint32_t hPollGroup;
 };
@@ -39842,7 +39841,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGr
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedRelayAuthTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pvTicket;
     int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
@@ -39918,7 +39917,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignali
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pMsg;
     int32_t cbMsg;
     void /*ISteamNetworkingSignalingRecvContext*/ *pContext;
@@ -39927,7 +39926,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t *pcbBlob;
     void *pBlob;
     char (*errMsg)[1024];
@@ -39936,7 +39935,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest_p
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_SetCertificate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const void *pCertificate;
     int32_t cbCertificate;
     char (*errMsg)[1024];
@@ -39956,7 +39955,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_RunCallbacks_params
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_BeginAsyncRequestFakeIP_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nNumPorts;
 };
 
@@ -40147,7 +40146,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_ConvertPingLocationToString
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_ParsePingLocationString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pszString;
     SteamNetworkPingLocation_t *result;
 };
@@ -40155,14 +40154,14 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_ParsePingLocationString_par
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_CheckPingDataUpToDate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     float flMaxAgeSeconds;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_IsPingMeasurementInProgress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_GetPingToDataCenter_params
@@ -40210,7 +40209,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction_para
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     uint32_t eScopeType;
     int32_t scopeObj;
@@ -40233,7 +40232,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValue_params
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValueInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     const char **pOutName;
     uint32_t *pOutDataType;
@@ -40253,13 +40252,13 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIPAddr_ToStr
     const SteamNetworkingIPAddr *addr;
     char *buf;
     uint32_t cbBuf;
-    bool bWithPort;
+    int8_t bWithPort;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIPAddr_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIPAddr *pAddr;
     const char *pszStr;
 };
@@ -40275,7 +40274,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToS
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
@@ -40320,7 +40319,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_ConvertPingLocationToString
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_ParsePingLocationString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pszString;
     SteamNetworkPingLocation_t *result;
 };
@@ -40328,7 +40327,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_ParsePingLocationString_par
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_CheckPingDataUpToDate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     float flMaxAgeSeconds;
 };
 
@@ -40377,7 +40376,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_para
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     uint32_t eScopeType;
     int32_t scopeObj;
@@ -40400,7 +40399,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValue_params
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     const char **pOutName;
     uint32_t *pOutDataType;
@@ -40420,13 +40419,13 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIPAddr_ToStr
     const SteamNetworkingIPAddr *addr;
     char *buf;
     uint32_t cbBuf;
-    bool bWithPort;
+    int8_t bWithPort;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIPAddr_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIPAddr *pAddr;
     const char *pszStr;
 };
@@ -40442,7 +40441,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToS
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
@@ -40494,7 +40493,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_ConvertPingLocationToString
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_ParsePingLocationString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pszString;
     SteamNetworkPingLocation_t *result;
 };
@@ -40502,7 +40501,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_ParsePingLocationString_par
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_CheckPingDataUpToDate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     float flMaxAgeSeconds;
 };
 
@@ -40551,7 +40550,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_para
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     uint32_t eScopeType;
     int32_t scopeObj;
@@ -40574,7 +40573,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue_params
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValueInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     const char **pOutName;
     uint32_t *pOutDataType;
@@ -40594,13 +40593,13 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ToStr
     const SteamNetworkingIPAddr *addr;
     char *buf;
     uint32_t cbBuf;
-    bool bWithPort;
+    int8_t bWithPort;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIPAddr *pAddr;
     const char *pszStr;
 };
@@ -40616,7 +40615,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToS
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
@@ -40668,7 +40667,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_ConvertPingLocationToString
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_ParsePingLocationString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pszString;
     SteamNetworkPingLocation_t *result;
 };
@@ -40676,7 +40675,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_ParsePingLocationString_par
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_CheckPingDataUpToDate_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     float flMaxAgeSeconds;
 };
 
@@ -40740,7 +40739,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_pa
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eValue;
     uint32_t eScopeType;
     int32_t scopeObj;
@@ -40774,7 +40773,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfi
     struct u_steam_iface *linux_side;
     uint32_t _ret;
     uint32_t eCurrent;
-    bool bEnumerateDevVars;
+    int8_t bEnumerateDevVars;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ToString_params
@@ -40783,13 +40782,13 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ToStr
     const SteamNetworkingIPAddr *addr;
     char *buf;
     uint32_t cbBuf;
-    bool bWithPort;
+    int8_t bWithPort;
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIPAddr *pAddr;
     const char *pszStr;
 };
@@ -40812,7 +40811,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToS
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     SteamNetworkingIdentity_144 *pIdentity;
     const char *pszStr;
 };
@@ -40833,7 +40832,7 @@ struct ISteamParties_SteamParties002_GetBeaconByIndex_params
 struct ISteamParties_SteamParties002_GetBeaconDetails_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulBeaconID;
     CSteamID *pSteamIDBeaconOwner;
     w_SteamPartyBeaconLocation_t *pLocation;
@@ -40851,14 +40850,14 @@ struct ISteamParties_SteamParties002_JoinParty_params
 struct ISteamParties_SteamParties002_GetNumAvailableBeaconLocations_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *puNumLocations;
 };
 
 struct ISteamParties_SteamParties002_GetAvailableBeaconLocations_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_SteamPartyBeaconLocation_t *pLocationList;
     uint32_t uMaxNumLocations;
 };
@@ -40898,14 +40897,14 @@ struct ISteamParties_SteamParties002_ChangeNumOpenSlots_params
 struct ISteamParties_SteamParties002_DestroyBeacon_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulBeacon;
 };
 
 struct ISteamParties_SteamParties002_GetBeaconLocationData_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_SteamPartyBeaconLocation_t BeaconLocation;
     uint32_t eData;
     char *pchDataStringOut;
@@ -40932,7 +40931,7 @@ struct ISteamUser_SteamUser004_LogOff_params
 struct ISteamUser_SteamUser004_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser004_GetLogonState_params
@@ -40944,7 +40943,7 @@ struct ISteamUser_SteamUser004_GetLogonState_params
 struct ISteamUser_SteamUser004_BConnected_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser004_GetSteamID_params
@@ -40956,14 +40955,14 @@ struct ISteamUser_SteamUser004_GetSteamID_params
 struct ISteamUser_SteamUser004_IsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameID;
 };
 
 struct ISteamUser_SteamUser004_RequireShowVACBannedMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameID;
 };
 
@@ -41011,7 +41010,7 @@ struct ISteamUser_SteamUser004_AddServerNetAddress_params
 struct ISteamUser_SteamUser004_SetEmail_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchEmail;
 };
 
@@ -41026,7 +41025,7 @@ struct ISteamUser_SteamUser004_GetSteamGameConnectToken_params
 struct ISteamUser_SteamUser004_SetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
@@ -41035,7 +41034,7 @@ struct ISteamUser_SteamUser004_SetRegistryString_params
 struct ISteamUser_SteamUser004_GetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
@@ -41045,7 +41044,7 @@ struct ISteamUser_SteamUser004_GetRegistryString_params
 struct ISteamUser_SteamUser004_SetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t iValue;
@@ -41054,7 +41053,7 @@ struct ISteamUser_SteamUser004_SetRegistryInt_params
 struct ISteamUser_SteamUser004_GetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t *piValue;
@@ -41070,7 +41069,7 @@ struct ISteamUser_SteamUser004_InitiateGameConnection_params
     int32_t nGameAppID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser004_TerminateGameConnection_params
@@ -41088,7 +41087,7 @@ struct ISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination_params
 struct ISteamUser_SteamUser004_IsPrimaryChatDestination_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser004_RequestLegacyCDKey_params
@@ -41117,7 +41116,7 @@ struct ISteamUser_SteamUser005_LogOff_params
 struct ISteamUser_SteamUser005_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser005_GetLogonState_params
@@ -41129,7 +41128,7 @@ struct ISteamUser_SteamUser005_GetLogonState_params
 struct ISteamUser_SteamUser005_BConnected_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser005_GetSteamID_params
@@ -41141,14 +41140,14 @@ struct ISteamUser_SteamUser005_GetSteamID_params
 struct ISteamUser_SteamUser005_IsVACBanned_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nGameID;
 };
 
 struct ISteamUser_SteamUser005_RequireShowVACBannedMessage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t nAppID;
 };
 
@@ -41175,14 +41174,14 @@ struct ISteamUser_SteamUser005_AddServerNetAddress_params
 struct ISteamUser_SteamUser005_SetEmail_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchEmail;
 };
 
 struct ISteamUser_SteamUser005_SetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
@@ -41191,7 +41190,7 @@ struct ISteamUser_SteamUser005_SetRegistryString_params
 struct ISteamUser_SteamUser005_GetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
@@ -41201,7 +41200,7 @@ struct ISteamUser_SteamUser005_GetRegistryString_params
 struct ISteamUser_SteamUser005_SetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t iValue;
@@ -41210,7 +41209,7 @@ struct ISteamUser_SteamUser005_SetRegistryInt_params
 struct ISteamUser_SteamUser005_GetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t *piValue;
@@ -41226,7 +41225,7 @@ struct ISteamUser_SteamUser005_InitiateGameConnection_params
     CGameID gameID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser005_TerminateGameConnection_params
@@ -41244,7 +41243,7 @@ struct ISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination_params
 struct ISteamUser_SteamUser005_IsPrimaryChatDestination_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser005_RequestLegacyCDKey_params
@@ -41256,32 +41255,32 @@ struct ISteamUser_SteamUser005_RequestLegacyCDKey_params
 struct ISteamUser_SteamUser005_SendGuestPassByEmail_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchEmailAccount;
     uint64_t gidGuestPassID;
-    bool bResending;
+    int8_t bResending;
 };
 
 struct ISteamUser_SteamUser005_SendGuestPassByAccountID_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t uAccountID;
     uint64_t gidGuestPassID;
-    bool bResending;
+    int8_t bResending;
 };
 
 struct ISteamUser_SteamUser005_AckGuestPass_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchGuestPassCode;
 };
 
 struct ISteamUser_SteamUser005_RedeemGuestPass_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchGuestPassCode;
 };
 
@@ -41306,7 +41305,7 @@ struct ISteamUser_SteamUser005_GetGuestPassLastUpdateTime_params
 struct ISteamUser_SteamUser005_GetGuestPassToGiveInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nPassIndex;
     uint64_t *pgidGuestPassID;
     uint32_t *pnPackageID;
@@ -41321,7 +41320,7 @@ struct ISteamUser_SteamUser005_GetGuestPassToGiveInfo_params
 struct ISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nPassIndex;
     uint64_t *pgidGuestPassID;
     uint32_t *pnPackageID;
@@ -41334,7 +41333,7 @@ struct ISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params
 struct ISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nPassIndex;
     char *pchSenderAddress;
     int32_t cSenderAddressSize;
@@ -41343,7 +41342,7 @@ struct ISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress_params
 struct ISteamUser_SteamUser005_GetGuestPassToRedeemSenderName_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nPassIndex;
     char *pchSenderName;
     int32_t cSenderNameSize;
@@ -41358,7 +41357,7 @@ struct ISteamUser_SteamUser005_AcknowledgeMessageByGID_params
 struct ISteamUser_SteamUser005_SetLanguage_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchLanguage;
 };
 
@@ -41408,7 +41407,7 @@ struct ISteamUser_SteamUser006_LogOff_params
 struct ISteamUser_SteamUser006_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser006_GetSteamID_params
@@ -41420,7 +41419,7 @@ struct ISteamUser_SteamUser006_GetSteamID_params
 struct ISteamUser_SteamUser006_SetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
@@ -41429,7 +41428,7 @@ struct ISteamUser_SteamUser006_SetRegistryString_params
 struct ISteamUser_SteamUser006_GetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
@@ -41439,7 +41438,7 @@ struct ISteamUser_SteamUser006_GetRegistryString_params
 struct ISteamUser_SteamUser006_SetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t iValue;
@@ -41448,7 +41447,7 @@ struct ISteamUser_SteamUser006_SetRegistryInt_params
 struct ISteamUser_SteamUser006_GetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t *piValue;
@@ -41464,7 +41463,7 @@ struct ISteamUser_SteamUser006_InitiateGameConnection_params
     CGameID gameID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser006_TerminateGameConnection_params
@@ -41502,7 +41501,7 @@ struct ISteamUser_SteamUser007_LogOff_params
 struct ISteamUser_SteamUser007_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser007_GetSteamID_params
@@ -41514,7 +41513,7 @@ struct ISteamUser_SteamUser007_GetSteamID_params
 struct ISteamUser_SteamUser007_SetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
@@ -41523,7 +41522,7 @@ struct ISteamUser_SteamUser007_SetRegistryString_params
 struct ISteamUser_SteamUser007_GetRegistryString_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
@@ -41533,7 +41532,7 @@ struct ISteamUser_SteamUser007_GetRegistryString_params
 struct ISteamUser_SteamUser007_SetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t iValue;
@@ -41542,7 +41541,7 @@ struct ISteamUser_SteamUser007_SetRegistryInt_params
 struct ISteamUser_SteamUser007_GetRegistryInt_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
     int32_t *piValue;
@@ -41558,7 +41557,7 @@ struct ISteamUser_SteamUser007_InitiateGameConnection_params
     CGameID gameID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
     void *pvSteam2GetEncryptionKey;
     int32_t cbSteam2GetEncryptionKey;
 };
@@ -41592,7 +41591,7 @@ struct ISteamUser_SteamUser008_GetHSteamUser_params
 struct ISteamUser_SteamUser008_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser008_GetSteamID_params
@@ -41611,7 +41610,7 @@ struct ISteamUser_SteamUser008_InitiateGameConnection_params
     CGameID gameID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
     void *pvSteam2GetEncryptionKey;
     int32_t cbSteam2GetEncryptionKey;
 };
@@ -41645,7 +41644,7 @@ struct ISteamUser_SteamUser009_GetHSteamUser_params
 struct ISteamUser_SteamUser009_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser009_GetSteamID_params
@@ -41664,7 +41663,7 @@ struct ISteamUser_SteamUser009_InitiateGameConnection_params
     CGameID gameID;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser009_TerminateGameConnection_params
@@ -41696,7 +41695,7 @@ struct ISteamUser_SteamUser010_GetHSteamUser_params
 struct ISteamUser_SteamUser010_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser010_GetSteamID_params
@@ -41714,7 +41713,7 @@ struct ISteamUser_SteamUser010_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser010_TerminateGameConnection_params
@@ -41741,7 +41740,7 @@ struct ISteamUser_SteamUser011_GetHSteamUser_params
 struct ISteamUser_SteamUser011_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser011_GetSteamID_params
@@ -41759,7 +41758,7 @@ struct ISteamUser_SteamUser011_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser011_TerminateGameConnection_params
@@ -41780,7 +41779,7 @@ struct ISteamUser_SteamUser011_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser011_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -41824,7 +41823,7 @@ struct ISteamUser_SteamUser012_GetHSteamUser_params
 struct ISteamUser_SteamUser012_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser012_GetSteamID_params
@@ -41842,7 +41841,7 @@ struct ISteamUser_SteamUser012_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser012_TerminateGameConnection_params
@@ -41863,7 +41862,7 @@ struct ISteamUser_SteamUser012_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser012_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -41945,7 +41944,7 @@ struct ISteamUser_SteamUser013_GetHSteamUser_params
 struct ISteamUser_SteamUser013_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser013_GetSteamID_params
@@ -41963,7 +41962,7 @@ struct ISteamUser_SteamUser013_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser013_TerminateGameConnection_params
@@ -41984,7 +41983,7 @@ struct ISteamUser_SteamUser013_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser013_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42011,11 +42010,11 @@ struct ISteamUser_SteamUser013_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42079,7 +42078,7 @@ struct ISteamUser_SteamUser014_GetHSteamUser_params
 struct ISteamUser_SteamUser014_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser014_GetSteamID_params
@@ -42097,7 +42096,7 @@ struct ISteamUser_SteamUser014_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser014_TerminateGameConnection_params
@@ -42118,7 +42117,7 @@ struct ISteamUser_SteamUser014_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser014_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42145,11 +42144,11 @@ struct ISteamUser_SteamUser014_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42207,7 +42206,7 @@ struct ISteamUser_SteamUser014_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser014_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser014_AdvertiseGame_params
@@ -42229,7 +42228,7 @@ struct ISteamUser_SteamUser014_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser014_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -42244,7 +42243,7 @@ struct ISteamUser_SteamUser015_GetHSteamUser_params
 struct ISteamUser_SteamUser015_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser015_GetSteamID_params
@@ -42262,7 +42261,7 @@ struct ISteamUser_SteamUser015_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser015_TerminateGameConnection_params
@@ -42283,7 +42282,7 @@ struct ISteamUser_SteamUser015_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser015_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42310,11 +42309,11 @@ struct ISteamUser_SteamUser015_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42379,7 +42378,7 @@ struct ISteamUser_SteamUser015_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser015_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser015_AdvertiseGame_params
@@ -42401,7 +42400,7 @@ struct ISteamUser_SteamUser015_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser015_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -42416,7 +42415,7 @@ struct ISteamUser_SteamUser016_GetHSteamUser_params
 struct ISteamUser_SteamUser016_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser016_GetSteamID_params
@@ -42434,7 +42433,7 @@ struct ISteamUser_SteamUser016_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser016_TerminateGameConnection_params
@@ -42455,7 +42454,7 @@ struct ISteamUser_SteamUser016_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser016_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42483,11 +42482,11 @@ struct ISteamUser_SteamUser016_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42553,7 +42552,7 @@ struct ISteamUser_SteamUser016_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser016_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser016_AdvertiseGame_params
@@ -42575,7 +42574,7 @@ struct ISteamUser_SteamUser016_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser016_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -42590,7 +42589,7 @@ struct ISteamUser_SteamUser017_GetHSteamUser_params
 struct ISteamUser_SteamUser017_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser017_GetSteamID_params
@@ -42608,7 +42607,7 @@ struct ISteamUser_SteamUser017_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser017_TerminateGameConnection_params
@@ -42629,7 +42628,7 @@ struct ISteamUser_SteamUser017_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser017_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42657,11 +42656,11 @@ struct ISteamUser_SteamUser017_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42727,7 +42726,7 @@ struct ISteamUser_SteamUser017_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser017_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser017_AdvertiseGame_params
@@ -42749,7 +42748,7 @@ struct ISteamUser_SteamUser017_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser017_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -42760,7 +42759,7 @@ struct ISteamUser_SteamUser017_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser017_GetPlayerSteamLevel_params
@@ -42778,7 +42777,7 @@ struct ISteamUser_SteamUser018_GetHSteamUser_params
 struct ISteamUser_SteamUser018_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser018_GetSteamID_params
@@ -42796,7 +42795,7 @@ struct ISteamUser_SteamUser018_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser018_TerminateGameConnection_params
@@ -42817,7 +42816,7 @@ struct ISteamUser_SteamUser018_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser018_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -42845,11 +42844,11 @@ struct ISteamUser_SteamUser018_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed;
+    int8_t bWantUncompressed;
     void *pUncompressedDestBuffer;
     uint32_t cbUncompressedDestBufferSize;
     uint32_t *nUncompressBytesWritten;
@@ -42915,7 +42914,7 @@ struct ISteamUser_SteamUser018_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser018_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser018_AdvertiseGame_params
@@ -42937,7 +42936,7 @@ struct ISteamUser_SteamUser018_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser018_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -42948,7 +42947,7 @@ struct ISteamUser_SteamUser018_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser018_GetPlayerSteamLevel_params
@@ -42973,7 +42972,7 @@ struct ISteamUser_SteamUser019_GetHSteamUser_params
 struct ISteamUser_SteamUser019_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser019_GetSteamID_params
@@ -42991,7 +42990,7 @@ struct ISteamUser_SteamUser019_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser019_TerminateGameConnection_params
@@ -43012,7 +43011,7 @@ struct ISteamUser_SteamUser019_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser019_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -43040,11 +43039,11 @@ struct ISteamUser_SteamUser019_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed_Deprecated;
+    int8_t bWantUncompressed_Deprecated;
     void *pUncompressedDestBuffer_Deprecated;
     uint32_t cbUncompressedDestBufferSize_Deprecated;
     uint32_t *nUncompressBytesWritten_Deprecated;
@@ -43110,7 +43109,7 @@ struct ISteamUser_SteamUser019_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser019_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser019_AdvertiseGame_params
@@ -43132,7 +43131,7 @@ struct ISteamUser_SteamUser019_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser019_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -43143,7 +43142,7 @@ struct ISteamUser_SteamUser019_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser019_GetPlayerSteamLevel_params
@@ -43162,25 +43161,25 @@ struct ISteamUser_SteamUser019_RequestStoreAuthURL_params
 struct ISteamUser_SteamUser019_BIsPhoneVerified_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser019_BIsTwoFactorEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser019_BIsPhoneIdentifying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser019_BIsPhoneRequiringVerification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_GetHSteamUser_params
@@ -43192,7 +43191,7 @@ struct ISteamUser_SteamUser020_GetHSteamUser_params
 struct ISteamUser_SteamUser020_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_GetSteamID_params
@@ -43210,7 +43209,7 @@ struct ISteamUser_SteamUser020_InitiateGameConnection_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser020_TerminateGameConnection_params
@@ -43231,7 +43230,7 @@ struct ISteamUser_SteamUser020_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser020_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -43259,11 +43258,11 @@ struct ISteamUser_SteamUser020_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed_Deprecated;
+    int8_t bWantUncompressed_Deprecated;
     void *pUncompressedDestBuffer_Deprecated;
     uint32_t cbUncompressedDestBufferSize_Deprecated;
     uint32_t *nUncompressBytesWritten_Deprecated;
@@ -43329,7 +43328,7 @@ struct ISteamUser_SteamUser020_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser020_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_AdvertiseGame_params
@@ -43351,7 +43350,7 @@ struct ISteamUser_SteamUser020_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser020_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -43362,7 +43361,7 @@ struct ISteamUser_SteamUser020_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser020_GetPlayerSteamLevel_params
@@ -43381,25 +43380,25 @@ struct ISteamUser_SteamUser020_RequestStoreAuthURL_params
 struct ISteamUser_SteamUser020_BIsPhoneVerified_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_BIsTwoFactorEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_BIsPhoneIdentifying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_BIsPhoneRequiringVerification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser020_GetMarketEligibility_params
@@ -43423,7 +43422,7 @@ struct ISteamUser_SteamUser021_GetHSteamUser_params
 struct ISteamUser_SteamUser021_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_GetSteamID_params
@@ -43441,7 +43440,7 @@ struct ISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED_params
@@ -43462,7 +43461,7 @@ struct ISteamUser_SteamUser021_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser021_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -43490,11 +43489,11 @@ struct ISteamUser_SteamUser021_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed_Deprecated;
+    int8_t bWantUncompressed_Deprecated;
     void *pUncompressedDestBuffer_Deprecated;
     uint32_t cbUncompressedDestBufferSize_Deprecated;
     uint32_t *nUncompressBytesWritten_Deprecated;
@@ -43560,7 +43559,7 @@ struct ISteamUser_SteamUser021_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser021_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_AdvertiseGame_params
@@ -43582,7 +43581,7 @@ struct ISteamUser_SteamUser021_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser021_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -43593,7 +43592,7 @@ struct ISteamUser_SteamUser021_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser021_GetPlayerSteamLevel_params
@@ -43612,25 +43611,25 @@ struct ISteamUser_SteamUser021_RequestStoreAuthURL_params
 struct ISteamUser_SteamUser021_BIsPhoneVerified_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_BIsTwoFactorEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_BIsPhoneIdentifying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_BIsPhoneRequiringVerification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser021_GetMarketEligibility_params
@@ -43648,7 +43647,7 @@ struct ISteamUser_SteamUser021_GetDurationControl_params
 struct ISteamUser_SteamUser021_BSetDurationControlOnlineState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eNewState;
 };
 
@@ -43661,7 +43660,7 @@ struct ISteamUser_SteamUser022_GetHSteamUser_params
 struct ISteamUser_SteamUser022_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_GetSteamID_params
@@ -43679,7 +43678,7 @@ struct ISteamUser_SteamUser022_InitiateGameConnection_DEPRECATED_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser022_TerminateGameConnection_DEPRECATED_params
@@ -43700,7 +43699,7 @@ struct ISteamUser_SteamUser022_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser022_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -43728,11 +43727,11 @@ struct ISteamUser_SteamUser022_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed_Deprecated;
+    int8_t bWantUncompressed_Deprecated;
     void *pUncompressedDestBuffer_Deprecated;
     uint32_t cbUncompressedDestBufferSize_Deprecated;
     uint32_t *nUncompressBytesWritten_Deprecated;
@@ -43799,7 +43798,7 @@ struct ISteamUser_SteamUser022_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser022_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_AdvertiseGame_params
@@ -43821,7 +43820,7 @@ struct ISteamUser_SteamUser022_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser022_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -43832,7 +43831,7 @@ struct ISteamUser_SteamUser022_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser022_GetPlayerSteamLevel_params
@@ -43851,25 +43850,25 @@ struct ISteamUser_SteamUser022_RequestStoreAuthURL_params
 struct ISteamUser_SteamUser022_BIsPhoneVerified_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_BIsTwoFactorEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_BIsPhoneIdentifying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_BIsPhoneRequiringVerification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser022_GetMarketEligibility_params
@@ -43887,7 +43886,7 @@ struct ISteamUser_SteamUser022_GetDurationControl_params
 struct ISteamUser_SteamUser022_BSetDurationControlOnlineState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eNewState;
 };
 
@@ -43900,7 +43899,7 @@ struct ISteamUser_SteamUser023_GetHSteamUser_params
 struct ISteamUser_SteamUser023_BLoggedOn_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_GetSteamID_params
@@ -43918,7 +43917,7 @@ struct ISteamUser_SteamUser023_InitiateGameConnection_DEPRECATED_params
     CSteamID steamIDGameServer;
     uint32_t unIPServer;
     uint16_t usPortServer;
-    bool bSecure;
+    int8_t bSecure;
 };
 
 struct ISteamUser_SteamUser023_TerminateGameConnection_DEPRECATED_params
@@ -43939,7 +43938,7 @@ struct ISteamUser_SteamUser023_TrackAppUsageEvent_params
 struct ISteamUser_SteamUser023_GetUserDataFolder_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchBuffer;
     int32_t cubBuffer;
 };
@@ -43967,11 +43966,11 @@ struct ISteamUser_SteamUser023_GetVoice_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
-    bool bWantCompressed;
+    int8_t bWantCompressed;
     void *pDestBuffer;
     uint32_t cbDestBufferSize;
     uint32_t *nBytesWritten;
-    bool bWantUncompressed_Deprecated;
+    int8_t bWantUncompressed_Deprecated;
     void *pUncompressedDestBuffer_Deprecated;
     uint32_t cbUncompressedDestBufferSize_Deprecated;
     uint32_t *nUncompressBytesWritten_Deprecated;
@@ -44045,7 +44044,7 @@ struct ISteamUser_SteamUser023_UserHasLicenseForApp_params
 struct ISteamUser_SteamUser023_BIsBehindNAT_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_AdvertiseGame_params
@@ -44067,7 +44066,7 @@ struct ISteamUser_SteamUser023_RequestEncryptedAppTicket_params
 struct ISteamUser_SteamUser023_GetEncryptedAppTicket_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -44078,7 +44077,7 @@ struct ISteamUser_SteamUser023_GetGameBadgeLevel_params
     struct u_steam_iface *linux_side;
     int32_t _ret;
     int32_t nSeries;
-    bool bFoil;
+    int8_t bFoil;
 };
 
 struct ISteamUser_SteamUser023_GetPlayerSteamLevel_params
@@ -44097,25 +44096,25 @@ struct ISteamUser_SteamUser023_RequestStoreAuthURL_params
 struct ISteamUser_SteamUser023_BIsPhoneVerified_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_BIsTwoFactorEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_BIsPhoneIdentifying_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_BIsPhoneRequiringVerification_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUser_SteamUser023_GetMarketEligibility_params
@@ -44133,7 +44132,7 @@ struct ISteamUser_SteamUser023_GetDurationControl_params
 struct ISteamUser_SteamUser023_BSetDurationControlOnlineState_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eNewState;
 };
 
@@ -44170,7 +44169,7 @@ struct ISteamUtils_SteamUtils002_GetIPCountry_params
 struct ISteamUtils_SteamUtils002_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44179,7 +44178,7 @@ struct ISteamUtils_SteamUtils002_GetImageSize_params
 struct ISteamUtils_SteamUtils002_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44188,7 +44187,7 @@ struct ISteamUtils_SteamUtils002_GetImageRGBA_params
 struct ISteamUtils_SteamUtils002_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44214,9 +44213,9 @@ struct ISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils002_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils002_GetAPICallFailureReason_params
@@ -44229,12 +44228,12 @@ struct ISteamUtils_SteamUtils002_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils002_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils004_GetSecondsSinceAppActive_params
@@ -44270,7 +44269,7 @@ struct ISteamUtils_SteamUtils004_GetIPCountry_params
 struct ISteamUtils_SteamUtils004_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44279,7 +44278,7 @@ struct ISteamUtils_SteamUtils004_GetImageSize_params
 struct ISteamUtils_SteamUtils004_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44288,7 +44287,7 @@ struct ISteamUtils_SteamUtils004_GetImageRGBA_params
 struct ISteamUtils_SteamUtils004_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44314,9 +44313,9 @@ struct ISteamUtils_SteamUtils004_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils004_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils004_GetAPICallFailureReason_params
@@ -44329,12 +44328,12 @@ struct ISteamUtils_SteamUtils004_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils004_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils004_RunFrame_params
@@ -44357,7 +44356,7 @@ struct ISteamUtils_SteamUtils004_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils004_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils005_GetSecondsSinceAppActive_params
@@ -44393,7 +44392,7 @@ struct ISteamUtils_SteamUtils005_GetIPCountry_params
 struct ISteamUtils_SteamUtils005_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44402,7 +44401,7 @@ struct ISteamUtils_SteamUtils005_GetImageSize_params
 struct ISteamUtils_SteamUtils005_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44411,7 +44410,7 @@ struct ISteamUtils_SteamUtils005_GetImageRGBA_params
 struct ISteamUtils_SteamUtils005_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44437,9 +44436,9 @@ struct ISteamUtils_SteamUtils005_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils005_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils005_GetAPICallFailureReason_params
@@ -44452,12 +44451,12 @@ struct ISteamUtils_SteamUtils005_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils005_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils005_RunFrame_params
@@ -44480,13 +44479,13 @@ struct ISteamUtils_SteamUtils005_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils005_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils005_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils005_CheckFileSignature_params
@@ -44499,7 +44498,7 @@ struct ISteamUtils_SteamUtils005_CheckFileSignature_params
 struct ISteamUtils_SteamUtils005_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -44515,7 +44514,7 @@ struct ISteamUtils_SteamUtils005_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils005_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -44553,7 +44552,7 @@ struct ISteamUtils_SteamUtils006_GetIPCountry_params
 struct ISteamUtils_SteamUtils006_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44562,7 +44561,7 @@ struct ISteamUtils_SteamUtils006_GetImageSize_params
 struct ISteamUtils_SteamUtils006_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44571,7 +44570,7 @@ struct ISteamUtils_SteamUtils006_GetImageRGBA_params
 struct ISteamUtils_SteamUtils006_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44597,9 +44596,9 @@ struct ISteamUtils_SteamUtils006_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils006_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils006_GetAPICallFailureReason_params
@@ -44612,12 +44611,12 @@ struct ISteamUtils_SteamUtils006_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils006_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils006_RunFrame_params
@@ -44640,13 +44639,13 @@ struct ISteamUtils_SteamUtils006_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils006_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils006_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils006_CheckFileSignature_params
@@ -44659,7 +44658,7 @@ struct ISteamUtils_SteamUtils006_CheckFileSignature_params
 struct ISteamUtils_SteamUtils006_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -44675,7 +44674,7 @@ struct ISteamUtils_SteamUtils006_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils006_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -44689,7 +44688,7 @@ struct ISteamUtils_SteamUtils006_GetSteamUILanguage_params
 struct ISteamUtils_SteamUtils006_IsSteamRunningInVR_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils007_GetSecondsSinceAppActive_params
@@ -44725,7 +44724,7 @@ struct ISteamUtils_SteamUtils007_GetIPCountry_params
 struct ISteamUtils_SteamUtils007_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44734,7 +44733,7 @@ struct ISteamUtils_SteamUtils007_GetImageSize_params
 struct ISteamUtils_SteamUtils007_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44743,7 +44742,7 @@ struct ISteamUtils_SteamUtils007_GetImageRGBA_params
 struct ISteamUtils_SteamUtils007_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44769,9 +44768,9 @@ struct ISteamUtils_SteamUtils007_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils007_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils007_GetAPICallFailureReason_params
@@ -44784,12 +44783,12 @@ struct ISteamUtils_SteamUtils007_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils007_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils007_RunFrame_params
@@ -44812,13 +44811,13 @@ struct ISteamUtils_SteamUtils007_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils007_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils007_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils007_CheckFileSignature_params
@@ -44831,7 +44830,7 @@ struct ISteamUtils_SteamUtils007_CheckFileSignature_params
 struct ISteamUtils_SteamUtils007_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -44848,7 +44847,7 @@ struct ISteamUtils_SteamUtils007_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils007_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -44862,7 +44861,7 @@ struct ISteamUtils_SteamUtils007_GetSteamUILanguage_params
 struct ISteamUtils_SteamUtils007_IsSteamRunningInVR_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils007_SetOverlayNotificationInset_params
@@ -44905,7 +44904,7 @@ struct ISteamUtils_SteamUtils008_GetIPCountry_params
 struct ISteamUtils_SteamUtils008_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -44914,7 +44913,7 @@ struct ISteamUtils_SteamUtils008_GetImageSize_params
 struct ISteamUtils_SteamUtils008_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -44923,7 +44922,7 @@ struct ISteamUtils_SteamUtils008_GetImageRGBA_params
 struct ISteamUtils_SteamUtils008_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -44949,9 +44948,9 @@ struct ISteamUtils_SteamUtils008_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils008_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils008_GetAPICallFailureReason_params
@@ -44964,12 +44963,12 @@ struct ISteamUtils_SteamUtils008_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils008_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils008_RunFrame_params
@@ -44992,13 +44991,13 @@ struct ISteamUtils_SteamUtils008_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils008_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils008_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils008_CheckFileSignature_params
@@ -45011,7 +45010,7 @@ struct ISteamUtils_SteamUtils008_CheckFileSignature_params
 struct ISteamUtils_SteamUtils008_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -45028,7 +45027,7 @@ struct ISteamUtils_SteamUtils008_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils008_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -45042,7 +45041,7 @@ struct ISteamUtils_SteamUtils008_GetSteamUILanguage_params
 struct ISteamUtils_SteamUtils008_IsSteamRunningInVR_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils008_SetOverlayNotificationInset_params
@@ -45055,7 +45054,7 @@ struct ISteamUtils_SteamUtils008_SetOverlayNotificationInset_params
 struct ISteamUtils_SteamUtils008_IsSteamInBigPictureMode_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils008_StartVRDashboard_params
@@ -45096,7 +45095,7 @@ struct ISteamUtils_SteamUtils009_GetIPCountry_params
 struct ISteamUtils_SteamUtils009_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -45105,7 +45104,7 @@ struct ISteamUtils_SteamUtils009_GetImageSize_params
 struct ISteamUtils_SteamUtils009_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -45114,7 +45113,7 @@ struct ISteamUtils_SteamUtils009_GetImageRGBA_params
 struct ISteamUtils_SteamUtils009_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -45140,9 +45139,9 @@ struct ISteamUtils_SteamUtils009_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils009_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils009_GetAPICallFailureReason_params
@@ -45155,12 +45154,12 @@ struct ISteamUtils_SteamUtils009_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils009_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils009_RunFrame_params
@@ -45183,13 +45182,13 @@ struct ISteamUtils_SteamUtils009_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils009_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_CheckFileSignature_params
@@ -45202,7 +45201,7 @@ struct ISteamUtils_SteamUtils009_CheckFileSignature_params
 struct ISteamUtils_SteamUtils009_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -45219,7 +45218,7 @@ struct ISteamUtils_SteamUtils009_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils009_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -45233,7 +45232,7 @@ struct ISteamUtils_SteamUtils009_GetSteamUILanguage_params
 struct ISteamUtils_SteamUtils009_IsSteamRunningInVR_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_SetOverlayNotificationInset_params
@@ -45246,7 +45245,7 @@ struct ISteamUtils_SteamUtils009_SetOverlayNotificationInset_params
 struct ISteamUtils_SteamUtils009_IsSteamInBigPictureMode_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_StartVRDashboard_params
@@ -45257,25 +45256,25 @@ struct ISteamUtils_SteamUtils009_StartVRDashboard_params
 struct ISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamUtils_SteamUtils009_IsSteamChinaLauncher_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_InitFilterText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils009_FilterText_params
@@ -45285,7 +45284,7 @@ struct ISteamUtils_SteamUtils009_FilterText_params
     char *pchOutFilteredText;
     uint32_t nByteSizeOutFilteredText;
     const char *pchInputMessage;
-    bool bLegalOnly;
+    int8_t bLegalOnly;
 };
 
 struct ISteamUtils_SteamUtils009_GetIPv6ConnectivityState_params
@@ -45328,7 +45327,7 @@ struct ISteamUtils_SteamUtils010_GetIPCountry_params
 struct ISteamUtils_SteamUtils010_GetImageSize_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint32_t *pnWidth;
     uint32_t *pnHeight;
@@ -45337,7 +45336,7 @@ struct ISteamUtils_SteamUtils010_GetImageSize_params
 struct ISteamUtils_SteamUtils010_GetImageRGBA_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t iImage;
     uint8_t *pubDest;
     int32_t nDestBufferSize;
@@ -45346,7 +45345,7 @@ struct ISteamUtils_SteamUtils010_GetImageRGBA_params
 struct ISteamUtils_SteamUtils010_GetCSERIPPort_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t *unIP;
     uint16_t *usPort;
 };
@@ -45372,9 +45371,9 @@ struct ISteamUtils_SteamUtils010_SetOverlayNotificationPosition_params
 struct ISteamUtils_SteamUtils010_IsAPICallCompleted_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils010_GetAPICallFailureReason_params
@@ -45387,12 +45386,12 @@ struct ISteamUtils_SteamUtils010_GetAPICallFailureReason_params
 struct ISteamUtils_SteamUtils010_GetAPICallResult_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t hSteamAPICall;
     void *pCallback;
     int32_t cubCallback;
     int32_t iCallbackExpected;
-    bool *pbFailed;
+    int8_t *pbFailed;
 };
 
 struct ISteamUtils_SteamUtils010_RunFrame_params
@@ -45415,13 +45414,13 @@ struct ISteamUtils_SteamUtils010_SetWarningMessageHook_params
 struct ISteamUtils_SteamUtils010_IsOverlayEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_BOverlayNeedsPresent_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_CheckFileSignature_params
@@ -45434,7 +45433,7 @@ struct ISteamUtils_SteamUtils010_CheckFileSignature_params
 struct ISteamUtils_SteamUtils010_ShowGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
@@ -45451,7 +45450,7 @@ struct ISteamUtils_SteamUtils010_GetEnteredGamepadTextLength_params
 struct ISteamUtils_SteamUtils010_GetEnteredGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pchText;
     uint32_t cchText;
 };
@@ -45465,7 +45464,7 @@ struct ISteamUtils_SteamUtils010_GetSteamUILanguage_params
 struct ISteamUtils_SteamUtils010_IsSteamRunningInVR_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_SetOverlayNotificationInset_params
@@ -45478,7 +45477,7 @@ struct ISteamUtils_SteamUtils010_SetOverlayNotificationInset_params
 struct ISteamUtils_SteamUtils010_IsSteamInBigPictureMode_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_StartVRDashboard_params
@@ -45489,25 +45488,25 @@ struct ISteamUtils_SteamUtils010_StartVRDashboard_params
 struct ISteamUtils_SteamUtils010_IsVRHeadsetStreamingEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_SetVRHeadsetStreamingEnabled_params
 {
     struct u_steam_iface *linux_side;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct ISteamUtils_SteamUtils010_IsSteamChinaLauncher_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_InitFilterText_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unFilterOptions;
 };
 
@@ -45532,13 +45531,13 @@ struct ISteamUtils_SteamUtils010_GetIPv6ConnectivityState_params
 struct ISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct ISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eKeyboardMode;
     int32_t nTextFieldXPosition;
     int32_t nTextFieldYPosition;
@@ -45549,13 +45548,13 @@ struct ISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput_params
 struct ISteamUtils_SteamUtils010_SetGameLauncherMode_params
 {
     struct u_steam_iface *linux_side;
-    bool bLauncherMode;
+    int8_t bLauncherMode;
 };
 
 struct ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params
 {
     struct u_steam_iface *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 enum unix_funcs

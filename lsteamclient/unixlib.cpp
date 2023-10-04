@@ -266,9 +266,9 @@ NTSTATUS steamclient_next_callback( void *args )
 }
 
 static void *(*p_CreateInterface)( const char *name, int *return_code );
-static bool (*p_Steam_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
-static bool (*p_Steam_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
-static bool (*p_Steam_FreeLastCallback)( int32_t );
+static int8_t (*p_Steam_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
+static int8_t (*p_Steam_GetAPICallResult)( int32_t, uint64_t, void *, int, int, int8_t * );
+static int8_t (*p_Steam_FreeLastCallback)( int32_t );
 static void (*p_Steam_ReleaseThreadLocalMemory)( int );
 static bool (*p_Steam_IsKnownInterface)( const char * );
 static void (*p_Steam_NotifyMissingInterface)( int32_t, const char * );

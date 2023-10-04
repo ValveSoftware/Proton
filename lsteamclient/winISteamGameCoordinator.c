@@ -21,7 +21,7 @@ uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage
     return params._ret;
 }
 
-bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32_t *pcubMsgSize)
+int8_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32_t *pcubMsgSize)
 {
     struct ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params params =
     {

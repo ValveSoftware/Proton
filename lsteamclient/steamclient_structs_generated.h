@@ -107,8 +107,8 @@ typedef struct AppDataChanged_t AppDataChanged_t;
 struct AppDataChanged_t
 {
     uint32_t m_nAppID;
-    bool m_bBySteamUI;
-    bool m_bCDDBUpdate;
+    int8_t m_bBySteamUI;
+    int8_t m_bCDDBUpdate;
     uint8_t __pad_6[2];
 };
 #pragma pack( pop )
@@ -262,7 +262,7 @@ struct ControllerAnalogActionData_t
     uint32_t eMode;
     float x;
     float y;
-    bool bActive;
+    int8_t bActive;
 };
 #pragma pack( pop )
 
@@ -270,8 +270,8 @@ typedef struct ControllerDigitalActionData_t ControllerDigitalActionData_t;
 #pragma pack( push, 1 )
 struct ControllerDigitalActionData_t
 {
-    bool bState;
-    bool bActive;
+    int8_t bState;
+    int8_t bActive;
 };
 #pragma pack( pop )
 
@@ -304,7 +304,7 @@ typedef struct DownloadClanActivityCountsResult_t DownloadClanActivityCountsResu
 #pragma pack( push, 1 )
 struct DownloadClanActivityCountsResult_t
 {
-    bool m_bSuccess;
+    int8_t m_bSuccess;
 };
 #pragma pack( pop )
 
@@ -314,7 +314,7 @@ struct DurationControl_t_147
 {
     uint32_t m_eResult;
     uint32_t m_appid;
-    bool m_bApplicable;
+    int8_t m_bApplicable;
     uint8_t __pad_9[3];
     int32_t m_csecsLast5h;
     uint32_t m_progress;
@@ -330,7 +330,7 @@ struct DurationControl_t_145
 {
     uint32_t m_eResult;
     uint32_t m_appid;
-    bool m_bApplicable;
+    int8_t m_bApplicable;
     uint8_t __pad_9[3];
     int32_t m_csecsLast5h;
     uint32_t m_progress;
@@ -360,11 +360,11 @@ struct EquippedProfileItems_t
 {
     uint32_t m_eResult;
     CSteamID m_steamID;
-    bool m_bHasAnimatedAvatar;
-    bool m_bHasAvatarFrame;
-    bool m_bHasProfileModifier;
-    bool m_bHasProfileBackground;
-    bool m_bHasMiniProfileBackground;
+    int8_t m_bHasAnimatedAvatar;
+    int8_t m_bHasAvatarFrame;
+    int8_t m_bHasProfileModifier;
+    int8_t m_bHasProfileBackground;
+    int8_t m_bHasMiniProfileBackground;
     uint8_t __pad_17[3];
 };
 #pragma pack( pop )
@@ -386,7 +386,7 @@ struct FavoritesListChanged_t_128x
     uint32_t m_nConnPort;
     uint32_t m_nAppID;
     uint32_t m_nFlags;
-    bool m_bAdd;
+    int8_t m_bAdd;
     uint8_t __pad_21[3];
     uint32_t m_unAccountId;
 };
@@ -401,7 +401,7 @@ struct FavoritesListChanged_t_099u
     uint32_t m_nConnPort;
     uint32_t m_nAppID;
     uint32_t m_nFlags;
-    bool m_bAdd;
+    int8_t m_bAdd;
     uint8_t __pad_21[3];
 };
 #pragma pack( pop )
@@ -480,7 +480,7 @@ struct FriendsIsFollowing_t
 {
     uint32_t m_eResult;
     CSteamID m_steamID;
-    bool m_bIsFollowing;
+    int8_t m_bIsFollowing;
     uint8_t __pad_13[3];
 };
 #pragma pack( pop )
@@ -507,7 +507,7 @@ struct GSClientAchievementStatus_t
 {
     uint64_t m_SteamID;
     char (m_pchAchievement)[128];
-    bool m_bUnlocked;
+    int8_t m_bUnlocked;
     uint8_t __pad_137[7];
 };
 #pragma pack( pop )
@@ -545,8 +545,8 @@ struct GSClientGroupStatus_t
 {
     CSteamID m_SteamIDUser;
     CSteamID m_SteamIDGroup;
-    bool m_bMember;
-    bool m_bOfficer;
+    int8_t m_bMember;
+    int8_t m_bOfficer;
 };
 #pragma pack( pop )
 
@@ -619,8 +619,8 @@ struct GameConnectedChatLeave_t
 {
     CSteamID m_steamIDClanChat;
     CSteamID m_steamIDUser;
-    bool m_bKicked;
-    bool m_bDropped;
+    int8_t m_bKicked;
+    int8_t m_bDropped;
 };
 #pragma pack( pop )
 
@@ -657,7 +657,7 @@ typedef struct GameOverlayActivated_t_158 GameOverlayActivated_t_158;
 struct GameOverlayActivated_t_158
 {
     uint8_t m_bActive;
-    bool m_bUserInitiated;
+    int8_t m_bUserInitiated;
     uint8_t __pad_2[2];
     uint32_t m_nAppID;
     uint32_t m_dwOverlayPID;
@@ -669,7 +669,7 @@ typedef struct GameOverlayActivated_t_156 GameOverlayActivated_t_156;
 struct GameOverlayActivated_t_156
 {
     uint8_t m_bActive;
-    bool m_bUserInitiated;
+    int8_t m_bUserInitiated;
     uint8_t __pad_2[2];
     uint32_t m_nAppID;
 };
@@ -717,8 +717,8 @@ struct GameStatsSessionIssued_t
 {
     uint64_t m_ulSessionID;
     uint32_t m_eResult;
-    bool m_bCollectingAny;
-    bool m_bCollectingDetails;
+    int8_t m_bCollectingAny;
+    int8_t m_bCollectingDetails;
     uint8_t __pad_14[2];
 };
 #pragma pack( pop )
@@ -735,7 +735,7 @@ typedef struct GamepadTextInputDismissed_t_156 GamepadTextInputDismissed_t_156;
 #pragma pack( push, 4 )
 struct GamepadTextInputDismissed_t_156
 {
-    bool m_bSubmitted;
+    int8_t m_bSubmitted;
     uint8_t __pad_1[3];
     uint32_t m_unSubmittedText;
     uint32_t m_unAppID;
@@ -746,7 +746,7 @@ typedef struct GamepadTextInputDismissed_t_121 GamepadTextInputDismissed_t_121;
 #pragma pack( push, 4 )
 struct GamepadTextInputDismissed_t_121
 {
-    bool m_bSubmitted;
+    int8_t m_bSubmitted;
     uint8_t __pad_1[3];
     uint32_t m_unSubmittedText;
 };
@@ -787,9 +787,9 @@ struct GetUserItemVoteResult_t
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
-    bool m_bVotedUp;
-    bool m_bVotedDown;
-    bool m_bVoteSkipped;
+    int8_t m_bVotedUp;
+    int8_t m_bVotedDown;
+    int8_t m_bVoteSkipped;
     uint8_t __pad_15[1];
 };
 #pragma pack( pop )
@@ -846,8 +846,8 @@ typedef struct HTML_CanGoBackAndForward_t HTML_CanGoBackAndForward_t;
 struct HTML_CanGoBackAndForward_t
 {
     uint32_t unBrowserHandle;
-    bool bCanGoBack;
-    bool bCanGoForward;
+    int8_t bCanGoBack;
+    int8_t bCanGoForward;
     uint8_t __pad_6[2];
 };
 #pragma pack( pop )
@@ -884,7 +884,7 @@ struct HTML_HorizontalScroll_t
     uint32_t unScrollMax;
     uint32_t unScrollCurrent;
     float flPageScale;
-    bool bVisible;
+    int8_t bVisible;
     uint8_t __pad_17[3];
     uint32_t unPageSize;
 };
@@ -937,7 +937,7 @@ struct HTML_VerticalScroll_t
     uint32_t unScrollMax;
     uint32_t unScrollCurrent;
     float flPageScale;
-    bool bVisible;
+    int8_t bVisible;
     uint8_t __pad_17[3];
     uint32_t unPageSize;
 };
@@ -966,7 +966,7 @@ struct InputAnalogActionData_t
     uint32_t eMode;
     float x;
     float y;
-    bool bActive;
+    int8_t bActive;
 };
 #pragma pack( pop )
 
@@ -974,8 +974,8 @@ typedef struct InputDigitalActionData_t InputDigitalActionData_t;
 #pragma pack( push, 1 )
 struct InputDigitalActionData_t
 {
-    bool bState;
-    bool bActive;
+    int8_t bState;
+    int8_t bActive;
 };
 #pragma pack( pop )
 
@@ -1117,7 +1117,7 @@ struct LobbyEnter_t
 {
     uint64_t m_ulSteamIDLobby;
     uint32_t m_rgfChatPermissions;
-    bool m_bLocked;
+    int8_t m_bLocked;
     uint8_t __pad_13[3];
     uint32_t m_EChatRoomEnterResponse;
     uint8_t __pad_20[4];
@@ -1195,7 +1195,7 @@ typedef struct MarketEligibilityResponse_t MarketEligibilityResponse_t;
 #pragma pack( push, 4 )
 struct MarketEligibilityResponse_t
 {
-    bool m_bAllowed;
+    int8_t m_bAllowed;
     uint8_t __pad_1[3];
     uint32_t m_eNotAllowedReason;
     uint32_t m_rtAllowedAtTime;
@@ -1257,7 +1257,7 @@ typedef struct MusicPlayerWantsLooped_t MusicPlayerWantsLooped_t;
 #pragma pack( push, 1 )
 struct MusicPlayerWantsLooped_t
 {
-    bool m_bLooped;
+    int8_t m_bLooped;
 };
 #pragma pack( pop )
 
@@ -1305,7 +1305,7 @@ typedef struct MusicPlayerWantsShuffled_t MusicPlayerWantsShuffled_t;
 #pragma pack( push, 1 )
 struct MusicPlayerWantsShuffled_t
 {
-    bool m_bShuffled;
+    int8_t m_bShuffled;
 };
 #pragma pack( pop )
 
@@ -1405,7 +1405,7 @@ typedef struct PSNGameBootInviteResult_t PSNGameBootInviteResult_t;
 #pragma pack( push, 1 )
 struct PSNGameBootInviteResult_t
 {
-    bool m_bGameBootInviteExists;
+    int8_t m_bGameBootInviteExists;
     CSteamID m_steamIDLobby;
 };
 #pragma pack( pop )
@@ -1521,7 +1521,7 @@ typedef struct RemoteStoragePublishFileProgress_t RemoteStoragePublishFileProgre
 struct RemoteStoragePublishFileProgress_t
 {
     double m_dPercentFile;
-    bool m_bPreview;
+    int8_t m_bPreview;
     uint8_t __pad_9[7];
 };
 #pragma pack( pop )
@@ -1616,7 +1616,7 @@ struct SearchForGameResultCallback_t
     int32_t m_nCountPlayersInGame;
     int32_t m_nCountAcceptedGame;
     CSteamID m_steamIDHost;
-    bool m_bFinalCallback;
+    int8_t m_bFinalCallback;
     uint8_t __pad_29[3];
 };
 #pragma pack( pop )
@@ -1625,8 +1625,8 @@ typedef struct SetPersonaNameResponse_t SetPersonaNameResponse_t;
 #pragma pack( push, 4 )
 struct SetPersonaNameResponse_t
 {
-    bool m_bSuccess;
-    bool m_bLocalSuccess;
+    int8_t m_bSuccess;
+    int8_t m_bLocalSuccess;
     uint8_t __pad_2[2];
     uint32_t m_result;
 };
@@ -1638,7 +1638,7 @@ struct SetUserItemVoteResult_t
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
-    bool m_bVoteUp;
+    int8_t m_bVoteUp;
     uint8_t __pad_13[3];
 };
 #pragma pack( pop )
@@ -1789,7 +1789,7 @@ struct SteamInventoryEligiblePromoItemDefIDs_t
     uint32_t m_result;
     CSteamID m_steamID;
     int32_t m_numEligiblePromoItemDefs;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_17[3];
 };
 #pragma pack( pop )
@@ -2021,7 +2021,7 @@ typedef struct SteamServerConnectFailure_t_135 SteamServerConnectFailure_t_135;
 struct SteamServerConnectFailure_t_135
 {
     uint32_t m_eResult;
-    bool m_bStillRetrying;
+    int8_t m_bStillRetrying;
     uint8_t __pad_5[3];
 };
 #pragma pack( pop )
@@ -2066,7 +2066,7 @@ struct SteamUGCQueryCompleted_t_143
     uint32_t m_eResult;
     uint32_t m_unNumResultsReturned;
     uint32_t m_unTotalMatchingResults;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     char (m_rgchNextCursor)[256];
     uint8_t __pad_277[3];
 };
@@ -2080,7 +2080,7 @@ struct SteamUGCQueryCompleted_t_128x
     uint32_t m_eResult;
     uint32_t m_unNumResultsReturned;
     uint32_t m_unTotalMatchingResults;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_21[3];
 };
 #pragma pack( pop )
@@ -2129,7 +2129,7 @@ typedef struct SubmitItemUpdateResult_t_141 SubmitItemUpdateResult_t_141;
 struct SubmitItemUpdateResult_t_141
 {
     uint32_t m_eResult;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_5[3];
     uint64_t m_nPublishedFileId;
 };
@@ -2140,7 +2140,7 @@ typedef struct SubmitItemUpdateResult_t_130 SubmitItemUpdateResult_t_130;
 struct SubmitItemUpdateResult_t_130
 {
     uint32_t m_eResult;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_5[3];
 };
 #pragma pack( pop )
@@ -2150,7 +2150,7 @@ typedef struct TimedTrialStatus_t TimedTrialStatus_t;
 struct TimedTrialStatus_t
 {
     uint32_t m_unAppID;
-    bool m_bIsOffline;
+    int8_t m_bIsOffline;
     uint8_t __pad_5[3];
     uint32_t m_unSecondsAllowed;
     uint32_t m_unSecondsPlayed;
@@ -2171,7 +2171,7 @@ struct UserAchievementIconFetched_t
 {
     CGameID m_nGameID;
     char (m_rgchAchievementName)[128];
-    bool m_bAchieved;
+    int8_t m_bAchieved;
     uint8_t __pad_137[3];
     int32_t m_nIconHandle;
 };
@@ -2182,7 +2182,7 @@ typedef struct UserAchievementStored_t UserAchievementStored_t;
 struct UserAchievementStored_t
 {
     uint64_t m_nGameID;
-    bool m_bGroupAchievement;
+    int8_t m_bGroupAchievement;
     char (m_rgchAchievementName)[128];
     uint8_t __pad_137[3];
     uint32_t m_nCurProgress;
@@ -2197,7 +2197,7 @@ struct UserFavoriteItemsListChanged_t
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
-    bool m_bWasAddRequest;
+    int8_t m_bWasAddRequest;
     uint8_t __pad_13[3];
 };
 #pragma pack( pop )
@@ -2284,8 +2284,8 @@ struct WorkshopEULAStatus_t
     uint32_t m_nAppID;
     uint32_t m_unVersion;
     uint32_t m_rtAction;
-    bool m_bAccepted;
-    bool m_bNeedsAction;
+    int8_t m_bAccepted;
+    int8_t m_bNeedsAction;
     uint8_t __pad_18[2];
 };
 #pragma pack( pop )
@@ -2296,8 +2296,8 @@ struct gameserveritem_t_105
 {
     servernetadr_t m_NetAdr;
     int32_t m_nPing;
-    bool m_bHadSuccessfulResponse;
-    bool m_bDoNotRefresh;
+    int8_t m_bHadSuccessfulResponse;
+    int8_t m_bDoNotRefresh;
     char (m_szGameDir)[32];
     char (m_szMap)[32];
     char (m_szGameDescription)[64];
@@ -2306,8 +2306,8 @@ struct gameserveritem_t_105
     int32_t m_nPlayers;
     int32_t m_nMaxPlayers;
     int32_t m_nBotPlayers;
-    bool m_bPassword;
-    bool m_bSecure;
+    int8_t m_bPassword;
+    int8_t m_bSecure;
     uint8_t __pad_162[2];
     uint32_t m_ulTimeLastPlayed;
     int32_t m_nServerVersion;
@@ -2323,8 +2323,8 @@ struct gameserveritem_t_099u
 {
     servernetadr_t m_NetAdr;
     int32_t m_nPing;
-    bool m_bHadSuccessfulResponse;
-    bool m_bDoNotRefresh;
+    int8_t m_bHadSuccessfulResponse;
+    int8_t m_bDoNotRefresh;
     char (m_szGameDir)[32];
     char (m_szMap)[32];
     char (m_szGameDescription)[64];
@@ -2333,8 +2333,8 @@ struct gameserveritem_t_099u
     int32_t m_nPlayers;
     int32_t m_nMaxPlayers;
     int32_t m_nBotPlayers;
-    bool m_bPassword;
-    bool m_bSecure;
+    int8_t m_bPassword;
+    int8_t m_bSecure;
     uint8_t __pad_162[2];
     uint32_t m_ulTimeLastPlayed;
     int32_t m_nServerVersion;
@@ -2903,9 +2903,9 @@ struct w64_SteamUGCDetails_t_128x
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 1025, m_rgchTags);
     uint8_t __pad_9212[4];
     uint64_t m_hFile;
@@ -2941,9 +2941,9 @@ struct u64_SteamUGCDetails_t_128x
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     U64_ARRAY(char, 1025, m_rgchTags);
     uint64_t m_hFile;
     uint64_t m_hPreviewFile;
@@ -2977,9 +2977,9 @@ struct w32_SteamUGCDetails_t_128x
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 1025, m_rgchTags);
     uint8_t __pad_9212[4];
     uint64_t m_hFile;
@@ -3015,9 +3015,9 @@ struct u32_SteamUGCDetails_t_128x
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 1025, m_rgchTags);
     uint64_t m_hFile;
     uint64_t m_hPreviewFile;
@@ -3060,9 +3060,9 @@ struct w64_SteamUGCDetails_t_126
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 1025, m_rgchTags);
     uint8_t __pad_9212[4];
     uint64_t m_hFile;
@@ -3096,9 +3096,9 @@ struct u64_SteamUGCDetails_t_126
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     U64_ARRAY(char, 1025, m_rgchTags);
     uint64_t m_hFile;
     uint64_t m_hPreviewFile;
@@ -3131,9 +3131,9 @@ struct w32_SteamUGCDetails_t_126
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 1025, m_rgchTags);
     uint8_t __pad_9212[4];
     uint64_t m_hFile;
@@ -3167,9 +3167,9 @@ struct u32_SteamUGCDetails_t_126
     uint32_t m_rtimeUpdated;
     uint32_t m_rtimeAddedToUserList;
     uint32_t m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
+    int8_t m_bBanned;
+    int8_t m_bAcceptedForUse;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 1025, m_rgchTags);
     uint64_t m_hFile;
     uint64_t m_hPreviewFile;
@@ -3587,7 +3587,7 @@ struct w_CSteamCallback
     virtual uint8_t * GetFixedData(  ) = 0;
     virtual uint32_t GetFixedSize(  ) = 0;
     virtual uint32_t GetNumMemberVariables(  ) = 0;
-    virtual bool GetMemberVariable( uint32_t, uint32_t *, uint32_t *, uint32_t *, const char **, const char ** ) = 0;
+    virtual int8_t GetMemberVariable( uint32_t, uint32_t *, uint32_t *, uint32_t *, const char **, const char ** ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -3599,7 +3599,7 @@ struct u_CSteamCallback
     virtual uint8_t * GetFixedData(  ) = 0;
     virtual uint32_t GetFixedSize(  ) = 0;
     virtual uint32_t GetNumMemberVariables(  ) = 0;
-    virtual bool GetMemberVariable( uint32_t, uint32_t *, uint32_t *, uint32_t *, const char **, const char ** ) = 0;
+    virtual int8_t GetMemberVariable( uint32_t, uint32_t *, uint32_t *, uint32_t *, const char **, const char ** ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -3770,7 +3770,7 @@ struct w64_CreateItemResult_t
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u64_CreateItemResult_t() const;
@@ -3783,7 +3783,7 @@ struct u64_CreateItemResult_t
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w64_CreateItemResult_t() const;
@@ -3797,7 +3797,7 @@ struct w32_CreateItemResult_t
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u32_CreateItemResult_t() const;
@@ -3810,7 +3810,7 @@ struct u32_CreateItemResult_t
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w32_CreateItemResult_t() const;
@@ -4066,7 +4066,7 @@ struct w64_GSReputation_t_123
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4085,7 +4085,7 @@ struct u64_GSReputation_t_123
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4103,7 +4103,7 @@ struct w32_GSReputation_t_123
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4122,7 +4122,7 @@ struct u32_GSReputation_t_123
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4149,7 +4149,7 @@ struct w64_GSReputation_t_108
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4165,7 +4165,7 @@ struct w32_GSReputation_t_108
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4184,7 +4184,7 @@ struct u32_GSReputation_t_108
 {
     uint32_t m_eResult;
     uint32_t m_unReputationScore;
-    bool m_bBanned;
+    int8_t m_bBanned;
     uint8_t __pad_9[3];
     uint32_t m_unBannedIP;
     uint16_t m_usBannedPort;
@@ -4563,8 +4563,8 @@ struct w64_HTML_LinkAtPosition_t
     uint32_t y;
     uint8_t __pad_12[4];
     W64_PTR(const char *pchURL, pchURL);
-    bool bInput;
-    bool bLiveLink;
+    int8_t bInput;
+    int8_t bLiveLink;
     uint8_t __pad_26[6];
 #ifdef __cplusplus
     operator u64_HTML_LinkAtPosition_t() const;
@@ -4579,8 +4579,8 @@ struct u64_HTML_LinkAtPosition_t
     uint32_t x;
     uint32_t y;
     U64_PTR(const char *pchURL, pchURL);
-    bool bInput;
-    bool bLiveLink;
+    int8_t bInput;
+    int8_t bLiveLink;
     uint8_t __pad_22[2];
 #ifdef __cplusplus
     operator w64_HTML_LinkAtPosition_t() const;
@@ -4595,8 +4595,8 @@ struct w32_HTML_LinkAtPosition_t
     uint32_t x;
     uint32_t y;
     W32_PTR(const char *pchURL, pchURL);
-    bool bInput;
-    bool bLiveLink;
+    int8_t bInput;
+    int8_t bLiveLink;
     uint8_t __pad_18[2];
 #ifdef __cplusplus
     operator u32_HTML_LinkAtPosition_t() const;
@@ -4611,8 +4611,8 @@ struct u32_HTML_LinkAtPosition_t
     uint32_t x;
     uint32_t y;
     U32_PTR(const char *pchURL, pchURL);
-    bool bInput;
-    bool bLiveLink;
+    int8_t bInput;
+    int8_t bLiveLink;
     uint8_t __pad_18[2];
 #ifdef __cplusplus
     operator w32_HTML_LinkAtPosition_t() const;
@@ -4946,7 +4946,7 @@ struct w64_HTML_StartRequest_t
     W64_PTR(const char *pchURL, pchURL);
     W64_PTR(const char *pchTarget, pchTarget);
     W64_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_33[7];
 #ifdef __cplusplus
     operator u64_HTML_StartRequest_t() const;
@@ -4961,7 +4961,7 @@ struct u64_HTML_StartRequest_t
     U64_PTR(const char *pchURL, pchURL);
     U64_PTR(const char *pchTarget, pchTarget);
     U64_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_29[3];
 #ifdef __cplusplus
     operator w64_HTML_StartRequest_t() const;
@@ -4976,7 +4976,7 @@ struct w32_HTML_StartRequest_t
     W32_PTR(const char *pchURL, pchURL);
     W32_PTR(const char *pchTarget, pchTarget);
     W32_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_17[3];
 #ifdef __cplusplus
     operator u32_HTML_StartRequest_t() const;
@@ -4991,7 +4991,7 @@ struct u32_HTML_StartRequest_t
     U32_PTR(const char *pchURL, pchURL);
     U32_PTR(const char *pchTarget, pchTarget);
     U32_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_17[3];
 #ifdef __cplusplus
     operator w32_HTML_StartRequest_t() const;
@@ -5055,10 +5055,10 @@ struct w64_HTML_URLChanged_t
     uint8_t __pad_4[4];
     W64_PTR(const char *pchURL, pchURL);
     W64_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_25[7];
     W64_PTR(const char *pchPageTitle, pchPageTitle);
-    bool bNewNavigation;
+    int8_t bNewNavigation;
     uint8_t __pad_41[7];
 #ifdef __cplusplus
     operator u64_HTML_URLChanged_t() const;
@@ -5072,10 +5072,10 @@ struct u64_HTML_URLChanged_t
     uint32_t unBrowserHandle;
     U64_PTR(const char *pchURL, pchURL);
     U64_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_21[3];
     U64_PTR(const char *pchPageTitle, pchPageTitle);
-    bool bNewNavigation;
+    int8_t bNewNavigation;
     uint8_t __pad_33[3];
 #ifdef __cplusplus
     operator w64_HTML_URLChanged_t() const;
@@ -5089,10 +5089,10 @@ struct w32_HTML_URLChanged_t
     uint32_t unBrowserHandle;
     W32_PTR(const char *pchURL, pchURL);
     W32_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_13[3];
     W32_PTR(const char *pchPageTitle, pchPageTitle);
-    bool bNewNavigation;
+    int8_t bNewNavigation;
     uint8_t __pad_21[3];
 #ifdef __cplusplus
     operator u32_HTML_URLChanged_t() const;
@@ -5106,10 +5106,10 @@ struct u32_HTML_URLChanged_t
     uint32_t unBrowserHandle;
     U32_PTR(const char *pchURL, pchURL);
     U32_PTR(const char *pchPostData, pchPostData);
-    bool bIsRedirect;
+    int8_t bIsRedirect;
     uint8_t __pad_13[3];
     U32_PTR(const char *pchPageTitle, pchPageTitle);
-    bool bNewNavigation;
+    int8_t bNewNavigation;
     uint8_t __pad_21[3];
 #ifdef __cplusplus
     operator w32_HTML_URLChanged_t() const;
@@ -5172,7 +5172,7 @@ struct w64_HTTPRequestCompleted_t_132x
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
     uint32_t m_unBodySize;
@@ -5188,7 +5188,7 @@ struct u64_HTTPRequestCompleted_t_132x
 {
     uint32_t m_hRequest;
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_13[3];
     uint32_t m_eStatusCode;
     uint32_t m_unBodySize;
@@ -5204,7 +5204,7 @@ struct w32_HTTPRequestCompleted_t_132x
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
     uint32_t m_unBodySize;
@@ -5220,7 +5220,7 @@ struct u32_HTTPRequestCompleted_t_132x
 {
     uint32_t m_hRequest;
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_13[3];
     uint32_t m_eStatusCode;
     uint32_t m_unBodySize;
@@ -5245,7 +5245,7 @@ struct w64_HTTPRequestCompleted_t_123
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5259,7 +5259,7 @@ struct u64_HTTPRequestCompleted_t_123
 {
     uint32_t m_hRequest;
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_13[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5274,7 +5274,7 @@ struct w32_HTTPRequestCompleted_t_123
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5288,7 +5288,7 @@ struct u32_HTTPRequestCompleted_t_123
 {
     uint32_t m_hRequest;
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_13[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5312,7 +5312,7 @@ struct w64_HTTPRequestCompleted_t_115
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
 };
@@ -5324,7 +5324,7 @@ struct w32_HTTPRequestCompleted_t_115
     uint32_t m_hRequest;
     uint8_t __pad_4[4];
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_17[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5338,7 +5338,7 @@ struct u32_HTTPRequestCompleted_t_115
 {
     uint32_t m_hRequest;
     uint64_t m_ulContextValue;
-    bool m_bRequestSuccessful;
+    int8_t m_bRequestSuccessful;
     uint8_t __pad_13[3];
     uint32_t m_eStatusCode;
 #ifdef __cplusplus
@@ -5653,7 +5653,7 @@ struct u_ISteamMatchmakingServerListResponse_099u
 struct w_ISteamNetworkingConnectionCustomSignaling
 {
 #ifdef __cplusplus
-    virtual bool SendSignal( uint32_t, const SteamNetConnectionInfo_t_144 *, const void *, int32_t ) = 0;
+    virtual int8_t SendSignal( uint32_t, const SteamNetConnectionInfo_t_144 *, const void *, int32_t ) = 0;
     virtual void Release(  ) = 0;
 #endif /* __cplusplus */
 };
@@ -5661,7 +5661,7 @@ struct w_ISteamNetworkingConnectionCustomSignaling
 struct u_ISteamNetworkingConnectionCustomSignaling
 {
 #ifdef __cplusplus
-    virtual bool SendSignal( uint32_t, const SteamNetConnectionInfo_t_144 *, const void *, int32_t ) = 0;
+    virtual int8_t SendSignal( uint32_t, const SteamNetConnectionInfo_t_144 *, const void *, int32_t ) = 0;
     virtual void Release(  ) = 0;
 #endif /* __cplusplus */
 };
@@ -6493,7 +6493,7 @@ struct w64_RemoteStorageAppSyncProgress_t_123
     uint32_t m_uBytesTransferredThisChunk;
     uint8_t __pad_268[4];
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_281[7];
 #ifdef __cplusplus
     operator u64_RemoteStorageAppSyncProgress_t_123() const;
@@ -6508,7 +6508,7 @@ struct u64_RemoteStorageAppSyncProgress_t_123
     uint32_t m_nAppID;
     uint32_t m_uBytesTransferredThisChunk;
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_277[3];
 #ifdef __cplusplus
     operator w64_RemoteStorageAppSyncProgress_t_123() const;
@@ -6524,7 +6524,7 @@ struct w32_RemoteStorageAppSyncProgress_t_123
     uint32_t m_uBytesTransferredThisChunk;
     uint8_t __pad_268[4];
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_281[7];
 #ifdef __cplusplus
     operator u32_RemoteStorageAppSyncProgress_t_123() const;
@@ -6539,7 +6539,7 @@ struct u32_RemoteStorageAppSyncProgress_t_123
     uint32_t m_nAppID;
     uint32_t m_uBytesTransferredThisChunk;
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_277[3];
 #ifdef __cplusplus
     operator w32_RemoteStorageAppSyncProgress_t_123() const;
@@ -6564,7 +6564,7 @@ struct w64_RemoteStorageAppSyncProgress_t_111x
     uint32_t m_uBytesTransferredThisChunk;
     uint8_t __pad_268[4];
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_281[7];
 };
 #pragma pack( pop )
@@ -6577,7 +6577,7 @@ struct w32_RemoteStorageAppSyncProgress_t_111x
     uint32_t m_uBytesTransferredThisChunk;
     uint8_t __pad_268[4];
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_281[7];
 #ifdef __cplusplus
     operator u32_RemoteStorageAppSyncProgress_t_111x() const;
@@ -6592,7 +6592,7 @@ struct u32_RemoteStorageAppSyncProgress_t_111x
     uint32_t m_nAppID;
     uint32_t m_uBytesTransferredThisChunk;
     double m_dAppPercentComplete;
-    bool m_bUploading;
+    int8_t m_bUploading;
     uint8_t __pad_277[3];
 #ifdef __cplusplus
     operator w32_RemoteStorageAppSyncProgress_t_111x() const;
@@ -7590,16 +7590,16 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_126
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
     int32_t m_nPreviewFileSize;
     W64_ARRAY(char, 256, m_rgchURL);
     uint32_t m_eFileType;
-    bool m_bAcceptedForUse;
+    int8_t m_bAcceptedForUse;
     uint8_t __pad_9753[7];
 #ifdef __cplusplus
     operator u64_RemoteStorageGetPublishedFileDetailsResult_t_126() const;
@@ -7623,16 +7623,16 @@ struct u64_RemoteStorageGetPublishedFileDetailsResult_t_126
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
     int32_t m_nPreviewFileSize;
     U64_ARRAY(char, 256, m_rgchURL);
     uint32_t m_eFileType;
-    bool m_bAcceptedForUse;
+    int8_t m_bAcceptedForUse;
     uint8_t __pad_9745[3];
 #ifdef __cplusplus
     operator w64_RemoteStorageGetPublishedFileDetailsResult_t_126() const;
@@ -7657,16 +7657,16 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_126
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
     int32_t m_nPreviewFileSize;
     W32_ARRAY(char, 256, m_rgchURL);
     uint32_t m_eFileType;
-    bool m_bAcceptedForUse;
+    int8_t m_bAcceptedForUse;
     uint8_t __pad_9753[7];
 #ifdef __cplusplus
     operator u32_RemoteStorageGetPublishedFileDetailsResult_t_126() const;
@@ -7690,16 +7690,16 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_126
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
     int32_t m_nPreviewFileSize;
     U32_ARRAY(char, 256, m_rgchURL);
     uint32_t m_eFileType;
-    bool m_bAcceptedForUse;
+    int8_t m_bAcceptedForUse;
     uint8_t __pad_9745[3];
 #ifdef __cplusplus
     operator w32_RemoteStorageGetPublishedFileDetailsResult_t_126() const;
@@ -7733,9 +7733,9 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_123
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -7764,9 +7764,9 @@ struct u64_RemoteStorageGetPublishedFileDetailsResult_t_123
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
@@ -7796,9 +7796,9 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_123
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -7827,9 +7827,9 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_123
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
@@ -7868,9 +7868,9 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_119x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -7897,9 +7897,9 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_119x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -7928,9 +7928,9 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_119x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
@@ -7969,9 +7969,9 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_119
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -7998,9 +7998,9 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_119
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -8029,9 +8029,9 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_119
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
@@ -8069,9 +8069,9 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_118
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -8097,9 +8097,9 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_118
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9483[1];
     int32_t m_nFileSize;
@@ -8127,9 +8127,9 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_118
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_9475[1];
     int32_t m_nFileSize;
@@ -8166,9 +8166,9 @@ struct w64_RemoteStorageGetPublishedFileDetailsResult_t_116x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W64_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W64_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_1739[5];
 };
@@ -8191,9 +8191,9 @@ struct w32_RemoteStorageGetPublishedFileDetailsResult_t_116x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     W32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     W32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_1739[5];
 #ifdef __cplusplus
@@ -8218,9 +8218,9 @@ struct u32_RemoteStorageGetPublishedFileDetailsResult_t_116x
     uint32_t m_rtimeCreated;
     uint32_t m_rtimeUpdated;
     uint32_t m_eVisibility;
-    bool m_bBanned;
+    int8_t m_bBanned;
     U32_ARRAY(char, 1025, m_rgchTags);
-    bool m_bTagsTruncated;
+    int8_t m_bTagsTruncated;
     U32_ARRAY(char, 260, m_pchFileName);
     uint8_t __pad_1731[1];
 #ifdef __cplusplus
@@ -8368,7 +8368,7 @@ struct w64_RemoteStoragePublishFileResult_t_125
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u64_RemoteStoragePublishFileResult_t_125() const;
@@ -8381,7 +8381,7 @@ struct u64_RemoteStoragePublishFileResult_t_125
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w64_RemoteStoragePublishFileResult_t_125() const;
@@ -8395,7 +8395,7 @@ struct w32_RemoteStoragePublishFileResult_t_125
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u32_RemoteStoragePublishFileResult_t_125() const;
@@ -8408,7 +8408,7 @@ struct u32_RemoteStoragePublishFileResult_t_125
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w32_RemoteStoragePublishFileResult_t_125() const;
@@ -8854,12 +8854,12 @@ struct w64_RemoteStorageUpdatePublishedFileRequest_t
     uint32_t m_eVisibility;
     uint8_t __pad_44[4];
     W64_PTR(w64_SteamParamStringArray_t *m_pTags, m_pTags);
-    bool m_bUpdateFile;
-    bool m_bUpdatePreviewFile;
-    bool m_bUpdateTitle;
-    bool m_bUpdateDescription;
-    bool m_bUpdateVisibility;
-    bool m_bUpdateTags;
+    int8_t m_bUpdateFile;
+    int8_t m_bUpdatePreviewFile;
+    int8_t m_bUpdateTitle;
+    int8_t m_bUpdateDescription;
+    int8_t m_bUpdateVisibility;
+    int8_t m_bUpdateTags;
     uint8_t __pad_62[2];
 };
 #pragma pack( pop )
@@ -8874,12 +8874,12 @@ struct w32_RemoteStorageUpdatePublishedFileRequest_t
     W32_PTR(const char *m_pchDescription, m_pchDescription);
     uint32_t m_eVisibility;
     W32_PTR(w32_SteamParamStringArray_t *m_pTags, m_pTags);
-    bool m_bUpdateFile;
-    bool m_bUpdatePreviewFile;
-    bool m_bUpdateTitle;
-    bool m_bUpdateDescription;
-    bool m_bUpdateVisibility;
-    bool m_bUpdateTags;
+    int8_t m_bUpdateFile;
+    int8_t m_bUpdatePreviewFile;
+    int8_t m_bUpdateTitle;
+    int8_t m_bUpdateDescription;
+    int8_t m_bUpdateVisibility;
+    int8_t m_bUpdateTags;
     uint8_t __pad_38[2];
 };
 #pragma pack( pop )
@@ -8899,7 +8899,7 @@ struct w64_RemoteStorageUpdatePublishedFileResult_t_125
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u64_RemoteStorageUpdatePublishedFileResult_t_125() const;
@@ -8912,7 +8912,7 @@ struct u64_RemoteStorageUpdatePublishedFileResult_t_125
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w64_RemoteStorageUpdatePublishedFileResult_t_125() const;
@@ -8926,7 +8926,7 @@ struct w32_RemoteStorageUpdatePublishedFileResult_t_125
     uint32_t m_eResult;
     uint8_t __pad_4[4];
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_17[7];
 #ifdef __cplusplus
     operator u32_RemoteStorageUpdatePublishedFileResult_t_125() const;
@@ -8939,7 +8939,7 @@ struct u32_RemoteStorageUpdatePublishedFileResult_t_125
 {
     uint32_t m_eResult;
     uint64_t m_nPublishedFileId;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    int8_t m_bUserNeedsToAcceptWorkshopLegalAgreement;
     uint8_t __pad_13[3];
 #ifdef __cplusplus
     operator w32_RemoteStorageUpdatePublishedFileResult_t_125() const;
@@ -9587,8 +9587,8 @@ struct w64_SteamInputConfigurationLoaded_t
     CSteamID m_ulMappingCreator;
     uint32_t m_unMajorRevision;
     uint32_t m_unMinorRevision;
-    bool m_bUsesSteamInputAPI;
-    bool m_bUsesGamepadAPI;
+    int8_t m_bUsesSteamInputAPI;
+    int8_t m_bUsesGamepadAPI;
     uint8_t __pad_34[6];
 #ifdef __cplusplus
     operator u64_SteamInputConfigurationLoaded_t() const;
@@ -9604,8 +9604,8 @@ struct u64_SteamInputConfigurationLoaded_t
     CSteamID m_ulMappingCreator;
     uint32_t m_unMajorRevision;
     uint32_t m_unMinorRevision;
-    bool m_bUsesSteamInputAPI;
-    bool m_bUsesGamepadAPI;
+    int8_t m_bUsesSteamInputAPI;
+    int8_t m_bUsesGamepadAPI;
     uint8_t __pad_30[2];
 #ifdef __cplusplus
     operator w64_SteamInputConfigurationLoaded_t() const;
@@ -9622,8 +9622,8 @@ struct w32_SteamInputConfigurationLoaded_t
     CSteamID m_ulMappingCreator;
     uint32_t m_unMajorRevision;
     uint32_t m_unMinorRevision;
-    bool m_bUsesSteamInputAPI;
-    bool m_bUsesGamepadAPI;
+    int8_t m_bUsesSteamInputAPI;
+    int8_t m_bUsesGamepadAPI;
     uint8_t __pad_34[6];
 #ifdef __cplusplus
     operator u32_SteamInputConfigurationLoaded_t() const;
@@ -9639,8 +9639,8 @@ struct u32_SteamInputConfigurationLoaded_t
     CSteamID m_ulMappingCreator;
     uint32_t m_unMajorRevision;
     uint32_t m_unMinorRevision;
-    bool m_bUsesSteamInputAPI;
-    bool m_bUsesGamepadAPI;
+    int8_t m_bUsesSteamInputAPI;
+    int8_t m_bUsesGamepadAPI;
     uint8_t __pad_30[2];
 #ifdef __cplusplus
     operator w32_SteamInputConfigurationLoaded_t() const;
@@ -10436,7 +10436,7 @@ typedef u64_SteamPartyBeaconLocation_t u_SteamPartyBeaconLocation_t;
 struct w64_SteamUGCRequestUGCDetailsResult_t_128x
 {
     w64_SteamUGCDetails_t_128x m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9777[7];
 #ifdef __cplusplus
     operator u64_SteamUGCRequestUGCDetailsResult_t_128x() const;
@@ -10448,7 +10448,7 @@ struct w64_SteamUGCRequestUGCDetailsResult_t_128x
 struct u64_SteamUGCRequestUGCDetailsResult_t_128x
 {
     u64_SteamUGCDetails_t_128x m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9765[3];
 #ifdef __cplusplus
     operator w64_SteamUGCRequestUGCDetailsResult_t_128x() const;
@@ -10460,7 +10460,7 @@ struct u64_SteamUGCRequestUGCDetailsResult_t_128x
 struct w32_SteamUGCRequestUGCDetailsResult_t_128x
 {
     w32_SteamUGCDetails_t_128x m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9777[7];
 #ifdef __cplusplus
     operator u32_SteamUGCRequestUGCDetailsResult_t_128x() const;
@@ -10472,7 +10472,7 @@ struct w32_SteamUGCRequestUGCDetailsResult_t_128x
 struct u32_SteamUGCRequestUGCDetailsResult_t_128x
 {
     u32_SteamUGCDetails_t_128x m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9765[3];
 #ifdef __cplusplus
     operator w32_SteamUGCRequestUGCDetailsResult_t_128x() const;
@@ -10493,7 +10493,7 @@ typedef u64_SteamUGCRequestUGCDetailsResult_t_128x u_SteamUGCRequestUGCDetailsRe
 struct w64_SteamUGCRequestUGCDetailsResult_t_129
 {
     w64_SteamUGCDetails_t_126 m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9769[7];
 #ifdef __cplusplus
     operator u64_SteamUGCRequestUGCDetailsResult_t_129() const;
@@ -10505,7 +10505,7 @@ struct w64_SteamUGCRequestUGCDetailsResult_t_129
 struct u64_SteamUGCRequestUGCDetailsResult_t_129
 {
     u64_SteamUGCDetails_t_126 m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9761[3];
 #ifdef __cplusplus
     operator w64_SteamUGCRequestUGCDetailsResult_t_129() const;
@@ -10517,7 +10517,7 @@ struct u64_SteamUGCRequestUGCDetailsResult_t_129
 struct w32_SteamUGCRequestUGCDetailsResult_t_129
 {
     w32_SteamUGCDetails_t_126 m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9769[7];
 #ifdef __cplusplus
     operator u32_SteamUGCRequestUGCDetailsResult_t_129() const;
@@ -10529,7 +10529,7 @@ struct w32_SteamUGCRequestUGCDetailsResult_t_129
 struct u32_SteamUGCRequestUGCDetailsResult_t_129
 {
     u32_SteamUGCDetails_t_126 m_details;
-    bool m_bCachedData;
+    int8_t m_bCachedData;
     uint8_t __pad_9761[3];
 #ifdef __cplusplus
     operator w32_SteamUGCRequestUGCDetailsResult_t_129() const;

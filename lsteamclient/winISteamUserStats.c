@@ -114,7 +114,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(struct w_steam_iface *_this, CGameID nGameID)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(struct w_steam_iface *_this, CGameID nGameID)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats_params params =
     {
@@ -126,7 +126,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_params params =
     {
@@ -140,7 +140,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2_params params =
     {
@@ -154,7 +154,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_params params =
     {
@@ -168,7 +168,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2_params params =
     {
@@ -182,7 +182,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat_params params =
     {
@@ -197,7 +197,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement_params params =
     {
@@ -211,7 +211,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement_params params =
     {
@@ -225,7 +225,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupA
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement_params params =
     {
@@ -238,7 +238,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement_params params =
     {
@@ -251,7 +251,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupA
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(struct w_steam_iface *_this, CGameID nGameID)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(struct w_steam_iface *_this, CGameID nGameID)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats_params params =
     {
@@ -263,7 +263,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStat
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement_params params =
     {
@@ -276,7 +276,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement_params params =
     {
@@ -438,7 +438,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats(struct w_steam_iface *_this, CGameID nGameID)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats(struct w_steam_iface *_this, CGameID nGameID)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCurrentStats_params params =
     {
@@ -450,7 +450,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_params params =
     {
@@ -464,7 +464,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2_params params =
     {
@@ -478,7 +478,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_params params =
     {
@@ -492,7 +492,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2_params params =
     {
@@ -506,7 +506,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat_params params =
     {
@@ -521,7 +521,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement_params params =
     {
@@ -535,7 +535,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement_params params =
     {
@@ -548,7 +548,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement(struct w_steam_iface *_this, CGameID nGameID, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement_params params =
     {
@@ -561,7 +561,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats(struct w_steam_iface *_this, CGameID nGameID)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats(struct w_steam_iface *_this, CGameID nGameID)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_StoreStats_params params =
     {
@@ -600,7 +600,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress(struct w_steam_iface *_this, CGameID nGameID, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress_params params =
     {
@@ -665,7 +665,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress, 16)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats_params params =
     {
@@ -676,7 +676,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_params params =
     {
@@ -689,7 +689,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2_params params =
     {
@@ -702,7 +702,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_params params =
     {
@@ -715,7 +715,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2_params params =
     {
@@ -728,7 +728,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat_params params =
     {
@@ -742,7 +742,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement_params params =
     {
@@ -755,7 +755,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement_params params =
     {
@@ -767,7 +767,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement_params params =
     {
@@ -779,7 +779,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_StoreStats_params params =
     {
@@ -815,7 +815,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress_params params =
     {
@@ -878,7 +878,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement, 20)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats_params params =
     {
@@ -889,7 +889,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_params params =
     {
@@ -902,7 +902,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2_params params =
     {
@@ -915,7 +915,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_params params =
     {
@@ -928,7 +928,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2_params params =
     {
@@ -941,7 +941,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat_params params =
     {
@@ -955,7 +955,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement_params params =
     {
@@ -968,7 +968,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement_params params =
     {
@@ -980,7 +980,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement_params params =
     {
@@ -992,7 +992,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats_params params =
     {
@@ -1028,7 +1028,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress_params params =
     {
@@ -1054,7 +1054,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_params params =
     {
@@ -1068,7 +1068,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2_params params =
     {
@@ -1082,7 +1082,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement_params params =
     {
@@ -1159,7 +1159,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_D
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry, 28)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore, 24)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats_params params =
     {
@@ -1170,7 +1170,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_params params =
     {
@@ -1183,7 +1183,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2_params params =
     {
@@ -1196,7 +1196,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_params params =
     {
@@ -1209,7 +1209,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2_params params =
     {
@@ -1222,7 +1222,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat_params params =
     {
@@ -1236,7 +1236,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement_params params =
     {
@@ -1249,7 +1249,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement_params params =
     {
@@ -1261,7 +1261,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement_params params =
     {
@@ -1273,7 +1273,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_StoreStats_params params =
     {
@@ -1309,7 +1309,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress_params params =
     {
@@ -1335,7 +1335,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_params params =
     {
@@ -1349,7 +1349,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2_params params =
     {
@@ -1363,7 +1363,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement_params params =
     {
@@ -1377,7 +1377,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats_params params =
     {
@@ -1478,7 +1478,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry_params params =
     {
@@ -1583,7 +1583,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore, 28)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers, 4)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats_params params =
     {
@@ -1594,7 +1594,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_params params =
     {
@@ -1607,7 +1607,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2_params params =
     {
@@ -1620,7 +1620,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_params params =
     {
@@ -1633,7 +1633,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2_params params =
     {
@@ -1646,7 +1646,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat_params params =
     {
@@ -1660,7 +1660,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement_params params =
     {
@@ -1673,7 +1673,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement_params params =
     {
@@ -1685,7 +1685,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement_params params =
     {
@@ -1697,7 +1697,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_StoreStats_params params =
     {
@@ -1733,7 +1733,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress_params params =
     {
@@ -1759,7 +1759,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_params params =
     {
@@ -1773,7 +1773,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2_params params =
     {
@@ -1787,7 +1787,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement_params params =
     {
@@ -1801,7 +1801,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats_params params =
     {
@@ -1902,7 +1902,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2022,7 +2022,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore, 28)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers, 4)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats_params params =
     {
@@ -2033,7 +2033,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_params params =
     {
@@ -2046,7 +2046,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2_params params =
     {
@@ -2059,7 +2059,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_params params =
     {
@@ -2072,7 +2072,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2_params params =
     {
@@ -2085,7 +2085,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat_params params =
     {
@@ -2099,7 +2099,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement_params params =
     {
@@ -2112,7 +2112,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement_params params =
     {
@@ -2124,7 +2124,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement_params params =
     {
@@ -2136,7 +2136,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime_params params =
     {
@@ -2150,7 +2150,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_StoreStats_params params =
     {
@@ -2186,7 +2186,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress_params params =
     {
@@ -2212,7 +2212,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_params params =
     {
@@ -2226,7 +2226,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2_params params =
     {
@@ -2240,7 +2240,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement_params params =
     {
@@ -2254,7 +2254,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime_params params =
     {
@@ -2269,7 +2269,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats_params params =
     {
@@ -2370,7 +2370,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_104 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2493,7 +2493,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_U
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers, 4)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats_params params =
     {
@@ -2504,7 +2504,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_params params =
     {
@@ -2517,7 +2517,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2_params params =
     {
@@ -2530,7 +2530,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_params params =
     {
@@ -2543,7 +2543,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2_params params =
     {
@@ -2556,7 +2556,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat_params params =
     {
@@ -2570,7 +2570,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement_params params =
     {
@@ -2583,7 +2583,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement_params params =
     {
@@ -2595,7 +2595,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement_params params =
     {
@@ -2607,7 +2607,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime_params params =
     {
@@ -2621,7 +2621,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_StoreStats_params params =
     {
@@ -2657,7 +2657,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress_params params =
     {
@@ -2683,7 +2683,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_params params =
     {
@@ -2697,7 +2697,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2_params params =
     {
@@ -2711,7 +2711,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement_params params =
     {
@@ -2725,7 +2725,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime_params params =
     {
@@ -2740,7 +2740,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats_params params =
     {
@@ -2841,7 +2841,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2979,7 +2979,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_U
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers, 4)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats_params params =
     {
@@ -2990,7 +2990,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_params params =
     {
@@ -3003,7 +3003,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2_params params =
     {
@@ -3016,7 +3016,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_params params =
     {
@@ -3029,7 +3029,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2_params params =
     {
@@ -3042,7 +3042,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat_params params =
     {
@@ -3056,7 +3056,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement_params params =
     {
@@ -3069,7 +3069,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement_params params =
     {
@@ -3081,7 +3081,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement_params params =
     {
@@ -3093,7 +3093,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime_params params =
     {
@@ -3107,7 +3107,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_StoreStats_params params =
     {
@@ -3143,7 +3143,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress_params params =
     {
@@ -3169,7 +3169,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_params params =
     {
@@ -3183,7 +3183,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2_params params =
     {
@@ -3197,7 +3197,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement_params params =
     {
@@ -3211,7 +3211,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime_params params =
     {
@@ -3226,7 +3226,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats_params params =
     {
@@ -3341,7 +3341,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3489,7 +3489,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2, 16)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats_params params =
     {
@@ -3500,7 +3500,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_params params =
     {
@@ -3513,7 +3513,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2_params params =
     {
@@ -3526,7 +3526,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_params params =
     {
@@ -3539,7 +3539,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2_params params =
     {
@@ -3552,7 +3552,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat_params params =
     {
@@ -3566,7 +3566,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement_params params =
     {
@@ -3579,7 +3579,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement_params params =
     {
@@ -3591,7 +3591,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement_params params =
     {
@@ -3603,7 +3603,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime_params params =
     {
@@ -3617,7 +3617,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats_params params =
     {
@@ -3653,7 +3653,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress_params params =
     {
@@ -3679,7 +3679,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_params params =
     {
@@ -3693,7 +3693,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2_params params =
     {
@@ -3707,7 +3707,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement_params params =
     {
@@ -3721,7 +3721,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime_params params =
     {
@@ -3736,7 +3736,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats_params params =
     {
@@ -3851,7 +3851,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3918,7 +3918,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Reque
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo_params params =
     {
@@ -3933,7 +3933,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMos
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo_params params =
     {
@@ -3949,7 +3949,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNex
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent_params params =
     {
@@ -3974,7 +3974,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_params params =
     {
@@ -3987,7 +3987,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobal
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2_params params =
     {
@@ -4131,7 +4131,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2, 16)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats_params params =
     {
@@ -4142,7 +4142,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_params params =
     {
@@ -4155,7 +4155,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2_params params =
     {
@@ -4168,7 +4168,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_params params =
     {
@@ -4181,7 +4181,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2_params params =
     {
@@ -4194,7 +4194,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat_params params =
     {
@@ -4208,7 +4208,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement_params params =
     {
@@ -4221,7 +4221,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement_params params =
     {
@@ -4233,7 +4233,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement_params params =
     {
@@ -4245,7 +4245,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime_params params =
     {
@@ -4259,7 +4259,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_StoreStats_params params =
     {
@@ -4295,7 +4295,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress_params params =
     {
@@ -4344,7 +4344,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_params params =
     {
@@ -4358,7 +4358,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2_params params =
     {
@@ -4372,7 +4372,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement_params params =
     {
@@ -4386,7 +4386,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime_params params =
     {
@@ -4401,7 +4401,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats_params params =
     {
@@ -4516,7 +4516,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry_params params =
     {
@@ -4583,7 +4583,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Reque
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMostAchievedAchievementInfo_params params =
     {
@@ -4598,7 +4598,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetMos
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNextMostAchievedAchievementInfo_params params =
     {
@@ -4614,7 +4614,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNex
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent_params params =
     {
@@ -4639,7 +4639,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_params params =
     {
@@ -4652,7 +4652,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobal
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2_params params =
     {
@@ -4800,7 +4800,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2, 16)
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats_params params =
     {
@@ -4811,7 +4811,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCu
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(struct w_steam_iface *_this, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_params params =
     {
@@ -4824,7 +4824,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2(struct w_steam_iface *_this, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2_params params =
     {
@@ -4837,7 +4837,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(struct w_steam_iface *_this, const char *pchName, int32_t nData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_params params =
     {
@@ -4850,7 +4850,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat(s
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2(struct w_steam_iface *_this, const char *pchName, float fData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2_params params =
     {
@@ -4863,7 +4863,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat(struct w_steam_iface *_this, const char *pchName, float flCountThisSession, double dSessionLength)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat_params params =
     {
@@ -4877,7 +4877,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvg
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement_params params =
     {
@@ -4890,7 +4890,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement_params params =
     {
@@ -4902,7 +4902,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement(struct w_steam_iface *_this, const char *pchName)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement_params params =
     {
@@ -4914,7 +4914,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchi
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime(struct w_steam_iface *_this, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime_params params =
     {
@@ -4928,7 +4928,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats(struct w_steam_iface *_this)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats(struct w_steam_iface *_this)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_StoreStats_params params =
     {
@@ -4964,7 +4964,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress(struct w_steam_iface *_this, const char *pchName, uint32_t nCurProgress, uint32_t nMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress_params params =
     {
@@ -5013,7 +5013,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_params params =
     {
@@ -5027,7 +5027,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, float *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2_params params =
     {
@@ -5041,7 +5041,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserSt
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement_params params =
     {
@@ -5055,7 +5055,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, bool *pbAchieved, uint32_t *punUnlockTime)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int8_t *pbAchieved, uint32_t *punUnlockTime)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime_params params =
     {
@@ -5070,7 +5070,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAc
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats(struct w_steam_iface *_this, bool bAchievementsToo)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats(struct w_steam_iface *_this, int8_t bAchievementsToo)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllStats_params params =
     {
@@ -5185,7 +5185,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Downl
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, w_LeaderboardEntry_t_123 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry_params params =
     {
@@ -5252,7 +5252,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Reque
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo(struct w_steam_iface *_this, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMostAchievedAchievementInfo_params params =
     {
@@ -5267,7 +5267,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetMos
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, bool *pbAchieved)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo(struct w_steam_iface *_this, int32_t iIteratorPrevious, char *pchName, uint32_t unNameBufLen, float *pflPercent, int8_t *pbAchieved)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNextMostAchievedAchievementInfo_params params =
     {
@@ -5283,7 +5283,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNex
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent(struct w_steam_iface *_this, const char *pchName, float *pflPercent)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent_params params =
     {
@@ -5308,7 +5308,7 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat(struct w_steam_iface *_this, const char *pchStatName, int64_t *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_params params =
     {
@@ -5321,7 +5321,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobal
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2(struct w_steam_iface *_this, const char *pchStatName, double *pData)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2_params params =
     {
@@ -5362,7 +5362,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlo
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits(struct w_steam_iface *_this, const char *pchName, int32_t *pnMinProgress, int32_t *pnMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits(struct w_steam_iface *_this, const char *pchName, int32_t *pnMinProgress, int32_t *pnMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_params params =
     {
@@ -5376,7 +5376,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchiev
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2(struct w_steam_iface *_this, const char *pchName, float *pfMinProgress, float *pfMaxProgress)
+int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2(struct w_steam_iface *_this, const char *pchName, float *pfMinProgress, float *pfMaxProgress)
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2_params params =
     {

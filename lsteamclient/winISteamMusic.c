@@ -13,7 +13,7 @@ DEFINE_THISCALL_WRAPPER(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_PlayNext,
 DEFINE_THISCALL_WRAPPER(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume, 8)
 DEFINE_THISCALL_WRAPPER(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume, 4)
 
-bool __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(struct w_steam_iface *_this)
+int8_t __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(struct w_steam_iface *_this)
 {
     struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled_params params =
     {
@@ -24,7 +24,7 @@ bool __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled(struct
     return params._ret;
 }
 
-bool __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(struct w_steam_iface *_this)
+int8_t __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying(struct w_steam_iface *_this)
 {
     struct ISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying_params params =
     {
