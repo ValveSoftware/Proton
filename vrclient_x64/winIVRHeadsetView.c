@@ -64,7 +64,7 @@ uint32_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(stru
     return params._ret;
 }
 
-void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(struct w_steam_iface *_this, bool bCropped)
+void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(struct w_steam_iface *_this, int8_t bCropped)
 {
     struct IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped_params params =
     {
@@ -75,7 +75,7 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped(struc
     VRCLIENT_CALL( IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped, &params );
 }
 
-bool __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(struct w_steam_iface *_this)
+int8_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped(struct w_steam_iface *_this)
 {
     struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params params =
     {

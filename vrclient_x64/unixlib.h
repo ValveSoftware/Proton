@@ -45,7 +45,7 @@ struct render_model_texture_map
 
 struct vrclient_init_params
 {
-    bool _ret;
+    int8_t _ret;
     HMODULE winevulkan;
     char *unix_path;
 };

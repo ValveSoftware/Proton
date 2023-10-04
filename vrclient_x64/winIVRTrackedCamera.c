@@ -27,7 +27,7 @@ DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPa
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion, 24)
 DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection, 28)
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params params =
     {
@@ -39,7 +39,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera(struct w_stea
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription(struct w_steam_iface *_this, uint32_t nDeviceIndex, char *pBuffer, uint32_t nBufferLen)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription(struct w_steam_iface *_this, uint32_t nDeviceIndex, char *pBuffer, uint32_t nBufferLen)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription_params params =
     {
@@ -53,7 +53,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescri
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat, uint32_t *pWidth, uint32_t *pHeight)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions_params params =
     {
@@ -68,7 +68,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimension
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat(struct w_steam_iface *_this, uint32_t nDeviceIndex, uint32_t nVideoStreamFormat)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat_params params =
     {
@@ -93,7 +93,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStrea
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool bEnable)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t bEnable)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming_params params =
     {
@@ -106,7 +106,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreamin
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream_params params =
     {
@@ -118,7 +118,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream(struct
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream_params params =
     {
@@ -130,7 +130,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive_params params =
     {
@@ -156,7 +156,7 @@ float __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedT
 
 extern const w_CameraVideoStreamFrame_t_0914 * __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex);
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex, const w_CameraVideoStreamFrame_t_0914 *pFrameImage)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex, const w_CameraVideoStreamFrame_t_0914 *pFrameImage)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params params =
     {
@@ -169,7 +169,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool bEnable)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t bEnable)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure_params params =
     {
@@ -182,7 +182,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream_params params =
     {
@@ -194,7 +194,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream(struct
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream_params params =
     {
@@ -206,7 +206,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream(struc
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused(struct w_steam_iface *_this, uint32_t nDeviceIndex)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused_params params =
     {
@@ -218,7 +218,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused(str
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flInputU, float flInputV, float *pflOutputU, float *pflOutputV)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flInputU, float flInputV, float *pflOutputU, float *pflOutputV)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion_params params =
     {
@@ -234,7 +234,7 @@ bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion(str
     return params._ret;
 }
 
-bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
+int8_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection(struct w_steam_iface *_this, uint32_t nDeviceIndex, float flWidthPixels, float flHeightPixels, float flZNear, float flZFar, HmdMatrix44_t *pProjection)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params params =
     {
@@ -355,7 +355,7 @@ const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorN
     return params._ret;
 }
 
-uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
+uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t *pHasCamera)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_002_HasCamera_params params =
     {
@@ -545,7 +545,7 @@ const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorN
     return params._ret;
 }
 
-uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
+uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t *pHasCamera)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_003_HasCamera_params params =
     {
@@ -805,7 +805,7 @@ const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorN
     return params._ret;
 }
 
-uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
+uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t *pHasCamera)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_004_HasCamera_params params =
     {
@@ -1065,7 +1065,7 @@ const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetCameraErrorN
     return params._ret;
 }
 
-uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
+uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t *pHasCamera)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_005_HasCamera_params params =
     {
@@ -1329,7 +1329,7 @@ const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetCameraErrorN
     return params._ret;
 }
 
-uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, bool *pHasCamera)
+uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_HasCamera(struct w_steam_iface *_this, uint32_t nDeviceIndex, int8_t *pHasCamera)
 {
     struct IVRTrackedCamera_IVRTrackedCamera_006_HasCamera_params params =
     {

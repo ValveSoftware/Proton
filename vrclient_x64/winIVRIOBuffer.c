@@ -216,7 +216,7 @@ uint64_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(struct w_st
     return params._ret;
 }
 
-bool __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(struct w_steam_iface *_this, uint64_t ulBuffer)
+int8_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct IVRIOBuffer_IVRIOBuffer_002_HasReaders_params params =
     {

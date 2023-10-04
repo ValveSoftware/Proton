@@ -1069,7 +1069,7 @@ uint32_t __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVRInput_IVRInput_005_IsUsingLegacyInput(struct w_steam_iface *_this)
+int8_t __thiscall winIVRInput_IVRInput_005_IsUsingLegacyInput(struct w_steam_iface *_this)
 {
     struct IVRInput_IVRInput_005_IsUsingLegacyInput_params params =
     {
@@ -1555,7 +1555,7 @@ uint32_t __thiscall winIVRInput_IVRInput_006_ShowBindingsForActionSet(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVRInput_IVRInput_006_IsUsingLegacyInput(struct w_steam_iface *_this)
+int8_t __thiscall winIVRInput_IVRInput_006_IsUsingLegacyInput(struct w_steam_iface *_this)
 {
     struct IVRInput_IVRInput_006_IsUsingLegacyInput_params params =
     {
@@ -2061,7 +2061,7 @@ uint32_t __thiscall winIVRInput_IVRInput_007_ShowBindingsForActionSet(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVRInput_IVRInput_007_IsUsingLegacyInput(struct w_steam_iface *_this)
+int8_t __thiscall winIVRInput_IVRInput_007_IsUsingLegacyInput(struct w_steam_iface *_this)
 {
     struct IVRInput_IVRInput_007_IsUsingLegacyInput_params params =
     {
@@ -2072,7 +2072,7 @@ bool __thiscall winIVRInput_IVRInput_007_IsUsingLegacyInput(struct w_steam_iface
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, uint64_t ulActionSetHandle, uint64_t ulDeviceHandle, bool bShowOnDesktop)
+uint32_t __thiscall winIVRInput_IVRInput_007_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, uint64_t ulActionSetHandle, uint64_t ulDeviceHandle, int8_t bShowOnDesktop)
 {
     struct IVRInput_IVRInput_007_OpenBindingUI_params params =
     {
@@ -2631,7 +2631,7 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(struct 
     return params._ret;
 }
 
-bool __thiscall winIVRInput_IVRInput_010_IsUsingLegacyInput(struct w_steam_iface *_this)
+int8_t __thiscall winIVRInput_IVRInput_010_IsUsingLegacyInput(struct w_steam_iface *_this)
 {
     struct IVRInput_IVRInput_010_IsUsingLegacyInput_params params =
     {
@@ -2642,7 +2642,7 @@ bool __thiscall winIVRInput_IVRInput_010_IsUsingLegacyInput(struct w_steam_iface
     return params._ret;
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, uint64_t ulActionSetHandle, uint64_t ulDeviceHandle, bool bShowOnDesktop)
+uint32_t __thiscall winIVRInput_IVRInput_010_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, uint64_t ulActionSetHandle, uint64_t ulDeviceHandle, int8_t bShowOnDesktop)
 {
     struct IVRInput_IVRInput_010_OpenBindingUI_params params =
     {

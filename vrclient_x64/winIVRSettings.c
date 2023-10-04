@@ -33,7 +33,7 @@ const char * __thiscall winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromE
     return params._ret;
 }
 
-bool __thiscall winIVRSettings_IVRSettings_001_Sync(struct w_steam_iface *_this, bool bForce, uint32_t *peError)
+int8_t __thiscall winIVRSettings_IVRSettings_001_Sync(struct w_steam_iface *_this, int8_t bForce, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_001_Sync_params params =
     {
@@ -46,7 +46,7 @@ bool __thiscall winIVRSettings_IVRSettings_001_Sync(struct w_steam_iface *_this,
     return params._ret;
 }
 
-bool __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bDefaultValue, uint32_t *peError)
+int8_t __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int8_t bDefaultValue, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_001_GetBool_params params =
     {
@@ -61,7 +61,7 @@ bool __thiscall winIVRSettings_IVRSettings_001_GetBool(struct w_steam_iface *_th
     return params._ret;
 }
 
-void __thiscall winIVRSettings_IVRSettings_001_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
+void __thiscall winIVRSettings_IVRSettings_001_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int8_t bValue, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_001_SetBool_params params =
     {
@@ -284,7 +284,7 @@ const char * __thiscall winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromE
     return params._ret;
 }
 
-bool __thiscall winIVRSettings_IVRSettings_002_Sync(struct w_steam_iface *_this, bool bForce, uint32_t *peError)
+int8_t __thiscall winIVRSettings_IVRSettings_002_Sync(struct w_steam_iface *_this, int8_t bForce, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_002_Sync_params params =
     {
@@ -297,7 +297,7 @@ bool __thiscall winIVRSettings_IVRSettings_002_Sync(struct w_steam_iface *_this,
     return params._ret;
 }
 
-void __thiscall winIVRSettings_IVRSettings_002_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
+void __thiscall winIVRSettings_IVRSettings_002_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int8_t bValue, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_002_SetBool_params params =
     {
@@ -353,7 +353,7 @@ void __thiscall winIVRSettings_IVRSettings_002_SetString(struct w_steam_iface *_
     VRCLIENT_CALL( IVRSettings_IVRSettings_002_SetString, &params );
 }
 
-bool __thiscall winIVRSettings_IVRSettings_002_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
+int8_t __thiscall winIVRSettings_IVRSettings_002_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_002_GetBool_params params =
     {
@@ -530,7 +530,7 @@ const char * __thiscall winIVRSettings_IVRSettings_003_GetSettingsErrorNameFromE
     return params._ret;
 }
 
-void __thiscall winIVRSettings_IVRSettings_003_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, bool bValue, uint32_t *peError)
+void __thiscall winIVRSettings_IVRSettings_003_SetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, int8_t bValue, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_003_SetBool_params params =
     {
@@ -586,7 +586,7 @@ void __thiscall winIVRSettings_IVRSettings_003_SetString(struct w_steam_iface *_
     VRCLIENT_CALL( IVRSettings_IVRSettings_003_SetString, &params );
 }
 
-bool __thiscall winIVRSettings_IVRSettings_003_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
+int8_t __thiscall winIVRSettings_IVRSettings_003_GetBool(struct w_steam_iface *_this, const char *pchSection, const char *pchSettingsKey, uint32_t *peError)
 {
     struct IVRSettings_IVRSettings_003_GetBool_params params =
     {

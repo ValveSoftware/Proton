@@ -2,7 +2,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,7 +12,7 @@ struct IVRApplications_IVRApplications_001_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_001_RemoveApplicationManifest_params
@@ -26,7 +25,7 @@ struct IVRApplications_IVRApplications_001_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_001_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -104,7 +103,7 @@ struct IVRApplications_IVRApplications_001_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_001_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -130,13 +129,13 @@ struct IVRApplications_IVRApplications_001_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_001_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -173,7 +172,7 @@ struct IVRApplications_IVRApplications_002_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_002_RemoveApplicationManifest_params
@@ -186,7 +185,7 @@ struct IVRApplications_IVRApplications_002_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_002_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -264,7 +263,7 @@ struct IVRApplications_IVRApplications_002_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_002_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -275,13 +274,13 @@ struct IVRApplications_IVRApplications_002_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_002_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -316,7 +315,7 @@ struct IVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFro
 struct IVRApplications_IVRApplications_002_IsQuitUserPromptRequested_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRApplications_IVRApplications_003_AddApplicationManifest_params
@@ -324,7 +323,7 @@ struct IVRApplications_IVRApplications_003_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_003_RemoveApplicationManifest_params
@@ -337,7 +336,7 @@ struct IVRApplications_IVRApplications_003_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_003_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -415,7 +414,7 @@ struct IVRApplications_IVRApplications_003_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_003_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -435,13 +434,13 @@ struct IVRApplications_IVRApplications_003_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_003_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -476,7 +475,7 @@ struct IVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFro
 struct IVRApplications_IVRApplications_003_IsQuitUserPromptRequested_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRApplications_IVRApplications_004_AddApplicationManifest_params
@@ -484,7 +483,7 @@ struct IVRApplications_IVRApplications_004_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_004_RemoveApplicationManifest_params
@@ -497,7 +496,7 @@ struct IVRApplications_IVRApplications_004_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_004_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -542,7 +541,7 @@ struct IVRApplications_IVRApplications_004_LaunchDashboardOverlay_params
 struct IVRApplications_IVRApplications_004_CancelApplicationLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -582,7 +581,7 @@ struct IVRApplications_IVRApplications_004_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_004_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -602,13 +601,13 @@ struct IVRApplications_IVRApplications_004_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_004_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -643,7 +642,7 @@ struct IVRApplications_IVRApplications_004_GetApplicationsTransitionStateNameFro
 struct IVRApplications_IVRApplications_004_IsQuitUserPromptRequested_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRApplications_IVRApplications_004_LaunchInternalProcess_params
@@ -660,7 +659,7 @@ struct IVRApplications_IVRApplications_005_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_005_RemoveApplicationManifest_params
@@ -673,7 +672,7 @@ struct IVRApplications_IVRApplications_005_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_005_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -728,7 +727,7 @@ struct IVRApplications_IVRApplications_005_LaunchDashboardOverlay_params
 struct IVRApplications_IVRApplications_005_CancelApplicationLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -768,7 +767,7 @@ struct IVRApplications_IVRApplications_005_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_005_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -788,13 +787,13 @@ struct IVRApplications_IVRApplications_005_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_005_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -829,7 +828,7 @@ struct IVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFro
 struct IVRApplications_IVRApplications_005_IsQuitUserPromptRequested_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRApplications_IVRApplications_005_LaunchInternalProcess_params
@@ -846,7 +845,7 @@ struct IVRApplications_IVRApplications_006_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_006_RemoveApplicationManifest_params
@@ -859,7 +858,7 @@ struct IVRApplications_IVRApplications_006_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_006_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -922,7 +921,7 @@ struct IVRApplications_IVRApplications_006_LaunchDashboardOverlay_params
 struct IVRApplications_IVRApplications_006_CancelApplicationLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -962,7 +961,7 @@ struct IVRApplications_IVRApplications_006_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_006_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -982,13 +981,13 @@ struct IVRApplications_IVRApplications_006_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_006_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -1003,7 +1002,7 @@ struct IVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType_para
 struct IVRApplications_IVRApplications_006_GetDefaultApplicationForMimeType_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchMimeType;
     char *pchAppKeyBuffer;
     uint32_t unAppKeyBufferLen;
@@ -1012,7 +1011,7 @@ struct IVRApplications_IVRApplications_006_GetDefaultApplicationForMimeType_para
 struct IVRApplications_IVRApplications_006_GetApplicationSupportedMimeTypes_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     char *pchMimeTypesBuffer;
     uint32_t unMimeTypesBuffer;
@@ -1067,7 +1066,7 @@ struct IVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFro
 struct IVRApplications_IVRApplications_006_IsQuitUserPromptRequested_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRApplications_IVRApplications_006_LaunchInternalProcess_params
@@ -1090,7 +1089,7 @@ struct IVRApplications_IVRApplications_007_AddApplicationManifest_params
     void *linux_side;
     uint32_t _ret;
     const char *pchApplicationManifestFullPath;
-    bool bTemporary;
+    int8_t bTemporary;
 };
 
 struct IVRApplications_IVRApplications_007_RemoveApplicationManifest_params
@@ -1103,7 +1102,7 @@ struct IVRApplications_IVRApplications_007_RemoveApplicationManifest_params
 struct IVRApplications_IVRApplications_007_IsApplicationInstalled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -1166,7 +1165,7 @@ struct IVRApplications_IVRApplications_007_LaunchDashboardOverlay_params
 struct IVRApplications_IVRApplications_007_CancelApplicationLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -1206,7 +1205,7 @@ struct IVRApplications_IVRApplications_007_GetApplicationPropertyString_params
 struct IVRApplications_IVRApplications_007_GetApplicationPropertyBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     uint32_t eProperty;
     uint32_t *peError;
@@ -1226,13 +1225,13 @@ struct IVRApplications_IVRApplications_007_SetApplicationAutoLaunch_params
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    bool bAutoLaunch;
+    int8_t bAutoLaunch;
 };
 
 struct IVRApplications_IVRApplications_007_GetApplicationAutoLaunch_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
 };
 
@@ -1247,7 +1246,7 @@ struct IVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType_para
 struct IVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchMimeType;
     char *pchAppKeyBuffer;
     uint32_t unAppKeyBufferLen;
@@ -1256,7 +1255,7 @@ struct IVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType_para
 struct IVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchAppKey;
     char *pchMimeTypesBuffer;
     uint32_t unMimeTypesBuffer;
@@ -1326,7 +1325,7 @@ struct IVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t configFile;
 };
 
@@ -1338,7 +1337,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pSizeX;
     float *pSizeZ;
 };
@@ -1346,14 +1345,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *rect;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1361,7 +1360,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo_par
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1369,14 +1368,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose;
 };
 
@@ -1415,7 +1414,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
@@ -1429,7 +1428,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint8_t *pTagsBuffer;
     uint32_t *punTagCount;
 };
@@ -1437,7 +1436,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t configFile;
 };
 
@@ -1449,7 +1448,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pSizeX;
     float *pSizeZ;
 };
@@ -1457,14 +1456,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *rect;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1472,7 +1471,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo_par
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1480,14 +1479,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose;
 };
 
@@ -1526,7 +1525,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
@@ -1540,7 +1539,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint8_t *pTagsBuffer;
     uint32_t *punTagCount;
 };
@@ -1548,7 +1547,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo_pa
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t unQuadsCount;
 };
@@ -1556,7 +1555,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo_para
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1564,7 +1563,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pBuffer;
     uint32_t *pnBufferLength;
 };
@@ -1572,7 +1571,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pBuffer;
     uint32_t nImportFlags;
 };
@@ -1580,7 +1579,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t configFile;
 };
 
@@ -1592,7 +1591,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_RevertWorkingCopy_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pSizeX;
     float *pSizeZ;
 };
@@ -1600,14 +1599,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaSize_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingPlayAreaRect_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *rect;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1615,7 +1614,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo_par
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1623,14 +1622,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatStandingZeroPoseToRawTrackingPose;
 };
 
@@ -1676,14 +1675,14 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdMatrix34_t *pmatSeatedZeroPoseToRawTrackingPose;
 };
 
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     char *pBuffer;
     uint32_t *pnBufferLength;
 };
@@ -1691,7 +1690,7 @@ struct IVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer_params
 struct IVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pBuffer;
     uint32_t nImportFlags;
 };
@@ -1720,14 +1719,14 @@ struct IVRChaperone_IVRChaperone_002_GetCalibrationState_params
 struct IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     ChaperoneSoftBoundsInfo_t *pInfo;
 };
 
 struct IVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *pQuadsBuffer;
     uint32_t *punQuadsCount;
 };
@@ -1735,7 +1734,7 @@ struct IVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params
 struct IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     ChaperoneSeatedBoundsInfo_t *pInfo;
 };
 
@@ -1760,13 +1759,13 @@ struct IVRChaperone_IVRChaperone_002_GetBoundsColor_params
 struct IVRChaperone_IVRChaperone_002_AreBoundsVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRChaperone_IVRChaperone_002_ForceBoundsVisible_params
 {
     void *linux_side;
-    bool bForce;
+    int8_t bForce;
 };
 
 struct IVRChaperone_IVRChaperone_003_GetCalibrationState_params
@@ -1778,7 +1777,7 @@ struct IVRChaperone_IVRChaperone_003_GetCalibrationState_params
 struct IVRChaperone_IVRChaperone_003_GetPlayAreaSize_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pSizeX;
     float *pSizeZ;
 };
@@ -1786,7 +1785,7 @@ struct IVRChaperone_IVRChaperone_003_GetPlayAreaSize_params
 struct IVRChaperone_IVRChaperone_003_GetPlayAreaRect_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *rect;
 };
 
@@ -1813,13 +1812,13 @@ struct IVRChaperone_IVRChaperone_003_GetBoundsColor_params
 struct IVRChaperone_IVRChaperone_003_AreBoundsVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRChaperone_IVRChaperone_003_ForceBoundsVisible_params
 {
     void *linux_side;
-    bool bForce;
+    int8_t bForce;
 };
 
 struct IVRChaperone_IVRChaperone_004_GetCalibrationState_params
@@ -1831,7 +1830,7 @@ struct IVRChaperone_IVRChaperone_004_GetCalibrationState_params
 struct IVRChaperone_IVRChaperone_004_GetPlayAreaSize_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pSizeX;
     float *pSizeZ;
 };
@@ -1839,7 +1838,7 @@ struct IVRChaperone_IVRChaperone_004_GetPlayAreaSize_params
 struct IVRChaperone_IVRChaperone_004_GetPlayAreaRect_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     HmdQuad_t *rect;
 };
 
@@ -1866,13 +1865,13 @@ struct IVRChaperone_IVRChaperone_004_GetBoundsColor_params
 struct IVRChaperone_IVRChaperone_004_AreBoundsVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRChaperone_IVRChaperone_004_ForceBoundsVisible_params
 {
     void *linux_side;
-    bool bForce;
+    int8_t bForce;
 };
 
 struct IVRChaperone_IVRChaperone_004_ResetZeroPose_params
@@ -1911,7 +1910,7 @@ struct IVRClientCore_IVRClientCore_002_GetGenericInterface_params
 struct IVRClientCore_IVRClientCore_002_BIsHmdPresent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params
@@ -1959,7 +1958,7 @@ struct IVRClientCore_IVRClientCore_003_GetGenericInterface_params
 struct IVRClientCore_IVRClientCore_003_BIsHmdPresent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError_params
@@ -1987,13 +1986,13 @@ struct IVRCompositor_IVRCompositor_005_GetLastError_params
 struct IVRCompositor_IVRCompositor_005_SetVSync_params
 {
     void *linux_side;
-    bool bVSync;
+    int8_t bVSync;
 };
 
 struct IVRCompositor_IVRCompositor_005_GetVSync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_005_SetGamma_params
@@ -2073,7 +2072,7 @@ struct IVRCompositor_IVRCompositor_005_ClearOverlay_params
 struct IVRCompositor_IVRCompositor_005_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_090 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2086,14 +2085,14 @@ struct IVRCompositor_IVRCompositor_005_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_005_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_005_CompositorBringToFront_params
@@ -2114,13 +2113,13 @@ struct IVRCompositor_IVRCompositor_005_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_005_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const Compositor_OverlaySettings *pSettings;
     float fAspectRatio;
     uint32_t eOrigin;
@@ -2153,13 +2152,13 @@ struct IVRCompositor_IVRCompositor_006_GetLastError_params
 struct IVRCompositor_IVRCompositor_006_SetVSync_params
 {
     void *linux_side;
-    bool bVSync;
+    int8_t bVSync;
 };
 
 struct IVRCompositor_IVRCompositor_006_GetVSync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_006_SetGamma_params
@@ -2208,7 +2207,7 @@ struct IVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame_params
 struct IVRCompositor_IVRCompositor_006_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_090 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2221,14 +2220,14 @@ struct IVRCompositor_IVRCompositor_006_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_006_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_006_CompositorBringToFront_params
@@ -2249,7 +2248,7 @@ struct IVRCompositor_IVRCompositor_006_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_006_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_006_SetTrackingSpace_params
@@ -2273,7 +2272,7 @@ struct IVRCompositor_IVRCompositor_006_GetCurrentSceneFocusProcess_params
 struct IVRCompositor_IVRCompositor_006_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_007_GetLastError_params
@@ -2287,13 +2286,13 @@ struct IVRCompositor_IVRCompositor_007_GetLastError_params
 struct IVRCompositor_IVRCompositor_007_SetVSync_params
 {
     void *linux_side;
-    bool bVSync;
+    int8_t bVSync;
 };
 
 struct IVRCompositor_IVRCompositor_007_GetVSync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_007_SetGamma_params
@@ -2336,7 +2335,7 @@ struct IVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame_params
 struct IVRCompositor_IVRCompositor_007_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_093 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2349,14 +2348,14 @@ struct IVRCompositor_IVRCompositor_007_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_007_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_007_CompositorBringToFront_params
@@ -2377,7 +2376,7 @@ struct IVRCompositor_IVRCompositor_007_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_007_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_007_SetTrackingSpace_params
@@ -2401,7 +2400,7 @@ struct IVRCompositor_IVRCompositor_007_GetCurrentSceneFocusProcess_params
 struct IVRCompositor_IVRCompositor_007_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_008_GetLastError_params
@@ -2415,13 +2414,13 @@ struct IVRCompositor_IVRCompositor_008_GetLastError_params
 struct IVRCompositor_IVRCompositor_008_SetVSync_params
 {
     void *linux_side;
-    bool bVSync;
+    int8_t bVSync;
 };
 
 struct IVRCompositor_IVRCompositor_008_GetVSync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_008_SetGamma_params
@@ -2465,7 +2464,7 @@ struct IVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame_params
 struct IVRCompositor_IVRCompositor_008_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_093 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2478,14 +2477,14 @@ struct IVRCompositor_IVRCompositor_008_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_008_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_008_SetSkyboxOverride_params
@@ -2523,7 +2522,7 @@ struct IVRCompositor_IVRCompositor_008_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_008_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_008_SetTrackingSpace_params
@@ -2547,7 +2546,7 @@ struct IVRCompositor_IVRCompositor_008_GetCurrentSceneFocusProcess_params
 struct IVRCompositor_IVRCompositor_008_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_008_ShowMirrorWindow_params
@@ -2632,7 +2631,7 @@ struct IVRCompositor_IVRCompositor_009_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_009_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0913 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2651,14 +2650,14 @@ struct IVRCompositor_IVRCompositor_009_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_009_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_009_SetSkyboxOverride_params
@@ -2692,7 +2691,7 @@ struct IVRCompositor_IVRCompositor_009_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_009_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_009_GetCurrentSceneFocusProcess_params
@@ -2710,7 +2709,7 @@ struct IVRCompositor_IVRCompositor_009_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_009_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_009_ShowMirrorWindow_params
@@ -2726,7 +2725,7 @@ struct IVRCompositor_IVRCompositor_009_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_009_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_009_CompositorDumpImages_params
@@ -2789,7 +2788,7 @@ struct IVRCompositor_IVRCompositor_010_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_010_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0914 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2808,14 +2807,14 @@ struct IVRCompositor_IVRCompositor_010_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_010_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_010_SetSkyboxOverride_params
@@ -2849,7 +2848,7 @@ struct IVRCompositor_IVRCompositor_010_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_010_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_010_GetCurrentSceneFocusProcess_params
@@ -2867,7 +2866,7 @@ struct IVRCompositor_IVRCompositor_010_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_010_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_010_ShowMirrorWindow_params
@@ -2883,7 +2882,7 @@ struct IVRCompositor_IVRCompositor_010_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_010_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_010_CompositorDumpImages_params
@@ -2946,7 +2945,7 @@ struct IVRCompositor_IVRCompositor_011_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_011_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0915 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -2965,14 +2964,14 @@ struct IVRCompositor_IVRCompositor_011_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_011_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_011_SetSkyboxOverride_params
@@ -3006,7 +3005,7 @@ struct IVRCompositor_IVRCompositor_011_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_011_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_011_GetCurrentSceneFocusProcess_params
@@ -3024,7 +3023,7 @@ struct IVRCompositor_IVRCompositor_011_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_011_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_011_ShowMirrorWindow_params
@@ -3040,7 +3039,7 @@ struct IVRCompositor_IVRCompositor_011_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_011_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_011_CompositorDumpImages_params
@@ -3112,7 +3111,7 @@ struct IVRCompositor_IVRCompositor_012_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_012_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0915 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -3131,14 +3130,14 @@ struct IVRCompositor_IVRCompositor_012_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_012_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_012_SetSkyboxOverride_params
@@ -3172,7 +3171,7 @@ struct IVRCompositor_IVRCompositor_012_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_012_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_012_GetCurrentSceneFocusProcess_params
@@ -3190,7 +3189,7 @@ struct IVRCompositor_IVRCompositor_012_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_012_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_012_ShowMirrorWindow_params
@@ -3206,7 +3205,7 @@ struct IVRCompositor_IVRCompositor_012_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_012_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_012_CompositorDumpImages_params
@@ -3217,7 +3216,7 @@ struct IVRCompositor_IVRCompositor_012_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_013_SetTrackingSpace_params
@@ -3284,7 +3283,7 @@ struct IVRCompositor_IVRCompositor_013_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_013_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0915 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -3303,14 +3302,14 @@ struct IVRCompositor_IVRCompositor_013_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_013_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_013_SetSkyboxOverride_params
@@ -3344,7 +3343,7 @@ struct IVRCompositor_IVRCompositor_013_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_013_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_013_GetCurrentSceneFocusProcess_params
@@ -3362,7 +3361,7 @@ struct IVRCompositor_IVRCompositor_013_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_013_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_013_ShowMirrorWindow_params
@@ -3378,7 +3377,7 @@ struct IVRCompositor_IVRCompositor_013_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_013_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_013_CompositorDumpImages_params
@@ -3389,13 +3388,13 @@ struct IVRCompositor_IVRCompositor_013_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_014_SetTrackingSpace_params
@@ -3462,7 +3461,7 @@ struct IVRCompositor_IVRCompositor_014_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_014_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0920 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -3481,14 +3480,14 @@ struct IVRCompositor_IVRCompositor_014_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_014_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_014_SetSkyboxOverride_params
@@ -3522,7 +3521,7 @@ struct IVRCompositor_IVRCompositor_014_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_014_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_014_GetCurrentSceneFocusProcess_params
@@ -3540,7 +3539,7 @@ struct IVRCompositor_IVRCompositor_014_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_014_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_014_ShowMirrorWindow_params
@@ -3556,7 +3555,7 @@ struct IVRCompositor_IVRCompositor_014_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_014_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_014_CompositorDumpImages_params
@@ -3567,13 +3566,13 @@ struct IVRCompositor_IVRCompositor_014_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_014_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_014_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_014_ForceReconnectProcess_params
@@ -3584,7 +3583,7 @@ struct IVRCompositor_IVRCompositor_014_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_014_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_015_SetTrackingSpace_params
@@ -3651,7 +3650,7 @@ struct IVRCompositor_IVRCompositor_015_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_015_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_0920 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -3677,14 +3676,14 @@ struct IVRCompositor_IVRCompositor_015_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_015_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_015_SetSkyboxOverride_params
@@ -3718,7 +3717,7 @@ struct IVRCompositor_IVRCompositor_015_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_015_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_015_GetCurrentSceneFocusProcess_params
@@ -3736,7 +3735,7 @@ struct IVRCompositor_IVRCompositor_015_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_015_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_015_ShowMirrorWindow_params
@@ -3752,7 +3751,7 @@ struct IVRCompositor_IVRCompositor_015_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_015_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_015_CompositorDumpImages_params
@@ -3763,13 +3762,13 @@ struct IVRCompositor_IVRCompositor_015_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_015_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_015_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_015_ForceReconnectProcess_params
@@ -3780,7 +3779,7 @@ struct IVRCompositor_IVRCompositor_015_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_015_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_015_RequestScreenshot_params
@@ -3819,7 +3818,7 @@ struct IVRCompositor_IVRCompositor_015_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -3900,7 +3899,7 @@ struct IVRCompositor_IVRCompositor_016_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_016_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_102 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -3926,14 +3925,14 @@ struct IVRCompositor_IVRCompositor_016_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_016_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_016_SetSkyboxOverride_params
@@ -3967,7 +3966,7 @@ struct IVRCompositor_IVRCompositor_016_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_016_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_016_GetCurrentSceneFocusProcess_params
@@ -3985,7 +3984,7 @@ struct IVRCompositor_IVRCompositor_016_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_016_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_016_ShowMirrorWindow_params
@@ -4001,7 +4000,7 @@ struct IVRCompositor_IVRCompositor_016_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_016_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_016_CompositorDumpImages_params
@@ -4012,13 +4011,13 @@ struct IVRCompositor_IVRCompositor_016_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_016_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_016_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_016_ForceReconnectProcess_params
@@ -4029,7 +4028,7 @@ struct IVRCompositor_IVRCompositor_016_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_016_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_016_GetMirrorTextureD3D11_params
@@ -4053,7 +4052,7 @@ struct IVRCompositor_IVRCompositor_016_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -4134,7 +4133,7 @@ struct IVRCompositor_IVRCompositor_017_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_017_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
@@ -4168,14 +4167,14 @@ struct IVRCompositor_IVRCompositor_017_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_017_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_017_SetSkyboxOverride_params
@@ -4209,7 +4208,7 @@ struct IVRCompositor_IVRCompositor_017_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_017_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_017_GetCurrentSceneFocusProcess_params
@@ -4227,7 +4226,7 @@ struct IVRCompositor_IVRCompositor_017_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_017_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_017_ShowMirrorWindow_params
@@ -4243,7 +4242,7 @@ struct IVRCompositor_IVRCompositor_017_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_017_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_017_CompositorDumpImages_params
@@ -4254,13 +4253,13 @@ struct IVRCompositor_IVRCompositor_017_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_017_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_017_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_017_ForceReconnectProcess_params
@@ -4271,7 +4270,7 @@ struct IVRCompositor_IVRCompositor_017_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_017_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_017_GetMirrorTextureD3D11_params
@@ -4295,7 +4294,7 @@ struct IVRCompositor_IVRCompositor_017_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -4376,7 +4375,7 @@ struct IVRCompositor_IVRCompositor_018_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_018_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
@@ -4410,21 +4409,21 @@ struct IVRCompositor_IVRCompositor_018_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_018_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_018_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_018_GetCurrentGridAlpha_params
@@ -4464,7 +4463,7 @@ struct IVRCompositor_IVRCompositor_018_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_018_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_018_GetCurrentSceneFocusProcess_params
@@ -4482,7 +4481,7 @@ struct IVRCompositor_IVRCompositor_018_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_018_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_018_ShowMirrorWindow_params
@@ -4498,7 +4497,7 @@ struct IVRCompositor_IVRCompositor_018_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_018_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_018_CompositorDumpImages_params
@@ -4509,13 +4508,13 @@ struct IVRCompositor_IVRCompositor_018_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_018_ForceReconnectProcess_params
@@ -4526,7 +4525,7 @@ struct IVRCompositor_IVRCompositor_018_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_018_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11_params
@@ -4550,7 +4549,7 @@ struct IVRCompositor_IVRCompositor_018_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -4631,7 +4630,7 @@ struct IVRCompositor_IVRCompositor_019_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_019_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
@@ -4665,21 +4664,21 @@ struct IVRCompositor_IVRCompositor_019_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_019_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_019_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_019_GetCurrentGridAlpha_params
@@ -4719,7 +4718,7 @@ struct IVRCompositor_IVRCompositor_019_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_019_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_019_GetCurrentSceneFocusProcess_params
@@ -4737,7 +4736,7 @@ struct IVRCompositor_IVRCompositor_019_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_019_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_019_ShowMirrorWindow_params
@@ -4753,7 +4752,7 @@ struct IVRCompositor_IVRCompositor_019_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_019_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_019_CompositorDumpImages_params
@@ -4764,13 +4763,13 @@ struct IVRCompositor_IVRCompositor_019_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_019_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_019_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_019_ForceReconnectProcess_params
@@ -4781,7 +4780,7 @@ struct IVRCompositor_IVRCompositor_019_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_019_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11_params
@@ -4805,7 +4804,7 @@ struct IVRCompositor_IVRCompositor_019_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -4903,7 +4902,7 @@ struct IVRCompositor_IVRCompositor_020_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_020_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
@@ -4937,21 +4936,21 @@ struct IVRCompositor_IVRCompositor_020_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_020_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_020_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_020_GetCurrentGridAlpha_params
@@ -4991,7 +4990,7 @@ struct IVRCompositor_IVRCompositor_020_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_020_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_020_GetCurrentSceneFocusProcess_params
@@ -5009,7 +5008,7 @@ struct IVRCompositor_IVRCompositor_020_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_020_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_020_ShowMirrorWindow_params
@@ -5025,7 +5024,7 @@ struct IVRCompositor_IVRCompositor_020_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_020_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_020_CompositorDumpImages_params
@@ -5036,13 +5035,13 @@ struct IVRCompositor_IVRCompositor_020_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_020_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_020_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_020_ForceReconnectProcess_params
@@ -5053,7 +5052,7 @@ struct IVRCompositor_IVRCompositor_020_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_020_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_020_GetMirrorTextureD3D11_params
@@ -5083,7 +5082,7 @@ struct IVRCompositor_IVRCompositor_020_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -5181,7 +5180,7 @@ struct IVRCompositor_IVRCompositor_021_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_021_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_103a *pTiming;
     uint32_t unFramesAgo;
 };
@@ -5215,21 +5214,21 @@ struct IVRCompositor_IVRCompositor_021_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_021_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_021_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_021_GetCurrentGridAlpha_params
@@ -5269,7 +5268,7 @@ struct IVRCompositor_IVRCompositor_021_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_021_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_021_GetCurrentSceneFocusProcess_params
@@ -5287,7 +5286,7 @@ struct IVRCompositor_IVRCompositor_021_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_021_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_021_ShowMirrorWindow_params
@@ -5303,7 +5302,7 @@ struct IVRCompositor_IVRCompositor_021_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_021_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_021_CompositorDumpImages_params
@@ -5314,13 +5313,13 @@ struct IVRCompositor_IVRCompositor_021_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_021_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_021_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_021_ForceReconnectProcess_params
@@ -5331,7 +5330,7 @@ struct IVRCompositor_IVRCompositor_021_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_021_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_021_GetMirrorTextureD3D11_params
@@ -5361,7 +5360,7 @@ struct IVRCompositor_IVRCompositor_021_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -5398,7 +5397,7 @@ struct IVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired_params
 struct IVRCompositor_IVRCompositor_021_SetExplicitTimingMode_params
 {
     void *linux_side;
-    bool bExplicitTimingMode;
+    int8_t bExplicitTimingMode;
 };
 
 struct IVRCompositor_IVRCompositor_021_SubmitExplicitTimingData_params
@@ -5471,7 +5470,7 @@ struct IVRCompositor_IVRCompositor_022_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_022_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_1017 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -5505,21 +5504,21 @@ struct IVRCompositor_IVRCompositor_022_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_022_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_022_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_022_GetCurrentGridAlpha_params
@@ -5559,7 +5558,7 @@ struct IVRCompositor_IVRCompositor_022_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_022_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_GetCurrentSceneFocusProcess_params
@@ -5577,7 +5576,7 @@ struct IVRCompositor_IVRCompositor_022_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_022_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_ShowMirrorWindow_params
@@ -5593,7 +5592,7 @@ struct IVRCompositor_IVRCompositor_022_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_022_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_CompositorDumpImages_params
@@ -5604,13 +5603,13 @@ struct IVRCompositor_IVRCompositor_022_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_022_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_022_ForceReconnectProcess_params
@@ -5621,7 +5620,7 @@ struct IVRCompositor_IVRCompositor_022_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_022_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_022_GetMirrorTextureD3D11_params
@@ -5651,7 +5650,7 @@ struct IVRCompositor_IVRCompositor_022_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -5700,19 +5699,19 @@ struct IVRCompositor_IVRCompositor_022_SubmitExplicitTimingData_params
 struct IVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_SetTrackingSpace_params
@@ -5779,7 +5778,7 @@ struct IVRCompositor_IVRCompositor_024_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_024_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_1017 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -5813,21 +5812,21 @@ struct IVRCompositor_IVRCompositor_024_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_024_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_024_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_024_GetCurrentGridAlpha_params
@@ -5867,7 +5866,7 @@ struct IVRCompositor_IVRCompositor_024_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_024_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_GetCurrentSceneFocusProcess_params
@@ -5885,7 +5884,7 @@ struct IVRCompositor_IVRCompositor_024_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_024_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_ShowMirrorWindow_params
@@ -5901,7 +5900,7 @@ struct IVRCompositor_IVRCompositor_024_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_024_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_CompositorDumpImages_params
@@ -5912,13 +5911,13 @@ struct IVRCompositor_IVRCompositor_024_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_024_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_024_ForceReconnectProcess_params
@@ -5929,7 +5928,7 @@ struct IVRCompositor_IVRCompositor_024_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_024_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_024_GetMirrorTextureD3D11_params
@@ -5959,7 +5958,7 @@ struct IVRCompositor_IVRCompositor_024_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -6008,19 +6007,19 @@ struct IVRCompositor_IVRCompositor_024_SubmitExplicitTimingData_params
 struct IVRCompositor_IVRCompositor_024_IsMotionSmoothingEnabled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_IsMotionSmoothingSupported_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_024_SetStageOverride_Async_params
@@ -6102,7 +6101,7 @@ struct IVRCompositor_IVRCompositor_026_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_026_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_1017 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -6136,21 +6135,21 @@ struct IVRCompositor_IVRCompositor_026_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_026_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_026_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeIn;
+    int8_t bFadeIn;
 };
 
 struct IVRCompositor_IVRCompositor_026_GetCurrentGridAlpha_params
@@ -6190,7 +6189,7 @@ struct IVRCompositor_IVRCompositor_026_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_026_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_GetCurrentSceneFocusProcess_params
@@ -6208,7 +6207,7 @@ struct IVRCompositor_IVRCompositor_026_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_026_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_ShowMirrorWindow_params
@@ -6224,7 +6223,7 @@ struct IVRCompositor_IVRCompositor_026_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_026_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_CompositorDumpImages_params
@@ -6235,13 +6234,13 @@ struct IVRCompositor_IVRCompositor_026_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_026_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_026_ForceReconnectProcess_params
@@ -6252,7 +6251,7 @@ struct IVRCompositor_IVRCompositor_026_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_026_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_026_GetMirrorTextureD3D11_params
@@ -6282,7 +6281,7 @@ struct IVRCompositor_IVRCompositor_026_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -6331,19 +6330,19 @@ struct IVRCompositor_IVRCompositor_026_SubmitExplicitTimingData_params
 struct IVRCompositor_IVRCompositor_026_IsMotionSmoothingEnabled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_IsMotionSmoothingSupported_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_026_SetStageOverride_Async_params
@@ -6364,7 +6363,7 @@ struct IVRCompositor_IVRCompositor_026_ClearStageOverride_params
 struct IVRCompositor_IVRCompositor_026_GetCompositorBenchmarkResults_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     Compositor_BenchmarkResults *pBenchmarkResults;
     uint32_t nSizeOfBenchmarkResults;
 };
@@ -6450,7 +6449,7 @@ struct IVRCompositor_IVRCompositor_027_PostPresentHandoff_params
 struct IVRCompositor_IVRCompositor_027_GetFrameTiming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_Compositor_FrameTiming_1017 *pTiming;
     uint32_t unFramesAgo;
 };
@@ -6484,21 +6483,21 @@ struct IVRCompositor_IVRCompositor_027_FadeToColor_params
     float fGreen;
     float fBlue;
     float fAlpha;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_027_GetCurrentFadeColor_params
 {
     void *linux_side;
     HmdColor_t *_ret;
-    bool bBackground;
+    int8_t bBackground;
 };
 
 struct IVRCompositor_IVRCompositor_027_FadeGrid_params
 {
     void *linux_side;
     float fSeconds;
-    bool bFadeGridIn;
+    int8_t bFadeGridIn;
 };
 
 struct IVRCompositor_IVRCompositor_027_GetCurrentGridAlpha_params
@@ -6538,7 +6537,7 @@ struct IVRCompositor_IVRCompositor_027_CompositorQuit_params
 struct IVRCompositor_IVRCompositor_027_IsFullscreen_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_GetCurrentSceneFocusProcess_params
@@ -6556,7 +6555,7 @@ struct IVRCompositor_IVRCompositor_027_GetLastFrameRenderer_params
 struct IVRCompositor_IVRCompositor_027_CanRenderScene_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_ShowMirrorWindow_params
@@ -6572,7 +6571,7 @@ struct IVRCompositor_IVRCompositor_027_HideMirrorWindow_params
 struct IVRCompositor_IVRCompositor_027_IsMirrorWindowVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_CompositorDumpImages_params
@@ -6583,13 +6582,13 @@ struct IVRCompositor_IVRCompositor_027_CompositorDumpImages_params
 struct IVRCompositor_IVRCompositor_027_ShouldAppRenderWithLowResources_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_ForceInterleavedReprojectionOn_params
 {
     void *linux_side;
-    bool bOverride;
+    int8_t bOverride;
 };
 
 struct IVRCompositor_IVRCompositor_027_ForceReconnectProcess_params
@@ -6600,7 +6599,7 @@ struct IVRCompositor_IVRCompositor_027_ForceReconnectProcess_params
 struct IVRCompositor_IVRCompositor_027_SuspendRendering_params
 {
     void *linux_side;
-    bool bSuspend;
+    int8_t bSuspend;
 };
 
 struct IVRCompositor_IVRCompositor_027_GetMirrorTextureD3D11_params
@@ -6630,7 +6629,7 @@ struct IVRCompositor_IVRCompositor_027_GetMirrorTextureGL_params
 struct IVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t glTextureId;
     void *glSharedTextureHandle;
 };
@@ -6679,19 +6678,19 @@ struct IVRCompositor_IVRCompositor_027_SubmitExplicitTimingData_params
 struct IVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRCompositor_IVRCompositor_027_SetStageOverride_Async_params
@@ -6712,7 +6711,7 @@ struct IVRCompositor_IVRCompositor_027_ClearStageOverride_params
 struct IVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     Compositor_BenchmarkResults *pBenchmarkResults;
     uint32_t nSizeOfBenchmarkResults;
 };
@@ -6796,7 +6795,7 @@ struct IVRControlPanel_IVRControlPanel_006_undoc7_params
 struct IVRControlPanel_IVRControlPanel_006_undoc8_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t a;
 };
 
@@ -6813,7 +6812,7 @@ struct IVRControlPanel_IVRControlPanel_006_undoc10_params
 struct IVRControlPanel_IVRControlPanel_006_undoc11_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t a;
 };
 
@@ -6843,13 +6842,13 @@ struct IVRControlPanel_IVRControlPanel_006_undoc15_params
 struct IVRControlPanel_IVRControlPanel_006_undoc16_params
 {
     void *linux_side;
-    bool a;
+    int8_t a;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc17_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc18_params
@@ -6861,13 +6860,13 @@ struct IVRControlPanel_IVRControlPanel_006_undoc18_params
 struct IVRControlPanel_IVRControlPanel_006_undoc19_params
 {
     void *linux_side;
-    bool a;
+    int8_t a;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc20_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc21_params
@@ -6889,21 +6888,21 @@ struct IVRControlPanel_IVRControlPanel_006_undoc22_params
 struct IVRControlPanel_IVRControlPanel_006_undoc23_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *a;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc24_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc25_params
 {
     void *linux_side;
-    bool _ret;
-    bool a;
+    int8_t _ret;
+    int8_t a;
 };
 
 struct IVRControlPanel_IVRControlPanel_006_undoc26_params
@@ -6950,7 +6949,7 @@ struct IVRDriverManager_IVRDriverManager_001_GetDriverHandle_params
 struct IVRDriverManager_IVRDriverManager_001_IsEnabled_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDriver;
 };
 
@@ -7009,13 +7008,13 @@ struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params
 struct IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewCropped_params
 {
     void *linux_side;
-    bool bCropped;
+    int8_t bCropped;
 };
 
 struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewCropped_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewAspectRatio_params
@@ -7129,7 +7128,7 @@ struct IVRIOBuffer_IVRIOBuffer_002_PropertyContainer_params
 struct IVRIOBuffer_IVRIOBuffer_002_HasReaders_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulBuffer;
 };
 
@@ -7701,7 +7700,7 @@ struct IVRInput_IVRInput_005_ShowBindingsForActionSet_params
 struct IVRInput_IVRInput_005_IsUsingLegacyInput_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRInput_IVRInput_006_SetActionManifestPath_params
@@ -7946,7 +7945,7 @@ struct IVRInput_IVRInput_006_ShowBindingsForActionSet_params
 struct IVRInput_IVRInput_006_IsUsingLegacyInput_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRInput_IVRInput_007_SetActionManifestPath_params
@@ -8202,7 +8201,7 @@ struct IVRInput_IVRInput_007_ShowBindingsForActionSet_params
 struct IVRInput_IVRInput_007_IsUsingLegacyInput_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRInput_IVRInput_007_OpenBindingUI_params
@@ -8212,7 +8211,7 @@ struct IVRInput_IVRInput_007_OpenBindingUI_params
     const char *pchAppKey;
     uint64_t ulActionSetHandle;
     uint64_t ulDeviceHandle;
-    bool bShowOnDesktop;
+    int8_t bShowOnDesktop;
 };
 
 struct IVRInput_IVRInput_010_SetActionManifestPath_params
@@ -8494,7 +8493,7 @@ struct IVRInput_IVRInput_010_GetComponentStateForBinding_params
 struct IVRInput_IVRInput_010_IsUsingLegacyInput_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRInput_IVRInput_010_OpenBindingUI_params
@@ -8504,7 +8503,7 @@ struct IVRInput_IVRInput_010_OpenBindingUI_params
     const char *pchAppKey;
     uint64_t ulActionSetHandle;
     uint64_t ulDeviceHandle;
-    bool bShowOnDesktop;
+    int8_t bShowOnDesktop;
 };
 
 struct IVRInput_IVRInput_010_GetBindingVariant_params
@@ -8626,7 +8625,7 @@ struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params
 struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -8680,7 +8679,7 @@ struct IVROverlay_IVROverlay_001_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_001_GetOverlayFlag_params
@@ -8689,7 +8688,7 @@ struct IVROverlay_IVROverlay_001_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_001_SetOverlayAlpha_params
@@ -8833,14 +8832,14 @@ struct IVROverlay_IVROverlay_001_HideOverlay_params
 struct IVROverlay_IVROverlay_001_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_001_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_092 *pEvent;
 };
@@ -8880,7 +8879,7 @@ struct IVROverlay_IVROverlay_001_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_001_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -8889,7 +8888,7 @@ struct IVROverlay_IVROverlay_001_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_001_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -8924,13 +8923,13 @@ struct IVROverlay_IVROverlay_001_SetOverlayFromFile_params
 struct IVROverlay_IVROverlay_001_IsSystemOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_001_IsActiveSystemOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -9000,7 +8999,7 @@ struct IVROverlay_IVROverlay_002_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_002_GetOverlayFlag_params
@@ -9009,7 +9008,7 @@ struct IVROverlay_IVROverlay_002_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_002_SetOverlayColor_params
@@ -9157,14 +9156,14 @@ struct IVROverlay_IVROverlay_002_HideOverlay_params
 struct IVROverlay_IVROverlay_002_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_002_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_093 *pEvent;
 };
@@ -9204,7 +9203,7 @@ struct IVROverlay_IVROverlay_002_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_002_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -9213,7 +9212,7 @@ struct IVROverlay_IVROverlay_002_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -9266,13 +9265,13 @@ struct IVROverlay_IVROverlay_002_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_002_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_002_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -9373,7 +9372,7 @@ struct IVROverlay_IVROverlay_003_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_003_GetOverlayFlag_params
@@ -9382,7 +9381,7 @@ struct IVROverlay_IVROverlay_003_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_003_SetOverlayColor_params
@@ -9530,14 +9529,14 @@ struct IVROverlay_IVROverlay_003_HideOverlay_params
 struct IVROverlay_IVROverlay_003_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_003_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_097 *pEvent;
 };
@@ -9577,7 +9576,7 @@ struct IVROverlay_IVROverlay_003_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_003_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -9586,7 +9585,7 @@ struct IVROverlay_IVROverlay_003_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_003_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -9639,13 +9638,13 @@ struct IVROverlay_IVROverlay_003_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_003_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_003_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -9752,7 +9751,7 @@ struct IVROverlay_IVROverlay_004_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_004_GetOverlayFlag_params
@@ -9761,7 +9760,7 @@ struct IVROverlay_IVROverlay_004_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_004_SetOverlayColor_params
@@ -9927,14 +9926,14 @@ struct IVROverlay_IVROverlay_004_HideOverlay_params
 struct IVROverlay_IVROverlay_004_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_004_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_097 *pEvent;
 };
@@ -9974,7 +9973,7 @@ struct IVROverlay_IVROverlay_004_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_004_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -9983,7 +9982,7 @@ struct IVROverlay_IVROverlay_004_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_004_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -10036,13 +10035,13 @@ struct IVROverlay_IVROverlay_004_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_004_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_004_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -10149,7 +10148,7 @@ struct IVROverlay_IVROverlay_005_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_005_GetOverlayFlag_params
@@ -10158,7 +10157,7 @@ struct IVROverlay_IVROverlay_005_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_005_SetOverlayColor_params
@@ -10324,14 +10323,14 @@ struct IVROverlay_IVROverlay_005_HideOverlay_params
 struct IVROverlay_IVROverlay_005_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_005_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_0910 *pEvent;
 };
@@ -10371,7 +10370,7 @@ struct IVROverlay_IVROverlay_005_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_005_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -10380,7 +10379,7 @@ struct IVROverlay_IVROverlay_005_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -10388,7 +10387,7 @@ struct IVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_005_IsFocusOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -10440,13 +10439,13 @@ struct IVROverlay_IVROverlay_005_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_005_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_005_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -10481,7 +10480,7 @@ struct IVROverlay_IVROverlay_005_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
 };
 
 struct IVROverlay_IVROverlay_005_GetKeyboardText_params
@@ -10578,7 +10577,7 @@ struct IVROverlay_IVROverlay_007_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_007_GetOverlayFlag_params
@@ -10587,7 +10586,7 @@ struct IVROverlay_IVROverlay_007_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_007_SetOverlayColor_params
@@ -10753,14 +10752,14 @@ struct IVROverlay_IVROverlay_007_HideOverlay_params
 struct IVROverlay_IVROverlay_007_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
 struct IVROverlay_IVROverlay_007_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_0912 *pEvent;
 };
@@ -10800,7 +10799,7 @@ struct IVROverlay_IVROverlay_007_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_007_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -10809,7 +10808,7 @@ struct IVROverlay_IVROverlay_007_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -10817,7 +10816,7 @@ struct IVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_007_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -10898,13 +10897,13 @@ struct IVROverlay_IVROverlay_007_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_007_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_007_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -10939,7 +10938,7 @@ struct IVROverlay_IVROverlay_007_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -10953,7 +10952,7 @@ struct IVROverlay_IVROverlay_007_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -11051,7 +11050,7 @@ struct IVROverlay_IVROverlay_008_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_008_GetOverlayFlag_params
@@ -11060,7 +11059,7 @@ struct IVROverlay_IVROverlay_008_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_008_SetOverlayColor_params
@@ -11226,7 +11225,7 @@ struct IVROverlay_IVROverlay_008_HideOverlay_params
 struct IVROverlay_IVROverlay_008_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11243,7 +11242,7 @@ struct IVROverlay_IVROverlay_008_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_008_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_0914 *pEvent;
 };
@@ -11283,7 +11282,7 @@ struct IVROverlay_IVROverlay_008_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_008_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -11292,7 +11291,7 @@ struct IVROverlay_IVROverlay_008_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -11300,7 +11299,7 @@ struct IVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_008_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11381,13 +11380,13 @@ struct IVROverlay_IVROverlay_008_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_008_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_008_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11422,7 +11421,7 @@ struct IVROverlay_IVROverlay_008_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -11436,7 +11435,7 @@ struct IVROverlay_IVROverlay_008_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -11548,7 +11547,7 @@ struct IVROverlay_IVROverlay_010_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_010_GetOverlayFlag_params
@@ -11557,7 +11556,7 @@ struct IVROverlay_IVROverlay_010_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_010_SetOverlayColor_params
@@ -11742,7 +11741,7 @@ struct IVROverlay_IVROverlay_010_HideOverlay_params
 struct IVROverlay_IVROverlay_010_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11759,7 +11758,7 @@ struct IVROverlay_IVROverlay_010_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_010_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
@@ -11800,7 +11799,7 @@ struct IVROverlay_IVROverlay_010_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_010_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -11809,7 +11808,7 @@ struct IVROverlay_IVROverlay_010_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -11817,7 +11816,7 @@ struct IVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_010_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11898,13 +11897,13 @@ struct IVROverlay_IVROverlay_010_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_010_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_010_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -11945,7 +11944,7 @@ struct IVROverlay_IVROverlay_010_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -11959,7 +11958,7 @@ struct IVROverlay_IVROverlay_010_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -12086,7 +12085,7 @@ struct IVROverlay_IVROverlay_011_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_011_GetOverlayFlag_params
@@ -12095,7 +12094,7 @@ struct IVROverlay_IVROverlay_011_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_011_SetOverlayColor_params
@@ -12280,7 +12279,7 @@ struct IVROverlay_IVROverlay_011_HideOverlay_params
 struct IVROverlay_IVROverlay_011_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -12297,7 +12296,7 @@ struct IVROverlay_IVROverlay_011_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_011_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
@@ -12338,7 +12337,7 @@ struct IVROverlay_IVROverlay_011_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_011_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -12347,7 +12346,7 @@ struct IVROverlay_IVROverlay_011_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -12355,7 +12354,7 @@ struct IVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_011_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -12458,13 +12457,13 @@ struct IVROverlay_IVROverlay_011_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_011_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_011_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -12505,7 +12504,7 @@ struct IVROverlay_IVROverlay_011_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -12519,7 +12518,7 @@ struct IVROverlay_IVROverlay_011_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -12646,7 +12645,7 @@ struct IVROverlay_IVROverlay_012_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_012_GetOverlayFlag_params
@@ -12655,7 +12654,7 @@ struct IVROverlay_IVROverlay_012_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_012_SetOverlayColor_params
@@ -12840,7 +12839,7 @@ struct IVROverlay_IVROverlay_012_HideOverlay_params
 struct IVROverlay_IVROverlay_012_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -12857,7 +12856,7 @@ struct IVROverlay_IVROverlay_012_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_012_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_101 *pEvent;
     uint32_t uncbVREvent;
@@ -12898,7 +12897,7 @@ struct IVROverlay_IVROverlay_012_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_012_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -12907,7 +12906,7 @@ struct IVROverlay_IVROverlay_012_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -12915,7 +12914,7 @@ struct IVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_012_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -13027,13 +13026,13 @@ struct IVROverlay_IVROverlay_012_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_012_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_012_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -13074,7 +13073,7 @@ struct IVROverlay_IVROverlay_012_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -13088,7 +13087,7 @@ struct IVROverlay_IVROverlay_012_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -13215,7 +13214,7 @@ struct IVROverlay_IVROverlay_013_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_013_GetOverlayFlag_params
@@ -13224,7 +13223,7 @@ struct IVROverlay_IVROverlay_013_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_013_SetOverlayColor_params
@@ -13441,7 +13440,7 @@ struct IVROverlay_IVROverlay_013_HideOverlay_params
 struct IVROverlay_IVROverlay_013_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -13458,7 +13457,7 @@ struct IVROverlay_IVROverlay_013_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_013_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
@@ -13499,7 +13498,7 @@ struct IVROverlay_IVROverlay_013_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_013_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -13508,7 +13507,7 @@ struct IVROverlay_IVROverlay_013_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -13516,7 +13515,7 @@ struct IVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_013_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -13628,13 +13627,13 @@ struct IVROverlay_IVROverlay_013_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_013_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_013_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -13675,7 +13674,7 @@ struct IVROverlay_IVROverlay_013_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -13689,7 +13688,7 @@ struct IVROverlay_IVROverlay_013_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -13826,7 +13825,7 @@ struct IVROverlay_IVROverlay_014_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_014_GetOverlayFlag_params
@@ -13835,7 +13834,7 @@ struct IVROverlay_IVROverlay_014_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_014_SetOverlayColor_params
@@ -14052,7 +14051,7 @@ struct IVROverlay_IVROverlay_014_HideOverlay_params
 struct IVROverlay_IVROverlay_014_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14069,7 +14068,7 @@ struct IVROverlay_IVROverlay_014_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_014_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
@@ -14110,7 +14109,7 @@ struct IVROverlay_IVROverlay_014_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_014_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -14119,7 +14118,7 @@ struct IVROverlay_IVROverlay_014_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -14127,7 +14126,7 @@ struct IVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_014_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14240,13 +14239,13 @@ struct IVROverlay_IVROverlay_014_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_014_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_014_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14287,7 +14286,7 @@ struct IVROverlay_IVROverlay_014_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -14301,7 +14300,7 @@ struct IVROverlay_IVROverlay_014_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -14466,7 +14465,7 @@ struct IVROverlay_IVROverlay_016_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_016_GetOverlayFlag_params
@@ -14475,7 +14474,7 @@ struct IVROverlay_IVROverlay_016_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_016_SetOverlayColor_params
@@ -14730,7 +14729,7 @@ struct IVROverlay_IVROverlay_016_HideOverlay_params
 struct IVROverlay_IVROverlay_016_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14747,7 +14746,7 @@ struct IVROverlay_IVROverlay_016_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_016_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
@@ -14788,7 +14787,7 @@ struct IVROverlay_IVROverlay_016_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_016_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -14797,7 +14796,7 @@ struct IVROverlay_IVROverlay_016_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -14805,7 +14804,7 @@ struct IVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_016_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14918,13 +14917,13 @@ struct IVROverlay_IVROverlay_016_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_016_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_016_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -14965,7 +14964,7 @@ struct IVROverlay_IVROverlay_016_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -14979,7 +14978,7 @@ struct IVROverlay_IVROverlay_016_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -15149,7 +15148,7 @@ struct IVROverlay_IVROverlay_017_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_017_GetOverlayFlag_params
@@ -15158,7 +15157,7 @@ struct IVROverlay_IVROverlay_017_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_017_SetOverlayColor_params
@@ -15413,7 +15412,7 @@ struct IVROverlay_IVROverlay_017_HideOverlay_params
 struct IVROverlay_IVROverlay_017_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -15430,7 +15429,7 @@ struct IVROverlay_IVROverlay_017_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_017_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1011 *pEvent;
     uint32_t uncbVREvent;
@@ -15471,7 +15470,7 @@ struct IVROverlay_IVROverlay_017_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_017_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -15480,7 +15479,7 @@ struct IVROverlay_IVROverlay_017_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t unControllerDeviceIndex;
 };
@@ -15488,7 +15487,7 @@ struct IVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse_param
 struct IVROverlay_IVROverlay_017_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -15621,13 +15620,13 @@ struct IVROverlay_IVROverlay_017_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_017_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_017_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -15668,7 +15667,7 @@ struct IVROverlay_IVROverlay_017_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -15682,7 +15681,7 @@ struct IVROverlay_IVROverlay_017_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -15852,7 +15851,7 @@ struct IVROverlay_IVROverlay_018_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_018_GetOverlayFlag_params
@@ -15861,7 +15860,7 @@ struct IVROverlay_IVROverlay_018_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_018_SetOverlayColor_params
@@ -16116,7 +16115,7 @@ struct IVROverlay_IVROverlay_018_HideOverlay_params
 struct IVROverlay_IVROverlay_018_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -16133,7 +16132,7 @@ struct IVROverlay_IVROverlay_018_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_018_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1016 *pEvent;
     uint32_t uncbVREvent;
@@ -16174,7 +16173,7 @@ struct IVROverlay_IVROverlay_018_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_018_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -16183,7 +16182,7 @@ struct IVROverlay_IVROverlay_018_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_018_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -16316,13 +16315,13 @@ struct IVROverlay_IVROverlay_018_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_018_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_018_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -16363,7 +16362,7 @@ struct IVROverlay_IVROverlay_018_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -16377,7 +16376,7 @@ struct IVROverlay_IVROverlay_018_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -16547,7 +16546,7 @@ struct IVROverlay_IVROverlay_019_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_019_GetOverlayFlag_params
@@ -16556,7 +16555,7 @@ struct IVROverlay_IVROverlay_019_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_019_SetOverlayColor_params
@@ -16811,7 +16810,7 @@ struct IVROverlay_IVROverlay_019_HideOverlay_params
 struct IVROverlay_IVROverlay_019_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -16828,7 +16827,7 @@ struct IVROverlay_IVROverlay_019_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_019_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -16869,7 +16868,7 @@ struct IVROverlay_IVROverlay_019_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_019_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -16878,7 +16877,7 @@ struct IVROverlay_IVROverlay_019_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_019_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -17011,13 +17010,13 @@ struct IVROverlay_IVROverlay_019_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_019_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_019_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -17058,7 +17057,7 @@ struct IVROverlay_IVROverlay_019_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -17072,7 +17071,7 @@ struct IVROverlay_IVROverlay_019_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -17229,7 +17228,7 @@ struct IVROverlay_IVROverlay_020_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_020_GetOverlayFlag_params
@@ -17238,7 +17237,7 @@ struct IVROverlay_IVROverlay_020_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_020_SetOverlayColor_params
@@ -17493,7 +17492,7 @@ struct IVROverlay_IVROverlay_020_HideOverlay_params
 struct IVROverlay_IVROverlay_020_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -17510,7 +17509,7 @@ struct IVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_020_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -17551,7 +17550,7 @@ struct IVROverlay_IVROverlay_020_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_020_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -17560,7 +17559,7 @@ struct IVROverlay_IVROverlay_020_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_020_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -17693,13 +17692,13 @@ struct IVROverlay_IVROverlay_020_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_020_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_020_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -17740,7 +17739,7 @@ struct IVROverlay_IVROverlay_020_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -17754,7 +17753,7 @@ struct IVROverlay_IVROverlay_020_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -17911,7 +17910,7 @@ struct IVROverlay_IVROverlay_021_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_021_GetOverlayFlag_params
@@ -17920,7 +17919,7 @@ struct IVROverlay_IVROverlay_021_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_021_SetOverlayColor_params
@@ -18173,7 +18172,7 @@ struct IVROverlay_IVROverlay_021_HideOverlay_params
 struct IVROverlay_IVROverlay_021_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -18190,7 +18189,7 @@ struct IVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_021_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -18231,7 +18230,7 @@ struct IVROverlay_IVROverlay_021_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_021_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -18240,7 +18239,7 @@ struct IVROverlay_IVROverlay_021_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_021_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -18343,13 +18342,13 @@ struct IVROverlay_IVROverlay_021_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_021_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_021_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -18390,7 +18389,7 @@ struct IVROverlay_IVROverlay_021_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -18404,7 +18403,7 @@ struct IVROverlay_IVROverlay_021_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -18561,7 +18560,7 @@ struct IVROverlay_IVROverlay_022_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_022_GetOverlayFlag_params
@@ -18570,7 +18569,7 @@ struct IVROverlay_IVROverlay_022_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_022_GetOverlayFlags_params
@@ -18847,7 +18846,7 @@ struct IVROverlay_IVROverlay_022_HideOverlay_params
 struct IVROverlay_IVROverlay_022_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -18864,7 +18863,7 @@ struct IVROverlay_IVROverlay_022_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_022_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -18905,7 +18904,7 @@ struct IVROverlay_IVROverlay_022_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_022_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -18914,7 +18913,7 @@ struct IVROverlay_IVROverlay_022_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_022_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -19060,13 +19059,13 @@ struct IVROverlay_IVROverlay_022_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_022_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_022_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -19107,7 +19106,7 @@ struct IVROverlay_IVROverlay_022_ShowKeyboard_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -19121,7 +19120,7 @@ struct IVROverlay_IVROverlay_022_ShowKeyboardForOverlay_params
     const char *pchDescription;
     uint32_t unCharMax;
     const char *pchExistingText;
-    bool bUseMinimalMode;
+    int8_t bUseMinimalMode;
     uint64_t uUserValue;
 };
 
@@ -19260,7 +19259,7 @@ struct IVROverlay_IVROverlay_024_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_024_GetOverlayFlag_params
@@ -19269,7 +19268,7 @@ struct IVROverlay_IVROverlay_024_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_024_GetOverlayFlags_params
@@ -19526,7 +19525,7 @@ struct IVROverlay_IVROverlay_024_HideOverlay_params
 struct IVROverlay_IVROverlay_024_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -19543,7 +19542,7 @@ struct IVROverlay_IVROverlay_024_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_024_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_11030 *pEvent;
     uint32_t uncbVREvent;
@@ -19584,7 +19583,7 @@ struct IVROverlay_IVROverlay_024_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_024_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -19593,7 +19592,7 @@ struct IVROverlay_IVROverlay_024_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_024_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -19719,13 +19718,13 @@ struct IVROverlay_IVROverlay_024_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_024_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_024_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -19919,7 +19918,7 @@ struct IVROverlay_IVROverlay_025_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_025_GetOverlayFlag_params
@@ -19928,7 +19927,7 @@ struct IVROverlay_IVROverlay_025_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_025_GetOverlayFlags_params
@@ -20196,7 +20195,7 @@ struct IVROverlay_IVROverlay_025_HideOverlay_params
 struct IVROverlay_IVROverlay_025_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -20213,7 +20212,7 @@ struct IVROverlay_IVROverlay_025_GetTransformForOverlayCoordinates_params
 struct IVROverlay_IVROverlay_025_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1168 *pEvent;
     uint32_t uncbVREvent;
@@ -20254,7 +20253,7 @@ struct IVROverlay_IVROverlay_025_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_025_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -20263,7 +20262,7 @@ struct IVROverlay_IVROverlay_025_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_025_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -20389,13 +20388,13 @@ struct IVROverlay_IVROverlay_025_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_025_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_025_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -20589,7 +20588,7 @@ struct IVROverlay_IVROverlay_026_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_026_GetOverlayFlag_params
@@ -20598,7 +20597,7 @@ struct IVROverlay_IVROverlay_026_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_026_GetOverlayFlags_params
@@ -20882,7 +20881,7 @@ struct IVROverlay_IVROverlay_026_HideOverlay_params
 struct IVROverlay_IVROverlay_026_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -20906,7 +20905,7 @@ struct IVROverlay_IVROverlay_026_WaitFrameSync_params
 struct IVROverlay_IVROverlay_026_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1168 *pEvent;
     uint32_t uncbVREvent;
@@ -20947,7 +20946,7 @@ struct IVROverlay_IVROverlay_026_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_026_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -20956,7 +20955,7 @@ struct IVROverlay_IVROverlay_026_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_026_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -21082,13 +21081,13 @@ struct IVROverlay_IVROverlay_026_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_026_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_026_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -21282,7 +21281,7 @@ struct IVROverlay_IVROverlay_027_SetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool bEnabled;
+    int8_t bEnabled;
 };
 
 struct IVROverlay_IVROverlay_027_GetOverlayFlag_params
@@ -21291,7 +21290,7 @@ struct IVROverlay_IVROverlay_027_GetOverlayFlag_params
     uint32_t _ret;
     uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
-    bool *pbEnabled;
+    int8_t *pbEnabled;
 };
 
 struct IVROverlay_IVROverlay_027_GetOverlayFlags_params
@@ -21557,7 +21556,7 @@ struct IVROverlay_IVROverlay_027_HideOverlay_params
 struct IVROverlay_IVROverlay_027_IsOverlayVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -21581,7 +21580,7 @@ struct IVROverlay_IVROverlay_027_WaitFrameSync_params
 struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     w_VREvent_t_1168 *pEvent;
     uint32_t uncbVREvent;
@@ -21622,7 +21621,7 @@ struct IVROverlay_IVROverlay_027_SetOverlayMouseScale_params
 struct IVROverlay_IVROverlay_027_ComputeOverlayIntersection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
@@ -21631,7 +21630,7 @@ struct IVROverlay_IVROverlay_027_ComputeOverlayIntersection_params
 struct IVROverlay_IVROverlay_027_IsHoverTargetOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -21757,13 +21756,13 @@ struct IVROverlay_IVROverlay_027_CreateDashboardOverlay_params
 struct IVROverlay_IVROverlay_027_IsDashboardVisible_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVROverlay_IVROverlay_027_IsActiveDashboardOverlay_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint64_t ulOverlayHandle;
 };
 
@@ -21869,7 +21868,7 @@ struct IVROverlay_IVROverlay_027_CloseMessageOverlay_params
 struct IVRRenderModels_IVRRenderModels_001_LoadRenderModel_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     w_RenderModel_t_090 *pRenderModel;
 };
@@ -21898,7 +21897,7 @@ struct IVRRenderModels_IVRRenderModels_001_GetRenderModelCount_params
 struct IVRRenderModels_IVRRenderModels_002_LoadRenderModel_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     w_RenderModel_t_0912 **ppRenderModel;
 };
@@ -21912,7 +21911,7 @@ struct IVRRenderModels_IVRRenderModels_002_FreeRenderModel_params
 struct IVRRenderModels_IVRRenderModels_002_LoadTexture_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     int32_t textureId;
     w_RenderModel_TextureMap_t_090 **ppTexture;
 };
@@ -21976,7 +21975,7 @@ struct IVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName_params
 struct IVRRenderModels_IVRRenderModels_002_GetComponentState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     const w_VRControllerState001_t *pControllerState;
@@ -21986,7 +21985,7 @@ struct IVRRenderModels_IVRRenderModels_002_GetComponentState_params
 struct IVRRenderModels_IVRRenderModels_002_RenderModelHasComponent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
 };
@@ -22087,7 +22086,7 @@ struct IVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName_params
 struct IVRRenderModels_IVRRenderModels_004_GetComponentState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     const w_VRControllerState001_t *pControllerState;
@@ -22098,7 +22097,7 @@ struct IVRRenderModels_IVRRenderModels_004_GetComponentState_params
 struct IVRRenderModels_IVRRenderModels_004_RenderModelHasComponent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
 };
@@ -22207,7 +22206,7 @@ struct IVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName_params
 struct IVRRenderModels_IVRRenderModels_005_GetComponentState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     const w_VRControllerState001_t *pControllerState;
@@ -22218,7 +22217,7 @@ struct IVRRenderModels_IVRRenderModels_005_GetComponentState_params
 struct IVRRenderModels_IVRRenderModels_005_RenderModelHasComponent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
 };
@@ -22354,7 +22353,7 @@ struct IVRRenderModels_IVRRenderModels_006_GetComponentRenderModelName_params
 struct IVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     uint64_t devicePath;
@@ -22365,7 +22364,7 @@ struct IVRRenderModels_IVRRenderModels_006_GetComponentStateForDevicePath_params
 struct IVRRenderModels_IVRRenderModels_006_GetComponentState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     const w_VRControllerState001_t *pControllerState;
@@ -22376,7 +22375,7 @@ struct IVRRenderModels_IVRRenderModels_006_GetComponentState_params
 struct IVRRenderModels_IVRRenderModels_006_RenderModelHasComponent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
 };
@@ -22501,18 +22500,18 @@ struct IVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum_params
 struct IVRSettings_IVRSettings_001_Sync_params
 {
     void *linux_side;
-    bool _ret;
-    bool bForce;
+    int8_t _ret;
+    int8_t bForce;
     uint32_t *peError;
 };
 
 struct IVRSettings_IVRSettings_001_GetBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchSection;
     const char *pchSettingsKey;
-    bool bDefaultValue;
+    int8_t bDefaultValue;
     uint32_t *peError;
 };
 
@@ -22521,7 +22520,7 @@ struct IVRSettings_IVRSettings_001_SetBool_params
     void *linux_side;
     const char *pchSection;
     const char *pchSettingsKey;
-    bool bValue;
+    int8_t bValue;
     uint32_t *peError;
 };
 
@@ -22608,8 +22607,8 @@ struct IVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum_params
 struct IVRSettings_IVRSettings_002_Sync_params
 {
     void *linux_side;
-    bool _ret;
-    bool bForce;
+    int8_t _ret;
+    int8_t bForce;
     uint32_t *peError;
 };
 
@@ -22618,7 +22617,7 @@ struct IVRSettings_IVRSettings_002_SetBool_params
     void *linux_side;
     const char *pchSection;
     const char *pchSettingsKey;
-    bool bValue;
+    int8_t bValue;
     uint32_t *peError;
 };
 
@@ -22652,7 +22651,7 @@ struct IVRSettings_IVRSettings_002_SetString_params
 struct IVRSettings_IVRSettings_002_GetBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchSection;
     const char *pchSettingsKey;
     uint32_t *peError;
@@ -22713,7 +22712,7 @@ struct IVRSettings_IVRSettings_003_SetBool_params
     void *linux_side;
     const char *pchSection;
     const char *pchSettingsKey;
-    bool bValue;
+    int8_t bValue;
     uint32_t *peError;
 };
 
@@ -22747,7 +22746,7 @@ struct IVRSettings_IVRSettings_003_SetString_params
 struct IVRSettings_IVRSettings_003_GetBool_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchSection;
     const char *pchSettingsKey;
     uint32_t *peError;
@@ -22861,7 +22860,7 @@ struct IVRSystem_IVRSystem_003_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_003_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -22882,7 +22881,7 @@ struct IVRSystem_IVRSystem_003_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_003_AttachToWindow_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *hWnd;
 };
 
@@ -22909,7 +22908,7 @@ struct IVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose_p
 struct IVRSystem_IVRSystem_003_LoadRenderModel_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const char *pchRenderModelName;
     w_RenderModel_t_090 *pRenderModel;
 };
@@ -22930,14 +22929,14 @@ struct IVRSystem_IVRSystem_003_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_003_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -23000,14 +22999,14 @@ struct IVRSystem_IVRSystem_003_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_003_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_090 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_003_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_090 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -23030,7 +23029,7 @@ struct IVRSystem_IVRSystem_003_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_003_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -23038,7 +23037,7 @@ struct IVRSystem_IVRSystem_003_GetControllerState_params
 struct IVRSystem_IVRSystem_003_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -23070,7 +23069,7 @@ struct IVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     const Compositor_OverlaySettings *overlaySettings;
     HmdVector2_t vecWindowClientPositionOnScreen;
     HmdVector2_t vecWindowClientSize;
@@ -23081,7 +23080,7 @@ struct IVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse_params
 struct IVRSystem_IVRSystem_003_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_003_ReleaseInputFocus_params
@@ -23092,7 +23091,7 @@ struct IVRSystem_IVRSystem_003_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_004_GetWindowBounds_params
@@ -23160,7 +23159,7 @@ struct IVRSystem_IVRSystem_004_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_004_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -23181,7 +23180,7 @@ struct IVRSystem_IVRSystem_004_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_004_AttachToWindow_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *hWnd;
 };
 
@@ -23215,14 +23214,14 @@ struct IVRSystem_IVRSystem_004_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_004_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -23285,14 +23284,14 @@ struct IVRSystem_IVRSystem_004_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_004_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_092 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_004_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_092 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -23315,7 +23314,7 @@ struct IVRSystem_IVRSystem_004_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_004_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -23323,7 +23322,7 @@ struct IVRSystem_IVRSystem_004_GetControllerState_params
 struct IVRSystem_IVRSystem_004_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -23355,7 +23354,7 @@ struct IVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_004_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_004_ReleaseInputFocus_params
@@ -23366,7 +23365,7 @@ struct IVRSystem_IVRSystem_004_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_004_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_004_DriverDebugRequest_params
@@ -23444,7 +23443,7 @@ struct IVRSystem_IVRSystem_005_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_005_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -23465,7 +23464,7 @@ struct IVRSystem_IVRSystem_005_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_005_AttachToWindow_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *hWnd;
 };
 
@@ -23509,14 +23508,14 @@ struct IVRSystem_IVRSystem_005_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_005_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -23579,14 +23578,14 @@ struct IVRSystem_IVRSystem_005_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_005_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_097 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_005_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_097 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -23609,7 +23608,7 @@ struct IVRSystem_IVRSystem_005_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_005_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -23617,7 +23616,7 @@ struct IVRSystem_IVRSystem_005_GetControllerState_params
 struct IVRSystem_IVRSystem_005_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -23649,7 +23648,7 @@ struct IVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_005_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_005_ReleaseInputFocus_params
@@ -23660,7 +23659,7 @@ struct IVRSystem_IVRSystem_005_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_005_DriverDebugRequest_params
@@ -23738,7 +23737,7 @@ struct IVRSystem_IVRSystem_006_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_006_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -23759,7 +23758,7 @@ struct IVRSystem_IVRSystem_006_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_006_AttachToWindow_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     void *hWnd;
 };
 
@@ -23816,14 +23815,14 @@ struct IVRSystem_IVRSystem_006_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_006_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -23886,14 +23885,14 @@ struct IVRSystem_IVRSystem_006_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_006_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_0910 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_006_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_0910 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -23916,7 +23915,7 @@ struct IVRSystem_IVRSystem_006_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_006_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -23924,7 +23923,7 @@ struct IVRSystem_IVRSystem_006_GetControllerState_params
 struct IVRSystem_IVRSystem_006_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -23956,7 +23955,7 @@ struct IVRSystem_IVRSystem_006_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_006_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_006_ReleaseInputFocus_params
@@ -23967,7 +23966,7 @@ struct IVRSystem_IVRSystem_006_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_006_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_006_DriverDebugRequest_params
@@ -23990,14 +23989,14 @@ struct IVRSystem_IVRSystem_006_PerformFirmwareUpdate_params
 struct IVRSystem_IVRSystem_006_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_006_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize_params
@@ -24046,7 +24045,7 @@ struct IVRSystem_IVRSystem_009_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_009_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -24066,14 +24065,14 @@ struct IVRSystem_IVRSystem_009_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_009_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_009_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_009_GetDeviceToAbsoluteTrackingPose_params
@@ -24137,14 +24136,14 @@ struct IVRSystem_IVRSystem_009_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_009_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -24207,14 +24206,14 @@ struct IVRSystem_IVRSystem_009_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_009_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_0912 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_009_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_0912 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -24237,7 +24236,7 @@ struct IVRSystem_IVRSystem_009_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_009_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -24245,7 +24244,7 @@ struct IVRSystem_IVRSystem_009_GetControllerState_params
 struct IVRSystem_IVRSystem_009_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -24277,7 +24276,7 @@ struct IVRSystem_IVRSystem_009_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_009_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_009_ReleaseInputFocus_params
@@ -24288,7 +24287,7 @@ struct IVRSystem_IVRSystem_009_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_009_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_009_DriverDebugRequest_params
@@ -24364,7 +24363,7 @@ struct IVRSystem_IVRSystem_010_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_010_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -24384,14 +24383,14 @@ struct IVRSystem_IVRSystem_010_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_010_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_010_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params
@@ -24469,14 +24468,14 @@ struct IVRSystem_IVRSystem_010_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_010_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -24539,14 +24538,14 @@ struct IVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_010_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_0914 *pEvent;
 };
 
 struct IVRSystem_IVRSystem_010_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_0914 *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -24569,7 +24568,7 @@ struct IVRSystem_IVRSystem_010_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_010_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -24577,7 +24576,7 @@ struct IVRSystem_IVRSystem_010_GetControllerState_params
 struct IVRSystem_IVRSystem_010_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -24609,7 +24608,7 @@ struct IVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_010_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_010_ReleaseInputFocus_params
@@ -24620,7 +24619,7 @@ struct IVRSystem_IVRSystem_010_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_010_DriverDebugRequest_params
@@ -24653,7 +24652,7 @@ struct IVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt_params
 struct IVRSystem_IVRSystem_010_PerformanceTestEnableCapture_params
 {
     void *linux_side;
-    bool bEnable;
+    int8_t bEnable;
 };
 
 struct IVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params
@@ -24708,7 +24707,7 @@ struct IVRSystem_IVRSystem_011_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_011_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -24728,14 +24727,14 @@ struct IVRSystem_IVRSystem_011_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_011_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_011_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_011_GetDeviceToAbsoluteTrackingPose_params
@@ -24813,14 +24812,14 @@ struct IVRSystem_IVRSystem_011_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_011_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -24883,7 +24882,7 @@ struct IVRSystem_IVRSystem_011_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_011_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -24891,7 +24890,7 @@ struct IVRSystem_IVRSystem_011_PollNextEvent_params
 struct IVRSystem_IVRSystem_011_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_0918 *pEvent;
     uint32_t uncbVREvent;
@@ -24915,7 +24914,7 @@ struct IVRSystem_IVRSystem_011_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_011_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -24923,7 +24922,7 @@ struct IVRSystem_IVRSystem_011_GetControllerState_params
 struct IVRSystem_IVRSystem_011_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -24955,7 +24954,7 @@ struct IVRSystem_IVRSystem_011_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_011_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_011_ReleaseInputFocus_params
@@ -24966,7 +24965,7 @@ struct IVRSystem_IVRSystem_011_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_011_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_011_DriverDebugRequest_params
@@ -24999,7 +24998,7 @@ struct IVRSystem_IVRSystem_011_AcknowledgeQuit_UserPrompt_params
 struct IVRSystem_IVRSystem_011_PerformanceTestEnableCapture_params
 {
     void *linux_side;
-    bool bEnable;
+    int8_t bEnable;
 };
 
 struct IVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange_params
@@ -25054,7 +25053,7 @@ struct IVRSystem_IVRSystem_012_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_012_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -25074,14 +25073,14 @@ struct IVRSystem_IVRSystem_012_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_012_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_012_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_012_GetDeviceToAbsoluteTrackingPose_params
@@ -25159,14 +25158,14 @@ struct IVRSystem_IVRSystem_012_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_012_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -25229,7 +25228,7 @@ struct IVRSystem_IVRSystem_012_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_012_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -25237,7 +25236,7 @@ struct IVRSystem_IVRSystem_012_PollNextEvent_params
 struct IVRSystem_IVRSystem_012_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
@@ -25261,7 +25260,7 @@ struct IVRSystem_IVRSystem_012_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_012_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
 };
@@ -25269,7 +25268,7 @@ struct IVRSystem_IVRSystem_012_GetControllerState_params
 struct IVRSystem_IVRSystem_012_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -25301,7 +25300,7 @@ struct IVRSystem_IVRSystem_012_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_012_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_012_ReleaseInputFocus_params
@@ -25312,7 +25311,7 @@ struct IVRSystem_IVRSystem_012_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_012_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_012_DriverDebugRequest_params
@@ -25372,7 +25371,7 @@ struct IVRSystem_IVRSystem_014_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_014_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -25389,7 +25388,7 @@ struct IVRSystem_IVRSystem_014_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_014_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -25409,14 +25408,14 @@ struct IVRSystem_IVRSystem_014_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_014_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_014_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_014_GetDeviceToAbsoluteTrackingPose_params
@@ -25494,14 +25493,14 @@ struct IVRSystem_IVRSystem_014_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_014_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -25564,7 +25563,7 @@ struct IVRSystem_IVRSystem_014_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_014_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -25572,7 +25571,7 @@ struct IVRSystem_IVRSystem_014_PollNextEvent_params
 struct IVRSystem_IVRSystem_014_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_103 *pEvent;
     uint32_t uncbVREvent;
@@ -25597,7 +25596,7 @@ struct IVRSystem_IVRSystem_014_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_014_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -25606,7 +25605,7 @@ struct IVRSystem_IVRSystem_014_GetControllerState_params
 struct IVRSystem_IVRSystem_014_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -25639,7 +25638,7 @@ struct IVRSystem_IVRSystem_014_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_014_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_014_ReleaseInputFocus_params
@@ -25650,7 +25649,7 @@ struct IVRSystem_IVRSystem_014_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_014_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_014_DriverDebugRequest_params
@@ -25709,7 +25708,7 @@ struct IVRSystem_IVRSystem_015_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_015_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -25726,7 +25725,7 @@ struct IVRSystem_IVRSystem_015_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_015_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -25746,14 +25745,14 @@ struct IVRSystem_IVRSystem_015_GetDXGIOutputInfo_params
 struct IVRSystem_IVRSystem_015_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_015_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_015_GetDeviceToAbsoluteTrackingPose_params
@@ -25831,14 +25830,14 @@ struct IVRSystem_IVRSystem_015_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_015_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -25901,7 +25900,7 @@ struct IVRSystem_IVRSystem_015_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_015_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -25909,7 +25908,7 @@ struct IVRSystem_IVRSystem_015_PollNextEvent_params
 struct IVRSystem_IVRSystem_015_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
@@ -25934,7 +25933,7 @@ struct IVRSystem_IVRSystem_015_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_015_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -25943,7 +25942,7 @@ struct IVRSystem_IVRSystem_015_GetControllerState_params
 struct IVRSystem_IVRSystem_015_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -25976,7 +25975,7 @@ struct IVRSystem_IVRSystem_015_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_015_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_015_ReleaseInputFocus_params
@@ -25987,7 +25986,7 @@ struct IVRSystem_IVRSystem_015_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_015_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_015_DriverDebugRequest_params
@@ -26046,7 +26045,7 @@ struct IVRSystem_IVRSystem_016_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_016_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -26063,7 +26062,7 @@ struct IVRSystem_IVRSystem_016_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_016_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -26090,14 +26089,14 @@ struct IVRSystem_IVRSystem_016_GetOutputDevice_params
 struct IVRSystem_IVRSystem_016_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_016_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_016_GetDeviceToAbsoluteTrackingPose_params
@@ -26175,14 +26174,14 @@ struct IVRSystem_IVRSystem_016_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_016_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -26245,7 +26244,7 @@ struct IVRSystem_IVRSystem_016_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_016_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -26253,7 +26252,7 @@ struct IVRSystem_IVRSystem_016_PollNextEvent_params
 struct IVRSystem_IVRSystem_016_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_106 *pEvent;
     uint32_t uncbVREvent;
@@ -26278,7 +26277,7 @@ struct IVRSystem_IVRSystem_016_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_016_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -26287,7 +26286,7 @@ struct IVRSystem_IVRSystem_016_GetControllerState_params
 struct IVRSystem_IVRSystem_016_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -26320,7 +26319,7 @@ struct IVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_016_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_016_ReleaseInputFocus_params
@@ -26331,7 +26330,7 @@ struct IVRSystem_IVRSystem_016_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_016_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_016_DriverDebugRequest_params
@@ -26390,7 +26389,7 @@ struct IVRSystem_IVRSystem_017_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_017_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -26407,7 +26406,7 @@ struct IVRSystem_IVRSystem_017_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_017_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -26435,14 +26434,14 @@ struct IVRSystem_IVRSystem_017_GetOutputDevice_params
 struct IVRSystem_IVRSystem_017_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_017_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_017_GetDeviceToAbsoluteTrackingPose_params
@@ -26520,14 +26519,14 @@ struct IVRSystem_IVRSystem_017_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_017_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -26590,7 +26589,7 @@ struct IVRSystem_IVRSystem_017_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_017_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_1011 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -26598,7 +26597,7 @@ struct IVRSystem_IVRSystem_017_PollNextEvent_params
 struct IVRSystem_IVRSystem_017_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_1011 *pEvent;
     uint32_t uncbVREvent;
@@ -26623,7 +26622,7 @@ struct IVRSystem_IVRSystem_017_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_017_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -26632,7 +26631,7 @@ struct IVRSystem_IVRSystem_017_GetControllerState_params
 struct IVRSystem_IVRSystem_017_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -26665,7 +26664,7 @@ struct IVRSystem_IVRSystem_017_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_017_CaptureInputFocus_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_017_ReleaseInputFocus_params
@@ -26676,7 +26675,7 @@ struct IVRSystem_IVRSystem_017_ReleaseInputFocus_params
 struct IVRSystem_IVRSystem_017_IsInputFocusCapturedByAnotherProcess_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_017_DriverDebugRequest_params
@@ -26735,7 +26734,7 @@ struct IVRSystem_IVRSystem_019_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_019_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -26752,7 +26751,7 @@ struct IVRSystem_IVRSystem_019_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_019_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -26780,14 +26779,14 @@ struct IVRSystem_IVRSystem_019_GetOutputDevice_params
 struct IVRSystem_IVRSystem_019_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_019_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_019_GetDeviceToAbsoluteTrackingPose_params
@@ -26865,14 +26864,14 @@ struct IVRSystem_IVRSystem_019_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_019_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -26947,7 +26946,7 @@ struct IVRSystem_IVRSystem_019_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_019_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -26955,7 +26954,7 @@ struct IVRSystem_IVRSystem_019_PollNextEvent_params
 struct IVRSystem_IVRSystem_019_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -26980,7 +26979,7 @@ struct IVRSystem_IVRSystem_019_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_019_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -26989,7 +26988,7 @@ struct IVRSystem_IVRSystem_019_GetControllerState_params
 struct IVRSystem_IVRSystem_019_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -27022,25 +27021,25 @@ struct IVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_019_IsInputAvailable_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_019_IsSteamVRDrawingControllers_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_019_ShouldApplicationPause_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_019_ShouldApplicationReduceRenderingWork_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_019_DriverDebugRequest_params
@@ -27099,7 +27098,7 @@ struct IVRSystem_IVRSystem_020_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_020_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -27116,7 +27115,7 @@ struct IVRSystem_IVRSystem_020_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_020_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -27144,14 +27143,14 @@ struct IVRSystem_IVRSystem_020_GetOutputDevice_params
 struct IVRSystem_IVRSystem_020_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_020_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose_params
@@ -27229,14 +27228,14 @@ struct IVRSystem_IVRSystem_020_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_020_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -27311,7 +27310,7 @@ struct IVRSystem_IVRSystem_020_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_020_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -27319,7 +27318,7 @@ struct IVRSystem_IVRSystem_020_PollNextEvent_params
 struct IVRSystem_IVRSystem_020_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_1322 *pEvent;
     uint32_t uncbVREvent;
@@ -27344,7 +27343,7 @@ struct IVRSystem_IVRSystem_020_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_020_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -27353,7 +27352,7 @@ struct IVRSystem_IVRSystem_020_GetControllerState_params
 struct IVRSystem_IVRSystem_020_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -27386,25 +27385,25 @@ struct IVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_020_IsInputAvailable_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_020_IsSteamVRDrawingControllers_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_020_ShouldApplicationPause_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_020_PerformFirmwareUpdate_params
@@ -27467,7 +27466,7 @@ struct IVRSystem_IVRSystem_021_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_021_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -27484,7 +27483,7 @@ struct IVRSystem_IVRSystem_021_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_021_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -27512,14 +27511,14 @@ struct IVRSystem_IVRSystem_021_GetOutputDevice_params
 struct IVRSystem_IVRSystem_021_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_021_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_021_GetDeviceToAbsoluteTrackingPose_params
@@ -27597,14 +27596,14 @@ struct IVRSystem_IVRSystem_021_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_021_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_021_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -27679,7 +27678,7 @@ struct IVRSystem_IVRSystem_021_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_021_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_11030 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -27687,7 +27686,7 @@ struct IVRSystem_IVRSystem_021_PollNextEvent_params
 struct IVRSystem_IVRSystem_021_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_11030 *pEvent;
     uint32_t uncbVREvent;
@@ -27712,7 +27711,7 @@ struct IVRSystem_IVRSystem_021_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_021_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -27721,7 +27720,7 @@ struct IVRSystem_IVRSystem_021_GetControllerState_params
 struct IVRSystem_IVRSystem_021_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -27754,25 +27753,25 @@ struct IVRSystem_IVRSystem_021_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_021_IsInputAvailable_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_021_IsSteamVRDrawingControllers_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_021_ShouldApplicationPause_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_021_ShouldApplicationReduceRenderingWork_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_021_PerformFirmwareUpdate_params
@@ -27830,7 +27829,7 @@ struct IVRSystem_IVRSystem_022_GetProjectionRaw_params
 struct IVRSystem_IVRSystem_022_ComputeDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eEye;
     float fU;
     float fV;
@@ -27847,7 +27846,7 @@ struct IVRSystem_IVRSystem_022_GetEyeToHeadTransform_params
 struct IVRSystem_IVRSystem_022_GetTimeSinceLastVsync_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     float *pfSecondsSinceLastVsync;
     uint64_t *pulFrameCounter;
 };
@@ -27875,14 +27874,14 @@ struct IVRSystem_IVRSystem_022_GetOutputDevice_params
 struct IVRSystem_IVRSystem_022_IsDisplayOnDesktop_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_022_SetDisplayVisibility_params
 {
     void *linux_side;
-    bool _ret;
-    bool bIsVisibleOnDesktop;
+    int8_t _ret;
+    int8_t bIsVisibleOnDesktop;
 };
 
 struct IVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose_params
@@ -27955,14 +27954,14 @@ struct IVRSystem_IVRSystem_022_GetTrackedDeviceClass_params
 struct IVRSystem_IVRSystem_022_IsTrackedDeviceConnected_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
 };
 
 struct IVRSystem_IVRSystem_022_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
@@ -28037,7 +28036,7 @@ struct IVRSystem_IVRSystem_022_GetPropErrorNameFromEnum_params
 struct IVRSystem_IVRSystem_022_PollNextEvent_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     w_VREvent_t_1168 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -28045,7 +28044,7 @@ struct IVRSystem_IVRSystem_022_PollNextEvent_params
 struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     w_VREvent_t_1168 *pEvent;
     uint32_t uncbVREvent;
@@ -28070,7 +28069,7 @@ struct IVRSystem_IVRSystem_022_GetHiddenAreaMesh_params
 struct IVRSystem_IVRSystem_022_GetControllerState_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
     uint32_t unControllerStateSize;
@@ -28079,7 +28078,7 @@ struct IVRSystem_IVRSystem_022_GetControllerState_params
 struct IVRSystem_IVRSystem_022_GetControllerStateWithPose_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t eOrigin;
     uint32_t unControllerDeviceIndex;
     w_VRControllerState001_t *pControllerState;
@@ -28112,25 +28111,25 @@ struct IVRSystem_IVRSystem_022_GetControllerAxisTypeNameFromEnum_params
 struct IVRSystem_IVRSystem_022_IsInputAvailable_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_022_IsSteamVRDrawingControllers_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_022_ShouldApplicationPause_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_022_ShouldApplicationReduceRenderingWork_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
 };
 
 struct IVRSystem_IVRSystem_022_PerformFirmwareUpdate_params
@@ -28162,14 +28161,14 @@ struct IVRSystem_IVRSystem_022_GetRuntimeVersion_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_HasCamera_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     char *pBuffer;
     uint32_t nBufferLen;
@@ -28178,7 +28177,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     uint32_t nVideoStreamFormat;
     uint32_t *pWidth;
@@ -28188,7 +28187,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     uint32_t nVideoStreamFormat;
 };
@@ -28203,29 +28202,29 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
-    bool bEnable;
+    int8_t bEnable;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
@@ -28246,7 +28245,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     const w_CameraVideoStreamFrame_t_0914 *pFrameImage;
 };
@@ -28254,36 +28253,36 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
-    bool bEnable;
+    int8_t bEnable;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     float flInputU;
     float flInputV;
@@ -28294,7 +28293,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion_params
 struct IVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection_params
 {
     void *linux_side;
-    bool _ret;
+    int8_t _ret;
     uint32_t nDeviceIndex;
     float flWidthPixels;
     float flHeightPixels;
@@ -28315,7 +28314,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_002_HasCamera_params
     void *linux_side;
     uint32_t _ret;
     uint32_t nDeviceIndex;
-    bool *pHasCamera;
+    int8_t *pHasCamera;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize_params
@@ -28389,7 +28388,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_003_HasCamera_params
     void *linux_side;
     uint32_t _ret;
     uint32_t nDeviceIndex;
-    bool *pHasCamera;
+    int8_t *pHasCamera;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize_params
@@ -28505,7 +28504,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_004_HasCamera_params
     void *linux_side;
     uint32_t _ret;
     uint32_t nDeviceIndex;
-    bool *pHasCamera;
+    int8_t *pHasCamera;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize_params
@@ -28621,7 +28620,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_005_HasCamera_params
     void *linux_side;
     uint32_t _ret;
     uint32_t nDeviceIndex;
-    bool *pHasCamera;
+    int8_t *pHasCamera;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_005_GetCameraFrameSize_params
@@ -28739,7 +28738,7 @@ struct IVRTrackedCamera_IVRTrackedCamera_006_HasCamera_params
     void *linux_side;
     uint32_t _ret;
     uint32_t nDeviceIndex;
-    bool *pHasCamera;
+    int8_t *pHasCamera;
 };
 
 struct IVRTrackedCamera_IVRTrackedCamera_006_GetCameraFrameSize_params
