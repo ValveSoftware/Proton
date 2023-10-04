@@ -131,7 +131,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc7(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc8(struct w_steam_iface *_this, uint32_t a)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc8(struct w_steam_iface *_this, uint32_t a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc8_params params =
     {
@@ -163,7 +163,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc10(struct w_steam_if
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc10, &params );
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc11(struct w_steam_iface *_this, uint32_t a)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc11(struct w_steam_iface *_this, uint32_t a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc11_params params =
     {
@@ -218,7 +218,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc15(struct w_stea
     return params._ret;
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc16(struct w_steam_iface *_this, bool a)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc16(struct w_steam_iface *_this, int8_t a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc16_params params =
     {
@@ -229,7 +229,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc16(struct w_steam_if
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc16, &params );
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc17(struct w_steam_iface *_this)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc17(struct w_steam_iface *_this)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc17_params params =
     {
@@ -251,7 +251,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc18(struct w_stea
     return params._ret;
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc19(struct w_steam_iface *_this, bool a)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc19(struct w_steam_iface *_this, int8_t a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc19_params params =
     {
@@ -262,7 +262,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc19(struct w_steam_if
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc19, &params );
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc20(struct w_steam_iface *_this)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc20(struct w_steam_iface *_this)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc20_params params =
     {
@@ -299,7 +299,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(struct w_steam_if
     VRCLIENT_CALL( IVRControlPanel_IVRControlPanel_006_undoc22, &params );
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_iface *_this, const char *a)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_iface *_this, const char *a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc23_params params =
     {
@@ -311,7 +311,7 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc23(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc24(struct w_steam_iface *_this)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc24(struct w_steam_iface *_this)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc24_params params =
     {
@@ -322,7 +322,7 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc24(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc25(struct w_steam_iface *_this, bool a)
+int8_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc25(struct w_steam_iface *_this, int8_t a)
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc25_params params =
     {

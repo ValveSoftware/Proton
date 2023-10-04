@@ -46,7 +46,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_005_GetLastError(struct w_ste
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_SetVSync(struct w_steam_iface *_this, bool bVSync)
+void __thiscall winIVRCompositor_IVRCompositor_005_SetVSync(struct w_steam_iface *_this, int8_t bVSync)
 {
     struct IVRCompositor_IVRCompositor_005_SetVSync_params params =
     {
@@ -57,7 +57,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_SetVSync(struct w_steam_iface
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_005_SetVSync, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_GetVSync(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_005_GetVSync(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_005_GetVSync_params params =
     {
@@ -197,7 +197,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_ClearOverlay(struct w_steam_i
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_005_ClearOverlay, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_005_GetFrameTiming_params params =
     {
@@ -210,7 +210,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_005_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_005_FadeToColor_params params =
     {
@@ -226,7 +226,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_005_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_005_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_005_FadeGrid_params params =
     {
@@ -268,7 +268,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_005_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_005_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_005_IsFullscreen_params params =
     {
@@ -279,7 +279,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_005_IsFullscreen(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(struct w_steam_iface *_this, const Compositor_OverlaySettings *pSettings, float fAspectRatio, uint32_t eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
+int8_t __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(struct w_steam_iface *_this, const Compositor_OverlaySettings *pSettings, float fAspectRatio, uint32_t eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
 {
     struct IVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params params =
     {
@@ -448,7 +448,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_006_GetLastError(struct w_ste
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_006_SetVSync(struct w_steam_iface *_this, bool bVSync)
+void __thiscall winIVRCompositor_IVRCompositor_006_SetVSync(struct w_steam_iface *_this, int8_t bVSync)
 {
     struct IVRCompositor_IVRCompositor_006_SetVSync_params params =
     {
@@ -459,7 +459,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_SetVSync(struct w_steam_iface
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_006_SetVSync, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_006_GetVSync(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_006_GetVSync(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_006_GetVSync_params params =
     {
@@ -543,7 +543,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame(struc
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_090 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_006_GetFrameTiming_params params =
     {
@@ -556,7 +556,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_006_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_006_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_006_FadeToColor_params params =
     {
@@ -572,7 +572,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_006_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_006_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_006_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_006_FadeGrid_params params =
     {
@@ -614,7 +614,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_006_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_006_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_006_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_006_IsFullscreen_params params =
     {
@@ -658,7 +658,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_006_GetCurrentSceneFocusProce
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_006_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_006_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_006_CanRenderScene_params params =
     {
@@ -789,7 +789,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_007_GetLastError(struct w_ste
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_007_SetVSync(struct w_steam_iface *_this, bool bVSync)
+void __thiscall winIVRCompositor_IVRCompositor_007_SetVSync(struct w_steam_iface *_this, int8_t bVSync)
 {
     struct IVRCompositor_IVRCompositor_007_SetVSync_params params =
     {
@@ -800,7 +800,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_SetVSync(struct w_steam_iface
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_007_SetVSync, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_007_GetVSync(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_007_GetVSync(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_007_GetVSync_params params =
     {
@@ -874,7 +874,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame(struc
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_007_GetFrameTiming_params params =
     {
@@ -887,7 +887,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_007_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_007_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_007_FadeToColor_params params =
     {
@@ -903,7 +903,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_007_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_007_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_007_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_007_FadeGrid_params params =
     {
@@ -945,7 +945,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_007_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_007_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_007_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_007_IsFullscreen_params params =
     {
@@ -989,7 +989,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_007_GetCurrentSceneFocusProce
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_007_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_007_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_007_CanRenderScene_params params =
     {
@@ -1125,7 +1125,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_008_GetLastError(struct w_ste
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_008_SetVSync(struct w_steam_iface *_this, bool bVSync)
+void __thiscall winIVRCompositor_IVRCompositor_008_SetVSync(struct w_steam_iface *_this, int8_t bVSync)
 {
     struct IVRCompositor_IVRCompositor_008_SetVSync_params params =
     {
@@ -1136,7 +1136,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_SetVSync(struct w_steam_iface
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_008_SetVSync, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_008_GetVSync(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_008_GetVSync(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_008_GetVSync_params params =
     {
@@ -1211,7 +1211,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(struc
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_093 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_008_GetFrameTiming_params params =
     {
@@ -1224,7 +1224,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(struct w_steam
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_008_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_008_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_008_FadeToColor_params params =
     {
@@ -1240,7 +1240,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_008_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_008_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_008_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_008_FadeGrid_params params =
     {
@@ -1310,7 +1310,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_008_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_008_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_008_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_008_IsFullscreen_params params =
     {
@@ -1354,7 +1354,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_008_GetCurrentSceneFocusProce
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_008_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_008_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_008_CanRenderScene_params params =
     {
@@ -1607,7 +1607,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0913 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_009_GetFrameTiming_params params =
     {
@@ -1631,7 +1631,7 @@ float __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_009_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_009_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_009_FadeToColor_params params =
     {
@@ -1647,7 +1647,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_009_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_009_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_009_FadeGrid_params params =
     {
@@ -1701,7 +1701,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_009_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_009_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_009_IsFullscreen_params params =
     {
@@ -1734,7 +1734,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_009_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_009_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_009_CanRenderScene_params params =
     {
@@ -1765,7 +1765,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_009_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_009_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_009_IsMirrorWindowVisible_params params =
     {
@@ -1972,7 +1972,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0914 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0914 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_010_GetFrameTiming_params params =
     {
@@ -1996,7 +1996,7 @@ float __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_010_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_010_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_010_FadeToColor_params params =
     {
@@ -2012,7 +2012,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_010_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_010_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_010_FadeGrid_params params =
     {
@@ -2066,7 +2066,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_010_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_010_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_010_IsFullscreen_params params =
     {
@@ -2099,7 +2099,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_010_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_010_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_010_CanRenderScene_params params =
     {
@@ -2130,7 +2130,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_010_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_010_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_010_IsMirrorWindowVisible_params params =
     {
@@ -2337,7 +2337,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_011_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_011_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_011_GetFrameTiming_params params =
     {
@@ -2361,7 +2361,7 @@ float __thiscall winIVRCompositor_IVRCompositor_011_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_011_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_011_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_011_FadeToColor_params params =
     {
@@ -2377,7 +2377,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_011_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_011_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_011_FadeGrid_params params =
     {
@@ -2431,7 +2431,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_011_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_011_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_011_IsFullscreen_params params =
     {
@@ -2464,7 +2464,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_011_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_011_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_011_CanRenderScene_params params =
     {
@@ -2495,7 +2495,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_011_IsMirrorWindowVisible_params params =
     {
@@ -2718,7 +2718,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_012_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_012_GetFrameTiming_params params =
     {
@@ -2742,7 +2742,7 @@ float __thiscall winIVRCompositor_IVRCompositor_012_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_012_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_012_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_012_FadeToColor_params params =
     {
@@ -2758,7 +2758,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_012_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_012_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_012_FadeGrid_params params =
     {
@@ -2812,7 +2812,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_012_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_012_IsFullscreen_params params =
     {
@@ -2845,7 +2845,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_012_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_012_CanRenderScene_params params =
     {
@@ -2876,7 +2876,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_012_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_012_IsMirrorWindowVisible_params params =
     {
@@ -2897,7 +2897,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources_params params =
     {
@@ -3115,7 +3115,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_013_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0915 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_013_GetFrameTiming_params params =
     {
@@ -3139,7 +3139,7 @@ float __thiscall winIVRCompositor_IVRCompositor_013_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_013_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_013_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_013_FadeToColor_params params =
     {
@@ -3155,7 +3155,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_013_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_013_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_013_FadeGrid_params params =
     {
@@ -3209,7 +3209,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_013_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_013_IsFullscreen_params params =
     {
@@ -3242,7 +3242,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_013_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_013_CanRenderScene_params params =
     {
@@ -3273,7 +3273,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_013_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_013_IsMirrorWindowVisible_params params =
     {
@@ -3294,7 +3294,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources_params params =
     {
@@ -3305,7 +3305,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn_params params =
     {
@@ -3527,7 +3527,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_014_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_014_GetFrameTiming_params params =
     {
@@ -3551,7 +3551,7 @@ float __thiscall winIVRCompositor_IVRCompositor_014_GetFrameTimeRemaining(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_014_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_014_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_014_FadeToColor_params params =
     {
@@ -3567,7 +3567,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_014_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_014_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_014_FadeGrid_params params =
     {
@@ -3621,7 +3621,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_014_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_014_IsFullscreen_params params =
     {
@@ -3654,7 +3654,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_014_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_014_CanRenderScene_params params =
     {
@@ -3685,7 +3685,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_014_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_014_IsMirrorWindowVisible_params params =
     {
@@ -3706,7 +3706,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_014_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_014_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_014_ShouldAppRenderWithLowResources_params params =
     {
@@ -3717,7 +3717,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_014_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_014_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_014_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_014_ForceInterleavedReprojectionOn_params params =
     {
@@ -3738,7 +3738,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_014_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_014_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_014_SuspendRendering_params params =
     {
@@ -3972,7 +3972,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_0920 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_015_GetFrameTiming_params params =
     {
@@ -4008,7 +4008,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_015_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_015_FadeToColor_params params =
     {
@@ -4024,7 +4024,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_015_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_015_FadeGrid_params params =
     {
@@ -4078,7 +4078,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_015_IsFullscreen_params params =
     {
@@ -4111,7 +4111,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_015_CanRenderScene_params params =
     {
@@ -4142,7 +4142,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_015_IsMirrorWindowVisible_params params =
     {
@@ -4163,7 +4163,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_015_ShouldAppRenderWithLowResources_params params =
     {
@@ -4174,7 +4174,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_015_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_015_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_015_ForceInterleavedReprojectionOn_params params =
     {
@@ -4195,7 +4195,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_015_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_015_SuspendRendering_params params =
     {
@@ -4259,7 +4259,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture_params params =
     {
@@ -4518,7 +4518,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_102 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_102 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_016_GetFrameTiming_params params =
     {
@@ -4554,7 +4554,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_016_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_016_FadeToColor_params params =
     {
@@ -4570,7 +4570,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_016_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_016_FadeGrid_params params =
     {
@@ -4624,7 +4624,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_016_IsFullscreen_params params =
     {
@@ -4657,7 +4657,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_016_CanRenderScene_params params =
     {
@@ -4688,7 +4688,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_016_IsMirrorWindowVisible_params params =
     {
@@ -4709,7 +4709,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_016_ShouldAppRenderWithLowResources_params params =
     {
@@ -4720,7 +4720,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_016_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_016_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_016_ForceInterleavedReprojectionOn_params params =
     {
@@ -4741,7 +4741,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_016_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_016_SuspendRendering_params params =
     {
@@ -4780,7 +4780,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture_params params =
     {
@@ -5036,7 +5036,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_017_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_017_GetFrameTiming_params params =
     {
@@ -5085,7 +5085,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_017_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_017_FadeToColor_params params =
     {
@@ -5101,7 +5101,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_FadeToColor, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_017_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_017_FadeGrid_params params =
     {
@@ -5155,7 +5155,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_017_IsFullscreen_params params =
     {
@@ -5188,7 +5188,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_017_CanRenderScene_params params =
     {
@@ -5219,7 +5219,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_017_IsMirrorWindowVisible_params params =
     {
@@ -5240,7 +5240,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_017_ShouldAppRenderWithLowResources_params params =
     {
@@ -5251,7 +5251,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_017_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_017_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_017_ForceInterleavedReprojectionOn_params params =
     {
@@ -5272,7 +5272,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_017_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_017_SuspendRendering_params params =
     {
@@ -5311,7 +5311,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture_params params =
     {
@@ -5571,7 +5571,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_018_GetFrameTiming_params params =
     {
@@ -5620,7 +5620,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_018_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_018_FadeToColor_params params =
     {
@@ -5636,7 +5636,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_018_GetCurrentFadeColor_params params =
     {
@@ -5649,7 +5649,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_018_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_018_FadeGrid_params params =
     {
@@ -5714,7 +5714,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_018_IsFullscreen_params params =
     {
@@ -5747,7 +5747,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_018_CanRenderScene_params params =
     {
@@ -5778,7 +5778,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_018_IsMirrorWindowVisible_params params =
     {
@@ -5799,7 +5799,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResources_params params =
     {
@@ -5810,7 +5810,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_018_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_018_ForceInterleavedReprojectionOn_params params =
     {
@@ -5831,7 +5831,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_018_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_018_SuspendRendering_params params =
     {
@@ -5870,7 +5870,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture_params params =
     {
@@ -6136,7 +6136,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_019_GetFrameTiming_params params =
     {
@@ -6185,7 +6185,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_019_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_019_FadeToColor_params params =
     {
@@ -6201,7 +6201,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_019_GetCurrentFadeColor_params params =
     {
@@ -6214,7 +6214,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_019_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_019_FadeGrid_params params =
     {
@@ -6279,7 +6279,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_019_IsFullscreen_params params =
     {
@@ -6312,7 +6312,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_019_CanRenderScene_params params =
     {
@@ -6343,7 +6343,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_019_IsMirrorWindowVisible_params params =
     {
@@ -6364,7 +6364,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_019_ShouldAppRenderWithLowResources_params params =
     {
@@ -6375,7 +6375,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_019_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_019_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_019_ForceInterleavedReprojectionOn_params params =
     {
@@ -6396,7 +6396,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_019_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_019_SuspendRendering_params params =
     {
@@ -6435,7 +6435,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture_params params =
     {
@@ -6733,7 +6733,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_020_GetFrameTiming_params params =
     {
@@ -6782,7 +6782,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_020_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_020_FadeToColor_params params =
     {
@@ -6798,7 +6798,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_020_GetCurrentFadeColor_params params =
     {
@@ -6811,7 +6811,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_020_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_020_FadeGrid_params params =
     {
@@ -6876,7 +6876,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_020_IsFullscreen_params params =
     {
@@ -6909,7 +6909,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_020_CanRenderScene_params params =
     {
@@ -6940,7 +6940,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_020_IsMirrorWindowVisible_params params =
     {
@@ -6961,7 +6961,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_020_ShouldAppRenderWithLowResources_params params =
     {
@@ -6972,7 +6972,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_020_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_020_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_020_ForceInterleavedReprojectionOn_params params =
     {
@@ -6993,7 +6993,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_020_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_020_SuspendRendering_params params =
     {
@@ -7043,7 +7043,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture_params params =
     {
@@ -7345,7 +7345,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_103a *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_021_GetFrameTiming_params params =
     {
@@ -7394,7 +7394,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_021_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_021_FadeToColor_params params =
     {
@@ -7410,7 +7410,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_021_GetCurrentFadeColor_params params =
     {
@@ -7423,7 +7423,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_021_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_021_FadeGrid_params params =
     {
@@ -7488,7 +7488,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_021_IsFullscreen_params params =
     {
@@ -7521,7 +7521,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_021_CanRenderScene_params params =
     {
@@ -7552,7 +7552,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_021_IsMirrorWindowVisible_params params =
     {
@@ -7573,7 +7573,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_021_ShouldAppRenderWithLowResources_params params =
     {
@@ -7584,7 +7584,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_021_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_021_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_021_ForceInterleavedReprojectionOn_params params =
     {
@@ -7605,7 +7605,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_021_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_021_SuspendRendering_params params =
     {
@@ -7655,7 +7655,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture_params params =
     {
@@ -7717,7 +7717,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensions
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(struct w_steam_iface *_this, bool bExplicitTimingMode)
+void __thiscall winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(struct w_steam_iface *_this, int8_t bExplicitTimingMode)
 {
     struct IVRCompositor_IVRCompositor_021_SetExplicitTimingMode_params params =
     {
@@ -7986,7 +7986,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_022_GetFrameTiming_params params =
     {
@@ -8035,7 +8035,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_022_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_022_FadeToColor_params params =
     {
@@ -8051,7 +8051,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_022_GetCurrentFadeColor_params params =
     {
@@ -8064,7 +8064,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_022_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_022_FadeGrid_params params =
     {
@@ -8129,7 +8129,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_IsFullscreen_params params =
     {
@@ -8162,7 +8162,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_CanRenderScene_params params =
     {
@@ -8193,7 +8193,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_IsMirrorWindowVisible_params params =
     {
@@ -8214,7 +8214,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_ShouldAppRenderWithLowResources_params params =
     {
@@ -8225,7 +8225,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_022_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_022_ForceInterleavedReprojectionOn_params params =
     {
@@ -8246,7 +8246,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_022_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_022_SuspendRendering_params params =
     {
@@ -8296,7 +8296,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture_params params =
     {
@@ -8380,7 +8380,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled_params params =
     {
@@ -8391,7 +8391,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported_params params =
     {
@@ -8402,7 +8402,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported(st
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading_params params =
     {
@@ -8668,7 +8668,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_024_GetFrameTiming_params params =
     {
@@ -8717,7 +8717,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_024_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_024_FadeToColor_params params =
     {
@@ -8733,7 +8733,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_024_GetCurrentFadeColor_params params =
     {
@@ -8746,7 +8746,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_024_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_024_FadeGrid_params params =
     {
@@ -8811,7 +8811,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_IsFullscreen_params params =
     {
@@ -8844,7 +8844,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_CanRenderScene_params params =
     {
@@ -8875,7 +8875,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_IsMirrorWindowVisible_params params =
     {
@@ -8896,7 +8896,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_ShouldAppRenderWithLowResources_params params =
     {
@@ -8907,7 +8907,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_024_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_024_ForceInterleavedReprojectionOn_params params =
     {
@@ -8928,7 +8928,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_024_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_024_SuspendRendering_params params =
     {
@@ -8978,7 +8978,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture_params params =
     {
@@ -9062,7 +9062,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData(
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_IsMotionSmoothingEnabled_params params =
     {
@@ -9073,7 +9073,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingEnabled(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingSupported(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingSupported(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_IsMotionSmoothingSupported_params params =
     {
@@ -9084,7 +9084,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_IsMotionSmoothingSupported(st
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading_params params =
     {
@@ -9382,7 +9382,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_026_GetFrameTiming_params params =
     {
@@ -9431,7 +9431,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_026_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_026_FadeToColor_params params =
     {
@@ -9447,7 +9447,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_026_GetCurrentFadeColor_params params =
     {
@@ -9460,7 +9460,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeIn)
+void __thiscall winIVRCompositor_IVRCompositor_026_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeIn)
 {
     struct IVRCompositor_IVRCompositor_026_FadeGrid_params params =
     {
@@ -9525,7 +9525,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_IsFullscreen_params params =
     {
@@ -9558,7 +9558,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_CanRenderScene_params params =
     {
@@ -9589,7 +9589,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_IsMirrorWindowVisible_params params =
     {
@@ -9610,7 +9610,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_ShouldAppRenderWithLowResources_params params =
     {
@@ -9621,7 +9621,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_026_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_026_ForceInterleavedReprojectionOn_params params =
     {
@@ -9642,7 +9642,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_026_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_026_SuspendRendering_params params =
     {
@@ -9692,7 +9692,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture_params params =
     {
@@ -9776,7 +9776,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData(
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_IsMotionSmoothingEnabled_params params =
     {
@@ -9787,7 +9787,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingEnabled(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingSupported(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingSupported(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_IsMotionSmoothingSupported_params params =
     {
@@ -9798,7 +9798,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_IsMotionSmoothingSupported(st
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading_params params =
     {
@@ -9834,7 +9834,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_ClearStageOverride(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_ClearStageOverride, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_GetCompositorBenchmarkResults(struct w_steam_iface *_this, Compositor_BenchmarkResults *pBenchmarkResults, uint32_t nSizeOfBenchmarkResults)
+int8_t __thiscall winIVRCompositor_IVRCompositor_026_GetCompositorBenchmarkResults(struct w_steam_iface *_this, Compositor_BenchmarkResults *pBenchmarkResults, uint32_t nSizeOfBenchmarkResults)
 {
     struct IVRCompositor_IVRCompositor_026_GetCompositorBenchmarkResults_params params =
     {
@@ -10155,7 +10155,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_ClearLastSubmittedFrame(struc
 
 extern void __thiscall winIVRCompositor_IVRCompositor_027_PostPresentHandoff(struct w_steam_iface *_this);
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
 {
     struct IVRCompositor_IVRCompositor_027_GetFrameTiming_params params =
     {
@@ -10204,7 +10204,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_GetCumulativeStats(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_GetCumulativeStats, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+void __thiscall winIVRCompositor_IVRCompositor_027_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_027_FadeToColor_params params =
     {
@@ -10220,7 +10220,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_FadeToColor(struct w_steam_if
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_FadeToColor, &params );
 }
 
-HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, bool bBackground)
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
 {
     struct IVRCompositor_IVRCompositor_027_GetCurrentFadeColor_params params =
     {
@@ -10233,7 +10233,7 @@ HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentFadeColor(s
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_FadeGrid(struct w_steam_iface *_this, float fSeconds, bool bFadeGridIn)
+void __thiscall winIVRCompositor_IVRCompositor_027_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeGridIn)
 {
     struct IVRCompositor_IVRCompositor_027_FadeGrid_params params =
     {
@@ -10298,7 +10298,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_CompositorQuit(struct w_steam
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_CompositorQuit, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_IsFullscreen(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_IsFullscreen(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_IsFullscreen_params params =
     {
@@ -10331,7 +10331,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastFrameRenderer(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_CanRenderScene(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_CanRenderScene(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_CanRenderScene_params params =
     {
@@ -10362,7 +10362,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_HideMirrorWindow(struct w_ste
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_HideMirrorWindow, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_IsMirrorWindowVisible(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_IsMirrorWindowVisible(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_IsMirrorWindowVisible_params params =
     {
@@ -10383,7 +10383,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_CompositorDumpImages(struct w
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_CompositorDumpImages, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_ShouldAppRenderWithLowResources_params params =
     {
@@ -10394,7 +10394,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_ShouldAppRenderWithLowResourc
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, bool bOverride)
+void __thiscall winIVRCompositor_IVRCompositor_027_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
 {
     struct IVRCompositor_IVRCompositor_027_ForceInterleavedReprojectionOn_params params =
     {
@@ -10415,7 +10415,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_ForceReconnectProcess(struct 
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_ForceReconnectProcess, &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_SuspendRendering(struct w_steam_iface *_this, bool bSuspend)
+void __thiscall winIVRCompositor_IVRCompositor_027_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
 {
     struct IVRCompositor_IVRCompositor_027_SuspendRendering_params params =
     {
@@ -10465,7 +10465,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextureGL(struct
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct IVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture_params params =
     {
@@ -10549,7 +10549,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SubmitExplicitTimingData(
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled_params params =
     {
@@ -10560,7 +10560,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingEnabled(stru
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported_params params =
     {
@@ -10571,7 +10571,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_IsMotionSmoothingSupported(st
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
 {
     struct IVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading_params params =
     {
@@ -10607,7 +10607,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_ClearStageOverride(struct w_s
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_ClearStageOverride, &params );
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults(struct w_steam_iface *_this, Compositor_BenchmarkResults *pBenchmarkResults, uint32_t nSizeOfBenchmarkResults)
+int8_t __thiscall winIVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults(struct w_steam_iface *_this, Compositor_BenchmarkResults *pBenchmarkResults, uint32_t nSizeOfBenchmarkResults)
 {
     struct IVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults_params params =
     {

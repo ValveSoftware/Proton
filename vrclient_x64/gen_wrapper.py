@@ -687,9 +687,9 @@ def declspec(decl, name, prefix, wrapped=False):
     real_name = real_name.removeprefix("const ")
     real_name = real_name.removeprefix("vr::")
 
-    if type_name in ('void', 'bool', 'char', 'float', 'double'):
+    if type_name in ('void', 'char', 'float', 'double'):
         return f'{const}{type_name}{name}'
-    if type_name.startswith(('int', 'long', 'short', 'signed')):
+    if type_name.startswith(('bool', 'int', 'long', 'short', 'signed')):
         return f'{const}int{decl.get_size() * 8}_t{name}'
     if type_name.startswith(('uint', 'unsigned')):
         return f'{const}uint{decl.get_size() * 8}_t{name}'
@@ -1578,7 +1578,6 @@ with open(u"unixlib_generated.h", "w") as file:
     out(u'#include <stdarg.h>\n')
     out(u'#include <stddef.h>\n')
     out(u'#include <stdint.h>\n')
-    out(u'#include <stdbool.h>\n')
     out(u'\n')
     out(u'#ifdef __cplusplus\n')
     out(u'extern "C" {\n')

@@ -50,7 +50,7 @@ uint64_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(str
     return params._ret;
 }
 
-bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_steam_iface *_this, uint32_t nDriver)
+int8_t __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_steam_iface *_this, uint32_t nDriver)
 {
     struct IVRDriverManager_IVRDriverManager_001_IsEnabled_params params =
     {

@@ -34,7 +34,7 @@ uint32_t __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(s
 
 extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, uint32_t *peError);
 
-extern bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this);
+extern int8_t __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this);
 
 const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, uint32_t eError)
 {
@@ -147,7 +147,7 @@ uint32_t __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(s
 
 extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, uint32_t *peError);
 
-extern bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this);
+extern int8_t __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this);
 
 const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, uint32_t eError)
 {

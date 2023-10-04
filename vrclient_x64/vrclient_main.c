@@ -193,7 +193,7 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface( name, params._ret );
 }
 
-static bool is_hmd_present_reg(void)
+static int8_t is_hmd_present_reg(void)
 {
     DWORD type, value, wait_status, size;
     DWORD is_hmd_present = 0;
@@ -419,7 +419,7 @@ void *__thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface( struct 
     return params._ret;
 }
 
-bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam_iface *_this )
+int8_t __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam_iface *_this )
 {
     struct IVRClientCore_IVRClientCore_002_BIsHmdPresent_params params = {.linux_side = _this->u_iface};
 
@@ -499,7 +499,7 @@ void *__thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface( struct 
     return params._ret;
 }
 
-bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam_iface *_this )
+int8_t __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam_iface *_this )
 {
     struct IVRClientCore_IVRClientCore_003_BIsHmdPresent_params params = {.linux_side = _this->u_iface};
 

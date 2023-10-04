@@ -297,7 +297,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11( struct 
 
 /* LoadRenderModel(_Async) / FreeRenderModel */
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct w_steam_iface *_this, const char *pchRenderModelName,
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_LoadRenderModel( struct w_steam_iface *_this, const char *pchRenderModelName,
                                                                         w_RenderModel_t_0912 **ppRenderModel )
 {
     struct render_model *model;
@@ -415,7 +415,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel( struct w
 
 /* LoadTexture(_Async) / FreeTexture */
 
-bool __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture( struct w_steam_iface *_this, int32_t textureId,
+int8_t __thiscall winIVRRenderModels_IVRRenderModels_002_LoadTexture( struct w_steam_iface *_this, int32_t textureId,
                                                                     w_RenderModel_TextureMap_t_090 **ppTexture )
 {
     struct render_model_texture_map *map;

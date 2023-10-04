@@ -52,7 +52,7 @@ void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(struct w_s
     VRCLIENT_CALL( IVROverlayView_IVROverlayView_003_PostOverlayEvent, &params );
 }
 
-bool __thiscall winIVROverlayView_IVROverlayView_003_IsViewingPermitted(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
+int8_t __thiscall winIVROverlayView_IVROverlayView_003_IsViewingPermitted(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params params =
     {
