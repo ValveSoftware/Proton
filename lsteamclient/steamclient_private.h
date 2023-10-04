@@ -5,7 +5,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #include <windef.h>
 #include <winbase.h>

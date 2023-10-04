@@ -74,7 +74,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 
 static BYTE *alloc_start, *alloc_end;
 
-static bool allocated_from_steamclient_dll( void *ptr )
+static int8_t allocated_from_steamclient_dll( void *ptr )
 {
     return (BYTE *)ptr >= alloc_start && (BYTE *)ptr < alloc_end;
 }
@@ -402,7 +402,7 @@ static void execute_pending_callbacks(void)
 
 static void *last_callback_data;
 
-bool CDECL Steam_FreeLastCallback( int32_t pipe )
+int8_t CDECL Steam_FreeLastCallback( int32_t pipe )
 {
     struct steamclient_Steam_FreeLastCallback_params params = {.pipe = pipe};
     TRACE( "%u\n", pipe );
@@ -416,7 +416,7 @@ bool CDECL Steam_FreeLastCallback( int32_t pipe )
     return params._ret;
 }
 
-bool CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *ignored )
+int8_t CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *ignored )
 {
     u_CallbackMsg_t u_msg;
     struct steamclient_Steam_BGetCallback_params params =
@@ -474,8 +474,8 @@ next_event:
     return params._ret;
 }
 
-bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
-                                   int w_callback_len, int id, bool *failed )
+int8_t CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
+                                   int w_callback_len, int id, int8_t *failed )
 {
     struct steamclient_Steam_GetAPICallResult_params params =
     {
@@ -531,7 +531,7 @@ void CDECL Breakpad_SteamWriteMiniDumpUsingExceptionInfoWithBuildId(int a, int b
     TRACE("\n");
 }
 
-bool CDECL Steam_IsKnownInterface( const char *pchVersion )
+int8_t CDECL Steam_IsKnownInterface( const char *pchVersion )
 {
     struct steamclient_Steam_IsKnownInterface_params params = {.version = pchVersion};
     TRACE("%s\n", pchVersion);

@@ -75,7 +75,7 @@ void __thiscall winISteamFriends_SteamFriends001_SetPersonaState(struct w_steam_
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_SetPersonaState, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_AddFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int8_t __thiscall winISteamFriends_SteamFriends001_AddFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct ISteamFriends_SteamFriends001_AddFriend_params params =
     {
@@ -87,7 +87,7 @@ bool __thiscall winISteamFriends_SteamFriends001_AddFriend(struct w_steam_iface 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_RemoveFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int8_t __thiscall winISteamFriends_SteamFriends001_RemoveFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct ISteamFriends_SteamFriends001_RemoveFriend_params params =
     {
@@ -99,7 +99,7 @@ bool __thiscall winISteamFriends_SteamFriends001_RemoveFriend(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int8_t __thiscall winISteamFriends_SteamFriends001_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct ISteamFriends_SteamFriends001_HasFriend_params params =
     {
@@ -135,7 +135,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaState(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t *pnGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
+int8_t __thiscall winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t *pnGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
 {
     struct ISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed_params params =
     {
@@ -266,7 +266,7 @@ int32_t __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_stea
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
+int8_t __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
 {
     struct ISteamFriends_SteamFriends001_SendMsgToFriend_2_params params =
     {
@@ -316,7 +316,7 @@ void __thiscall winISteamFriends_SteamFriends001_ClearChatHistory(struct w_steam
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_ClearChatHistory, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_InviteFriendByEmail(struct w_steam_iface *_this, const char *pchEmailAccount)
+int8_t __thiscall winISteamFriends_SteamFriends001_InviteFriendByEmail(struct w_steam_iface *_this, const char *pchEmailAccount)
 {
     struct ISteamFriends_SteamFriends001_InviteFriendByEmail_params params =
     {
@@ -339,7 +339,7 @@ int32_t __thiscall winISteamFriends_SteamFriends001_GetBlockedFriendCount(struct
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
+int8_t __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
 {
     struct ISteamFriends_SteamFriends001_GetFriendGamePlayed_params params =
     {
@@ -354,7 +354,7 @@ bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
+int8_t __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct ISteamFriends_SteamFriends001_GetFriendGamePlayed2_params params =
     {
@@ -578,7 +578,7 @@ const char * __thiscall winISteamFriends_SteamFriends002_GetFriendRegValue(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
+int8_t __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct ISteamFriends_SteamFriends002_GetFriendGamePlayed_params params =
     {
@@ -607,7 +607,7 @@ const char * __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_AddFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int8_t __thiscall winISteamFriends_SteamFriends002_AddFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct ISteamFriends_SteamFriends002_AddFriend_params params =
     {
@@ -619,7 +619,7 @@ bool __thiscall winISteamFriends_SteamFriends002_AddFriend(struct w_steam_iface 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_RemoveFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int8_t __thiscall winISteamFriends_SteamFriends002_RemoveFriend(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct ISteamFriends_SteamFriends002_RemoveFriend_params params =
     {
@@ -631,7 +631,7 @@ bool __thiscall winISteamFriends_SteamFriends002_RemoveFriend(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends002_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends002_HasFriend_params params =
     {
@@ -656,7 +656,7 @@ int32_t __thiscall winISteamFriends_SteamFriends002_AddFriendByName(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(struct w_steam_iface *_this, const char *pchEmailAccount)
+int8_t __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(struct w_steam_iface *_this, const char *pchEmailAccount)
 {
     struct ISteamFriends_SteamFriends002_InviteFriendByEmail_params params =
     {
@@ -684,7 +684,7 @@ int32_t __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_stea
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
+int8_t __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
 {
     struct ISteamFriends_SteamFriends002_SendMsgToFriend_params params =
     {
@@ -770,7 +770,7 @@ const char * __thiscall winISteamFriends_SteamFriends002_GetClanName(struct w_st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_InviteFriendToClan(struct w_steam_iface *_this, CSteamID steamIDFriend, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends002_InviteFriendToClan(struct w_steam_iface *_this, CSteamID steamIDFriend, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends002_InviteFriendToClan_params params =
     {
@@ -783,7 +783,7 @@ bool __thiscall winISteamFriends_SteamFriends002_InviteFriendToClan(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_AcknowledgeInviteToClan(struct w_steam_iface *_this, CSteamID steamIDClan, bool bAcceptOrDenyClanInvite)
+int8_t __thiscall winISteamFriends_SteamFriends002_AcknowledgeInviteToClan(struct w_steam_iface *_this, CSteamID steamIDClan, int8_t bAcceptOrDenyClanInvite)
 {
     struct ISteamFriends_SteamFriends002_AcknowledgeInviteToClan_params params =
     {
@@ -998,7 +998,7 @@ int32_t __thiscall winISteamFriends_SteamFriends003_GetFriendAvatar(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends003_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
+int8_t __thiscall winISteamFriends_SteamFriends003_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct ISteamFriends_SteamFriends003_GetFriendGamePlayed_params params =
     {
@@ -1027,7 +1027,7 @@ const char * __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends003_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends003_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends003_HasFriend_params params =
     {
@@ -1102,7 +1102,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends003_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends003_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends003_IsUserInSource_params params =
     {
@@ -1115,7 +1115,7 @@ bool __thiscall winISteamFriends_SteamFriends003_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends003_SetInGameVoiceSpeaking_params params =
     {
@@ -1305,7 +1305,7 @@ int32_t __thiscall winISteamFriends_SteamFriends004_GetFriendAvatar(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends004_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
+int8_t __thiscall winISteamFriends_SteamFriends004_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct ISteamFriends_SteamFriends004_GetFriendGamePlayed_params params =
     {
@@ -1334,7 +1334,7 @@ const char * __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends004_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends004_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends004_HasFriend_params params =
     {
@@ -1409,7 +1409,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends004_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends004_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends004_IsUserInSource_params params =
     {
@@ -1422,7 +1422,7 @@ bool __thiscall winISteamFriends_SteamFriends004_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends004_SetInGameVoiceSpeaking_params params =
     {
@@ -1616,7 +1616,7 @@ int32_t __thiscall winISteamFriends_SteamFriends005_GetFriendAvatar(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends005_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends005_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends005_GetFriendGamePlayed_params params =
     {
@@ -1642,7 +1642,7 @@ const char * __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends005_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends005_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends005_HasFriend_params params =
     {
@@ -1717,7 +1717,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends005_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends005_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends005_IsUserInSource_params params =
     {
@@ -1730,7 +1730,7 @@ bool __thiscall winISteamFriends_SteamFriends005_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends005_SetInGameVoiceSpeaking_params params =
     {
@@ -1975,7 +1975,7 @@ int32_t __thiscall winISteamFriends_SteamFriends006_GetFriendAvatar(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends006_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends006_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends006_GetFriendGamePlayed_params params =
     {
@@ -2001,7 +2001,7 @@ const char * __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends006_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends006_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends006_HasFriend_params params =
     {
@@ -2088,7 +2088,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends006_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends006_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends006_IsUserInSource_params params =
     {
@@ -2101,7 +2101,7 @@ bool __thiscall winISteamFriends_SteamFriends006_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends006_SetInGameVoiceSpeaking_params params =
     {
@@ -2348,7 +2348,7 @@ const char * __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends007_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends007_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends007_GetFriendGamePlayed_params params =
     {
@@ -2374,7 +2374,7 @@ const char * __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends007_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends007_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends007_HasFriend_params params =
     {
@@ -2461,7 +2461,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends007_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends007_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends007_IsUserInSource_params params =
     {
@@ -2474,7 +2474,7 @@ bool __thiscall winISteamFriends_SteamFriends007_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends007_SetInGameVoiceSpeaking_params params =
     {
@@ -2765,7 +2765,7 @@ const char * __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends008_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends008_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends008_GetFriendGamePlayed_params params =
     {
@@ -2791,7 +2791,7 @@ const char * __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends008_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends008_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends008_HasFriend_params params =
     {
@@ -2878,7 +2878,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends008_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends008_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends008_IsUserInSource_params params =
     {
@@ -2891,7 +2891,7 @@ bool __thiscall winISteamFriends_SteamFriends008_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends008_SetInGameVoiceSpeaking_params params =
     {
@@ -3006,7 +3006,7 @@ int32_t __thiscall winISteamFriends_SteamFriends008_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends008_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends008_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends008_RequestUserInformation_params params =
     {
@@ -3273,7 +3273,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends009_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends009_GetFriendGamePlayed_params params =
     {
@@ -3299,7 +3299,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends009_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends009_HasFriend_params params =
     {
@@ -3386,7 +3386,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends009_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends009_IsUserInSource_params params =
     {
@@ -3399,7 +3399,7 @@ bool __thiscall winISteamFriends_SteamFriends009_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends009_SetInGameVoiceSpeaking_params params =
     {
@@ -3514,7 +3514,7 @@ int32_t __thiscall winISteamFriends_SteamFriends009_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends009_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends009_RequestUserInformation_params params =
     {
@@ -3589,7 +3589,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends009_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends009_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends009_SetRichPresence_params params =
     {
@@ -3650,7 +3650,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKe
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends009_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends009_InviteUserToGame_params params =
     {
@@ -3928,7 +3928,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends010_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends010_GetFriendGamePlayed_params params =
     {
@@ -3954,7 +3954,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends010_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends010_HasFriend_params params =
     {
@@ -4015,7 +4015,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends010_GetClanActivityCounts_params params =
     {
@@ -4069,7 +4069,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends010_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends010_IsUserInSource_params params =
     {
@@ -4082,7 +4082,7 @@ bool __thiscall winISteamFriends_SteamFriends010_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends010_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends010_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends010_SetInGameVoiceSpeaking_params params =
     {
@@ -4197,7 +4197,7 @@ int32_t __thiscall winISteamFriends_SteamFriends010_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends010_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends010_RequestUserInformation_params params =
     {
@@ -4272,7 +4272,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends010_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends010_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends010_SetRichPresence_params params =
     {
@@ -4333,7 +4333,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKe
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends010_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends010_InviteUserToGame_params params =
     {
@@ -4406,7 +4406,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends010_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends010_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends010_LeaveClanChatRoom_params params =
     {
@@ -4444,7 +4444,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends010_SendClanChatMessage_params params =
     {
@@ -4474,7 +4474,7 @@ int32_t __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends010_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends010_IsClanChatAdmin_params params =
     {
@@ -4487,7 +4487,7 @@ bool __thiscall winISteamFriends_SteamFriends010_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam_params params =
     {
@@ -4499,7 +4499,7 @@ bool __thiscall winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends010_OpenClanChatWindowInSteam_params params =
     {
@@ -4511,7 +4511,7 @@ bool __thiscall winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends010_CloseClanChatWindowInSteam_params params =
     {
@@ -4523,7 +4523,7 @@ bool __thiscall winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends010_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends010_SetListenForFriendsMessages_params params =
     {
@@ -4535,7 +4535,7 @@ bool __thiscall winISteamFriends_SteamFriends010_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends010_ReplyToFriendMessage_params params =
     {
@@ -4800,7 +4800,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends011_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends011_GetFriendGamePlayed_params params =
     {
@@ -4826,7 +4826,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends011_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends011_HasFriend_params params =
     {
@@ -4887,7 +4887,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends011_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends011_GetClanActivityCounts_params params =
     {
@@ -4941,7 +4941,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends011_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends011_IsUserInSource_params params =
     {
@@ -4954,7 +4954,7 @@ bool __thiscall winISteamFriends_SteamFriends011_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends011_SetInGameVoiceSpeaking_params params =
     {
@@ -5069,7 +5069,7 @@ int32_t __thiscall winISteamFriends_SteamFriends011_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends011_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends011_RequestUserInformation_params params =
     {
@@ -5144,7 +5144,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends011_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends011_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends011_SetRichPresence_params params =
     {
@@ -5216,7 +5216,7 @@ void __thiscall winISteamFriends_SteamFriends011_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends011_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends011_InviteUserToGame_params params =
     {
@@ -5289,7 +5289,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends011_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends011_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends011_LeaveClanChatRoom_params params =
     {
@@ -5327,7 +5327,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends011_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends011_SendClanChatMessage_params params =
     {
@@ -5357,7 +5357,7 @@ int32_t __thiscall winISteamFriends_SteamFriends011_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends011_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends011_IsClanChatAdmin_params params =
     {
@@ -5370,7 +5370,7 @@ bool __thiscall winISteamFriends_SteamFriends011_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends011_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends011_IsClanChatWindowOpenInSteam_params params =
     {
@@ -5382,7 +5382,7 @@ bool __thiscall winISteamFriends_SteamFriends011_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends011_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends011_OpenClanChatWindowInSteam_params params =
     {
@@ -5394,7 +5394,7 @@ bool __thiscall winISteamFriends_SteamFriends011_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends011_CloseClanChatWindowInSteam_params params =
     {
@@ -5406,7 +5406,7 @@ bool __thiscall winISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends011_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends011_SetListenForFriendsMessages_params params =
     {
@@ -5418,7 +5418,7 @@ bool __thiscall winISteamFriends_SteamFriends011_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends011_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends011_ReplyToFriendMessage_params params =
     {
@@ -5724,7 +5724,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends012_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends012_GetFriendGamePlayed_params params =
     {
@@ -5750,7 +5750,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends012_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends012_HasFriend_params params =
     {
@@ -5811,7 +5811,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends012_GetClanActivityCounts_params params =
     {
@@ -5865,7 +5865,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends012_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends012_IsUserInSource_params params =
     {
@@ -5878,7 +5878,7 @@ bool __thiscall winISteamFriends_SteamFriends012_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends012_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends012_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends012_SetInGameVoiceSpeaking_params params =
     {
@@ -5993,7 +5993,7 @@ int32_t __thiscall winISteamFriends_SteamFriends012_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends012_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends012_RequestUserInformation_params params =
     {
@@ -6068,7 +6068,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends012_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends012_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends012_SetRichPresence_params params =
     {
@@ -6140,7 +6140,7 @@ void __thiscall winISteamFriends_SteamFriends012_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends012_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends012_InviteUserToGame_params params =
     {
@@ -6213,7 +6213,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends012_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends012_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends012_LeaveClanChatRoom_params params =
     {
@@ -6251,7 +6251,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends012_SendClanChatMessage_params params =
     {
@@ -6281,7 +6281,7 @@ int32_t __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends012_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends012_IsClanChatAdmin_params params =
     {
@@ -6294,7 +6294,7 @@ bool __thiscall winISteamFriends_SteamFriends012_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam_params params =
     {
@@ -6306,7 +6306,7 @@ bool __thiscall winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends012_OpenClanChatWindowInSteam_params params =
     {
@@ -6318,7 +6318,7 @@ bool __thiscall winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends012_CloseClanChatWindowInSteam_params params =
     {
@@ -6330,7 +6330,7 @@ bool __thiscall winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends012_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends012_SetListenForFriendsMessages_params params =
     {
@@ -6342,7 +6342,7 @@ bool __thiscall winISteamFriends_SteamFriends012_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends012_ReplyToFriendMessage_params params =
     {
@@ -6648,7 +6648,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends013_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends013_GetFriendGamePlayed_params params =
     {
@@ -6674,7 +6674,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends013_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends013_HasFriend_params params =
     {
@@ -6735,7 +6735,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends013_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends013_GetClanActivityCounts_params params =
     {
@@ -6789,7 +6789,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends013_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends013_IsUserInSource_params params =
     {
@@ -6802,7 +6802,7 @@ bool __thiscall winISteamFriends_SteamFriends013_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends013_SetInGameVoiceSpeaking_params params =
     {
@@ -6918,7 +6918,7 @@ int32_t __thiscall winISteamFriends_SteamFriends013_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends013_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends013_RequestUserInformation_params params =
     {
@@ -6993,7 +6993,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends013_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends013_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends013_SetRichPresence_params params =
     {
@@ -7065,7 +7065,7 @@ void __thiscall winISteamFriends_SteamFriends013_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends013_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends013_InviteUserToGame_params params =
     {
@@ -7138,7 +7138,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends013_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends013_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends013_LeaveClanChatRoom_params params =
     {
@@ -7176,7 +7176,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends013_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends013_SendClanChatMessage_params params =
     {
@@ -7206,7 +7206,7 @@ int32_t __thiscall winISteamFriends_SteamFriends013_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends013_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends013_IsClanChatAdmin_params params =
     {
@@ -7219,7 +7219,7 @@ bool __thiscall winISteamFriends_SteamFriends013_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends013_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends013_IsClanChatWindowOpenInSteam_params params =
     {
@@ -7231,7 +7231,7 @@ bool __thiscall winISteamFriends_SteamFriends013_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends013_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends013_OpenClanChatWindowInSteam_params params =
     {
@@ -7243,7 +7243,7 @@ bool __thiscall winISteamFriends_SteamFriends013_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends013_CloseClanChatWindowInSteam_params params =
     {
@@ -7255,7 +7255,7 @@ bool __thiscall winISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends013_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends013_SetListenForFriendsMessages_params params =
     {
@@ -7267,7 +7267,7 @@ bool __thiscall winISteamFriends_SteamFriends013_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends013_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends013_ReplyToFriendMessage_params params =
     {
@@ -7574,7 +7574,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends014_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends014_GetFriendGamePlayed_params params =
     {
@@ -7612,7 +7612,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetPlayerNickname(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends014_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends014_HasFriend_params params =
     {
@@ -7673,7 +7673,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends014_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends014_GetClanActivityCounts_params params =
     {
@@ -7727,7 +7727,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends014_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends014_IsUserInSource_params params =
     {
@@ -7740,7 +7740,7 @@ bool __thiscall winISteamFriends_SteamFriends014_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends014_SetInGameVoiceSpeaking_params params =
     {
@@ -7856,7 +7856,7 @@ int32_t __thiscall winISteamFriends_SteamFriends014_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends014_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends014_RequestUserInformation_params params =
     {
@@ -7931,7 +7931,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends014_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends014_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends014_SetRichPresence_params params =
     {
@@ -8003,7 +8003,7 @@ void __thiscall winISteamFriends_SteamFriends014_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends014_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends014_InviteUserToGame_params params =
     {
@@ -8076,7 +8076,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends014_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends014_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends014_LeaveClanChatRoom_params params =
     {
@@ -8114,7 +8114,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends014_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends014_SendClanChatMessage_params params =
     {
@@ -8144,7 +8144,7 @@ int32_t __thiscall winISteamFriends_SteamFriends014_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends014_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends014_IsClanChatAdmin_params params =
     {
@@ -8157,7 +8157,7 @@ bool __thiscall winISteamFriends_SteamFriends014_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends014_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends014_IsClanChatWindowOpenInSteam_params params =
     {
@@ -8169,7 +8169,7 @@ bool __thiscall winISteamFriends_SteamFriends014_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends014_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends014_OpenClanChatWindowInSteam_params params =
     {
@@ -8181,7 +8181,7 @@ bool __thiscall winISteamFriends_SteamFriends014_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends014_CloseClanChatWindowInSteam_params params =
     {
@@ -8193,7 +8193,7 @@ bool __thiscall winISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends014_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends014_SetListenForFriendsMessages_params params =
     {
@@ -8205,7 +8205,7 @@ bool __thiscall winISteamFriends_SteamFriends014_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends014_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends014_ReplyToFriendMessage_params params =
     {
@@ -8521,7 +8521,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends015_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends015_GetFriendGamePlayed_params params =
     {
@@ -8631,7 +8631,7 @@ void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(stru
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_GetFriendsGroupMembersList, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends015_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends015_HasFriend_params params =
     {
@@ -8692,7 +8692,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends015_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends015_GetClanActivityCounts_params params =
     {
@@ -8746,7 +8746,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends015_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends015_IsUserInSource_params params =
     {
@@ -8759,7 +8759,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends015_SetInGameVoiceSpeaking_params params =
     {
@@ -8875,7 +8875,7 @@ int32_t __thiscall winISteamFriends_SteamFriends015_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends015_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends015_RequestUserInformation_params params =
     {
@@ -8950,7 +8950,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends015_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends015_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends015_SetRichPresence_params params =
     {
@@ -9022,7 +9022,7 @@ void __thiscall winISteamFriends_SteamFriends015_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends015_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends015_InviteUserToGame_params params =
     {
@@ -9095,7 +9095,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends015_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends015_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends015_LeaveClanChatRoom_params params =
     {
@@ -9133,7 +9133,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends015_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends015_SendClanChatMessage_params params =
     {
@@ -9163,7 +9163,7 @@ int32_t __thiscall winISteamFriends_SteamFriends015_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends015_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends015_IsClanChatAdmin_params params =
     {
@@ -9176,7 +9176,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends015_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends015_IsClanChatWindowOpenInSteam_params params =
     {
@@ -9188,7 +9188,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends015_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends015_OpenClanChatWindowInSteam_params params =
     {
@@ -9200,7 +9200,7 @@ bool __thiscall winISteamFriends_SteamFriends015_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends015_CloseClanChatWindowInSteam_params params =
     {
@@ -9212,7 +9212,7 @@ bool __thiscall winISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends015_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends015_SetListenForFriendsMessages_params params =
     {
@@ -9224,7 +9224,7 @@ bool __thiscall winISteamFriends_SteamFriends015_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends015_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends015_ReplyToFriendMessage_params params =
     {
@@ -9289,7 +9289,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends015_EnumerateFollowingList(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_IsClanPublic(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends015_IsClanPublic(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends015_IsClanPublic_params params =
     {
@@ -9301,7 +9301,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsClanPublic(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_IsClanOfficialGameGroup(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends015_IsClanOfficialGameGroup(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends015_IsClanOfficialGameGroup_params params =
     {
@@ -9580,7 +9580,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaName(st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
+int8_t __thiscall winISteamFriends_SteamFriends017_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, FriendGameInfo_t *pFriendGameInfo)
 {
     struct ISteamFriends_SteamFriends017_GetFriendGamePlayed_params params =
     {
@@ -9690,7 +9690,7 @@ void __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersList(stru
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_GetFriendsGroupMembersList, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
+int8_t __thiscall winISteamFriends_SteamFriends017_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct ISteamFriends_SteamFriends017_HasFriend_params params =
     {
@@ -9751,7 +9751,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
+int8_t __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct ISteamFriends_SteamFriends017_GetClanActivityCounts_params params =
     {
@@ -9805,7 +9805,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByInde
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+int8_t __thiscall winISteamFriends_SteamFriends017_IsUserInSource(struct w_steam_iface *_this, CSteamID steamIDUser, CSteamID steamIDSource)
 {
     struct ISteamFriends_SteamFriends017_IsUserInSource_params params =
     {
@@ -9818,7 +9818,7 @@ bool __thiscall winISteamFriends_SteamFriends017_IsUserInSource(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends017_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, bool bSpeaking)
+void __thiscall winISteamFriends_SteamFriends017_SetInGameVoiceSpeaking(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bSpeaking)
 {
     struct ISteamFriends_SteamFriends017_SetInGameVoiceSpeaking_params params =
     {
@@ -9935,7 +9935,7 @@ int32_t __thiscall winISteamFriends_SteamFriends017_GetLargeFriendAvatar(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+int8_t __thiscall winISteamFriends_SteamFriends017_RequestUserInformation(struct w_steam_iface *_this, CSteamID steamIDUser, int8_t bRequireNameOnly)
 {
     struct ISteamFriends_SteamFriends017_RequestUserInformation_params params =
     {
@@ -10010,7 +10010,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends017_GetUserRestrictions(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+int8_t __thiscall winISteamFriends_SteamFriends017_SetRichPresence(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct ISteamFriends_SteamFriends017_SetRichPresence_params params =
     {
@@ -10082,7 +10082,7 @@ void __thiscall winISteamFriends_SteamFriends017_RequestFriendRichPresence(struc
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_RequestFriendRichPresence, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
+int8_t __thiscall winISteamFriends_SteamFriends017_InviteUserToGame(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchConnectString)
 {
     struct ISteamFriends_SteamFriends017_InviteUserToGame_params params =
     {
@@ -10155,7 +10155,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends017_JoinClanChatRoom(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends017_LeaveClanChatRoom(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends017_LeaveClanChatRoom_params params =
     {
@@ -10193,7 +10193,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
+int8_t __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, const char *pchText)
 {
     struct ISteamFriends_SteamFriends017_SendClanChatMessage_params params =
     {
@@ -10223,7 +10223,7 @@ int32_t __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+int8_t __thiscall winISteamFriends_SteamFriends017_IsClanChatAdmin(struct w_steam_iface *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
 {
     struct ISteamFriends_SteamFriends017_IsClanChatAdmin_params params =
     {
@@ -10236,7 +10236,7 @@ bool __thiscall winISteamFriends_SteamFriends017_IsClanChatAdmin(struct w_steam_
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam_params params =
     {
@@ -10248,7 +10248,7 @@ bool __thiscall winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends017_OpenClanChatWindowInSteam_params params =
     {
@@ -10260,7 +10260,7 @@ bool __thiscall winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
+int8_t __thiscall winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam(struct w_steam_iface *_this, CSteamID steamIDClanChat)
 {
     struct ISteamFriends_SteamFriends017_CloseClanChatWindowInSteam_params params =
     {
@@ -10272,7 +10272,7 @@ bool __thiscall winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_SetListenForFriendsMessages(struct w_steam_iface *_this, bool bInterceptEnabled)
+int8_t __thiscall winISteamFriends_SteamFriends017_SetListenForFriendsMessages(struct w_steam_iface *_this, int8_t bInterceptEnabled)
 {
     struct ISteamFriends_SteamFriends017_SetListenForFriendsMessages_params params =
     {
@@ -10284,7 +10284,7 @@ bool __thiscall winISteamFriends_SteamFriends017_SetListenForFriendsMessages(str
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
+int8_t __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, const char *pchMsgToSend)
 {
     struct ISteamFriends_SteamFriends017_ReplyToFriendMessage_params params =
     {
@@ -10349,7 +10349,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends017_EnumerateFollowingList(stru
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_IsClanPublic(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends017_IsClanPublic(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends017_IsClanPublic_params params =
     {
@@ -10361,7 +10361,7 @@ bool __thiscall winISteamFriends_SteamFriends017_IsClanPublic(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_IsClanOfficialGameGroup(struct w_steam_iface *_this, CSteamID steamIDClan)
+int8_t __thiscall winISteamFriends_SteamFriends017_IsClanOfficialGameGroup(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct ISteamFriends_SteamFriends017_IsClanOfficialGameGroup_params params =
     {
@@ -10395,7 +10395,7 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTo
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog, &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(struct w_steam_iface *_this, const char *pchProtocol)
+int8_t __thiscall winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(struct w_steam_iface *_this, const char *pchProtocol)
 {
     struct ISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser_params params =
     {
@@ -10430,7 +10430,7 @@ uint64_t __thiscall winISteamFriends_SteamFriends017_RequestEquippedProfileItems
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType)
+int8_t __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType)
 {
     struct ISteamFriends_SteamFriends017_BHasEquippedProfileItem_params params =
     {

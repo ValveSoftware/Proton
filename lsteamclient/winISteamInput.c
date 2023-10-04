@@ -39,7 +39,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetDeviceBindingRevision, 20)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetRemotePlaySessionID, 12)
 
-bool __thiscall winISteamInput_SteamInput001_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput001_Init(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput001_Init_params params =
     {
@@ -50,7 +50,7 @@ bool __thiscall winISteamInput_SteamInput001_Init(struct w_steam_iface *_this)
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput001_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput001_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput001_Shutdown_params params =
     {
@@ -343,7 +343,7 @@ void __thiscall winISteamInput_SteamInput001_TriggerRepeatedHapticPulse(struct w
     STEAMCLIENT_CALL( ISteamInput_SteamInput001_TriggerRepeatedHapticPulse, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput001_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
+int8_t __thiscall winISteamInput_SteamInput001_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
 {
     struct ISteamInput_SteamInput001_ShowBindingPanel_params params =
     {
@@ -429,7 +429,7 @@ uint32_t __thiscall winISteamInput_SteamInput001_TranslateActionOrigin(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput001_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamInput_SteamInput001_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamInput_SteamInput001_GetDeviceBindingRevision_params params =
     {
@@ -544,7 +544,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_TranslateActionOrigin, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetDeviceBindingRevision, 20)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetRemotePlaySessionID, 12)
 
-bool __thiscall winISteamInput_SteamInput002_Init(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput002_Init(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput002_Init_params params =
     {
@@ -555,7 +555,7 @@ bool __thiscall winISteamInput_SteamInput002_Init(struct w_steam_iface *_this)
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput002_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput002_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput002_Shutdown_params params =
     {
@@ -848,7 +848,7 @@ void __thiscall winISteamInput_SteamInput002_TriggerRepeatedHapticPulse(struct w
     STEAMCLIENT_CALL( ISteamInput_SteamInput002_TriggerRepeatedHapticPulse, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput002_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
+int8_t __thiscall winISteamInput_SteamInput002_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
 {
     struct ISteamInput_SteamInput002_ShowBindingPanel_params params =
     {
@@ -934,7 +934,7 @@ uint32_t __thiscall winISteamInput_SteamInput002_TranslateActionOrigin(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput002_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamInput_SteamInput002_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamInput_SteamInput002_GetDeviceBindingRevision_params params =
     {
@@ -1061,7 +1061,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetDeviceBindingRevision, 2
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetRemotePlaySessionID, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetSessionInputConfigurationSettings, 4)
 
-bool __thiscall winISteamInput_SteamInput005_Init(struct w_steam_iface *_this, bool bExplicitlyCallRunFrame)
+int8_t __thiscall winISteamInput_SteamInput005_Init(struct w_steam_iface *_this, int8_t bExplicitlyCallRunFrame)
 {
     struct ISteamInput_SteamInput005_Init_params params =
     {
@@ -1073,7 +1073,7 @@ bool __thiscall winISteamInput_SteamInput005_Init(struct w_steam_iface *_this, b
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput005_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput005_Shutdown_params params =
     {
@@ -1084,7 +1084,7 @@ bool __thiscall winISteamInput_SteamInput005_Shutdown(struct w_steam_iface *_thi
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
+int8_t __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     struct ISteamInput_SteamInput005_SetInputActionManifestFilePath_params params =
     {
@@ -1096,7 +1096,7 @@ bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(stru
     return params._ret;
 }
 
-void __thiscall winISteamInput_SteamInput005_RunFrame(struct w_steam_iface *_this, bool bReservedValue)
+void __thiscall winISteamInput_SteamInput005_RunFrame(struct w_steam_iface *_this, int8_t bReservedValue)
 {
     struct ISteamInput_SteamInput005_RunFrame_params params =
     {
@@ -1107,7 +1107,7 @@ void __thiscall winISteamInput_SteamInput005_RunFrame(struct w_steam_iface *_thi
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_RunFrame, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput005_BWaitForData(struct w_steam_iface *_this, bool bWaitForever, uint32_t unTimeout)
+int8_t __thiscall winISteamInput_SteamInput005_BWaitForData(struct w_steam_iface *_this, int8_t bWaitForever, uint32_t unTimeout)
 {
     struct ISteamInput_SteamInput005_BWaitForData_params params =
     {
@@ -1120,7 +1120,7 @@ bool __thiscall winISteamInput_SteamInput005_BWaitForData(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_BNewDataAvailable(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput005_BNewDataAvailable(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput005_BNewDataAvailable_params params =
     {
@@ -1479,7 +1479,7 @@ void __thiscall winISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(s
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput005_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
+int8_t __thiscall winISteamInput_SteamInput005_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
 {
     struct ISteamInput_SteamInput005_ShowBindingPanel_params params =
     {
@@ -1565,7 +1565,7 @@ uint32_t __thiscall winISteamInput_SteamInput005_TranslateActionOrigin(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput005_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamInput_SteamInput005_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamInput_SteamInput005_GetDeviceBindingRevision_params params =
     {
@@ -1716,7 +1716,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_GetRemotePlaySessionID, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_GetSessionInputConfigurationSettings, 4)
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_SetDualSenseTriggerEffect, 16)
 
-bool __thiscall winISteamInput_SteamInput006_Init(struct w_steam_iface *_this, bool bExplicitlyCallRunFrame)
+int8_t __thiscall winISteamInput_SteamInput006_Init(struct w_steam_iface *_this, int8_t bExplicitlyCallRunFrame)
 {
     struct ISteamInput_SteamInput006_Init_params params =
     {
@@ -1728,7 +1728,7 @@ bool __thiscall winISteamInput_SteamInput006_Init(struct w_steam_iface *_this, b
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_Shutdown(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput006_Shutdown(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput006_Shutdown_params params =
     {
@@ -1739,7 +1739,7 @@ bool __thiscall winISteamInput_SteamInput006_Shutdown(struct w_steam_iface *_thi
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
+int8_t __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(struct w_steam_iface *_this, const char *pchInputActionManifestAbsolutePath)
 {
     struct ISteamInput_SteamInput006_SetInputActionManifestFilePath_params params =
     {
@@ -1751,7 +1751,7 @@ bool __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(stru
     return params._ret;
 }
 
-void __thiscall winISteamInput_SteamInput006_RunFrame(struct w_steam_iface *_this, bool bReservedValue)
+void __thiscall winISteamInput_SteamInput006_RunFrame(struct w_steam_iface *_this, int8_t bReservedValue)
 {
     struct ISteamInput_SteamInput006_RunFrame_params params =
     {
@@ -1762,7 +1762,7 @@ void __thiscall winISteamInput_SteamInput006_RunFrame(struct w_steam_iface *_thi
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_RunFrame, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput006_BWaitForData(struct w_steam_iface *_this, bool bWaitForever, uint32_t unTimeout)
+int8_t __thiscall winISteamInput_SteamInput006_BWaitForData(struct w_steam_iface *_this, int8_t bWaitForever, uint32_t unTimeout)
 {
     struct ISteamInput_SteamInput006_BWaitForData_params params =
     {
@@ -1775,7 +1775,7 @@ bool __thiscall winISteamInput_SteamInput006_BWaitForData(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_BNewDataAvailable(struct w_steam_iface *_this)
+int8_t __thiscall winISteamInput_SteamInput006_BNewDataAvailable(struct w_steam_iface *_this)
 {
     struct ISteamInput_SteamInput006_BNewDataAvailable_params params =
     {
@@ -2134,7 +2134,7 @@ void __thiscall winISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(s
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse, &params );
 }
 
-bool __thiscall winISteamInput_SteamInput006_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
+int8_t __thiscall winISteamInput_SteamInput006_ShowBindingPanel(struct w_steam_iface *_this, uint64_t inputHandle)
 {
     struct ISteamInput_SteamInput006_ShowBindingPanel_params params =
     {
@@ -2220,7 +2220,7 @@ uint32_t __thiscall winISteamInput_SteamInput006_TranslateActionOrigin(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamInput_SteamInput006_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
+int8_t __thiscall winISteamInput_SteamInput006_GetDeviceBindingRevision(struct w_steam_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
 {
     struct ISteamInput_SteamInput006_GetDeviceBindingRevision_params params =
     {

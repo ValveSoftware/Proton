@@ -36,7 +36,7 @@ int32_t __thiscall winISteamClient_SteamClient006_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient006_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient006_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient006_BReleaseSteamPipe_params params =
     {
@@ -374,7 +374,7 @@ int32_t __thiscall winISteamClient_SteamClient007_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient007_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient007_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient007_BReleaseSteamPipe_params params =
     {
@@ -733,7 +733,7 @@ int32_t __thiscall winISteamClient_SteamClient008_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient008_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient008_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient008_BReleaseSteamPipe_params params =
     {
@@ -1078,7 +1078,7 @@ int32_t __thiscall winISteamClient_SteamClient009_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient009_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient009_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient009_BReleaseSteamPipe_params params =
     {
@@ -1441,7 +1441,7 @@ int32_t __thiscall winISteamClient_SteamClient010_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient010_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient010_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient010_BReleaseSteamPipe_params params =
     {
@@ -1728,7 +1728,7 @@ void __thiscall winISteamClient_SteamClient010_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient010_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient010_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient010_BShutdownIfAllPipesClosed_params params =
     {
@@ -1833,7 +1833,7 @@ int32_t __thiscall winISteamClient_SteamClient011_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient011_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient011_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient011_BReleaseSteamPipe_params params =
     {
@@ -2135,7 +2135,7 @@ void __thiscall winISteamClient_SteamClient011_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient011_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient011_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient011_BShutdownIfAllPipesClosed_params params =
     {
@@ -2243,7 +2243,7 @@ int32_t __thiscall winISteamClient_SteamClient012_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient012_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient012_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient012_BReleaseSteamPipe_params params =
     {
@@ -2530,7 +2530,7 @@ void __thiscall winISteamClient_SteamClient012_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient012_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient012_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient012_BShutdownIfAllPipesClosed_params params =
     {
@@ -2688,7 +2688,7 @@ int32_t __thiscall winISteamClient_SteamClient013_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient013_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient013_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient013_BReleaseSteamPipe_params params =
     {
@@ -2975,7 +2975,7 @@ void __thiscall winISteamClient_SteamClient013_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient013_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient013_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient013_BShutdownIfAllPipesClosed_params params =
     {
@@ -3178,7 +3178,7 @@ int32_t __thiscall winISteamClient_SteamClient014_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient014_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient014_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient014_BReleaseSteamPipe_params params =
     {
@@ -3465,7 +3465,7 @@ void __thiscall winISteamClient_SteamClient014_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient014_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient014_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient014_BShutdownIfAllPipesClosed_params params =
     {
@@ -3655,7 +3655,7 @@ int32_t __thiscall winISteamClient_SteamClient015_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient015_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient015_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient015_BReleaseSteamPipe_params params =
     {
@@ -3942,7 +3942,7 @@ void __thiscall winISteamClient_SteamClient015_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient015_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient015_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient015_BShutdownIfAllPipesClosed_params params =
     {
@@ -4152,7 +4152,7 @@ int32_t __thiscall winISteamClient_SteamClient016_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient016_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient016_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient016_BReleaseSteamPipe_params params =
     {
@@ -4439,7 +4439,7 @@ void __thiscall winISteamClient_SteamClient016_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient016_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient016_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient016_BShutdownIfAllPipesClosed_params params =
     {
@@ -4704,7 +4704,7 @@ int32_t __thiscall winISteamClient_SteamClient017_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient017_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient017_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient017_BReleaseSteamPipe_params params =
     {
@@ -4991,7 +4991,7 @@ void __thiscall winISteamClient_SteamClient017_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient017_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient017_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient017_BShutdownIfAllPipesClosed_params params =
     {
@@ -5306,7 +5306,7 @@ int32_t __thiscall winISteamClient_SteamClient018_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient018_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient018_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient018_BReleaseSteamPipe_params params =
     {
@@ -5608,7 +5608,7 @@ void __thiscall winISteamClient_SteamClient018_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient018_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient018_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient018_BShutdownIfAllPipesClosed_params params =
     {
@@ -5957,7 +5957,7 @@ int32_t __thiscall winISteamClient_SteamClient019_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient019_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient019_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient019_BReleaseSteamPipe_params params =
     {
@@ -6259,7 +6259,7 @@ void __thiscall winISteamClient_SteamClient019_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient019_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient019_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient019_BShutdownIfAllPipesClosed_params params =
     {
@@ -6625,7 +6625,7 @@ int32_t __thiscall winISteamClient_SteamClient020_CreateSteamPipe(struct w_steam
     return params._ret;
 }
 
-bool __thiscall winISteamClient_SteamClient020_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
+int8_t __thiscall winISteamClient_SteamClient020_BReleaseSteamPipe(struct w_steam_iface *_this, int32_t hSteamPipe)
 {
     struct ISteamClient_SteamClient020_BReleaseSteamPipe_params params =
     {
@@ -6927,7 +6927,7 @@ void __thiscall winISteamClient_SteamClient020_SetWarningMessageHook(struct w_st
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_SetWarningMessageHook, &params );
 }
 
-bool __thiscall winISteamClient_SteamClient020_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
+int8_t __thiscall winISteamClient_SteamClient020_BShutdownIfAllPipesClosed(struct w_steam_iface *_this)
 {
     struct ISteamClient_SteamClient020_BShutdownIfAllPipesClosed_params params =
     {

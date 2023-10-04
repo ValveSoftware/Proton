@@ -32,7 +32,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue_params params =
     {
@@ -45,7 +45,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestConte
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTimeout_params params =
     {
@@ -58,7 +58,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetwo
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue_params params =
     {
@@ -72,7 +72,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeade
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParameter_params params =
     {
@@ -86,7 +86,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOr
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest_params params =
     {
@@ -99,7 +99,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SendHTTPRequest(str
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_DeferHTTPRequest_params params =
     {
@@ -111,7 +111,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_DeferHTTPRequest(st
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_PrioritizeHTTPRequest_params params =
     {
@@ -123,7 +123,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_PrioritizeHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize_params params =
     {
@@ -137,7 +137,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue_params params =
     {
@@ -152,7 +152,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodySize_params params =
     {
@@ -165,7 +165,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData_params params =
     {
@@ -179,7 +179,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest_params params =
     {
@@ -191,7 +191,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest(
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct_params params =
     {
@@ -204,7 +204,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProg
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody_params params =
     {
@@ -291,7 +291,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue_params params =
     {
@@ -304,7 +304,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestConte
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout_params params =
     {
@@ -317,7 +317,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetwo
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue_params params =
     {
@@ -331,7 +331,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeade
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParameter_params params =
     {
@@ -345,7 +345,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOr
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest_params params =
     {
@@ -358,7 +358,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequest(str
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndStreamResponse(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndStreamResponse(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndStreamResponse_params params =
     {
@@ -371,7 +371,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SendHTTPRequestAndS
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_DeferHTTPRequest_params params =
     {
@@ -383,7 +383,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_DeferHTTPRequest(st
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_PrioritizeHTTPRequest_params params =
     {
@@ -395,7 +395,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_PrioritizeHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize_params params =
     {
@@ -409,7 +409,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue_params params =
     {
@@ -424,7 +424,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize_params params =
     {
@@ -437,7 +437,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData_params params =
     {
@@ -451,7 +451,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint32_t cOffset, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint32_t cOffset, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData_params params =
     {
@@ -466,7 +466,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingRes
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseHTTPRequest_params params =
     {
@@ -478,7 +478,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseHTTPRequest(
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProgressPct_params params =
     {
@@ -491,7 +491,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPDownloadProg
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody_params params =
     {
@@ -506,7 +506,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPo
     return params._ret;
 }
 
-uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer(struct w_steam_iface *_this, bool bAllowResponsesToModify)
+uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer(struct w_steam_iface *_this, int8_t bAllowResponsesToModify)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer_params params =
     {
@@ -518,7 +518,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieCon
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseCookieContainer(struct w_steam_iface *_this, uint32_t hCookieContainer)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseCookieContainer(struct w_steam_iface *_this, uint32_t hCookieContainer)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseCookieContainer_params params =
     {
@@ -530,7 +530,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_ReleaseCookieContai
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie(struct w_steam_iface *_this, uint32_t hCookieContainer, const char *pchHost, const char *pchUrl, const char *pchCookie)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie(struct w_steam_iface *_this, uint32_t hCookieContainer, const char *pchHost, const char *pchUrl, const char *pchCookie)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie_params params =
     {
@@ -545,7 +545,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCookieContainer(struct w_steam_iface *_this, uint32_t hRequest, uint32_t hCookieContainer)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCookieContainer(struct w_steam_iface *_this, uint32_t hRequest, uint32_t hCookieContainer)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCookieContainer_params params =
     {
@@ -558,7 +558,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestCooki
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo(struct w_steam_iface *_this, uint32_t hRequest, const char *pchUserAgentInfo)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo(struct w_steam_iface *_this, uint32_t hRequest, const char *pchUserAgentInfo)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo_params params =
     {
@@ -571,7 +571,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserA
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate(struct w_steam_iface *_this, uint32_t hRequest, bool bRequireVerifiedCertificate)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate(struct w_steam_iface *_this, uint32_t hRequest, int8_t bRequireVerifiedCertificate)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate_params params =
     {
@@ -584,7 +584,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequi
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unMilliseconds)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unMilliseconds)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS_params params =
     {
@@ -597,7 +597,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsol
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTimedOut(struct w_steam_iface *_this, uint32_t hRequest, bool *pbWasTimedOut)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTimedOut(struct w_steam_iface *_this, uint32_t hRequest, int8_t *pbWasTimedOut)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTimedOut_params params =
     {
@@ -692,7 +692,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue(struct w_steam_iface *_this, uint32_t hRequest, uint64_t ulContextValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue_params params =
     {
@@ -705,7 +705,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestConte
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetworkActivityTimeout(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unTimeoutSeconds)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetworkActivityTimeout_params params =
     {
@@ -718,7 +718,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestNetwo
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, const char *pchHeaderValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue_params params =
     {
@@ -732,7 +732,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeade
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParameter(struct w_steam_iface *_this, uint32_t hRequest, const char *pchParamName, const char *pchParamValue)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParameter_params params =
     {
@@ -746,7 +746,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOr
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest_params params =
     {
@@ -759,7 +759,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequest(str
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndStreamResponse(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndStreamResponse(struct w_steam_iface *_this, uint32_t hRequest, uint64_t *pCallHandle)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndStreamResponse_params params =
     {
@@ -772,7 +772,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SendHTTPRequestAndS
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_DeferHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_DeferHTTPRequest_params params =
     {
@@ -784,7 +784,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_DeferHTTPRequest(st
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_PrioritizeHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_PrioritizeHTTPRequest_params params =
     {
@@ -796,7 +796,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_PrioritizeHTTPReque
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint32_t *unResponseHeaderSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize_params params =
     {
@@ -810,7 +810,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue(struct w_steam_iface *_this, uint32_t hRequest, const char *pchHeaderName, uint8_t *pHeaderValueBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue_params params =
     {
@@ -825,7 +825,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHead
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodySize(struct w_steam_iface *_this, uint32_t hRequest, uint32_t *unBodySize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodySize_params params =
     {
@@ -838,7 +838,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBodyData_params params =
     {
@@ -852,7 +852,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseBody
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint32_t cOffset, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingResponseBodyData(struct w_steam_iface *_this, uint32_t hRequest, uint32_t cOffset, uint8_t *pBodyDataBuffer, uint32_t unBufferSize)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingResponseBodyData_params params =
     {
@@ -867,7 +867,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPStreamingRes
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseHTTPRequest(struct w_steam_iface *_this, uint32_t hRequest)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseHTTPRequest_params params =
     {
@@ -879,7 +879,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseHTTPRequest(
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProgressPct(struct w_steam_iface *_this, uint32_t hRequest, float *pflPercentOut)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProgressPct_params params =
     {
@@ -892,7 +892,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPDownloadProg
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPostBody(struct w_steam_iface *_this, uint32_t hRequest, const char *pchContentType, uint8_t *pubBody, uint32_t unBodyLen)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPostBody_params params =
     {
@@ -907,7 +907,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPo
     return params._ret;
 }
 
-uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateCookieContainer(struct w_steam_iface *_this, bool bAllowResponsesToModify)
+uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateCookieContainer(struct w_steam_iface *_this, int8_t bAllowResponsesToModify)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateCookieContainer_params params =
     {
@@ -919,7 +919,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateCookieCon
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseCookieContainer(struct w_steam_iface *_this, uint32_t hCookieContainer)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseCookieContainer(struct w_steam_iface *_this, uint32_t hCookieContainer)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseCookieContainer_params params =
     {
@@ -931,7 +931,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_ReleaseCookieContai
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie(struct w_steam_iface *_this, uint32_t hCookieContainer, const char *pchHost, const char *pchUrl, const char *pchCookie)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie(struct w_steam_iface *_this, uint32_t hCookieContainer, const char *pchHost, const char *pchUrl, const char *pchCookie)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie_params params =
     {
@@ -946,7 +946,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCookieContainer(struct w_steam_iface *_this, uint32_t hRequest, uint32_t hCookieContainer)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCookieContainer(struct w_steam_iface *_this, uint32_t hRequest, uint32_t hCookieContainer)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCookieContainer_params params =
     {
@@ -959,7 +959,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestCooki
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo(struct w_steam_iface *_this, uint32_t hRequest, const char *pchUserAgentInfo)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo(struct w_steam_iface *_this, uint32_t hRequest, const char *pchUserAgentInfo)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo_params params =
     {
@@ -972,7 +972,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserA
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRequiresVerifiedCertificate(struct w_steam_iface *_this, uint32_t hRequest, bool bRequireVerifiedCertificate)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRequiresVerifiedCertificate(struct w_steam_iface *_this, uint32_t hRequest, int8_t bRequireVerifiedCertificate)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRequiresVerifiedCertificate_params params =
     {
@@ -985,7 +985,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRequi
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unMilliseconds)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS(struct w_steam_iface *_this, uint32_t hRequest, uint32_t unMilliseconds)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS_params params =
     {
@@ -998,7 +998,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsol
     return params._ret;
 }
 
-bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTimedOut(struct w_steam_iface *_this, uint32_t hRequest, bool *pbWasTimedOut)
+int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTimedOut(struct w_steam_iface *_this, uint32_t hRequest, int8_t *pbWasTimedOut)
 {
     struct ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTimedOut_params params =
     {

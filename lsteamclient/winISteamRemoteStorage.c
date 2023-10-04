@@ -12,7 +12,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite_params params =
     {
@@ -52,7 +52,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists_params params =
     {
@@ -64,7 +64,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete_params params =
     {
@@ -100,7 +100,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota_params params =
     {
@@ -147,7 +147,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite_params params =
     {
@@ -187,7 +187,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists_params params =
     {
@@ -223,7 +223,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota_params params =
     {
@@ -282,7 +282,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCHandle, 8)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite_params params =
     {
@@ -310,7 +310,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget_params params =
     {
@@ -322,7 +322,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete_params params =
     {
@@ -346,7 +346,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists_params params =
     {
@@ -358,7 +358,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted_params params =
     {
@@ -418,7 +418,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetQuota_params params =
     {
@@ -431,7 +431,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForAccount_params params =
     {
@@ -442,7 +442,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_IsCloudEnabledForApp_params params =
     {
@@ -453,7 +453,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_SetCloudEnabledForApp_params params =
     {
@@ -476,7 +476,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetUGCDetails_params params =
     {
@@ -590,7 +590,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCCount, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle, 8)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite_params params =
     {
@@ -618,7 +618,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget_params params =
     {
@@ -630,7 +630,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete_params params =
     {
@@ -654,7 +654,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms_params params =
     {
@@ -667,7 +667,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_S
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists_params params =
     {
@@ -679,7 +679,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted_params params =
     {
@@ -751,7 +751,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetQuota_params params =
     {
@@ -764,7 +764,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForAccount_params params =
     {
@@ -775,7 +775,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_IsCloudEnabledForApp_params params =
     {
@@ -786,7 +786,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetCloudEnabledForApp_params params =
     {
@@ -809,7 +809,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDetails_params params =
     {
@@ -934,7 +934,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_EnumerateUserSubscribedFiles, 8)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UnsubscribePublishedFile, 12)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite_params params =
     {
@@ -962,7 +962,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget_params params =
     {
@@ -974,7 +974,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete_params params =
     {
@@ -998,7 +998,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms_params params =
     {
@@ -1011,7 +1011,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_S
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists_params params =
     {
@@ -1023,7 +1023,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted_params params =
     {
@@ -1095,7 +1095,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetQuota_params params =
     {
@@ -1108,7 +1108,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForAccount_params params =
     {
@@ -1119,7 +1119,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_IsCloudEnabledForApp_params params =
     {
@@ -1130,7 +1130,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetCloudEnabledForApp_params params =
     {
@@ -1153,7 +1153,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetUGCDetails_params params =
     {
@@ -1422,7 +1422,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite_params params =
     {
@@ -1450,7 +1450,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget_params params =
     {
@@ -1462,7 +1462,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete_params params =
     {
@@ -1486,7 +1486,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms_params params =
     {
@@ -1499,7 +1499,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_S
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists_params params =
     {
@@ -1511,7 +1511,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted_params params =
     {
@@ -1583,7 +1583,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetQuota_params params =
     {
@@ -1596,7 +1596,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForAccount_params params =
     {
@@ -1607,7 +1607,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_IsCloudEnabledForApp_params params =
     {
@@ -1618,7 +1618,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetCloudEnabledForApp_params params =
     {
@@ -1641,7 +1641,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDownloadProgress_params params =
     {
@@ -1655,7 +1655,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetUGCDetails_params params =
     {
@@ -1739,7 +1739,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile_params params =
     {
@@ -1752,7 +1752,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile_params params =
     {
@@ -1765,7 +1765,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle_params params =
     {
@@ -1778,7 +1778,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription_params params =
     {
@@ -1791,7 +1791,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileVisibility_params params =
     {
@@ -1804,7 +1804,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags_params params =
     {
@@ -1901,7 +1901,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -1926,7 +1926,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdateUserPublishedItemVote_params params =
     {
@@ -2140,7 +2140,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite_params params =
     {
@@ -2168,7 +2168,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget_params params =
     {
@@ -2180,7 +2180,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete_params params =
     {
@@ -2204,7 +2204,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms_params params =
     {
@@ -2217,7 +2217,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_S
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists_params params =
     {
@@ -2229,7 +2229,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted_params params =
     {
@@ -2301,7 +2301,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetQuota_params params =
     {
@@ -2314,7 +2314,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForAccount_params params =
     {
@@ -2325,7 +2325,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_IsCloudEnabledForApp_params params =
     {
@@ -2336,7 +2336,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetCloudEnabledForApp_params params =
     {
@@ -2359,7 +2359,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDownloadProgress_params params =
     {
@@ -2373,7 +2373,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetUGCDetails_params params =
     {
@@ -2457,7 +2457,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile_params params =
     {
@@ -2470,7 +2470,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile_params params =
     {
@@ -2483,7 +2483,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle_params params =
     {
@@ -2496,7 +2496,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription_params params =
     {
@@ -2509,7 +2509,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileVisibility_params params =
     {
@@ -2522,7 +2522,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTags_params params =
     {
@@ -2619,7 +2619,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -2644,7 +2644,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdateUserPublishedItemVote_params params =
     {
@@ -2864,7 +2864,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite_params params =
     {
@@ -2892,7 +2892,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget_params params =
     {
@@ -2904,7 +2904,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete_params params =
     {
@@ -2928,7 +2928,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms_params params =
     {
@@ -2953,7 +2953,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamWriteChunk_params params =
     {
@@ -2967,7 +2967,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamClose_params params =
     {
@@ -2979,7 +2979,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamCancel_params params =
     {
@@ -2991,7 +2991,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists_params params =
     {
@@ -3003,7 +3003,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted_params params =
     {
@@ -3075,7 +3075,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetQuota_params params =
     {
@@ -3088,7 +3088,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForAccount_params params =
     {
@@ -3099,7 +3099,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_IsCloudEnabledForApp_params params =
     {
@@ -3110,7 +3110,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetCloudEnabledForApp_params params =
     {
@@ -3133,7 +3133,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDownloadProgress_params params =
     {
@@ -3147,7 +3147,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetUGCDetails_params params =
     {
@@ -3231,7 +3231,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile_params params =
     {
@@ -3244,7 +3244,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile_params params =
     {
@@ -3257,7 +3257,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle_params params =
     {
@@ -3270,7 +3270,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription_params params =
     {
@@ -3283,7 +3283,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileVisibility_params params =
     {
@@ -3296,7 +3296,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTags_params params =
     {
@@ -3393,7 +3393,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -3418,7 +3418,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdateUserPublishedItemVote_params params =
     {
@@ -3642,7 +3642,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction, 12)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles, 28)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite_params params =
     {
@@ -3670,7 +3670,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget_params params =
     {
@@ -3682,7 +3682,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete_params params =
     {
@@ -3706,7 +3706,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms_params params =
     {
@@ -3731,7 +3731,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamWriteChunk_params params =
     {
@@ -3745,7 +3745,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamClose_params params =
     {
@@ -3757,7 +3757,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamCancel_params params =
     {
@@ -3769,7 +3769,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists_params params =
     {
@@ -3781,7 +3781,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted_params params =
     {
@@ -3853,7 +3853,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetQuota_params params =
     {
@@ -3866,7 +3866,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForAccount_params params =
     {
@@ -3877,7 +3877,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_IsCloudEnabledForApp_params params =
     {
@@ -3888,7 +3888,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetCloudEnabledForApp_params params =
     {
@@ -3911,7 +3911,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDownloadProgress_params params =
     {
@@ -3925,7 +3925,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetUGCDetails_params params =
     {
@@ -4010,7 +4010,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile_params params =
     {
@@ -4023,7 +4023,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile_params params =
     {
@@ -4036,7 +4036,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle_params params =
     {
@@ -4049,7 +4049,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription_params params =
     {
@@ -4062,7 +4062,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility_params params =
     {
@@ -4075,7 +4075,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTags_params params =
     {
@@ -4172,7 +4172,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -4197,7 +4197,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdateUserPublishedItemVote_params params =
     {
@@ -4422,7 +4422,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite_params params =
     {
@@ -4450,7 +4450,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget_params params =
     {
@@ -4462,7 +4462,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete_params params =
     {
@@ -4486,7 +4486,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms_params params =
     {
@@ -4511,7 +4511,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamWriteChunk_params params =
     {
@@ -4525,7 +4525,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamClose_params params =
     {
@@ -4537,7 +4537,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamCancel_params params =
     {
@@ -4549,7 +4549,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists_params params =
     {
@@ -4561,7 +4561,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted_params params =
     {
@@ -4633,7 +4633,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetQuota_params params =
     {
@@ -4646,7 +4646,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForAccount_params params =
     {
@@ -4657,7 +4657,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_IsCloudEnabledForApp_params params =
     {
@@ -4668,7 +4668,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetCloudEnabledForApp_params params =
     {
@@ -4692,7 +4692,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDownloadProgress_params params =
     {
@@ -4706,7 +4706,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetUGCDetails_params params =
     {
@@ -4791,7 +4791,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile_params params =
     {
@@ -4804,7 +4804,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile_params params =
     {
@@ -4817,7 +4817,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle_params params =
     {
@@ -4830,7 +4830,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription_params params =
     {
@@ -4843,7 +4843,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileVisibility_params params =
     {
@@ -4856,7 +4856,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTags_params params =
     {
@@ -4953,7 +4953,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -4978,7 +4978,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdateUserPublishedItemVote_params params =
     {
@@ -5218,7 +5218,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite_params params =
     {
@@ -5246,7 +5246,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget_params params =
     {
@@ -5258,7 +5258,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete_params params =
     {
@@ -5282,7 +5282,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms_params params =
     {
@@ -5307,7 +5307,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk_params params =
     {
@@ -5321,7 +5321,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamClose_params params =
     {
@@ -5333,7 +5333,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamCancel_params params =
     {
@@ -5345,7 +5345,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists_params params =
     {
@@ -5357,7 +5357,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted_params params =
     {
@@ -5429,7 +5429,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota_params params =
     {
@@ -5442,7 +5442,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForAccount_params params =
     {
@@ -5453,7 +5453,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_IsCloudEnabledForApp_params params =
     {
@@ -5464,7 +5464,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetCloudEnabledForApp_params params =
     {
@@ -5488,7 +5488,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress_params params =
     {
@@ -5502,7 +5502,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails_params params =
     {
@@ -5587,7 +5587,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile_params params =
     {
@@ -5600,7 +5600,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile_params params =
     {
@@ -5613,7 +5613,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle_params params =
     {
@@ -5626,7 +5626,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription_params params =
     {
@@ -5639,7 +5639,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileVisibility_params params =
     {
@@ -5652,7 +5652,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTags_params params =
     {
@@ -5750,7 +5750,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -5775,7 +5775,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdateUserPublishedItemVote_params params =
     {
@@ -6015,7 +6015,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite_params params =
     {
@@ -6043,7 +6043,7 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget_params params =
     {
@@ -6055,7 +6055,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete_params params =
     {
@@ -6079,7 +6079,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms_params params =
     {
@@ -6104,7 +6104,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamWriteChunk_params params =
     {
@@ -6118,7 +6118,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamClose_params params =
     {
@@ -6130,7 +6130,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamCancel_params params =
     {
@@ -6142,7 +6142,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists_params params =
     {
@@ -6154,7 +6154,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted_params params =
     {
@@ -6226,7 +6226,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetQuota_params params =
     {
@@ -6239,7 +6239,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForAccount_params params =
     {
@@ -6250,7 +6250,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_IsCloudEnabledForApp_params params =
     {
@@ -6261,7 +6261,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetCloudEnabledForApp_params params =
     {
@@ -6285,7 +6285,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDownloadProgress_params params =
     {
@@ -6299,7 +6299,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetUGCDetails_params params =
     {
@@ -6385,7 +6385,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile_params params =
     {
@@ -6398,7 +6398,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile_params params =
     {
@@ -6411,7 +6411,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle_params params =
     {
@@ -6424,7 +6424,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription_params params =
     {
@@ -6437,7 +6437,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileVisibility_params params =
     {
@@ -6450,7 +6450,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTags_params params =
     {
@@ -6548,7 +6548,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -6573,7 +6573,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdateUserPublishedItemVote_params params =
     {
@@ -6816,7 +6816,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite_params params =
     {
@@ -6872,7 +6872,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsyncComplete_params params =
     {
@@ -6886,7 +6886,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget_params params =
     {
@@ -6898,7 +6898,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete_params params =
     {
@@ -6922,7 +6922,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms_params params =
     {
@@ -6947,7 +6947,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamWriteChunk_params params =
     {
@@ -6961,7 +6961,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamClose_params params =
     {
@@ -6973,7 +6973,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamCancel_params params =
     {
@@ -6985,7 +6985,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists_params params =
     {
@@ -6997,7 +6997,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted_params params =
     {
@@ -7069,7 +7069,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota(struct w_steam_iface *_this, int32_t *pnTotalBytes, int32_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetQuota_params params =
     {
@@ -7082,7 +7082,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForAccount_params params =
     {
@@ -7093,7 +7093,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_IsCloudEnabledForApp_params params =
     {
@@ -7104,7 +7104,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetCloudEnabledForApp_params params =
     {
@@ -7128,7 +7128,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDownloadProgress_params params =
     {
@@ -7142,7 +7142,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetUGCDetails_params params =
     {
@@ -7228,7 +7228,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile_params params =
     {
@@ -7241,7 +7241,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile_params params =
     {
@@ -7254,7 +7254,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle_params params =
     {
@@ -7267,7 +7267,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription_params params =
     {
@@ -7280,7 +7280,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileVisibility_params params =
     {
@@ -7293,7 +7293,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTags_params params =
     {
@@ -7391,7 +7391,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -7416,7 +7416,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdateUserPublishedItemVote_params params =
     {
@@ -7662,7 +7662,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles, 28)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation, 20)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite_params params =
     {
@@ -7718,7 +7718,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsyncComplete_params params =
     {
@@ -7732,7 +7732,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget_params params =
     {
@@ -7744,7 +7744,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete_params params =
     {
@@ -7768,7 +7768,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms_params params =
     {
@@ -7793,7 +7793,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamWriteChunk_params params =
     {
@@ -7807,7 +7807,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamClose_params params =
     {
@@ -7819,7 +7819,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamCancel_params params =
     {
@@ -7831,7 +7831,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists_params params =
     {
@@ -7843,7 +7843,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted_params params =
     {
@@ -7915,7 +7915,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota(struct w_steam_iface *_this, uint64_t *pnTotalBytes, uint64_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota(struct w_steam_iface *_this, uint64_t *pnTotalBytes, uint64_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetQuota_params params =
     {
@@ -7928,7 +7928,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForAccount_params params =
     {
@@ -7939,7 +7939,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_IsCloudEnabledForApp_params params =
     {
@@ -7950,7 +7950,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetCloudEnabledForApp_params params =
     {
@@ -7974,7 +7974,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDownloadProgress_params params =
     {
@@ -7988,7 +7988,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetUGCDetails_params params =
     {
@@ -8074,7 +8074,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile_params params =
     {
@@ -8087,7 +8087,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile_params params =
     {
@@ -8100,7 +8100,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle_params params =
     {
@@ -8113,7 +8113,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription_params params =
     {
@@ -8126,7 +8126,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileVisibility_params params =
     {
@@ -8139,7 +8139,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTags_params params =
     {
@@ -8237,7 +8237,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -8262,7 +8262,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdateUserPublishedItemVote_params params =
     {
@@ -8512,7 +8512,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch, 4)
 DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch, 4)
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite(struct w_steam_iface *_this, const char *pchFile, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite_params params =
     {
@@ -8568,7 +8568,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete(struct w_steam_iface *_this, uint64_t hReadCall, void *pvBuffer, uint32_t cubToRead)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsyncComplete_params params =
     {
@@ -8582,7 +8582,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget_params params =
     {
@@ -8594,7 +8594,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete_params params =
     {
@@ -8618,7 +8618,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms(struct w_steam_iface *_this, const char *pchFile, uint32_t eRemoteStoragePlatform)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms_params params =
     {
@@ -8643,7 +8643,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk(struct w_steam_iface *_this, uint64_t writeHandle, const void *pvData, int32_t cubData)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamWriteChunk_params params =
     {
@@ -8657,7 +8657,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamClose(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamClose_params params =
     {
@@ -8669,7 +8669,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamCancel(struct w_steam_iface *_this, uint64_t writeHandle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamCancel_params params =
     {
@@ -8681,7 +8681,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists_params params =
     {
@@ -8693,7 +8693,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_F
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted(struct w_steam_iface *_this, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted_params params =
     {
@@ -8765,7 +8765,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota(struct w_steam_iface *_this, uint64_t *pnTotalBytes, uint64_t *puAvailableBytes)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota(struct w_steam_iface *_this, uint64_t *pnTotalBytes, uint64_t *puAvailableBytes)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetQuota_params params =
     {
@@ -8778,7 +8778,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForAccount(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForAccount(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForAccount_params params =
     {
@@ -8789,7 +8789,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_I
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForApp(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForApp(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_IsCloudEnabledForApp_params params =
     {
@@ -8800,7 +8800,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_I
     return params._ret;
 }
 
-void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetCloudEnabledForApp(struct w_steam_iface *_this, bool bEnabled)
+void __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetCloudEnabledForApp(struct w_steam_iface *_this, int8_t bEnabled)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetCloudEnabledForApp_params params =
     {
@@ -8824,7 +8824,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress(struct w_steam_iface *_this, uint64_t hContent, int32_t *pnBytesDownloaded, int32_t *pnBytesExpected)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDownloadProgress_params params =
     {
@@ -8838,7 +8838,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_G
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails(struct w_steam_iface *_this, uint64_t hContent, uint32_t *pnAppID, char **ppchName, int32_t *pnFileSizeInBytes, CSteamID *pSteamIDOwner)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetUGCDetails_params params =
     {
@@ -8924,7 +8924,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile_params params =
     {
@@ -8937,7 +8937,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchPreviewFile)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile_params params =
     {
@@ -8950,7 +8950,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchTitle)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle_params params =
     {
@@ -8963,7 +8963,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription_params params =
     {
@@ -8976,7 +8976,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileVisibility(struct w_steam_iface *_this, uint64_t updateHandle, uint32_t eVisibility)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileVisibility_params params =
     {
@@ -8989,7 +8989,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_U
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags(struct w_steam_iface *_this, uint64_t updateHandle, w_SteamParamStringArray_t *pTags)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTags_params params =
     {
@@ -9087,7 +9087,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription(struct w_steam_iface *_this, uint64_t updateHandle, const char *pchChangeDescription)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription_params params =
     {
@@ -9112,7 +9112,7 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
     return params._ret;
 }
 
-uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, bool bVoteUp)
+uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdateUserPublishedItemVote(struct w_steam_iface *_this, uint64_t unPublishedFileId, int8_t bVoteUp)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdateUserPublishedItemVote_params params =
     {
@@ -9254,7 +9254,7 @@ const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch_params params =
     {
@@ -9265,7 +9265,7 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_B
     return params._ret;
 }
 
-bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch(struct w_steam_iface *_this)
+int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch(struct w_steam_iface *_this)
 {
     struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch_params params =
     {

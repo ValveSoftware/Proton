@@ -137,7 +137,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQu
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery, &params );
 }
 
-bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing(struct w_steam_iface *_this, uint32_t eType)
+int8_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing(struct w_steam_iface *_this, uint32_t eType)
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing_params params =
     {
@@ -412,7 +412,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQu
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RefreshQuery, &params );
 }
 
-bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing(struct w_steam_iface *_this, void *hRequest)
+int8_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing(struct w_steam_iface *_this, void *hRequest)
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_IsRefreshing_params params =
     {
