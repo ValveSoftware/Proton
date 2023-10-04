@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <pshpack1.h>
+
 struct ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params
 {
     struct u_steam_iface *linux_side;
@@ -45556,6 +45558,8 @@ struct ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params
     struct u_steam_iface *linux_side;
     int8_t _ret;
 };
+
+#include <poppack.h>
 
 enum unix_funcs
 {
