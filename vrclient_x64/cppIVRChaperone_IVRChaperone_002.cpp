@@ -5,7 +5,7 @@ NTSTATUS IVRChaperone_IVRChaperone_002_GetCalibrationState( void *args )
 {
     struct IVRChaperone_IVRChaperone_002_GetCalibrationState_params *params = (struct IVRChaperone_IVRChaperone_002_GetCalibrationState_params *)args;
     struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = (uint32_t)iface->GetCalibrationState(  );
+    params->_ret = iface->GetCalibrationState(  );
     return 0;
 }
 
@@ -13,7 +13,7 @@ NTSTATUS IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo( void *args )
 {
     struct IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params *params = (struct IVRChaperone_IVRChaperone_002_GetSoftBoundsInfo_params *)args;
     struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = (bool)iface->GetSoftBoundsInfo( params->pInfo );
+    params->_ret = iface->GetSoftBoundsInfo( params->pInfo );
     return 0;
 }
 
@@ -21,7 +21,7 @@ NTSTATUS IVRChaperone_IVRChaperone_002_GetHardBoundsInfo( void *args )
 {
     struct IVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params *params = (struct IVRChaperone_IVRChaperone_002_GetHardBoundsInfo_params *)args;
     struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = (bool)iface->GetHardBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
+    params->_ret = iface->GetHardBoundsInfo( params->pQuadsBuffer, params->punQuadsCount );
     return 0;
 }
 
@@ -29,7 +29,7 @@ NTSTATUS IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo( void *args )
 {
     struct IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params *params = (struct IVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo_params *)args;
     struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = (bool)iface->GetSeatedBoundsInfo( params->pInfo );
+    params->_ret = iface->GetSeatedBoundsInfo( params->pInfo );
     return 0;
 }
 
@@ -61,7 +61,7 @@ NTSTATUS IVRChaperone_IVRChaperone_002_AreBoundsVisible( void *args )
 {
     struct IVRChaperone_IVRChaperone_002_AreBoundsVisible_params *params = (struct IVRChaperone_IVRChaperone_002_AreBoundsVisible_params *)args;
     struct u_IVRChaperone_IVRChaperone_002 *iface = (struct u_IVRChaperone_IVRChaperone_002 *)params->linux_side;
-    params->_ret = (bool)iface->AreBoundsVisible(  );
+    params->_ret = iface->AreBoundsVisible(  );
     return 0;
 }
 

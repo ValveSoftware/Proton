@@ -7,7 +7,7 @@ NTSTATUS IVROverlayView_IVROverlayView_003_AcquireOverlayView( void *args )
     struct u_IVROverlayView_IVROverlayView_003 *iface = (struct u_IVROverlayView_IVROverlayView_003 *)params->linux_side;
     u_VROverlayView_t u_pOverlayView;
     if (params->pOverlayView) u_pOverlayView = *params->pOverlayView;
-    params->_ret = (uint32_t)iface->AcquireOverlayView( params->ulOverlayHandle, params->pNativeDevice, params->pOverlayView ? &u_pOverlayView : nullptr, params->unOverlayViewSize );
+    params->_ret = iface->AcquireOverlayView( params->ulOverlayHandle, params->pNativeDevice, params->pOverlayView ? &u_pOverlayView : nullptr, params->unOverlayViewSize );
     if (params->pOverlayView) *params->pOverlayView = u_pOverlayView;
     return 0;
 }
@@ -18,7 +18,7 @@ NTSTATUS IVROverlayView_IVROverlayView_003_ReleaseOverlayView( void *args )
     struct u_IVROverlayView_IVROverlayView_003 *iface = (struct u_IVROverlayView_IVROverlayView_003 *)params->linux_side;
     u_VROverlayView_t u_pOverlayView;
     if (params->pOverlayView) u_pOverlayView = *params->pOverlayView;
-    params->_ret = (uint32_t)iface->ReleaseOverlayView( params->pOverlayView ? &u_pOverlayView : nullptr );
+    params->_ret = iface->ReleaseOverlayView( params->pOverlayView ? &u_pOverlayView : nullptr );
     if (params->pOverlayView) *params->pOverlayView = u_pOverlayView;
     return 0;
 }
@@ -37,7 +37,7 @@ NTSTATUS IVROverlayView_IVROverlayView_003_IsViewingPermitted( void *args )
 {
     struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params *params = (struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params *)args;
     struct u_IVROverlayView_IVROverlayView_003 *iface = (struct u_IVROverlayView_IVROverlayView_003 *)params->linux_side;
-    params->_ret = (bool)iface->IsViewingPermitted( params->ulOverlayHandle );
+    params->_ret = iface->IsViewingPermitted( params->ulOverlayHandle );
     return 0;
 }
 
