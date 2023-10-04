@@ -1521,9 +1521,11 @@ with open(u"unixlib_generated.h", "w") as file:
     out(u'#endif /* __cplusplus */\n')
     out(u'\n')
 
+    out(u'#include <pshpack1.h>\n\n')
     for klass, method in all_methods:
         sdkver = klass._sdkver
         method.write_params(out)
+    out(u'#include <poppack.h>\n\n')
 
     out(u'enum unix_funcs\n')
     out(u'{\n')
