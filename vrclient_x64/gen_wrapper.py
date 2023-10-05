@@ -244,6 +244,7 @@ MANUAL_METHODS = {
     "IVRMailbox_undoc3": lambda ver, abi: abi == 'u',
     "IVROverlay_SetOverlayTexture": True,
     "IVRInput_GetDigitalActionData": lambda ver, abi: abi == 'w' and ver > 3,
+    "IVRTrackedCamera_GetVideoStreamFrame": True,
 }
 
 

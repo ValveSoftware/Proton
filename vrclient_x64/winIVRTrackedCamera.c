@@ -154,17 +154,7 @@ float __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedT
     return params._ret;
 }
 
-const w_CameraVideoStreamFrame_t_0914 * __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex)
-{
-    struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params params =
-    {
-        .linux_side = _this->u_iface,
-        .nDeviceIndex = nDeviceIndex,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame, &params );
-    return params._ret;
-}
+extern const w_CameraVideoStreamFrame_t_0914 * __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex);
 
 bool __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex, const w_CameraVideoStreamFrame_t_0914 *pFrameImage)
 {
