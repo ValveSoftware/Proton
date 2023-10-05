@@ -81,14 +81,6 @@ NTSTATUS IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime( void *
     return 0;
 }
 
-NTSTATUS IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame( void *args )
-{
-    struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params *params = (struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params *)args;
-    struct u_IVRTrackedCamera_IVRTrackedCamera_001 *iface = (struct u_IVRTrackedCamera_IVRTrackedCamera_001 *)params->linux_side;
-    params->_ret = (const w_CameraVideoStreamFrame_t_0914 *)iface->GetVideoStreamFrame( params->nDeviceIndex );
-    return 0;
-}
-
 NTSTATUS IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame( void *args )
 {
     struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params *params = (struct IVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame_params *)args;

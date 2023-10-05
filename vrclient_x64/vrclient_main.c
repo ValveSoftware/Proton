@@ -516,3 +516,17 @@ bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam
 
     return TRUE;
 }
+
+const w_CameraVideoStreamFrame_t_0914 * __thiscall winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame(struct w_steam_iface *_this, uint32_t nDeviceIndex)
+{
+    static w_CameraVideoStreamFrame_t_0914 w_frame;
+    struct IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nDeviceIndex = nDeviceIndex,
+        ._ret = &w_frame,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame, &params );
+    return params._ret;
+}
