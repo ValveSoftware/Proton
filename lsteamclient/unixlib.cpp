@@ -237,6 +237,8 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
     char buffer[4096], *dst = buffer;
     uint32_t len;
 
+    TRACE( "src %s, is_url %u\n", debugstr_a(src), is_url );
+
     if (!src) return NULL;
 
     *dst = 0;
@@ -295,6 +297,7 @@ done:
     if (!(dst = (char *)HeapAlloc( GetProcessHeap(), 0, len ))) return NULL;
     memcpy( dst, buffer, len );
 
+    TRACE( "-> %s\n", debugstr_a(dst) );
     return dst;
 }
 
@@ -310,6 +313,8 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
     char **out, **o;
     WCHAR scratch[PATH_MAX] = {0};
 
+    TRACE( "src %p\n", src );
+
     if (!src) return NULL;
 
     len = sizeof(char *); /* NUL */
@@ -319,6 +324,7 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
 
     for (s = src, o = out; *s; ++s, ++o)
     {
+        TRACE( "  src[%zu] %s\n", s - src, debugstr_a(*s) );
         if (IS_ABSOLUTE( *s ))
         {
             MultiByteToWideChar( CP_UNIXCP, 0, *s, -1, scratch, PATH_MAX );
@@ -336,10 +342,12 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
             }
             *l = 0;
         }
+        TRACE( "  -> %s\n", debugstr_a(*o) );
     }
 
     *o = NULL;
 
+    TRACE( "  -> %p\n", out );
     return (const char **)out;
 }
 
@@ -360,6 +368,8 @@ unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src
     static const char file_prot[] = "file://";
     WCHAR *dosW;
     uint32_t r;
+
+    TRACE( "api_result %u, src %s, dst %p, dst_bytes %u is_url %u\n", api_result, debugstr_a(src), dst, dst_bytes, is_url );
 
     if (!src || !*src || !api_result || !dst || !dst_bytes)
     {
@@ -404,5 +414,6 @@ unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src
     }
     HeapFree( GetProcessHeap(), 0, dosW );
 
+    TRACE( "-> dst %s, r %u\n", debugstr_a(dst), r );
     return r;
 }
