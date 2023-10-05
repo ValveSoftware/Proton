@@ -22,6 +22,8 @@ char *vrclient_dos_to_unix_path( const char *src )
     char buffer[4096], *dst = buffer;
     uint32_t len;
 
+    TRACE( "src %s\n", debugstr_a(src) );
+
     if (!src) return NULL;
 
     *dst = 0;
@@ -72,6 +74,7 @@ done:
     if (!(dst = (char *)HeapAlloc( GetProcessHeap(), 0, len ))) return NULL;
     memcpy( dst, buffer, len );
 
+    TRACE( "-> %s\n", debugstr_a(dst) );
     return dst;
 }
 
@@ -85,6 +88,8 @@ unsigned int vrclient_unix_path_to_dos_path( bool api_result, const char *src, c
 {
     WCHAR *dosW;
     uint32_t r;
+
+    TRACE( "api_result %u, src %s, dst %p, dst_bytes %u\n", api_result, debugstr_a(src), dst, dst_bytes );
 
     if (!src || !*src || !api_result || !dst || !dst_bytes)
     {
@@ -103,6 +108,7 @@ unsigned int vrclient_unix_path_to_dos_path( bool api_result, const char *src, c
     r = WideCharToMultiByte( CP_ACP, 0, dosW, -1, dst, dst_bytes, NULL, NULL );
     HeapFree( GetProcessHeap(), 0, dosW );
 
+    TRACE( "-> dst %s, r %u\n", debugstr_a(dst), r );
     return r == 0 ? 0 : r - 1;
 }
 
