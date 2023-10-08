@@ -1,7 +1,7 @@
 MODULE    = steam.exe
 IMPORTS   = user32 advapi32 shlwapi shell32 msi ole32
 
-EXTRADLLFLAGS = -mconsole -mcygwin -static-libgcc -static-libstdc++ -ldl
+EXTRADLLFLAGS = -mwindows -mcygwin -static-libgcc -static-libstdc++ -ldl
 EXTRADEFS = -DWINE_NO_LONG_TYPES
 
 CXX_SRCS = \
