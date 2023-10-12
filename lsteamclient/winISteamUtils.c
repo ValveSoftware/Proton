@@ -3045,7 +3045,7 @@ bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(struct w_
     };
     TRACE("%p\n", _this);
     cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck( &params );
-    return params._ret;
+    return FALSE;
 }
 
 bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(struct w_steam_iface *_this, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
