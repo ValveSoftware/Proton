@@ -221,9 +221,8 @@ static EVRRenderModelError ivrrendermodels_load_texture_d3d11_async( void *devic
     return error;
 }
 
-static EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async( void *dst_texture )
+static EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async( void *dst_texture, struct winRenderModel_TextureMap_t_1237 *texture_map )
 {
-    struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
     IUnknown *unk = dst_texture;
     EVRRenderModelError error;
     ID3D11Texture2D *texture;
@@ -349,7 +348,7 @@ EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTe
         return _ret;
     }
 
-    _ret = ivrrendermodels_load_into_texture_d3d11_async( pDstTexture );
+    _ret = ivrrendermodels_load_into_texture_d3d11_async( pDstTexture, texture_map );
 
     free_linux_texture_map_005( _this->u_iface, texture_map );
 
@@ -385,7 +384,7 @@ EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadIntoTe
         return _ret;
     }
 
-    _ret = ivrrendermodels_load_into_texture_d3d11_async( pDstTexture );
+    _ret = ivrrendermodels_load_into_texture_d3d11_async( pDstTexture, texture_map );
 
     free_linux_texture_map_006( _this->u_iface, texture_map );
 
