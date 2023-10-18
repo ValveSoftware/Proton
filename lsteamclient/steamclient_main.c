@@ -1127,14 +1127,14 @@ HSteamPipe after_steam_pipe_create(HSteamPipe pipe)
     return pipe;
 }
 
-bool Steam_IsKnownInterface( const char *pchVersion )
+bool CDECL Steam_IsKnownInterface( const char *pchVersion )
 {
     TRACE("%s\n", pchVersion);
     load_steamclient();
     return steamclient_IsKnownInterface( pchVersion );
 }
 
-void Steam_NotifyMissingInterface( HSteamPipe hSteamPipe, const char *pchVersion )
+void CDECL Steam_NotifyMissingInterface( HSteamPipe hSteamPipe, const char *pchVersion )
 {
     TRACE("%u %s\n", hSteamPipe, pchVersion);
     load_steamclient();
