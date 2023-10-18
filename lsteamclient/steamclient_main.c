@@ -820,6 +820,8 @@ static bool (*steamclient_BGetCallback)(HSteamPipe a, CallbackMsg_t *b, int32 *c
 static bool (*steamclient_GetAPICallResult)(HSteamPipe, SteamAPICall_t, void *, int, int, bool *);
 static bool (*steamclient_FreeLastCallback)(HSteamPipe);
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
+static bool (*steamclient_IsKnownInterface)( const char *pchVersion );
+static void (*steamclient_NotifyMissingInterface)( HSteamPipe hSteamPipe, const char *pchVersion );
 
 static int load_steamclient(void)
 {
@@ -882,6 +884,18 @@ static int load_steamclient(void)
     steamclient_ReleaseThreadLocalMemory = dlsym(steamclient_lib, "Steam_ReleaseThreadLocalMemory");
     if(!steamclient_ReleaseThreadLocalMemory){
         ERR("unable to load ReleaseThreadLocalMemory method\n");
+        return 0;
+    }
+
+    steamclient_IsKnownInterface = dlsym(steamclient_lib, "Steam_IsKnownInterface");
+    if(!steamclient_IsKnownInterface){
+        ERR("unable to load IsKnownInterface method\n");
+        return 0;
+    }
+
+    steamclient_NotifyMissingInterface = dlsym(steamclient_lib, "Steam_NotifyMissingInterface");
+    if(!steamclient_NotifyMissingInterface){
+        ERR("unable to load NotifyMissingInterface method\n");
         return 0;
     }
 
@@ -1109,4 +1123,18 @@ HSteamPipe after_steam_pipe_create(HSteamPipe pipe)
     TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
 
     return pipe;
+}
+
+bool CDECL Steam_IsKnownInterface( const char *pchVersion )
+{
+    TRACE("%s\n", pchVersion);
+    load_steamclient();
+    return steamclient_IsKnownInterface( pchVersion );
+}
+
+void CDECL Steam_NotifyMissingInterface( HSteamPipe hSteamPipe, const char *pchVersion )
+{
+    TRACE("%u %s\n", hSteamPipe, pchVersion);
+    load_steamclient();
+    steamclient_NotifyMissingInterface( hSteamPipe, pchVersion );
 }

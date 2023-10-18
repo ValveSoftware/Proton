@@ -56,6 +56,9 @@
 56 stub hid_write
 57 stub hid_write_output_report
 
+@ cdecl Steam_IsKnownInterface(ptr)
+@ cdecl Steam_NotifyMissingInterface(long ptr)
+
 # GameOverlayRenderer entry points
 @ stub BOverlayNeedsPresent
 @ stub IsOverlayEnabled
