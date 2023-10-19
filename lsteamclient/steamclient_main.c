@@ -477,48 +477,51 @@ static int load_steamclient(void)
     else
         params.ignore_child_processes = ignore_child_processes;
 
-    if (!unix_steamclient_init( &params )) return 0;
+    if (STEAMCLIENT_CALL( steamclient_init, &params )) return 0;
     return 1;
 }
 
 void *CDECL CreateInterface(const char *name, int *return_code)
 {
+    struct steamclient_CreateInterface_params params = {.name = name, .return_code = return_code};
+
     TRACE("name: %s, return_code: %p\n", name, return_code);
     if (!load_steamclient()) return NULL;
-    return create_win_interface( name, unix_CreateInterface( name, return_code ) );
+    if (STEAMCLIENT_CALL( steamclient_CreateInterface, &params )) return NULL;
+    return create_win_interface( name, params._ret );
 }
 
 static void execute_pending_callbacks(void)
 {
-    struct callback *callback = NULL;
-    uint32_t callback_size = 0;
+    struct steamclient_next_callback_params params = {0};
 
-    while (unix_steamclient_next_callback( callback, &callback_size ))
+    while (!STEAMCLIENT_CALL( steamclient_next_callback, &params ) && params._ret)
     {
-        if (!callback || callback_size > callback->size)
-            callback = realloc( callback, callback_size );
-        else switch (callback->type)
+        if (!params.callback || params.size > params.callback->size)
+            params.callback = realloc( params.callback, params.size );
+        else switch (params.callback->type)
         {
         case SOCKETS_DEBUG_OUTPUT:
-            TRACE( "SOCKETS_DEBUG_OUTPUT func %p, type %u, msg %s.\n", callback->sockets_debug_output.pfnFunc,
-                   callback->sockets_debug_output.type, wine_dbgstr_a( callback->sockets_debug_output.msg ) );
-            callback->sockets_debug_output.pfnFunc( callback->sockets_debug_output.type, callback->sockets_debug_output.msg );
+            TRACE( "SOCKETS_DEBUG_OUTPUT func %p, type %u, msg %s.\n", params.callback->sockets_debug_output.pfnFunc,
+                   params.callback->sockets_debug_output.type, wine_dbgstr_a( params.callback->sockets_debug_output.msg ) );
+            params.callback->sockets_debug_output.pfnFunc( params.callback->sockets_debug_output.type, params.callback->sockets_debug_output.msg );
             break;
         case WARNING_MESSAGE_HOOK:
-            TRACE( "WARNING_MESSAGE_HOOK func %p, severity %d, msg %s.\n", callback->warning_message_hook.pFunction,
-                   callback->warning_message_hook.severity, wine_dbgstr_a( callback->warning_message_hook.msg ) );
-            callback->warning_message_hook.pFunction( callback->warning_message_hook.severity, callback->warning_message_hook.msg );
+            TRACE( "WARNING_MESSAGE_HOOK func %p, severity %d, msg %s.\n", params.callback->warning_message_hook.pFunction,
+                   params.callback->warning_message_hook.severity, wine_dbgstr_a( params.callback->warning_message_hook.msg ) );
+            params.callback->warning_message_hook.pFunction( params.callback->warning_message_hook.severity, params.callback->warning_message_hook.msg );
             break;
         }
     }
 
-    free( callback );
+    free( params.callback );
 }
 
 static void *last_callback_data;
 
 bool CDECL Steam_FreeLastCallback( int32_t pipe )
 {
+    struct steamclient_Steam_FreeLastCallback_params params = {.pipe = pipe};
     TRACE( "%u\n", pipe );
 
     if (!load_steamclient()) return 0;
@@ -526,13 +529,25 @@ bool CDECL Steam_FreeLastCallback( int32_t pipe )
     HeapFree( GetProcessHeap(), 0, last_callback_data );
     last_callback_data = NULL;
 
-    return unix_Steam_FreeLastCallback( pipe );
+    STEAMCLIENT_CALL( steamclient_Steam_FreeLastCallback, &params );
+    return params._ret;
 }
 
 bool CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *ignored )
 {
     u_CallbackMsg_t u_msg;
-    bool ret;
+    struct steamclient_Steam_BGetCallback_params params =
+    {
+        .pipe = pipe,
+        .w_msg = win_msg,
+        .ignored = ignored,
+        .u_msg = &u_msg,
+    };
+    struct steamclient_callback_message_receive_params receive_params =
+    {
+        .u_msg = &u_msg,
+        .w_msg = win_msg,
+    };
 
     TRACE("%u, %p, %p\n", pipe, win_msg, ignored);
 
@@ -541,11 +556,12 @@ bool CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *
     execute_pending_callbacks();
 
 next_event:
-    if (!(ret = unix_Steam_BGetCallback( pipe, win_msg, ignored, &u_msg ))) return FALSE;
+    STEAMCLIENT_CALL( steamclient_Steam_BGetCallback, &params );
+    if (!params._ret) return FALSE;
 
     if (!(win_msg->m_pubParam = HeapAlloc( GetProcessHeap(), 0, win_msg->m_cubParam ))) return FALSE;
     last_callback_data = win_msg->m_pubParam;
-    unix_callback_message_receive( &u_msg, win_msg );
+    STEAMCLIENT_CALL( steamclient_callback_message_receive, &receive_params );
 
     if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
     {
@@ -572,24 +588,37 @@ next_event:
     }
 
     execute_pending_callbacks();
-    return ret;
+    return params._ret;
 }
 
 bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
                                    int w_callback_len, int id, bool *failed )
 {
+    struct steamclient_Steam_GetAPICallResult_params params =
+    {
+        .pipe = pipe,
+        .call = call,
+        .w_callback = w_callback,
+        .w_callback_len = w_callback_len,
+        .id = id,
+        .failed = failed,
+    };
+
     TRACE( "%u, x, %p, %u, %u, %p\n", pipe, w_callback, w_callback_len, id, failed );
 
     if (!load_steamclient()) return FALSE;
-    return unix_Steam_GetAPICallResult( pipe, call, w_callback, w_callback_len, id, failed );
+    STEAMCLIENT_CALL( steamclient_Steam_GetAPICallResult, &params );
+    return params._ret;
 }
 
 void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
 {
+    struct steamclient_Steam_ReleaseThreadLocalMemory_params params = {.thread_exit = bThreadExit};
     TRACE("%d\n", bThreadExit);
 
     if (!load_steamclient()) return;
-    unix_Steam_ReleaseThreadLocalMemory( bThreadExit );
+
+    STEAMCLIENT_CALL( steamclient_Steam_ReleaseThreadLocalMemory, &params );
 }
 
 void CDECL Breakpad_SteamMiniDumpInit( uint32_t a, const char *b, const char *c )
@@ -621,14 +650,17 @@ void CDECL Breakpad_SteamWriteMiniDumpUsingExceptionInfoWithBuildId(int a, int b
 
 bool CDECL Steam_IsKnownInterface( const char *pchVersion )
 {
+    struct steamclient_Steam_IsKnownInterface_params params = {.version = pchVersion};
     TRACE("%s\n", pchVersion);
     load_steamclient();
-    return unix_Steam_IsKnownInterface( pchVersion );
+    STEAMCLIENT_CALL( steamclient_Steam_IsKnownInterface, &params );
+    return params._ret;
 }
 
 void CDECL Steam_NotifyMissingInterface( int32_t hSteamPipe, const char *pchVersion )
 {
+    struct steamclient_Steam_NotifyMissingInterface_params params = {.pipe = hSteamPipe, .version = pchVersion};
     TRACE("%u %s\n", hSteamPipe, pchVersion);
     load_steamclient();
-    unix_Steam_NotifyMissingInterface( hSteamPipe, pchVersion );
+    STEAMCLIENT_CALL( steamclient_Steam_NotifyMissingInterface, &params );
 }

@@ -4,6 +4,21 @@
 
 extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
 {
+    steamclient_init,
+    steamclient_next_callback,
+    steamclient_CreateInterface,
+    steamclient_Steam_GetAPICallResult,
+    steamclient_Steam_BGetCallback,
+    steamclient_callback_message_receive,
+    steamclient_Steam_FreeLastCallback,
+    steamclient_Steam_ReleaseThreadLocalMemory,
+    steamclient_Steam_IsKnownInterface,
+    steamclient_Steam_NotifyMissingInterface,
+    steamclient_networking_messages_receive_144,
+    steamclient_networking_messages_receive_147,
+    steamclient_networking_messages_receive_153a,
+    steamclient_networking_message_release_147,
+    steamclient_networking_message_release_153a,
     ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps,
     ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps,
     ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName,

@@ -62,6 +62,22 @@ extern void queue_sockets_debug_output( void (*W_STDCALL pfnFunc)( uint32_t, con
 extern void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char * ),
                                         int32_t severity, const char *msg );
 
+extern NTSTATUS steamclient_init( void * );
+extern NTSTATUS steamclient_next_callback( void * );
+extern NTSTATUS steamclient_CreateInterface( void * );
+extern NTSTATUS steamclient_Steam_GetAPICallResult( void * );
+extern NTSTATUS steamclient_Steam_BGetCallback( void * );
+extern NTSTATUS steamclient_callback_message_receive( void * );
+extern NTSTATUS steamclient_Steam_FreeLastCallback( void * );
+extern NTSTATUS steamclient_Steam_ReleaseThreadLocalMemory( void * );
+extern NTSTATUS steamclient_Steam_IsKnownInterface( void * );
+extern NTSTATUS steamclient_Steam_NotifyMissingInterface( void * );
+extern NTSTATUS steamclient_networking_messages_receive_144( void * );
+extern NTSTATUS steamclient_networking_messages_receive_147( void * );
+extern NTSTATUS steamclient_networking_messages_receive_153a( void * );
+extern NTSTATUS steamclient_networking_message_release_147( void * );
+extern NTSTATUS steamclient_networking_message_release_153a( void * );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

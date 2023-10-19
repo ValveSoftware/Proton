@@ -57,8 +57,9 @@ void queue_warning_message_hook( void (*W_CDECL pFunction)( int32_t, const char 
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-bool unix_steamclient_next_callback( struct callback *callback, uint32_t *size )
+NTSTATUS steamclient_next_callback( void *args )
 {
+    struct steamclient_next_callback_params *params = (struct steamclient_next_callback_params *)args;
     struct list *ptr;
 
     pthread_mutex_lock( &callbacks_lock );
@@ -66,18 +67,19 @@ bool unix_steamclient_next_callback( struct callback *callback, uint32_t *size )
     {
         struct callback_entry *entry = LIST_ENTRY( ptr, struct callback_entry, entry );
 
-        if (entry->callback.size <= *size)
+        if (entry->callback.size <= params->size)
         {
-            memcpy( callback, &entry->callback, entry->callback.size );
+            memcpy( params->callback, &entry->callback, entry->callback.size );
             list_remove( &entry->entry );
             free( entry );
         }
 
-        *size = entry->callback.size;
+        params->size = entry->callback.size;
     }
     pthread_mutex_unlock( &callbacks_lock );
 
-    return !!ptr;
+    params->_ret = !!ptr;
+    return 0;
 }
 
 static void *(*p_CreateInterface)( const char *name, int *return_code );
@@ -88,46 +90,60 @@ static void (*p_Steam_ReleaseThreadLocalMemory)( int );
 static bool (*p_Steam_IsKnownInterface)( const char * );
 static void (*p_Steam_NotifyMissingInterface)( int32_t, const char * );
 
-bool unix_Steam_BGetCallback( uint32_t pipe, w_CallbackMsg_t *w_msg, int32_t *ignored, u_CallbackMsg_t *u_msg )
+NTSTATUS steamclient_Steam_BGetCallback( void *args )
 {
-    if (!p_Steam_BGetCallback( pipe, u_msg, ignored )) return false;
-    callback_message_utow( u_msg, w_msg );
-    return true;
-}
+    struct steamclient_Steam_BGetCallback_params *params = (struct steamclient_Steam_BGetCallback_params *)args;
 
-void unix_callback_message_receive( u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )
-{
-    convert_callback_utow( u_msg->m_iCallback, (void *)u_msg->m_pubParam, u_msg->m_cubParam,
-                           (void *)w_msg->m_pubParam, w_msg->m_cubParam );
-}
-
-bool unix_Steam_FreeLastCallback( uint32_t pipe )
-{
-    return p_Steam_FreeLastCallback( pipe );
-}
-
-bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback, int w_callback_len,
-                                  int id, bool *failed )
-{
-    int u_callback_len = w_callback_len;
-    void *u_callback;
-    bool ret;
-
-    if (!(u_callback = alloc_callback_wtou( id, w_callback, &u_callback_len ))) return false;
-
-    ret = p_Steam_GetAPICallResult( pipe, call, u_callback, u_callback_len, id, failed );
-
-    if (ret && u_callback != w_callback)
+    if (!p_Steam_BGetCallback( params->pipe, params->u_msg, params->ignored ))
+        params->_ret = false;
+    else
     {
-        convert_callback_utow( id, u_callback, u_callback_len, w_callback, w_callback_len );
+        callback_message_utow( params->u_msg, params->w_msg );
+        params->_ret = true;
+    }
+
+    return 0;
+}
+
+NTSTATUS steamclient_callback_message_receive( void *args )
+{
+    struct steamclient_callback_message_receive_params *params = (struct steamclient_callback_message_receive_params *)args;
+    convert_callback_utow( params->u_msg->m_iCallback, (void *)params->u_msg->m_pubParam,
+                           params->u_msg->m_cubParam, (void *)params->w_msg->m_pubParam,
+                           params->w_msg->m_cubParam );
+    return 0;
+}
+
+NTSTATUS steamclient_Steam_FreeLastCallback( void *args )
+{
+    struct steamclient_Steam_FreeLastCallback_params *params = (struct steamclient_Steam_FreeLastCallback_params *)args;
+    params->_ret = p_Steam_FreeLastCallback( params->pipe );
+    return 0;
+}
+
+NTSTATUS steamclient_Steam_GetAPICallResult( void *args )
+{
+    struct steamclient_Steam_GetAPICallResult_params *params = (struct steamclient_Steam_GetAPICallResult_params *)args;
+    int u_callback_len = params->w_callback_len;
+    void *u_callback;
+
+    if (!(u_callback = alloc_callback_wtou( params->id, params->w_callback, &u_callback_len ))) return false;
+
+    params->_ret = p_Steam_GetAPICallResult( params->pipe, params->call, u_callback, u_callback_len,
+                                             params->id, params->failed );
+
+    if (params->_ret && u_callback != params->w_callback)
+    {
+        convert_callback_utow( params->id, u_callback, u_callback_len, params->w_callback, params->w_callback_len );
         HeapFree( GetProcessHeap(), 0, u_callback );
     }
 
-    return ret;
+    return 0;
 }
 
-bool unix_steamclient_init( struct steamclient_init_params *params )
+NTSTATUS steamclient_init( void *args )
 {
+    struct steamclient_init_params *params = (struct steamclient_init_params *)args;
     char path[PATH_MAX], resolved_path[PATH_MAX];
     static void *steamclient;
 
@@ -136,7 +152,7 @@ bool unix_steamclient_init( struct steamclient_init_params *params )
     if (params->ignore_child_processes_unset) unsetenv( "IgnoreChildProcesses" );
     else if (params->ignore_child_processes) setenv( "IgnoreChildProcesses", params->ignore_child_processes, TRUE );
 
-    if (steamclient) return true;
+    if (steamclient) return 0;
 
 #ifdef __APPLE__
     if (getenv( "STEAM_COMPAT_CLIENT_INSTALL_PATH" ))
@@ -163,14 +179,14 @@ bool unix_steamclient_init( struct steamclient_init_params *params )
     if (!(steamclient = dlopen( path, RTLD_NOW )))
     {
         ERR( "unable to load native steamclient library\n" );
-        return false;
+        return -1;
     }
 
 #define LOAD_FUNC( x )                                         \
     if (!(p_##x = (decltype(p_##x))dlsym( steamclient, #x )))  \
     {                                                          \
         ERR( "unable to load " #x "\n" );                      \
-        return false;                                          \
+        return -1;                                             \
     }
 
     LOAD_FUNC( CreateInterface );
@@ -181,25 +197,33 @@ bool unix_steamclient_init( struct steamclient_init_params *params )
     LOAD_FUNC( Steam_IsKnownInterface );
     LOAD_FUNC( Steam_NotifyMissingInterface );
 
-    return true;
+    return 0;
 }
 
-void *unix_CreateInterface( const char *name, int *return_code )
+NTSTATUS steamclient_CreateInterface( void *args )
 {
-    return p_CreateInterface( name, return_code );
+    struct steamclient_CreateInterface_params *params = (struct steamclient_CreateInterface_params *)args;
+    params->_ret = p_CreateInterface( params->name, params->return_code );
+    return 0;
 }
 
-void unix_Steam_ReleaseThreadLocalMemory( int thread_exit )
+NTSTATUS steamclient_Steam_ReleaseThreadLocalMemory( void *args )
 {
-    p_Steam_ReleaseThreadLocalMemory( thread_exit );
+    struct steamclient_Steam_ReleaseThreadLocalMemory_params *params = (struct steamclient_Steam_ReleaseThreadLocalMemory_params *)args;
+    p_Steam_ReleaseThreadLocalMemory( params->thread_exit );
+    return 0;
 }
 
-bool unix_Steam_IsKnownInterface( const char *version )
+NTSTATUS steamclient_Steam_IsKnownInterface( void *args )
 {
-    return p_Steam_IsKnownInterface( version );
+    struct steamclient_Steam_IsKnownInterface_params *params = (struct steamclient_Steam_IsKnownInterface_params *)args;
+    params->_ret = p_Steam_IsKnownInterface( params->version );
+    return 0;
 }
 
-void unix_Steam_NotifyMissingInterface( int32_t pipe, const char *version )
+NTSTATUS steamclient_Steam_NotifyMissingInterface( void *args )
 {
-    p_Steam_NotifyMissingInterface( pipe, version );
+    struct steamclient_Steam_NotifyMissingInterface_params *params = (struct steamclient_Steam_NotifyMissingInterface_params *)args;
+    p_Steam_NotifyMissingInterface( params->pipe, params->version );
+    return 0;
 }
