@@ -51,7 +51,11 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             {
                 if (compositor_data.client_core_linux_side)
                 {
-                    cppIVRClientCore_IVRClientCore_003_Cleanup(compositor_data.client_core_linux_side);
+                    struct cppIVRClientCore_IVRClientCore_003_Cleanup_params params =
+                    {
+                        .linux_side = compositor_data.client_core_linux_side,
+                    };
+                    cppIVRClientCore_IVRClientCore_003_Cleanup( &params );
                     compositor_data.client_core_linux_side = NULL;
                 }
                 dlclose(vrclient_lib);
