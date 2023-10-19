@@ -37,6 +37,15 @@ struct render_model_texture_map
     };
 };
 
+struct vrclient_init_params
+{
+    char *unix_path;
+};
+
+extern bool unix_vrclient_init( struct vrclient_init_params *params );
+extern void *unix_HmdSystemFactory( const char *name, int *return_code );
+extern void *unix_VRClientCoreFactory( const char *name, int *return_code );
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
