@@ -5,9 +5,6 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define __USE_GNU
-#include <dlfcn.h>
-
 #include "windef.h"
 #include "winbase.h"
 #include "winnls.h"
@@ -43,33 +40,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
-}
-
-void sync_environment(void)
-{
-    static const char *steamapi_envs[] =
-    {
-        "SteamAppId",
-        "IgnoreChildProcesses",
-    };
-
-    char value[32767];
-
-    for (unsigned int i = 0; i < ARRAY_SIZE(steamapi_envs); i++)
-    {
-        if (!GetEnvironmentVariableA(steamapi_envs[i], value, ARRAY_SIZE(value)))
-        {
-            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND)
-            {
-                TRACE("unsetenv(\"%s\")\n", steamapi_envs[i]);
-                unsetenv(steamapi_envs[i]);
-            }
-            continue;
-        }
-
-        TRACE("setenv(\"%s\", \"%s\", 1)\n", steamapi_envs[i], value);
-        setenv(steamapi_envs[i], value, 1);
-    }
 }
 
 /* Returns:
@@ -676,101 +646,30 @@ done:
     return ret;
 }
 
-static void *steamclient_lib;
-static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
-bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
-bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
-bool (*steamclient_FreeLastCallback)( int32_t );
-static void (*steamclient_ReleaseThreadLocalMemory)(int);
-static bool (*steamclient_IsKnownInterface)( const char *pchVersion );
-static void (*steamclient_NotifyMissingInterface)( int32_t hSteamPipe, const char *pchVersion );
-
 static int load_steamclient(void)
 {
-    char path[PATH_MAX], resolved_path[PATH_MAX];
+    char steam_app_id[4096], ignore_child_processes[4096];
+    struct steamclient_init_params params = {0};
 
-    if(steamclient_lib)
-        return 1;
+    if (!GetEnvironmentVariableA("SteamAppId", steam_app_id, ARRAY_SIZE(steam_app_id)))
+        params.steam_app_id_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    else
+        params.steam_app_id = steam_app_id;
 
-    sync_environment();
+    if (!GetEnvironmentVariableA("IgnoreChildProcesses", ignore_child_processes, ARRAY_SIZE(ignore_child_processes)))
+        params.ignore_child_processes_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    else
+        params.ignore_child_processes = ignore_child_processes;
 
-#ifdef __APPLE__
-    if(getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH")){
-        snprintf(path, PATH_MAX, "%s/steamclient.dylib", getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH"));
-    }else{
-        WARN("Old Steam client, falling back to DYLD environment to locate native steamclient library\n");
-        strcpy(path, "steamclient.dylib");
-    }
-#else
-#ifdef _WIN64
-    snprintf(path, PATH_MAX, "%s/.steam/sdk64/steamclient.so", getenv("HOME"));
-#else
-    snprintf(path, PATH_MAX, "%s/.steam/sdk32/steamclient.so", getenv("HOME"));
-#endif
-    if (realpath(path, resolved_path)){
-        lstrcpynA(path, resolved_path, PATH_MAX);
-        path[PATH_MAX - 1] = 0;
-    }
-#endif
-    steamclient_lib = dlopen(path, RTLD_NOW);
-    if(!steamclient_lib){
-        ERR("unable to load native steamclient library\n");
-        return 0;
-    }
-
-    steamclient_CreateInterface = dlsym(steamclient_lib, "CreateInterface");
-    if(!steamclient_CreateInterface){
-        ERR("unable to load CreateInterface method\n");
-        return 0;
-    }
-
-    steamclient_BGetCallback = dlsym(steamclient_lib, "Steam_BGetCallback");
-    if(!steamclient_BGetCallback){
-        ERR("unable to load BGetCallback method\n");
-        return 0;
-    }
-
-    steamclient_GetAPICallResult = dlsym(steamclient_lib, "Steam_GetAPICallResult");
-    if(!steamclient_GetAPICallResult){
-        ERR("unable to load GetAPICallResult method\n");
-        return 0;
-    }
-
-    steamclient_FreeLastCallback = dlsym(steamclient_lib, "Steam_FreeLastCallback");
-    if(!steamclient_FreeLastCallback){
-        ERR("unable to load FreeLastCallback method\n");
-        return 0;
-    }
-
-    steamclient_ReleaseThreadLocalMemory = dlsym(steamclient_lib, "Steam_ReleaseThreadLocalMemory");
-    if(!steamclient_ReleaseThreadLocalMemory){
-        ERR("unable to load ReleaseThreadLocalMemory method\n");
-        return 0;
-    }
-
-    steamclient_IsKnownInterface = dlsym(steamclient_lib, "Steam_IsKnownInterface");
-    if(!steamclient_IsKnownInterface){
-        ERR("unable to load IsKnownInterface method\n");
-        return 0;
-    }
-
-    steamclient_NotifyMissingInterface = dlsym(steamclient_lib, "Steam_NotifyMissingInterface");
-    if(!steamclient_NotifyMissingInterface){
-        ERR("unable to load NotifyMissingInterface method\n");
-        return 0;
-    }
-
+    if (!unix_steamclient_init( &params )) return 0;
     return 1;
 }
 
 void *CDECL CreateInterface(const char *name, int *return_code)
 {
     TRACE("name: %s, return_code: %p\n", name, return_code);
-
-    if(!load_steamclient())
-        return NULL;
-
-    return create_win_interface(name, steamclient_CreateInterface(name, return_code));
+    if (!load_steamclient()) return NULL;
+    return create_win_interface( name, unix_CreateInterface( name, return_code ) );
 }
 
 static void execute_pending_callbacks(void)
@@ -821,8 +720,7 @@ bool CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t *
 
     TRACE("%u, %p, %p\n", pipe, win_msg, ignored);
 
-    if(!load_steamclient())
-        return 0;
+    if (!load_steamclient()) return 0;
 
     execute_pending_callbacks();
 
@@ -867,7 +765,6 @@ bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback
     TRACE( "%u, x, %p, %u, %u, %p\n", pipe, w_callback, w_callback_len, id, failed );
 
     if (!load_steamclient()) return FALSE;
-
     return unix_Steam_GetAPICallResult( pipe, call, w_callback, w_callback_len, id, failed );
 }
 
@@ -875,10 +772,8 @@ void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
 {
     TRACE("%d\n", bThreadExit);
 
-    if(!load_steamclient())
-        return;
-
-    steamclient_ReleaseThreadLocalMemory(bThreadExit);
+    if (!load_steamclient()) return;
+    unix_Steam_ReleaseThreadLocalMemory( bThreadExit );
 }
 
 void CDECL Breakpad_SteamMiniDumpInit( uint32_t a, const char *b, const char *c )
@@ -912,12 +807,12 @@ bool CDECL Steam_IsKnownInterface( const char *pchVersion )
 {
     TRACE("%s\n", pchVersion);
     load_steamclient();
-    return steamclient_IsKnownInterface( pchVersion );
+    return unix_Steam_IsKnownInterface( pchVersion );
 }
 
 void CDECL Steam_NotifyMissingInterface( int32_t hSteamPipe, const char *pchVersion )
 {
     TRACE("%u %s\n", hSteamPipe, pchVersion);
     load_steamclient();
-    steamclient_NotifyMissingInterface( hSteamPipe, pchVersion );
+    unix_Steam_NotifyMissingInterface( hSteamPipe, pchVersion );
 }

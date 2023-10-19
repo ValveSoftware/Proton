@@ -27,6 +27,14 @@ extern void steamclient_free_path_array( const char **path_array );
 #define PATH_MAX 4096
 extern char g_tmppath[PATH_MAX];
 
+struct steamclient_init_params
+{
+    const char *steam_app_id;
+    bool steam_app_id_unset;
+    const char *ignore_child_processes;
+    bool ignore_child_processes_unset;
+};
+
 enum callback_type
 {
     SOCKETS_DEBUG_OUTPUT = 1,
@@ -56,18 +64,17 @@ struct callback
     };
 };
 
+extern bool unix_steamclient_init( struct steamclient_init_params *params );
 extern bool unix_steamclient_next_callback( struct callback *callback, uint32_t *length );
-
-extern bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
+extern void *unix_CreateInterface( const char *name, int *return_code );
 extern bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
                                          int w_callback_len, int id, bool *failed );
-
-extern bool (*steamclient_BGetCallback)( int32_t a, u_CallbackMsg_t *b, int32_t *c );
 extern bool unix_Steam_BGetCallback( uint32_t pipe, w_CallbackMsg_t *w_msg, int32_t *ignored, u_CallbackMsg_t *u_msg );
 extern void unix_callback_message_receive( u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg );
-
-extern bool (*steamclient_FreeLastCallback)( int32_t );
 extern bool unix_Steam_FreeLastCallback( uint32_t pipe );
+extern void unix_Steam_ReleaseThreadLocalMemory( int thread_exit );
+extern bool unix_Steam_IsKnownInterface( const char *version );
+extern void unix_Steam_NotifyMissingInterface( int32_t pipe, const char *version );
 
 struct networking_message_pool;
 struct networking_message
