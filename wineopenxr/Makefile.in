@@ -1,7 +1,7 @@
 MODULE     = wineopenxr.dll
-IMPORTS    = advapi32 dxgi vulkan-1
+IMPORTS    = advapi32 dxgi
 
-EXTRADLLFLAGS = -mcygwin
+EXTRADLLFLAGS = -mcygwin -lvulkan
 EXTRADEFS = -DWINE_NO_LONG_TYPES
 
 C_SRCS = \
