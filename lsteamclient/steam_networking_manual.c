@@ -92,8 +92,9 @@ static bool networking_message_pool_receive_144( int32_t capacity, int32_t count
 
     if (count > 0)
     {
+        struct steamclient_networking_messages_receive_144_params params = {.count = count, .w_msgs = messages};
         if (!networking_message_pool_alloc_data( count, pool )) return false;
-        unix_networking_messages_receive_144( count, messages );
+        STEAMCLIENT_CALL( steamclient_networking_messages_receive_144, &params );
     }
 
     return true;
@@ -117,7 +118,8 @@ static void W_STDCALL w_SteamNetworkingMessage_t_147_Release( w_SteamNetworkingM
     if (message->pool) networking_message_pool_release( message->pool );
     else
     {
-        unix_networking_message_release_147( msg );
+        struct steamclient_networking_message_release_147_params params = {.w_msg = msg};
+        STEAMCLIENT_CALL( steamclient_networking_message_release_147, &params );
         HeapFree( GetProcessHeap(), 0, message );
     }
 }
@@ -158,8 +160,9 @@ static bool networking_message_pool_receive_147( uint32_t capacity, uint32_t cou
 
     if (count)
     {
+        struct steamclient_networking_messages_receive_147_params params = {.count = count, .w_msgs = messages};
         if (!networking_message_pool_alloc_data( count, pool )) return false;
-        unix_networking_messages_receive_147( count, messages );
+        STEAMCLIENT_CALL( steamclient_networking_messages_receive_147, &params );
     }
 
     return true;
@@ -183,7 +186,8 @@ static void W_STDCALL w_SteamNetworkingMessage_t_153a_Release( w_SteamNetworking
     if (message->pool) networking_message_pool_release( message->pool );
     else
     {
-        unix_networking_message_release_153a( msg );
+        struct steamclient_networking_message_release_153a_params params = {.w_msg = msg};
+        STEAMCLIENT_CALL( steamclient_networking_message_release_153a, &params );
         HeapFree( GetProcessHeap(), 0, message );
     }
 }
@@ -224,8 +228,9 @@ static bool networking_message_pool_receive_153a( uint32_t capacity, uint32_t co
 
     if (count)
     {
+        struct steamclient_networking_messages_receive_153a_params params = {.count = count, .w_msgs = messages};
         if (!networking_message_pool_alloc_data( count, pool )) return false;
-        unix_networking_messages_receive_153a( count, messages );
+        STEAMCLIENT_CALL( steamclient_networking_messages_receive_153a, &params );
     }
 
     return true;
