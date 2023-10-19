@@ -67,17 +67,96 @@ struct callback
     };
 };
 
-extern bool unix_steamclient_init( struct steamclient_init_params *params );
-extern bool unix_steamclient_next_callback( struct callback *callback, uint32_t *length );
-extern void *unix_CreateInterface( const char *name, int *return_code );
-extern bool unix_Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
-                                         int w_callback_len, int id, bool *failed );
-extern bool unix_Steam_BGetCallback( uint32_t pipe, w_CallbackMsg_t *w_msg, int32_t *ignored, u_CallbackMsg_t *u_msg );
-extern void unix_callback_message_receive( u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg );
-extern bool unix_Steam_FreeLastCallback( uint32_t pipe );
-extern void unix_Steam_ReleaseThreadLocalMemory( int thread_exit );
-extern bool unix_Steam_IsKnownInterface( const char *version );
-extern void unix_Steam_NotifyMissingInterface( int32_t pipe, const char *version );
+struct steamclient_next_callback_params
+{
+    bool _ret;
+    struct callback *callback;
+    uint32_t size;
+};
+
+struct steamclient_CreateInterface_params
+{
+    void *_ret;
+    const char *name;
+    int *return_code;
+};
+
+struct steamclient_Steam_GetAPICallResult_params
+{
+    bool _ret;
+    int32_t pipe;
+    uint64_t call;
+    void *w_callback;
+    int w_callback_len;
+    int id;
+    bool *failed;
+};
+
+struct steamclient_Steam_BGetCallback_params
+{
+    bool _ret;
+    uint32_t pipe;
+    w_CallbackMsg_t *w_msg;
+    int32_t *ignored;
+    u_CallbackMsg_t *u_msg;
+};
+
+struct steamclient_callback_message_receive_params
+{
+    u_CallbackMsg_t *u_msg;
+    w_CallbackMsg_t *w_msg;
+};
+
+struct steamclient_Steam_FreeLastCallback_params
+{
+    bool _ret;
+    uint32_t pipe;
+};
+
+struct steamclient_Steam_ReleaseThreadLocalMemory_params
+{
+    int thread_exit;
+};
+
+struct steamclient_Steam_IsKnownInterface_params
+{
+    bool _ret;
+    const char *version;
+};
+
+struct steamclient_Steam_NotifyMissingInterface_params
+{
+    int32_t pipe;
+    const char *version;
+};
+
+struct steamclient_networking_messages_receive_144_params
+{
+    uint32_t count;
+    w_SteamNetworkingMessage_t_144 **w_msgs;
+};
+
+struct steamclient_networking_messages_receive_147_params
+{
+    uint32_t count;
+    w_SteamNetworkingMessage_t_147 **w_msgs;
+};
+
+struct steamclient_networking_messages_receive_153a_params
+{
+    uint32_t count;
+    w_SteamNetworkingMessage_t_153a **w_msgs;
+};
+
+struct steamclient_networking_message_release_147_params
+{
+    w_SteamNetworkingMessage_t_147 *w_msg;
+};
+
+struct steamclient_networking_message_release_153a_params
+{
+    w_SteamNetworkingMessage_t_153a *w_msg;
+};
 
 struct networking_message_pool;
 struct networking_message
@@ -99,12 +178,6 @@ struct networking_message
         w_SteamNetworkingMessage_t_153a w_msg_153a;
     };
 };
-
-extern void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMessage_t_144 **w_msgs );
-extern void unix_networking_messages_receive_147( uint32_t count, w_SteamNetworkingMessage_t_147 **w_msgs );
-extern void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **w_msgs );
-extern void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg );
-extern void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg );
 
 typedef NTSTATUS (*unixlib_entry_t)( void *args );
 extern const unixlib_entry_t __wine_unix_call_funcs[];

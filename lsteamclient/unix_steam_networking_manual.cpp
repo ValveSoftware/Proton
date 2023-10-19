@@ -24,13 +24,14 @@ static void receive_messages_utow_144( uint32_t count, u_SteamNetworkingMessage_
     }
 }
 
-void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMessage_t_144 **w_msgs )
+NTSTATUS steamclient_networking_messages_receive_144( void *args )
 {
+    struct steamclient_networking_messages_receive_144_params *params = (struct steamclient_networking_messages_receive_144_params *)args;
     uint32_t i;
 
-    for (i = 0; i < count; i++)
+    for (i = 0; i < params->count; i++)
     {
-        struct networking_message *message = CONTAINING_RECORD( w_msgs[i], struct networking_message, w_msg_144 );
+        struct networking_message *message = CONTAINING_RECORD( params->w_msgs[i], struct networking_message, w_msg_144 );
         w_SteamNetworkingMessage_t_144 *w_msg = &message->w_msg_144;
         u_SteamNetworkingMessage_t_144 *u_msg = message->u_msg_144;
 
@@ -38,6 +39,8 @@ void unix_networking_messages_receive_144( uint32_t count, w_SteamNetworkingMess
         u_msg->m_pfnRelease( u_msg );
         message->u_msg_144 = NULL;
     }
+
+    return 0;
 }
 
 /* ISteamNetworkingSockets_SteamNetworkingSockets002 */
@@ -108,13 +111,14 @@ static void receive_messages_utow_147( uint32_t count, u_SteamNetworkingMessage_
     }
 }
 
-void unix_networking_messages_receive_147( uint32_t count, w_SteamNetworkingMessage_t_147 **w_msgs )
+NTSTATUS steamclient_networking_messages_receive_147( void *args )
 {
+    struct steamclient_networking_messages_receive_147_params *params = (struct steamclient_networking_messages_receive_147_params *)args;
     uint32_t i;
 
-    for (i = 0; i < count; i++)
+    for (i = 0; i < params->count; i++)
     {
-        struct networking_message *message = CONTAINING_RECORD( w_msgs[i], struct networking_message, w_msg_147 );
+        struct networking_message *message = CONTAINING_RECORD( params->w_msgs[i], struct networking_message, w_msg_147 );
         w_SteamNetworkingMessage_t_147 *w_msg = &message->w_msg_147;
         u_SteamNetworkingMessage_t_147 *u_msg = message->u_msg_147;
 
@@ -122,6 +126,8 @@ void unix_networking_messages_receive_147( uint32_t count, w_SteamNetworkingMess
         u_msg->m_pfnRelease( u_msg );
         message->u_msg_147 = NULL;
     }
+
+    return 0;
 }
 
 static void U_STDCALL u_SteamNetworkingMessage_t_147_FreeData( u_SteamNetworkingMessage_t_147 *msg )
@@ -164,7 +170,7 @@ static void send_messages_wtou_147( uint32_t count, w_SteamNetworkingMessage_t_1
     }
 }
 
-void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg )
+static void networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg )
 {
     struct networking_message *message = CONTAINING_RECORD( w_msg, struct networking_message, w_msg_147 );
     u_SteamNetworkingMessage_t_147 *u_msg = message->u_msg_147;
@@ -172,6 +178,13 @@ void unix_networking_message_release_147( w_SteamNetworkingMessage_t_147 *w_msg 
     if (!message->u_msg_147) return;
     u_msg->m_pfnRelease( u_msg );
     message->u_msg_147 = NULL;
+}
+
+NTSTATUS steamclient_networking_message_release_147( void *args )
+{
+    struct steamclient_networking_message_release_147_params *params = (struct steamclient_networking_message_release_147_params *)args;
+    networking_message_release_147( params->w_msg );
+    return 0;
 }
 
 /* ISteamNetworkingSockets_SteamNetworkingSockets006 */
@@ -389,13 +402,14 @@ static void receive_messages_utow_153a( uint32_t count, u_SteamNetworkingMessage
     }
 }
 
-void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetworkingMessage_t_153a **w_msgs )
+NTSTATUS steamclient_networking_messages_receive_153a( void *args )
 {
+    struct steamclient_networking_messages_receive_153a_params *params = (struct steamclient_networking_messages_receive_153a_params *)args;
     uint32_t i;
 
-    for (i = 0; i < count; i++)
+    for (i = 0; i < params->count; i++)
     {
-        struct networking_message *message = CONTAINING_RECORD( w_msgs[i], struct networking_message, w_msg_153a );
+        struct networking_message *message = CONTAINING_RECORD( params->w_msgs[i], struct networking_message, w_msg_153a );
         w_SteamNetworkingMessage_t_153a *w_msg = &message->w_msg_153a;
         u_SteamNetworkingMessage_t_153a *u_msg = message->u_msg_153a;
 
@@ -403,6 +417,8 @@ void unix_networking_messages_receive_153a( uint32_t count, w_SteamNetworkingMes
         u_msg->m_pfnRelease( u_msg );
         message->u_msg_153a = NULL;
     }
+
+    return 0;
 }
 
 static void U_STDCALL u_SteamNetworkingMessage_t_153a_FreeData( u_SteamNetworkingMessage_t_153a *msg )
@@ -446,7 +462,7 @@ static void send_messages_wtou_153a( uint32_t count, w_SteamNetworkingMessage_t_
     }
 }
 
-void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg )
+static void networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_msg )
 {
     struct networking_message *message = CONTAINING_RECORD( w_msg, struct networking_message, w_msg_153a );
     u_SteamNetworkingMessage_t_153a *u_msg = message->u_msg_153a;
@@ -454,6 +470,13 @@ void unix_networking_message_release_153a( w_SteamNetworkingMessage_t_153a *w_ms
     if (!message->u_msg_153a) return;
     u_msg->m_pfnRelease( u_msg );
     message->u_msg_153a = NULL;
+}
+
+NTSTATUS steamclient_networking_message_release_153a( void *args )
+{
+    struct steamclient_networking_message_release_153a_params *params = (struct steamclient_networking_message_release_153a_params *)args;
+    networking_message_release_153a( params->w_msg );
+    return 0;
 }
 
 /* ISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 */

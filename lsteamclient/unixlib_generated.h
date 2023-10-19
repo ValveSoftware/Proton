@@ -45560,6 +45560,21 @@ struct ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params
 
 enum unix_funcs
 {
+    unix_steamclient_init,
+    unix_steamclient_next_callback,
+    unix_steamclient_CreateInterface,
+    unix_steamclient_Steam_GetAPICallResult,
+    unix_steamclient_Steam_BGetCallback,
+    unix_steamclient_callback_message_receive,
+    unix_steamclient_Steam_FreeLastCallback,
+    unix_steamclient_Steam_ReleaseThreadLocalMemory,
+    unix_steamclient_Steam_IsKnownInterface,
+    unix_steamclient_Steam_NotifyMissingInterface,
+    unix_steamclient_networking_messages_receive_144,
+    unix_steamclient_networking_messages_receive_147,
+    unix_steamclient_networking_messages_receive_153a,
+    unix_steamclient_networking_message_release_147,
+    unix_steamclient_networking_message_release_153a,
     unix_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps,
     unix_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps,
     unix_ISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName,
