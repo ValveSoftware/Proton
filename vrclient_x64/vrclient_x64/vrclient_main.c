@@ -31,8 +31,7 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-static void *vrclient_lib;
-struct compositor_data compositor_data;
+struct compositor_data compositor_data = {0};
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -45,19 +44,14 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             break;
 
         case DLL_PROCESS_DETACH:
-            if (vrclient_lib)
+            if (compositor_data.client_core_linux_side)
             {
-                if (compositor_data.client_core_linux_side)
+                struct cppIVRClientCore_IVRClientCore_003_Cleanup_params params =
                 {
-                    struct cppIVRClientCore_IVRClientCore_003_Cleanup_params params =
-                    {
-                        .linux_side = compositor_data.client_core_linux_side,
-                    };
-                    cppIVRClientCore_IVRClientCore_003_Cleanup( &params );
-                    compositor_data.client_core_linux_side = NULL;
-                }
-                dlclose(vrclient_lib);
-                vrclient_lib = NULL;
+                    .linux_side = compositor_data.client_core_linux_side,
+                };
+                cppIVRClientCore_IVRClientCore_003_Cleanup( &params );
+                compositor_data.client_core_linux_side = NULL;
             }
             break;
     }
@@ -200,14 +194,13 @@ struct w_steam_iface *create_win_interface(const char *name, void *linux_side)
     return NULL;
 }
 
-static void *(*vrclient_HmdSystemFactory)(const char *name, int *return_code);
-static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
-
 static int load_vrclient(void)
 {
     static const WCHAR PROTON_VR_RUNTIME_W[] = {'P','R','O','T','O','N','_','V','R','_','R','U','N','T','I','M','E',0};
+    static BOOL loaded;
+
+    struct vrclient_init_params params = {0};
     WCHAR pathW[PATH_MAX];
-    char *pathU;
     DWORD sz;
 
 #ifdef _WIN64
@@ -216,8 +209,7 @@ static int load_vrclient(void)
     static const char append_path[] = "/bin/vrclient.so";
 #endif
 
-    if(vrclient_lib)
-        return 1;
+    if (loaded) return 1;
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
     if(!GetEnvironmentVariableW(PROTON_VR_RUNTIME_W, pathW, ARRAY_SIZE(pathW)))
@@ -255,63 +247,38 @@ static int load_vrclient(void)
         return 0;
     }
 
-    pathU = HeapAlloc(GetProcessHeap(), 0, sz + sizeof(append_path));
+    params.unix_path = HeapAlloc( GetProcessHeap(), 0, sz + sizeof(append_path) );
 
-    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, pathU, sz, NULL, NULL);
+    sz = WideCharToMultiByte( CP_UNIXCP, 0, pathW, -1, params.unix_path, sz, NULL, NULL );
     if(!sz)
     {
         ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
-        HeapFree(GetProcessHeap(), 0, pathU);
+        HeapFree(GetProcessHeap(), 0, params.unix_path);
         return 0;
     }
 
-    strcat(pathU, append_path);
+    strcat( params.unix_path, append_path );
 
-    TRACE("got openvr runtime path: %s\n", pathU);
+    TRACE( "got openvr runtime path: %s\n", params.unix_path );
 
-    vrclient_lib = dlopen(pathU, RTLD_NOW);
-    if(!vrclient_lib){
-        TRACE("unable to load vrclient.so\n");
-        HeapFree(GetProcessHeap(), 0, pathU);
-        return 0;
-    }
+    if (unix_vrclient_init( &params )) loaded = TRUE;
 
-    vrclient_HmdSystemFactory = dlsym(vrclient_lib, "HmdSystemFactory");
-    if(!vrclient_HmdSystemFactory){
-        ERR("unable to load HmdSystemFactory method\n");
-        HeapFree(GetProcessHeap(), 0, pathU);
-        return 0;
-    }
-
-    vrclient_VRClientCoreFactory = dlsym(vrclient_lib, "VRClientCoreFactory");
-    if(!vrclient_VRClientCoreFactory){
-        ERR("unable to load VRClientCoreFactory method\n");
-        HeapFree(GetProcessHeap(), 0, pathU);
-        return 0;
-    }
-
-    HeapFree(GetProcessHeap(), 0, pathU);
-    return 1;
+    HeapFree( GetProcessHeap(), 0, params.unix_path );
+    return loaded;
 }
 
 void *CDECL HmdSystemFactory(const char *name, int *return_code)
 {
     TRACE("name: %s, return_code: %p\n", name, return_code);
-
-    if(!load_vrclient())
-        return NULL;
-
-    return create_win_interface(name, vrclient_HmdSystemFactory(name, return_code));
+    if (!load_vrclient()) return NULL;
+    return create_win_interface( name, unix_HmdSystemFactory( name, return_code ) );
 }
 
 void *CDECL VRClientCoreFactory(const char *name, int *return_code)
 {
     TRACE("name: %s, return_code: %p\n", name, return_code);
-
-    if(!load_vrclient())
-        return NULL;
-
-    return create_win_interface(name, vrclient_VRClientCoreFactory(name, return_code));
+    if (!load_vrclient()) return NULL;
+    return create_win_interface( name, unix_VRClientCoreFactory( name, return_code ) );
 }
 
 static VkDevice_T *(WINAPI *p_get_native_VkDevice)( VkDevice_T * );

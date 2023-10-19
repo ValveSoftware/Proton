@@ -141,4 +141,5 @@ SOURCES = \
 	vrclient_x64/json_converter.cpp \
 	vrclient_x64/jsoncpp.cpp \
 	vrclient_x64/unix_vrrendermodels_manual.cpp \
+	vrclient_x64/unixlib.cpp \
 	vrclient_x64/unixlib_generated.cpp \
