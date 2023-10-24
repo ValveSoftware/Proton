@@ -275,7 +275,7 @@ const char *steamclient_dos_to_unix_path( const char *src, int is_url )
 done:
     len = strlen( buffer );
     if (!(dst = HeapAlloc( GetProcessHeap(), 0, len + 1 ))) return NULL;
-    memcpy( dst, buffer, len );
+    memcpy( dst, buffer, len + 1 );
     return dst;
 }
 
