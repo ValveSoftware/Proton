@@ -1216,7 +1216,7 @@ run:
 
         if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
         {
-            WINE_ERR("Failed to execture %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
+            WINE_ERR("Failed to execute %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
             if (game_process && ret == SE_ERR_NOASSOC && link2ea)
             {
                 /* Try to uninstall EA desktop so it is set up from prerequisites on the next run. */
