@@ -103,7 +103,7 @@ char *vrclient_dos_to_unix_path( const char *src )
     if (!src) return NULL;
 
     *dst = 0;
-    if (*src) goto done;
+    if (!*src) goto done;
 
     if(IS_ABSOLUTE(src)){
         /* absolute path, use wine conversion */
@@ -146,7 +146,7 @@ char *vrclient_dos_to_unix_path( const char *src )
 done:
     len = strlen( buffer );
     if (!(dst = HeapAlloc( GetProcessHeap(), 0, len + 1 ))) return NULL;
-    memcpy( dst, buffer, len );
+    memcpy( dst, buffer, len + 1 );
     return dst;
 }
 
