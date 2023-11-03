@@ -1058,7 +1058,10 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
-        if appid == "1621680":
+        if appid in [
+                "1621680",
+                "359870",
+                ]:
             ret.add("noforcelgadd")
 
         if appid in [
