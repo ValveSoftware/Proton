@@ -1427,6 +1427,9 @@ class Session:
 
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+        else:
+            if "noforcelgadd" in self.compat_config:
+                self.env["WINE_LARGE_ADDRESS_AWARE"] = "0"
 
         if "heapdelayfree" in self.compat_config:
             self.env["WINE_HEAP_DELAY_FREE"] = "1"
