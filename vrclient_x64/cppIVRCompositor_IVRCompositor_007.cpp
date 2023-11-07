@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRCompositor_IVRCompositor_007_GetLastError( void *args )
 {
     struct IVRCompositor_IVRCompositor_007_GetLastError_params *params = (struct IVRCompositor_IVRCompositor_007_GetLastError_params *)args;

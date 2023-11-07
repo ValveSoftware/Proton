@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRResources_IVRResources_001_LoadSharedResource( void *args )
 {
     struct IVRResources_IVRResources_001_LoadSharedResource_params *params = (struct IVRResources_IVRResources_001_LoadSharedResource_params *)args;

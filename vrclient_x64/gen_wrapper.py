@@ -895,6 +895,9 @@ def handle_class(klass):
 
         out(u'/* This file is auto-generated, do not edit. */\n')
         out(u'#include "unix_private.h"\n\n')
+        out(u'#if 0\n')
+        out(u'#pragma makedep unix\n')
+        out(u'#endif\n\n')
 
         for method in klass.methods:
             if type(method) is Destructor:
@@ -1610,8 +1613,11 @@ with open(u"unixlib_generated.h", "w") as file:
 with open('unixlib_generated.cpp', 'w') as file:
     out = file.write
 
-    out(u'/* This file is auto-generated, do not edit. */\n\n')
+    out(u'/* This file is auto-generated, do not edit. */\n')
     out(u'#include "unix_private.h"\n\n')
+    out(u'#if 0\n')
+    out(u'#pragma makedep unix\n')
+    out(u'#endif\n\n')
 
     out(u'extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =\n')
     out(u'{\n')

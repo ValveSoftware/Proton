@@ -2,8 +2,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <linux/limits.h>
-
 #ifndef __cplusplus
 #include "unixlib.h"
 #include "wine/debug.h"

@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 static u_VRVulkanTextureData_t *unwrap_texture_vkdata( const w_VRVulkanTextureData_t *w_vkdata, u_VRVulkanTextureData_t *u_vkdata )
 {
     if (!w_vkdata) return NULL;

@@ -1,8 +1,9 @@
 MODULE     = vrclient.dll
+UNIXLIB    = vrclient.so
 MODULE_x64 = vrclient_x64.dll
+UNIXLIB_x64= vrclient_x64.so
 IMPORTS    = advapi32
 
-EXTRADLLFLAGS = -mcygwin -static-libgcc -static-libstdc++ -ldl
 EXTRADEFS = -DWINE_NO_LONG_TYPES -DGNUC
 
 SOURCES = \

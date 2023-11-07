@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRIOBuffer_IVRIOBuffer_002_Open( void *args )
 {
     struct IVRIOBuffer_IVRIOBuffer_002_Open_params *params = (struct IVRIOBuffer_IVRIOBuffer_002_Open_params *)args;

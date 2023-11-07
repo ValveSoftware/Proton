@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 static u_Texture_t unwrap_texture_data( const w_Texture_t *w_texture, u_VRVulkanTextureData_t *u_vkdata )

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy( void *args )
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params *params = (struct IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params *)args;

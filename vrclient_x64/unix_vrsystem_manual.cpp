@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 static VkInstance_T *unwrap_instance( uint32_t type, VkInstance_T *instance )

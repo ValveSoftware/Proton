@@ -11,12 +11,12 @@
 
 #include "vrclient_structs.h"
 
-#include "wine/unixlib.h"
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif /* __cplusplus */
+
+#include "wine/unixlib.h"
 
 #include <pshpack1.h>
 
@@ -69,10 +69,7 @@ struct vrclient_VRClientCoreFactory_params
 
 #include <poppack.h>
 
-typedef NTSTATUS (*unixlib_entry_t)( void *args );
-extern const unixlib_entry_t __wine_unix_call_funcs[];
-
-#define VRCLIENT_CALL( code, args ) __wine_unix_call_funcs[unix_ ## code]( args )
+#define VRCLIENT_CALL( code, args ) WINE_UNIX_CALL( unix_ ## code, args )
 
 #ifdef __cplusplus
 } /* extern "C" */

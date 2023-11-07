@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRCompositor_IVRCompositor_009_SetTrackingSpace( void *args )
 {
     struct IVRCompositor_IVRCompositor_009_SetTrackingSpace_params *params = (struct IVRCompositor_IVRCompositor_009_SetTrackingSpace_params *)args;

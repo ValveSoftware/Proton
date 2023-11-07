@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async( void *args )
 {
     struct IVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async_params *params = (struct IVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async_params *)args;

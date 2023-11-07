@@ -1,5 +1,9 @@
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 /* LoadRenderModel(_Async) / FreeRenderModel */
 
 NTSTATUS IVRRenderModels_IVRRenderModels_002_LoadRenderModel( void *args )

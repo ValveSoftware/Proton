@@ -436,7 +436,8 @@ $(OBJ)/.wine-post-build32:
 ## vrclient
 ##
 
-VRCLIENT_DEPENDS = wine
+VRCLIENT_LDFLAGS = -static-libgcc -static-libstdc++
+VRCLIENT_DEPENDS = vulkan-headers wine
 
 $(eval $(call rules-source,vrclient,$(SRCDIR)/vrclient_x64))
 $(eval $(call rules-makedep,vrclient,32))

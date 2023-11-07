@@ -1,6 +1,9 @@
 /* This file is auto-generated, do not edit. */
-
 #include "unix_private.h"
+
+#if 0
+#pragma makedep unix
+#endif
 
 extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
 {

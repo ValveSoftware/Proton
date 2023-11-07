@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRInput_IVRInput_004_SetActionManifestPath( void *args )
 {
     struct IVRInput_IVRInput_004_SetActionManifestPath_params *params = (struct IVRInput_IVRInput_004_SetActionManifestPath_params *)args;

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVROverlay_IVROverlay_027_FindOverlay( void *args )
 {
     struct IVROverlay_IVROverlay_027_FindOverlay_params *params = (struct IVROverlay_IVROverlay_027_FindOverlay_params *)args;

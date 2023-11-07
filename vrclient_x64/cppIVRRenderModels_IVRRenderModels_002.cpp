@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRRenderModels_IVRRenderModels_002_GetRenderModelName( void *args )
 {
     struct IVRRenderModels_IVRRenderModels_002_GetRenderModelName_params *params = (struct IVRRenderModels_IVRRenderModels_002_GetRenderModelName_params *)args;

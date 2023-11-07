@@ -3,6 +3,10 @@
 #include <winternl.h>
 #include <dlfcn.h>
 
+#if 0
+#pragma makedep unix
+#endif
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 static void *(*p_HmdSystemFactory)( const char *name, int *return_code );

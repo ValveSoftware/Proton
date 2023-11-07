@@ -21,6 +21,8 @@
 
 #include "wine/unixlib.h"
 
+#define PATH_MAX 4096
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 CREATE_TYPE_INFO_VTABLE;
@@ -39,6 +41,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             init_type_info_rtti( (char *)instance );
             init_rtti( (char *)instance );
 #endif /* __x86_64__ */
+            __wine_init_unix_call();
             break;
 
         case DLL_PROCESS_DETACH:

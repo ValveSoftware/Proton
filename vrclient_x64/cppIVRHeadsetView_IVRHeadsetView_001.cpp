@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize( void *args )
 {
     struct IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params *params = (struct IVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewSize_params *)args;

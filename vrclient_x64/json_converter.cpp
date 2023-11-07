@@ -1,21 +1,57 @@
 #include <stdarg.h>
 #include <stddef.h>
 
-#include <windef.h>
-#include <winbase.h>
+#include "ntstatus.h"
+#define WIN32_NO_STATUS
+#include "windef.h"
+#include "winbase.h"
 
+#undef min
+#undef max
 #undef wcsncpy
-#include <windows.h>
-#include <wine/debug.h>
+#include <algorithm>
+#include <string>
+#include <cwchar>
+#include "json/json.h"
+
+#include "unix_private.h"
+
+#include <stdlib.h>
+#include <linux/limits.h>
+
+#if 0
+#pragma makedep unix
+#endif
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-#include "unix_private.h"
-#include <linux/limits.h>
-
-#include "json/json.h"
-
 #define IS_ABSOLUTE( x ) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
+
+static char *get_unix_file_name( const WCHAR *path )
+{
+    UNICODE_STRING nt_name;
+    OBJECT_ATTRIBUTES attr;
+    NTSTATUS status;
+    ULONG size = 256;
+    char *buffer;
+
+    nt_name.Buffer = (WCHAR *)path;
+    nt_name.MaximumLength = nt_name.Length = lstrlenW( path ) * sizeof(WCHAR);
+    InitializeObjectAttributes( &attr, &nt_name, 0, 0, NULL );
+    for (;;)
+    {
+        if (!(buffer = (char *)malloc( size ))) return NULL;
+        status = wine_nt_to_unix_file_name( &attr, buffer, &size, FILE_OPEN_IF );
+        if (status != STATUS_BUFFER_TOO_SMALL) break;
+        free( buffer );
+    }
+    if (status && status != STATUS_NO_SUCH_FILE)
+    {
+        free( buffer );
+        return NULL;
+    }
+    return buffer;
+}
 
 char *vrclient_dos_to_unix_path( const char *src )
 {
@@ -32,14 +68,18 @@ char *vrclient_dos_to_unix_path( const char *src )
     if (IS_ABSOLUTE( src ))
     {
         /* absolute path, use wine conversion */
-        WCHAR srcW[PATH_MAX] = {0};
+        WCHAR srcW[PATH_MAX] = {'\\', '?', '?', '\\', 0}, *tmp;
         char *unix_path;
         uint32_t r;
 
-        r = MultiByteToWideChar( CP_UNIXCP, 0, src, -1, srcW, PATH_MAX );
-        if (r == 0) return NULL;
+        r = ntdll_umbstowcs( src, -1, srcW + 4, PATH_MAX - 4 );
+        if (r == 0) unix_path = NULL;
+        else
+        {
+            for (tmp = srcW; *tmp; ++tmp) if (*tmp == '/') *tmp = '\\';
+            unix_path = get_unix_file_name( srcW );
+        }
 
-        unix_path = wine_get_unix_file_name( srcW );
         if (!unix_path)
         {
             WARN( "Unable to convert DOS filename to unix: %s\n", src );
@@ -52,7 +92,7 @@ char *vrclient_dos_to_unix_path( const char *src )
             lstrcpynA( dst, unix_path, PATH_MAX );
         }
 
-        HeapFree( GetProcessHeap(), 0, unix_path );
+        free( unix_path );
     }
     else
     {
@@ -71,7 +111,7 @@ char *vrclient_dos_to_unix_path( const char *src )
 
 done:
     len = strlen( buffer ) + 1;
-    if (!(dst = (char *)HeapAlloc( GetProcessHeap(), 0, len ))) return NULL;
+    if (!(dst = (char *)malloc( len ))) return NULL;
     memcpy( dst, buffer, len );
 
     TRACE( "-> %s\n", debugstr_a(dst) );
@@ -80,14 +120,16 @@ done:
 
 void vrclient_free_path( char *path )
 {
-    HeapFree( GetProcessHeap(), 0, path );
+    free( path );
 }
 
 /* returns the number of bytes written to dst, not including the NUL terminator */
 unsigned int vrclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst, uint32_t dst_bytes )
 {
+    NTSTATUS status;
+    uint32_t r = 0;
+    ULONG size = 0;
     WCHAR *dosW;
-    uint32_t r;
 
     TRACE( "api_result %u, src %s, dst %p, dst_bytes %u\n", api_result, debugstr_a(src), dst, dst_bytes );
 
@@ -97,16 +139,25 @@ unsigned int vrclient_unix_path_to_dos_path( bool api_result, const char *src, c
         return 0;
     }
 
-    dosW = wine_get_dos_file_name( src );
-    if (!dosW)
+    status = wine_unix_to_nt_file_name( src, NULL, &size );
+    if (status != STATUS_BUFFER_TOO_SMALL)
     {
-        WARN( "Unable to convert unix filename to DOS: %s\n", src );
+        WARN( "Unable to convert unix filename to DOS: %s, status %#x.\n", debugstr_a(src), status );
         *dst = 0;
         return 0;
     }
 
-    r = WideCharToMultiByte( CP_ACP, 0, dosW, -1, dst, dst_bytes, NULL, NULL );
-    HeapFree( GetProcessHeap(), 0, dosW );
+    dosW = (WCHAR *)malloc( size * sizeof(WCHAR) );
+    status = wine_unix_to_nt_file_name( src, dosW, &size );
+    if (!status) r = ntdll_wcstoumbs( dosW, size, dst, dst_bytes, FALSE );
+    else *dst = 0;
+    free( dosW );
+
+    if (!strncmp( dst, "\\??\\", 4 ))
+    {
+        memmove( dst, dst + 4, r - 4 );
+        r -= 4;
+    }
 
     TRACE( "-> dst %s, r %u\n", debugstr_a(dst), r );
     return r == 0 ? 0 : r - 1;
@@ -127,42 +178,21 @@ static bool ends_with(const std::string &s, char c)
 static bool convert_path_to_win(std::string &s)
 {
     bool need_slash = ends_with(s, '\\') || ends_with(s, '/');
+    WCHAR srcW[PATH_MAX] = {'\\', '?', '?', '\\', 0}, *tmp;
+    char *unix_path;
+    uint32_t sz;
 
-    DWORD sz = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, NULL, 0);
-    if(!sz)
-    {
-        return false;
-    }
+    sz = ntdll_umbstowcs( s.c_str(), -1, srcW + 4, PATH_MAX - 4 );
+    if (!sz) return false;
 
-    WCHAR *dos_path = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, sz * sizeof(WCHAR));
-    if(!dos_path)
-    {
-        return false;
-    }
-
-    sz = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, dos_path, sz);
-    if(!sz)
-    {
-        HeapFree(GetProcessHeap(), 0, dos_path);
-        return false;
-    }
-
-    char *unix_path = wine_get_unix_file_name(dos_path);
-    if(!unix_path)
-    {
-        HeapFree(GetProcessHeap(), 0, dos_path);
-        return false;
-    }
+    for (tmp = srcW; *tmp; ++tmp) if (*tmp == '/') *tmp = '\\';
+    if (!(unix_path = get_unix_file_name( srcW ))) return false;
 
     /* XXX assuming the system encoding is UTF-8 */
     s = unix_path;
+    free( unix_path );
 
-    if(need_slash)
-        s += '/';
-
-    HeapFree(GetProcessHeap(), 0, unix_path);
-    HeapFree(GetProcessHeap(), 0, dos_path);
-
+    if (need_slash) s += '/';
     return true;
 }
 

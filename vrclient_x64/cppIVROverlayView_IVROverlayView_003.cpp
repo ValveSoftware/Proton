@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVROverlayView_IVROverlayView_003_AcquireOverlayView( void *args )
 {
     struct IVROverlayView_IVROverlayView_003_AcquireOverlayView_params *params = (struct IVROverlayView_IVROverlayView_003_AcquireOverlayView_params *)args;

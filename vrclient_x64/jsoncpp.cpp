@@ -68,10 +68,9 @@ license you like.
 // End of content of file: LICENSE
 // //////////////////////////////////////////////////////////////////////
 
-
-
-
-
+#if 0
+#pragma makedep unix
+#endif
 
 #include "json/json.h"
 

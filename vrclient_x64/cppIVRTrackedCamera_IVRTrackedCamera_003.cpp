@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum( void *args )
 {
     struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum_params *params = (struct IVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum_params *)args;

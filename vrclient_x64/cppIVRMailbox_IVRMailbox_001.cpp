@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRMailbox_IVRMailbox_001_undoc1( void *args )
 {
     struct IVRMailbox_IVRMailbox_001_undoc1_params *params = (struct IVRMailbox_IVRMailbox_001_undoc1_params *)args;

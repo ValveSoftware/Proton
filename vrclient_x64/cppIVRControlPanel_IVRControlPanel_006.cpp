@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRControlPanel_IVRControlPanel_006_undoc1( void *args )
 {
     struct IVRControlPanel_IVRControlPanel_006_undoc1_params *params = (struct IVRControlPanel_IVRControlPanel_006_undoc1_params *)args;

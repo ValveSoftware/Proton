@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRApplications_IVRApplications_005_AddApplicationManifest( void *args )
 {
     struct IVRApplications_IVRApplications_005_AddApplicationManifest_params *params = (struct IVRApplications_IVRApplications_005_AddApplicationManifest_params *)args;

@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRRenderModels_IVRRenderModels_001_LoadRenderModel( void *args )
 {
     struct IVRRenderModels_IVRRenderModels_001_LoadRenderModel_params *params = (struct IVRRenderModels_IVRRenderModels_001_LoadRenderModel_params *)args;

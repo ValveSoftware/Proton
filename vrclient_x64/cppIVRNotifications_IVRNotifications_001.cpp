@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRNotifications_IVRNotifications_001_GetErrorString( void *args )
 {
     struct IVRNotifications_IVRNotifications_001_GetErrorString_params *params = (struct IVRNotifications_IVRNotifications_001_GetErrorString_params *)args;

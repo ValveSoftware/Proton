@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRDriverManager_IVRDriverManager_001_GetDriverCount( void *args )
 {
     struct IVRDriverManager_IVRDriverManager_001_GetDriverCount_params *params = (struct IVRDriverManager_IVRDriverManager_001_GetDriverCount_params *)args;

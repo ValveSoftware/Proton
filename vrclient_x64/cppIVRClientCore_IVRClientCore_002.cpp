@@ -1,6 +1,10 @@
 /* This file is auto-generated, do not edit. */
 #include "unix_private.h"
 
+#if 0
+#pragma makedep unix
+#endif
+
 NTSTATUS IVRClientCore_IVRClientCore_002_Cleanup( void *args )
 {
     struct IVRClientCore_IVRClientCore_002_Cleanup_params *params = (struct IVRClientCore_IVRClientCore_002_Cleanup_params *)args;
