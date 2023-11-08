@@ -269,21 +269,6 @@ static void post_present_handoff_init( void *linux_side, unsigned int version )
 {
     if (!compositor_data.dxvk_device) return;
     compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
-
-    if (!compositor_data.d3d11_explicit_handoff && version >= 21)
-    {
-        struct cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode_params params =
-        {
-            .linux_side = linux_side,
-            .bExplicitTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
-        };
-
-        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
-         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
-         * in lockups and crashes. */
-        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode( &params );
-        compositor_data.d3d11_explicit_handoff = TRUE;
-    }
 }
 
 static void post_present_handoff_done(void)
@@ -297,22 +282,11 @@ static void wait_get_poses_init( void *linux_side )
 {
     if (!compositor_data.dxvk_device) return;
     compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
-
-    if (compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
-    {
-        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
-         * if explicit timing mode is set. */
-        cppIVRCompositor_IVRCompositor_022_PostPresentHandoff( linux_side );
-    }
 }
 
 static void wait_get_poses_done( void *linux_side )
 {
     if (!compositor_data.dxvk_device) return;
-
-    if (compositor_data.d3d11_explicit_handoff)
-        cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData( linux_side );
-
     compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue( compositor_data.dxvk_device );
 }
 
@@ -1031,7 +1005,23 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses( s
     };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct cppIVRCompositor_IVRCompositor_021_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        cppIVRCompositor_IVRCompositor_021_PostPresentHandoff( &params );
+    }
+
     cppIVRCompositor_IVRCompositor_021_WaitGetPoses( &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData( &params );
+    }
+
     wait_get_poses_done( _this->u_iface );
     return params._ret;
 }
@@ -1064,6 +1054,22 @@ void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff( struct w_
     struct cppIVRCompositor_IVRCompositor_021_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 21 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .bExplicitTimingMode = TRUE,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode( &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
     cppIVRCompositor_IVRCompositor_021_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
@@ -1113,7 +1119,23 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses( s
     };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct cppIVRCompositor_IVRCompositor_022_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        cppIVRCompositor_IVRCompositor_022_PostPresentHandoff( &params );
+    }
+
     cppIVRCompositor_IVRCompositor_022_WaitGetPoses( &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData( &params );
+    }
+
     wait_get_poses_done( _this->u_iface );
     return params._ret;
 }
@@ -1146,6 +1168,22 @@ void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff( struct w_
     struct cppIVRCompositor_IVRCompositor_022_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 22 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode( &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
     cppIVRCompositor_IVRCompositor_022_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
@@ -1195,7 +1233,23 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses( s
     };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct cppIVRCompositor_IVRCompositor_024_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        cppIVRCompositor_IVRCompositor_024_PostPresentHandoff( &params );
+    }
+
     cppIVRCompositor_IVRCompositor_024_WaitGetPoses( &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData( &params );
+    }
+
     wait_get_poses_done( _this->u_iface );
     return params._ret;
 }
@@ -1228,6 +1282,22 @@ void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff( struct w_
     struct cppIVRCompositor_IVRCompositor_024_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 24 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode( &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
     cppIVRCompositor_IVRCompositor_024_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
@@ -1277,7 +1347,23 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses( s
     };
     TRACE( "%p\n", _this );
     wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct cppIVRCompositor_IVRCompositor_026_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        cppIVRCompositor_IVRCompositor_026_PostPresentHandoff( &params );
+    }
+
     cppIVRCompositor_IVRCompositor_026_WaitGetPoses( &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        cppIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData( &params );
+    }
+
     wait_get_poses_done( _this->u_iface );
     return params._ret;
 }
@@ -1310,6 +1396,22 @@ void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff( struct w_
     struct cppIVRCompositor_IVRCompositor_026_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 26 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_026_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        cppIVRCompositor_IVRCompositor_026_SetExplicitTimingMode( &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
     cppIVRCompositor_IVRCompositor_026_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
@@ -1373,6 +1475,22 @@ void __thiscall winIVRCompositor_IVRCompositor_027_PostPresentHandoff( struct w_
     struct cppIVRCompositor_IVRCompositor_027_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
     TRACE( "%p\n", _this );
     post_present_handoff_init( _this->u_iface, 27 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct cppIVRCompositor_IVRCompositor_027_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        cppIVRCompositor_IVRCompositor_027_SetExplicitTimingMode( &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
     cppIVRCompositor_IVRCompositor_027_PostPresentHandoff( &params );
     post_present_handoff_done();
 }
