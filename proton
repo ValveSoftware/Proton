@@ -1228,6 +1228,7 @@ def default_compat_config():
                 "1888160", #Armored Core VI
                 "814380", #Sekiro: Shadows Die Twice
                 "2379390", #Rainbow Six Extraction
+                "883710", #Resident Evil 2
                 ]:
             ret.add("enableamdags")
 
