@@ -1226,6 +1226,7 @@ def default_compat_config():
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 "1446780", #monster hunter rise
                 "2379390", #Rainbow Six Extraction
+                "883710", #Resident Evil 2
                 ]:
             ret.add("enablenvapi")
 
