@@ -1240,6 +1240,7 @@ def default_compat_config():
                 "883710", #Resident Evil 2
                 "952060", #Resident Evil 3
                 "1196590", #Resident Evil Village
+                "418370", #Resident Evil 7 Biohazard
                 ]:
             ret.add("enableamdags")
 
