@@ -1227,6 +1227,7 @@ def default_compat_config():
                 "1446780", #monster hunter rise
                 "2379390", #Rainbow Six Extraction
                 "883710", #Resident Evil 2
+                "952060", #Resident Evil 3
                 ]:
             ret.add("enablenvapi")
 
