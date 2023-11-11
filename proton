@@ -1232,6 +1232,7 @@ def default_compat_config():
         if appid in [
                 "1245620", #Elden Ring
                 "1888160", #Armored Core VI
+                "1888930", #the last of us part 1
                 "814380", #Sekiro: Shadows Die Twice
                 "2379390", #Rainbow Six Extraction
                 "883710", #Resident Evil 2
