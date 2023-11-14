@@ -1231,6 +1231,10 @@ def default_compat_config():
                 "1196590", #Resident Evil Village
                 "418370", #Resident Evil 7 Biohazard
                 "990080", #Hogwarts Legacy
+                "530940", #BIOHAZARD 7 resident evil グロテスクVer.
+                "895950", #BIOHAZARD RE:2 Z Version
+                "1100830", #BIOHAZARD RE:3 Z Version
+                "1196600", #BIOHAZARD VILLAGE Z Version
                 ]:
             ret.add("enablenvapi")
 
@@ -1244,6 +1248,10 @@ def default_compat_config():
                 "1196590", #Resident Evil Village
                 "418370", #Resident Evil 7 Biohazard
                 "990080", #Hogwarts Legacy
+                "530940", #BIOHAZARD 7 resident evil グロテスクVer.
+                "895950", #BIOHAZARD RE:2 Z Version
+                "1100830", #BIOHAZARD RE:3 Z Version
+                "1196600", #BIOHAZARD VILLAGE Z Version
                 ]:
             ret.add("enableamdags")
 
