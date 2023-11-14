@@ -4,6 +4,6 @@ IMPORTS    = advapi32 dxgi
 EXTRADLLFLAGS = -mcygwin -lvulkan
 EXTRADEFS = -DWINE_NO_LONG_TYPES
 
-C_SRCS = \
+SOURCES = \
 	openxr.c \
 	openxr_thunks.c \
