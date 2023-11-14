@@ -5,7 +5,7 @@ IMPORTS    = advapi32
 EXTRADLLFLAGS = -mcygwin -static-libgcc -static-libstdc++ -ldl
 EXTRADEFS = -DWINE_NO_LONG_TYPES -DGNUC
 
-C_SRCS = \
+SOURCES = \
 	vrclient_x64/flatapi.c \
 	vrclient_x64/vrclient_main.c \
 	vrclient_x64/vrcompositor_manual.c \
@@ -34,8 +34,6 @@ C_SRCS = \
 	vrclient_x64/winIVRSettings.c \
 	vrclient_x64/winIVRSystem.c \
 	vrclient_x64/winIVRTrackedCamera.c \
-
-CXX_SRCS = \
 	vrclient_x64/cppIVRApplications_IVRApplications_001.cpp \
 	vrclient_x64/cppIVRApplications_IVRApplications_002.cpp \
 	vrclient_x64/cppIVRApplications_IVRApplications_003.cpp \
