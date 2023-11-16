@@ -305,7 +305,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_009_Submit( &params );
@@ -353,7 +353,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_010_Submit( &params );
@@ -401,7 +401,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_011_Submit( &params );
@@ -449,7 +449,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_012_Submit( &params );
@@ -497,7 +497,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_013_Submit( &params );
@@ -545,7 +545,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_014_Submit( &params );
@@ -593,7 +593,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_015_Submit( &params );
@@ -660,7 +660,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_016_Submit( &params );
@@ -727,7 +727,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_017_Submit( &params );
@@ -794,7 +794,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_018_Submit( &params );
@@ -861,7 +861,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_019_Submit( &params );
@@ -943,7 +943,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_020_Submit( &params );
@@ -1041,7 +1041,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_021_Submit( &params );
@@ -1155,7 +1155,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_022_Submit( &params );
@@ -1269,7 +1269,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_024_Submit( &params );
@@ -1383,7 +1383,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_026_Submit( &params );
@@ -1462,7 +1462,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct 
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &nSubmitFlags, &state );
+    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
     params.pTexture = state.submit;
     cppIVRCompositor_IVRCompositor_027_Submit( &params );
