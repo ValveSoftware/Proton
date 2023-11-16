@@ -225,7 +225,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -273,7 +273,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -321,7 +321,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -369,7 +369,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -417,7 +417,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -465,7 +465,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -513,7 +513,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -580,7 +580,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -647,7 +647,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -714,7 +714,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -781,7 +781,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -848,7 +848,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -931,7 +931,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -1030,7 +1030,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -1129,7 +1129,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -1228,7 +1228,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
@@ -1292,7 +1292,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_if
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
-    TRACE( "%p\n", _this );
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
