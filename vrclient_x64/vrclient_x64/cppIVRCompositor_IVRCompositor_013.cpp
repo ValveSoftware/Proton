@@ -41,14 +41,6 @@ NTSTATUS IVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex( void 
     return 0;
 }
 
-NTSTATUS IVRCompositor_IVRCompositor_013_Submit( void *args )
-{
-    struct IVRCompositor_IVRCompositor_013_Submit_params *params = (struct IVRCompositor_IVRCompositor_013_Submit_params *)args;
-    struct u_IVRCompositor_IVRCompositor_013 *iface = (struct u_IVRCompositor_IVRCompositor_013 *)params->linux_side;
-    params->_ret = (uint32_t)iface->Submit( params->eEye, params->pTexture, params->pBounds, params->nSubmitFlags );
-    return 0;
-}
-
 NTSTATUS IVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame( void *args )
 {
     struct IVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame_params *params = (struct IVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame_params *)args;

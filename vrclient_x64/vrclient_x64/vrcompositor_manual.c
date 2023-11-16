@@ -13,29 +13,16 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 struct submit_state
 {
-    void *submit;
     w_Texture_t texture;
     w_VRVulkanTextureArrayData_t vkdata;
-    union
-    {
-        struct
-        {
-            w_VRVulkanTextureData_t depth_vkdata;
-            w_VRTextureWithPoseAndDepth_t both;
-            w_VRTextureWithDepth_t depth;
-            w_VRTextureWithPose_t pose;
-        };
-        struct
-        {
-            VkImageLayout image_layout;
-            VkImageSubresourceRange subresources;
-            IDXGIVkInteropSurface *dxvk_surface;
-            IDXGIVkInteropDevice *dxvk_device;
-        };
-    };
+    VkImageLayout image_layout;
+    VkImageSubresourceRange subresources;
+    IDXGIVkInteropSurface *dxvk_surface;
+    IDXGIVkInteropDevice *dxvk_device;
 };
 
-static void load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags, struct submit_state *state )
+static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
+                                                        struct submit_state *state )
 {
     static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty;
     w_VRVulkanTextureData_t vkdata;
@@ -47,23 +34,23 @@ static void load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *textu
     if (!(texture_iface = texture->handle))
     {
         WARN( "No D3D11 texture %p.\n", texture );
-        return;
+        return texture;
     }
 
     if (FAILED(texture_iface->lpVtbl->QueryInterface( texture_iface, &IID_IDXGIVkInteropSurface,
                                                       (void **)&state->dxvk_surface )))
     {
         WARN( "Invalid D3D11 texture %p.\n", texture );
-        return;
+        return texture;
     }
 
     state->texture = vrclient_translate_texture_dxvk( texture, &vkdata, state->dxvk_surface, &state->dxvk_device,
                                                       &state->image_layout, &image_info );
     state->vkdata.m_nImage = vkdata.m_nImage;
-    state->vkdata.m_pDevice = get_native_VkDevice( vkdata.m_pDevice );
-    state->vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice( vkdata.m_pPhysicalDevice );
-    state->vkdata.m_pInstance = get_native_VkInstance( vkdata.m_pInstance );
-    state->vkdata.m_pQueue = get_native_VkQueue( vkdata.m_pQueue );
+    state->vkdata.m_pDevice = vkdata.m_pDevice;
+    state->vkdata.m_pPhysicalDevice = vkdata.m_pPhysicalDevice;
+    state->vkdata.m_pInstance = vkdata.m_pInstance;
+    state->vkdata.m_pQueue = vkdata.m_pQueue;
     state->vkdata.m_nQueueFamilyIndex = vkdata.m_nQueueFamilyIndex;
     state->vkdata.m_nWidth = vkdata.m_nWidth;
     state->vkdata.m_nHeight = vkdata.m_nHeight;
@@ -92,6 +79,8 @@ static void load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *textu
                                                          state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
     state->dxvk_device->lpVtbl->FlushRenderingCommands( state->dxvk_device );
     state->dxvk_device->lpVtbl->LockSubmissionQueue( state->dxvk_device );
+
+    return &state->texture;
 }
 
 static void free_compositor_texture_dxvk( struct submit_state *state )
@@ -103,56 +92,6 @@ static void free_compositor_texture_dxvk( struct submit_state *state )
                                                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout );
     state->dxvk_device->lpVtbl->Release( state->dxvk_device );
     state->dxvk_surface->lpVtbl->Release( state->dxvk_surface );
-}
-
-static void load_compositor_texture_vulkan( uint32_t eye, const w_Texture_t *texture, uint32_t flags, struct submit_state *state )
-{
-    w_VRVulkanTextureData_t *their_vkdata;
-
-    their_vkdata = texture->handle;
-
-    memcpy( &state->vkdata, their_vkdata, flags & Submit_VulkanTextureWithArrayData ? sizeof(w_VRVulkanTextureArrayData_t)
-                                                                                    : sizeof(w_VRVulkanTextureData_t) );
-
-    state->vkdata.m_pDevice = get_native_VkDevice( state->vkdata.m_pDevice );
-    state->vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice( state->vkdata.m_pPhysicalDevice );
-    state->vkdata.m_pInstance = get_native_VkInstance( state->vkdata.m_pInstance );
-    state->vkdata.m_pQueue = get_native_VkQueue( state->vkdata.m_pQueue );
-
-    switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-    {
-    case 0:
-        state->texture = *texture;
-        state->texture.handle = &state->vkdata;
-        break;
-
-    case Submit_TextureWithPose:
-        state->pose = *(w_VRTextureWithPose_t *)texture;
-        state->pose.handle = &state->vkdata;
-        state->submit = &state->pose;
-        break;
-
-    case Submit_TextureWithDepth:
-        state->depth = *(w_VRTextureWithDepth_t *)texture;
-        state->depth.handle = &state->vkdata;
-        state->submit = &state->depth;
-        break;
-
-    case Submit_TextureWithPose | Submit_TextureWithDepth:
-        state->both = *(w_VRTextureWithPoseAndDepth_t *)texture;
-        state->both.handle = &state->vkdata;
-
-        their_vkdata = state->both.depth.handle;
-        state->depth_vkdata = *their_vkdata;
-        state->depth_vkdata.m_pDevice = get_native_VkDevice( state->depth_vkdata.m_pDevice );
-        state->depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice( state->depth_vkdata.m_pPhysicalDevice );
-        state->depth_vkdata.m_pInstance = get_native_VkInstance( state->depth_vkdata.m_pInstance );
-        state->depth_vkdata.m_pQueue = get_native_VkQueue( state->depth_vkdata.m_pQueue );
-        state->both.depth.handle = &state->depth_vkdata;
-
-        state->submit = &state->both;
-        break;
-    }
 }
 
 struct set_skybox_override_state
@@ -277,20 +216,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_009_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -325,20 +264,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_010_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -373,20 +312,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_011_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -421,20 +360,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_012_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -469,20 +408,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_013_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -517,20 +456,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_014_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -565,20 +504,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_015_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -632,20 +571,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_016_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -699,20 +638,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_017_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -766,20 +705,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_018_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -833,20 +772,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_019_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -900,20 +839,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_020_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -983,20 +922,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_021_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1082,20 +1021,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_022_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1181,20 +1120,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_024_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1280,20 +1219,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_026_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1344,20 +1283,20 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_if
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
 {
-    struct submit_state state = {.texture = *pTexture, .submit = &state.texture};
+    struct submit_state state = {0};
     struct IVRCompositor_IVRCompositor_027_Submit_params params =
     {
         .linux_side = _this->u_iface,
         .eEye = eEye,
+        .pTexture = pTexture,
         .pBounds = pBounds,
         .nSubmitFlags = nSubmitFlags,
     };
     TRACE( "%p\n", _this );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX) load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
-    if (pTexture->eType == TextureType_Vulkan) load_compositor_texture_vulkan( eEye, pTexture, nSubmitFlags, &state );
-    params.pTexture = state.submit;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
