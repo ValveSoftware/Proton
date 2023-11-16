@@ -33,14 +33,6 @@ NTSTATUS IVRCompositor_IVRCompositor_010_GetLastPoses( void *args )
     return 0;
 }
 
-NTSTATUS IVRCompositor_IVRCompositor_010_Submit( void *args )
-{
-    struct IVRCompositor_IVRCompositor_010_Submit_params *params = (struct IVRCompositor_IVRCompositor_010_Submit_params *)args;
-    struct u_IVRCompositor_IVRCompositor_010 *iface = (struct u_IVRCompositor_IVRCompositor_010 *)params->linux_side;
-    params->_ret = (uint32_t)iface->Submit( params->eEye, params->pTexture, params->pBounds, params->nSubmitFlags );
-    return 0;
-}
-
 NTSTATUS IVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame( void *args )
 {
     struct IVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame_params *params = (struct IVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame_params *)args;
