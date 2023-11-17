@@ -323,7 +323,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeRenderModel( struct w
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_FreeRenderModel, &params );
-    free( model );
+    HeapFree( GetProcessHeap(), 0, model );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async( struct w_steam_iface *_this, const char *pchRenderModelName,
@@ -352,7 +352,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeRenderModel( struct w
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_FreeRenderModel, &params );
-    free( model );
+    HeapFree( GetProcessHeap(), 0, model );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async( struct w_steam_iface *_this, const char *pchRenderModelName,
@@ -381,7 +381,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeRenderModel( struct w
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_FreeRenderModel, &params );
-    free( model );
+    HeapFree( GetProcessHeap(), 0, model );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async( struct w_steam_iface *_this, const char *pchRenderModelName,
@@ -410,7 +410,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel( struct w
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_FreeRenderModel, &params );
-    free( model );
+    HeapFree( GetProcessHeap(), 0, model );
 }
 
 /* LoadTexture(_Async) / FreeTexture */
@@ -441,7 +441,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_002_FreeTexture( struct w_ste
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_002_FreeTexture, &params );
-    free( map );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
@@ -470,7 +470,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTexture( struct w_ste
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_004_FreeTexture, &params );
-    free( map );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
@@ -499,7 +499,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTexture( struct w_ste
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_005_FreeTexture, &params );
-    free( map );
+    HeapFree( GetProcessHeap(), 0, map );
 }
 
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async( struct w_steam_iface *_this, int32_t textureId,
@@ -528,5 +528,5 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture( struct w_ste
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRRenderModels_IVRRenderModels_006_FreeTexture, &params );
-    free( map );
+    HeapFree( GetProcessHeap(), 0, map );
 }
