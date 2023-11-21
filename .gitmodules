@@ -13,12 +13,6 @@
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://github.com/GStreamer/gstreamer.git
-[submodule "gst-plugins-base"]
-	path = gst-plugins-base
-	url = https://github.com/GStreamer/gst-plugins-base.git
-[submodule "gst-plugins-good"]
-	path = gst-plugins-good
-	url = https://github.com/GStreamer/gst-plugins-good.git
 [submodule "gst-orc"]
 	path = gst-orc
 	url = https://github.com/GStreamer/orc.git
