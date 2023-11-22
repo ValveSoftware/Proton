@@ -22,11 +22,13 @@ $$(OBJ)/.$(1)-configure$(3):
 	    -e '/^CXXFLAGS/c CXXFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17' \
 	    -e '/^LDFLAGS/c LDFLAGS = $$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$($(4)LDFLAGS)' \
 	    \
+	    -e '/^x86_64_CC/a x86_64_CXX = $$(TARGET_CROSS64)-g++' \
 	    -e '/^x86_64_CFLAGS/c x86_64_CFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))' \
 	    -e '/^x86_64_CPPFLAGS/c x86_64_CPPFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))' \
 	    -e '/^x86_64_CXXFLAGS/c x86_64_CXXFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17' \
 	    -e '/^x86_64_LDFLAGS/c x86_64_LDFLAGS = $$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$(CROSSLDFLAGS)' \
 	    \
+	    -e '/^i386_CC/a i386_CXX = $$(TARGET_CROSS32)-g++' \
 	    -e '/^i386_CFLAGS/c i386_CFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))' \
 	    -e '/^i386_CPPFLAGS/c i386_CPPFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))' \
 	    -e '/^i386_CXXFLAGS/c i386_CXXFLAGS = $$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17' \
