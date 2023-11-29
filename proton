@@ -1225,6 +1225,7 @@ def default_compat_config():
                 "1196590", #Resident Evil Village
                 "418370", #Resident Evil 7 Biohazard
                 "990080", #Hogwarts Legacy
+                "526870", #Satisfactory
                 ]:
             ret.add("enablenvapi")
 
