@@ -603,7 +603,7 @@ class XrFunction(object):
         Args:
             call_conv (str, optional): calling convention e.g. WINAPI
             prefix (str, optional): prefix to append prior to function name e.g. xrFoo -> wine_xrFoo
-            postfix (str, optional): text to append after function name but prior to semicolon e.g. DECLSPEC_HIDDEN
+            postfix (str, optional): text to append after function name but prior to semicolon
         """
 
         proto = "{0}".format(self.type)
@@ -2221,13 +2221,13 @@ class XrGenerator(object):
             if xr_func.is_core_func():
                 f.write("{0};\n".format(xr_func.prototype("WINAPI", prefix="wine_")))
             else:
-                f.write("{0};\n".format(xr_func.prototype("WINAPI", prefix="wine_", postfix="DECLSPEC_HIDDEN")))
+                f.write("{0};\n".format(xr_func.prototype("WINAPI", prefix="wine_")))
         f.write("\n")
 
         f.write("/* Private thunks */\n")
         for xr_func in self.registry.funcs.values():
             if xr_func.needs_private_thunk():
-                f.write("{0};\n".format(xr_func.prototype(prefix="thunk_", postfix="DECLSPEC_HIDDEN")))
+                f.write("{0};\n".format(xr_func.prototype(prefix="thunk_")))
         f.write("\n")
 
         for struct in self.host_structs:
@@ -2235,7 +2235,7 @@ class XrGenerator(object):
         f.write("\n")
 
         for func in self.struct_chain_conversions:
-            f.write(func.prototype(postfix="DECLSPEC_HIDDEN") + ";\n")
+            f.write(func.prototype() + ";\n")
         f.write("\n")
 
         f.write("/* For use by xrInstance and children */\n")
@@ -2301,6 +2301,10 @@ class XrGenerator(object):
 
         f.write("#ifndef WINE_XR_ALIGN\n")
         f.write("#define WINE_XR_ALIGN DECLSPEC_ALIGN\n")
+        f.write("#endif\n\n")
+
+        f.write("#ifdef __x86_64__\n")
+        f.write("#define XR_PTR_SIZE 8\n")
         f.write("#endif\n\n")
 
         # The overall strategy is to define independent constants and datatypes,
