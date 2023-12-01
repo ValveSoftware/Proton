@@ -1246,6 +1246,7 @@ def default_compat_config():
                 "1196590", #Resident Evil Village
                 "418370", #Resident Evil 7 Biohazard
                 "990080", #Hogwarts Legacy
+                "1328670", #Mass Effect Legendary Edition
                 ]:
             ret.add("enableamdags")
 
