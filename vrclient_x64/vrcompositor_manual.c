@@ -13,7 +13,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 struct submit_state
 {
-    w_Texture_t texture;
+    union
+    {
+        w_Texture_t texture;
+        w_VRTextureWithPose_t texture_with_pose;
+    } texture;
     w_VRVulkanTextureArrayData_t vkdata;
     VkImageLayout image_layout;
     VkImageSubresourceRange subresources;
@@ -24,7 +28,8 @@ struct submit_state
 static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
                                                         struct submit_state *state )
 {
-    static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty;
+    static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty |
+            Submit_TextureWithPose;
     w_VRVulkanTextureData_t vkdata;
     VkImageCreateInfo image_info;
     IUnknown *texture_iface;
@@ -44,8 +49,9 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
         return texture;
     }
 
-    state->texture = vrclient_translate_texture_dxvk( texture, &vkdata, state->dxvk_surface, &state->dxvk_device,
-                                                      &state->image_layout, &image_info );
+    state->texture.texture = vrclient_translate_texture_dxvk( texture, &vkdata, state->dxvk_surface, &state->dxvk_device,
+                                                              &state->image_layout, &image_info );
+
     state->vkdata.m_nImage = vkdata.m_nImage;
     state->vkdata.m_pDevice = vkdata.m_pDevice;
     state->vkdata.m_pPhysicalDevice = vkdata.m_pPhysicalDevice;
@@ -56,7 +62,11 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
     state->vkdata.m_nHeight = vkdata.m_nHeight;
     state->vkdata.m_nFormat = vkdata.m_nFormat;
     state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
-    state->texture.handle = &state->vkdata;
+    state->texture.texture.handle = &state->vkdata;
+
+    if (*flags & Submit_TextureWithPose)
+        ((w_VRTextureWithPose_t *)&state->texture.texture)->mDeviceToAbsoluteTracking =
+                ((w_VRTextureWithPose_t*)texture)->mDeviceToAbsoluteTracking;
 
     compositor_data.dxvk_device = state->dxvk_device;
 
@@ -80,7 +90,7 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
     state->dxvk_device->lpVtbl->FlushRenderingCommands( state->dxvk_device );
     state->dxvk_device->lpVtbl->LockSubmissionQueue( state->dxvk_device );
 
-    return &state->texture;
+    return &state->texture.texture;
 }
 
 static void free_compositor_texture_dxvk( struct submit_state *state )
