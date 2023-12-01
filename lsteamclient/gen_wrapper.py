@@ -1344,7 +1344,7 @@ with open("steamclient_generated.h", "w") as file:
     out(u'/* This file is auto-generated, do not edit. */\n\n')
 
     for _, klass in sorted(all_classes.items()):
-        out(f"extern struct w_steam_iface *create_win{klass.full_name}(void *) DECLSPEC_HIDDEN;\n")
+        out(f"extern struct w_steam_iface *create_win{klass.full_name}(void *);\n")
 
 
 with open("steamclient_generated.c", "w") as file:
