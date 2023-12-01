@@ -60,11 +60,11 @@ struct w_steam_iface
 };
 
 typedef struct w_steam_iface *(*iface_constructor)( void * );
-extern iface_constructor find_iface_constructor( const char *iface_version ) DECLSPEC_HIDDEN;
+extern iface_constructor find_iface_constructor( const char *iface_version );
 typedef void (*iface_destructor)( struct w_steam_iface * );
-extern iface_destructor find_iface_destructor( const char *iface_version ) DECLSPEC_HIDDEN;
+extern iface_destructor find_iface_destructor( const char *iface_version );
 
-extern void init_rtti( char *base ) DECLSPEC_HIDDEN;
+extern void init_rtti( char *base );
 
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 
