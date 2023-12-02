@@ -64,6 +64,12 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
     state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
     state->texture.texture.handle = &state->vkdata;
 
+    if (*flags & Submit_TextureWithDepth)
+    {
+        WARN( "Ignoring depth.\n" );
+        *flags &= ~Submit_TextureWithDepth;
+    }
+
     if (*flags & Submit_TextureWithPose)
         ((w_VRTextureWithPose_t *)&state->texture.texture)->mDeviceToAbsoluteTracking =
                 ((w_VRTextureWithPose_t*)texture)->mDeviceToAbsoluteTracking;
