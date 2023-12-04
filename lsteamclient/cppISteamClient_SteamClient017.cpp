@@ -254,7 +254,7 @@ NTSTATUS ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInPro
 {
     struct ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params *params = (struct ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params *)args;
     struct u_ISteamClient_SteamClient017 *iface = (struct u_ISteamClient_SteamClient017 *)params->linux_side;
-    void (*U_STDCALL u__a)(void) = manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( params->_a );
+    void (*U_CDECL u__a)(void) = manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( params->_a );
     iface->DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( u__a );
     return 0;
 }
@@ -263,7 +263,7 @@ NTSTATUS ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultIn
 {
     struct ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params *params = (struct ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params *)args;
     struct u_ISteamClient_SteamClient017 *iface = (struct u_ISteamClient_SteamClient017 *)params->linux_side;
-    void (*U_STDCALL u__a)(void) = manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( params->_a );
+    void (*U_CDECL u__a)(void) = manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( params->_a );
     iface->DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( u__a );
     return 0;
 }
@@ -272,7 +272,7 @@ NTSTATUS ISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProc
 {
     struct ISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params = (struct ISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *)args;
     struct u_ISteamClient_SteamClient017 *iface = (struct u_ISteamClient_SteamClient017 *)params->linux_side;
-    uint32_t (*U_STDCALL u_func)(int32_t) = manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( params->func );
+    uint32_t (*U_CDECL u_func)(int32_t) = manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( params->func );
     iface->Set_SteamAPI_CCheckCallbackRegisteredInProcess( u_func );
     return 0;
 }

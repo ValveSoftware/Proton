@@ -41,12 +41,12 @@ static BOOL networking_message_pool_alloc_data( uint32_t count, struct networkin
     return TRUE;
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_144_FreeData( w_SteamNetworkingMessage_t_144 *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_144_FreeData( w_SteamNetworkingMessage_t_144 *msg )
 {
     if (msg->m_pData) SecureZeroMemory( msg->m_pData, msg->m_cbSize );
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_144_Release( w_SteamNetworkingMessage_t_144 *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_144_Release( w_SteamNetworkingMessage_t_144 *msg )
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_144 );
 
@@ -100,7 +100,7 @@ static BOOL networking_message_pool_receive_144( int32_t capacity, int32_t count
     return TRUE;
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_147_FreeData( w_SteamNetworkingMessage_t_147 *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_147_FreeData( w_SteamNetworkingMessage_t_147 *msg )
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_147 );
 
@@ -108,7 +108,7 @@ static void W_STDCALL w_SteamNetworkingMessage_t_147_FreeData( w_SteamNetworking
     if (!message->pool) HeapFree( GetProcessHeap(), 0, msg->m_pData );
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_147_Release( w_SteamNetworkingMessage_t_147 *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_147_Release( w_SteamNetworkingMessage_t_147 *msg )
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_147 );
 
@@ -168,7 +168,7 @@ static BOOL networking_message_pool_receive_147( uint32_t capacity, uint32_t cou
     return TRUE;
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkingMessage_t_153a *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkingMessage_t_153a *msg )
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
 
@@ -176,7 +176,7 @@ static void W_STDCALL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkin
     if (!message->pool) HeapFree( GetProcessHeap(), 0, msg->m_pData );
 }
 
-static void W_STDCALL w_SteamNetworkingMessage_t_153a_Release( w_SteamNetworkingMessage_t_153a *msg )
+static void W_CDECL w_SteamNetworkingMessage_t_153a_Release( w_SteamNetworkingMessage_t_153a *msg )
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
 

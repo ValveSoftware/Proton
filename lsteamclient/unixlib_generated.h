@@ -22905,19 +22905,19 @@ struct ISteamClient_SteamClient016_GetISteamHTMLSurface_params
 struct ISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t);
+    void (*W_CDECL func)(uint64_t, void *, uint32_t, int32_t);
 };
 
 struct ISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t);
+    void (*W_CDECL func)(uint64_t, void *, uint32_t, int32_t);
 };
 
 struct ISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     struct u_steam_iface *linux_side;
-    uint32_t (*W_STDCALL func)(int32_t);
+    uint32_t (*W_CDECL func)(int32_t);
 };
 
 struct ISteamClient_SteamClient017_CreateSteamPipe_params
@@ -23176,19 +23176,19 @@ struct ISteamClient_SteamClient017_GetISteamHTMLSurface_params
 struct ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     struct u_steam_iface *linux_side;
-    uint32_t (*W_STDCALL func)(int32_t);
+    uint32_t (*W_CDECL func)(int32_t);
 };
 
 struct ISteamClient_SteamClient017_GetISteamInventory_params
@@ -23483,19 +23483,19 @@ struct ISteamClient_SteamClient018_GetISteamHTMLSurface_params
 struct ISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     struct u_steam_iface *linux_side;
-    uint32_t (*W_STDCALL func)(int32_t);
+    uint32_t (*W_CDECL func)(int32_t);
 };
 
 struct ISteamClient_SteamClient018_GetISteamInventory_params
@@ -23808,19 +23808,19 @@ struct ISteamClient_SteamClient019_GetISteamHTMLSurface_params
 struct ISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     struct u_steam_iface *linux_side;
-    uint32_t (*W_STDCALL func)(int32_t);
+    uint32_t (*W_CDECL func)(int32_t);
 };
 
 struct ISteamClient_SteamClient019_GetISteamInventory_params
@@ -24142,13 +24142,13 @@ struct ISteamClient_SteamClient020_GetISteamHTMLSurface_params
 struct ISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL _a)(void);
+    void (*W_CDECL _a)(void);
 };
 
 struct ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
@@ -33850,7 +33850,7 @@ struct ISteamInput_SteamInput005_EnableDeviceCallbacks_params
 struct ISteamInput_SteamInput005_EnableActionEventCallbacks_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL pCallback)(SteamInputActionEvent_t *);
+    void (*W_CDECL pCallback)(SteamInputActionEvent_t *);
 };
 
 struct ISteamInput_SteamInput005_GetActionSetHandle_params
@@ -34204,7 +34204,7 @@ struct ISteamInput_SteamInput006_EnableDeviceCallbacks_params
 struct ISteamInput_SteamInput006_EnableActionEventCallbacks_params
 {
     struct u_steam_iface *linux_side;
-    void (*W_STDCALL pCallback)(SteamInputActionEvent_t *);
+    void (*W_CDECL pCallback)(SteamInputActionEvent_t *);
 };
 
 struct ISteamInput_SteamInput006_GetActionSetHandle_params
@@ -40205,7 +40205,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction_para
 {
     struct u_steam_iface *linux_side;
     uint32_t eDetailLevel;
-    void (*W_STDCALL pfnFunc)(uint32_t, const char *);
+    void (*W_CDECL pfnFunc)(uint32_t, const char *);
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue_params
@@ -40372,7 +40372,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_para
 {
     struct u_steam_iface *linux_side;
     uint32_t eDetailLevel;
-    void (*W_STDCALL pfnFunc)(uint32_t, const char *);
+    void (*W_CDECL pfnFunc)(uint32_t, const char *);
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue_params
@@ -40546,7 +40546,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_para
 {
     struct u_steam_iface *linux_side;
     uint32_t eDetailLevel;
-    void (*W_STDCALL pfnFunc)(uint32_t, const char *);
+    void (*W_CDECL pfnFunc)(uint32_t, const char *);
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params
@@ -40720,7 +40720,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction_para
 {
     struct u_steam_iface *linux_side;
     uint32_t eDetailLevel;
-    void (*W_STDCALL pfnFunc)(uint32_t, const char *);
+    void (*W_CDECL pfnFunc)(uint32_t, const char *);
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType_params
