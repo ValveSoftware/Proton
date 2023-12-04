@@ -9978,8 +9978,8 @@ struct w64_SteamNetworkingMessage_t_153a
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W64_PTR(void (*W_STDCALL m_pfnFreeData)(w64_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
-    W64_PTR(void (*W_STDCALL m_pfnRelease)(w64_SteamNetworkingMessage_t_153a *), m_pfnRelease);
+    W64_PTR(void (*W_CDECL m_pfnFreeData)(w64_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
+    W64_PTR(void (*W_CDECL m_pfnRelease)(w64_SteamNetworkingMessage_t_153a *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10002,8 +10002,8 @@ struct u64_SteamNetworkingMessage_t_153a
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U64_PTR(void (*U_STDCALL m_pfnFreeData)(u64_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
-    U64_PTR(void (*U_STDCALL m_pfnRelease)(u64_SteamNetworkingMessage_t_153a *), m_pfnRelease);
+    U64_PTR(void (*U_CDECL m_pfnFreeData)(u64_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
+    U64_PTR(void (*U_CDECL m_pfnRelease)(u64_SteamNetworkingMessage_t_153a *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10027,8 +10027,8 @@ struct w32_SteamNetworkingMessage_t_153a
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W32_PTR(void (*W_STDCALL m_pfnFreeData)(w32_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
-    W32_PTR(void (*W_STDCALL m_pfnRelease)(w32_SteamNetworkingMessage_t_153a *), m_pfnRelease);
+    W32_PTR(void (*W_CDECL m_pfnFreeData)(w32_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
+    W32_PTR(void (*W_CDECL m_pfnRelease)(w32_SteamNetworkingMessage_t_153a *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10051,8 +10051,8 @@ struct u32_SteamNetworkingMessage_t_153a
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U32_PTR(void (*U_STDCALL m_pfnFreeData)(u32_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
-    U32_PTR(void (*U_STDCALL m_pfnRelease)(u32_SteamNetworkingMessage_t_153a *), m_pfnRelease);
+    U32_PTR(void (*U_CDECL m_pfnFreeData)(u32_SteamNetworkingMessage_t_153a *), m_pfnFreeData);
+    U32_PTR(void (*U_CDECL m_pfnRelease)(u32_SteamNetworkingMessage_t_153a *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10083,8 +10083,8 @@ struct w64_SteamNetworkingMessage_t_147
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W64_PTR(void (*W_STDCALL m_pfnFreeData)(w64_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
-    W64_PTR(void (*W_STDCALL m_pfnRelease)(w64_SteamNetworkingMessage_t_147 *), m_pfnRelease);
+    W64_PTR(void (*W_CDECL m_pfnFreeData)(w64_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
+    W64_PTR(void (*W_CDECL m_pfnRelease)(w64_SteamNetworkingMessage_t_147 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10104,8 +10104,8 @@ struct u64_SteamNetworkingMessage_t_147
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U64_PTR(void (*U_STDCALL m_pfnFreeData)(u64_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
-    U64_PTR(void (*U_STDCALL m_pfnRelease)(u64_SteamNetworkingMessage_t_147 *), m_pfnRelease);
+    U64_PTR(void (*U_CDECL m_pfnFreeData)(u64_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
+    U64_PTR(void (*U_CDECL m_pfnRelease)(u64_SteamNetworkingMessage_t_147 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10126,8 +10126,8 @@ struct w32_SteamNetworkingMessage_t_147
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W32_PTR(void (*W_STDCALL m_pfnFreeData)(w32_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
-    W32_PTR(void (*W_STDCALL m_pfnRelease)(w32_SteamNetworkingMessage_t_147 *), m_pfnRelease);
+    W32_PTR(void (*W_CDECL m_pfnFreeData)(w32_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
+    W32_PTR(void (*W_CDECL m_pfnRelease)(w32_SteamNetworkingMessage_t_147 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10147,8 +10147,8 @@ struct u32_SteamNetworkingMessage_t_147
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U32_PTR(void (*U_STDCALL m_pfnFreeData)(u32_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
-    U32_PTR(void (*U_STDCALL m_pfnRelease)(u32_SteamNetworkingMessage_t_147 *), m_pfnRelease);
+    U32_PTR(void (*U_CDECL m_pfnFreeData)(u32_SteamNetworkingMessage_t_147 *), m_pfnFreeData);
+    U32_PTR(void (*U_CDECL m_pfnRelease)(u32_SteamNetworkingMessage_t_147 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10177,8 +10177,8 @@ struct w64_SteamNetworkingMessage_t_151
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W64_PTR(void (*W_STDCALL m_pfnFreeData)(w64_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
-    W64_PTR(void (*W_STDCALL m_pfnRelease)(w64_SteamNetworkingMessage_t_151 *), m_pfnRelease);
+    W64_PTR(void (*W_CDECL m_pfnFreeData)(w64_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
+    W64_PTR(void (*W_CDECL m_pfnRelease)(w64_SteamNetworkingMessage_t_151 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10198,8 +10198,8 @@ struct u64_SteamNetworkingMessage_t_151
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U64_PTR(void (*U_STDCALL m_pfnFreeData)(u64_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
-    U64_PTR(void (*U_STDCALL m_pfnRelease)(u64_SteamNetworkingMessage_t_151 *), m_pfnRelease);
+    U64_PTR(void (*U_CDECL m_pfnFreeData)(u64_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
+    U64_PTR(void (*U_CDECL m_pfnRelease)(u64_SteamNetworkingMessage_t_151 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10220,8 +10220,8 @@ struct w32_SteamNetworkingMessage_t_151
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W32_PTR(void (*W_STDCALL m_pfnFreeData)(w32_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
-    W32_PTR(void (*W_STDCALL m_pfnRelease)(w32_SteamNetworkingMessage_t_151 *), m_pfnRelease);
+    W32_PTR(void (*W_CDECL m_pfnFreeData)(w32_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
+    W32_PTR(void (*W_CDECL m_pfnRelease)(w32_SteamNetworkingMessage_t_151 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10241,8 +10241,8 @@ struct u32_SteamNetworkingMessage_t_151
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U32_PTR(void (*U_STDCALL m_pfnFreeData)(u32_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
-    U32_PTR(void (*U_STDCALL m_pfnRelease)(u32_SteamNetworkingMessage_t_151 *), m_pfnRelease);
+    U32_PTR(void (*U_CDECL m_pfnFreeData)(u32_SteamNetworkingMessage_t_151 *), m_pfnFreeData);
+    U32_PTR(void (*U_CDECL m_pfnRelease)(u32_SteamNetworkingMessage_t_151 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m_nFlags;
     int64_t m_nUserData;
@@ -10271,8 +10271,8 @@ struct w64_SteamNetworkingMessage_t_144
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W64_PTR(void (*W_STDCALL m_pfnFreeData)(w64_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
-    W64_PTR(void (*W_STDCALL m_pfnRelease)(w64_SteamNetworkingMessage_t_144 *), m_pfnRelease);
+    W64_PTR(void (*W_CDECL m_pfnFreeData)(w64_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
+    W64_PTR(void (*W_CDECL m_pfnRelease)(w64_SteamNetworkingMessage_t_144 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m___nPadDummy;
 #ifdef __cplusplus
@@ -10291,8 +10291,8 @@ struct u64_SteamNetworkingMessage_t_144
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U64_PTR(void (*U_STDCALL m_pfnFreeData)(u64_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
-    U64_PTR(void (*U_STDCALL m_pfnRelease)(u64_SteamNetworkingMessage_t_144 *), m_pfnRelease);
+    U64_PTR(void (*U_CDECL m_pfnFreeData)(u64_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
+    U64_PTR(void (*U_CDECL m_pfnRelease)(u64_SteamNetworkingMessage_t_144 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m___nPadDummy;
 #ifdef __cplusplus
@@ -10312,8 +10312,8 @@ struct w32_SteamNetworkingMessage_t_144
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    W32_PTR(void (*W_STDCALL m_pfnFreeData)(w32_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
-    W32_PTR(void (*W_STDCALL m_pfnRelease)(w32_SteamNetworkingMessage_t_144 *), m_pfnRelease);
+    W32_PTR(void (*W_CDECL m_pfnFreeData)(w32_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
+    W32_PTR(void (*W_CDECL m_pfnRelease)(w32_SteamNetworkingMessage_t_144 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m___nPadDummy;
 #ifdef __cplusplus
@@ -10332,8 +10332,8 @@ struct u32_SteamNetworkingMessage_t_144
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
-    U32_PTR(void (*U_STDCALL m_pfnFreeData)(u32_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
-    U32_PTR(void (*U_STDCALL m_pfnRelease)(u32_SteamNetworkingMessage_t_144 *), m_pfnRelease);
+    U32_PTR(void (*U_CDECL m_pfnFreeData)(u32_SteamNetworkingMessage_t_144 *), m_pfnFreeData);
+    U32_PTR(void (*U_CDECL m_pfnRelease)(u32_SteamNetworkingMessage_t_144 *), m_pfnRelease);
     int32_t m_nChannel;
     int32_t m___nPadDummy;
 #ifdef __cplusplus

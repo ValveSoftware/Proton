@@ -25,8 +25,6 @@ extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_ifa
 
 typedef void (*W_CDECL w_cdecl_func)( void * );
 extern void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_size );
-typedef void (*W_STDCALL w_stdcall_func)( void * );
-extern void queue_stdcall_func_callback( w_stdcall_func func, void *data, uint32_t data_size );
 
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 
@@ -34,25 +32,25 @@ typedef void (U_CDECL *u_SteamAPIWarningMessageHook_t)( int32_t, const char * );
 typedef void (W_CDECL *w_SteamAPIWarningMessageHook_t)( int32_t, const char * );
 u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w_SteamAPIWarningMessageHook_t );
 
-typedef void (U_STDCALL *u_FSteamNetworkingSocketsDebugOutput)( uint32_t, const char * );
-typedef void (W_STDCALL *w_FSteamNetworkingSocketsDebugOutput)( uint32_t, const char * );
+typedef void (U_CDECL *u_FSteamNetworkingSocketsDebugOutput)( uint32_t, const char * );
+typedef void (W_CDECL *w_FSteamNetworkingSocketsDebugOutput)( uint32_t, const char * );
 u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput );
 
-typedef uint32_t (U_STDCALL *u_SteamAPI_CheckCallbackRegistered_t)( int32_t );
-typedef uint32_t (W_STDCALL *w_SteamAPI_CheckCallbackRegistered_t)( int32_t );
+typedef uint32_t (U_CDECL *u_SteamAPI_CheckCallbackRegistered_t)( int32_t );
+typedef uint32_t (W_CDECL *w_SteamAPI_CheckCallbackRegistered_t)( int32_t );
 u_SteamAPI_CheckCallbackRegistered_t manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( w_SteamAPI_CheckCallbackRegistered_t );
 
 typedef uint32_t (U_CDECL *u_SteamAPI_CheckCallbackRegistered_t_156)( int32_t );
 typedef uint32_t (W_CDECL *w_SteamAPI_CheckCallbackRegistered_t_156)( int32_t );
 u_SteamAPI_CheckCallbackRegistered_t_156 manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func_156( w_SteamAPI_CheckCallbackRegistered_t_156 );
 
-typedef void (U_STDCALL *u_SteamAPI_PostAPIResultInProcess_t)( uint64_t, void *, uint32_t, int );
-typedef void (W_STDCALL *w_SteamAPI_PostAPIResultInProcess_t)( uint64_t, void *, uint32_t, int );
+typedef void (U_CDECL *u_SteamAPI_PostAPIResultInProcess_t)( uint64_t, void *, uint32_t, int );
+typedef void (W_CDECL *w_SteamAPI_PostAPIResultInProcess_t)( uint64_t, void *, uint32_t, int );
 u_SteamAPI_PostAPIResultInProcess_t manual_convert_Set_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t );
 u_SteamAPI_PostAPIResultInProcess_t manual_convert_Remove_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t );
 
-typedef void (U_STDCALL *u_void_SteamAPI_PostAPIResultInProcess_t)(void);
-typedef void (W_STDCALL *w_void_SteamAPI_PostAPIResultInProcess_t)(void);
+typedef void (U_CDECL *u_void_SteamAPI_PostAPIResultInProcess_t)(void);
+typedef void (W_CDECL *w_void_SteamAPI_PostAPIResultInProcess_t)(void);
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 
