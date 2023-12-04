@@ -3489,9 +3489,9 @@ struct u_ISteamClient_SteamClient016
     virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(uint64_t, void *, uint32_t, int32_t) ) = 0;
-    virtual void Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(uint64_t, void *, uint32_t, int32_t) ) = 0;
-    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_STDCALL )(int32_t) ) = 0;
+    virtual void Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(uint64_t, void *, uint32_t, int32_t) ) = 0;
+    virtual void Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(uint64_t, void *, uint32_t, int32_t) ) = 0;
+    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -3646,9 +3646,9 @@ struct u_ISteamClient_SteamClient017
     virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_STDCALL )(int32_t) ) = 0;
+    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
     virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamParentalSettings*/ * GetISteamParentalSettings( int32_t, int32_t, const char * ) = 0;
@@ -4852,9 +4852,9 @@ struct u_ISteamClient_SteamClient018
     virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_STDCALL )(int32_t) ) = 0;
+    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
     virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamParentalSettings*/ * GetISteamParentalSettings( int32_t, int32_t, const char * ) = 0;
@@ -5384,7 +5384,7 @@ struct u_ISteamNetworkingUtils_SteamNetworkingUtils001
     virtual int32_t GetPOPCount(  ) = 0;
     virtual int32_t GetPOPList( uint32_t *, int32_t ) = 0;
     virtual int64_t GetLocalTimestamp(  ) = 0;
-    virtual void SetDebugOutputFunction( uint32_t, void (*U_STDCALL )(uint32_t, const char *) ) = 0;
+    virtual void SetDebugOutputFunction( uint32_t, void (*U_CDECL )(uint32_t, const char *) ) = 0;
     virtual int8_t SetConfigValue( uint32_t, uint32_t, int32_t, uint32_t, const void * ) = 0;
     virtual uint32_t GetConfigValue( uint32_t, uint32_t, int32_t, uint32_t *, void *, uint32_t * ) = 0;
     virtual int8_t GetConfigValueInfo( uint32_t, const char **, uint32_t *, uint32_t *, uint32_t * ) = 0;
@@ -5534,7 +5534,7 @@ struct u_ISteamNetworkingUtils_SteamNetworkingUtils002
     virtual int32_t GetPOPCount(  ) = 0;
     virtual int32_t GetPOPList( uint32_t *, int32_t ) = 0;
     virtual int64_t GetLocalTimestamp(  ) = 0;
-    virtual void SetDebugOutputFunction( uint32_t, void (*U_STDCALL )(uint32_t, const char *) ) = 0;
+    virtual void SetDebugOutputFunction( uint32_t, void (*U_CDECL )(uint32_t, const char *) ) = 0;
     virtual int8_t SetConfigValue( uint32_t, uint32_t, int32_t, uint32_t, const void * ) = 0;
     virtual uint32_t GetConfigValue( uint32_t, uint32_t, int32_t, uint32_t *, void *, uint32_t * ) = 0;
     virtual int8_t GetConfigValueInfo( uint32_t, const char **, uint32_t *, uint32_t *, uint32_t * ) = 0;
@@ -5582,9 +5582,9 @@ struct u_ISteamClient_SteamClient019
     virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_STDCALL )(int32_t) ) = 0;
+    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
     virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamParentalSettings*/ * GetISteamParentalSettings( int32_t, int32_t, const char * ) = 0;
@@ -5642,8 +5642,8 @@ struct u_ISteamClient_SteamClient020
     virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
-    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
-    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_STDCALL )(void) ) = 0;
+    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
     virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
     virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
     virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
@@ -5875,7 +5875,7 @@ struct u_ISteamNetworkingUtils_SteamNetworkingUtils003
     virtual int32_t GetPOPCount(  ) = 0;
     virtual int32_t GetPOPList( uint32_t *, int32_t ) = 0;
     virtual int64_t GetLocalTimestamp(  ) = 0;
-    virtual void SetDebugOutputFunction( uint32_t, void (*U_STDCALL )(uint32_t, const char *) ) = 0;
+    virtual void SetDebugOutputFunction( uint32_t, void (*U_CDECL )(uint32_t, const char *) ) = 0;
     virtual int8_t SetConfigValue( uint32_t, uint32_t, int32_t, uint32_t, const void * ) = 0;
     virtual uint32_t GetConfigValue( uint32_t, uint32_t, int32_t, uint32_t *, void *, uint32_t * ) = 0;
     virtual int8_t GetConfigValueInfo( uint32_t, const char **, uint32_t *, uint32_t *, uint32_t * ) = 0;
@@ -6373,7 +6373,7 @@ struct u_ISteamInput_SteamInput005
     virtual int8_t BNewDataAvailable(  ) = 0;
     virtual int32_t GetConnectedControllers( uint64_t * ) = 0;
     virtual void EnableDeviceCallbacks(  ) = 0;
-    virtual void EnableActionEventCallbacks( void (*U_STDCALL )(SteamInputActionEvent_t *) ) = 0;
+    virtual void EnableActionEventCallbacks( void (*U_CDECL )(SteamInputActionEvent_t *) ) = 0;
     virtual uint64_t GetActionSetHandle( const char * ) = 0;
     virtual void ActivateActionSet( uint64_t, uint64_t ) = 0;
     virtual uint64_t GetCurrentActionSet( uint64_t ) = 0;
@@ -6476,7 +6476,7 @@ struct u_ISteamInput_SteamInput006
     virtual int8_t BNewDataAvailable(  ) = 0;
     virtual int32_t GetConnectedControllers( uint64_t * ) = 0;
     virtual void EnableDeviceCallbacks(  ) = 0;
-    virtual void EnableActionEventCallbacks( void (*U_STDCALL )(SteamInputActionEvent_t *) ) = 0;
+    virtual void EnableActionEventCallbacks( void (*U_CDECL )(SteamInputActionEvent_t *) ) = 0;
     virtual uint64_t GetActionSetHandle( const char * ) = 0;
     virtual void ActivateActionSet( uint64_t, uint64_t ) = 0;
     virtual uint64_t GetCurrentActionSet( uint64_t ) = 0;
@@ -6681,7 +6681,7 @@ struct u_ISteamNetworkingUtils_SteamNetworkingUtils004
     virtual int32_t GetPOPCount(  ) = 0;
     virtual int32_t GetPOPList( uint32_t *, int32_t ) = 0;
     virtual int64_t GetLocalTimestamp(  ) = 0;
-    virtual void SetDebugOutputFunction( uint32_t, void (*U_STDCALL )(uint32_t, const char *) ) = 0;
+    virtual void SetDebugOutputFunction( uint32_t, void (*U_CDECL )(uint32_t, const char *) ) = 0;
     virtual uint32_t GetIPv4FakeIPType( uint32_t ) = 0;
     virtual uint32_t GetRealIdentityForFakeIP( const SteamNetworkingIPAddr *, SteamNetworkingIdentity_144 * ) = 0;
     virtual int8_t SetConfigValue( uint32_t, uint32_t, int32_t, uint32_t, const void * ) = 0;

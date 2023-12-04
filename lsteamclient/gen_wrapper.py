@@ -838,7 +838,7 @@ def callconv(cursor, prefix):
     tokens = cursor.get_tokens()
     while next(tokens).spelling != '(': pass
     token = next(tokens).spelling.strip('_')
-    token = token.replace('*', 'stdcall')
+    token = token.replace('*', 'cdecl')
     token = token.replace('S_CALLTYPE', 'cdecl')
     return f'{prefix[0].upper()}_{token.upper()} '
 

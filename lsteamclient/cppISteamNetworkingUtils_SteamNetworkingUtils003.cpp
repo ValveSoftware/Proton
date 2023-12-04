@@ -101,7 +101,7 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction( v
 {
     struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_params *params = (struct ISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_params *)args;
     struct u_ISteamNetworkingUtils_SteamNetworkingUtils003 *iface = (struct u_ISteamNetworkingUtils_SteamNetworkingUtils003 *)params->linux_side;
-    void (*U_STDCALL u_pfnFunc)(uint32_t, const char *) = manual_convert_SetDebugOutputFunction_pfnFunc( params->pfnFunc );
+    void (*U_CDECL u_pfnFunc)(uint32_t, const char *) = manual_convert_SetDebugOutputFunction_pfnFunc( params->pfnFunc );
     iface->SetDebugOutputFunction( params->eDetailLevel, u_pfnFunc );
     return 0;
 }

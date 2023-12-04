@@ -36,7 +36,6 @@ enum callback_type
     SOCKETS_DEBUG_OUTPUT = 1,
     WARNING_MESSAGE_HOOK,
     CALL_CDECL_FUNC_DATA,
-    CALL_STDCALL_FUNC_DATA,
     CALL_IFACE_VTABLE_0,
     CALL_IFACE_VTABLE_1,
     CALL_IFACE_VTABLE_2,
@@ -53,7 +52,7 @@ struct callback
     {
         struct
         {
-            void (*W_STDCALL pfnFunc)( uint32_t, const char * );
+            void (*W_CDECL pfnFunc)( uint32_t, const char * );
             uint32_t type;
             const char msg[1];
         } sockets_debug_output;
@@ -70,12 +69,6 @@ struct callback
             void (*W_CDECL pFunc)( void * );
             unsigned char data[1];
         } call_cdecl_func_data;
-
-        struct
-        {
-            void (*W_STDCALL pFunc)( void * );
-            unsigned char data[1];
-        } call_stdcall_func_data;
 
         struct
         {

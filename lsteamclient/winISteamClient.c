@@ -4570,7 +4570,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient016_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t))
+void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL func)(uint64_t, void *, uint32_t, int32_t))
 {
     struct ISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -4581,7 +4581,7 @@ void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProc
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t))
+void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL func)(uint64_t, void *, uint32_t, int32_t))
 {
     struct ISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -4592,7 +4592,7 @@ void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInP
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_STDCALL func)(int32_t))
+void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_CDECL func)(int32_t))
 {
     struct ISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -5121,7 +5121,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient017_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5132,7 +5132,7 @@ void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIR
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5143,7 +5143,7 @@ void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostA
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_STDCALL func)(int32_t))
+void __thiscall winISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_CDECL func)(int32_t))
 {
     struct ISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -5738,7 +5738,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient018_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5749,7 +5749,7 @@ void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIR
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5760,7 +5760,7 @@ void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostA
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_STDCALL func)(int32_t))
+void __thiscall winISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_CDECL func)(int32_t))
 {
     struct ISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -6389,7 +6389,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient019_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -6400,7 +6400,7 @@ void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIR
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -6411,7 +6411,7 @@ void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostA
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_STDCALL func)(int32_t))
+void __thiscall winISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*W_CDECL func)(int32_t))
 {
     struct ISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -7057,7 +7057,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient020_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -7068,7 +7068,7 @@ void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIR
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, &params );
 }
 
-void __thiscall winISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_STDCALL _a)(void))
+void __thiscall winISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*W_CDECL _a)(void))
 {
     struct ISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {

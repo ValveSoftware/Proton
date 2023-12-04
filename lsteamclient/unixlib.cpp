@@ -123,26 +123,6 @@ void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_siz
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-void queue_stdcall_func_callback( w_stdcall_func func, void *data, uint32_t data_size )
-{
-    uint32_t size = data_size;
-    struct callback_entry *entry;
-
-    size += sizeof(struct callback_entry);
-    if (!(entry = (struct callback_entry *)malloc( size ))) return;
-
-    entry->callback.type = CALL_STDCALL_FUNC_DATA;
-    size -= offsetof( struct callback_entry, callback );
-    entry->callback.size = size;
-
-    entry->callback.call_stdcall_func_data.pFunc = func;
-    memcpy( (char *)entry->callback.call_stdcall_func_data.data, data, data_size );
-
-    pthread_mutex_lock( &callbacks_lock );
-    list_add_tail( &callbacks, &entry->entry );
-    pthread_mutex_unlock( &callbacks_lock );
-}
-
 u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput w_func )
 {
     w_steam_networking_socket_debug_output = w_func;
@@ -177,7 +157,7 @@ u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w
     return &u_steam_api_warning_message_hook;
 }
 
-static uint32_t U_STDCALL u_steam_api_check_callback_registered( int32_t v )
+static uint32_t U_CDECL u_steam_api_check_callback_registered( int32_t v )
 {
     return 1;
 }
@@ -199,7 +179,7 @@ u_SteamAPI_CheckCallbackRegistered_t_156 manual_convert_Set_SteamAPI_CCheckCallb
     return &u_steam_api_check_callback_registered_156;
 }
 
-static void U_STDCALL u_steam_api_post_api_result_in_process( uint64_t a, void *b, uint32_t c, int d )
+static void U_CDECL u_steam_api_post_api_result_in_process( uint64_t a, void *b, uint32_t c, int d )
 {
 }
 
@@ -215,7 +195,7 @@ u_SteamAPI_PostAPIResultInProcess_t manual_convert_Remove_SteamAPI_CPostAPIResul
     return &u_steam_api_post_api_result_in_process;
 }
 
-static void U_STDCALL u_void_steam_api_post_api_result_in_process(void)
+static void U_CDECL u_void_steam_api_post_api_result_in_process(void)
 {
 }
 
