@@ -348,7 +348,8 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue( void *arg
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,                  \
                                               params->scopeObj, params->eDataType, &u_fn );        \
         if (params->_ret) w_##y = *(decltype(w_##y) *)params->pArg;                                \
-    }
+    }                                                                                              \
+    break;
 
     case 201 /*ConnectionStatusChanged*/: CASE( SteamNetConnectionStatusChanged )
     case 202 /*AuthStatusChanged*/: CASE( SteamNetAuthenticationStatusChanged )
@@ -571,7 +572,8 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( void *arg
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,                  \
                                               params->scopeObj, params->eDataType, &u_fn );        \
         if (params->_ret) w_##y = *(decltype(w_##y) *)params->pArg;                                \
-    }
+    }                                                                                              \
+    break;
 
     case 201 /*ConnectionStatusChanged*/: CASE( SteamNetConnectionStatusChanged_153a )
     case 202 /*AuthStatusChanged*/: CASE( SteamNetAuthenticationStatusChanged )
