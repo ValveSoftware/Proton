@@ -1242,6 +1242,10 @@ def default_compat_config():
                 "990080", #Hogwarts Legacy
                 "1328670", #Mass Effect Legendary Edition
                 "627270", #Injustice 2
+                "530940", #BIOHAZARD 7 resident evil
+                "895950", #BIOHAZARD RE:2 Z Version
+                "1100830", #BIOHAZARD RE:3 Z Version
+                "1196600", #BIOHAZARD VILLAGE Z Version
                 ]:
             ret.add("enableamdags")
 
