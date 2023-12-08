@@ -39,7 +39,7 @@ attach the generated $HOME/steam-$APPID.log to this issue report as a file.
 4. Please copy it to your clipboard by pressing `Ctrl+A` and then `Ctrl+C`.
    Then paste it in a [Gist](https://gist.github.com/) and post the link in
    this issue.
-5. Also, please copy the contents of `Help` > `Steam Runtime Information` to
+5. Also, please copy the contents of `Help` > `Steam Runtime Diagnostics` to
    the gist.
 6. Please search for open issues and pull requests by the name of the game and
    find out whether they are relevant and should be referenced above.
