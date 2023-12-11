@@ -797,7 +797,7 @@ class CompatData:
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = not use_wined3d and \
                     not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
-            use_nvapi = 'enablenvapi' in g_session.compat_config
+            use_nvapi = 'disablenvapi' not in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -1092,145 +1092,13 @@ def default_compat_config():
             ret.add("noesync")
 
         if appid in [
-                # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
-                "1938800", #Alone in the Dark Prologue
-                "1310410", #Alone in the Dark
-                "673130", #amid evil
-                "1182900", #A Plague Tale: Requiem
-                "1291680", #apocalypse: 2.0 edition
-                "979690", #the ascent
-                "805550", #assetto corsa competizione
-                "668580", #Atomic Heart
-                "2407990", #Atomic Heart demo
-                "924970", #back 4 blood
-                "1086940", #Baldur's Gate 3
-                "1178830", #bright memory infinite
-                "1409670", #bright memory infinite benchmark
-                "1016800", #chernobylite enhanced edition
-                "1153640", #chorus
-                "1791040", #chorus demo
-                "1577240", #cions of vega
-                "1632760", #cions of vega demo
-                "870780", #control ultimate edition
-                "884660", #CRSED
-                "1091500", #cyberpunk 2077
-                "1693980", #dead space (remake)
-                "1190460", #death stranding
-                "1850570", #Death Stranding Director's Cut
-                "1252330", #deathloop
-                "548430", #deep rock galactic
-                "428660", #deliver us the moon
-                "1929610", #Demonologist
-                "2302560", #Demonologist demo
-                "2097490", #Desordre
-                "2373430", #Desordre (demo)
-                "2211940", #Doge Simulator
-                "2312000", #Doge Simulator (demo)
-                "534380", #dying light 2
-                "269190", #edge of eternity
-                "1871990", #engine evolution 2022
-                "1952070", #engine evolution 2022 demo
-                "1128920", #everspace 2
-                "1312800", #everspace 2 demo
-                "1330470", #F.I.S.T.: Forged In Shadow Torch
-                "1332390", #F.I.S.T.: Forged In Shadow Torch Demo
-                "1641960", #Forever Skies
-                "2141060", #Forever Skies Demo
-                "1680880", #forspoken
-                "2228080", #forspoken demo
-                "1551360", #Forza Horizon 5
-                "1080110", #f1 2020
-                "1098130", #get stuffed
-                "1139900", #ghostrunner
-                "1249200", #ghostrunner demo
-                "1475810", #Ghostwire: Tokyo
-                "1593500", #god of war
-                "1496790", #Gotham Knights
-                "414340", #hellblade: senua's sacrifice
-                "1817230", #hi-fi rush
-                "1659040", #hitman 3
-                "1847520", #hitman 3 free starter pack
-                "1151640", #Horizon Zero Dawn
-                "1149460", #Icarus
-                "1650150", #island of the ancients
-                "1987940", #island of the ancients demo
-                "1371480", #iron conflict
-                "1946700", #Layers of Fear
-                "2237040", #Layers of Fear (demo)
-                "1544360", #lego builder's journey
-                "1265780", #Lord of the Rings: Gollum
-                "1363080", #Manor Lords
-                "2122820", #Manor Lords Demo
-                "997070", #marvel's avengers
-                "1817070", #marvel's spider-man remastered
-                "784080", #mechwarrior 5: mercenaries
-                "1170950", #mortal online 2
-                "261550", #mount & blade II: bannerlord
-                "1222370", #Necromunda: Hired Gun
-                "1846380", #need for speed unbound
-                "1325200", #nioh 2
-                "275850", #no man's sky
-                "1386900", #Observer: System Redux
-                "1140100", #the persistence
-                "1322170", #pluviophile
-                "400", #Portal [RTX]
-                "2410180", #Portal Prelude RTX
-                "1549180", #propnight
-                "1186640", #pumpkin jack
-                "1895880", #Ratchet & Clank: Rift Apart
-                "1144200", #Ready Or Not
-                "1404210", #Red Dead Online
-                "1174180", #Red Dead Redemption 2
-                "1294810", #Redfall
-                "1282100", #Remnant 2
-                "1649240", #returnal
-                "391220", #rise of the tomb raider
-                "1599660", #sackboy: a big adventure
-                "872670", #SCP: 5K - alpha testing
-                "513710", #scum
-                "1227690", #Severed Steel
-                "1631910", #Severed Steel demo
-                "750920", #shadow of the tomb raider
-                "1949030", #Sherlock Holmes: The Awakened
-                "1155330", #Showgunners
-                "2022460", #Showgunners demo
-                "1602080", #soulstice
-                "2015300", #soulstice demo
-                "1817190", #Spider-Man: Miles Morales
-                "1296010", #stay in the light
-                "2162020", #Strayed Lights
-                "2311720", #Strayed Lights demo
-                "813630", #supraland
-                "487390", #system shock demo
-                "868270", #the cycle: frontier
-                "306130", #the elder scrolls online
-                "1888930", #the last of us part 1
-                "1096200", #the orville: interactive fan experience
-                "1843860", #the redress of mira
-                "2050550", #the redress of mira demo
-                "1567740", #to hell with it
-                "1164940", #Trepang2
-                "1210600", #Trepang2 (demo)
-                "1662690", #twin stones: the journey of bukka
-                "1659420", #Uncharted Legacy of Thieves
-                "1159690", #Voidtrain
-                "1321660", #Voidtrain demo
-                "1361210", #Warhammer 40,000: Darktide
-                "236390", #war thunder
-                "2239550", #watch dogs legion
-                "936720", #wrench
-                "1249800", #xuan-yuan sword VII
-                "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
-                "1446780", #monster hunter rise
-                "2379390", #Rainbow Six Extraction
-                "883710", #Resident Evil 2
-                "952060", #Resident Evil 3
-                "1196590", #Resident Evil Village
-                "418370", #Resident Evil 7 Biohazard
-                "990080", #Hogwarts Legacy
-                "526870", #Satisfactory
+                # disable dxvknvapi for titles which dislike it
+                "1088850", #Marvel's Guardians of the Galaxy
+                "1418100", #Swords of Legends Online
+                "2080180", #Go Home Annie Demo
+                "1939100", #Go Home Annie
                 ]:
-            ret.add("enablenvapi")
+            ret.add("disablenvapi")
 
         if appid in [
                 "1245620", #Elden Ring
@@ -1422,7 +1290,7 @@ class Session:
         self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
-        self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
+        self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
         self.check_environment("PROTON_ENABLE_AMD_AGS", "enableamdags")
 
         if "noesync" in self.compat_config:
@@ -1463,8 +1331,7 @@ class Session:
             if not "VKD3D_FEATURE_LEVEL" in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
-        # enablenvapi beats hidenvgpu
-        if "hidenvgpu" in self.compat_config and "enablenvapi" not in self.compat_config:
+        if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
         if "usenativexinput13" in self.compat_config:
@@ -1540,7 +1407,7 @@ class Session:
         if "nativevulkanloader" in self.compat_config:
             self.dlloverrides["vulkan-1"] = "n"
 
-        if "enablenvapi" in self.compat_config:
+        if "disablenvapi" not in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
 
         if "enableamdags" in self.compat_config:
