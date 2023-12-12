@@ -1100,27 +1100,6 @@ def default_compat_config():
                 ]:
             ret.add("disablenvapi")
 
-        if appid in [
-                "1245620", #Elden Ring
-                "1888160", #Armored Core VI
-                "1888930", #the last of us part 1
-                "814380", #Sekiro: Shadows Die Twice
-                "2379390", #Rainbow Six Extraction
-                "883710", #Resident Evil 2
-                "952060", #Resident Evil 3
-                "1196590", #Resident Evil Village
-                "418370", #Resident Evil 7 Biohazard
-                "990080", #Hogwarts Legacy
-                "1328670", #Mass Effect Legendary Edition
-                "627270", #Injustice 2
-                "530940", #BIOHAZARD 7 resident evil
-                "895950", #BIOHAZARD RE:2 Z Version
-                "1100830", #BIOHAZARD RE:3 Z Version
-                "1196600", #BIOHAZARD VILLAGE Z Version
-                "601150", #Devil May Cry 5
-                ]:
-            ret.add("enableamdags")
-
     return ret
 
 class Session:
@@ -1291,7 +1270,6 @@ class Session:
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
-        self.check_environment("PROTON_ENABLE_AMD_AGS", "enableamdags")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -1409,9 +1387,6 @@ class Session:
 
         if "disablenvapi" not in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
-
-        if "enableamdags" in self.compat_config:
-            self.dlloverrides["amd_ags_x64"] = "b"
 
         s = ""
         for dll in self.dlloverrides:
