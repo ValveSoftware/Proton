@@ -1111,6 +1111,11 @@ def default_compat_config():
                 ]:
             ret.add("disablenvapi")
 
+        if appid in [
+                "2395210" #Tony Hawk's Pro Skater 1 + 2
+                ]:
+            ret.add("forcenvapi")
+
     return ret
 
 class Session:
