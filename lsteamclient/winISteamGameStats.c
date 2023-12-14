@@ -56,6 +56,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt(
         .nData = nData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddSessionAttributeInt, &params );
     return params._ret;
 }
@@ -70,6 +71,8 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeStri
         .pstrData = pstrData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
+    IsBadStringPtrA(pstrData, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddSessionAttributeString, &params );
     return params._ret;
 }
@@ -84,6 +87,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeFloa
         .fData = fData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddSessionAttributeFloat, &params );
     return params._ret;
 }
@@ -98,6 +102,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddNewRow(struct w_stea
         .pstrTableName = pstrTableName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrTableName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddNewRow, &params );
     return params._ret;
 }
@@ -136,6 +141,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt(stru
         .nData = nData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddRowAttributeInt, &params );
     return params._ret;
 }
@@ -150,6 +156,8 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddRowAtributeString(st
         .pstrData = pstrData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
+    IsBadStringPtrA(pstrData, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddRowAtributeString, &params );
     return params._ret;
 }
@@ -164,6 +172,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeFloat(st
         .fData = fData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddRowAttributeFloat, &params );
     return params._ret;
 }
@@ -178,6 +187,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddSessionAttributeInt6
         .llData = llData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddSessionAttributeInt64, &params );
     return params._ret;
 }
@@ -192,6 +202,7 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt64(st
         .llData = llData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pstrName, -1);
     STEAMCLIENT_CALL( ISteamGameStats_SteamGameStats001_AddRowAttributeInt64, &params );
     return params._ret;
 }

@@ -44,6 +44,7 @@ int8_t __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Reg
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote, &params );
     return params._ret;
 }
@@ -90,6 +91,7 @@ int8_t __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Set
         .pchDisplayName = pchDisplayName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDisplayName, -1);
     STEAMCLIENT_CALL( ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDisplayName, &params );
     return params._ret;
 }
@@ -258,6 +260,7 @@ int8_t __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Upd
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryText, &params );
     return params._ret;
 }
@@ -330,6 +333,7 @@ int8_t __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Set
         .pchEntryText = pchEntryText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchEntryText, -1);
     STEAMCLIENT_CALL( ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry, &params );
     return params._ret;
 }
@@ -389,6 +393,7 @@ int8_t __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Set
         .pchEntryText = pchEntryText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchEntryText, -1);
     STEAMCLIENT_CALL( ISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry, &params );
     return params._ret;
 }

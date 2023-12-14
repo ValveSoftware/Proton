@@ -84,6 +84,9 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasi
         .pGameDescription = pGameDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pRegionName, -1);
+    IsBadStringPtrA(pProductName, -1);
+    IsBadStringPtrA(pGameDescription, -1);
     STEAMCLIENT_CALL( ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData, &params );
 }
 
@@ -106,6 +109,8 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyV
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetKeyValue, &params );
 }
 
@@ -148,6 +153,7 @@ int8_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMa
         .pServerAddress = pServerAddress,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pServerAddress, -1);
     STEAMCLIENT_CALL( ISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterServer, &params );
     return params._ret;
 }
@@ -160,6 +166,7 @@ int8_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_Remov
         .pServerAddress = pServerAddress,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pServerAddress, -1);
     STEAMCLIENT_CALL( ISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer, &params );
     return params._ret;
 }

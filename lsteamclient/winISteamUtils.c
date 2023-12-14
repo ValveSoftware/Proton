@@ -744,6 +744,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils005_CheckFileSignature, &params );
     return params._ret;
 }
@@ -759,6 +760,7 @@ int8_t __thiscall winISteamUtils_SteamUtils005_ShowGamepadTextInput(struct w_ste
         .unCharMax = unCharMax,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils005_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -1086,6 +1088,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils006_CheckFileSignature, &params );
     return params._ret;
 }
@@ -1101,6 +1104,7 @@ int8_t __thiscall winISteamUtils_SteamUtils006_ShowGamepadTextInput(struct w_ste
         .unCharMax = unCharMax,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils006_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -1453,6 +1457,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils007_CheckFileSignature, &params );
     return params._ret;
 }
@@ -1469,6 +1474,8 @@ int8_t __thiscall winISteamUtils_SteamUtils007_ShowGamepadTextInput(struct w_ste
         .pchExistingText = pchExistingText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
+    IsBadStringPtrA(pchExistingText, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils007_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -1836,6 +1843,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils008_CheckFileSignature, &params );
     return params._ret;
 }
@@ -1852,6 +1860,8 @@ int8_t __thiscall winISteamUtils_SteamUtils008_ShowGamepadTextInput(struct w_ste
         .pchExistingText = pchExistingText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
+    IsBadStringPtrA(pchExistingText, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils008_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -2248,6 +2258,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils009_CheckFileSignature, &params );
     return params._ret;
 }
@@ -2264,6 +2275,8 @@ int8_t __thiscall winISteamUtils_SteamUtils009_ShowGamepadTextInput(struct w_ste
         .pchExistingText = pchExistingText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
+    IsBadStringPtrA(pchExistingText, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils009_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -2402,6 +2415,7 @@ int32_t __thiscall winISteamUtils_SteamUtils009_FilterText(struct w_steam_iface 
         .bLegalOnly = bLegalOnly,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchInputMessage, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils009_FilterText, &params );
     return params._ret;
 }
@@ -2741,6 +2755,7 @@ uint64_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_ste
         .szFileName = szFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(szFileName, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils010_CheckFileSignature, &params );
     return params._ret;
 }
@@ -2757,6 +2772,8 @@ int8_t __thiscall winISteamUtils_SteamUtils010_ShowGamepadTextInput(struct w_ste
         .pchExistingText = pchExistingText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
+    IsBadStringPtrA(pchExistingText, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils010_ShowGamepadTextInput, &params );
     return params._ret;
 }
@@ -2897,6 +2914,7 @@ int32_t __thiscall winISteamUtils_SteamUtils010_FilterText(struct w_steam_iface 
         .nByteSizeOutFilteredText = nByteSizeOutFilteredText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchInputMessage, -1);
     STEAMCLIENT_CALL( ISteamUtils_SteamUtils010_FilterText, &params );
     return params._ret;
 }

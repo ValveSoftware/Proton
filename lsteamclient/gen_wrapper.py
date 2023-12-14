@@ -405,6 +405,9 @@ PATH_CONV_STRUCTS = {
     },
 }
 
+PRETOUCH_TYPES = {
+    "const char *": "    IsBadStringPtrA({0}, -1);\n",
+}
 
 class Padding:
     def __init__(self, offset, size):
@@ -1060,6 +1063,14 @@ def handle_method_c(klass, method, winclassname, out):
     out(u'    };\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
+
+    # Some games pass pointers to the data in PE modules which have no access. Access violation is handled
+    # by VEH (which decrypts data and changes page protection). That can only work if such access violation happens
+    # on the PE side, so access the data before passing to the Unix side.
+    for _, p in enumerate(method.get_arguments()):
+        pretouch = PRETOUCH_TYPES.get(p.type.spelling)
+        if pretouch is not None:
+            out(pretouch.format(p.spelling))
 
     out(f'    STEAMCLIENT_CALL( {method.full_name}, &params );\n')
 

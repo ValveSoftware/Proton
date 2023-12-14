@@ -106,6 +106,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient006_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -133,6 +134,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient006_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -172,6 +174,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient006_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -186,6 +189,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient006_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -201,6 +205,7 @@ void * __thiscall winISteamClient_SteamClient006_GetISteamBilling(struct w_steam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamBilling, &params );
     return params._ret;
 }
@@ -215,6 +220,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient006_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -230,6 +236,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient006_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -245,6 +252,7 @@ void /*ISteamContentServer*/ * __thiscall winISteamClient_SteamClient006_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamContentServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -260,6 +268,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient006_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -275,6 +284,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient006_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient006_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -432,6 +442,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient007_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -447,6 +458,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient007_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -474,6 +486,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient007_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -488,6 +501,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient007_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -503,6 +517,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient007_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -518,6 +533,7 @@ void /*ISteamContentServer*/ * __thiscall winISteamClient_SteamClient007_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamContentServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -533,6 +549,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient007_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -548,6 +565,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient007_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -563,6 +581,7 @@ void * __thiscall winISteamClient_SteamClient007_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -599,6 +618,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient007_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -614,6 +634,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient007_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -629,6 +650,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient007_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -655,6 +677,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient007_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient007_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -792,6 +815,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient008_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -807,6 +831,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient008_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -834,6 +859,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient008_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -848,6 +874,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient008_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -863,6 +890,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient008_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -878,6 +906,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient008_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -893,6 +922,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient008_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -908,6 +938,7 @@ void * __thiscall winISteamClient_SteamClient008_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -923,6 +954,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient008_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -938,6 +970,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient008_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -953,6 +986,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient008_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -968,6 +1002,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient008_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient008_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1137,6 +1172,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient009_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1152,6 +1188,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient009_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1179,6 +1216,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient009_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1193,6 +1231,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient009_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1208,6 +1247,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient009_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1223,6 +1263,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient009_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1238,6 +1279,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient009_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1253,6 +1295,7 @@ void * __thiscall winISteamClient_SteamClient009_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1268,6 +1311,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient009_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1283,6 +1327,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient009_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1298,6 +1343,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient009_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1313,6 +1359,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient009_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1328,6 +1375,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient009_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient009_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1500,6 +1548,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient010_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1515,6 +1564,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient010_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1542,6 +1592,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient010_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1556,6 +1607,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient010_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1571,6 +1623,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient010_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1586,6 +1639,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient010_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1601,6 +1655,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient010_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1616,6 +1671,7 @@ void * __thiscall winISteamClient_SteamClient010_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1631,6 +1687,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient010_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1646,6 +1703,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient010_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1661,6 +1719,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient010_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1676,6 +1735,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient010_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1691,6 +1751,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient010_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1749,6 +1810,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient010_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient010_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1892,6 +1954,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient011_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1907,6 +1970,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient011_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1934,6 +1998,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient011_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1948,6 +2013,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient011_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1963,6 +2029,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient011_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1978,6 +2045,7 @@ void /*ISteamMasterServerUpdater*/ * __thiscall winISteamClient_SteamClient011_G
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamMasterServerUpdater, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -1993,6 +2061,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient011_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2008,6 +2077,7 @@ void * __thiscall winISteamClient_SteamClient011_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2023,6 +2093,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient011_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2038,6 +2109,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient011_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2053,6 +2125,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient011_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2068,6 +2141,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient011_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2083,6 +2157,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient011_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2098,6 +2173,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient011_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2156,6 +2232,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient011_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient011_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2302,6 +2379,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient012_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2317,6 +2395,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient012_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2344,6 +2423,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient012_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2358,6 +2438,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient012_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2373,6 +2454,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient012_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2388,6 +2470,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient012_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2403,6 +2486,7 @@ void * __thiscall winISteamClient_SteamClient012_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2418,6 +2502,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient012_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2433,6 +2518,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient012_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2448,6 +2534,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient012_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2463,6 +2550,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient012_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2478,6 +2566,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient012_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2493,6 +2582,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient012_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2551,6 +2641,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient012_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2566,6 +2657,7 @@ void /*ISteamUnifiedMessages*/ * __thiscall winISteamClient_SteamClient012_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamUnifiedMessages, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2581,6 +2673,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient012_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2596,6 +2689,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient012_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient012_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2747,6 +2841,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient013_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2762,6 +2857,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient013_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2789,6 +2885,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient013_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2803,6 +2900,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient013_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2818,6 +2916,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient013_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2833,6 +2932,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient013_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2848,6 +2948,7 @@ void * __thiscall winISteamClient_SteamClient013_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2863,6 +2964,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient013_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2878,6 +2980,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient013_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2893,6 +2996,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient013_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2908,6 +3012,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient013_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2923,6 +3028,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient013_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2938,6 +3044,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient013_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -2996,6 +3103,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient013_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3011,6 +3119,7 @@ void /*ISteamUnifiedMessages*/ * __thiscall winISteamClient_SteamClient013_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamUnifiedMessages, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3026,6 +3135,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient013_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3041,6 +3151,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient013_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3056,6 +3167,7 @@ void * __thiscall winISteamClient_SteamClient013_GetISteamInventory(struct w_ste
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamInventory, &params );
     return params._ret;
 }
@@ -3070,6 +3182,7 @@ void * __thiscall winISteamClient_SteamClient013_GetISteamVideo(struct w_steam_i
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamVideo, &params );
     return params._ret;
 }
@@ -3084,6 +3197,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient013_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient013_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3237,6 +3351,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient014_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3252,6 +3367,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient014_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3279,6 +3395,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient014_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3293,6 +3410,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient014_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3308,6 +3426,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient014_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3323,6 +3442,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient014_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3338,6 +3458,7 @@ void * __thiscall winISteamClient_SteamClient014_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3353,6 +3474,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient014_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3368,6 +3490,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient014_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3383,6 +3506,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient014_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3398,6 +3522,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient014_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3413,6 +3538,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient014_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3428,6 +3554,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient014_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3486,6 +3613,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient014_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3501,6 +3629,7 @@ void /*ISteamUnifiedMessages*/ * __thiscall winISteamClient_SteamClient014_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamUnifiedMessages, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3516,6 +3645,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient014_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3531,6 +3661,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient014_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3546,6 +3677,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient014_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3561,6 +3693,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient014_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient014_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3714,6 +3847,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient015_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3729,6 +3863,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient015_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3756,6 +3891,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient015_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3770,6 +3906,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient015_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3785,6 +3922,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient015_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3800,6 +3938,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient015_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3815,6 +3954,7 @@ void * __thiscall winISteamClient_SteamClient015_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3830,6 +3970,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient015_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3845,6 +3986,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient015_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3860,6 +4002,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient015_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3875,6 +4018,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient015_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3890,6 +4034,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient015_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3905,6 +4050,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient015_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3963,6 +4109,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient015_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3978,6 +4125,7 @@ void /*ISteamUnifiedMessages*/ * __thiscall winISteamClient_SteamClient015_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamUnifiedMessages, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -3993,6 +4141,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient015_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4008,6 +4157,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient015_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4023,6 +4173,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient015_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4038,6 +4189,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient015_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4053,6 +4205,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient015_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient015_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4211,6 +4364,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient016_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4226,6 +4380,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient016_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4253,6 +4408,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient016_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4267,6 +4423,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient016_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4282,6 +4439,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient016_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4297,6 +4455,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient016_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4312,6 +4471,7 @@ void * __thiscall winISteamClient_SteamClient016_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4327,6 +4487,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient016_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4342,6 +4503,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient016_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4357,6 +4519,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient016_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4372,6 +4535,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient016_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4387,6 +4551,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient016_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4402,6 +4567,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient016_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4460,6 +4626,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient016_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4475,6 +4642,7 @@ void /*ISteamUnifiedMessages*/ * __thiscall winISteamClient_SteamClient016_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamUnifiedMessages, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4490,6 +4658,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient016_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4505,6 +4674,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient016_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4520,6 +4690,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient016_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4535,6 +4706,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient016_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4550,6 +4722,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient016_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4565,6 +4738,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient016_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient016_GetISteamHTMLSurface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4763,6 +4937,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient017_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4778,6 +4953,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient017_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4805,6 +4981,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient017_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4819,6 +4996,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient017_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4834,6 +5012,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient017_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4849,6 +5028,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient017_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4864,6 +5044,7 @@ void * __thiscall winISteamClient_SteamClient017_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4879,6 +5060,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient017_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4894,6 +5076,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient017_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4909,6 +5092,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient017_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4924,6 +5108,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient017_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4939,6 +5124,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient017_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -4954,6 +5140,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient017_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5012,6 +5199,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient017_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5027,6 +5215,7 @@ void * __thiscall winISteamClient_SteamClient017_DEPRECATED_GetISteamUnifiedMess
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_DEPRECATED_GetISteamUnifiedMessages, &params );
     return params._ret;
 }
@@ -5041,6 +5230,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient017_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5056,6 +5246,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient017_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5071,6 +5262,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient017_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5086,6 +5278,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient017_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5101,6 +5294,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient017_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5116,6 +5310,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient017_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamHTMLSurface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5164,6 +5359,7 @@ void /*ISteamInventory*/ * __thiscall winISteamClient_SteamClient017_GetISteamIn
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamInventory, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5179,6 +5375,7 @@ void /*ISteamVideo*/ * __thiscall winISteamClient_SteamClient017_GetISteamVideo(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamVideo, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5194,6 +5391,7 @@ void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient017_GetI
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient017_GetISteamParentalSettings, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5365,6 +5563,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient018_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5380,6 +5579,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient018_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5407,6 +5607,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient018_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5421,6 +5622,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient018_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5436,6 +5638,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient018_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5451,6 +5654,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient018_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5466,6 +5670,7 @@ void * __thiscall winISteamClient_SteamClient018_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5481,6 +5686,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient018_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5496,6 +5702,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient018_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5511,6 +5718,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient018_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5526,6 +5734,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient018_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5541,6 +5750,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient018_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5556,6 +5766,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient018_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5571,6 +5782,7 @@ void /*ISteamGameSearch*/ * __thiscall winISteamClient_SteamClient018_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamGameSearch, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5629,6 +5841,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient018_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5644,6 +5857,7 @@ void * __thiscall winISteamClient_SteamClient018_DEPRECATED_GetISteamUnifiedMess
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_DEPRECATED_GetISteamUnifiedMessages, &params );
     return params._ret;
 }
@@ -5658,6 +5872,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient018_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5673,6 +5888,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient018_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5688,6 +5904,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient018_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5703,6 +5920,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient018_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5718,6 +5936,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient018_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5733,6 +5952,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient018_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamHTMLSurface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5781,6 +6001,7 @@ void /*ISteamInventory*/ * __thiscall winISteamClient_SteamClient018_GetISteamIn
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamInventory, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5796,6 +6017,7 @@ void /*ISteamVideo*/ * __thiscall winISteamClient_SteamClient018_GetISteamVideo(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamVideo, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5811,6 +6033,7 @@ void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient018_GetI
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamParentalSettings, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5826,6 +6049,7 @@ void /*ISteamInput*/ * __thiscall winISteamClient_SteamClient018_GetISteamInput(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamInput, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -5841,6 +6065,7 @@ void /*ISteamParties*/ * __thiscall winISteamClient_SteamClient018_GetISteamPart
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient018_GetISteamParties, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6016,6 +6241,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient019_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6031,6 +6257,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient019_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6058,6 +6285,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient019_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6072,6 +6300,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient019_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6087,6 +6316,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient019_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6102,6 +6332,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient019_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6117,6 +6348,7 @@ void * __thiscall winISteamClient_SteamClient019_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6132,6 +6364,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient019_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6147,6 +6380,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient019_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6162,6 +6396,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient019_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6177,6 +6412,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient019_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6192,6 +6428,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient019_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6207,6 +6444,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient019_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6222,6 +6460,7 @@ void /*ISteamGameSearch*/ * __thiscall winISteamClient_SteamClient019_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamGameSearch, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6280,6 +6519,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient019_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6295,6 +6535,7 @@ void * __thiscall winISteamClient_SteamClient019_DEPRECATED_GetISteamUnifiedMess
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_DEPRECATED_GetISteamUnifiedMessages, &params );
     return params._ret;
 }
@@ -6309,6 +6550,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient019_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6324,6 +6566,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient019_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6339,6 +6582,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient019_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6354,6 +6598,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient019_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6369,6 +6614,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient019_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6384,6 +6630,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient019_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamHTMLSurface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6432,6 +6679,7 @@ void /*ISteamInventory*/ * __thiscall winISteamClient_SteamClient019_GetISteamIn
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamInventory, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6447,6 +6695,7 @@ void /*ISteamVideo*/ * __thiscall winISteamClient_SteamClient019_GetISteamVideo(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamVideo, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6462,6 +6711,7 @@ void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient019_GetI
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamParentalSettings, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6477,6 +6727,7 @@ void /*ISteamInput*/ * __thiscall winISteamClient_SteamClient019_GetISteamInput(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamInput, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6492,6 +6743,7 @@ void /*ISteamParties*/ * __thiscall winISteamClient_SteamClient019_GetISteamPart
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamParties, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6507,6 +6759,7 @@ void /*ISteamRemotePlay*/ * __thiscall winISteamClient_SteamClient019_GetISteamR
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient019_GetISteamRemotePlay, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6684,6 +6937,7 @@ void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient020_GetISteamUser(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamUser, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6699,6 +6953,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient020_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamGameServer, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6726,6 +6981,7 @@ void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient020_GetISteamFrie
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamFriends, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6740,6 +6996,7 @@ void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient020_GetISteamUtils(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamUtils, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6755,6 +7012,7 @@ void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient020_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamMatchmaking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6770,6 +7028,7 @@ void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient020_Ge
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamMatchmakingServers, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6785,6 +7044,7 @@ void * __thiscall winISteamClient_SteamClient020_GetISteamGenericInterface(struc
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamGenericInterface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6800,6 +7060,7 @@ void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient020_GetISteamUs
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamUserStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6815,6 +7076,7 @@ void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient020_GetIS
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamGameServerStats, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6830,6 +7092,7 @@ void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient020_GetISteamApps(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamApps, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6845,6 +7108,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient020_GetISteamN
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamNetworking, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6860,6 +7124,7 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient020_GetISte
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamRemoteStorage, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6875,6 +7140,7 @@ void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient020_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamScreenshots, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6890,6 +7156,7 @@ void /*ISteamGameSearch*/ * __thiscall winISteamClient_SteamClient020_GetISteamG
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamGameSearch, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6948,6 +7215,7 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient020_GetISteamHTTP(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamHTTP, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6963,6 +7231,7 @@ void * __thiscall winISteamClient_SteamClient020_DEPRECATED_GetISteamUnifiedMess
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_DEPRECATED_GetISteamUnifiedMessages, &params );
     return params._ret;
 }
@@ -6977,6 +7246,7 @@ void /*ISteamController*/ * __thiscall winISteamClient_SteamClient020_GetISteamC
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamController, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -6992,6 +7262,7 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient020_GetISteamUGC(stru
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamUGC, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7007,6 +7278,7 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient020_GetISteamAppL
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamAppList, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7022,6 +7294,7 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient020_GetISteamMusic(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamMusic, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7037,6 +7310,7 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient020_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamMusicRemote, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7052,6 +7326,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient020_GetISteam
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamHTMLSurface, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7100,6 +7375,7 @@ void /*ISteamInventory*/ * __thiscall winISteamClient_SteamClient020_GetISteamIn
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamInventory, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7115,6 +7391,7 @@ void /*ISteamVideo*/ * __thiscall winISteamClient_SteamClient020_GetISteamVideo(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamVideo, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7130,6 +7407,7 @@ void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient020_GetI
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamParentalSettings, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7145,6 +7423,7 @@ void /*ISteamInput*/ * __thiscall winISteamClient_SteamClient020_GetISteamInput(
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamInput, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7160,6 +7439,7 @@ void /*ISteamParties*/ * __thiscall winISteamClient_SteamClient020_GetISteamPart
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamParties, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;
@@ -7175,6 +7455,7 @@ void /*ISteamRemotePlay*/ * __thiscall winISteamClient_SteamClient020_GetISteamR
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamClient_SteamClient020_GetISteamRemotePlay, &params );
     params._ret = create_win_interface( pchVersion, params._ret );
     return params._ret;

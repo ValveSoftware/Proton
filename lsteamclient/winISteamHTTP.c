@@ -28,6 +28,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPReque
         .pchAbsoluteURL = pchAbsoluteURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchAbsoluteURL, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest, &params );
     return params._ret;
 }
@@ -68,6 +69,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHea
         .pchHeaderValue = pchHeaderValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
+    IsBadStringPtrA(pchHeaderValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestHeaderValue, &params );
     return params._ret;
 }
@@ -82,6 +85,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGet
         .pchParamValue = pchParamValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchParamName, -1);
+    IsBadStringPtrA(pchParamValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestGetOrPostParameter, &params );
     return params._ret;
 }
@@ -133,6 +138,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHe
         .unResponseHeaderSize = unResponseHeaderSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderSize, &params );
     return params._ret;
 }
@@ -148,6 +154,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHe
         .unBufferSize = unBufferSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseHeaderValue, &params );
     return params._ret;
 }
@@ -215,6 +222,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRaw
         .unBodyLen = unBodyLen,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchContentType, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody, &params );
     return params._ret;
 }
@@ -287,6 +295,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPReque
         .pchAbsoluteURL = pchAbsoluteURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchAbsoluteURL, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest, &params );
     return params._ret;
 }
@@ -327,6 +336,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHea
         .pchHeaderValue = pchHeaderValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
+    IsBadStringPtrA(pchHeaderValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestHeaderValue, &params );
     return params._ret;
 }
@@ -341,6 +352,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGet
         .pchParamValue = pchParamValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchParamName, -1);
+    IsBadStringPtrA(pchParamValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestGetOrPostParameter, &params );
     return params._ret;
 }
@@ -405,6 +418,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHe
         .unResponseHeaderSize = unResponseHeaderSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize, &params );
     return params._ret;
 }
@@ -420,6 +434,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHe
         .unBufferSize = unBufferSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue, &params );
     return params._ret;
 }
@@ -502,6 +517,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRaw
         .unBodyLen = unBodyLen,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchContentType, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody, &params );
     return params._ret;
 }
@@ -541,6 +557,9 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie(struct 
         .pchCookie = pchCookie,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHost, -1);
+    IsBadStringPtrA(pchUrl, -1);
+    IsBadStringPtrA(pchCookie, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetCookie, &params );
     return params._ret;
 }
@@ -567,6 +586,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUse
         .pchUserAgentInfo = pchUserAgentInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchUserAgentInfo, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo, &params );
     return params._ret;
 }
@@ -688,6 +708,7 @@ uint32_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPReque
         .pchAbsoluteURL = pchAbsoluteURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchAbsoluteURL, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest, &params );
     return params._ret;
 }
@@ -728,6 +749,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHea
         .pchHeaderValue = pchHeaderValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
+    IsBadStringPtrA(pchHeaderValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestHeaderValue, &params );
     return params._ret;
 }
@@ -742,6 +765,8 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGet
         .pchParamValue = pchParamValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchParamName, -1);
+    IsBadStringPtrA(pchParamValue, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestGetOrPostParameter, &params );
     return params._ret;
 }
@@ -806,6 +831,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHe
         .unResponseHeaderSize = unResponseHeaderSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderSize, &params );
     return params._ret;
 }
@@ -821,6 +847,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHe
         .unBufferSize = unBufferSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHeaderName, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPResponseHeaderValue, &params );
     return params._ret;
 }
@@ -903,6 +930,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRaw
         .unBodyLen = unBodyLen,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchContentType, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestRawPostBody, &params );
     return params._ret;
 }
@@ -942,6 +970,9 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie(struct 
         .pchCookie = pchCookie,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchHost, -1);
+    IsBadStringPtrA(pchUrl, -1);
+    IsBadStringPtrA(pchCookie, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetCookie, &params );
     return params._ret;
 }
@@ -968,6 +999,7 @@ int8_t __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUse
         .pchUserAgentInfo = pchUserAgentInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchUserAgentInfo, -1);
     STEAMCLIENT_CALL( ISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestUserAgentInfo, &params );
     return params._ret;
 }

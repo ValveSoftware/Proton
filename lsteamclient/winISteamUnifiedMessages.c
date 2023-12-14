@@ -20,6 +20,7 @@ uint64_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERS
         .unContext = unContext,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchServiceMethod, -1);
     STEAMCLIENT_CALL( ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod, &params );
     return params._ret;
 }
@@ -75,6 +76,7 @@ int8_t __thiscall winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSIO
         .unNotificationBufferSize = unNotificationBufferSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchServiceNotification, -1);
     STEAMCLIENT_CALL( ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendNotification, &params );
     return params._ret;
 }

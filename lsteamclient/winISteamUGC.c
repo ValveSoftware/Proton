@@ -99,6 +99,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag, &params );
     return params._ret;
 }
@@ -112,6 +113,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag, &params );
     return params._ret;
 }
@@ -151,6 +153,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -177,6 +180,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText, &params );
     return params._ret;
 }
@@ -351,6 +355,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag, &params );
     return params._ret;
 }
@@ -364,6 +369,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag, &params );
     return params._ret;
 }
@@ -416,6 +422,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -442,6 +449,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText, &params );
     return params._ret;
 }
@@ -507,6 +515,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle, &params );
     return params._ret;
 }
@@ -520,6 +529,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription, &params );
     return params._ret;
 }
@@ -559,6 +569,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent, &params );
     return params._ret;
 }
@@ -572,6 +583,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview, &params );
     return params._ret;
 }
@@ -585,6 +597,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -844,6 +857,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag, &params );
     return params._ret;
 }
@@ -857,6 +871,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag, &params );
     return params._ret;
 }
@@ -909,6 +924,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -935,6 +951,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText, &params );
     return params._ret;
 }
@@ -1000,6 +1017,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle, &params );
     return params._ret;
 }
@@ -1013,6 +1031,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription, &params );
     return params._ret;
 }
@@ -1052,6 +1071,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent, &params );
     return params._ret;
 }
@@ -1065,6 +1085,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview, &params );
     return params._ret;
 }
@@ -1078,6 +1099,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -1340,6 +1362,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag, &params );
     return params._ret;
 }
@@ -1353,6 +1376,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag, &params );
     return params._ret;
 }
@@ -1405,6 +1429,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -1431,6 +1456,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText, &params );
     return params._ret;
 }
@@ -1496,6 +1522,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle, &params );
     return params._ret;
 }
@@ -1509,6 +1536,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription, &params );
     return params._ret;
 }
@@ -1548,6 +1576,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent, &params );
     return params._ret;
 }
@@ -1561,6 +1590,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview, &params );
     return params._ret;
 }
@@ -1574,6 +1604,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -1977,6 +2008,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag, &params );
     return params._ret;
 }
@@ -1990,6 +2022,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag, &params );
     return params._ret;
 }
@@ -2081,6 +2114,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -2107,6 +2141,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText, &params );
     return params._ret;
 }
@@ -2172,6 +2207,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle, &params );
     return params._ret;
 }
@@ -2185,6 +2221,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription, &params );
     return params._ret;
 }
@@ -2198,6 +2235,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata, &params );
     return params._ret;
 }
@@ -2237,6 +2275,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent, &params );
     return params._ret;
 }
@@ -2250,6 +2289,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview, &params );
     return params._ret;
 }
@@ -2263,6 +2303,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -2709,6 +2750,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag, &params );
     return params._ret;
 }
@@ -2722,6 +2764,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag, &params );
     return params._ret;
 }
@@ -2800,6 +2843,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage, &params );
     return params._ret;
 }
@@ -2826,6 +2870,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -2852,6 +2897,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText, &params );
     return params._ret;
 }
@@ -2917,6 +2963,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle, &params );
     return params._ret;
 }
@@ -2930,6 +2977,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription, &params );
     return params._ret;
 }
@@ -2943,6 +2991,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -2956,6 +3005,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata, &params );
     return params._ret;
 }
@@ -2995,6 +3045,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent, &params );
     return params._ret;
 }
@@ -3008,6 +3059,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview, &params );
     return params._ret;
 }
@@ -3021,6 +3073,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -3535,6 +3588,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag, &params );
     return params._ret;
 }
@@ -3548,6 +3602,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag, &params );
     return params._ret;
 }
@@ -3639,6 +3694,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage, &params );
     return params._ret;
 }
@@ -3665,6 +3721,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -3691,6 +3748,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText, &params );
     return params._ret;
 }
@@ -3718,6 +3776,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -3770,6 +3830,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle, &params );
     return params._ret;
 }
@@ -3783,6 +3844,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription, &params );
     return params._ret;
 }
@@ -3796,6 +3858,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -3809,6 +3872,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata, &params );
     return params._ret;
 }
@@ -3848,6 +3912,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent, &params );
     return params._ret;
 }
@@ -3861,6 +3926,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview, &params );
     return params._ret;
 }
@@ -3874,6 +3940,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -3888,6 +3955,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -3901,6 +3970,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -4082,6 +4152,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -4454,6 +4525,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag, &params );
     return params._ret;
 }
@@ -4467,6 +4539,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag, &params );
     return params._ret;
 }
@@ -4558,6 +4631,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage, &params );
     return params._ret;
 }
@@ -4584,6 +4658,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -4610,6 +4685,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText, &params );
     return params._ret;
 }
@@ -4637,6 +4713,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -4689,6 +4767,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle, &params );
     return params._ret;
 }
@@ -4702,6 +4781,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription, &params );
     return params._ret;
 }
@@ -4715,6 +4795,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -4728,6 +4809,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata, &params );
     return params._ret;
 }
@@ -4767,6 +4849,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent, &params );
     return params._ret;
 }
@@ -4780,6 +4863,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview, &params );
     return params._ret;
 }
@@ -4793,6 +4877,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -4807,6 +4892,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -4821,6 +4908,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -4834,6 +4922,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -4848,6 +4937,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -4862,6 +4952,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -4888,6 +4979,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -5069,6 +5161,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -5450,6 +5543,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag, &params );
     return params._ret;
 }
@@ -5463,6 +5557,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag, &params );
     return params._ret;
 }
@@ -5567,6 +5662,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage, &params );
     return params._ret;
 }
@@ -5593,6 +5689,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -5619,6 +5716,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText, &params );
     return params._ret;
 }
@@ -5646,6 +5744,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -5698,6 +5798,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle, &params );
     return params._ret;
 }
@@ -5711,6 +5812,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription, &params );
     return params._ret;
 }
@@ -5724,6 +5826,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -5737,6 +5840,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata, &params );
     return params._ret;
 }
@@ -5776,6 +5880,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent, &params );
     return params._ret;
 }
@@ -5789,6 +5894,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview, &params );
     return params._ret;
 }
@@ -5802,6 +5908,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -5816,6 +5923,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -5830,6 +5939,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -5843,6 +5953,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -5857,6 +5968,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -5871,6 +5983,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -5897,6 +6010,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -6078,6 +6192,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -6507,6 +6622,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag, &params );
     return params._ret;
 }
@@ -6520,6 +6636,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag, &params );
     return params._ret;
 }
@@ -6637,6 +6754,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage, &params );
     return params._ret;
 }
@@ -6663,6 +6781,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -6689,6 +6808,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText, &params );
     return params._ret;
 }
@@ -6716,6 +6836,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -6768,6 +6890,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle, &params );
     return params._ret;
 }
@@ -6781,6 +6904,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription, &params );
     return params._ret;
 }
@@ -6794,6 +6918,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -6807,6 +6932,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata, &params );
     return params._ret;
 }
@@ -6846,6 +6972,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent, &params );
     return params._ret;
 }
@@ -6859,6 +6986,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview, &params );
     return params._ret;
 }
@@ -6872,6 +7000,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -6886,6 +7015,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -6900,6 +7031,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -6913,6 +7045,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -6927,6 +7060,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -6941,6 +7075,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -6967,6 +7102,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -7148,6 +7284,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -7491,6 +7628,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -7678,6 +7816,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag, &params );
     return params._ret;
 }
@@ -7691,6 +7830,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag, &params );
     return params._ret;
 }
@@ -7808,6 +7948,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage, &params );
     return params._ret;
 }
@@ -7834,6 +7975,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -7860,6 +8002,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText, &params );
     return params._ret;
 }
@@ -7887,6 +8030,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -7939,6 +8084,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle, &params );
     return params._ret;
 }
@@ -7952,6 +8098,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription, &params );
     return params._ret;
 }
@@ -7965,6 +8112,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -7978,6 +8126,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata, &params );
     return params._ret;
 }
@@ -8017,6 +8166,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent, &params );
     return params._ret;
 }
@@ -8030,6 +8180,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview, &params );
     return params._ret;
 }
@@ -8056,6 +8207,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -8070,6 +8222,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -8084,6 +8238,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -8097,6 +8252,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -8111,6 +8267,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -8125,6 +8282,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -8151,6 +8309,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -8332,6 +8491,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -8679,6 +8839,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -8857,6 +9018,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -8882,6 +9044,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag, &params );
     return params._ret;
 }
@@ -8895,6 +9058,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag, &params );
     return params._ret;
 }
@@ -9012,6 +9176,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage, &params );
     return params._ret;
 }
@@ -9038,6 +9203,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -9064,6 +9230,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText, &params );
     return params._ret;
 }
@@ -9091,6 +9258,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -9143,6 +9312,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle, &params );
     return params._ret;
 }
@@ -9156,6 +9326,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription, &params );
     return params._ret;
 }
@@ -9169,6 +9340,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -9182,6 +9354,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata, &params );
     return params._ret;
 }
@@ -9221,6 +9394,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent, &params );
     return params._ret;
 }
@@ -9234,6 +9408,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview, &params );
     return params._ret;
 }
@@ -9272,6 +9447,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -9286,6 +9462,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -9300,6 +9478,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -9313,6 +9492,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -9327,6 +9507,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -9341,6 +9522,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -9367,6 +9549,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -9548,6 +9731,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -9898,6 +10082,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -10076,6 +10261,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -10101,6 +10287,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag, &params );
     return params._ret;
 }
@@ -10127,6 +10314,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag, &params );
     return params._ret;
 }
@@ -10244,6 +10432,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage, &params );
     return params._ret;
 }
@@ -10270,6 +10459,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -10296,6 +10486,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText, &params );
     return params._ret;
 }
@@ -10323,6 +10514,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -10375,6 +10568,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle, &params );
     return params._ret;
 }
@@ -10388,6 +10582,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription, &params );
     return params._ret;
 }
@@ -10401,6 +10596,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -10414,6 +10610,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata, &params );
     return params._ret;
 }
@@ -10453,6 +10650,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent, &params );
     return params._ret;
 }
@@ -10466,6 +10664,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview, &params );
     return params._ret;
 }
@@ -10504,6 +10703,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -10518,6 +10718,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -10532,6 +10734,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -10545,6 +10748,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -10559,6 +10763,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -10573,6 +10778,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -10599,6 +10805,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -10780,6 +10987,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -11136,6 +11344,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -11359,6 +11568,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -11384,6 +11594,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag, &params );
     return params._ret;
 }
@@ -11410,6 +11621,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag, &params );
     return params._ret;
 }
@@ -11527,6 +11739,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage, &params );
     return params._ret;
 }
@@ -11553,6 +11766,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -11579,6 +11793,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText, &params );
     return params._ret;
 }
@@ -11606,6 +11821,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -11658,6 +11875,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle, &params );
     return params._ret;
 }
@@ -11671,6 +11889,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription, &params );
     return params._ret;
 }
@@ -11684,6 +11903,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -11697,6 +11917,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata, &params );
     return params._ret;
 }
@@ -11736,6 +11957,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent, &params );
     return params._ret;
 }
@@ -11749,6 +11971,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview, &params );
     return params._ret;
 }
@@ -11787,6 +12010,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -11801,6 +12025,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -11815,6 +12041,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -11828,6 +12055,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -11842,6 +12070,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -11856,6 +12085,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -11882,6 +12112,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -12063,6 +12294,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -12448,6 +12680,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -12671,6 +12904,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -12696,6 +12930,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag, &params );
     return params._ret;
 }
@@ -12722,6 +12957,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag, &params );
     return params._ret;
 }
@@ -12839,6 +13075,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage, &params );
     return params._ret;
 }
@@ -12865,6 +13102,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -12891,6 +13129,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText, &params );
     return params._ret;
 }
@@ -12946,6 +13185,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -12998,6 +13239,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle, &params );
     return params._ret;
 }
@@ -13011,6 +13253,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription, &params );
     return params._ret;
 }
@@ -13024,6 +13267,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -13037,6 +13281,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata, &params );
     return params._ret;
 }
@@ -13076,6 +13321,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent, &params );
     return params._ret;
 }
@@ -13089,6 +13335,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview, &params );
     return params._ret;
 }
@@ -13127,6 +13374,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -13141,6 +13389,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -13155,6 +13405,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -13168,6 +13419,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -13182,6 +13434,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -13196,6 +13449,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -13222,6 +13476,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -13403,6 +13658,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -13793,6 +14049,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -14016,6 +14273,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -14056,6 +14314,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag, &params );
     return params._ret;
 }
@@ -14082,6 +14341,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag, &params );
     return params._ret;
 }
@@ -14199,6 +14459,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage, &params );
     return params._ret;
 }
@@ -14225,6 +14486,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -14251,6 +14513,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText, &params );
     return params._ret;
 }
@@ -14306,6 +14569,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -14358,6 +14623,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle, &params );
     return params._ret;
 }
@@ -14371,6 +14637,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription, &params );
     return params._ret;
 }
@@ -14384,6 +14651,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -14397,6 +14665,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata, &params );
     return params._ret;
 }
@@ -14436,6 +14705,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent, &params );
     return params._ret;
 }
@@ -14449,6 +14719,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview, &params );
     return params._ret;
 }
@@ -14487,6 +14758,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -14501,6 +14773,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -14515,6 +14789,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -14528,6 +14803,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -14542,6 +14818,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -14556,6 +14833,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -14608,6 +14886,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -14789,6 +15068,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer, &params );
     return params._ret;
 }
@@ -15183,6 +15463,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGC
         .pchCursor = pchCursor,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_2, &params );
     return params._ret;
 }
@@ -15406,6 +15687,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValue
         .cchValueSize = cchValueSize,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_2, &params );
     return params._ret;
 }
@@ -15446,6 +15728,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag, &params );
     return params._ret;
 }
@@ -15472,6 +15755,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag(stru
         .pTagName = pTagName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag, &params );
     return params._ret;
 }
@@ -15589,6 +15873,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage(struct 
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage, &params );
     return params._ret;
 }
@@ -15615,6 +15900,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFil
         .pMatchCloudFileName = pMatchCloudFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter, &params );
     return params._ret;
 }
@@ -15641,6 +15927,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText(struc
         .pSearchText = pSearchText,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText, &params );
     return params._ret;
 }
@@ -15696,6 +15983,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValue
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTag, &params );
     return params._ret;
 }
@@ -15748,6 +16037,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle(struct
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle, &params );
     return params._ret;
 }
@@ -15761,6 +16051,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription(
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription, &params );
     return params._ret;
 }
@@ -15774,6 +16065,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLangua
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage, &params );
     return params._ret;
 }
@@ -15787,6 +16079,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata(str
         .pchMetaData = pchMetaData,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata, &params );
     return params._ret;
 }
@@ -15827,6 +16120,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent(stru
         .pszContentFolder = pszContentFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent, &params );
     return params._ret;
 }
@@ -15840,6 +16134,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview(stru
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview, &params );
     return params._ret;
 }
@@ -15878,6 +16173,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueT
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags, &params );
     return params._ret;
 }
@@ -15892,6 +16188,8 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag(
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag, &params );
     return params._ret;
 }
@@ -15906,6 +16204,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile(
         .type = type,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile, &params );
     return params._ret;
 }
@@ -15919,6 +16218,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo, &params );
     return params._ret;
 }
@@ -15933,6 +16233,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFi
         .pszPreviewFile = pszPreviewFile,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile, &params );
     return params._ret;
 }
@@ -15947,6 +16248,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVi
         .pszVideoID = pszVideoID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo, &params );
     return params._ret;
 }
@@ -15999,6 +16301,7 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemUpdate(
         .pchChangeNote = pchChangeNote,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemUpdate, &params );
     return params._ret;
 }
@@ -16180,6 +16483,7 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGam
         .pszFolder = pszFolder,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
     STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer, &params );
     return params._ret;
 }

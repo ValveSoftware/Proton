@@ -105,6 +105,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnection, &params );
     return params._ret;
 }
@@ -155,6 +156,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName, &params );
 }
 
@@ -522,6 +524,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnection, &params );
     return params._ret;
 }
@@ -572,6 +575,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName, &params );
 }
 
@@ -990,6 +994,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnection, &params );
     return params._ret;
 }
@@ -1040,6 +1045,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName, &params );
 }
 
@@ -1500,6 +1506,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnection, &params );
     return params._ret;
 }
@@ -1550,6 +1557,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName, &params );
 }
 
@@ -2080,6 +2088,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection, &params );
     return params._ret;
 }
@@ -2130,6 +2139,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName, &params );
 }
 
@@ -2679,6 +2689,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseConn
         .bEnableLinger = bEnableLinger,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszDebug, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnection, &params );
     return params._ret;
 }
@@ -2729,6 +2740,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
         .pszName = pszName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszName, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName, &params );
 }
 

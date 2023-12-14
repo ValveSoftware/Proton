@@ -16,6 +16,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(struc
         .cchValueMax = cchValueMax,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData, &params );
     return params._ret;
 }
@@ -1061,6 +1062,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQu
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam, &params );
     return params._ret;
 }
@@ -1388,6 +1390,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQu
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam, &params );
     return params._ret;
 }
@@ -1748,6 +1751,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQu
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQueryParam, &params );
     return params._ret;
 }
@@ -1795,6 +1799,7 @@ uint64_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(
         .pszFileName = pszFileName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFileName, -1);
     STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails, &params );
     return params._ret;
 }

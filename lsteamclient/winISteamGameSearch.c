@@ -27,6 +27,8 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchPar
         .pchValuesToFind = pchValuesToFind,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKeyToFind, -1);
+    IsBadStringPtrA(pchValuesToFind, -1);
     STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams, &params );
     return params._ret;
 }
@@ -114,6 +116,8 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParam
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams, &params );
     return params._ret;
 }
@@ -127,6 +131,7 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDet
         .cubConnectionDetails = cubConnectionDetails,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchConnectionDetails, -1);
     STEAMCLIENT_CALL( ISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails, &params );
     return params._ret;
 }

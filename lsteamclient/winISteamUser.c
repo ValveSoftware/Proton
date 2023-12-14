@@ -210,6 +210,7 @@ int8_t __thiscall winISteamUser_SteamUser004_SetEmail(struct w_steam_iface *_thi
         .pchEmail = pchEmail,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchEmail, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser004_SetEmail, &params );
     return params._ret;
 }
@@ -237,6 +238,8 @@ int8_t __thiscall winISteamUser_SteamUser004_SetRegistryString(struct w_steam_if
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser004_SetRegistryString, &params );
     return params._ret;
 }
@@ -252,6 +255,7 @@ int8_t __thiscall winISteamUser_SteamUser004_GetRegistryString(struct w_steam_if
         .cbValue = cbValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser004_GetRegistryString, &params );
     return params._ret;
 }
@@ -266,6 +270,7 @@ int8_t __thiscall winISteamUser_SteamUser004_SetRegistryInt(struct w_steam_iface
         .iValue = iValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser004_SetRegistryInt, &params );
     return params._ret;
 }
@@ -280,6 +285,7 @@ int8_t __thiscall winISteamUser_SteamUser004_GetRegistryInt(struct w_steam_iface
         .piValue = piValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser004_GetRegistryInt, &params );
     return params._ret;
 }
@@ -574,6 +580,7 @@ int8_t __thiscall winISteamUser_SteamUser005_SetEmail(struct w_steam_iface *_thi
         .pchEmail = pchEmail,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchEmail, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetEmail, &params );
     return params._ret;
 }
@@ -588,6 +595,8 @@ int8_t __thiscall winISteamUser_SteamUser005_SetRegistryString(struct w_steam_if
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetRegistryString, &params );
     return params._ret;
 }
@@ -603,6 +612,7 @@ int8_t __thiscall winISteamUser_SteamUser005_GetRegistryString(struct w_steam_if
         .cbValue = cbValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_GetRegistryString, &params );
     return params._ret;
 }
@@ -617,6 +627,7 @@ int8_t __thiscall winISteamUser_SteamUser005_SetRegistryInt(struct w_steam_iface
         .iValue = iValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetRegistryInt, &params );
     return params._ret;
 }
@@ -631,6 +642,7 @@ int8_t __thiscall winISteamUser_SteamUser005_GetRegistryInt(struct w_steam_iface
         .piValue = piValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_GetRegistryInt, &params );
     return params._ret;
 }
@@ -707,6 +719,7 @@ int8_t __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(struct w_steam
         .bResending = bResending,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchEmailAccount, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SendGuestPassByEmail, &params );
     return params._ret;
 }
@@ -733,6 +746,7 @@ int8_t __thiscall winISteamUser_SteamUser005_AckGuestPass(struct w_steam_iface *
         .pchGuestPassCode = pchGuestPassCode,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchGuestPassCode, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_AckGuestPass, &params );
     return params._ret;
 }
@@ -745,6 +759,7 @@ int8_t __thiscall winISteamUser_SteamUser005_RedeemGuestPass(struct w_steam_ifac
         .pchGuestPassCode = pchGuestPassCode,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchGuestPassCode, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_RedeemGuestPass, &params );
     return params._ret;
 }
@@ -856,6 +871,7 @@ void __thiscall winISteamUser_SteamUser005_AcknowledgeMessageByGID(struct w_stea
         .pchMessageGID = pchMessageGID,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMessageGID, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_AcknowledgeMessageByGID, &params );
 }
 
@@ -867,6 +883,7 @@ int8_t __thiscall winISteamUser_SteamUser005_SetLanguage(struct w_steam_iface *_
         .pchLanguage = pchLanguage,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetLanguage, &params );
     return params._ret;
 }
@@ -881,6 +898,7 @@ void __thiscall winISteamUser_SteamUser005_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_TrackAppUsageEvent, &params );
 }
 
@@ -892,6 +910,7 @@ void __thiscall winISteamUser_SteamUser005_SetAccountName(struct w_steam_iface *
         .pchAccountName = pchAccountName,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchAccountName, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetAccountName, &params );
 }
 
@@ -903,6 +922,7 @@ void __thiscall winISteamUser_SteamUser005_SetPassword(struct w_steam_iface *_th
         .pchPassword = pchPassword,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchPassword, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser005_SetPassword, &params );
 }
 
@@ -1052,6 +1072,8 @@ int8_t __thiscall winISteamUser_SteamUser006_SetRegistryString(struct w_steam_if
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser006_SetRegistryString, &params );
     return params._ret;
 }
@@ -1067,6 +1089,7 @@ int8_t __thiscall winISteamUser_SteamUser006_GetRegistryString(struct w_steam_if
         .cbValue = cbValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser006_GetRegistryString, &params );
     return params._ret;
 }
@@ -1081,6 +1104,7 @@ int8_t __thiscall winISteamUser_SteamUser006_SetRegistryInt(struct w_steam_iface
         .iValue = iValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser006_SetRegistryInt, &params );
     return params._ret;
 }
@@ -1095,6 +1119,7 @@ int8_t __thiscall winISteamUser_SteamUser006_GetRegistryInt(struct w_steam_iface
         .piValue = piValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser006_GetRegistryInt, &params );
     return params._ret;
 }
@@ -1139,6 +1164,7 @@ void __thiscall winISteamUser_SteamUser006_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser006_TrackAppUsageEvent, &params );
 }
 
@@ -1251,6 +1277,8 @@ int8_t __thiscall winISteamUser_SteamUser007_SetRegistryString(struct w_steam_if
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser007_SetRegistryString, &params );
     return params._ret;
 }
@@ -1266,6 +1294,7 @@ int8_t __thiscall winISteamUser_SteamUser007_GetRegistryString(struct w_steam_if
         .cbValue = cbValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser007_GetRegistryString, &params );
     return params._ret;
 }
@@ -1280,6 +1309,7 @@ int8_t __thiscall winISteamUser_SteamUser007_SetRegistryInt(struct w_steam_iface
         .iValue = iValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser007_SetRegistryInt, &params );
     return params._ret;
 }
@@ -1294,6 +1324,7 @@ int8_t __thiscall winISteamUser_SteamUser007_GetRegistryInt(struct w_steam_iface
         .piValue = piValue,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser007_GetRegistryInt, &params );
     return params._ret;
 }
@@ -1340,6 +1371,7 @@ void __thiscall winISteamUser_SteamUser007_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser007_TrackAppUsageEvent, &params );
 }
 
@@ -1468,6 +1500,7 @@ void __thiscall winISteamUser_SteamUser008_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser008_TrackAppUsageEvent, &params );
 }
 
@@ -1588,6 +1621,7 @@ void __thiscall winISteamUser_SteamUser009_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser009_TrackAppUsageEvent, &params );
 }
 
@@ -1706,6 +1740,7 @@ void __thiscall winISteamUser_SteamUser010_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser010_TrackAppUsageEvent, &params );
 }
 
@@ -1818,6 +1853,7 @@ void __thiscall winISteamUser_SteamUser011_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser011_TrackAppUsageEvent, &params );
 }
 
@@ -2003,6 +2039,7 @@ void __thiscall winISteamUser_SteamUser012_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser012_TrackAppUsageEvent, &params );
 }
 
@@ -2257,6 +2294,7 @@ void __thiscall winISteamUser_SteamUser013_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser013_TrackAppUsageEvent, &params );
 }
 
@@ -2534,6 +2572,7 @@ void __thiscall winISteamUser_SteamUser014_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser014_TrackAppUsageEvent, &params );
 }
 
@@ -2867,6 +2906,7 @@ void __thiscall winISteamUser_SteamUser015_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser015_TrackAppUsageEvent, &params );
 }
 
@@ -3213,6 +3253,7 @@ void __thiscall winISteamUser_SteamUser016_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser016_TrackAppUsageEvent, &params );
 }
 
@@ -3563,6 +3604,7 @@ void __thiscall winISteamUser_SteamUser017_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser017_TrackAppUsageEvent, &params );
 }
 
@@ -3940,6 +3982,7 @@ void __thiscall winISteamUser_SteamUser018_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser018_TrackAppUsageEvent, &params );
 }
 
@@ -4184,6 +4227,7 @@ uint64_t __thiscall winISteamUser_SteamUser018_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser018_RequestStoreAuthURL, &params );
     return params._ret;
 }
@@ -4334,6 +4378,7 @@ void __thiscall winISteamUser_SteamUser019_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser019_TrackAppUsageEvent, &params );
 }
 
@@ -4578,6 +4623,7 @@ uint64_t __thiscall winISteamUser_SteamUser019_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser019_RequestStoreAuthURL, &params );
     return params._ret;
 }
@@ -4778,6 +4824,7 @@ void __thiscall winISteamUser_SteamUser020_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser020_TrackAppUsageEvent, &params );
 }
 
@@ -5022,6 +5069,7 @@ uint64_t __thiscall winISteamUser_SteamUser020_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser020_RequestStoreAuthURL, &params );
     return params._ret;
 }
@@ -5247,6 +5295,7 @@ void __thiscall winISteamUser_SteamUser021_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser021_TrackAppUsageEvent, &params );
 }
 
@@ -5491,6 +5540,7 @@ uint64_t __thiscall winISteamUser_SteamUser021_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser021_RequestStoreAuthURL, &params );
     return params._ret;
 }
@@ -5729,6 +5779,7 @@ void __thiscall winISteamUser_SteamUser022_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser022_TrackAppUsageEvent, &params );
 }
 
@@ -5974,6 +6025,7 @@ uint64_t __thiscall winISteamUser_SteamUser022_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser022_RequestStoreAuthURL, &params );
     return params._ret;
 }
@@ -6213,6 +6265,7 @@ void __thiscall winISteamUser_SteamUser023_TrackAppUsageEvent(struct w_steam_ifa
         .pchExtraInfo = pchExtraInfo,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchExtraInfo, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser023_TrackAppUsageEvent, &params );
 }
 
@@ -6334,6 +6387,7 @@ uint32_t __thiscall winISteamUser_SteamUser023_GetAuthTicketForWebApi(struct w_s
         .pchIdentity = pchIdentity,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchIdentity, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser023_GetAuthTicketForWebApi, &params );
     return params._ret;
 }
@@ -6470,6 +6524,7 @@ uint64_t __thiscall winISteamUser_SteamUser023_RequestStoreAuthURL(struct w_stea
         .pchRedirectURL = pchRedirectURL,
     };
     TRACE("%p\n", _this);
+    IsBadStringPtrA(pchRedirectURL, -1);
     STEAMCLIENT_CALL( ISteamUser_SteamUser023_RequestStoreAuthURL, &params );
     return params._ret;
 }
