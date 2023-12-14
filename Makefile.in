@@ -394,6 +394,7 @@ WINE_SOURCE_ARGS = \
   --exclude dlls/winevulkan/winevulkan.spec
 
 WINE_CONFIGURE_ARGS = \
+  --enable-werror \
   --with-mingw \
   --disable-tests
 
