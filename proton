@@ -1065,6 +1065,11 @@ def default_compat_config():
             ret.add("noforcelgadd")
 
         if appid in [
+                "257420", #Serious Sam 4
+                ]:
+            ret.add("hidevggpu")
+
+        if appid in [
                 "1341820", #As Dusk falls
                 "280790", #Creativerse
                 "306130", #The Elder Scrolls Online
@@ -1418,6 +1423,7 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
+        self.check_environment("PROTON_HIDE_VANGOGH_GPU", "hidevggpu")
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
@@ -1462,6 +1468,9 @@ class Session:
         if "vkd3dfl12" in self.compat_config:
             if not "VKD3D_FEATURE_LEVEL" in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+
+        if "hidevggpu" in self.compat_config:
+            self.env["WINE_HIDE_VANGOGH_GPU"] = "1"
 
         # enablenvapi beats hidenvgpu
         if "hidenvgpu" in self.compat_config and "enablenvapi" not in self.compat_config:
