@@ -1250,6 +1250,7 @@ def default_compat_config():
                 "990080", #Hogwarts Legacy
                 "1328670", #Mass Effect Legendary Edition
                 "627270", #Injustice 2
+                "601150", #Devil May Cry 5
                 ]:
             ret.add("enableamdags")
 
