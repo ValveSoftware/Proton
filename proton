@@ -1246,6 +1246,7 @@ def default_compat_config():
                 "895950", #BIOHAZARD RE:2 Z Version
                 "1100830", #BIOHAZARD RE:3 Z Version
                 "1196600", #BIOHAZARD VILLAGE Z Version
+                "601150", #Devil May Cry 5
                 ]:
             ret.add("enableamdags")
 
