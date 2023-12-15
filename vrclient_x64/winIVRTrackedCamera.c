@@ -892,6 +892,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreami
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
@@ -899,11 +900,14 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrame
         .eFrameType = eFrameType,
         .pFrameBuffer = pFrameBuffer,
         .nFrameBufferSize = nFrameBufferSize,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
@@ -925,6 +929,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextu
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
@@ -932,27 +937,34 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextu
         .eFrameType = eFrameType,
         .pD3D11DeviceOrResource = pD3D11DeviceOrResource,
         .ppD3D11ShaderResourceView = ppD3D11ShaderResourceView,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .eFrameType = eFrameType,
         .pglTextureId = pglTextureId,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
@@ -1154,6 +1166,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_ReleaseVideoStreami
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
@@ -1161,11 +1174,14 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrame
         .eFrameType = eFrameType,
         .pFrameBuffer = pFrameBuffer,
         .nFrameBufferSize = nFrameBufferSize,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamFrameBuffer, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
@@ -1187,6 +1203,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextu
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
@@ -1194,27 +1211,34 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextu
         .eFrameType = eFrameType,
         .pD3D11DeviceOrResource = pD3D11DeviceOrResource,
         .ppD3D11ShaderResourceView = ppD3D11ShaderResourceView,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureD3D11, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .eFrameType = eFrameType,
         .pglTextureId = pglTextureId,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_005_GetVideoStreamTextureGL, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
@@ -1418,6 +1442,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_ReleaseVideoStreami
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pFrameBuffer, uint32_t nFrameBufferSize, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer_params params =
     {
         .linux_side = _this->u_iface,
@@ -1425,11 +1450,14 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrame
         .eFrameType = eFrameType,
         .pFrameBuffer = pFrameBuffer,
         .nFrameBufferSize = nFrameBufferSize,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamFrameBuffer, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
@@ -1451,6 +1479,7 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextu
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11_params params =
     {
         .linux_side = _this->u_iface,
@@ -1458,27 +1487,34 @@ uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextu
         .eFrameType = eFrameType,
         .pD3D11DeviceOrResource = pD3D11DeviceOrResource,
         .ppD3D11ShaderResourceView = ppD3D11ShaderResourceView,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureD3D11, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL(struct w_steam_iface *_this, uint64_t hTrackedCamera, uint32_t eFrameType, uint32_t *pglTextureId, w_CameraVideoStreamFrameHeader_t_1017 *pFrameHeader, uint32_t nFrameHeaderSize)
 {
+    w_CameraVideoStreamFrameHeader_t_1017 w_pFrameHeader;
     struct IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL_params params =
     {
         .linux_side = _this->u_iface,
         .hTrackedCamera = hTrackedCamera,
         .eFrameType = eFrameType,
         .pglTextureId = pglTextureId,
-        .pFrameHeader = pFrameHeader,
+        .pFrameHeader = pFrameHeader ? &w_pFrameHeader : NULL,
         .nFrameHeaderSize = nFrameHeaderSize,
     };
     TRACE("%p\n", _this);
+    nFrameHeaderSize = min( nFrameHeaderSize, sizeof(w_pFrameHeader) );
+    if (pFrameHeader) memcpy( &w_pFrameHeader, pFrameHeader, nFrameHeaderSize );
     VRCLIENT_CALL( IVRTrackedCamera_IVRTrackedCamera_006_GetVideoStreamTextureGL, &params );
+    if (pFrameHeader) memcpy( pFrameHeader, &w_pFrameHeader, nFrameHeaderSize );
     return params._ret;
 }
 

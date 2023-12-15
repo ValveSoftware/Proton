@@ -93,45 +93,57 @@ uint32_t __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_if
 
 uint32_t __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam_iface *_this, uint64_t action, w_InputDigitalActionData_t *pActionData, uint32_t unActionDataSize)
 {
+    w_InputDigitalActionData_t w_pActionData;
     struct IVRInput_IVRInput_003_GetDigitalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_003_GetDigitalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_003_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_003_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_003_GetPoseActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_003_GetPoseActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -233,15 +245,19 @@ uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_003_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 
@@ -442,48 +458,60 @@ extern uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(struct 
 
 uint32_t __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_004_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_004_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_004_GetPoseActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_004_GetPoseActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_1016 *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputSkeletalActionData_t_1016 w_pActionData;
     struct IVRInput_IVRInput_004_GetSkeletalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_004_GetSkeletalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -586,15 +614,19 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_004_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_004_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 
@@ -804,47 +836,59 @@ extern uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(struct 
 
 uint32_t __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_005_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_005_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_005_GetPoseActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_005_GetPoseActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
+    w_InputSkeletalActionData_t_113b w_pActionData;
     struct IVRInput_IVRInput_005_GetSkeletalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_005_GetSkeletalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -1029,15 +1073,19 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_005_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_005_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 
@@ -1273,63 +1321,79 @@ extern uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(struct 
 
 uint32_t __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_006_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_006_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_006_GetPoseActionDataRelativeToNow_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_006_GetPoseActionDataRelativeToNow, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_006_GetPoseActionDataForNextFrame_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_006_GetPoseActionDataForNextFrame, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
+    w_InputSkeletalActionData_t_113b w_pActionData;
     struct IVRInput_IVRInput_006_GetSkeletalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_006_GetSkeletalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -1515,15 +1579,19 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_006_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 
@@ -1763,63 +1831,79 @@ extern uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(struct 
 
 uint32_t __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_007_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_007_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_007_GetPoseActionDataRelativeToNow_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_007_GetPoseActionDataRelativeToNow, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_007_GetPoseActionDataForNextFrame_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_007_GetPoseActionDataForNextFrame, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
+    w_InputSkeletalActionData_t_113b w_pActionData;
     struct IVRInput_IVRInput_007_GetSkeletalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_007_GetSkeletalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -2005,15 +2089,19 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_007_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_007_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 
@@ -2292,63 +2380,79 @@ extern uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(struct 
 
 uint32_t __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_iface *_this, uint64_t action, w_InputAnalogActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputAnalogActionData_t w_pActionData;
     struct IVRInput_IVRInput_010_GetAnalogActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_010_GetAnalogActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_010_GetPoseActionDataRelativeToNow_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
         .fPredictedSecondsFromNow = fPredictedSecondsFromNow,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_010_GetPoseActionDataRelativeToNow, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, uint64_t action, uint32_t eOrigin, w_InputPoseActionData_t *pActionData, uint32_t unActionDataSize, uint64_t ulRestrictToDevice)
 {
+    w_InputPoseActionData_t w_pActionData;
     struct IVRInput_IVRInput_010_GetPoseActionDataForNextFrame_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
         .eOrigin = eOrigin,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
         .ulRestrictToDevice = ulRestrictToDevice,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_010_GetPoseActionDataForNextFrame, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
 uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w_steam_iface *_this, uint64_t action, w_InputSkeletalActionData_t_113b *pActionData, uint32_t unActionDataSize)
 {
+    w_InputSkeletalActionData_t_113b w_pActionData;
     struct IVRInput_IVRInput_010_GetSkeletalActionData_params params =
     {
         .linux_side = _this->u_iface,
         .action = action,
-        .pActionData = pActionData,
+        .pActionData = pActionData ? &w_pActionData : NULL,
         .unActionDataSize = unActionDataSize,
     };
     TRACE("%p\n", _this);
+    unActionDataSize = min( unActionDataSize, sizeof(w_pActionData) );
+    if (pActionData) memcpy( &w_pActionData, pActionData, unActionDataSize );
     VRCLIENT_CALL( IVRInput_IVRInput_010_GetSkeletalActionData, &params );
+    if (pActionData) memcpy( pActionData, &w_pActionData, unActionDataSize );
     return params._ret;
 }
 
@@ -2558,15 +2662,19 @@ uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct w_ste
 
 uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, uint64_t origin, w_InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
+    w_InputOriginInfo_t w_pOriginInfo;
     struct IVRInput_IVRInput_010_GetOriginTrackedDeviceInfo_params params =
     {
         .linux_side = _this->u_iface,
         .origin = origin,
-        .pOriginInfo = pOriginInfo,
+        .pOriginInfo = pOriginInfo ? &w_pOriginInfo : NULL,
         .unOriginInfoSize = unOriginInfoSize,
     };
     TRACE("%p\n", _this);
+    unOriginInfoSize = min( unOriginInfoSize, sizeof(w_pOriginInfo) );
+    if (pOriginInfo) memcpy( &w_pOriginInfo, pOriginInfo, unOriginInfoSize );
     VRCLIENT_CALL( IVRInput_IVRInput_010_GetOriginTrackedDeviceInfo, &params );
+    if (pOriginInfo) memcpy( pOriginInfo, &w_pOriginInfo, unOriginInfoSize );
     return params._ret;
 }
 

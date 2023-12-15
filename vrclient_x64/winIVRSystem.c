@@ -4475,29 +4475,37 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_011_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_0918 w_pEvent;
     struct IVRSystem_IVRSystem_011_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_011_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_0918 w_pEvent;
     struct IVRSystem_IVRSystem_011_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_011_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -5233,29 +5241,37 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_012_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_103 w_pEvent;
     struct IVRSystem_IVRSystem_012_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_012_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_103 w_pEvent;
     struct IVRSystem_IVRSystem_012_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_012_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -5965,29 +5981,37 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_014_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_103 w_pEvent;
     struct IVRSystem_IVRSystem_014_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_014_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_103 w_pEvent;
     struct IVRSystem_IVRSystem_014_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_014_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -6019,31 +6043,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_014_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_014_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_014_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_014_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_014_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -6699,29 +6731,37 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_015_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_106 w_pEvent;
     struct IVRSystem_IVRSystem_015_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_015_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_106 w_pEvent;
     struct IVRSystem_IVRSystem_015_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_015_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -6753,31 +6793,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_015_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_015_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_015_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_015_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_015_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -7446,29 +7494,37 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_016_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_106 w_pEvent;
     struct IVRSystem_IVRSystem_016_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_016_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_106 w_pEvent;
     struct IVRSystem_IVRSystem_016_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_016_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -7500,31 +7556,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_016_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_016_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_016_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_016_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_016_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -8196,29 +8260,37 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_017_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_1011 w_pEvent;
     struct IVRSystem_IVRSystem_017_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_017_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_1011 w_pEvent;
     struct IVRSystem_IVRSystem_017_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_017_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -8250,31 +8322,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_017_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_017_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_017_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_017_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_017_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -8965,29 +9045,37 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_019_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_1322 w_pEvent;
     struct IVRSystem_IVRSystem_019_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_019_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_1322 w_pEvent;
     struct IVRSystem_IVRSystem_019_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_019_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -9019,31 +9107,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_019_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_019_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_019_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_019_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_019_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -9751,29 +9847,37 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_1322 w_pEvent;
     struct IVRSystem_IVRSystem_020_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_020_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_1322 w_pEvent;
     struct IVRSystem_IVRSystem_020_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_020_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -9805,31 +9909,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_020_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_020_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_020_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_020_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_020_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -10547,29 +10659,37 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_11030 w_pEvent;
     struct IVRSystem_IVRSystem_021_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_021_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_11030 w_pEvent;
     struct IVRSystem_IVRSystem_021_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_021_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -10601,31 +10721,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_021_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_021_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_021_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_021_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_021_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
@@ -11320,29 +11448,37 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum(stru
 
 int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
 {
+    w_VREvent_t_1168 w_pEvent;
     struct IVRSystem_IVRSystem_022_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_022_PollNextEvent, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VREvent_t_1168 w_pEvent;
     struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
-        .pEvent = pEvent,
+        .pEvent = pEvent ? &w_pEvent : NULL,
         .uncbVREvent = uncbVREvent,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    uncbVREvent = min( uncbVREvent, sizeof(w_pEvent) );
+    if (pEvent) memcpy( &w_pEvent, pEvent, uncbVREvent );
     VRCLIENT_CALL( IVRSystem_IVRSystem_022_PollNextEventWithPose, &params );
+    if (pEvent) memcpy( pEvent, &w_pEvent, uncbVREvent );
     return params._ret;
 }
 
@@ -11374,31 +11510,39 @@ w_HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(str
 
 int8_t __thiscall winIVRSystem_IVRSystem_022_GetControllerState(struct w_steam_iface *_this, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_022_GetControllerState_params params =
     {
         .linux_side = _this->u_iface,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_022_GetControllerState, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
 int8_t __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t unControllerDeviceIndex, w_VRControllerState001_t *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
+    w_VRControllerState001_t w_pControllerState;
     struct IVRSystem_IVRSystem_022_GetControllerStateWithPose_params params =
     {
         .linux_side = _this->u_iface,
         .eOrigin = eOrigin,
         .unControllerDeviceIndex = unControllerDeviceIndex,
-        .pControllerState = pControllerState,
+        .pControllerState = pControllerState ? &w_pControllerState : NULL,
         .unControllerStateSize = unControllerStateSize,
         .pTrackedDevicePose = pTrackedDevicePose,
     };
     TRACE("%p\n", _this);
+    unControllerStateSize = min( unControllerStateSize, sizeof(w_pControllerState) );
+    if (pControllerState) memcpy( &w_pControllerState, pControllerState, unControllerStateSize );
     VRCLIENT_CALL( IVRSystem_IVRSystem_022_GetControllerStateWithPose, &params );
+    if (pControllerState) memcpy( pControllerState, &w_pControllerState, unControllerStateSize );
     return params._ret;
 }
 
