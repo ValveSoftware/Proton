@@ -6383,19 +6383,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_010_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_010_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_010_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_010_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -7476,19 +7464,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_011_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_011_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_011_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_011_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_0918 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -8610,19 +8586,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_012_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_101 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_012_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_012_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_012_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_101 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -9817,19 +9781,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_013_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_013_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_013_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_013_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_103 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -11051,19 +11003,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_014_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_014_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_014_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_014_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -12397,19 +12337,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_016_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_016_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_016_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_016_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_106 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -13767,19 +13695,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_017_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_017_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_017_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_017_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1011 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -15170,19 +15086,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_018_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1016 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_018_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_018_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_018_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1016 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -16558,19 +16462,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_019_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_019_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -17921,19 +17813,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_020_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_020_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -19274,19 +19154,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_021_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_021_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -20614,19 +20482,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_022_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_022_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_022_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_022_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1322 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -21972,19 +21828,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_024_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_024_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_024_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_024_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_11030 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -23309,19 +23153,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_025_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_025_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_025_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_025_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -24689,19 +24521,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_WaitFrameSync(struct w_steam_if
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_026_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_026_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_026_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_026_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
@@ -26045,19 +25865,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_WaitFrameSync(struct w_steam_if
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
-{
-    struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params params =
-    {
-        .linux_side = _this->u_iface,
-        .ulOverlayHandle = ulOverlayHandle,
-        .pEvent = pEvent,
-        .uncbVREvent = uncbVREvent,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVROverlay_IVROverlay_027_PollNextOverlayEvent, &params );
-    return params._ret;
-}
+extern int8_t __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent);
 
 uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
