@@ -1093,6 +1093,7 @@ def default_compat_config():
                 "212910", #Call of Duty: Black Ops II - Zombies
                 "499100", #Dark Parables: The Exiled Prince Collector's Edition (499100)
                 "1404090", #Trivia Tricks
+                "2052410", #WITCH ON THE HOLY NIGHT
                 ]:
             ret.add("heapdelayfree")
 
