@@ -304,18 +304,31 @@ done:
     return ret;
 }
 
+static BOOL get_env_win(const WCHAR *name, char *value, unsigned int size)
+{
+    DWORD i, env_size;
+
+    if (!(env_size = GetEnvironmentVariableW(name, (WCHAR *)value, size / sizeof(WCHAR))) || env_size >= size / sizeof(WCHAR))
+        return FALSE;
+
+    for (i = 0; i <= env_size; ++i)
+        value[i] = ((WCHAR *)value)[i];
+
+    return TRUE;
+}
+
 static int load_steamclient(void)
 {
     char steam_app_id[4096], ignore_child_processes[4096];
     struct steamclient_init_params params = {.g_tmppath = temp_path_buffer};
 
-    if (!GetEnvironmentVariableA("SteamAppId", steam_app_id, ARRAY_SIZE(steam_app_id)))
-        params.steam_app_id_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    if (!get_env_win(u"SteamAppId", steam_app_id, sizeof(steam_app_id)))
+        params.steam_app_id_unset = TRUE;
     else
         params.steam_app_id = steam_app_id;
 
-    if (!GetEnvironmentVariableA("IgnoreChildProcesses", ignore_child_processes, ARRAY_SIZE(ignore_child_processes)))
-        params.ignore_child_processes_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    if (!get_env_win(u"IgnoreChildProcesses", ignore_child_processes, sizeof(ignore_child_processes)))
+        params.ignore_child_processes_unset = TRUE;
     else
         params.ignore_child_processes = ignore_child_processes;
 
