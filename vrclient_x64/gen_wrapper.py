@@ -158,6 +158,10 @@ STRUCTS_NEXT_IS_SIZE = [
     "InputBindingInfo_t",
 ]
 
+STRUCTS_IS_INPUT_ARRAY = [
+    "VRActiveActionSet_t",
+]
+
 STRUCTS_NEXT_IS_SIZE_UNHANDLED = [
     "VROverlayIntersectionMaskPrimitive_t" # not next, but next-next uint32 is the size
 ]
@@ -227,8 +231,6 @@ MANUAL_METHODS = {
     "IVRClientCore_Cleanup": lambda ver, abi: abi == 'w',
     "IVRSystem_GetDXGIOutputInfo": lambda ver, abi: abi == 'w',
     "IVRSystem_GetOutputDevice": lambda ver, abi: abi == 'u' and ver > 16,
-    "IVRSystem_PollNextEvent": lambda ver, abi: abi == 'w' and ver > 10,
-    "IVRSystem_PollNextEventWithPose": lambda ver, abi: abi == 'w' and ver > 10,
     "IVRCompositor_Submit": lambda ver, abi: ver > 8,
     "IVRCompositor_SetSkyboxOverride": lambda ver, abi: ver > 8,
     "IVRCompositor_PostPresentHandoff": lambda ver, abi: abi == 'w',
@@ -244,7 +246,6 @@ MANUAL_METHODS = {
     "IVRRenderModels_LoadRenderModel_Async": True,
     "IVRRenderModels_FreeRenderModel": lambda ver, abi: ver > 1,
     "IVRMailbox_undoc3": lambda ver, abi: abi == 'u',
-    "IVROverlay_PollNextOverlayEvent": lambda ver, abi: abi == 'w' and ver > 9,
     "IVROverlay_SetOverlayTexture": True,
     "IVRInput_GetDigitalActionData": lambda ver, abi: abi == 'w' and ver > 3,
     "IVRTrackedCamera_GetVideoStreamFrame": True,
@@ -842,6 +843,9 @@ def handle_method_c(klass, method, winclassname, out):
              for i, p in enumerate(method.get_arguments())]
     params = [declspec(p, names[i], "w_") for i, p in enumerate(method.get_arguments())]
 
+    need_convert = {n: p for n, p in zip(names, method.get_arguments())
+                    if param_needs_conversion(p)}
+
     if returns_record:
         params = [f'{declspec(method.result_type, "*_ret", "w_")}'] + params
         names = ['_ret'] + names
@@ -856,11 +860,35 @@ def handle_method_c(klass, method, winclassname, out):
     out(f'{ret}__thiscall {winclassname}_{method.name}({", ".join(params)})\n')
     out(u'{\n')
 
+    names = names[2:] if returns_record else names[1:]
+    params = list(zip(names, method.get_arguments()))
+    params += [(None, None)]
+    param_sizes = {}
+
+    for i, (name, param) in enumerate(params[:-1]):
+        if name not in need_convert:
+            continue
+        real_type = underlying_type(param)
+        if strip_ns(real_type.spelling) not in STRUCTS_NEXT_IS_SIZE:
+            continue
+        assert name not in STRUCTS_IS_INPUT_ARRAY
+        assert name not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
+
+        next_name, next_param = params[i + 1]
+        if next_param and next_param.type.spelling == "uint32_t":
+            out(f'    {declspec(param.type.get_pointee(), f"w_{name}", "w_")};\n')
+            param_sizes[name] = next_name
+
     out(f'    struct {method.full_name}_params params =\n')
     out(u'    {\n')
     out(u'        .linux_side = _this->u_iface,\n')
-    for name in names[1:]:
-        out(f'        .{name} = {name},\n')
+    if returns_record:
+        out(u'        ._ret = _ret,\n')
+    for name, param in params[:-1]:
+        if name in param_sizes:
+            out(f'        .{name} = {name} ? &w_{name} : NULL,\n')
+        else:
+            out(f'        .{name} = {name},\n')
     out(u'    };\n')
 
     out(u'    TRACE("%p\\n", _this);\n')
@@ -868,7 +896,12 @@ def handle_method_c(klass, method, winclassname, out):
     if 'eTextureType' in names:
         out(u'    if (eTextureType == TextureType_DirectX) FIXME( "Not implemented Direct3D API!\\n" );\n')
 
+    for name, size in param_sizes.items():
+        out(f'    {size} = min( {size}, sizeof(w_{name}) );\n')
+        out(f'    if ({name}) memcpy( &w_{name}, {name}, {size} );\n')
     out(f'    VRCLIENT_CALL( {method.full_name}, &params );\n')
+    for name, size in param_sizes.items():
+        out(f'    if ({name}) memcpy( {name}, &w_{name}, {size} );\n')
 
     if not returns_void:
         out(u'    return params._ret;\n')
