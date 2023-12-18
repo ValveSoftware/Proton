@@ -231,6 +231,7 @@ NTSTATUS ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProc
 NTSTATUS steamclient_next_callback( void *args )
 {
     struct steamclient_next_callback_params *params = (struct steamclient_next_callback_params *)args;
+    uint32_t capacity = params->size;
     struct list *ptr;
 
     pthread_mutex_lock( &callbacks_lock );
@@ -238,14 +239,13 @@ NTSTATUS steamclient_next_callback( void *args )
     {
         struct callback_entry *entry = LIST_ENTRY( ptr, struct callback_entry, entry );
 
-        if (entry->callback.size <= params->size)
+        params->size = entry->callback.size;
+        if (params->size <= capacity)
         {
-            memcpy( params->callback, &entry->callback, entry->callback.size );
+            memcpy( params->callback, &entry->callback, params->size );
             list_remove( &entry->entry );
             free( entry );
         }
-
-        params->size = entry->callback.size;
     }
     pthread_mutex_unlock( &callbacks_lock );
 
