@@ -772,11 +772,6 @@ def handle_method_cpp(method, classname, out):
         next_name, next_param = params[i + 1]
         if not next_param or next_param.type.spelling != "uint32_t":
             size_param[name] = ', -1'
-        elif struct_needs_size_adjustment(real_type.get_canonical()):
-            real_name = real_type.spelling
-            out(f'    uint32_t u_{next_name} = std::min( params->{next_name}, (uint32_t)sizeof({real_name}) );\n')
-            size_param[name] = f', params->{next_name}'
-            size_fixup[next_name] = True
         elif name in need_convert:
             assert name not in STRUCTS_NEXT_IS_SIZE_UNHANDLED
             out(f'    uint32_t u_{next_name} = params->{next_name} ? sizeof(u_{name}) : 0;\n')
@@ -1048,29 +1043,6 @@ def struct_needs_conversion(struct):
     assert abis['u64'].size <= abis['w64'].size
     if abis['u64'].size < abis['w64'].size:
         return False
-
-    return False
-
-
-def struct_needs_size_adjustment(struct):
-    name = canonical_typename(struct)
-    if name in EXEMPT_STRUCTS:
-        return False
-
-    abis = find_struct_abis(name)
-    if abis is None:
-        return False
-    if abis['w32'].needs_conversion(abis['u32']):
-        return False
-    if abis['w64'].needs_conversion(abis['u64']):
-        return False
-
-    assert abis['u32'].size <= abis['w32'].size
-    if abis['u32'].size < abis['w32'].size:
-        return True
-    assert abis['u64'].size <= abis['w64'].size
-    if abis['u64'].size < abis['w64'].size:
-        return True
 
     return False
 
