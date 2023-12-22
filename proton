@@ -831,7 +831,10 @@ class CompatData:
                     "ntdll.dll," +
 
                     #some games require official vulkan loader
-                    "vulkan-1.dll"
+                    "vulkan-1.dll," +
+
+                    #let the games install native
+                    "ir50_32.dll"
                     )
 
             # If any of this info changes, we must rerun the tasks below
