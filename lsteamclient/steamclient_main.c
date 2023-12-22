@@ -306,13 +306,18 @@ done:
 
 static int load_steamclient(void)
 {
+    char steam_app_id[4096], ignore_child_processes[4096];
     struct steamclient_init_params params = {.g_tmppath = temp_path_buffer};
 
-    if (!(params.steam_app_id = getenv("SteamAppId")))
-        params.steam_app_id_unset = TRUE;
+    if (!GetEnvironmentVariableA("SteamAppId", steam_app_id, ARRAY_SIZE(steam_app_id)))
+        params.steam_app_id_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    else
+        params.steam_app_id = steam_app_id;
 
-    if (!(params.ignore_child_processes = getenv("IgnoreChildProcesses")))
-        params.ignore_child_processes_unset = TRUE;
+    if (!GetEnvironmentVariableA("IgnoreChildProcesses", ignore_child_processes, ARRAY_SIZE(ignore_child_processes)))
+        params.ignore_child_processes_unset = GetLastError() == ERROR_ENVVAR_NOT_FOUND;
+    else
+        params.ignore_child_processes = ignore_child_processes;
 
     if (STEAMCLIENT_CALL( steamclient_init, &params )) return 0;
     return 1;
