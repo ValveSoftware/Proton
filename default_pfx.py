@@ -121,10 +121,12 @@ def make_default_pfx(default_pfx_dir, dist_dir):
     local_env = dict(os.environ)
 
     ld_path = dist_dir + "/lib64:" + dist_dir + "/lib"
+    dll_path = dist_dir + "/lib64/vkd3d:" + dist_dir + "/lib/vkd3d"
 
     local_env["LD_LIBRARY_PATH"] = ld_path
     local_env["WINEPREFIX"] = default_pfx_dir
     local_env["WINEDEBUG"] = "-all"
+    local_env["WINEDLLPATH"] = dll_path
     runtime_args = []
 
     subprocess.run(runtime_args + ["/bin/bash", "-c",
