@@ -122,9 +122,9 @@ extern XrResult WINAPI wine_xrGetD3D11GraphicsRequirementsKHR(XrInstance instanc
 extern XrResult WINAPI wine_xrGetD3D12GraphicsRequirementsKHR(XrInstance instance,
         XrSystemId systemId, XrGraphicsRequirementsD3D12KHR *graphicsRequirements);
 
-extern VkDevice (WINAPI *get_native_VkDevice)(VkDevice);
-extern VkInstance (WINAPI *get_native_VkInstance)(VkInstance);
-extern VkPhysicalDevice (WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice);
-extern VkPhysicalDevice (WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance, VkPhysicalDevice);
-extern VkQueue (WINAPI *get_native_VkQueue)(VkQueue);
+extern VkDevice (*get_native_VkDevice)(VkDevice);
+extern VkInstance (*get_native_VkInstance)(VkInstance);
+extern VkPhysicalDevice (*get_native_VkPhysicalDevice)(VkPhysicalDevice);
+extern VkPhysicalDevice (*get_wrapped_VkPhysicalDevice)(VkInstance, VkPhysicalDevice);
+extern VkQueue (*get_native_VkQueue)(VkQueue);
 extern XrResult load_host_openxr_loader(void);

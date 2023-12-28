@@ -654,7 +654,7 @@ static void parse_extensions(const char *in, uint32_t *out_count,
 
 extern "C"
 {
-    VkPhysicalDevice WINAPI __wine_get_native_VkPhysicalDevice(VkPhysicalDevice phys_dev);
+    VkPhysicalDevice __wine_get_native_VkPhysicalDevice(VkPhysicalDevice phys_dev);
 };
 
 static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)

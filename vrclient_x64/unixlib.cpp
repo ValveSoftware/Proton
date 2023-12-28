@@ -12,11 +12,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 static void *(*p_HmdSystemFactory)( const char *name, int *return_code );
 static void *(*p_VRClientCoreFactory)( const char *name, int *return_code );
 
-VkDevice_T *(WINAPI *p_get_native_VkDevice)( VkDevice_T * );
-VkInstance_T *(WINAPI *p_get_native_VkInstance)( VkInstance_T * );
-VkPhysicalDevice_T *(WINAPI *p_get_native_VkPhysicalDevice)( VkPhysicalDevice_T * );
-VkPhysicalDevice_T *(WINAPI *p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
-VkQueue_T *(WINAPI *p_get_native_VkQueue)( VkQueue_T * );
+VkDevice_T *(*p_get_native_VkDevice)( VkDevice_T * );
+VkInstance_T *(*p_get_native_VkInstance)( VkInstance_T * );
+VkPhysicalDevice_T *(*p_get_native_VkPhysicalDevice)( VkPhysicalDevice_T * );
+VkPhysicalDevice_T *(*p_get_wrapped_VkPhysicalDevice)( VkInstance_T *, VkPhysicalDevice_T * );
+VkQueue_T *(*p_get_native_VkQueue)( VkQueue_T * );
 
 static void *get_winevulkan_unixlib( HMODULE winevulkan )
 {

@@ -83,11 +83,11 @@ static char *wineopenxr_strdup(const char *src)
     return r;
 }
 
-VkDevice(WINAPI *get_native_VkDevice)(VkDevice);
-VkInstance(WINAPI *get_native_VkInstance)(VkInstance);
-VkPhysicalDevice(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice);
-VkPhysicalDevice(WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance, VkPhysicalDevice);
-VkQueue(WINAPI *get_native_VkQueue)(VkQueue);
+VkDevice(*get_native_VkDevice)(VkDevice);
+VkInstance(*get_native_VkInstance)(VkInstance);
+VkPhysicalDevice(*get_native_VkPhysicalDevice)(VkPhysicalDevice);
+VkPhysicalDevice(*get_wrapped_VkPhysicalDevice)(VkInstance, VkPhysicalDevice);
+VkQueue(*get_native_VkQueue)(VkQueue);
 VkResult (WINAPI *p_wine_vkCreateInstance)(const VkInstanceCreateInfo *create_info,
         const VkAllocationCallbacks *allocator, VkInstance *ret);
 VkResult (WINAPI *p_wine_vkCreateDevice)(VkPhysicalDevice phys_dev, const VkDeviceCreateInfo *create_info,
