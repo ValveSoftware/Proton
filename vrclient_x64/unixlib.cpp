@@ -42,7 +42,7 @@ static void *get_winevulkan_unixlib( HMODULE winevulkan )
     return dlopen( info.dli_fname, RTLD_NOW );
 }
 
-static void load_vk_unwrappers( HMODULE winevulkan )
+static BOOL load_vk_unwrappers( HMODULE winevulkan )
 {
     static HMODULE h = NULL;
     void *unix_handle;
@@ -50,14 +50,14 @@ static void load_vk_unwrappers( HMODULE winevulkan )
     if (!(unix_handle = get_winevulkan_unixlib( winevulkan )))
     {
         ERR("Unable to open winevulkan.so.\n");
-        return;
+        return FALSE;
     }
 
 #define LOAD_FUNC( name )                                                        \
     if (!(p_##name = (decltype(p_##name))dlsym( unix_handle, "__wine_" #name ))) \
     {                                                                            \
         ERR( "%s not found.\n", #name );                                         \
-        return;                                                                  \
+        return FALSE;                                                                  \
     }
 
     LOAD_FUNC( get_native_VkDevice )
@@ -69,6 +69,7 @@ static void load_vk_unwrappers( HMODULE winevulkan )
 #undef LOAD_FUNC
 
     dlclose(unix_handle);
+    return TRUE;
 }
 
 NTSTATUS vrclient_init( void *args )
@@ -100,7 +101,9 @@ NTSTATUS vrclient_init( void *args )
 
 #undef LOAD_FUNC
 
-    load_vk_unwrappers( params->winevulkan );
+    if (!load_vk_unwrappers( params->winevulkan ))
+        return -1;
+
     params->_ret = true;
     return 0;
 }
