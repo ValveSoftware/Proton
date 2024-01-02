@@ -1089,6 +1089,7 @@ def default_compat_config():
                 "4000", #Garry's Mod
                 "383120", #Empyrion - Galactic Survival
                 "2371630", #Sword Art Online: Integral Factor
+                "460790", #Bayonetta
                 ]:
             ret.add("gamedrive")
 
