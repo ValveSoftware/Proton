@@ -45,7 +45,7 @@ DEFINE_VTBL_WRAPPER(56);
 
 #endif
 
-static char temp_path_buffer[PATH_MAX];
+static char temp_path_buffer[TEMP_PATH_BUFFER_LENGTH];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;

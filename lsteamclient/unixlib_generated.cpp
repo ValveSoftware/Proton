@@ -10260,7 +10260,7 @@ u64_HTML_FileOpenDialog_t::operator w64_HTML_FileOpenDialog_t() const
     w64_HTML_FileOpenDialog_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
     ret.pchTitle = this->pchTitle;
-    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchInitialFile = g_tmppath;
     return ret;
 }
@@ -10281,7 +10281,7 @@ u32_HTML_FileOpenDialog_t::operator w32_HTML_FileOpenDialog_t() const
     w32_HTML_FileOpenDialog_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
     ret.pchTitle = this->pchTitle;
-    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchInitialFile = g_tmppath;
     return ret;
 }
@@ -10333,7 +10333,7 @@ u64_HTML_FinishedRequest_t::operator w64_HTML_FinishedRequest_t() const
 {
     w64_HTML_FinishedRequest_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchPageTitle = this->pchPageTitle;
     return ret;
@@ -10354,7 +10354,7 @@ u32_HTML_FinishedRequest_t::operator w32_HTML_FinishedRequest_t() const
 {
     w32_HTML_FinishedRequest_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchPageTitle = this->pchPageTitle;
     return ret;
@@ -10520,7 +10520,7 @@ u64_HTML_LinkAtPosition_t::operator w64_HTML_LinkAtPosition_t() const
     ret.unBrowserHandle = this->unBrowserHandle;
     ret.x = this->x;
     ret.y = this->y;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.bInput = this->bInput;
     ret.bLiveLink = this->bLiveLink;
@@ -10547,7 +10547,7 @@ u32_HTML_LinkAtPosition_t::operator w32_HTML_LinkAtPosition_t() const
     ret.unBrowserHandle = this->unBrowserHandle;
     ret.x = this->x;
     ret.y = this->y;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.bInput = this->bInput;
     ret.bLiveLink = this->bLiveLink;
@@ -10835,7 +10835,7 @@ u64_HTML_NewWindow_t_132x::operator w64_HTML_NewWindow_t_132x() const
 {
     w64_HTML_NewWindow_t_132x ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.unX = this->unX;
     ret.unY = this->unY;
@@ -10864,7 +10864,7 @@ u32_HTML_NewWindow_t_132x::operator w32_HTML_NewWindow_t_132x() const
 {
     w32_HTML_NewWindow_t_132x ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.unX = this->unX;
     ret.unY = this->unY;
@@ -10892,7 +10892,7 @@ u64_HTML_NewWindow_t_130x::operator w64_HTML_NewWindow_t_130x() const
 {
     w64_HTML_NewWindow_t_130x ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.unX = this->unX;
     ret.unY = this->unY;
@@ -10919,7 +10919,7 @@ u32_HTML_NewWindow_t_130x::operator w32_HTML_NewWindow_t_130x() const
 {
     w32_HTML_NewWindow_t_130x ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.unX = this->unX;
     ret.unY = this->unY;
@@ -10966,7 +10966,7 @@ u64_HTML_OpenLinkInNewTab_t::operator w64_HTML_OpenLinkInNewTab_t() const
 {
     w64_HTML_OpenLinkInNewTab_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     return ret;
 }
@@ -10985,7 +10985,7 @@ u32_HTML_OpenLinkInNewTab_t::operator w32_HTML_OpenLinkInNewTab_t() const
 {
     w32_HTML_OpenLinkInNewTab_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     return ret;
 }
@@ -11097,7 +11097,7 @@ u64_HTML_StartRequest_t::operator w64_HTML_StartRequest_t() const
 {
     w64_HTML_StartRequest_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchTarget = this->pchTarget;
     ret.pchPostData = this->pchPostData;
@@ -11122,7 +11122,7 @@ u32_HTML_StartRequest_t::operator w32_HTML_StartRequest_t() const
 {
     w32_HTML_StartRequest_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchTarget = this->pchTarget;
     ret.pchPostData = this->pchPostData;
@@ -11246,7 +11246,7 @@ u64_HTML_URLChanged_t::operator w64_HTML_URLChanged_t() const
 {
     w64_HTML_URLChanged_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchPostData = this->pchPostData;
     ret.bIsRedirect = this->bIsRedirect;
@@ -11273,7 +11273,7 @@ u32_HTML_URLChanged_t::operator w32_HTML_URLChanged_t() const
 {
     w32_HTML_URLChanged_t ret;
     ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
     ret.pchURL = g_tmppath;
     ret.pchPostData = this->pchPostData;
     ret.bIsRedirect = this->bIsRedirect;

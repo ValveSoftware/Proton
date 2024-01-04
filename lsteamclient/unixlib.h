@@ -12,6 +12,8 @@
 
 #include "steamclient_structs.h"
 
+#define TEMP_PATH_BUFFER_LENGTH 4096
+
 #ifdef __cplusplus
 extern "C"
 {

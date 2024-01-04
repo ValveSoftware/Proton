@@ -561,7 +561,7 @@ class Struct:
             if field.name not in path_conv_fields:
                 out(f'    ret.{field.name} = this->{field.name};\n')
             else:
-                out(f'    steamclient_unix_path_to_dos_path(1, this->{field.name}, g_tmppath, sizeof(g_tmppath), 1);\n')
+                out(f'    steamclient_unix_path_to_dos_path(1, this->{field.name}, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);\n')
                 out(f'    ret.{field.name} = g_tmppath;\n')
         out(u'    return ret;\n')
         out(u'}\n')
