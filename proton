@@ -1102,6 +1102,7 @@ def default_compat_config():
 
         if appid in [
                 "2630", #Call of Duty 2
+                "1060210", #Disaster Report 4: Summer Memories
                 ]:
             ret.add("nofsync")
             ret.add("noesync")
