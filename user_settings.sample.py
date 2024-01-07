@@ -15,6 +15,9 @@ user_settings = {
     #DXVK debug logging
     "DXVK_LOG_LEVEL": "info",
 
+    #DXVK-NVAPI debug logging
+    "DXVK_NVAPI_LOG_LEVEL": "info",
+
     #vkd3d debug logging
     "VKD3D_DEBUG": "warn",
 
