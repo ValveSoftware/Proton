@@ -42,6 +42,8 @@ extern struct w_steam_iface *create_winISteamNetworkingFakeUDPPort_SteamNetworki
 
 extern void execute_pending_callbacks(void);
 
+extern void execute_pending_callbacks(void);
+
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
 void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version);
