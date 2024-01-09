@@ -674,3 +674,18 @@ w_SteamNetworkingMessage_t_153a *__thiscall winISteamNetworkingUtils_SteamNetwor
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage, &params );
     return params._ret;
 }
+
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest( struct w_steam_iface *_this, void *hServerListRequest )
+{
+    struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .hServerListRequest = hServerListRequest,
+    };
+
+    TRACE("%p\n", _this);
+
+    execute_pending_callbacks(); /* execute any pending callbacks that might still need to use the request */
+
+    STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest, &params );
+}

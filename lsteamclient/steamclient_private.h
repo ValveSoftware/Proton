@@ -44,6 +44,8 @@ struct SteamInputActionEvent_t;
 typedef void (*CDECL win_SteamInputActionEventCallbackPointer)( struct SteamInputActionEvent_t * );
 void lin_SteamInputActionEventCallbackPointer( struct SteamInputActionEvent_t *dat );
 
+extern void execute_pending_callbacks(void);
+
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
 void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version);

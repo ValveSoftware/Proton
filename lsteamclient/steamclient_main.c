@@ -346,7 +346,7 @@ void *CDECL CreateInterface(const char *name, int *return_code)
     return create_win_interface( name, params._ret );
 }
 
-static void execute_pending_callbacks(void)
+void execute_pending_callbacks(void)
 {
     struct steamclient_next_callback_params params = {0};
 

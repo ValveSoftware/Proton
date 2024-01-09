@@ -366,17 +366,6 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
     return params._ret;
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest(struct w_steam_iface *_this, void *hServerListRequest)
-{
-    struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params params =
-    {
-        .linux_side = _this->u_iface,
-        .hServerListRequest = hServerListRequest,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest, &params );
-}
-
 gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails(struct w_steam_iface *_this, void *hRequest, int32_t iServer)
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails_params params =

@@ -230,6 +230,7 @@ MANUAL_METHODS = {
 
     "ISteamMatchmakingServers_PingServer": lambda ver, abi: abi == 'u',
     "ISteamMatchmakingServers_PlayerDetails": lambda ver, abi: abi == 'u',
+    "ISteamMatchmakingServers_ReleaseRequest": lambda ver, abi: abi == 'w',
     "ISteamMatchmakingServers_RequestFavoritesServerList": lambda ver, abi: abi == 'u',
     "ISteamMatchmakingServers_RequestFriendsServerList": lambda ver, abi: abi == 'u',
     "ISteamMatchmakingServers_RequestHistoryServerList": lambda ver, abi: abi == 'u',
