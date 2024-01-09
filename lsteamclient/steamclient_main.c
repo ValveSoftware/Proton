@@ -301,6 +301,7 @@ struct w_steam_iface *create_win_interface(const char *name, void *u_iface)
 done:
     LeaveCriticalSection(&steamclient_cs);
     if (!ret) ERR("Don't recognize interface name: %s\n", name);
+    SetLastError(0);
     return ret;
 }
 
