@@ -1346,20 +1346,14 @@ class Session:
         except (OSError, IOError, TypeError, KeyError):
             pass
 
-    def setup_logging(self, *, append_forever):
+    def setup_logging(self):
         basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
 
-        if append_forever:
-            #SteamGameId is not always available
-            lfile_path = basedir + "/steam-proton.log"
-        else:
-            if not "SteamGameId" in os.environ:
-                return False
+        #SteamGameId is not always available
+        lfile_path = basedir + "/steam-" + os.environ.get("SteamGameId", "proton") + ".log"
 
-            lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
-
-            if file_exists(lfile_path, follow_symlinks=False):
-                os.remove(lfile_path)
+        if file_exists(lfile_path, follow_symlinks=False):
+            os.remove(lfile_path)
 
         makedirs(basedir)
         self.log_file = open(lfile_path, "a")
@@ -1480,7 +1474,7 @@ class Session:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
-            if self.setup_logging(append_forever=False):
+            if self.setup_logging():
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
