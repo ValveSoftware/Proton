@@ -18784,6 +18784,7 @@ void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg
     }
 #undef MAKE_CASE
 
+    w_msg->m_hSteamUser = u_msg->m_hSteamUser;
     w_msg->m_iCallback = u_msg->m_iCallback;
     w_msg->m_cubParam = len;
 }

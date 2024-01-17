@@ -1658,6 +1658,7 @@ with open('unixlib_generated.cpp', 'w') as file:
     out(u'    }\n')
     out(u'#undef MAKE_CASE\n')
     out(u'\n')
+    out(u'    w_msg->m_hSteamUser = u_msg->m_hSteamUser;\n')
     out(u'    w_msg->m_iCallback = u_msg->m_iCallback;\n')
     out(u'    w_msg->m_cubParam = len;\n')
     out(u'}\n')
