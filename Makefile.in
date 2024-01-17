@@ -596,27 +596,6 @@ $(OBJ)/.vkd3d-proton-post-build64:
 
 
 ##
-## mediaconv
-##
-
-MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
-
-$(eval $(call rules-source,mediaconv,$(SRCDIR)/media-converter))
-$(eval $(call rules-cargo,mediaconv,32))
-$(eval $(call rules-cargo,mediaconv,64))
-
-$(OBJ)/.mediaconv-post-build64:
-	mkdir -p $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
-	cp -a $(MEDIACONV_OBJ64)/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
-	touch $@
-
-$(OBJ)/.mediaconv-post-build32:
-	mkdir -p $(MEDIACONV_DST32)/lib/gstreamer-1.0/
-	cp -a $(MEDIACONV_OBJ32)/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST32)/lib/gstreamer-1.0/
-	touch $@
-
-
-##
 ## BattlEye Bridge
 ##
 
