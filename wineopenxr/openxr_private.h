@@ -2,10 +2,10 @@
 
 #include "wine/list.h"
 
-#define INSTANCE_TYPE_VULKAN 1
-#define INSTANCE_TYPE_OPENGL 2
-#define INSTANCE_TYPE_D3D11 3
-#define INSTANCE_TYPE_D3D12 4
+#define SESSION_TYPE_VULKAN 1
+#define SESSION_TYPE_OPENGL 2
+#define SESSION_TYPE_D3D11 3
+#define SESSION_TYPE_D3D12 4
 
 struct IDXGIVkInteropDevice2;
 typedef struct IDXGIVkInteropDevice2 IDXGIVkInteropDevice2;
@@ -17,7 +17,6 @@ typedef struct wine_XrInstance {
     VkInstance vk_instance;
     VkPhysicalDevice vk_phys_dev;
 
-    uint32_t instance_type;
     XrSystemId systemId;
 
     IDXGIVkInteropDevice2 *dxvk_device;
@@ -36,6 +35,7 @@ typedef struct wine_XrSession {
     XrSession session;
     struct wine_XrInstance *wine_instance;
 
+    uint32_t session_type;
     struct list entry;
 
     uint32_t composition_layer_count;
