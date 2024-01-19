@@ -763,7 +763,7 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 {
     XrResult res;
     struct wine_XrInstance *wine_instance;
-    uint32_t i, j, count, type = 0;
+    uint32_t i, j, count = 0;
     XrInstanceCreateInfo our_createInfo;
     const char *ext_name;
     char **new_list;
@@ -773,15 +773,6 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
     WINE_TRACE("Incoming extensions:\n");
     for(i = 0; i < createInfo->enabledExtensionCount; ++i){
         WINE_TRACE("  -%s\n", createInfo->enabledExtensionNames[i]);
-        if(!strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_D3D11_enable")){
-            type = INSTANCE_TYPE_D3D11;
-        }else if(!strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_D3D12_enable")){
-            type = INSTANCE_TYPE_D3D12;
-        }else if(!strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_vulkan_enable")){
-            type = INSTANCE_TYPE_VULKAN;
-        }else if(!strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_opengl_enable")){
-            type = INSTANCE_TYPE_OPENGL;
-        }
     }
 
     new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(*new_list));
@@ -833,7 +824,6 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
     ALL_XR_INSTANCE_FUNCS()
 #undef USE_XR_FUNC
 
-    wine_instance->instance_type = type;
     *instance = (XrInstance)wine_instance;
 
 cleanup:
@@ -934,6 +924,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
     XrResult res;
     XrSessionCreateInfo our_create_info;
     XrGraphicsBindingVulkanKHR our_vk_binding;
+    uint32_t session_type = 0;
 
     WINE_TRACE("%p, %p, %p\n", instance, createInfo, session);
 
@@ -951,6 +942,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 our_create_info = *createInfo;
                 our_create_info.next = &our_vk_binding;
                 createInfo = &our_create_info;
+                session_type = SESSION_TYPE_VULKAN;
 
                 break;
             }
@@ -988,6 +980,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 our_create_info = *createInfo;
                 our_create_info.next = &our_vk_binding;
                 createInfo = &our_create_info;
+                session_type = SESSION_TYPE_D3D11;
 
                 break;
             }
@@ -1007,6 +1000,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
     }
 
     wine_session->wine_instance = wine_instance;
+    wine_session->session_type = session_type;
 
     EnterCriticalSection(&session_list_lock);
 
@@ -1964,7 +1958,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainFormats(XrSession session, uint32_t for
 
     WINE_TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
 
-    if (wine_session->wine_instance->instance_type != INSTANCE_TYPE_D3D11)
+    if (wine_session->session_type != SESSION_TYPE_D3D11)
         return xrEnumerateSwapchainFormats(wine_session->session, formatCapacityInput, formatCountOutput, formats);
 
     res = xrEnumerateSwapchainFormats(wine_session->session, 0, &real_format_count, NULL);
@@ -2012,7 +2006,7 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
     wine_swapchain = heap_alloc_zero(sizeof(*wine_swapchain));
     wine_swapchain->create_info = *createInfo;
 
-    if(wine_session->wine_instance->instance_type == INSTANCE_TYPE_D3D11){
+    if(wine_session->session_type == SESSION_TYPE_D3D11){
         our_createInfo = *createInfo;
         our_createInfo.format = map_format_dxgi_to_vulkan(createInfo->format);
         if(our_createInfo.format == VK_FORMAT_UNDEFINED){
@@ -2091,7 +2085,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
     WINE_TRACE("%p, %u, %p, %p\n", swapchain, imageCapacityInput, imageCountOutput, images);
 
     if(images){
-        if(wine_instance->instance_type == INSTANCE_TYPE_D3D11){
+        if(wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
             our_images = heap_alloc(sizeof(*our_images) * imageCapacityInput);
             for(i = 0; i < imageCapacityInput; ++i){
                 our_images[i].type = XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR;
@@ -2103,7 +2097,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
     res = xrEnumerateSwapchainImages(wine_swapchain->swapchain, imageCapacityInput, imageCountOutput, images);
 
     if(images && res == XR_SUCCESS){
-        if(wine_instance->instance_type == INSTANCE_TYPE_D3D11){
+        if(wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
             XrSwapchainImageD3D11KHR *their_d3d11;
             D3D11_TEXTURE2D_DESC1 desc;
 
