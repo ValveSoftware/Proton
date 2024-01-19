@@ -39,6 +39,7 @@ enum callback_type
     CALL_IFACE_VTABLE_0,
     CALL_IFACE_VTABLE_1,
     CALL_IFACE_VTABLE_2,
+    CALL_IFACE_VTABLE_0_SERVER_RESPONDED,
     CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST,
     CALL_IFACE_VTABLE_0_RULES_RESPONDED,
 };
@@ -77,6 +78,12 @@ struct callback
             uint64_t arg1;
             uint64_t arg2;
         } call_iface_vtable;
+
+        struct
+        {
+            struct w_steam_iface *iface;
+            gameserveritem_t_105 server[];
+        } server_responded;
 
         struct
         {

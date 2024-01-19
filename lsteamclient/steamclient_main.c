@@ -389,6 +389,12 @@ void execute_pending_callbacks(void)
                             params.callback->call_iface_vtable.arg0, params.callback->call_iface_vtable.arg1, params.callback->call_iface_vtable.arg2) );
             break;
 
+        case CALL_IFACE_VTABLE_0_SERVER_RESPONDED:
+            TRACE( "CALL_IFACE_VTABLE_0_SERVER_RESPONDED iface %p, server %p.\n", params.callback->server_responded.iface,
+                   params.callback->server_responded.server );
+            CALL_VTBL_FUNC( params.callback->server_responded.iface, 0, void, (void *, gameserveritem_t_105 *), (params.callback->server_responded.iface,
+                            params.callback->server_responded.server) );
+            break;
         case CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST:
             TRACE( "CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST iface %p, name %s, score %u, time_played %f.\n", params.callback->add_player_to_list.iface,
                    params.callback->add_player_to_list.name, params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played );

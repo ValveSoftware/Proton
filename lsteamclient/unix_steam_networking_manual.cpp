@@ -670,7 +670,7 @@ struct SteamMatchmakingPingResponse : u_ISteamMatchmakingPingResponse
 
 void SteamMatchmakingPingResponse::ServerResponded( gameserveritem_t_105 *server )
 {
-    queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_0, (intptr_t)server, 0, 0 );
+    queue_vtable_callback_0_server_responded( this->w_iface, server );
 }
 
 void SteamMatchmakingPingResponse::ServerFailedToRespond(void)

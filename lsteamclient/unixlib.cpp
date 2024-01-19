@@ -16,7 +16,7 @@ struct callback_entry
 static struct list callbacks = LIST_INIT( callbacks );
 static pthread_mutex_t callbacks_lock = PTHREAD_MUTEX_INITIALIZER;
 
-extern void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1, uint64_t arg2 )
+void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1, uint64_t arg2 )
 {
     struct callback_entry *entry;
     uint32_t size = 0;
@@ -38,7 +38,27 @@ extern void queue_vtable_callback( struct w_steam_iface *w_iface, enum callback_
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-extern void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_iface, const char *pchName, int nScore, float flTimePlayed )
+void queue_vtable_callback_0_server_responded( struct w_steam_iface *w_iface, gameserveritem_t_105 *server )
+{
+    uint32_t size = sizeof(*server);
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)malloc( size ))) return;
+
+    entry->callback.type = CALL_IFACE_VTABLE_0_SERVER_RESPONDED;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.server_responded.iface = w_iface;
+    entry->callback.server_responded.server[0] = *server;
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_iface, const char *pchName, int nScore, float flTimePlayed )
 {
     uint32_t name_size = strlen( pchName ) + 1, size = name_size;
     struct callback_entry *entry;
@@ -60,7 +80,7 @@ extern void queue_vtable_callback_0_add_player_to_list( struct w_steam_iface *w_
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-extern void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_iface, const char *pchRule, const char *pchValue )
+void queue_vtable_callback_0_rules_responded( struct w_steam_iface *w_iface, const char *pchRule, const char *pchValue )
 {
     uint32_t rule_size = strlen( pchRule ) + 1, value_size = strlen( pchValue ) + 1, size = rule_size + value_size;
     struct callback_entry *entry;
