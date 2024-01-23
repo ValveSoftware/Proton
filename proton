@@ -1317,6 +1317,10 @@ class Session:
         else:
             self.env.pop("LC_ALL", "")
 
+        # CW-Bug-Id: #23185 Enable the new SDL 2.30 Steam Input integration.
+        if "SteamVirtualGamepadInfo_Proton" in self.env and "SteamVirtualGamepadInfo" not in self.env:
+            self.env["SteamVirtualGamepadInfo"] = self.env["SteamVirtualGamepadInfo_Proton"]
+
         self.env.pop("WINEARCH", "")
 
         if 'ORIG_'+ld_path_var not in os.environ:
@@ -1745,9 +1749,6 @@ if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
         log("No compat data path?")
         sys.exit(1)
-
-    # CW-Bug-Id: #23185 Avoid triggering new SDL 2.30 behavior.
-    os.environ.pop('SteamVirtualGamepadInfo', None)
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
