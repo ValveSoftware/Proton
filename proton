@@ -1546,9 +1546,6 @@ if __name__ == "__main__":
         log("No compat data path?")
         sys.exit(1)
 
-    # CW-Bug-Id: #23185 Avoid triggering new SDL 2.30 behavior.
-    os.environ.pop('SteamVirtualGamepadInfo', None)
-
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
     g_proton.cleanup_legacy_dist()
