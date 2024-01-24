@@ -57,10 +57,24 @@ check_container_engine() {
 
     touch permission_check
 
-    # Capture both stdout and stderr
-    local output="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
-                                            --rm $2 \
-                                            stat --format "%u" /test/permission_check 2>&1)"
+    # Create a temporary file for capturing output
+    local temp_output_file=$(mktemp)
+
+    # Execute the check command and redirect to the temporary file
+    $1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+                            --rm $2 stat --format "%u" /test/permission_check \
+                            >"$temp_output_file" 2>&1
+    local return_code=$?
+
+    local output=$(<"$temp_output_file")
+
+    rm "$temp_output_file"
+
+    if [ $return_code -ne 0 ]; then
+        err "Command failed with return code $return_code. Output: $output"
+        die "Please check your $1 setup."
+    fi
+
     rm permission_check
 
     # Filter output to get inner_uid or "Permission denied"
