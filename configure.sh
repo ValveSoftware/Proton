@@ -56,10 +56,21 @@ check_container_engine() {
     fi
 
     touch permission_check
-    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+
+    # Capture both stdout and stderr
+    local output="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
                                             --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
+
+    # Filter output to get inner_uid or "Permission denied"
+    local inner_uid=$(echo "$output" | grep -E '^[0-9]+$|Permission denied')
+
+    # Check if inner_uid is not captured or empty
+    if [ -z "$inner_uid" ]; then
+        err "Unable to determine UID - received output: $output"
+        die "Please check your $1 setup."
+    fi
 
     if [[ $inner_uid == *"Permission denied"* ]]; then
         err "The container cannot access files. Are you using SELinux?"
