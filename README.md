@@ -2,7 +2,7 @@ Introduction
 ------------
 
 **Proton** is a tool for use with the Steam client which allows games which are
-exclusive to Windows to run on the Linux operating system. It uses Wine to
+exclusive to Windows to run on the GNU/Linux operating system. It uses Wine to
 facilitate this.
 
 **Most users should use Proton provided by the Steam Client itself.** See
