@@ -1110,6 +1110,11 @@ def default_compat_config():
             ret.add("heapdelayfree")
 
         if appid in [
+                "21980", #Call of Juarez: Bound in Blood
+                ]:
+            ret.add("heapzeromemory")
+
+        if appid in [
                 "2630", #Call of Duty 2
                 "1060210", #Disaster Report 4: Summer Memories
                 ]:
@@ -1312,6 +1317,7 @@ class Session:
         self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
+        self.check_environment("PROTON_HEAP_ZERO_MEMORY", "heapzeromemory")
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
         self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
         self.check_environment("PROTON_HIDE_APU", "hideapu")
@@ -1346,6 +1352,9 @@ class Session:
 
         if "heapdelayfree" in self.compat_config:
             self.env["WINE_HEAP_DELAY_FREE"] = "1"
+
+        if "heapzeromemory" in self.compat_config:
+            self.env["WINE_HEAP_ZERO_MEMORY"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
