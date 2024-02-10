@@ -26,6 +26,7 @@ extern char *json_convert_startup_info(const char *startup_info);
 extern char *json_convert_paths(const char *input);
 
 extern NTSTATUS vrclient_init( void *args );
+extern NTSTATUS vrclient_unload( void *args );
 extern NTSTATUS vrclient_HmdSystemFactory( void *args );
 extern NTSTATUS vrclient_VRClientCoreFactory( void *args );
 

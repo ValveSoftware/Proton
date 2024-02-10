@@ -28865,6 +28865,7 @@ enum unix_funcs
     unix_vrclient_init,
     unix_vrclient_HmdSystemFactory,
     unix_vrclient_VRClientCoreFactory,
+    unix_vrclient_unload,
     unix_IVRApplications_IVRApplications_001_AddApplicationManifest,
     unix_IVRApplications_IVRApplications_001_RemoveApplicationManifest,
     unix_IVRApplications_IVRApplications_001_IsApplicationInstalled,

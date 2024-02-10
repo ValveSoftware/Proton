@@ -26,6 +26,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 CREATE_TYPE_INFO_VTABLE;
 
 struct compositor_data compositor_data = {0};
+static BOOL vrclient_loaded;
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -51,6 +52,8 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
                 VRCLIENT_CALL( IVRClientCore_IVRClientCore_003_Cleanup, &params );
                 compositor_data.client_core_linux_side = NULL;
             }
+            VRCLIENT_CALL( vrclient_unload, NULL );
+            vrclient_loaded = FALSE;
             break;
     }
 
@@ -104,7 +107,6 @@ static int load_vrclient(void)
 {
     static const WCHAR PROTON_VR_RUNTIME_W[] = {'P','R','O','T','O','N','_','V','R','_','R','U','N','T','I','M','E',0};
     static const WCHAR winevulkanW[] = {'w','i','n','e','v','u','l','k','a','n','.','d','l','l',0};
-    static BOOL loaded;
 
     struct vrclient_init_params params = {.winevulkan = LoadLibraryW( winevulkanW )};
     WCHAR pathW[PATH_MAX];
@@ -116,7 +118,7 @@ static int load_vrclient(void)
     static const char append_path[] = "/bin/vrclient.so";
 #endif
 
-    if (loaded) return 1;
+    if (vrclient_loaded) return 1;
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
     if(!GetEnvironmentVariableW(PROTON_VR_RUNTIME_W, pathW, ARRAY_SIZE(pathW)))
@@ -169,10 +171,10 @@ static int load_vrclient(void)
     TRACE( "got openvr runtime path: %s\n", params.unix_path );
 
     VRCLIENT_CALL( vrclient_init, &params );
-    if (params._ret) loaded = TRUE;
+    if (params._ret) vrclient_loaded = TRUE;
 
     HeapFree( GetProcessHeap(), 0, params.unix_path );
-    return loaded;
+    return vrclient_loaded;
 }
 
 void *CDECL HmdSystemFactory(const char *name, int *return_code)
