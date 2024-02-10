@@ -10,6 +10,7 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     vrclient_init,
     vrclient_HmdSystemFactory,
     vrclient_VRClientCoreFactory,
+    vrclient_unload,
     IVRApplications_IVRApplications_001_AddApplicationManifest,
     IVRApplications_IVRApplications_001_RemoveApplicationManifest,
     IVRApplications_IVRApplications_001_IsApplicationInstalled,

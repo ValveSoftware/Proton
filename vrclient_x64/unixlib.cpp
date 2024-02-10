@@ -72,10 +72,11 @@ static BOOL load_vk_unwrappers( HMODULE winevulkan )
     return TRUE;
 }
 
+static void *vrclient;
+
 NTSTATUS vrclient_init( void *args )
 {
     struct vrclient_init_params *params = (struct vrclient_init_params *)args;
-    static void *vrclient;
 
     params->_ret = false;
 
@@ -107,6 +108,16 @@ NTSTATUS vrclient_init( void *args )
         return 0;
 
     params->_ret = true;
+    return 0;
+}
+
+NTSTATUS vrclient_unload( void *args )
+{
+    if (!vrclient) return 0;
+    dlclose( vrclient );
+    vrclient = NULL;
+    p_HmdSystemFactory = NULL;
+    p_VRClientCoreFactory = NULL;
     return 0;
 }
 
