@@ -72,6 +72,7 @@ SOURCES = \
 	cppIVRCompositor_IVRCompositor_024.cpp \
 	cppIVRCompositor_IVRCompositor_026.cpp \
 	cppIVRCompositor_IVRCompositor_027.cpp \
+	cppIVRCompositor_IVRCompositor_028.cpp \
 	cppIVRControlPanel_IVRControlPanel_006.cpp \
 	cppIVRDriverManager_IVRDriverManager_001.cpp \
 	cppIVRExtendedDisplay_IVRExtendedDisplay_001.cpp \
