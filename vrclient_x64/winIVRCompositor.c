@@ -10097,20 +10097,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetTrackingSpace(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
-{
-    struct IVRCompositor_IVRCompositor_027_WaitGetPoses_params params =
-    {
-        .linux_side = _this->u_iface,
-        .pRenderPoseArray = pRenderPoseArray,
-        .unRenderPoseArrayCount = unRenderPoseArrayCount,
-        .pGamePoseArray = pGamePoseArray,
-        .unGamePoseArrayCount = unGamePoseArrayCount,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_WaitGetPoses, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
