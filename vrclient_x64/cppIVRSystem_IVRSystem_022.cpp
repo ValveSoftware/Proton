@@ -233,7 +233,7 @@ NTSTATUS IVRSystem_IVRSystem_022_PollNextEvent( void *args )
 {
     struct IVRSystem_IVRSystem_022_PollNextEvent_params *params = (struct IVRSystem_IVRSystem_022_PollNextEvent_params *)args;
     struct u_IVRSystem_IVRSystem_022 *iface = (struct u_IVRSystem_IVRSystem_022 *)params->linux_side;
-    u_VREvent_t_1168 u_pEvent;
+    u_VREvent_t_2010 u_pEvent;
     if (params->pEvent) u_pEvent = *params->pEvent;
     uint32_t u_uncbVREvent = params->uncbVREvent ? sizeof(u_pEvent) : 0;
     params->_ret = iface->PollNextEvent( params->pEvent ? &u_pEvent : nullptr, u_uncbVREvent );
@@ -245,7 +245,7 @@ NTSTATUS IVRSystem_IVRSystem_022_PollNextEventWithPose( void *args )
 {
     struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params *params = (struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params *)args;
     struct u_IVRSystem_IVRSystem_022 *iface = (struct u_IVRSystem_IVRSystem_022 *)params->linux_side;
-    u_VREvent_t_1168 u_pEvent;
+    u_VREvent_t_2010 u_pEvent;
     if (params->pEvent) u_pEvent = *params->pEvent;
     uint32_t u_uncbVREvent = params->uncbVREvent ? sizeof(u_pEvent) : 0;
     params->_ret = iface->PollNextEventWithPose( params->eOrigin, params->pEvent ? &u_pEvent : nullptr, u_uncbVREvent, params->pTrackedDevicePose );

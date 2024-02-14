@@ -11446,9 +11446,9 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum(stru
     return params._ret;
 }
 
-int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent)
+int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_this, w_VREvent_t_2010 *pEvent, uint32_t uncbVREvent)
 {
-    w_VREvent_t_1168 w_pEvent;
+    w_VREvent_t_2010 w_pEvent;
     struct IVRSystem_IVRSystem_022_PollNextEvent_params params =
     {
         .linux_side = _this->u_iface,
@@ -11463,9 +11463,9 @@ int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface 
     return params._ret;
 }
 
-int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_1168 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+int8_t __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, w_VREvent_t_2010 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
-    w_VREvent_t_1168 w_pEvent;
+    w_VREvent_t_2010 w_pEvent;
     struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params params =
     {
         .linux_side = _this->u_iface,
