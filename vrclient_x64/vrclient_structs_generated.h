@@ -107,6 +107,16 @@ struct VREvent_Ipd_t
 };
 #pragma pack( pop )
 
+typedef struct VREvent_Keyboard_t_2010 VREvent_Keyboard_t_2010;
+#pragma pack( push, 8 )
+struct VREvent_Keyboard_t_2010
+{
+    char (cNewInput)[8];
+    uint64_t uUserValue;
+    uint64_t overlayHandle;
+};
+#pragma pack( pop )
+
 typedef struct VREvent_Keyboard_t_0912 VREvent_Keyboard_t_0912;
 #pragma pack( push, 8 )
 struct VREvent_Keyboard_t_0912
@@ -133,9 +143,20 @@ struct VREvent_MessageOverlay_t
 };
 #pragma pack( pop )
 
-typedef struct VREvent_Mouse_t VREvent_Mouse_t;
+typedef struct VREvent_Mouse_t_2010 VREvent_Mouse_t_2010;
 #pragma pack( push, 4 )
-struct VREvent_Mouse_t
+struct VREvent_Mouse_t_2010
+{
+    float x;
+    float y;
+    uint32_t button;
+    uint32_t cursorIndex;
+};
+#pragma pack( pop )
+
+typedef struct VREvent_Mouse_t_090 VREvent_Mouse_t_090;
+#pragma pack( push, 4 )
+struct VREvent_Mouse_t_090
 {
     float x;
     float y;
@@ -160,6 +181,18 @@ struct VREvent_Notification_t_092
     float x;
     float y;
     uint32_t notificationId;
+};
+#pragma pack( pop )
+
+typedef struct VREvent_Overlay_t_2010 VREvent_Overlay_t_2010;
+#pragma pack( push, 8 )
+struct VREvent_Overlay_t_2010
+{
+    uint64_t overlayHandle;
+    uint64_t devicePath;
+    uint64_t memoryBlockId;
+    uint32_t cursorIndex;
+    uint8_t __pad_28[4];
 };
 #pragma pack( pop )
 
@@ -304,6 +337,18 @@ struct VREvent_Screenshot_t
 };
 #pragma pack( pop )
 
+typedef struct VREvent_Scroll_t_2010 VREvent_Scroll_t_2010;
+#pragma pack( push, 4 )
+struct VREvent_Scroll_t_2010
+{
+    float xdelta;
+    float ydelta;
+    uint32_t unused;
+    float viewportscale;
+    uint32_t cursorIndex;
+};
+#pragma pack( pop )
+
 typedef struct VREvent_Scroll_t_1322 VREvent_Scroll_t_1322;
 #pragma pack( push, 4 )
 struct VREvent_Scroll_t_1322
@@ -401,13 +446,49 @@ struct TrackedDevicePose_t
 };
 #pragma pack( pop )
 
+typedef union VREvent_Data_t_2010 VREvent_Data_t_2010;
+#pragma pack( push, 8 )
+union VREvent_Data_t_2010
+{
+    VREvent_Reserved_t_113b reserved;
+    VREvent_Controller_t controller;
+    VREvent_Mouse_t_2010 mouse;
+    VREvent_Scroll_t_2010 scroll;
+    VREvent_Process_t_1210 process;
+    VREvent_Notification_t_093 notification;
+    VREvent_Overlay_t_2010 overlay;
+    VREvent_Status_t status;
+    VREvent_Keyboard_t_2010 keyboard;
+    VREvent_Ipd_t ipd;
+    VREvent_Chaperone_t chaperone;
+    VREvent_PerformanceTest_t performanceTest;
+    VREvent_TouchPadMove_t touchPadMove;
+    VREvent_SeatedZeroPoseReset_t seatedZeroPoseReset;
+    VREvent_Screenshot_t screenshot;
+    VREvent_ScreenshotProgress_t screenshotProgress;
+    VREvent_ApplicationLaunch_t applicationLaunch;
+    VREvent_EditingCameraSurface_t cameraSurface;
+    VREvent_MessageOverlay_t messageOverlay;
+    VREvent_Property_t property;
+    VREvent_HapticVibration_t hapticVibration;
+    VREvent_WebConsole_t webConsole;
+    VREvent_InputBindingLoad_t_1016 inputBinding;
+    VREvent_InputActionManifestLoad_t actionManifest;
+    VREvent_SpatialAnchor_t spatialAnchor;
+    VREvent_ProgressUpdate_t progressUpdate;
+    VREvent_ShowUI_t showUi;
+    VREvent_ShowDevTools_t showDevTools;
+    VREvent_HDCPError_t hdcpError;
+};
+#pragma pack( pop )
+
 typedef union VREvent_Data_t_1168 VREvent_Data_t_1168;
 #pragma pack( push, 8 )
 union VREvent_Data_t_1168
 {
     VREvent_Reserved_t_113b reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_1322 scroll;
     VREvent_Process_t_1210 process;
     VREvent_Notification_t_093 notification;
@@ -443,7 +524,7 @@ union VREvent_Data_t_11030
 {
     VREvent_Reserved_t_113b reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_1322 scroll;
     VREvent_Process_t_1210 process;
     VREvent_Notification_t_093 notification;
@@ -479,7 +560,7 @@ union VREvent_Data_t_1322
 {
     VREvent_Reserved_t_113b reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_1322 scroll;
     VREvent_Process_t_1210 process;
     VREvent_Notification_t_093 notification;
@@ -516,7 +597,7 @@ union VREvent_Data_t_1210
 {
     VREvent_Reserved_t_113b reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_1210 process;
     VREvent_Notification_t_093 notification;
@@ -551,7 +632,7 @@ union VREvent_Data_t_113b
 {
     VREvent_Reserved_t_113b reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -586,7 +667,7 @@ union VREvent_Data_t_1016
 {
     VREvent_Reserved_t_1013 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -619,7 +700,7 @@ union VREvent_Data_t_1015
 {
     VREvent_Reserved_t_1013 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -650,7 +731,7 @@ union VREvent_Data_t_1014
 {
     VREvent_Reserved_t_1013 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -680,7 +761,7 @@ union VREvent_Data_t_1013
 {
     VREvent_Reserved_t_1013 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -709,7 +790,7 @@ union VREvent_Data_t_1012
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -738,7 +819,7 @@ union VREvent_Data_t_1011
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -766,7 +847,7 @@ union VREvent_Data_t_106
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -793,7 +874,7 @@ union VREvent_Data_t_105
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -819,7 +900,7 @@ union VREvent_Data_t_103
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -844,7 +925,7 @@ union VREvent_Data_t_102
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -868,7 +949,7 @@ union VREvent_Data_t_101
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -890,7 +971,7 @@ union VREvent_Data_t_0918
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -911,7 +992,7 @@ union VREvent_Data_t_0915
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Scroll_t_0915 scroll;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
@@ -931,7 +1012,7 @@ union VREvent_Data_t_0914
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
     VREvent_Overlay_t_092 overlay;
@@ -949,7 +1030,7 @@ union VREvent_Data_t_0912
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_0912 process;
     VREvent_Notification_t_093 notification;
     VREvent_Overlay_t_092 overlay;
@@ -966,7 +1047,7 @@ union VREvent_Data_t_0910
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_090 process;
     VREvent_Notification_t_093 notification;
     VREvent_Overlay_t_092 overlay;
@@ -981,7 +1062,7 @@ union VREvent_Data_t_097
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_090 process;
     VREvent_Notification_t_093 notification;
     VREvent_Overlay_t_092 overlay;
@@ -995,7 +1076,7 @@ union VREvent_Data_t_093
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_090 process;
     VREvent_Notification_t_093 notification;
     VREvent_Overlay_t_092 overlay;
@@ -1008,7 +1089,7 @@ union VREvent_Data_t_092
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_090 process;
     VREvent_Notification_t_092 notification;
     VREvent_Overlay_t_092 overlay;
@@ -1021,7 +1102,7 @@ union VREvent_Data_t_090
 {
     VREvent_Reserved_t_090 reserved;
     VREvent_Controller_t controller;
-    VREvent_Mouse_t mouse;
+    VREvent_Mouse_t_090 mouse;
     VREvent_Process_t_090 process;
 };
 #pragma pack( pop )
@@ -1561,6 +1642,10 @@ typedef struct u64_VRControllerState001_t u64_VRControllerState001_t;
 typedef struct w64_VRControllerState001_t w64_VRControllerState001_t;
 typedef struct u32_VRControllerState001_t u32_VRControllerState001_t;
 typedef struct w32_VRControllerState001_t w32_VRControllerState001_t;
+typedef struct u64_VREvent_t_2010 u64_VREvent_t_2010;
+typedef struct w64_VREvent_t_2010 w64_VREvent_t_2010;
+typedef struct u32_VREvent_t_2010 u32_VREvent_t_2010;
+typedef struct w32_VREvent_t_2010 w32_VREvent_t_2010;
 typedef struct u64_VREvent_t_1168 u64_VREvent_t_1168;
 typedef struct w64_VREvent_t_1168 w64_VREvent_t_1168;
 typedef struct u32_VREvent_t_1168 u32_VREvent_t_1168;
@@ -4300,6 +4385,69 @@ typedef u32_VRControllerState001_t u_VRControllerState001_t;
 #ifdef __x86_64__
 typedef w64_VRControllerState001_t w_VRControllerState001_t;
 typedef u64_VRControllerState001_t u_VRControllerState001_t;
+#endif
+
+#pragma pack( push, 8 )
+struct w64_VREvent_t_2010
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    uint8_t __pad_12[4];
+    VREvent_Data_t_2010 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_2010() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct u64_VREvent_t_2010
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    VREvent_Data_t_2010 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_2010() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 8 )
+struct w32_VREvent_t_2010
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    uint8_t __pad_12[4];
+    VREvent_Data_t_2010 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_2010() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct u32_VREvent_t_2010
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    VREvent_Data_t_2010 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_2010() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#ifdef __i386__
+typedef w32_VREvent_t_2010 w_VREvent_t_2010;
+typedef u32_VREvent_t_2010 u_VREvent_t_2010;
+#endif
+#ifdef __x86_64__
+typedef w64_VREvent_t_2010 w_VREvent_t_2010;
+typedef u64_VREvent_t_2010 u_VREvent_t_2010;
 #endif
 
 #pragma pack( push, 8 )

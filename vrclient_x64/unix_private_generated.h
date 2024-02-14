@@ -3825,7 +3825,7 @@ struct u_IVROverlayView_IVROverlayView_003
 #ifdef __cplusplus
     virtual uint32_t AcquireOverlayView( uint64_t, u_VRNativeDevice_t *, u_VROverlayView_t *, uint32_t ) = 0;
     virtual uint32_t ReleaseOverlayView( u_VROverlayView_t * ) = 0;
-    virtual void PostOverlayEvent( uint64_t, const u_VREvent_t_1168 * ) = 0;
+    virtual void PostOverlayEvent( uint64_t, const u_VREvent_t_2010 * ) = 0;
     virtual int8_t IsViewingPermitted( uint64_t ) = 0;
 #endif /* __cplusplus */
 };
@@ -3944,8 +3944,8 @@ struct u_IVRSystem_IVRSystem_022
     virtual uint32_t GetArrayTrackedDeviceProperty( uint32_t, uint32_t, uint32_t, void *, uint32_t, uint32_t * ) = 0;
     virtual uint32_t GetStringTrackedDeviceProperty( uint32_t, uint32_t, char *, uint32_t, uint32_t * ) = 0;
     virtual const char * GetPropErrorNameFromEnum( uint32_t ) = 0;
-    virtual int8_t PollNextEvent( u_VREvent_t_1168 *, uint32_t ) = 0;
-    virtual int8_t PollNextEventWithPose( uint32_t, u_VREvent_t_1168 *, uint32_t, TrackedDevicePose_t * ) = 0;
+    virtual int8_t PollNextEvent( u_VREvent_t_2010 *, uint32_t ) = 0;
+    virtual int8_t PollNextEventWithPose( uint32_t, u_VREvent_t_2010 *, uint32_t, TrackedDevicePose_t * ) = 0;
     virtual const char * GetEventTypeNameFromEnum( uint32_t ) = 0;
     virtual u_HiddenAreaMesh_t GetHiddenAreaMesh( uint32_t, uint32_t ) = 0;
     virtual int8_t GetControllerState( uint32_t, u_VRControllerState001_t *, uint32_t ) = 0;
@@ -4258,7 +4258,7 @@ struct u_IVROverlay_IVROverlay_027
     virtual int8_t IsOverlayVisible( uint64_t ) = 0;
     virtual uint32_t GetTransformForOverlayCoordinates( uint64_t, uint32_t, HmdVector2_t, HmdMatrix34_t * ) = 0;
     virtual uint32_t WaitFrameSync( uint32_t ) = 0;
-    virtual int8_t PollNextOverlayEvent( uint64_t, u_VREvent_t_1168 *, uint32_t ) = 0;
+    virtual int8_t PollNextOverlayEvent( uint64_t, u_VREvent_t_2010 *, uint32_t ) = 0;
     virtual uint32_t GetOverlayInputMethod( uint64_t, uint32_t * ) = 0;
     virtual uint32_t SetOverlayInputMethod( uint64_t, uint32_t ) = 0;
     virtual uint32_t GetOverlayMouseScale( uint64_t, HmdVector2_t * ) = 0;
