@@ -218,6 +218,8 @@ need to be explicitly loaded by the debugging tools. For GDB there's a helper
 script `wine/tools/gdbinit.py` (source it) that provides `load-symbol-files`
 (or `lsf` for short) command which loads the symbols for all the mapped files.
 
+For tips on debugging see [docs/DEBUGGING.md](docs/DEBUGGING.md).
+
 
 `compile_commands.json`
 -----------------------
