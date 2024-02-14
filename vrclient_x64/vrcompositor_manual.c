@@ -26,7 +26,7 @@ struct submit_state
 };
 
 static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
-                                                        struct submit_state *state )
+                                                        struct submit_state *state, uint32_t array_index )
 {
     static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty |
             Submit_TextureWithPose;
@@ -78,9 +78,10 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
 
     if (*flags & ~supported_flags) FIXME( "Unhandled flags %#x.\n", *flags );
 
-    if (image_info.arrayLayers > 1)
+    if (image_info.arrayLayers > 1 || array_index != ~0u)
     {
-        state->vkdata.m_unArrayIndex = eye;
+        TRACE( "arrayLayers %u.\n", image_info.arrayLayers );
+        state->vkdata.m_unArrayIndex = array_index != ~0u ? array_index : eye;
         state->vkdata.m_unArraySize = image_info.arrayLayers;
         *flags = *flags | Submit_VulkanTextureWithArrayData;
     }
@@ -245,7 +246,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -293,7 +294,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -341,7 +342,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -389,7 +390,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -437,7 +438,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -485,7 +486,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -533,7 +534,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -600,7 +601,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -667,7 +668,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -734,7 +735,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -801,7 +802,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -868,7 +869,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -951,7 +952,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1050,7 +1051,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1149,7 +1150,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1248,7 +1249,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1347,7 +1348,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_if
 
     compositor_data.handoff_called = FALSE;
     if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state );
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_Submit, &params );
     if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
     return params._ret;
@@ -1390,6 +1391,150 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride( struct
     };
     TRACE( "%p\n", _this );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_SetSkyboxOverride, &params );
+    set_skybox_override_done( pTextures, unTextureCount );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_WaitGetPoses( struct w_steam_iface *_this,
+                                                                     TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
+                                                                     TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
+{
+    struct IVRCompositor_IVRCompositor_028_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
+    TRACE( "%p\n", _this );
+    wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct IVRCompositor_IVRCompositor_028_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_PostPresentHandoff, &params );
+    }
+
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_WaitGetPoses, &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData, &params );
+    }
+
+    wait_get_poses_done( _this->u_iface );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_Submit( struct w_steam_iface *_this,
+                                                               uint32_t eEye, const w_Texture_t *pTexture,
+                                                               const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
+{
+    struct submit_state state = {0};
+    struct IVRCompositor_IVRCompositor_028_Submit_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pTexture = pTexture,
+        .pBounds = pBounds,
+        .nSubmitFlags = nSubmitFlags,
+    };
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
+
+    compositor_data.handoff_called = FALSE;
+    if (pTexture->eType == TextureType_DirectX)
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_Submit, &params );
+    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex( struct w_steam_iface *_this,
+                                                               uint32_t eEye, const w_Texture_t *pTexture, uint32_t unTextureArrayIndex,
+                                                               const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
+{
+    struct submit_state state = {0};
+    uint32_t ret;
+
+    TRACE( "_this %p, eEye %u, pTexture %p (eType %u), unTextureArrayIndex %u, pBounds %p, nSubmitFlags %#x\n",
+            _this, eEye, pTexture, pTexture->eType, unTextureArrayIndex, pBounds, nSubmitFlags );
+
+    compositor_data.handoff_called = FALSE;
+    if (pTexture->eType == TextureType_DirectX)
+    {
+        struct IVRCompositor_IVRCompositor_028_Submit_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eEye = eEye,
+            .pTexture = pTexture,
+            .pBounds = pBounds,
+            .nSubmitFlags = nSubmitFlags,
+        };
+
+        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, unTextureArrayIndex );
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_Submit, &params );
+        ret = params._ret;
+    }
+    else
+    {
+        struct IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eEye = eEye,
+            .pTexture = pTexture,
+            .unTextureArrayIndex = unTextureArrayIndex,
+            .pBounds = pBounds,
+            .nSubmitFlags = nSubmitFlags,
+        };
+
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex, &params );
+        ret = params._ret;
+    }
+    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    return ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_PostPresentHandoff( struct w_steam_iface *_this )
+{
+    struct IVRCompositor_IVRCompositor_028_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+    TRACE( "%p\n", _this );
+    post_present_handoff_init( _this->u_iface, 28 );
+
+    if (compositor_data.dxvk_device && !compositor_data.d3d11_explicit_handoff)
+    {
+        struct IVRCompositor_IVRCompositor_028_SetExplicitTimingMode_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eTimingMode = VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff,
+        };
+
+        /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+         * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+         * in lockups and crashes. */
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SetExplicitTimingMode, &params );
+        compositor_data.d3d11_explicit_handoff = TRUE;
+    }
+
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_PostPresentHandoff, &params );
+    post_present_handoff_done();
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SetSkyboxOverride( struct w_steam_iface *_this,
+                                                                          const w_Texture_t *pTextures, uint32_t unTextureCount )
+{
+    struct set_skybox_override_state state = {0};
+    struct IVRCompositor_IVRCompositor_028_SetSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTextures = set_skybox_override_init( pTextures, unTextureCount, &state ),
+        .unTextureCount = unTextureCount,
+    };
+    TRACE( "%p\n", _this );
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SetSkyboxOverride, &params );
     set_skybox_override_done( pTextures, unTextureCount );
     return params._ret;
 }

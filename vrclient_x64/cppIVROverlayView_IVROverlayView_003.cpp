@@ -31,7 +31,7 @@ NTSTATUS IVROverlayView_IVROverlayView_003_PostOverlayEvent( void *args )
 {
     struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params *params = (struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params *)args;
     struct u_IVROverlayView_IVROverlayView_003 *iface = (struct u_IVROverlayView_IVROverlayView_003 *)params->linux_side;
-    u_VREvent_t_2010 u_pvrEvent;
+    u_VREvent_t_223 u_pvrEvent;
     if (params->pvrEvent) u_pvrEvent = *params->pvrEvent;
     iface->PostOverlayEvent( params->ulOverlayHandle, params->pvrEvent ? &u_pvrEvent : nullptr );
     return 0;

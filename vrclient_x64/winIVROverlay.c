@@ -26105,9 +26105,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_WaitFrameSync(struct w_steam_if
     return params._ret;
 }
 
-int8_t __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_2010 *pEvent, uint32_t uncbVREvent)
+int8_t __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, w_VREvent_t_223 *pEvent, uint32_t uncbVREvent)
 {
-    w_VREvent_t_2010 w_pEvent;
+    w_VREvent_t_223 w_pEvent;
     struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params params =
     {
         .linux_side = _this->u_iface,

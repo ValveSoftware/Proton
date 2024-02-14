@@ -7,6 +7,22 @@ struct VREvent_ApplicationLaunch_t
 };
 #pragma pack( pop )
 
+typedef struct VREvent_AudioMuteControl_t VREvent_AudioMuteControl_t;
+#pragma pack( push, 1 )
+struct VREvent_AudioMuteControl_t
+{
+    int8_t bMute;
+};
+#pragma pack( pop )
+
+typedef struct VREvent_AudioVolumeControl_t VREvent_AudioVolumeControl_t;
+#pragma pack( push, 4 )
+struct VREvent_AudioVolumeControl_t
+{
+    float fVolumeLevel;
+};
+#pragma pack( pop )
+
 typedef struct VREvent_Chaperone_t VREvent_Chaperone_t;
 #pragma pack( push, 8 )
 struct VREvent_Chaperone_t
@@ -443,6 +459,44 @@ struct TrackedDevicePose_t
     int8_t bPoseIsValid;
     int8_t bDeviceIsConnected;
     uint8_t __pad_78[2];
+};
+#pragma pack( pop )
+
+typedef union VREvent_Data_t_223 VREvent_Data_t_223;
+#pragma pack( push, 8 )
+union VREvent_Data_t_223
+{
+    VREvent_Reserved_t_113b reserved;
+    VREvent_Controller_t controller;
+    VREvent_Mouse_t_2010 mouse;
+    VREvent_Scroll_t_2010 scroll;
+    VREvent_Process_t_1210 process;
+    VREvent_Notification_t_093 notification;
+    VREvent_Overlay_t_2010 overlay;
+    VREvent_Status_t status;
+    VREvent_Keyboard_t_2010 keyboard;
+    VREvent_Ipd_t ipd;
+    VREvent_Chaperone_t chaperone;
+    VREvent_PerformanceTest_t performanceTest;
+    VREvent_TouchPadMove_t touchPadMove;
+    VREvent_SeatedZeroPoseReset_t seatedZeroPoseReset;
+    VREvent_Screenshot_t screenshot;
+    VREvent_ScreenshotProgress_t screenshotProgress;
+    VREvent_ApplicationLaunch_t applicationLaunch;
+    VREvent_EditingCameraSurface_t cameraSurface;
+    VREvent_MessageOverlay_t messageOverlay;
+    VREvent_Property_t property;
+    VREvent_HapticVibration_t hapticVibration;
+    VREvent_WebConsole_t webConsole;
+    VREvent_InputBindingLoad_t_1016 inputBinding;
+    VREvent_InputActionManifestLoad_t actionManifest;
+    VREvent_SpatialAnchor_t spatialAnchor;
+    VREvent_ProgressUpdate_t progressUpdate;
+    VREvent_ShowUI_t showUi;
+    VREvent_ShowDevTools_t showDevTools;
+    VREvent_HDCPError_t hdcpError;
+    VREvent_AudioVolumeControl_t audioVolumeControl;
+    VREvent_AudioMuteControl_t audioMuteControl;
 };
 #pragma pack( pop )
 
@@ -1642,6 +1696,10 @@ typedef struct u64_VRControllerState001_t u64_VRControllerState001_t;
 typedef struct w64_VRControllerState001_t w64_VRControllerState001_t;
 typedef struct u32_VRControllerState001_t u32_VRControllerState001_t;
 typedef struct w32_VRControllerState001_t w32_VRControllerState001_t;
+typedef struct u64_VREvent_t_223 u64_VREvent_t_223;
+typedef struct w64_VREvent_t_223 w64_VREvent_t_223;
+typedef struct u32_VREvent_t_223 u32_VREvent_t_223;
+typedef struct w32_VREvent_t_223 w32_VREvent_t_223;
 typedef struct u64_VREvent_t_2010 u64_VREvent_t_2010;
 typedef struct w64_VREvent_t_2010 w64_VREvent_t_2010;
 typedef struct u32_VREvent_t_2010 u32_VREvent_t_2010;
@@ -4385,6 +4443,69 @@ typedef u32_VRControllerState001_t u_VRControllerState001_t;
 #ifdef __x86_64__
 typedef w64_VRControllerState001_t w_VRControllerState001_t;
 typedef u64_VRControllerState001_t u_VRControllerState001_t;
+#endif
+
+#pragma pack( push, 8 )
+struct w64_VREvent_t_223
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    uint8_t __pad_12[4];
+    VREvent_Data_t_223 data;
+#ifdef __cplusplus
+    operator u64_VREvent_t_223() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct u64_VREvent_t_223
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    VREvent_Data_t_223 data;
+#ifdef __cplusplus
+    operator w64_VREvent_t_223() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 8 )
+struct w32_VREvent_t_223
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    uint8_t __pad_12[4];
+    VREvent_Data_t_223 data;
+#ifdef __cplusplus
+    operator u32_VREvent_t_223() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct u32_VREvent_t_223
+{
+    uint32_t eventType;
+    uint32_t trackedDeviceIndex;
+    float eventAgeSeconds;
+    VREvent_Data_t_223 data;
+#ifdef __cplusplus
+    operator w32_VREvent_t_223() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#ifdef __i386__
+typedef w32_VREvent_t_223 w_VREvent_t_223;
+typedef u32_VREvent_t_223 u_VREvent_t_223;
+#endif
+#ifdef __x86_64__
+typedef w64_VREvent_t_223 w_VREvent_t_223;
+typedef u64_VREvent_t_223 u_VREvent_t_223;
 #endif
 
 #pragma pack( push, 8 )

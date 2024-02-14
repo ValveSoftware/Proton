@@ -377,7 +377,7 @@ NTSTATUS IVROverlay_IVROverlay_027_PollNextOverlayEvent( void *args )
 {
     struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params *params = (struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params *)args;
     struct u_IVROverlay_IVROverlay_027 *iface = (struct u_IVROverlay_IVROverlay_027 *)params->linux_side;
-    u_VREvent_t_2010 u_pEvent;
+    u_VREvent_t_223 u_pEvent;
     if (params->pEvent) u_pEvent = *params->pEvent;
     uint32_t u_uncbVREvent = params->uncbVREvent ? sizeof(u_pEvent) : 0;
     params->_ret = iface->PollNextOverlayEvent( params->ulOverlayHandle, params->pEvent ? &u_pEvent : nullptr, u_uncbVREvent );
