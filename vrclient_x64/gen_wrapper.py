@@ -235,7 +235,7 @@ MANUAL_METHODS = {
     "IVRCompositor_Submit": lambda ver, abi: ver > 8,
     "IVRCompositor_SetSkyboxOverride": lambda ver, abi: ver > 8,
     "IVRCompositor_PostPresentHandoff": lambda ver, abi: abi == 'w',
-    "IVRCompositor_WaitGetPoses": lambda ver, abi: abi == 'w' and ver > 15 and ver < 27,
+    "IVRCompositor_WaitGetPoses": lambda ver, abi: abi == 'w' and ver > 15,
     "IVRCompositor_GetVulkanDeviceExtensionsRequired": lambda ver, abi: abi == 'u',
     "IVRRenderModels_LoadTextureD3D11_Async": lambda ver, abi: abi == 'w',
     "IVRRenderModels_FreeTextureD3D11": lambda ver, abi: abi == 'w',
