@@ -1439,120 +1439,6 @@ class Session:
                 s = dll + "=" + setting
         append_to_env_str(self.env, "WINEDLLOVERRIDES", s, ";")
 
-    def dump_dbg_env(self, f):
-        f.write("PATH=\"" + self.env["PATH"] + "\" \\\n")
-        f.write("\tTERM=\"xterm\" \\\n") #XXX
-        f.write("\tWINEDEBUG=\"-all\" \\\n")
-        f.write("\tWINEDLLPATH=\"" + self.env["WINEDLLPATH"] + "\" \\\n")
-        f.write("\t" + ld_path_var + "=\"" + self.env[ld_path_var] + "\" \\\n")
-        f.write("\tWINEPREFIX=\"" + self.env["WINEPREFIX"] + "\" \\\n")
-        if "WINEESYNC" in self.env:
-            f.write("\tWINEESYNC=\"" + self.env["WINEESYNC"] + "\" \\\n")
-        if "WINEFSYNC" in self.env:
-            f.write("\tWINEFSYNC=\"" + self.env["WINEFSYNC"] + "\" \\\n")
-        if "SteamGameId" in self.env:
-            f.write("\tSteamGameId=\"" + self.env["SteamGameId"] + "\" \\\n")
-        if "SteamAppId" in self.env:
-            f.write("\tSteamAppId=\"" + self.env["SteamAppId"] + "\" \\\n")
-        if "WINEDLLOVERRIDES" in self.env:
-            f.write("\tWINEDLLOVERRIDES=\"" + self.env["WINEDLLOVERRIDES"] + "\" \\\n")
-        if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in self.env:
-            f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + self.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
-        if "WINE_LARGE_ADDRESS_AWARE" in self.env:
-            f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + self.env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
-        if "GST_PLUGIN_SYSTEM_PATH_1_0" in self.env:
-            f.write("\tGST_PLUGIN_SYSTEM_PATH_1_0=\"" + self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] + "\" \\\n")
-        if "WINE_GST_REGISTRY_DIR" in self.env:
-            f.write("\tWINE_GST_REGISTRY_DIR=\"" + self.env["WINE_GST_REGISTRY_DIR"] + "\" \\\n")
-        if "MEDIACONV_AUDIO_DUMP_FILE" in self.env:
-            f.write("\tMEDIACONV_AUDIO_DUMP_FILE=\"" + self.env["MEDIACONV_AUDIO_DUMP_FILE"] + "\" \\\n")
-        if "MEDIACONV_AUDIO_TRANSCODED_FILE" in self.env:
-            f.write("\tMEDIACONV_AUDIO_TRANSCODED_FILE=\"" + self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] + "\" \\\n")
-        if "MEDIACONV_VIDEO_DUMP_FILE" in self.env:
-            f.write("\tMEDIACONV_VIDEO_DUMP_FILE=\"" + self.env["MEDIACONV_VIDEO_DUMP_FILE"] + "\" \\\n")
-        if "MEDIACONV_VIDEO_TRANSCODED_FILE" in self.env:
-            f.write("\tMEDIACONV_VIDEO_TRANSCODED_FILE=\"" + self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] + "\" \\\n")
-
-    def dump_dbg_scripts(self):
-        exe_name = os.path.basename(sys.argv[2])
-
-        tmpdir = self.env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
-        makedirs(tmpdir)
-
-        with open(tmpdir + "winedbg", "w") as f:
-            f.write("#!/bin/bash\n")
-            f.write("#Run winedbg with args\n\n")
-            f.write("cd \"" + os.getcwd() + "\"\n")
-            self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"$@\"\n")
-        os.chmod(tmpdir + "winedbg", 0o755)
-
-        with open(tmpdir + "winedbg_run", "w") as f:
-            f.write("#!/bin/bash\n")
-            f.write("#Run winedbg and prepare to run game or given program\n\n")
-            f.write("cd \"" + os.getcwd() + "\"\n")
-            f.write("DEF_CMD=(")
-            first = True
-            for arg in sys.argv[2:]:
-                if first:
-                    f.write("\"" + arg + "\"")
-                    first = False
-                else:
-                    f.write(" \"" + arg + "\"")
-            f.write(")\n")
-            self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-        os.chmod(tmpdir + "winedbg_run", 0o755)
-
-        with open(tmpdir + "gdb_attach", "w") as f:
-            f.write("#!/bin/bash\n")
-            f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
-            f.write("cd \"" + os.getcwd() + "\"\n")
-            f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | sed -e 's/^0*//')\n")
-            f.write("if [ -z \"$WPID_HEX\" ]; then \n")
-            f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
-            f.write("    exit 1\n")
-            f.write("fi\n")
-            f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
-            self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb $WPID_DEC\n")
-        os.chmod(tmpdir + "gdb_attach", 0o755)
-
-        with open(tmpdir + "gdb_run", "w") as f:
-            f.write("#!/bin/bash\n")
-            f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
-            f.write("cd \"" + os.getcwd() + "\"\n")
-            f.write("DEF_CMD=(")
-            first = True
-            for arg in sys.argv[2:]:
-                if first:
-                    f.write("\"" + arg + "\"")
-                    first = False
-                else:
-                    f.write(" \"" + arg + "\"")
-            f.write(")\n")
-            self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-        os.chmod(tmpdir + "gdb_run", 0o755)
-
-        with open(tmpdir + "run", "w") as f:
-            f.write("#!/bin/bash\n")
-            f.write("#Run game or given command in environment\n\n")
-            f.write("cd \"" + os.getcwd() + "\"\n")
-            f.write("DEF_CMD=(")
-            first = True
-            for arg in sys.argv[2:]:
-                if first:
-                    f.write("\"" + arg + "\"")
-                    first = False
-                else:
-                    f.write(" \"" + arg + "\"")
-            f.write(")\n")
-            self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine64_bin + "\" c:\\\\windows\\\\system32\\\\steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
-        os.chmod(tmpdir + "run", 0o755)
-
     def run_proc(self, args, local_env=None):
         if local_env is None:
             local_env = self.env
@@ -1563,12 +1449,6 @@ class Session:
             adverb = ['steam-runtime-launcher-interface-0', 'proton']
         else:
             adverb = []
-
-        if "PROTON_DUMP_DEBUG_COMMANDS" in self.env and nonzero(self.env["PROTON_DUMP_DEBUG_COMMANDS"]):
-            try:
-                self.dump_dbg_scripts()
-            except OSError:
-                log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
 
         if self.remote_debug_cmd:
             remote_debug_cmd = self.remote_debug_cmd

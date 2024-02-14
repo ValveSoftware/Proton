@@ -284,8 +284,6 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 | :-------------------- | :--------------------------------- | :----------- |
 |                       | `PROTON_LOG`                       | Convenience method for dumping a useful debug log to `$PROTON_LOG_DIR/steam-$APPID.log`. Set to `1` to enable default logging, or set to a string to be appended to the default `WINEDEBUG` channels. |
 |                       | `PROTON_LOG_DIR`                   | Output log files into the directory specified. Defaults to your home directory. |
-|                       | `PROTON_DUMP_DEBUG_COMMANDS`       | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
-|                       | `PROTON_DEBUG_DIR`                 | Root directory for the Proton debug scripts, `/tmp` by default. |
 |                       | `PROTON_WAIT_ATTACH`               | Wait for a debugger to attach to steam.exe before launching the game process. To attach to the game process at startup, debuggers should be set to follow child processes. |
 |                       | `PROTON_CRASH_REPORT_DIR`          | Write crash logs into this directory. Does not clean up old logs, so may eat all your disk space eventually. |
 | `wined3d`             | `PROTON_USE_WINED3D`               | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11, d3d10, and d3d9. |
