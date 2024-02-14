@@ -8621,7 +8621,7 @@ struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params
 {
     void *linux_side;
     uint64_t ulOverlayHandle;
-    const w_VREvent_t_1168 *pvrEvent;
+    const w_VREvent_t_2010 *pvrEvent;
 };
 
 struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params
@@ -21584,7 +21584,7 @@ struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params
     void *linux_side;
     int8_t _ret;
     uint64_t ulOverlayHandle;
-    w_VREvent_t_1168 *pEvent;
+    w_VREvent_t_2010 *pEvent;
     uint32_t uncbVREvent;
 };
 
@@ -28039,7 +28039,7 @@ struct IVRSystem_IVRSystem_022_PollNextEvent_params
 {
     void *linux_side;
     int8_t _ret;
-    w_VREvent_t_1168 *pEvent;
+    w_VREvent_t_2010 *pEvent;
     uint32_t uncbVREvent;
 };
 
@@ -28048,7 +28048,7 @@ struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params
     void *linux_side;
     int8_t _ret;
     uint32_t eOrigin;
-    w_VREvent_t_1168 *pEvent;
+    w_VREvent_t_2010 *pEvent;
     uint32_t uncbVREvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
