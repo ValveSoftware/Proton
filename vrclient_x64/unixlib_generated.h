@@ -6735,6 +6735,365 @@ struct IVRCompositor_IVRCompositor_027_GetPosesForFrame_params
     uint32_t unPoseArrayCount;
 };
 
+struct IVRCompositor_IVRCompositor_028_SetTrackingSpace_params
+{
+    void *linux_side;
+    uint32_t eOrigin;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetTrackingSpace_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_WaitGetPoses_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    TrackedDevicePose_t *pRenderPoseArray;
+    uint32_t unRenderPoseArrayCount;
+    TrackedDevicePose_t *pGamePoseArray;
+    uint32_t unGamePoseArrayCount;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetLastPoses_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    TrackedDevicePose_t *pRenderPoseArray;
+    uint32_t unRenderPoseArrayCount;
+    TrackedDevicePose_t *pGamePoseArray;
+    uint32_t unGamePoseArrayCount;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t unDeviceIndex;
+    TrackedDevicePose_t *pOutputPose;
+    TrackedDevicePose_t *pOutputGamePose;
+};
+
+struct IVRCompositor_IVRCompositor_028_Submit_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t eEye;
+    const w_Texture_t *pTexture;
+    const VRTextureBounds_t *pBounds;
+    uint32_t nSubmitFlags;
+};
+
+struct IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t eEye;
+    const w_Texture_t *pTexture;
+    uint32_t unTextureArrayIndex;
+    const VRTextureBounds_t *pBounds;
+    uint32_t nSubmitFlags;
+};
+
+struct IVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_PostPresentHandoff_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetFrameTiming_params
+{
+    void *linux_side;
+    int8_t _ret;
+    w_Compositor_FrameTiming_1017 *pTiming;
+    uint32_t unFramesAgo;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetFrameTimings_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    w_Compositor_FrameTiming_1017 *pTiming;
+    uint32_t nFrames;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetFrameTimeRemaining_params
+{
+    void *linux_side;
+    float _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetCumulativeStats_params
+{
+    void *linux_side;
+    Compositor_CumulativeStats_1267 *pStats;
+    uint32_t nStatsSizeInBytes;
+};
+
+struct IVRCompositor_IVRCompositor_028_FadeToColor_params
+{
+    void *linux_side;
+    float fSeconds;
+    float fRed;
+    float fGreen;
+    float fBlue;
+    float fAlpha;
+    int8_t bBackground;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetCurrentFadeColor_params
+{
+    void *linux_side;
+    HmdColor_t *_ret;
+    int8_t bBackground;
+};
+
+struct IVRCompositor_IVRCompositor_028_FadeGrid_params
+{
+    void *linux_side;
+    float fSeconds;
+    int8_t bFadeGridIn;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetCurrentGridAlpha_params
+{
+    void *linux_side;
+    float _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_SetSkyboxOverride_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    const w_Texture_t *pTextures;
+    uint32_t unTextureCount;
+};
+
+struct IVRCompositor_IVRCompositor_028_ClearSkyboxOverride_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_CompositorBringToFront_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_CompositorGoToBack_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_CompositorQuit_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_IsFullscreen_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetLastFrameRenderer_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_CanRenderScene_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_ShowMirrorWindow_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_HideMirrorWindow_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_IsMirrorWindowVisible_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_CompositorDumpImages_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn_params
+{
+    void *linux_side;
+    int8_t bOverride;
+};
+
+struct IVRCompositor_IVRCompositor_028_ForceReconnectProcess_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_SuspendRendering_params
+{
+    void *linux_side;
+    int8_t bSuspend;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t eEye;
+    void *pD3D11DeviceOrResource;
+    void **ppD3D11ShaderResourceView;
+};
+
+struct IVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11_params
+{
+    void *linux_side;
+    void *pD3D11ShaderResourceView;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetMirrorTextureGL_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t eEye;
+    uint32_t *pglTextureId;
+    void **pglSharedTextureHandle;
+};
+
+struct IVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture_params
+{
+    void *linux_side;
+    int8_t _ret;
+    uint32_t glTextureId;
+    void *glSharedTextureHandle;
+};
+
+struct IVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess_params
+{
+    void *linux_side;
+    void *glSharedTextureHandle;
+};
+
+struct IVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess_params
+{
+    void *linux_side;
+    void *glSharedTextureHandle;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    char *pchValue;
+    uint32_t unBufferSize;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    VkPhysicalDevice_T *pPhysicalDevice;
+    char *pchValue;
+    uint32_t unBufferSize;
+};
+
+struct IVRCompositor_IVRCompositor_028_SetExplicitTimingMode_params
+{
+    void *linux_side;
+    uint32_t eTimingMode;
+};
+
+struct IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData_params
+{
+    void *linux_side;
+    uint32_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading_params
+{
+    void *linux_side;
+    int8_t _ret;
+};
+
+struct IVRCompositor_IVRCompositor_028_SetStageOverride_Async_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    const char *pchRenderModelPath;
+    const HmdMatrix34_t *pTransform;
+    const Compositor_StageRenderSettings *pRenderSettings;
+    uint32_t nSizeOfRenderSettings;
+};
+
+struct IVRCompositor_IVRCompositor_028_ClearStageOverride_params
+{
+    void *linux_side;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults_params
+{
+    void *linux_side;
+    int8_t _ret;
+    Compositor_BenchmarkResults *pBenchmarkResults;
+    uint32_t nSizeOfBenchmarkResults;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t *pRenderPosePredictionID;
+    uint32_t *pGamePosePredictionID;
+};
+
+struct IVRCompositor_IVRCompositor_028_GetPosesForFrame_params
+{
+    void *linux_side;
+    uint32_t _ret;
+    uint32_t unPosePredictionID;
+    TrackedDevicePose_t *pPoseArray;
+    uint32_t unPoseArrayCount;
+};
+
 struct IVRControlPanel_IVRControlPanel_006_undoc1_params
 {
     void *linux_side;
@@ -8621,7 +8980,7 @@ struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params
 {
     void *linux_side;
     uint64_t ulOverlayHandle;
-    const w_VREvent_t_2010 *pvrEvent;
+    const w_VREvent_t_223 *pvrEvent;
 };
 
 struct IVROverlayView_IVROverlayView_003_IsViewingPermitted_params
@@ -21584,7 +21943,7 @@ struct IVROverlay_IVROverlay_027_PollNextOverlayEvent_params
     void *linux_side;
     int8_t _ret;
     uint64_t ulOverlayHandle;
-    w_VREvent_t_2010 *pEvent;
+    w_VREvent_t_223 *pEvent;
     uint32_t uncbVREvent;
 };
 
@@ -28039,7 +28398,7 @@ struct IVRSystem_IVRSystem_022_PollNextEvent_params
 {
     void *linux_side;
     int8_t _ret;
-    w_VREvent_t_2010 *pEvent;
+    w_VREvent_t_223 *pEvent;
     uint32_t uncbVREvent;
 };
 
@@ -28048,7 +28407,7 @@ struct IVRSystem_IVRSystem_022_PollNextEventWithPose_params
     void *linux_side;
     int8_t _ret;
     uint32_t eOrigin;
-    w_VREvent_t_2010 *pEvent;
+    w_VREvent_t_223 *pEvent;
     uint32_t uncbVREvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -29841,6 +30200,58 @@ enum unix_funcs
     unix_IVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults,
     unix_IVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs,
     unix_IVRCompositor_IVRCompositor_027_GetPosesForFrame,
+    unix_IVRCompositor_IVRCompositor_028_SetTrackingSpace,
+    unix_IVRCompositor_IVRCompositor_028_GetTrackingSpace,
+    unix_IVRCompositor_IVRCompositor_028_WaitGetPoses,
+    unix_IVRCompositor_IVRCompositor_028_GetLastPoses,
+    unix_IVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex,
+    unix_IVRCompositor_IVRCompositor_028_Submit,
+    unix_IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex,
+    unix_IVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame,
+    unix_IVRCompositor_IVRCompositor_028_PostPresentHandoff,
+    unix_IVRCompositor_IVRCompositor_028_GetFrameTiming,
+    unix_IVRCompositor_IVRCompositor_028_GetFrameTimings,
+    unix_IVRCompositor_IVRCompositor_028_GetFrameTimeRemaining,
+    unix_IVRCompositor_IVRCompositor_028_GetCumulativeStats,
+    unix_IVRCompositor_IVRCompositor_028_FadeToColor,
+    unix_IVRCompositor_IVRCompositor_028_GetCurrentFadeColor,
+    unix_IVRCompositor_IVRCompositor_028_FadeGrid,
+    unix_IVRCompositor_IVRCompositor_028_GetCurrentGridAlpha,
+    unix_IVRCompositor_IVRCompositor_028_SetSkyboxOverride,
+    unix_IVRCompositor_IVRCompositor_028_ClearSkyboxOverride,
+    unix_IVRCompositor_IVRCompositor_028_CompositorBringToFront,
+    unix_IVRCompositor_IVRCompositor_028_CompositorGoToBack,
+    unix_IVRCompositor_IVRCompositor_028_CompositorQuit,
+    unix_IVRCompositor_IVRCompositor_028_IsFullscreen,
+    unix_IVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess,
+    unix_IVRCompositor_IVRCompositor_028_GetLastFrameRenderer,
+    unix_IVRCompositor_IVRCompositor_028_CanRenderScene,
+    unix_IVRCompositor_IVRCompositor_028_ShowMirrorWindow,
+    unix_IVRCompositor_IVRCompositor_028_HideMirrorWindow,
+    unix_IVRCompositor_IVRCompositor_028_IsMirrorWindowVisible,
+    unix_IVRCompositor_IVRCompositor_028_CompositorDumpImages,
+    unix_IVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources,
+    unix_IVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn,
+    unix_IVRCompositor_IVRCompositor_028_ForceReconnectProcess,
+    unix_IVRCompositor_IVRCompositor_028_SuspendRendering,
+    unix_IVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11,
+    unix_IVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11,
+    unix_IVRCompositor_IVRCompositor_028_GetMirrorTextureGL,
+    unix_IVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture,
+    unix_IVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess,
+    unix_IVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess,
+    unix_IVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired,
+    unix_IVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired,
+    unix_IVRCompositor_IVRCompositor_028_SetExplicitTimingMode,
+    unix_IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData,
+    unix_IVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled,
+    unix_IVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported,
+    unix_IVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading,
+    unix_IVRCompositor_IVRCompositor_028_SetStageOverride_Async,
+    unix_IVRCompositor_IVRCompositor_028_ClearStageOverride,
+    unix_IVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults,
+    unix_IVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs,
+    unix_IVRCompositor_IVRCompositor_028_GetPosesForFrame,
     unix_IVRControlPanel_IVRControlPanel_006_undoc1,
     unix_IVRControlPanel_IVRControlPanel_006_undoc2,
     unix_IVRControlPanel_IVRControlPanel_006_undoc3,

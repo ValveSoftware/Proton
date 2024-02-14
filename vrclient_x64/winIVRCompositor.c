@@ -10783,6 +10783,771 @@ void destroy_winIVRCompositor_IVRCompositor_027_FnTable(struct w_steam_iface *ob
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SetTrackingSpace, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetTrackingSpace, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_WaitGetPoses, 20)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetLastPoses, 20)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex, 16)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_Submit, 20)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex, 24)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_PostPresentHandoff, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetFrameTiming, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetFrameTimings, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetFrameTimeRemaining, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetCumulativeStats, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_FadeToColor, 28)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetCurrentFadeColor, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_FadeGrid, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetCurrentGridAlpha, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SetSkyboxOverride, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ClearSkyboxOverride, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_CompositorBringToFront, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_CompositorGoToBack, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_CompositorQuit, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_IsFullscreen, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetLastFrameRenderer, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_CanRenderScene, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ShowMirrorWindow, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_HideMirrorWindow, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_IsMirrorWindowVisible, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_CompositorDumpImages, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ForceReconnectProcess, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SuspendRendering, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11, 16)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetMirrorTextureGL, 16)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired, 16)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SetExplicitTimingMode, 8)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SubmitExplicitTimingData, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_SetStageOverride_Async, 20)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_ClearStageOverride, 4)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs, 12)
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_028_GetPosesForFrame, 16)
+
+void __thiscall winIVRCompositor_IVRCompositor_028_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
+{
+    struct IVRCompositor_IVRCompositor_028_SetTrackingSpace_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SetTrackingSpace, &params );
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetTrackingSpace(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_GetTrackingSpace_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetTrackingSpace, &params );
+    return params._ret;
+}
+
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_028_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+{
+    struct IVRCompositor_IVRCompositor_028_GetLastPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetLastPoses, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+{
+    struct IVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unDeviceIndex = unDeviceIndex,
+        .pOutputPose = pOutputPose,
+        .pOutputGamePose = pOutputGamePose,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex, &params );
+    return params._ret;
+}
+
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_028_Submit(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex(struct w_steam_iface *_this, uint32_t eEye, const w_Texture_t *pTexture, uint32_t unTextureArrayIndex, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame, &params );
+}
+
+extern void __thiscall winIVRCompositor_IVRCompositor_028_PostPresentHandoff(struct w_steam_iface *_this);
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_GetFrameTiming(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t unFramesAgo)
+{
+    struct IVRCompositor_IVRCompositor_028_GetFrameTiming_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTiming = pTiming,
+        .unFramesAgo = unFramesAgo,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetFrameTiming, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetFrameTimings(struct w_steam_iface *_this, w_Compositor_FrameTiming_1017 *pTiming, uint32_t nFrames)
+{
+    struct IVRCompositor_IVRCompositor_028_GetFrameTimings_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pTiming = pTiming,
+        .nFrames = nFrames,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetFrameTimings, &params );
+    return params._ret;
+}
+
+float __thiscall winIVRCompositor_IVRCompositor_028_GetFrameTimeRemaining(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_GetFrameTimeRemaining_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetFrameTimeRemaining, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_GetCumulativeStats(struct w_steam_iface *_this, Compositor_CumulativeStats_1267 *pStats, uint32_t nStatsSizeInBytes)
+{
+    struct IVRCompositor_IVRCompositor_028_GetCumulativeStats_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pStats = pStats,
+        .nStatsSizeInBytes = nStatsSizeInBytes,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetCumulativeStats, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_FadeToColor(struct w_steam_iface *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, int8_t bBackground)
+{
+    struct IVRCompositor_IVRCompositor_028_FadeToColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .fSeconds = fSeconds,
+        .fRed = fRed,
+        .fGreen = fGreen,
+        .fBlue = fBlue,
+        .fAlpha = fAlpha,
+        .bBackground = bBackground,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_FadeToColor, &params );
+}
+
+HmdColor_t * __thiscall winIVRCompositor_IVRCompositor_028_GetCurrentFadeColor(struct w_steam_iface *_this, HmdColor_t *_ret, int8_t bBackground)
+{
+    struct IVRCompositor_IVRCompositor_028_GetCurrentFadeColor_params params =
+    {
+        .linux_side = _this->u_iface,
+        ._ret = _ret,
+        .bBackground = bBackground,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetCurrentFadeColor, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_FadeGrid(struct w_steam_iface *_this, float fSeconds, int8_t bFadeGridIn)
+{
+    struct IVRCompositor_IVRCompositor_028_FadeGrid_params params =
+    {
+        .linux_side = _this->u_iface,
+        .fSeconds = fSeconds,
+        .bFadeGridIn = bFadeGridIn,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_FadeGrid, &params );
+}
+
+float __thiscall winIVRCompositor_IVRCompositor_028_GetCurrentGridAlpha(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_GetCurrentGridAlpha_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetCurrentGridAlpha, &params );
+    return params._ret;
+}
+
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SetSkyboxOverride(struct w_steam_iface *_this, const w_Texture_t *pTextures, uint32_t unTextureCount);
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ClearSkyboxOverride(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ClearSkyboxOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ClearSkyboxOverride, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_CompositorBringToFront(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_CompositorBringToFront_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_CompositorBringToFront, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_CompositorGoToBack(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_CompositorGoToBack_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_CompositorGoToBack, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_CompositorQuit(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_CompositorQuit_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_CompositorQuit, &params );
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_IsFullscreen(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_IsFullscreen_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_IsFullscreen, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetLastFrameRenderer(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_GetLastFrameRenderer_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetLastFrameRenderer, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_CanRenderScene(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_CanRenderScene_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_CanRenderScene, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ShowMirrorWindow(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ShowMirrorWindow_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ShowMirrorWindow, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_HideMirrorWindow(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_HideMirrorWindow_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_HideMirrorWindow, &params );
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_IsMirrorWindowVisible(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_IsMirrorWindowVisible_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_IsMirrorWindowVisible, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_CompositorDumpImages(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_CompositorDumpImages_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_CompositorDumpImages, &params );
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn(struct w_steam_iface *_this, int8_t bOverride)
+{
+    struct IVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bOverride = bOverride,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ForceReconnectProcess(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ForceReconnectProcess_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ForceReconnectProcess, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_SuspendRendering(struct w_steam_iface *_this, int8_t bSuspend)
+{
+    struct IVRCompositor_IVRCompositor_028_SuspendRendering_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bSuspend = bSuspend,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SuspendRendering, &params );
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+{
+    struct IVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pD3D11DeviceOrResource = pD3D11DeviceOrResource,
+        .ppD3D11ShaderResourceView = ppD3D11ShaderResourceView,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11(struct w_steam_iface *_this, void *pD3D11ShaderResourceView)
+{
+    struct IVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pD3D11ShaderResourceView = pD3D11ShaderResourceView,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11, &params );
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
+{
+    struct IVRCompositor_IVRCompositor_028_GetMirrorTextureGL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eEye = eEye,
+        .pglTextureId = pglTextureId,
+        .pglSharedTextureHandle = pglSharedTextureHandle,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetMirrorTextureGL, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
+{
+    struct IVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture_params params =
+    {
+        .linux_side = _this->u_iface,
+        .glTextureId = glTextureId,
+        .glSharedTextureHandle = glSharedTextureHandle,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
+{
+    struct IVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess_params params =
+    {
+        .linux_side = _this->u_iface,
+        .glSharedTextureHandle = glSharedTextureHandle,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess, &params );
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
+{
+    struct IVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess_params params =
+    {
+        .linux_side = _this->u_iface,
+        .glSharedTextureHandle = glSharedTextureHandle,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess, &params );
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired(struct w_steam_iface *_this, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize)
+{
+    struct IVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pPhysicalDevice = pPhysicalDevice,
+        .pchValue = pchValue,
+        .unBufferSize = unBufferSize,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
+{
+    struct IVRCompositor_IVRCompositor_028_SetExplicitTimingMode_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eTimingMode = eTimingMode,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SetExplicitTimingMode, &params );
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SubmitExplicitTimingData(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SubmitExplicitTimingData, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+{
+    struct IVRCompositor_IVRCompositor_028_SetStageOverride_Async_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchRenderModelPath = pchRenderModelPath,
+        .pTransform = pTransform,
+        .pRenderSettings = pRenderSettings,
+        .nSizeOfRenderSettings = nSizeOfRenderSettings,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SetStageOverride_Async, &params );
+    return params._ret;
+}
+
+void __thiscall winIVRCompositor_IVRCompositor_028_ClearStageOverride(struct w_steam_iface *_this)
+{
+    struct IVRCompositor_IVRCompositor_028_ClearStageOverride_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_ClearStageOverride, &params );
+}
+
+int8_t __thiscall winIVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults(struct w_steam_iface *_this, Compositor_BenchmarkResults *pBenchmarkResults, uint32_t nSizeOfBenchmarkResults)
+{
+    struct IVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pBenchmarkResults = pBenchmarkResults,
+        .nSizeOfBenchmarkResults = nSizeOfBenchmarkResults,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs(struct w_steam_iface *_this, uint32_t *pRenderPosePredictionID, uint32_t *pGamePosePredictionID)
+{
+    struct IVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPosePredictionID = pRenderPosePredictionID,
+        .pGamePosePredictionID = pGamePosePredictionID,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winIVRCompositor_IVRCompositor_028_GetPosesForFrame(struct w_steam_iface *_this, uint32_t unPosePredictionID, TrackedDevicePose_t *pPoseArray, uint32_t unPoseArrayCount)
+{
+    struct IVRCompositor_IVRCompositor_028_GetPosesForFrame_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unPosePredictionID = unPosePredictionID,
+        .pPoseArray = pPoseArray,
+        .unPoseArrayCount = unPoseArrayCount,
+    };
+    TRACE("%p\n", _this);
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_GetPosesForFrame, &params );
+    return params._ret;
+}
+
+extern vtable_ptr winIVRCompositor_IVRCompositor_028_vtable;
+
+DEFINE_RTTI_DATA0(winIVRCompositor_IVRCompositor_028, 0, ".?AVIVRCompositor@@")
+
+__ASM_BLOCK_BEGIN(winIVRCompositor_IVRCompositor_028_vtables)
+    __ASM_VTABLE(winIVRCompositor_IVRCompositor_028,
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SetTrackingSpace)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetTrackingSpace)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_WaitGetPoses)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetLastPoses)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_Submit)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_PostPresentHandoff)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetFrameTiming)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetFrameTimings)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetFrameTimeRemaining)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetCumulativeStats)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_FadeToColor)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetCurrentFadeColor)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_FadeGrid)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetCurrentGridAlpha)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SetSkyboxOverride)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ClearSkyboxOverride)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_CompositorBringToFront)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_CompositorGoToBack)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_CompositorQuit)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_IsFullscreen)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetLastFrameRenderer)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_CanRenderScene)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ShowMirrorWindow)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_HideMirrorWindow)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_IsMirrorWindowVisible)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_CompositorDumpImages)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ForceReconnectProcess)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SuspendRendering)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetMirrorTextureGL)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SetExplicitTimingMode)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SubmitExplicitTimingData)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_SetStageOverride_Async)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_ClearStageOverride)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_028_GetPosesForFrame)
+    );
+__ASM_BLOCK_END
+
+struct w_steam_iface *create_winIVRCompositor_IVRCompositor_028(void *u_iface)
+{
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRCompositor_IVRCompositor_028_vtable;
+    r->u_iface = u_iface;
+    return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_028(struct w_steam_iface *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+struct w_steam_iface *create_winIVRCompositor_IVRCompositor_028_FnTable(void *u_iface)
+{
+    struct w_steam_iface *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*r));
+    struct thunk *thunks = alloc_thunks(52);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 52 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRCompositor_IVRCompositor_028_SetTrackingSpace, 1, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRCompositor_IVRCompositor_028_GetTrackingSpace, 0, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRCompositor_IVRCompositor_028_WaitGetPoses, 4, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRCompositor_IVRCompositor_028_GetLastPoses, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRCompositor_IVRCompositor_028_GetLastPoseForTrackedDeviceIndex, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRCompositor_IVRCompositor_028_Submit, 4, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex, 5, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRCompositor_IVRCompositor_028_ClearLastSubmittedFrame, 0, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRCompositor_IVRCompositor_028_PostPresentHandoff, 0, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRCompositor_IVRCompositor_028_GetFrameTiming, 2, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_028_GetFrameTimings, 2, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_028_GetFrameTimeRemaining, 0, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_028_GetCumulativeStats, 2, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_028_FadeToColor, 6, TRUE, TRUE);
+    init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_028_GetCurrentFadeColor, 2, FALSE, FALSE);
+    init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_028_FadeGrid, 2, TRUE, FALSE);
+    init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_028_GetCurrentGridAlpha, 0, FALSE, FALSE);
+    init_thunk(&thunks[17], r, winIVRCompositor_IVRCompositor_028_SetSkyboxOverride, 2, FALSE, FALSE);
+    init_thunk(&thunks[18], r, winIVRCompositor_IVRCompositor_028_ClearSkyboxOverride, 0, FALSE, FALSE);
+    init_thunk(&thunks[19], r, winIVRCompositor_IVRCompositor_028_CompositorBringToFront, 0, FALSE, FALSE);
+    init_thunk(&thunks[20], r, winIVRCompositor_IVRCompositor_028_CompositorGoToBack, 0, FALSE, FALSE);
+    init_thunk(&thunks[21], r, winIVRCompositor_IVRCompositor_028_CompositorQuit, 0, FALSE, FALSE);
+    init_thunk(&thunks[22], r, winIVRCompositor_IVRCompositor_028_IsFullscreen, 0, FALSE, FALSE);
+    init_thunk(&thunks[23], r, winIVRCompositor_IVRCompositor_028_GetCurrentSceneFocusProcess, 0, FALSE, FALSE);
+    init_thunk(&thunks[24], r, winIVRCompositor_IVRCompositor_028_GetLastFrameRenderer, 0, FALSE, FALSE);
+    init_thunk(&thunks[25], r, winIVRCompositor_IVRCompositor_028_CanRenderScene, 0, FALSE, FALSE);
+    init_thunk(&thunks[26], r, winIVRCompositor_IVRCompositor_028_ShowMirrorWindow, 0, FALSE, FALSE);
+    init_thunk(&thunks[27], r, winIVRCompositor_IVRCompositor_028_HideMirrorWindow, 0, FALSE, FALSE);
+    init_thunk(&thunks[28], r, winIVRCompositor_IVRCompositor_028_IsMirrorWindowVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[29], r, winIVRCompositor_IVRCompositor_028_CompositorDumpImages, 0, FALSE, FALSE);
+    init_thunk(&thunks[30], r, winIVRCompositor_IVRCompositor_028_ShouldAppRenderWithLowResources, 0, FALSE, FALSE);
+    init_thunk(&thunks[31], r, winIVRCompositor_IVRCompositor_028_ForceInterleavedReprojectionOn, 1, FALSE, FALSE);
+    init_thunk(&thunks[32], r, winIVRCompositor_IVRCompositor_028_ForceReconnectProcess, 0, FALSE, FALSE);
+    init_thunk(&thunks[33], r, winIVRCompositor_IVRCompositor_028_SuspendRendering, 1, FALSE, FALSE);
+    init_thunk(&thunks[34], r, winIVRCompositor_IVRCompositor_028_GetMirrorTextureD3D11, 3, FALSE, FALSE);
+    init_thunk(&thunks[35], r, winIVRCompositor_IVRCompositor_028_ReleaseMirrorTextureD3D11, 1, FALSE, FALSE);
+    init_thunk(&thunks[36], r, winIVRCompositor_IVRCompositor_028_GetMirrorTextureGL, 3, FALSE, FALSE);
+    init_thunk(&thunks[37], r, winIVRCompositor_IVRCompositor_028_ReleaseSharedGLTexture, 2, FALSE, FALSE);
+    init_thunk(&thunks[38], r, winIVRCompositor_IVRCompositor_028_LockGLSharedTextureForAccess, 1, FALSE, FALSE);
+    init_thunk(&thunks[39], r, winIVRCompositor_IVRCompositor_028_UnlockGLSharedTextureForAccess, 1, FALSE, FALSE);
+    init_thunk(&thunks[40], r, winIVRCompositor_IVRCompositor_028_GetVulkanInstanceExtensionsRequired, 2, FALSE, FALSE);
+    init_thunk(&thunks[41], r, winIVRCompositor_IVRCompositor_028_GetVulkanDeviceExtensionsRequired, 3, FALSE, FALSE);
+    init_thunk(&thunks[42], r, winIVRCompositor_IVRCompositor_028_SetExplicitTimingMode, 1, FALSE, FALSE);
+    init_thunk(&thunks[43], r, winIVRCompositor_IVRCompositor_028_SubmitExplicitTimingData, 0, FALSE, FALSE);
+    init_thunk(&thunks[44], r, winIVRCompositor_IVRCompositor_028_IsMotionSmoothingEnabled, 0, FALSE, FALSE);
+    init_thunk(&thunks[45], r, winIVRCompositor_IVRCompositor_028_IsMotionSmoothingSupported, 0, FALSE, FALSE);
+    init_thunk(&thunks[46], r, winIVRCompositor_IVRCompositor_028_IsCurrentSceneFocusAppLoading, 0, FALSE, FALSE);
+    init_thunk(&thunks[47], r, winIVRCompositor_IVRCompositor_028_SetStageOverride_Async, 4, FALSE, FALSE);
+    init_thunk(&thunks[48], r, winIVRCompositor_IVRCompositor_028_ClearStageOverride, 0, FALSE, FALSE);
+    init_thunk(&thunks[49], r, winIVRCompositor_IVRCompositor_028_GetCompositorBenchmarkResults, 2, FALSE, FALSE);
+    init_thunk(&thunks[50], r, winIVRCompositor_IVRCompositor_028_GetLastPosePredictionIDs, 2, FALSE, FALSE);
+    init_thunk(&thunks[51], r, winIVRCompositor_IVRCompositor_028_GetPosesForFrame, 3, FALSE, FALSE);
+    for (i = 0; i < 52; i++)
+        vtable[i] = &thunks[i];
+    r->u_iface = u_iface;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_028_FnTable(struct w_steam_iface *object)
+{
+    TRACE("%p\n", object);
+    VirtualFree(object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, object->vtable);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 void init_winIVRCompositor_rtti( char *base )
 {
 #ifdef __x86_64__
@@ -10807,5 +11572,6 @@ void init_winIVRCompositor_rtti( char *base )
     init_winIVRCompositor_IVRCompositor_024_rtti( base );
     init_winIVRCompositor_IVRCompositor_026_rtti( base );
     init_winIVRCompositor_IVRCompositor_027_rtti( base );
+    init_winIVRCompositor_IVRCompositor_028_rtti( base );
 #endif /* __x86_64__ */
 }

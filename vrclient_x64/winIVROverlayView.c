@@ -40,7 +40,7 @@ uint32_t __thiscall winIVROverlayView_IVROverlayView_003_ReleaseOverlayView(stru
     return params._ret;
 }
 
-void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const w_VREvent_t_2010 *pvrEvent)
+void __thiscall winIVROverlayView_IVROverlayView_003_PostOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const w_VREvent_t_223 *pvrEvent)
 {
     struct IVROverlayView_IVROverlayView_003_PostOverlayEvent_params params =
     {

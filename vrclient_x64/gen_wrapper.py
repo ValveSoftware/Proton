@@ -11,6 +11,7 @@ import os
 import re
 
 SDK_VERSIONS = [
+    "v2.2.3",
     "v2.0.10",
     "v1.26.7",
     "v1.23.7",
@@ -234,6 +235,7 @@ MANUAL_METHODS = {
     "IVRSystem_GetDXGIOutputInfo": lambda ver, abi: abi == 'w',
     "IVRSystem_GetOutputDevice": lambda ver, abi: abi == 'u' and ver > 16,
     "IVRCompositor_Submit": lambda ver, abi: ver > 8,
+    "IVRCompositor_SubmitWithArrayIndex": lambda ver, abi: ver > 8,
     "IVRCompositor_SetSkyboxOverride": lambda ver, abi: ver > 8,
     "IVRCompositor_PostPresentHandoff": lambda ver, abi: abi == 'w',
     "IVRCompositor_WaitGetPoses": lambda ver, abi: abi == 'w' and ver > 15,
