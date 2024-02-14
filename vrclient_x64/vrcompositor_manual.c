@@ -1295,6 +1295,41 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride( struct
     return params._ret;
 }
 
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses( struct w_steam_iface *_this,
+                                                                     TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount,
+                                                                     TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount )
+{
+    struct IVRCompositor_IVRCompositor_027_WaitGetPoses_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pRenderPoseArray = pRenderPoseArray,
+        .unRenderPoseArrayCount = unRenderPoseArrayCount,
+        .pGamePoseArray = pGamePoseArray,
+        .unGamePoseArrayCount = unGamePoseArrayCount,
+    };
+    TRACE( "%p\n", _this );
+    wait_get_poses_init( _this->u_iface );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+    {
+        struct IVRCompositor_IVRCompositor_027_PostPresentHandoff_params params = {.linux_side = _this->u_iface};
+        /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+         * if explicit timing mode is set. */
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_PostPresentHandoff, &params );
+    }
+
+    VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_WaitGetPoses, &params );
+
+    if (compositor_data.dxvk_device && compositor_data.d3d11_explicit_handoff)
+    {
+        struct IVRCompositor_IVRCompositor_027_SubmitExplicitTimingData_params params = {.linux_side = _this->u_iface};
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_SubmitExplicitTimingData, &params );
+    }
+
+    wait_get_poses_done( _this->u_iface );
+    return params._ret;
+}
+
 uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_iface *_this,
                                                                uint32_t eEye, const w_Texture_t *pTexture,
                                                                const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags )
