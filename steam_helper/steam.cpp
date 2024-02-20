@@ -35,6 +35,7 @@
 #include "ntstatus.h"
 #define WIN32_NO_STATUS
 #include <windows.h>
+#include <winsvc.h>
 #include <winternl.h>
 #include <shellapi.h>
 #include <shlwapi.h>
@@ -1219,8 +1220,11 @@ run:
     {
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
         DWORD is_unavailable, type, size;
+        SC_HANDLE manager, service;
+        SERVICE_STATUS status;
         DWORD timeout = 3000;
         HKEY eakey;
+        BOOL ret;
 
         link2ea = TRUE;
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
@@ -1238,6 +1242,26 @@ run:
             }
             RegCloseKey(eakey);
         }
+        if ((manager = OpenSCManagerA(NULL, SERVICES_ACTIVE_DATABASEA, SERVICE_QUERY_STATUS)))
+        {
+            if ((service = OpenServiceA(manager, "EABackgroundService", SERVICE_QUERY_STATUS)))
+            {
+                if (QueryServiceStatus(service, &status))
+                {
+                    TRACE("dwCurrentState %#x.\n", status.dwCurrentState);
+                    if (status.dwCurrentState == SERVICE_STOP_PENDING || status.dwCurrentState == SERVICE_STOPPED)
+                    {
+                        ret = DeleteFileA("C:\\ProgramData\\EA Desktop\\backgroundservice.ini");
+                        WARN("Tried to delete backgroundservice.ini, ret %d, error %u.\n", ret, GetLastError());
+                    }
+                }
+                else ERR("Could not query service status, error %u.\n", GetLastError());
+                CloseServiceHandle(service);
+            }
+            else TRACE("Could not open EABackgroundService, error %u.\n", GetLastError());
+            CloseServiceHandle(manager);
+        }
+        else ERR("Could not open service manager, error %u.\n", GetLastError());
     }
     hide_window = env_nonzero("PROTON_HIDE_PROCESS_WINDOW");
 
