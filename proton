@@ -415,6 +415,7 @@ class Proton:
         self.lib_dir = self.path("files/lib/")
         self.lib64_dir = self.path("files/lib64/")
         self.fonts_dir = self.path("files/share/fonts/")
+        self.media_dir = self.path("files/share/media/")
         self.wine_fonts_dir = self.path("files/share/wine/fonts/")
         self.wine_inf = self.path("files/share/wine/wine.inf")
         self.version_file = self.path("version")
@@ -1234,6 +1235,9 @@ class Session:
         if "STEAM_COMPAT_TRANSCODED_MEDIA_PATH" in os.environ:
             self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_audio.foz"
             self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_video.foz"
+
+        self.env["MEDIACONV_BLANK_VIDEO_FILE"] = g_proton.media_dir + "blank.mkv"
+        self.env["MEDIACONV_BLANK_AUDIO_FILE"] = g_proton.media_dir + "blank.ptna"
 
         prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 

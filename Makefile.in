@@ -766,6 +766,18 @@ symstore-tarball:
 	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symstore.zip . >& /dev/null
 
 ##
+## Media
+##
+
+DIST_MEDIA := $(DST_DIR)/share/media
+$(DIST_MEDIA):
+	mkdir -p $@
+	cp $(SRCDIR)/media/blank.mkv $@
+	cp $(SRCDIR)/media/blank.ptna $@
+
+all-dist: $(DIST_MEDIA)
+
+##
 ## Fonts
 ##
 
