@@ -1118,7 +1118,6 @@ def default_compat_config():
                 "1418100", #Swords of Legends Online
                 "2080180", #Go Home Annie Demo
                 "1939100", #Go Home Annie
-                "2073850", #THE FINALS
                 ]:
             ret.add("disablenvapi")
 
