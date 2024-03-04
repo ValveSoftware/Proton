@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="9.0-201"
+CURRENT_PREFIX_VERSION="9.0-200"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -229,9 +229,9 @@ def copyfile_reflink(srcname, dstname):
                 while bytes_to_copy > 0:
                     bytes_to_copy -= copy_file_range(src.fileno(), dst.fileno(), bytes_to_copy)
         except OSError as e:
-            if e.errno not in (errno.EXDEV, errno.ENOSYS, errno.EINVAL, errno.EOPNOTSUPP):
+            if e.errno not in (errno.EXDEV, errno.ENOSYS, errno.EINVAL):
                 raise e
-            if e.errno == errno.ENOSYS or e.errno == errno.EOPNOTSUPP:
+            if e.errno == errno.ENOSYS:
                 copyfile = shutil.copyfile
             shutil.copyfile(srcname, dstname)
 
@@ -415,7 +415,6 @@ class Proton:
         self.lib_dir = self.path("files/lib/")
         self.lib64_dir = self.path("files/lib64/")
         self.fonts_dir = self.path("files/share/fonts/")
-        self.media_dir = self.path("files/share/media/")
         self.wine_fonts_dir = self.path("files/share/wine/fonts/")
         self.wine_inf = self.path("files/share/wine/wine.inf")
         self.version_file = self.path("version")
@@ -953,10 +952,13 @@ class CompatData:
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
+                    optional = False
+                    if f == "d3d12core":
+                        optional = True
                     try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     g_session.dlloverrides[f] = "n"
 
                 # If the user requested the NVAPI be available, copy it into place.
@@ -1072,7 +1074,10 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
-        if appid == "1621680":
+        if appid in [
+                "1621680",
+                "359870",
+                ]:
             ret.add("noforcelgadd")
 
         if appid in [
@@ -1091,7 +1096,6 @@ def default_compat_config():
                 "383120", #Empyrion - Galactic Survival
                 "2371630", #Sword Art Online: Integral Factor
                 "460790", #Bayonetta
-                "273590", #Descent 3
                 ]:
             ret.add("gamedrive")
 
@@ -1103,13 +1107,6 @@ def default_compat_config():
                 "2052410", #WITCH ON THE HOLY NIGHT
                 ]:
             ret.add("heapdelayfree")
-
-        if appid in [
-                "21980", #Call of Juarez: Bound in Blood
-                "553850", #Helldivers 2
-                "2055290", #Sonic Colors: Ultimate
-                ]:
-            ret.add("heapzeromemory")
 
         if appid in [
                 "2630", #Call of Duty 2
@@ -1124,16 +1121,8 @@ def default_compat_config():
                 "1418100", #Swords of Legends Online
                 "2080180", #Go Home Annie Demo
                 "1939100", #Go Home Annie
-                "108710", #Alan Wake
-                "435150", #Divinity: Original Sin 2 - Definitive Edition
-                "505170", #Carmageddon: Max Damage
                 ]:
             ret.add("disablenvapi")
-
-        if appid in [
-                "2395210" #Tony Hawk's Pro Skater 1 + 2
-                ]:
-            ret.add("forcenvapi")
 
         if appid in [
                 "2395210" #Tony Hawk's Pro Skater 1 + 2
@@ -1145,28 +1134,7 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
-        if appid in [
-                "20530", # Red Faction
-                "72850", # The Elder Scrolls V: Skyrim
-                "397950", # Clustertruck
-                "712180", # Mugsters
-                ]:
-            ret.add("xalia")
-
     return ret
-
-default_cpu_limit = {
-    "19900"     :  16,  # Far Cry 2
-    "298110"    :  16,  # Far Cry 4
-    "20920"     :  16,  # The Witcher 2: Assassins of Kings Enchanced Edition
-    "35130"     :  16,  # Lara Croft and the Guardian of Light
-    "55150"     :  16,  # Warhammer 40,000: Space Marine
-    "15620"     :  8,   # Warhammer 40,000: Dawn of War II
-    "20570"     :  8,   # Warhammer 40,000: Dawn of War II - Chaos Rising
-    "56400"     :  8,   # Warhammer 40,000: Dawn of War II - Retribution
-    "618970"    :  4,   # Outcast - Second Contact
-    "10150"     :  8,   # Prototype
-}
 
 class Session:
     def __init__(self):
@@ -1205,10 +1173,6 @@ class Session:
         if not "noforcelgadd" in self.compat_config:
             self.compat_config.add("forcelgadd")
 
-        appid = os.environ.get("SteamGameId", 0)
-        if not "WINE_CPU_TOPOLOGY" in self.env and appid in default_cpu_limit:
-            self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
-
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
             #steam sets LC_ALL=C to help some games, but Wine requires the real value
@@ -1245,9 +1209,6 @@ class Session:
         if "STEAM_COMPAT_TRANSCODED_MEDIA_PATH" in os.environ:
             self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_audio.foz"
             self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_video.foz"
-
-        self.env["MEDIACONV_BLANK_VIDEO_FILE"] = g_proton.media_dir + "blank.mkv"
-        self.env["MEDIACONV_BLANK_AUDIO_FILE"] = g_proton.media_dir + "blank.ptna"
 
         prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
@@ -1313,7 +1274,6 @@ class Session:
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
-            self.env.setdefault("DXVK_NVAPI_LOG_LEVEL", "info")
             self.env.setdefault("VKD3D_DEBUG", "warn")
             self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
@@ -1341,13 +1301,13 @@ class Session:
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
+        self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
         self.check_environment("PROTON_HIDE_VANGOGH_GPU", "hidevggpu")
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
-        self.check_environment("PROTON_HEAP_ZERO_MEMORY", "heapzeromemory")
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
         self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
         self.check_environment("PROTON_HIDE_APU", "hideapu")
@@ -1365,6 +1325,9 @@ class Session:
         else:
             self.env["WINEFSYNC"] = "1"
 
+        if "nowritewatch" in self.compat_config:
+            self.env["WINE_DISABLE_WRITE_WATCH"] = "1"
+
         if "oldglstr" in self.compat_config:
             #mesa override
             self.env["MESA_EXTENSION_MAX_YEAR"] = "2003"
@@ -1379,9 +1342,6 @@ class Session:
 
         if "heapdelayfree" in self.compat_config:
             self.env["WINE_HEAP_DELAY_FREE"] = "1"
-
-        if "heapzeromemory" in self.compat_config:
-            self.env["WINE_HEAP_ZERO_MEMORY"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
@@ -1410,9 +1370,6 @@ class Session:
 
         if "noopwr" in self.compat_config:
             self.env["WINE_DISABLE_VULKAN_OPWR"] = "1"
-
-        if "xalia" in self.compat_config and "PROTON_USE_XALIA" not in self.env:
-            self.env["PROTON_USE_XALIA"] = "1"
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
