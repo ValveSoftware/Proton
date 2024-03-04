@@ -1132,6 +1132,11 @@ def default_compat_config():
                 ]:
             ret.add("forcenvapi")
 
+        if appid in [
+                "1252330" #Deathloop
+                ]:
+            ret.add("hideapu")
+
     return ret
 
 class Session:
@@ -1310,6 +1315,7 @@ class Session:
         self.check_environment("PROTON_HEAP_ZERO_MEMORY", "heapzeromemory")
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
         self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
+        self.check_environment("PROTON_HIDE_APU", "hideapu")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -1357,6 +1363,9 @@ class Session:
 
         if "hidenvgpu" in self.compat_config and "forcenvapi" not in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
+
+        if "hideapu" in self.compat_config:
+            self.env["WINE_HIDE_APU"] = "1"
 
         if "usenativexinput13" in self.compat_config:
             self.dlloverrides["xinput1_3"] = "n"
