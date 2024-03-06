@@ -1029,6 +1029,9 @@ def default_compat_config():
                 "1522260", #Iragon: Prologue 18+
                 "2229300", #Iragon
                 "1097480", #Iragon 18+
+
+                #black screen on launch, issue #7486
+                "553850", #HELLDIVERS 2
                 ]:
             ret.add("nomfdxgiman")
 
