@@ -648,3 +648,90 @@ unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src
     return r;
 }
 
+static const struct callback_def *find_first_callback_def_by_id( int id )
+{
+    unsigned int l, r, m;
+
+    l = 0;
+    r = callback_data_size;
+    while (l < r)
+    {
+        m = (l + r) /2;
+        if (callback_data[m].id == id)
+        {
+            while (m && callback_data[m - 1].id == id) --m;
+            return &callback_data[m];
+        }
+        if (id < callback_data[m].id) r = m;
+        else                          l = m + 1;
+    }
+    return NULL;
+}
+
+void *alloc_callback_wtou( int id, void *callback, int *callback_len )
+{
+    const struct callback_def *c, *end, *best;
+
+    if (!(c = find_first_callback_def_by_id( id ))) return callback;
+
+    end = callback_data + callback_data_size;
+    best = NULL;
+    while (c != end && c->id == id)
+    {
+        if (c->w_callback_len == *callback_len)
+        {
+            best = c;
+            break;
+        }
+        if (!best && *callback_len >= c->w_callback_len) best = c;
+        ++c;
+    }
+
+    if (!best)
+    {
+        WARN( "len %d is too small for callback %d.\n", *callback_len, id );
+        return callback;
+    }
+    if (best->w_callback_len != *callback_len)
+        WARN( "Found len %d for id %d, len %d.\n", best->w_callback_len, id, *callback_len );
+    *callback_len = best->u_callback_len;
+    return malloc( *callback_len );
+}
+
+void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len)
+{
+    const struct callback_def *c, *end, *best;
+
+    if (!(c = find_first_callback_def_by_id( id )))
+    {
+        memcpy( w_callback, u_callback, u_callback_len );
+        return;
+    }
+
+    end = callback_data + callback_data_size;
+    best = NULL;
+    while (c != end && c->id == id)
+    {
+        if (c->w_callback_len == w_callback_len && c->u_callback_len == u_callback_len)
+        {
+            best = c;
+            break;
+        }
+        if (!best && c->u_callback_len == u_callback_len && c->w_callback_len <= w_callback_len)
+            best = c;
+        ++c;
+    }
+    if (!best)
+    {
+        ERR( "Could not find id %d, u_callback_len %d, w_callback_len %d.\n", id, u_callback_len, w_callback_len );
+        memcpy( w_callback, u_callback, std::min(w_callback_len, u_callback_len) );
+        return;
+    }
+
+    if (best->w_callback_len != w_callback_len || best->u_callback_len != u_callback_len)
+        WARN( "Found len %d, %d for id %d, len %d, %d.\n", best->w_callback_len, best->u_callback_len,
+              id, w_callback_len, u_callback_len );
+
+    if (best->conv_w_from_u) best->conv_w_from_u( w_callback, u_callback );
+    else                     memcpy( w_callback, u_callback, u_callback_len );
+}

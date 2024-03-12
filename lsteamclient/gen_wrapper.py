@@ -1700,73 +1700,40 @@ with open('unixlib_generated.cpp', 'w') as file:
     out(u'}\n')
     out(u'\n')
 
-    out(u'void *alloc_callback_wtou(int id, void *callback, int *callback_len)\n')
-    out(u'{\n')
-    out(u'    int len;\n')
-    out(u'\n')
-    out(u'#define MAKE_CASE(id, wlen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24)\n')
-    out(u'    switch (MAKE_CASE(id, *callback_len))\n')
-    out(u'    {\n')
     out(u'#ifdef __i386__\n')
-    values = set()
-    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
-        name, value = abis["u32"].name, (cbid, abis["w32"].size)
-        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
-        if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["w32"].size}): len = {abis["u32"].size}; break; /* {name} */\n')
-        else:
-            out(f'    /* case MAKE_CASE({cbid}, {abis["w32"].size}): len = {abis["u32"].size}; break; {name} */\n')
-        values.add(value)
-    out(u'#endif\n')
-    out(u'#ifdef __x86_64__\n')
-    values = set()
-    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
-        name, value = abis["u64"].name, (cbid, abis["w64"].size)
-        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
-        if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["w64"].size}): len = {abis["u64"].size}; break; /* {name} */\n')
-        else:
-            out(f'    /* case MAKE_CASE({cbid}, {abis["w64"].size}): len = {abis["u64"].size}; break; {name} */\n')
-        values.add(value)
-    out(u'#endif\n')
-    out(u'    default: return callback;\n')
-    out(u'    }\n')
-    out(u'#undef MAKE_CASE\n')
-    out(u'\n')
-    out(u'    callback = malloc( len );\n')
-    out(u'    *callback_len = len;\n')
-    out(u'    return callback;\n')
-    out(u'}\n')
-    out(u'\n')
-
-    out(u'void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len)\n')
-    out(u'{\n')
-    out(u'#define MAKE_CASE(id, wlen, ulen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24) | (uint64_t)(ulen)\n')
-    out(u'    switch (MAKE_CASE(id, w_callback_len, u_callback_len))\n')
-    out(u'    {\n')
-    out(u'#ifdef __i386__\n')
+    out(u'const struct callback_def callback_data[] =\n{\n');
     values = set()
     for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
         name, value = abis["u32"].name, (cbid, abis["w32"].size, abis["u32"].size)
         if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+
+        w_from_u = f'{name}_w_from_u'
+        if not w_from_u in written_converters:
+            w_from_u = u'nullptr'
+
         if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["w32"].size}, {abis["u32"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break;\n')
+            out(f'    {{ {cbid}, {sdkver}, {abis["w32"].size}, {abis["u32"].size}, {w_from_u} }},\n')
         else:
-            out(f'    /* case MAKE_CASE({cbid}, {abis["w32"].size}, {abis["u32"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break; */\n')
+            out(f'    /*{{ {cbid}, {sdkver}, {abis["w32"].size}, {abis["u32"].size}, {w_from_u} }},*/\n')
         values.add(value)
+    out(u'};\n');
     out(u'#endif\n')
     out(u'#ifdef __x86_64__\n')
+    out(u'const struct callback_def callback_data[] =\n{\n');
     values = set()
     for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
         name, value = abis["u64"].name, (cbid, abis["w64"].size, abis["u64"].size)
         if name in all_versions[sdkver]: name = all_versions[sdkver][name]
+
+        w_from_u = f'{name}_w_from_u'
+        if not w_from_u in written_converters:
+            w_from_u = u'nullptr'
+
         if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["w64"].size}, {abis["u64"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break;\n')
+            out(f'    {{ {cbid}, {sdkver}, {abis["w64"].size}, {abis["u64"].size}, {w_from_u} }},\n')
         else:
-            out(f'    /* case MAKE_CASE({cbid}, {abis["w64"].size}, {abis["u64"].size}): *(w_{name} *)w_callback = *(u_{name} *)u_callback; break; */\n')
+            out(f'    /*{{ {cbid}, {sdkver}, {abis["w64"].size}, {abis["u64"].size}, {w_from_u} }},*/\n')
         values.add(value)
+    out(u'};\n');
     out(u'#endif\n')
-    out(u'    default: memcpy( w_callback, u_callback, u_callback_len ); break;\n')
-    out(u'    }\n')
-    out(u'#undef MAKE_CASE\n')
-    out(u'}\n')
+    out(u'const unsigned int callback_data_size = ARRAY_SIZE(callback_data);\n');

@@ -57,6 +57,17 @@ typedef void (W_CDECL *w_void_SteamAPI_PostAPIResultInProcess_t)(void);
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t );
 
+struct callback_def
+{
+    int id;
+    int sdkver;
+    int w_callback_len;
+    int u_callback_len;
+    void (*conv_w_from_u)(void *dst, const void *src);
+};
+extern const struct callback_def callback_data[];
+extern const unsigned int callback_data_size;
+
 void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg );
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
 void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *w_callback, int w_callback_len );
