@@ -1661,45 +1661,6 @@ with open('unixlib_generated.cpp', 'w') as file:
                 out(u'\n')
                 abis['u32'].write_converter('w32_', path_conv_fields)
 
-    out(u'void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )\n')
-    out(u'{\n')
-    out(u'    int len;\n')
-    out(u'\n')
-    out(u'#define MAKE_CASE(id, wlen) ((uint64_t)(id) << 48) | ((uint64_t)(wlen) << 24)\n')
-    out(u'    switch (MAKE_CASE(u_msg->m_iCallback, u_msg->m_cubParam))\n')
-    out(u'    {\n')
-    out(u'#ifdef __i386__\n')
-    values = set()
-    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
-        name, value = abis["w32"].name, (cbid, abis["u32"].size)
-        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
-        if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["u32"].size}): len = {abis["w32"].size}; break; /* {name} */\n')
-        else:
-            out(f'    /* Conflict: case MAKE_CASE({cbid}, {abis["u32"].size}): len = {abis["w32"].size}; break; */ /* {name} */\n')
-        values.add(value)
-    out(u'#endif\n')
-    out(u'#ifdef __x86_64__\n')
-    values = set()
-    for cbid, sdkver, abis in sorted(callbacks, key=lambda x: x[0]):
-        name, value = abis["w64"].name, (cbid, abis["u64"].size)
-        if name in all_versions[sdkver]: name = all_versions[sdkver][name]
-        if value not in values:
-            out(f'    case MAKE_CASE({cbid}, {abis["u64"].size}): len = {abis["w64"].size}; break; /* {name} */\n')
-        else:
-            out(f'    /* Conflict: case MAKE_CASE({cbid}, {abis["u64"].size}): len = {abis["w64"].size}; break; */ /* {name} */\n')
-        values.add(value)
-    out(u'#endif\n')
-    out(u'    default: len = u_msg->m_cubParam; break;\n')
-    out(u'    }\n')
-    out(u'#undef MAKE_CASE\n')
-    out(u'\n')
-    out(u'    w_msg->m_hSteamUser = u_msg->m_hSteamUser;\n')
-    out(u'    w_msg->m_iCallback = u_msg->m_iCallback;\n')
-    out(u'    w_msg->m_cubParam = len;\n')
-    out(u'}\n')
-    out(u'\n')
-
     out(u'#ifdef __i386__\n')
     out(u'const struct callback_def callback_data[] =\n{\n');
     values = set()
