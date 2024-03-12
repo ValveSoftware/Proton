@@ -735,3 +735,29 @@ void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w
     if (best->conv_w_from_u) best->conv_w_from_u( w_callback, u_callback );
     else                     memcpy( w_callback, u_callback, u_callback_len );
 }
+
+void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )
+{
+    const struct callback_def *c, *end;
+    int len = u_msg->m_cubParam;
+
+    if ((c = find_first_callback_def_by_id( u_msg->m_iCallback )))
+    {
+        end = callback_data + callback_data_size;
+        while (c != end && c->id == u_msg->m_iCallback)
+        {
+            if (c->u_callback_len == u_msg->m_cubParam)
+            {
+                len = c->w_callback_len;
+                break;
+            }
+            ++c;
+        }
+        if (c == end || c->id != u_msg->m_iCallback)
+            WARN( "Unix len %d not found for callback %d.\n", u_msg->m_cubParam, u_msg->m_iCallback );
+    }
+
+    w_msg->m_hSteamUser = u_msg->m_hSteamUser;
+    w_msg->m_iCallback = u_msg->m_iCallback;
+    w_msg->m_cubParam = len;
+}
