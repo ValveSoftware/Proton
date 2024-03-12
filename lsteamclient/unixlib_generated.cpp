@@ -8045,68 +8045,85 @@ C_ASSERT( sizeof(u32_SteamUGCDetails_t_126().m_unVotesDown) >= 4 );
 C_ASSERT( offsetof(u32_SteamUGCDetails_t_126, m_flScore) == 9756 );
 C_ASSERT( sizeof(u32_SteamUGCDetails_t_126().m_flScore) >= 4 );
 
+static void SteamUGCDetails_t_128x_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCDetails_t_128x *d = (u_SteamUGCDetails_t_128x *)dst;
+    const w_SteamUGCDetails_t_128x *s = (const w_SteamUGCDetails_t_128x *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+    d->m_unNumChildren = s->m_unNumChildren;
+}
 #ifdef __x86_64__
 w64_SteamUGCDetails_t_128x::operator u64_SteamUGCDetails_t_128x() const
 {
     u64_SteamUGCDetails_t_128x ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
-    ret.m_unNumChildren = this->m_unNumChildren;
+    SteamUGCDetails_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamUGCDetails_t_128x_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCDetails_t_128x *d = (w_SteamUGCDetails_t_128x *)dst;
+    const u_SteamUGCDetails_t_128x *s = (const u_SteamUGCDetails_t_128x *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+    d->m_unNumChildren = s->m_unNumChildren;
+}
+#ifdef __x86_64__
 u64_SteamUGCDetails_t_128x::operator w64_SteamUGCDetails_t_128x() const
 {
     w64_SteamUGCDetails_t_128x ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
-    ret.m_unNumChildren = this->m_unNumChildren;
+    SteamUGCDetails_t_128x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8115,128 +8132,98 @@ u64_SteamUGCDetails_t_128x::operator w64_SteamUGCDetails_t_128x() const
 w32_SteamUGCDetails_t_128x::operator u32_SteamUGCDetails_t_128x() const
 {
     u32_SteamUGCDetails_t_128x ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
-    ret.m_unNumChildren = this->m_unNumChildren;
-    return ret;
-}
-
-u32_SteamUGCDetails_t_128x::operator w32_SteamUGCDetails_t_128x() const
-{
-    w32_SteamUGCDetails_t_128x ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
-    ret.m_unNumChildren = this->m_unNumChildren;
+    SteamUGCDetails_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_SteamUGCDetails_t_128x::operator w32_SteamUGCDetails_t_128x() const
+{
+    w32_SteamUGCDetails_t_128x ret;
+    SteamUGCDetails_t_128x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void SteamUGCDetails_t_126_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCDetails_t_126 *d = (u_SteamUGCDetails_t_126 *)dst;
+    const w_SteamUGCDetails_t_126 *s = (const w_SteamUGCDetails_t_126 *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+}
 #ifdef __x86_64__
 w64_SteamUGCDetails_t_126::operator u64_SteamUGCDetails_t_126() const
 {
     u64_SteamUGCDetails_t_126 ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
+    SteamUGCDetails_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamUGCDetails_t_126_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCDetails_t_126 *d = (w_SteamUGCDetails_t_126 *)dst;
+    const u_SteamUGCDetails_t_126 *s = (const u_SteamUGCDetails_t_126 *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+}
+#ifdef __x86_64__
 u64_SteamUGCDetails_t_126::operator w64_SteamUGCDetails_t_126() const
 {
     w64_SteamUGCDetails_t_126 ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
+    SteamUGCDetails_t_126_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8245,62 +8232,17 @@ u64_SteamUGCDetails_t_126::operator w64_SteamUGCDetails_t_126() const
 w32_SteamUGCDetails_t_126::operator u32_SteamUGCDetails_t_126() const
 {
     u32_SteamUGCDetails_t_126 ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
+    SteamUGCDetails_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamUGCDetails_t_126::operator w32_SteamUGCDetails_t_126() const
 {
     w32_SteamUGCDetails_t_126 ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_rtimeAddedToUserList = this->m_rtimeAddedToUserList;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_unVotesUp = this->m_unVotesUp;
-    ret.m_unVotesDown = this->m_unVotesDown;
-    ret.m_flScore = this->m_flScore;
+    SteamUGCDetails_t_126_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8337,22 +8279,39 @@ C_ASSERT( sizeof(u32_AddAppDependencyResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_AddAppDependencyResult_t, m_nAppID) == 12 );
 C_ASSERT( sizeof(u32_AddAppDependencyResult_t().m_nAppID) >= 4 );
 
+static void AddAppDependencyResult_t_u_from_w(void *dst, const void *src)
+{
+    u_AddAppDependencyResult_t *d = (u_AddAppDependencyResult_t *)dst;
+    const w_AddAppDependencyResult_t *s = (const w_AddAppDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+}
 #ifdef __x86_64__
 w64_AddAppDependencyResult_t::operator u64_AddAppDependencyResult_t() const
 {
     u64_AddAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    AddAppDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void AddAppDependencyResult_t_w_from_u(void *dst, const void *src)
+{
+    w_AddAppDependencyResult_t *d = (w_AddAppDependencyResult_t *)dst;
+    const u_AddAppDependencyResult_t *s = (const u_AddAppDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+}
+#ifdef __x86_64__
 u64_AddAppDependencyResult_t::operator w64_AddAppDependencyResult_t() const
 {
     w64_AddAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    AddAppDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8361,18 +8320,17 @@ u64_AddAppDependencyResult_t::operator w64_AddAppDependencyResult_t() const
 w32_AddAppDependencyResult_t::operator u32_AddAppDependencyResult_t() const
 {
     u32_AddAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    AddAppDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_AddAppDependencyResult_t::operator w32_AddAppDependencyResult_t() const
 {
     w32_AddAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    AddAppDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8409,22 +8367,39 @@ C_ASSERT( sizeof(u32_AddUGCDependencyResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_AddUGCDependencyResult_t, m_nChildPublishedFileId) == 12 );
 C_ASSERT( sizeof(u32_AddUGCDependencyResult_t().m_nChildPublishedFileId) >= 8 );
 
+static void AddUGCDependencyResult_t_u_from_w(void *dst, const void *src)
+{
+    u_AddUGCDependencyResult_t *d = (u_AddUGCDependencyResult_t *)dst;
+    const w_AddUGCDependencyResult_t *s = (const w_AddUGCDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nChildPublishedFileId = s->m_nChildPublishedFileId;
+}
 #ifdef __x86_64__
 w64_AddUGCDependencyResult_t::operator u64_AddUGCDependencyResult_t() const
 {
     u64_AddUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    AddUGCDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void AddUGCDependencyResult_t_w_from_u(void *dst, const void *src)
+{
+    w_AddUGCDependencyResult_t *d = (w_AddUGCDependencyResult_t *)dst;
+    const u_AddUGCDependencyResult_t *s = (const u_AddUGCDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nChildPublishedFileId = s->m_nChildPublishedFileId;
+}
+#ifdef __x86_64__
 u64_AddUGCDependencyResult_t::operator w64_AddUGCDependencyResult_t() const
 {
     w64_AddUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    AddUGCDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -8433,18 +8408,17 @@ u64_AddUGCDependencyResult_t::operator w64_AddUGCDependencyResult_t() const
 w32_AddUGCDependencyResult_t::operator u32_AddUGCDependencyResult_t() const
 {
     u32_AddUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    AddUGCDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_AddUGCDependencyResult_t::operator w32_AddUGCDependencyResult_t() const
 {
     w32_AddUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    AddUGCDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9417,20 +9391,37 @@ C_ASSERT( sizeof(u32_CreateBeaconCallback_t().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_CreateBeaconCallback_t, m_ulBeaconID) == 4 );
 C_ASSERT( sizeof(u32_CreateBeaconCallback_t().m_ulBeaconID) >= 8 );
 
+static void CreateBeaconCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_CreateBeaconCallback_t *d = (u_CreateBeaconCallback_t *)dst;
+    const w_CreateBeaconCallback_t *s = (const w_CreateBeaconCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulBeaconID = s->m_ulBeaconID;
+}
 #ifdef __x86_64__
 w64_CreateBeaconCallback_t::operator u64_CreateBeaconCallback_t() const
 {
     u64_CreateBeaconCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
+    CreateBeaconCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void CreateBeaconCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_CreateBeaconCallback_t *d = (w_CreateBeaconCallback_t *)dst;
+    const u_CreateBeaconCallback_t *s = (const u_CreateBeaconCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulBeaconID = s->m_ulBeaconID;
+}
+#ifdef __x86_64__
 u64_CreateBeaconCallback_t::operator w64_CreateBeaconCallback_t() const
 {
     w64_CreateBeaconCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
+    CreateBeaconCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9439,16 +9430,17 @@ u64_CreateBeaconCallback_t::operator w64_CreateBeaconCallback_t() const
 w32_CreateBeaconCallback_t::operator u32_CreateBeaconCallback_t() const
 {
     u32_CreateBeaconCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
+    CreateBeaconCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_CreateBeaconCallback_t::operator w32_CreateBeaconCallback_t() const
 {
     w32_CreateBeaconCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
+    CreateBeaconCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9485,22 +9477,39 @@ C_ASSERT( sizeof(u32_CreateItemResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_CreateItemResult_t, m_bUserNeedsToAcceptWorkshopLegalAgreement) == 12 );
 C_ASSERT( sizeof(u32_CreateItemResult_t().m_bUserNeedsToAcceptWorkshopLegalAgreement) >= 1 );
 
+static void CreateItemResult_t_u_from_w(void *dst, const void *src)
+{
+    u_CreateItemResult_t *d = (u_CreateItemResult_t *)dst;
+    const w_CreateItemResult_t *s = (const w_CreateItemResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
 #ifdef __x86_64__
 w64_CreateItemResult_t::operator u64_CreateItemResult_t() const
 {
     u64_CreateItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    CreateItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void CreateItemResult_t_w_from_u(void *dst, const void *src)
+{
+    w_CreateItemResult_t *d = (w_CreateItemResult_t *)dst;
+    const u_CreateItemResult_t *s = (const u_CreateItemResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
+#ifdef __x86_64__
 u64_CreateItemResult_t::operator w64_CreateItemResult_t() const
 {
     w64_CreateItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    CreateItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9509,18 +9518,17 @@ u64_CreateItemResult_t::operator w64_CreateItemResult_t() const
 w32_CreateItemResult_t::operator u32_CreateItemResult_t() const
 {
     u32_CreateItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    CreateItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_CreateItemResult_t::operator w32_CreateItemResult_t() const
 {
     w32_CreateItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    CreateItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9549,20 +9557,37 @@ C_ASSERT( sizeof(u32_DeleteItemResult_t().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_DeleteItemResult_t, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_DeleteItemResult_t().m_nPublishedFileId) >= 8 );
 
+static void DeleteItemResult_t_u_from_w(void *dst, const void *src)
+{
+    u_DeleteItemResult_t *d = (u_DeleteItemResult_t *)dst;
+    const w_DeleteItemResult_t *s = (const w_DeleteItemResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_DeleteItemResult_t::operator u64_DeleteItemResult_t() const
 {
     u64_DeleteItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    DeleteItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void DeleteItemResult_t_w_from_u(void *dst, const void *src)
+{
+    w_DeleteItemResult_t *d = (w_DeleteItemResult_t *)dst;
+    const u_DeleteItemResult_t *s = (const u_DeleteItemResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_DeleteItemResult_t::operator w64_DeleteItemResult_t() const
 {
     w64_DeleteItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    DeleteItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9571,16 +9596,17 @@ u64_DeleteItemResult_t::operator w64_DeleteItemResult_t() const
 w32_DeleteItemResult_t::operator u32_DeleteItemResult_t() const
 {
     u32_DeleteItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    DeleteItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_DeleteItemResult_t::operator w32_DeleteItemResult_t() const
 {
     w32_DeleteItemResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    DeleteItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9617,22 +9643,39 @@ C_ASSERT( sizeof(u32_DownloadItemResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_DownloadItemResult_t, m_eResult) == 12 );
 C_ASSERT( sizeof(u32_DownloadItemResult_t().m_eResult) >= 4 );
 
+static void DownloadItemResult_t_u_from_w(void *dst, const void *src)
+{
+    u_DownloadItemResult_t *d = (u_DownloadItemResult_t *)dst;
+    const w_DownloadItemResult_t *s = (const w_DownloadItemResult_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+}
 #ifdef __x86_64__
 w64_DownloadItemResult_t::operator u64_DownloadItemResult_t() const
 {
     u64_DownloadItemResult_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
+    DownloadItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void DownloadItemResult_t_w_from_u(void *dst, const void *src)
+{
+    w_DownloadItemResult_t *d = (w_DownloadItemResult_t *)dst;
+    const u_DownloadItemResult_t *s = (const u_DownloadItemResult_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+}
+#ifdef __x86_64__
 u64_DownloadItemResult_t::operator w64_DownloadItemResult_t() const
 {
     w64_DownloadItemResult_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
+    DownloadItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9641,18 +9684,17 @@ u64_DownloadItemResult_t::operator w64_DownloadItemResult_t() const
 w32_DownloadItemResult_t::operator u32_DownloadItemResult_t() const
 {
     u32_DownloadItemResult_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
+    DownloadItemResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_DownloadItemResult_t::operator w32_DownloadItemResult_t() const
 {
     w32_DownloadItemResult_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eResult = this->m_eResult;
+    DownloadItemResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9681,20 +9723,37 @@ C_ASSERT( sizeof(u32_EndGameResultCallback_t().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_EndGameResultCallback_t, ullUniqueGameID) == 4 );
 C_ASSERT( sizeof(u32_EndGameResultCallback_t().ullUniqueGameID) >= 8 );
 
+static void EndGameResultCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_EndGameResultCallback_t *d = (u_EndGameResultCallback_t *)dst;
+    const w_EndGameResultCallback_t *s = (const w_EndGameResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->ullUniqueGameID = s->ullUniqueGameID;
+}
 #ifdef __x86_64__
 w64_EndGameResultCallback_t::operator u64_EndGameResultCallback_t() const
 {
     u64_EndGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
+    EndGameResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void EndGameResultCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_EndGameResultCallback_t *d = (w_EndGameResultCallback_t *)dst;
+    const u_EndGameResultCallback_t *s = (const u_EndGameResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->ullUniqueGameID = s->ullUniqueGameID;
+}
+#ifdef __x86_64__
 u64_EndGameResultCallback_t::operator w64_EndGameResultCallback_t() const
 {
     w64_EndGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
+    EndGameResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9703,16 +9762,17 @@ u64_EndGameResultCallback_t::operator w64_EndGameResultCallback_t() const
 w32_EndGameResultCallback_t::operator u32_EndGameResultCallback_t() const
 {
     u32_EndGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
+    EndGameResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_EndGameResultCallback_t::operator w32_EndGameResultCallback_t() const
 {
     w32_EndGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
+    EndGameResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9757,24 +9817,41 @@ C_ASSERT( sizeof(u32_FileDetailsResult_t().m_FileSHA) >= 20 );
 C_ASSERT( offsetof(u32_FileDetailsResult_t, m_unFlags) == 32 );
 C_ASSERT( sizeof(u32_FileDetailsResult_t().m_unFlags) >= 4 );
 
+static void FileDetailsResult_t_u_from_w(void *dst, const void *src)
+{
+    u_FileDetailsResult_t *d = (u_FileDetailsResult_t *)dst;
+    const w_FileDetailsResult_t *s = (const w_FileDetailsResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulFileSize = s->m_ulFileSize;
+    d->m_FileSHA = s->m_FileSHA;
+    d->m_unFlags = s->m_unFlags;
+}
 #ifdef __x86_64__
 w64_FileDetailsResult_t::operator u64_FileDetailsResult_t() const
 {
     u64_FileDetailsResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulFileSize = this->m_ulFileSize;
-    ret.m_FileSHA = this->m_FileSHA;
-    ret.m_unFlags = this->m_unFlags;
+    FileDetailsResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void FileDetailsResult_t_w_from_u(void *dst, const void *src)
+{
+    w_FileDetailsResult_t *d = (w_FileDetailsResult_t *)dst;
+    const u_FileDetailsResult_t *s = (const u_FileDetailsResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulFileSize = s->m_ulFileSize;
+    d->m_FileSHA = s->m_FileSHA;
+    d->m_unFlags = s->m_unFlags;
+}
+#ifdef __x86_64__
 u64_FileDetailsResult_t::operator w64_FileDetailsResult_t() const
 {
     w64_FileDetailsResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulFileSize = this->m_ulFileSize;
-    ret.m_FileSHA = this->m_FileSHA;
-    ret.m_unFlags = this->m_unFlags;
+    FileDetailsResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9783,20 +9860,17 @@ u64_FileDetailsResult_t::operator w64_FileDetailsResult_t() const
 w32_FileDetailsResult_t::operator u32_FileDetailsResult_t() const
 {
     u32_FileDetailsResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulFileSize = this->m_ulFileSize;
-    ret.m_FileSHA = this->m_FileSHA;
-    ret.m_unFlags = this->m_unFlags;
+    FileDetailsResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_FileDetailsResult_t::operator w32_FileDetailsResult_t() const
 {
     w32_FileDetailsResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulFileSize = this->m_ulFileSize;
-    ret.m_FileSHA = this->m_FileSHA;
-    ret.m_unFlags = this->m_unFlags;
+    FileDetailsResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9929,30 +10003,47 @@ C_ASSERT( sizeof(u32_GSReputation_t_108().m_ulBannedGameID) >= 8 );
 C_ASSERT( offsetof(u32_GSReputation_t_108, m_unBanExpires) == 28 );
 C_ASSERT( sizeof(u32_GSReputation_t_108().m_unBanExpires) >= 4 );
 
+static void GSReputation_t_123_u_from_w(void *dst, const void *src)
+{
+    u_GSReputation_t_123 *d = (u_GSReputation_t_123 *)dst;
+    const w_GSReputation_t_123 *s = (const w_GSReputation_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unReputationScore = s->m_unReputationScore;
+    d->m_bBanned = s->m_bBanned;
+    d->m_unBannedIP = s->m_unBannedIP;
+    d->m_usBannedPort = s->m_usBannedPort;
+    d->m_ulBannedGameID = s->m_ulBannedGameID;
+    d->m_unBanExpires = s->m_unBanExpires;
+}
 #ifdef __x86_64__
 w64_GSReputation_t_123::operator u64_GSReputation_t_123() const
 {
     u64_GSReputation_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
+    GSReputation_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void GSReputation_t_123_w_from_u(void *dst, const void *src)
+{
+    w_GSReputation_t_123 *d = (w_GSReputation_t_123 *)dst;
+    const u_GSReputation_t_123 *s = (const u_GSReputation_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unReputationScore = s->m_unReputationScore;
+    d->m_bBanned = s->m_bBanned;
+    d->m_unBannedIP = s->m_unBannedIP;
+    d->m_usBannedPort = s->m_usBannedPort;
+    d->m_ulBannedGameID = s->m_ulBannedGameID;
+    d->m_unBanExpires = s->m_unBanExpires;
+}
+#ifdef __x86_64__
 u64_GSReputation_t_123::operator w64_GSReputation_t_123() const
 {
     w64_GSReputation_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
+    GSReputation_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -9961,54 +10052,62 @@ u64_GSReputation_t_123::operator w64_GSReputation_t_123() const
 w32_GSReputation_t_123::operator u32_GSReputation_t_123() const
 {
     u32_GSReputation_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
-    return ret;
-}
-
-u32_GSReputation_t_123::operator w32_GSReputation_t_123() const
-{
-    w32_GSReputation_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
+    GSReputation_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_GSReputation_t_123::operator w32_GSReputation_t_123() const
+{
+    w32_GSReputation_t_123 ret;
+    GSReputation_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void GSReputation_t_108_u_from_w(void *dst, const void *src)
+{
+    u_GSReputation_t_108 *d = (u_GSReputation_t_108 *)dst;
+    const w_GSReputation_t_108 *s = (const w_GSReputation_t_108 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unReputationScore = s->m_unReputationScore;
+    d->m_bBanned = s->m_bBanned;
+    d->m_unBannedIP = s->m_unBannedIP;
+    d->m_usBannedPort = s->m_usBannedPort;
+    d->m_ulBannedGameID = s->m_ulBannedGameID;
+    d->m_unBanExpires = s->m_unBanExpires;
+}
 #ifdef __i386__
 w32_GSReputation_t_108::operator u32_GSReputation_t_108() const
 {
     u32_GSReputation_t_108 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
+    GSReputation_t_108_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void GSReputation_t_108_w_from_u(void *dst, const void *src)
+{
+    w_GSReputation_t_108 *d = (w_GSReputation_t_108 *)dst;
+    const u_GSReputation_t_108 *s = (const u_GSReputation_t_108 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unReputationScore = s->m_unReputationScore;
+    d->m_bBanned = s->m_bBanned;
+    d->m_unBannedIP = s->m_unBannedIP;
+    d->m_usBannedPort = s->m_usBannedPort;
+    d->m_ulBannedGameID = s->m_ulBannedGameID;
+    d->m_unBanExpires = s->m_unBanExpires;
+}
+#ifdef __i386__
 u32_GSReputation_t_108::operator w32_GSReputation_t_108() const
 {
     w32_GSReputation_t_108 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unReputationScore = this->m_unReputationScore;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_unBannedIP = this->m_unBannedIP;
-    ret.m_usBannedPort = this->m_usBannedPort;
-    ret.m_ulBannedGameID = this->m_ulBannedGameID;
-    ret.m_unBanExpires = this->m_unBanExpires;
+    GSReputation_t_108_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10061,26 +10160,43 @@ C_ASSERT( sizeof(u32_GetAppDependenciesResult_t().m_nNumAppDependencies) >= 4 );
 C_ASSERT( offsetof(u32_GetAppDependenciesResult_t, m_nTotalNumAppDependencies) == 144 );
 C_ASSERT( sizeof(u32_GetAppDependenciesResult_t().m_nTotalNumAppDependencies) >= 4 );
 
+static void GetAppDependenciesResult_t_u_from_w(void *dst, const void *src)
+{
+    u_GetAppDependenciesResult_t *d = (u_GetAppDependenciesResult_t *)dst;
+    const w_GetAppDependenciesResult_t *s = (const w_GetAppDependenciesResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_rgAppIDs = s->m_rgAppIDs;
+    d->m_nNumAppDependencies = s->m_nNumAppDependencies;
+    d->m_nTotalNumAppDependencies = s->m_nTotalNumAppDependencies;
+}
 #ifdef __x86_64__
 w64_GetAppDependenciesResult_t::operator u64_GetAppDependenciesResult_t() const
 {
     u64_GetAppDependenciesResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_rgAppIDs = this->m_rgAppIDs;
-    ret.m_nNumAppDependencies = this->m_nNumAppDependencies;
-    ret.m_nTotalNumAppDependencies = this->m_nTotalNumAppDependencies;
+    GetAppDependenciesResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void GetAppDependenciesResult_t_w_from_u(void *dst, const void *src)
+{
+    w_GetAppDependenciesResult_t *d = (w_GetAppDependenciesResult_t *)dst;
+    const u_GetAppDependenciesResult_t *s = (const u_GetAppDependenciesResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_rgAppIDs = s->m_rgAppIDs;
+    d->m_nNumAppDependencies = s->m_nNumAppDependencies;
+    d->m_nTotalNumAppDependencies = s->m_nTotalNumAppDependencies;
+}
+#ifdef __x86_64__
 u64_GetAppDependenciesResult_t::operator w64_GetAppDependenciesResult_t() const
 {
     w64_GetAppDependenciesResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_rgAppIDs = this->m_rgAppIDs;
-    ret.m_nNumAppDependencies = this->m_nNumAppDependencies;
-    ret.m_nTotalNumAppDependencies = this->m_nTotalNumAppDependencies;
+    GetAppDependenciesResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10089,22 +10205,17 @@ u64_GetAppDependenciesResult_t::operator w64_GetAppDependenciesResult_t() const
 w32_GetAppDependenciesResult_t::operator u32_GetAppDependenciesResult_t() const
 {
     u32_GetAppDependenciesResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_rgAppIDs = this->m_rgAppIDs;
-    ret.m_nNumAppDependencies = this->m_nNumAppDependencies;
-    ret.m_nTotalNumAppDependencies = this->m_nTotalNumAppDependencies;
+    GetAppDependenciesResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_GetAppDependenciesResult_t::operator w32_GetAppDependenciesResult_t() const
 {
     w32_GetAppDependenciesResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_rgAppIDs = this->m_rgAppIDs;
-    ret.m_nNumAppDependencies = this->m_nNumAppDependencies;
-    ret.m_nTotalNumAppDependencies = this->m_nTotalNumAppDependencies;
+    GetAppDependenciesResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10133,20 +10244,37 @@ C_ASSERT( sizeof(u32_HTML_ChangedTitle_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_ChangedTitle_t, pchTitle) == 4 );
 C_ASSERT( sizeof(u32_HTML_ChangedTitle_t().pchTitle) >= 4 );
 
+static void HTML_ChangedTitle_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_ChangedTitle_t *d = (u_HTML_ChangedTitle_t *)dst;
+    const w_HTML_ChangedTitle_t *s = (const w_HTML_ChangedTitle_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchTitle = s->pchTitle;
+}
 #ifdef __x86_64__
 w64_HTML_ChangedTitle_t::operator u64_HTML_ChangedTitle_t() const
 {
     u64_HTML_ChangedTitle_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
+    HTML_ChangedTitle_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_ChangedTitle_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_ChangedTitle_t *d = (w_HTML_ChangedTitle_t *)dst;
+    const u_HTML_ChangedTitle_t *s = (const u_HTML_ChangedTitle_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchTitle = s->pchTitle;
+}
+#ifdef __x86_64__
 u64_HTML_ChangedTitle_t::operator w64_HTML_ChangedTitle_t() const
 {
     w64_HTML_ChangedTitle_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
+    HTML_ChangedTitle_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10191,24 +10319,41 @@ C_ASSERT( sizeof(u32_HTML_ComboNeedsPaint_t().unWide) >= 4 );
 C_ASSERT( offsetof(u32_HTML_ComboNeedsPaint_t, unTall) == 12 );
 C_ASSERT( sizeof(u32_HTML_ComboNeedsPaint_t().unTall) >= 4 );
 
+static void HTML_ComboNeedsPaint_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_ComboNeedsPaint_t *d = (u_HTML_ComboNeedsPaint_t *)dst;
+    const w_HTML_ComboNeedsPaint_t *s = (const w_HTML_ComboNeedsPaint_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pBGRA = s->pBGRA;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+}
 #ifdef __x86_64__
 w64_HTML_ComboNeedsPaint_t::operator u64_HTML_ComboNeedsPaint_t() const
 {
     u64_HTML_ComboNeedsPaint_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pBGRA = this->pBGRA;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_ComboNeedsPaint_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_ComboNeedsPaint_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_ComboNeedsPaint_t *d = (w_HTML_ComboNeedsPaint_t *)dst;
+    const u_HTML_ComboNeedsPaint_t *s = (const u_HTML_ComboNeedsPaint_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pBGRA = s->pBGRA;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+}
+#ifdef __x86_64__
 u64_HTML_ComboNeedsPaint_t::operator w64_HTML_ComboNeedsPaint_t() const
 {
     w64_HTML_ComboNeedsPaint_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pBGRA = this->pBGRA;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_ComboNeedsPaint_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10245,23 +10390,40 @@ C_ASSERT( sizeof(u32_HTML_FileOpenDialog_t().pchTitle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_FileOpenDialog_t, pchInitialFile) == 8 );
 C_ASSERT( sizeof(u32_HTML_FileOpenDialog_t().pchInitialFile) >= 4 );
 
+static void HTML_FileOpenDialog_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_FileOpenDialog_t *d = (u_HTML_FileOpenDialog_t *)dst;
+    const w_HTML_FileOpenDialog_t *s = (const w_HTML_FileOpenDialog_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchTitle = s->pchTitle;
+    d->pchInitialFile = s->pchInitialFile;
+}
 #ifdef __x86_64__
 w64_HTML_FileOpenDialog_t::operator u64_HTML_FileOpenDialog_t() const
 {
     u64_HTML_FileOpenDialog_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
-    ret.pchInitialFile = this->pchInitialFile;
+    HTML_FileOpenDialog_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_FileOpenDialog_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_FileOpenDialog_t *d = (w_HTML_FileOpenDialog_t *)dst;
+    const u_HTML_FileOpenDialog_t *s = (const u_HTML_FileOpenDialog_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchTitle = s->pchTitle;
+    steamclient_unix_path_to_dos_path(1, s->pchInitialFile, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchInitialFile = g_tmppath;
+}
+#ifdef __x86_64__
 u64_HTML_FileOpenDialog_t::operator w64_HTML_FileOpenDialog_t() const
 {
     w64_HTML_FileOpenDialog_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
-    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchInitialFile = g_tmppath;
+    HTML_FileOpenDialog_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10270,19 +10432,17 @@ u64_HTML_FileOpenDialog_t::operator w64_HTML_FileOpenDialog_t() const
 w32_HTML_FileOpenDialog_t::operator u32_HTML_FileOpenDialog_t() const
 {
     u32_HTML_FileOpenDialog_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
-    ret.pchInitialFile = this->pchInitialFile;
+    HTML_FileOpenDialog_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_FileOpenDialog_t::operator w32_HTML_FileOpenDialog_t() const
 {
     w32_HTML_FileOpenDialog_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchTitle = this->pchTitle;
-    steamclient_unix_path_to_dos_path(1, this->pchInitialFile, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchInitialFile = g_tmppath;
+    HTML_FileOpenDialog_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10319,23 +10479,40 @@ C_ASSERT( sizeof(u32_HTML_FinishedRequest_t().pchURL) >= 4 );
 C_ASSERT( offsetof(u32_HTML_FinishedRequest_t, pchPageTitle) == 8 );
 C_ASSERT( sizeof(u32_HTML_FinishedRequest_t().pchPageTitle) >= 4 );
 
+static void HTML_FinishedRequest_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_FinishedRequest_t *d = (u_HTML_FinishedRequest_t *)dst;
+    const w_HTML_FinishedRequest_t *s = (const w_HTML_FinishedRequest_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+    d->pchPageTitle = s->pchPageTitle;
+}
 #ifdef __x86_64__
 w64_HTML_FinishedRequest_t::operator u64_HTML_FinishedRequest_t() const
 {
     u64_HTML_FinishedRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchPageTitle = this->pchPageTitle;
+    HTML_FinishedRequest_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_FinishedRequest_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_FinishedRequest_t *d = (w_HTML_FinishedRequest_t *)dst;
+    const u_HTML_FinishedRequest_t *s = (const u_HTML_FinishedRequest_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->pchPageTitle = s->pchPageTitle;
+}
+#ifdef __x86_64__
 u64_HTML_FinishedRequest_t::operator w64_HTML_FinishedRequest_t() const
 {
     w64_HTML_FinishedRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchPageTitle = this->pchPageTitle;
+    HTML_FinishedRequest_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10344,19 +10521,17 @@ u64_HTML_FinishedRequest_t::operator w64_HTML_FinishedRequest_t() const
 w32_HTML_FinishedRequest_t::operator u32_HTML_FinishedRequest_t() const
 {
     u32_HTML_FinishedRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchPageTitle = this->pchPageTitle;
+    HTML_FinishedRequest_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_FinishedRequest_t::operator w32_HTML_FinishedRequest_t() const
 {
     w32_HTML_FinishedRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchPageTitle = this->pchPageTitle;
+    HTML_FinishedRequest_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10385,20 +10560,37 @@ C_ASSERT( sizeof(u32_HTML_JSAlert_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_JSAlert_t, pchMessage) == 4 );
 C_ASSERT( sizeof(u32_HTML_JSAlert_t().pchMessage) >= 4 );
 
+static void HTML_JSAlert_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_JSAlert_t *d = (u_HTML_JSAlert_t *)dst;
+    const w_HTML_JSAlert_t *s = (const w_HTML_JSAlert_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMessage = s->pchMessage;
+}
 #ifdef __x86_64__
 w64_HTML_JSAlert_t::operator u64_HTML_JSAlert_t() const
 {
     u64_HTML_JSAlert_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMessage = this->pchMessage;
+    HTML_JSAlert_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_JSAlert_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_JSAlert_t *d = (w_HTML_JSAlert_t *)dst;
+    const u_HTML_JSAlert_t *s = (const u_HTML_JSAlert_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMessage = s->pchMessage;
+}
+#ifdef __x86_64__
 u64_HTML_JSAlert_t::operator w64_HTML_JSAlert_t() const
 {
     w64_HTML_JSAlert_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMessage = this->pchMessage;
+    HTML_JSAlert_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10427,20 +10619,37 @@ C_ASSERT( sizeof(u32_HTML_JSConfirm_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_JSConfirm_t, pchMessage) == 4 );
 C_ASSERT( sizeof(u32_HTML_JSConfirm_t().pchMessage) >= 4 );
 
+static void HTML_JSConfirm_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_JSConfirm_t *d = (u_HTML_JSConfirm_t *)dst;
+    const w_HTML_JSConfirm_t *s = (const w_HTML_JSConfirm_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMessage = s->pchMessage;
+}
 #ifdef __x86_64__
 w64_HTML_JSConfirm_t::operator u64_HTML_JSConfirm_t() const
 {
     u64_HTML_JSConfirm_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMessage = this->pchMessage;
+    HTML_JSConfirm_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_JSConfirm_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_JSConfirm_t *d = (w_HTML_JSConfirm_t *)dst;
+    const u_HTML_JSConfirm_t *s = (const u_HTML_JSConfirm_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMessage = s->pchMessage;
+}
+#ifdef __x86_64__
 u64_HTML_JSConfirm_t::operator w64_HTML_JSConfirm_t() const
 {
     w64_HTML_JSConfirm_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMessage = this->pchMessage;
+    HTML_JSConfirm_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10501,29 +10710,46 @@ C_ASSERT( sizeof(u32_HTML_LinkAtPosition_t().bInput) >= 1 );
 C_ASSERT( offsetof(u32_HTML_LinkAtPosition_t, bLiveLink) == 17 );
 C_ASSERT( sizeof(u32_HTML_LinkAtPosition_t().bLiveLink) >= 1 );
 
+static void HTML_LinkAtPosition_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_LinkAtPosition_t *d = (u_HTML_LinkAtPosition_t *)dst;
+    const w_HTML_LinkAtPosition_t *s = (const w_HTML_LinkAtPosition_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->x = s->x;
+    d->y = s->y;
+    d->pchURL = s->pchURL;
+    d->bInput = s->bInput;
+    d->bLiveLink = s->bLiveLink;
+}
 #ifdef __x86_64__
 w64_HTML_LinkAtPosition_t::operator u64_HTML_LinkAtPosition_t() const
 {
     u64_HTML_LinkAtPosition_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.x = this->x;
-    ret.y = this->y;
-    ret.pchURL = this->pchURL;
-    ret.bInput = this->bInput;
-    ret.bLiveLink = this->bLiveLink;
+    HTML_LinkAtPosition_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_LinkAtPosition_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_LinkAtPosition_t *d = (w_HTML_LinkAtPosition_t *)dst;
+    const u_HTML_LinkAtPosition_t *s = (const u_HTML_LinkAtPosition_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->x = s->x;
+    d->y = s->y;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->bInput = s->bInput;
+    d->bLiveLink = s->bLiveLink;
+}
+#ifdef __x86_64__
 u64_HTML_LinkAtPosition_t::operator w64_HTML_LinkAtPosition_t() const
 {
     w64_HTML_LinkAtPosition_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.x = this->x;
-    ret.y = this->y;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.bInput = this->bInput;
-    ret.bLiveLink = this->bLiveLink;
+    HTML_LinkAtPosition_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10532,25 +10758,17 @@ u64_HTML_LinkAtPosition_t::operator w64_HTML_LinkAtPosition_t() const
 w32_HTML_LinkAtPosition_t::operator u32_HTML_LinkAtPosition_t() const
 {
     u32_HTML_LinkAtPosition_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.x = this->x;
-    ret.y = this->y;
-    ret.pchURL = this->pchURL;
-    ret.bInput = this->bInput;
-    ret.bLiveLink = this->bLiveLink;
+    HTML_LinkAtPosition_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_LinkAtPosition_t::operator w32_HTML_LinkAtPosition_t() const
 {
     w32_HTML_LinkAtPosition_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.x = this->x;
-    ret.y = this->y;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.bInput = this->bInput;
-    ret.bLiveLink = this->bLiveLink;
+    HTML_LinkAtPosition_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10659,40 +10877,57 @@ C_ASSERT( sizeof(u32_HTML_NeedsPaint_t().flPageScale) >= 4 );
 C_ASSERT( offsetof(u32_HTML_NeedsPaint_t, unPageSerial) == 44 );
 C_ASSERT( sizeof(u32_HTML_NeedsPaint_t().unPageSerial) >= 4 );
 
+static void HTML_NeedsPaint_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_NeedsPaint_t *d = (u_HTML_NeedsPaint_t *)dst;
+    const w_HTML_NeedsPaint_t *s = (const w_HTML_NeedsPaint_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pBGRA = s->pBGRA;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+    d->unUpdateX = s->unUpdateX;
+    d->unUpdateY = s->unUpdateY;
+    d->unUpdateWide = s->unUpdateWide;
+    d->unUpdateTall = s->unUpdateTall;
+    d->unScrollX = s->unScrollX;
+    d->unScrollY = s->unScrollY;
+    d->flPageScale = s->flPageScale;
+    d->unPageSerial = s->unPageSerial;
+}
 #ifdef __x86_64__
 w64_HTML_NeedsPaint_t::operator u64_HTML_NeedsPaint_t() const
 {
     u64_HTML_NeedsPaint_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pBGRA = this->pBGRA;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unUpdateX = this->unUpdateX;
-    ret.unUpdateY = this->unUpdateY;
-    ret.unUpdateWide = this->unUpdateWide;
-    ret.unUpdateTall = this->unUpdateTall;
-    ret.unScrollX = this->unScrollX;
-    ret.unScrollY = this->unScrollY;
-    ret.flPageScale = this->flPageScale;
-    ret.unPageSerial = this->unPageSerial;
+    HTML_NeedsPaint_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_NeedsPaint_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_NeedsPaint_t *d = (w_HTML_NeedsPaint_t *)dst;
+    const u_HTML_NeedsPaint_t *s = (const u_HTML_NeedsPaint_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pBGRA = s->pBGRA;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+    d->unUpdateX = s->unUpdateX;
+    d->unUpdateY = s->unUpdateY;
+    d->unUpdateWide = s->unUpdateWide;
+    d->unUpdateTall = s->unUpdateTall;
+    d->unScrollX = s->unScrollX;
+    d->unScrollY = s->unScrollY;
+    d->flPageScale = s->flPageScale;
+    d->unPageSerial = s->unPageSerial;
+}
+#ifdef __x86_64__
 u64_HTML_NeedsPaint_t::operator w64_HTML_NeedsPaint_t() const
 {
     w64_HTML_NeedsPaint_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pBGRA = this->pBGRA;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unUpdateX = this->unUpdateX;
-    ret.unUpdateY = this->unUpdateY;
-    ret.unUpdateWide = this->unUpdateWide;
-    ret.unUpdateTall = this->unUpdateTall;
-    ret.unScrollX = this->unScrollX;
-    ret.unScrollY = this->unScrollY;
-    ret.flPageScale = this->flPageScale;
-    ret.unPageSerial = this->unPageSerial;
+    HTML_NeedsPaint_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10817,31 +11052,48 @@ C_ASSERT( sizeof(u32_HTML_NewWindow_t_130x().unWide) >= 4 );
 C_ASSERT( offsetof(u32_HTML_NewWindow_t_130x, unTall) == 20 );
 C_ASSERT( sizeof(u32_HTML_NewWindow_t_130x().unTall) >= 4 );
 
+static void HTML_NewWindow_t_132x_u_from_w(void *dst, const void *src)
+{
+    u_HTML_NewWindow_t_132x *d = (u_HTML_NewWindow_t_132x *)dst;
+    const w_HTML_NewWindow_t_132x *s = (const w_HTML_NewWindow_t_132x *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+    d->unX = s->unX;
+    d->unY = s->unY;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+    d->unNewWindow_BrowserHandle_IGNORE = s->unNewWindow_BrowserHandle_IGNORE;
+}
 #ifdef __x86_64__
 w64_HTML_NewWindow_t_132x::operator u64_HTML_NewWindow_t_132x() const
 {
     u64_HTML_NewWindow_t_132x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unNewWindow_BrowserHandle_IGNORE = this->unNewWindow_BrowserHandle_IGNORE;
+    HTML_NewWindow_t_132x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_NewWindow_t_132x_w_from_u(void *dst, const void *src)
+{
+    w_HTML_NewWindow_t_132x *d = (w_HTML_NewWindow_t_132x *)dst;
+    const u_HTML_NewWindow_t_132x *s = (const u_HTML_NewWindow_t_132x *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->unX = s->unX;
+    d->unY = s->unY;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+    d->unNewWindow_BrowserHandle_IGNORE = s->unNewWindow_BrowserHandle_IGNORE;
+}
+#ifdef __x86_64__
 u64_HTML_NewWindow_t_132x::operator w64_HTML_NewWindow_t_132x() const
 {
     w64_HTML_NewWindow_t_132x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unNewWindow_BrowserHandle_IGNORE = this->unNewWindow_BrowserHandle_IGNORE;
+    HTML_NewWindow_t_132x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10850,54 +11102,61 @@ u64_HTML_NewWindow_t_132x::operator w64_HTML_NewWindow_t_132x() const
 w32_HTML_NewWindow_t_132x::operator u32_HTML_NewWindow_t_132x() const
 {
     u32_HTML_NewWindow_t_132x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unNewWindow_BrowserHandle_IGNORE = this->unNewWindow_BrowserHandle_IGNORE;
-    return ret;
-}
-
-u32_HTML_NewWindow_t_132x::operator w32_HTML_NewWindow_t_132x() const
-{
-    w32_HTML_NewWindow_t_132x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
-    ret.unNewWindow_BrowserHandle_IGNORE = this->unNewWindow_BrowserHandle_IGNORE;
+    HTML_NewWindow_t_132x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_HTML_NewWindow_t_132x::operator w32_HTML_NewWindow_t_132x() const
+{
+    w32_HTML_NewWindow_t_132x ret;
+    HTML_NewWindow_t_132x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void HTML_NewWindow_t_130x_u_from_w(void *dst, const void *src)
+{
+    u_HTML_NewWindow_t_130x *d = (u_HTML_NewWindow_t_130x *)dst;
+    const w_HTML_NewWindow_t_130x *s = (const w_HTML_NewWindow_t_130x *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+    d->unX = s->unX;
+    d->unY = s->unY;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+}
 #ifdef __x86_64__
 w64_HTML_NewWindow_t_130x::operator u64_HTML_NewWindow_t_130x() const
 {
     u64_HTML_NewWindow_t_130x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_NewWindow_t_130x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_NewWindow_t_130x_w_from_u(void *dst, const void *src)
+{
+    w_HTML_NewWindow_t_130x *d = (w_HTML_NewWindow_t_130x *)dst;
+    const u_HTML_NewWindow_t_130x *s = (const u_HTML_NewWindow_t_130x *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->unX = s->unX;
+    d->unY = s->unY;
+    d->unWide = s->unWide;
+    d->unTall = s->unTall;
+}
+#ifdef __x86_64__
 u64_HTML_NewWindow_t_130x::operator w64_HTML_NewWindow_t_130x() const
 {
     w64_HTML_NewWindow_t_130x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_NewWindow_t_130x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10906,25 +11165,17 @@ u64_HTML_NewWindow_t_130x::operator w64_HTML_NewWindow_t_130x() const
 w32_HTML_NewWindow_t_130x::operator u32_HTML_NewWindow_t_130x() const
 {
     u32_HTML_NewWindow_t_130x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_NewWindow_t_130x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_NewWindow_t_130x::operator w32_HTML_NewWindow_t_130x() const
 {
     w32_HTML_NewWindow_t_130x ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.unX = this->unX;
-    ret.unY = this->unY;
-    ret.unWide = this->unWide;
-    ret.unTall = this->unTall;
+    HTML_NewWindow_t_130x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10953,21 +11204,38 @@ C_ASSERT( sizeof(u32_HTML_OpenLinkInNewTab_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_OpenLinkInNewTab_t, pchURL) == 4 );
 C_ASSERT( sizeof(u32_HTML_OpenLinkInNewTab_t().pchURL) >= 4 );
 
+static void HTML_OpenLinkInNewTab_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_OpenLinkInNewTab_t *d = (u_HTML_OpenLinkInNewTab_t *)dst;
+    const w_HTML_OpenLinkInNewTab_t *s = (const w_HTML_OpenLinkInNewTab_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+}
 #ifdef __x86_64__
 w64_HTML_OpenLinkInNewTab_t::operator u64_HTML_OpenLinkInNewTab_t() const
 {
     u64_HTML_OpenLinkInNewTab_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
+    HTML_OpenLinkInNewTab_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_OpenLinkInNewTab_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_OpenLinkInNewTab_t *d = (w_HTML_OpenLinkInNewTab_t *)dst;
+    const u_HTML_OpenLinkInNewTab_t *s = (const u_HTML_OpenLinkInNewTab_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+}
+#ifdef __x86_64__
 u64_HTML_OpenLinkInNewTab_t::operator w64_HTML_OpenLinkInNewTab_t() const
 {
     w64_HTML_OpenLinkInNewTab_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
+    HTML_OpenLinkInNewTab_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -10976,17 +11244,17 @@ u64_HTML_OpenLinkInNewTab_t::operator w64_HTML_OpenLinkInNewTab_t() const
 w32_HTML_OpenLinkInNewTab_t::operator u32_HTML_OpenLinkInNewTab_t() const
 {
     u32_HTML_OpenLinkInNewTab_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
+    HTML_OpenLinkInNewTab_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_OpenLinkInNewTab_t::operator w32_HTML_OpenLinkInNewTab_t() const
 {
     w32_HTML_OpenLinkInNewTab_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
+    HTML_OpenLinkInNewTab_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11015,20 +11283,37 @@ C_ASSERT( sizeof(u32_HTML_ShowToolTip_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_ShowToolTip_t, pchMsg) == 4 );
 C_ASSERT( sizeof(u32_HTML_ShowToolTip_t().pchMsg) >= 4 );
 
+static void HTML_ShowToolTip_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_ShowToolTip_t *d = (u_HTML_ShowToolTip_t *)dst;
+    const w_HTML_ShowToolTip_t *s = (const w_HTML_ShowToolTip_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
 #ifdef __x86_64__
 w64_HTML_ShowToolTip_t::operator u64_HTML_ShowToolTip_t() const
 {
     u64_HTML_ShowToolTip_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_ShowToolTip_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_ShowToolTip_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_ShowToolTip_t *d = (w_HTML_ShowToolTip_t *)dst;
+    const u_HTML_ShowToolTip_t *s = (const u_HTML_ShowToolTip_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
+#ifdef __x86_64__
 u64_HTML_ShowToolTip_t::operator w64_HTML_ShowToolTip_t() const
 {
     w64_HTML_ShowToolTip_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_ShowToolTip_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11081,27 +11366,44 @@ C_ASSERT( sizeof(u32_HTML_StartRequest_t().pchPostData) >= 4 );
 C_ASSERT( offsetof(u32_HTML_StartRequest_t, bIsRedirect) == 16 );
 C_ASSERT( sizeof(u32_HTML_StartRequest_t().bIsRedirect) >= 1 );
 
+static void HTML_StartRequest_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_StartRequest_t *d = (u_HTML_StartRequest_t *)dst;
+    const w_HTML_StartRequest_t *s = (const w_HTML_StartRequest_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+    d->pchTarget = s->pchTarget;
+    d->pchPostData = s->pchPostData;
+    d->bIsRedirect = s->bIsRedirect;
+}
 #ifdef __x86_64__
 w64_HTML_StartRequest_t::operator u64_HTML_StartRequest_t() const
 {
     u64_HTML_StartRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchTarget = this->pchTarget;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
+    HTML_StartRequest_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_StartRequest_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_StartRequest_t *d = (w_HTML_StartRequest_t *)dst;
+    const u_HTML_StartRequest_t *s = (const u_HTML_StartRequest_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->pchTarget = s->pchTarget;
+    d->pchPostData = s->pchPostData;
+    d->bIsRedirect = s->bIsRedirect;
+}
+#ifdef __x86_64__
 u64_HTML_StartRequest_t::operator w64_HTML_StartRequest_t() const
 {
     w64_HTML_StartRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchTarget = this->pchTarget;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
+    HTML_StartRequest_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11110,23 +11412,17 @@ u64_HTML_StartRequest_t::operator w64_HTML_StartRequest_t() const
 w32_HTML_StartRequest_t::operator u32_HTML_StartRequest_t() const
 {
     u32_HTML_StartRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchTarget = this->pchTarget;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
+    HTML_StartRequest_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_StartRequest_t::operator w32_HTML_StartRequest_t() const
 {
     w32_HTML_StartRequest_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchTarget = this->pchTarget;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
+    HTML_StartRequest_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11155,20 +11451,37 @@ C_ASSERT( sizeof(u32_HTML_StatusText_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_StatusText_t, pchMsg) == 4 );
 C_ASSERT( sizeof(u32_HTML_StatusText_t().pchMsg) >= 4 );
 
+static void HTML_StatusText_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_StatusText_t *d = (u_HTML_StatusText_t *)dst;
+    const w_HTML_StatusText_t *s = (const w_HTML_StatusText_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
 #ifdef __x86_64__
 w64_HTML_StatusText_t::operator u64_HTML_StatusText_t() const
 {
     u64_HTML_StatusText_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_StatusText_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_StatusText_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_StatusText_t *d = (w_HTML_StatusText_t *)dst;
+    const u_HTML_StatusText_t *s = (const u_HTML_StatusText_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
+#ifdef __x86_64__
 u64_HTML_StatusText_t::operator w64_HTML_StatusText_t() const
 {
     w64_HTML_StatusText_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_StatusText_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11229,29 +11542,46 @@ C_ASSERT( sizeof(u32_HTML_URLChanged_t().pchPageTitle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_URLChanged_t, bNewNavigation) == 20 );
 C_ASSERT( sizeof(u32_HTML_URLChanged_t().bNewNavigation) >= 1 );
 
+static void HTML_URLChanged_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_URLChanged_t *d = (u_HTML_URLChanged_t *)dst;
+    const w_HTML_URLChanged_t *s = (const w_HTML_URLChanged_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchURL = s->pchURL;
+    d->pchPostData = s->pchPostData;
+    d->bIsRedirect = s->bIsRedirect;
+    d->pchPageTitle = s->pchPageTitle;
+    d->bNewNavigation = s->bNewNavigation;
+}
 #ifdef __x86_64__
 w64_HTML_URLChanged_t::operator u64_HTML_URLChanged_t() const
 {
     u64_HTML_URLChanged_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
-    ret.pchPageTitle = this->pchPageTitle;
-    ret.bNewNavigation = this->bNewNavigation;
+    HTML_URLChanged_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_URLChanged_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_URLChanged_t *d = (w_HTML_URLChanged_t *)dst;
+    const u_HTML_URLChanged_t *s = (const u_HTML_URLChanged_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, s->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
+    d->pchURL = g_tmppath;
+    d->pchPostData = s->pchPostData;
+    d->bIsRedirect = s->bIsRedirect;
+    d->pchPageTitle = s->pchPageTitle;
+    d->bNewNavigation = s->bNewNavigation;
+}
+#ifdef __x86_64__
 u64_HTML_URLChanged_t::operator w64_HTML_URLChanged_t() const
 {
     w64_HTML_URLChanged_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
-    ret.pchPageTitle = this->pchPageTitle;
-    ret.bNewNavigation = this->bNewNavigation;
+    HTML_URLChanged_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11260,25 +11590,17 @@ u64_HTML_URLChanged_t::operator w64_HTML_URLChanged_t() const
 w32_HTML_URLChanged_t::operator u32_HTML_URLChanged_t() const
 {
     u32_HTML_URLChanged_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchURL = this->pchURL;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
-    ret.pchPageTitle = this->pchPageTitle;
-    ret.bNewNavigation = this->bNewNavigation;
+    HTML_URLChanged_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_HTML_URLChanged_t::operator w32_HTML_URLChanged_t() const
 {
     w32_HTML_URLChanged_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    steamclient_unix_path_to_dos_path(1, this->pchURL, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);
-    ret.pchURL = g_tmppath;
-    ret.pchPostData = this->pchPostData;
-    ret.bIsRedirect = this->bIsRedirect;
-    ret.pchPageTitle = this->pchPageTitle;
-    ret.bNewNavigation = this->bNewNavigation;
+    HTML_URLChanged_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11307,20 +11629,37 @@ C_ASSERT( sizeof(u32_HTML_UpdateToolTip_t().unBrowserHandle) >= 4 );
 C_ASSERT( offsetof(u32_HTML_UpdateToolTip_t, pchMsg) == 4 );
 C_ASSERT( sizeof(u32_HTML_UpdateToolTip_t().pchMsg) >= 4 );
 
+static void HTML_UpdateToolTip_t_u_from_w(void *dst, const void *src)
+{
+    u_HTML_UpdateToolTip_t *d = (u_HTML_UpdateToolTip_t *)dst;
+    const w_HTML_UpdateToolTip_t *s = (const w_HTML_UpdateToolTip_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
 #ifdef __x86_64__
 w64_HTML_UpdateToolTip_t::operator u64_HTML_UpdateToolTip_t() const
 {
     u64_HTML_UpdateToolTip_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_UpdateToolTip_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTML_UpdateToolTip_t_w_from_u(void *dst, const void *src)
+{
+    w_HTML_UpdateToolTip_t *d = (w_HTML_UpdateToolTip_t *)dst;
+    const u_HTML_UpdateToolTip_t *s = (const u_HTML_UpdateToolTip_t *)src;
+
+    d->unBrowserHandle = s->unBrowserHandle;
+    d->pchMsg = s->pchMsg;
+}
+#ifdef __x86_64__
 u64_HTML_UpdateToolTip_t::operator w64_HTML_UpdateToolTip_t() const
 {
     w64_HTML_UpdateToolTip_t ret;
-    ret.unBrowserHandle = this->unBrowserHandle;
-    ret.pchMsg = this->pchMsg;
+    HTML_UpdateToolTip_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11453,26 +11792,43 @@ C_ASSERT( sizeof(u32_HTTPRequestCompleted_t_115().m_bRequestSuccessful) >= 1 );
 C_ASSERT( offsetof(u32_HTTPRequestCompleted_t_115, m_eStatusCode) == 16 );
 C_ASSERT( sizeof(u32_HTTPRequestCompleted_t_115().m_eStatusCode) >= 4 );
 
+static void HTTPRequestCompleted_t_132x_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestCompleted_t_132x *d = (u_HTTPRequestCompleted_t_132x *)dst;
+    const w_HTTPRequestCompleted_t_132x *s = (const w_HTTPRequestCompleted_t_132x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+    d->m_unBodySize = s->m_unBodySize;
+}
 #ifdef __x86_64__
 w64_HTTPRequestCompleted_t_132x::operator u64_HTTPRequestCompleted_t_132x() const
 {
     u64_HTTPRequestCompleted_t_132x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
-    ret.m_unBodySize = this->m_unBodySize;
+    HTTPRequestCompleted_t_132x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestCompleted_t_132x_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestCompleted_t_132x *d = (w_HTTPRequestCompleted_t_132x *)dst;
+    const u_HTTPRequestCompleted_t_132x *s = (const u_HTTPRequestCompleted_t_132x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+    d->m_unBodySize = s->m_unBodySize;
+}
+#ifdef __x86_64__
 u64_HTTPRequestCompleted_t_132x::operator w64_HTTPRequestCompleted_t_132x() const
 {
     w64_HTTPRequestCompleted_t_132x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
-    ret.m_unBodySize = this->m_unBodySize;
+    HTTPRequestCompleted_t_132x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11481,44 +11837,56 @@ u64_HTTPRequestCompleted_t_132x::operator w64_HTTPRequestCompleted_t_132x() cons
 w32_HTTPRequestCompleted_t_132x::operator u32_HTTPRequestCompleted_t_132x() const
 {
     u32_HTTPRequestCompleted_t_132x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
-    ret.m_unBodySize = this->m_unBodySize;
-    return ret;
-}
-
-u32_HTTPRequestCompleted_t_132x::operator w32_HTTPRequestCompleted_t_132x() const
-{
-    w32_HTTPRequestCompleted_t_132x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
-    ret.m_unBodySize = this->m_unBodySize;
+    HTTPRequestCompleted_t_132x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_HTTPRequestCompleted_t_132x::operator w32_HTTPRequestCompleted_t_132x() const
+{
+    w32_HTTPRequestCompleted_t_132x ret;
+    HTTPRequestCompleted_t_132x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void HTTPRequestCompleted_t_123_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestCompleted_t_123 *d = (u_HTTPRequestCompleted_t_123 *)dst;
+    const w_HTTPRequestCompleted_t_123 *s = (const w_HTTPRequestCompleted_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+}
 #ifdef __x86_64__
 w64_HTTPRequestCompleted_t_123::operator u64_HTTPRequestCompleted_t_123() const
 {
     u64_HTTPRequestCompleted_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
+    HTTPRequestCompleted_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestCompleted_t_123_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestCompleted_t_123 *d = (w_HTTPRequestCompleted_t_123 *)dst;
+    const u_HTTPRequestCompleted_t_123 *s = (const u_HTTPRequestCompleted_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+}
+#ifdef __x86_64__
 u64_HTTPRequestCompleted_t_123::operator w64_HTTPRequestCompleted_t_123() const
 {
     w64_HTTPRequestCompleted_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
+    HTTPRequestCompleted_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11527,42 +11895,56 @@ u64_HTTPRequestCompleted_t_123::operator w64_HTTPRequestCompleted_t_123() const
 w32_HTTPRequestCompleted_t_123::operator u32_HTTPRequestCompleted_t_123() const
 {
     u32_HTTPRequestCompleted_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
-    return ret;
-}
-
-u32_HTTPRequestCompleted_t_123::operator w32_HTTPRequestCompleted_t_123() const
-{
-    w32_HTTPRequestCompleted_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
+    HTTPRequestCompleted_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_HTTPRequestCompleted_t_123::operator w32_HTTPRequestCompleted_t_123() const
+{
+    w32_HTTPRequestCompleted_t_123 ret;
+    HTTPRequestCompleted_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void HTTPRequestCompleted_t_115_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestCompleted_t_115 *d = (u_HTTPRequestCompleted_t_115 *)dst;
+    const w_HTTPRequestCompleted_t_115 *s = (const w_HTTPRequestCompleted_t_115 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+}
 #ifdef __i386__
 w32_HTTPRequestCompleted_t_115::operator u32_HTTPRequestCompleted_t_115() const
 {
     u32_HTTPRequestCompleted_t_115 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
+    HTTPRequestCompleted_t_115_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestCompleted_t_115_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestCompleted_t_115 *d = (w_HTTPRequestCompleted_t_115 *)dst;
+    const u_HTTPRequestCompleted_t_115 *s = (const u_HTTPRequestCompleted_t_115 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_bRequestSuccessful = s->m_bRequestSuccessful;
+    d->m_eStatusCode = s->m_eStatusCode;
+}
+#ifdef __i386__
 u32_HTTPRequestCompleted_t_115::operator w32_HTTPRequestCompleted_t_115() const
 {
     w32_HTTPRequestCompleted_t_115 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_bRequestSuccessful = this->m_bRequestSuccessful;
-    ret.m_eStatusCode = this->m_eStatusCode;
+    HTTPRequestCompleted_t_115_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11647,24 +12029,41 @@ C_ASSERT( sizeof(u32_HTTPRequestDataReceived_t_121x().m_cOffset) >= 4 );
 C_ASSERT( offsetof(u32_HTTPRequestDataReceived_t_121x, m_cBytesReceived) == 16 );
 C_ASSERT( sizeof(u32_HTTPRequestDataReceived_t_121x().m_cBytesReceived) >= 4 );
 
+static void HTTPRequestDataReceived_t_123_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestDataReceived_t_123 *d = (u_HTTPRequestDataReceived_t_123 *)dst;
+    const w_HTTPRequestDataReceived_t_123 *s = (const w_HTTPRequestDataReceived_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_cOffset = s->m_cOffset;
+    d->m_cBytesReceived = s->m_cBytesReceived;
+}
 #ifdef __x86_64__
 w64_HTTPRequestDataReceived_t_123::operator u64_HTTPRequestDataReceived_t_123() const
 {
     u64_HTTPRequestDataReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
+    HTTPRequestDataReceived_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestDataReceived_t_123_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestDataReceived_t_123 *d = (w_HTTPRequestDataReceived_t_123 *)dst;
+    const u_HTTPRequestDataReceived_t_123 *s = (const u_HTTPRequestDataReceived_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_cOffset = s->m_cOffset;
+    d->m_cBytesReceived = s->m_cBytesReceived;
+}
+#ifdef __x86_64__
 u64_HTTPRequestDataReceived_t_123::operator w64_HTTPRequestDataReceived_t_123() const
 {
     w64_HTTPRequestDataReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
+    HTTPRequestDataReceived_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11673,42 +12072,56 @@ u64_HTTPRequestDataReceived_t_123::operator w64_HTTPRequestDataReceived_t_123() 
 w32_HTTPRequestDataReceived_t_123::operator u32_HTTPRequestDataReceived_t_123() const
 {
     u32_HTTPRequestDataReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
-    return ret;
-}
-
-u32_HTTPRequestDataReceived_t_123::operator w32_HTTPRequestDataReceived_t_123() const
-{
-    w32_HTTPRequestDataReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
+    HTTPRequestDataReceived_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_HTTPRequestDataReceived_t_123::operator w32_HTTPRequestDataReceived_t_123() const
+{
+    w32_HTTPRequestDataReceived_t_123 ret;
+    HTTPRequestDataReceived_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void HTTPRequestDataReceived_t_121x_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestDataReceived_t_121x *d = (u_HTTPRequestDataReceived_t_121x *)dst;
+    const w_HTTPRequestDataReceived_t_121x *s = (const w_HTTPRequestDataReceived_t_121x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_cOffset = s->m_cOffset;
+    d->m_cBytesReceived = s->m_cBytesReceived;
+}
 #ifdef __i386__
 w32_HTTPRequestDataReceived_t_121x::operator u32_HTTPRequestDataReceived_t_121x() const
 {
     u32_HTTPRequestDataReceived_t_121x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
+    HTTPRequestDataReceived_t_121x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestDataReceived_t_121x_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestDataReceived_t_121x *d = (w_HTTPRequestDataReceived_t_121x *)dst;
+    const u_HTTPRequestDataReceived_t_121x *s = (const u_HTTPRequestDataReceived_t_121x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+    d->m_cOffset = s->m_cOffset;
+    d->m_cBytesReceived = s->m_cBytesReceived;
+}
+#ifdef __i386__
 u32_HTTPRequestDataReceived_t_121x::operator w32_HTTPRequestDataReceived_t_121x() const
 {
     w32_HTTPRequestDataReceived_t_121x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    ret.m_cOffset = this->m_cOffset;
-    ret.m_cBytesReceived = this->m_cBytesReceived;
+    HTTPRequestDataReceived_t_121x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11761,20 +12174,37 @@ C_ASSERT( sizeof(u32_HTTPRequestHeadersReceived_t_121x().m_hRequest) >= 4 );
 C_ASSERT( offsetof(u32_HTTPRequestHeadersReceived_t_121x, m_ulContextValue) == 4 );
 C_ASSERT( sizeof(u32_HTTPRequestHeadersReceived_t_121x().m_ulContextValue) >= 8 );
 
+static void HTTPRequestHeadersReceived_t_123_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestHeadersReceived_t_123 *d = (u_HTTPRequestHeadersReceived_t_123 *)dst;
+    const w_HTTPRequestHeadersReceived_t_123 *s = (const w_HTTPRequestHeadersReceived_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+}
 #ifdef __x86_64__
 w64_HTTPRequestHeadersReceived_t_123::operator u64_HTTPRequestHeadersReceived_t_123() const
 {
     u64_HTTPRequestHeadersReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
+    HTTPRequestHeadersReceived_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestHeadersReceived_t_123_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestHeadersReceived_t_123 *d = (w_HTTPRequestHeadersReceived_t_123 *)dst;
+    const u_HTTPRequestHeadersReceived_t_123 *s = (const u_HTTPRequestHeadersReceived_t_123 *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+}
+#ifdef __x86_64__
 u64_HTTPRequestHeadersReceived_t_123::operator w64_HTTPRequestHeadersReceived_t_123() const
 {
     w64_HTTPRequestHeadersReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
+    HTTPRequestHeadersReceived_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11783,34 +12213,52 @@ u64_HTTPRequestHeadersReceived_t_123::operator w64_HTTPRequestHeadersReceived_t_
 w32_HTTPRequestHeadersReceived_t_123::operator u32_HTTPRequestHeadersReceived_t_123() const
 {
     u32_HTTPRequestHeadersReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
-    return ret;
-}
-
-u32_HTTPRequestHeadersReceived_t_123::operator w32_HTTPRequestHeadersReceived_t_123() const
-{
-    w32_HTTPRequestHeadersReceived_t_123 ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
+    HTTPRequestHeadersReceived_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_HTTPRequestHeadersReceived_t_123::operator w32_HTTPRequestHeadersReceived_t_123() const
+{
+    w32_HTTPRequestHeadersReceived_t_123 ret;
+    HTTPRequestHeadersReceived_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void HTTPRequestHeadersReceived_t_121x_u_from_w(void *dst, const void *src)
+{
+    u_HTTPRequestHeadersReceived_t_121x *d = (u_HTTPRequestHeadersReceived_t_121x *)dst;
+    const w_HTTPRequestHeadersReceived_t_121x *s = (const w_HTTPRequestHeadersReceived_t_121x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+}
 #ifdef __i386__
 w32_HTTPRequestHeadersReceived_t_121x::operator u32_HTTPRequestHeadersReceived_t_121x() const
 {
     u32_HTTPRequestHeadersReceived_t_121x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
+    HTTPRequestHeadersReceived_t_121x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void HTTPRequestHeadersReceived_t_121x_w_from_u(void *dst, const void *src)
+{
+    w_HTTPRequestHeadersReceived_t_121x *d = (w_HTTPRequestHeadersReceived_t_121x *)dst;
+    const u_HTTPRequestHeadersReceived_t_121x *s = (const u_HTTPRequestHeadersReceived_t_121x *)src;
+
+    d->m_hRequest = s->m_hRequest;
+    d->m_ulContextValue = s->m_ulContextValue;
+}
+#ifdef __i386__
 u32_HTTPRequestHeadersReceived_t_121x::operator w32_HTTPRequestHeadersReceived_t_121x() const
 {
     w32_HTTPRequestHeadersReceived_t_121x ret;
-    ret.m_hRequest = this->m_hRequest;
-    ret.m_ulContextValue = this->m_ulContextValue;
+    HTTPRequestHeadersReceived_t_121x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11839,20 +12287,37 @@ C_ASSERT( sizeof(u32_ItemInstalled_t().m_unAppID) >= 4 );
 C_ASSERT( offsetof(u32_ItemInstalled_t, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_ItemInstalled_t().m_nPublishedFileId) >= 8 );
 
+static void ItemInstalled_t_u_from_w(void *dst, const void *src)
+{
+    u_ItemInstalled_t *d = (u_ItemInstalled_t *)dst;
+    const w_ItemInstalled_t *s = (const w_ItemInstalled_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_ItemInstalled_t::operator u64_ItemInstalled_t() const
 {
     u64_ItemInstalled_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    ItemInstalled_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void ItemInstalled_t_w_from_u(void *dst, const void *src)
+{
+    w_ItemInstalled_t *d = (w_ItemInstalled_t *)dst;
+    const u_ItemInstalled_t *s = (const u_ItemInstalled_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_ItemInstalled_t::operator w64_ItemInstalled_t() const
 {
     w64_ItemInstalled_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    ItemInstalled_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11861,16 +12326,17 @@ u64_ItemInstalled_t::operator w64_ItemInstalled_t() const
 w32_ItemInstalled_t::operator u32_ItemInstalled_t() const
 {
     u32_ItemInstalled_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    ItemInstalled_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_ItemInstalled_t::operator w32_ItemInstalled_t() const
 {
     w32_ItemInstalled_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    ItemInstalled_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11915,24 +12381,41 @@ C_ASSERT( sizeof(u32_JoinPartyCallback_t().m_SteamIDBeaconOwner) >= 8 );
 C_ASSERT( offsetof(u32_JoinPartyCallback_t, m_rgchConnectString) == 20 );
 C_ASSERT( sizeof(u32_JoinPartyCallback_t().m_rgchConnectString) >= 256 );
 
+static void JoinPartyCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_JoinPartyCallback_t *d = (u_JoinPartyCallback_t *)dst;
+    const w_JoinPartyCallback_t *s = (const w_JoinPartyCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulBeaconID = s->m_ulBeaconID;
+    d->m_SteamIDBeaconOwner = s->m_SteamIDBeaconOwner;
+    d->m_rgchConnectString = s->m_rgchConnectString;
+}
 #ifdef __x86_64__
 w64_JoinPartyCallback_t::operator u64_JoinPartyCallback_t() const
 {
     u64_JoinPartyCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
-    ret.m_SteamIDBeaconOwner = this->m_SteamIDBeaconOwner;
-    ret.m_rgchConnectString = this->m_rgchConnectString;
+    JoinPartyCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void JoinPartyCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_JoinPartyCallback_t *d = (w_JoinPartyCallback_t *)dst;
+    const u_JoinPartyCallback_t *s = (const u_JoinPartyCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulBeaconID = s->m_ulBeaconID;
+    d->m_SteamIDBeaconOwner = s->m_SteamIDBeaconOwner;
+    d->m_rgchConnectString = s->m_rgchConnectString;
+}
+#ifdef __x86_64__
 u64_JoinPartyCallback_t::operator w64_JoinPartyCallback_t() const
 {
     w64_JoinPartyCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
-    ret.m_SteamIDBeaconOwner = this->m_SteamIDBeaconOwner;
-    ret.m_rgchConnectString = this->m_rgchConnectString;
+    JoinPartyCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -11941,20 +12424,17 @@ u64_JoinPartyCallback_t::operator w64_JoinPartyCallback_t() const
 w32_JoinPartyCallback_t::operator u32_JoinPartyCallback_t() const
 {
     u32_JoinPartyCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
-    ret.m_SteamIDBeaconOwner = this->m_SteamIDBeaconOwner;
-    ret.m_rgchConnectString = this->m_rgchConnectString;
+    JoinPartyCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_JoinPartyCallback_t::operator w32_JoinPartyCallback_t() const
 {
     w32_JoinPartyCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulBeaconID = this->m_ulBeaconID;
-    ret.m_SteamIDBeaconOwner = this->m_SteamIDBeaconOwner;
-    ret.m_rgchConnectString = this->m_rgchConnectString;
+    JoinPartyCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12095,26 +12575,43 @@ C_ASSERT( sizeof(u32_LeaderboardEntry_t_104().m_nScore) >= 4 );
 C_ASSERT( offsetof(u32_LeaderboardEntry_t_104, m_cDetails) == 16 );
 C_ASSERT( sizeof(u32_LeaderboardEntry_t_104().m_cDetails) >= 4 );
 
+static void LeaderboardEntry_t_123_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardEntry_t_123 *d = (u_LeaderboardEntry_t_123 *)dst;
+    const w_LeaderboardEntry_t_123 *s = (const w_LeaderboardEntry_t_123 *)src;
+
+    d->m_steamIDUser = s->m_steamIDUser;
+    d->m_nGlobalRank = s->m_nGlobalRank;
+    d->m_nScore = s->m_nScore;
+    d->m_cDetails = s->m_cDetails;
+    d->m_hUGC = s->m_hUGC;
+}
 #ifdef __x86_64__
 w64_LeaderboardEntry_t_123::operator u64_LeaderboardEntry_t_123() const
 {
     u64_LeaderboardEntry_t_123 ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
+    LeaderboardEntry_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardEntry_t_123_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardEntry_t_123 *d = (w_LeaderboardEntry_t_123 *)dst;
+    const u_LeaderboardEntry_t_123 *s = (const u_LeaderboardEntry_t_123 *)src;
+
+    d->m_steamIDUser = s->m_steamIDUser;
+    d->m_nGlobalRank = s->m_nGlobalRank;
+    d->m_nScore = s->m_nScore;
+    d->m_cDetails = s->m_cDetails;
+    d->m_hUGC = s->m_hUGC;
+}
+#ifdef __x86_64__
 u64_LeaderboardEntry_t_123::operator w64_LeaderboardEntry_t_123() const
 {
     w64_LeaderboardEntry_t_123 ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
+    LeaderboardEntry_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12123,46 +12620,58 @@ u64_LeaderboardEntry_t_123::operator w64_LeaderboardEntry_t_123() const
 w32_LeaderboardEntry_t_123::operator u32_LeaderboardEntry_t_123() const
 {
     u32_LeaderboardEntry_t_123 ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
-    return ret;
-}
-
-u32_LeaderboardEntry_t_123::operator w32_LeaderboardEntry_t_123() const
-{
-    w32_LeaderboardEntry_t_123 ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
+    LeaderboardEntry_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_LeaderboardEntry_t_123::operator w32_LeaderboardEntry_t_123() const
+{
+    w32_LeaderboardEntry_t_123 ret;
+    LeaderboardEntry_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void LeaderboardEntry_t_111x_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardEntry_t_111x *d = (u_LeaderboardEntry_t_111x *)dst;
+    const w_LeaderboardEntry_t_111x *s = (const w_LeaderboardEntry_t_111x *)src;
+
+    d->m_steamIDUser = s->m_steamIDUser;
+    d->m_nGlobalRank = s->m_nGlobalRank;
+    d->m_nScore = s->m_nScore;
+    d->m_cDetails = s->m_cDetails;
+    d->m_hUGC = s->m_hUGC;
+}
 #ifdef __i386__
 w32_LeaderboardEntry_t_111x::operator u32_LeaderboardEntry_t_111x() const
 {
     u32_LeaderboardEntry_t_111x ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
+    LeaderboardEntry_t_111x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardEntry_t_111x_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardEntry_t_111x *d = (w_LeaderboardEntry_t_111x *)dst;
+    const u_LeaderboardEntry_t_111x *s = (const u_LeaderboardEntry_t_111x *)src;
+
+    d->m_steamIDUser = s->m_steamIDUser;
+    d->m_nGlobalRank = s->m_nGlobalRank;
+    d->m_nScore = s->m_nScore;
+    d->m_cDetails = s->m_cDetails;
+    d->m_hUGC = s->m_hUGC;
+}
+#ifdef __i386__
 u32_LeaderboardEntry_t_111x::operator w32_LeaderboardEntry_t_111x() const
 {
     w32_LeaderboardEntry_t_111x ret;
-    ret.m_steamIDUser = this->m_steamIDUser;
-    ret.m_nGlobalRank = this->m_nGlobalRank;
-    ret.m_nScore = this->m_nScore;
-    ret.m_cDetails = this->m_cDetails;
-    ret.m_hUGC = this->m_hUGC;
+    LeaderboardEntry_t_111x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12279,28 +12788,45 @@ C_ASSERT( sizeof(u32_LeaderboardScoreUploaded_t_104().m_nGlobalRankNew) >= 4 );
 C_ASSERT( offsetof(u32_LeaderboardScoreUploaded_t_104, m_nGlobalRankPrevious) == 24 );
 C_ASSERT( sizeof(u32_LeaderboardScoreUploaded_t_104().m_nGlobalRankPrevious) >= 4 );
 
+static void LeaderboardScoreUploaded_t_123_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardScoreUploaded_t_123 *d = (u_LeaderboardScoreUploaded_t_123 *)dst;
+    const w_LeaderboardScoreUploaded_t_123 *s = (const w_LeaderboardScoreUploaded_t_123 *)src;
+
+    d->m_bSuccess = s->m_bSuccess;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+    d->m_nScore = s->m_nScore;
+    d->m_bScoreChanged = s->m_bScoreChanged;
+    d->m_nGlobalRankNew = s->m_nGlobalRankNew;
+    d->m_nGlobalRankPrevious = s->m_nGlobalRankPrevious;
+}
 #ifdef __x86_64__
 w64_LeaderboardScoreUploaded_t_123::operator u64_LeaderboardScoreUploaded_t_123() const
 {
     u64_LeaderboardScoreUploaded_t_123 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
+    LeaderboardScoreUploaded_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardScoreUploaded_t_123_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardScoreUploaded_t_123 *d = (w_LeaderboardScoreUploaded_t_123 *)dst;
+    const u_LeaderboardScoreUploaded_t_123 *s = (const u_LeaderboardScoreUploaded_t_123 *)src;
+
+    d->m_bSuccess = s->m_bSuccess;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+    d->m_nScore = s->m_nScore;
+    d->m_bScoreChanged = s->m_bScoreChanged;
+    d->m_nGlobalRankNew = s->m_nGlobalRankNew;
+    d->m_nGlobalRankPrevious = s->m_nGlobalRankPrevious;
+}
+#ifdef __x86_64__
 u64_LeaderboardScoreUploaded_t_123::operator w64_LeaderboardScoreUploaded_t_123() const
 {
     w64_LeaderboardScoreUploaded_t_123 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
+    LeaderboardScoreUploaded_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12309,50 +12835,60 @@ u64_LeaderboardScoreUploaded_t_123::operator w64_LeaderboardScoreUploaded_t_123(
 w32_LeaderboardScoreUploaded_t_123::operator u32_LeaderboardScoreUploaded_t_123() const
 {
     u32_LeaderboardScoreUploaded_t_123 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
-    return ret;
-}
-
-u32_LeaderboardScoreUploaded_t_123::operator w32_LeaderboardScoreUploaded_t_123() const
-{
-    w32_LeaderboardScoreUploaded_t_123 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
+    LeaderboardScoreUploaded_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_LeaderboardScoreUploaded_t_123::operator w32_LeaderboardScoreUploaded_t_123() const
+{
+    w32_LeaderboardScoreUploaded_t_123 ret;
+    LeaderboardScoreUploaded_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void LeaderboardScoreUploaded_t_104_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardScoreUploaded_t_104 *d = (u_LeaderboardScoreUploaded_t_104 *)dst;
+    const w_LeaderboardScoreUploaded_t_104 *s = (const w_LeaderboardScoreUploaded_t_104 *)src;
+
+    d->m_bSuccess = s->m_bSuccess;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+    d->m_nScore = s->m_nScore;
+    d->m_bScoreChanged = s->m_bScoreChanged;
+    d->m_nGlobalRankNew = s->m_nGlobalRankNew;
+    d->m_nGlobalRankPrevious = s->m_nGlobalRankPrevious;
+}
 #ifdef __i386__
 w32_LeaderboardScoreUploaded_t_104::operator u32_LeaderboardScoreUploaded_t_104() const
 {
     u32_LeaderboardScoreUploaded_t_104 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
+    LeaderboardScoreUploaded_t_104_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardScoreUploaded_t_104_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardScoreUploaded_t_104 *d = (w_LeaderboardScoreUploaded_t_104 *)dst;
+    const u_LeaderboardScoreUploaded_t_104 *s = (const u_LeaderboardScoreUploaded_t_104 *)src;
+
+    d->m_bSuccess = s->m_bSuccess;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+    d->m_nScore = s->m_nScore;
+    d->m_bScoreChanged = s->m_bScoreChanged;
+    d->m_nGlobalRankNew = s->m_nGlobalRankNew;
+    d->m_nGlobalRankPrevious = s->m_nGlobalRankPrevious;
+}
+#ifdef __i386__
 u32_LeaderboardScoreUploaded_t_104::operator w32_LeaderboardScoreUploaded_t_104() const
 {
     w32_LeaderboardScoreUploaded_t_104 ret;
-    ret.m_bSuccess = this->m_bSuccess;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    ret.m_nScore = this->m_nScore;
-    ret.m_bScoreChanged = this->m_bScoreChanged;
-    ret.m_nGlobalRankNew = this->m_nGlobalRankNew;
-    ret.m_nGlobalRankPrevious = this->m_nGlobalRankPrevious;
+    LeaderboardScoreUploaded_t_104_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12405,20 +12941,37 @@ C_ASSERT( sizeof(u32_LeaderboardUGCSet_t_111x().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_LeaderboardUGCSet_t_111x, m_hSteamLeaderboard) == 4 );
 C_ASSERT( sizeof(u32_LeaderboardUGCSet_t_111x().m_hSteamLeaderboard) >= 8 );
 
+static void LeaderboardUGCSet_t_123_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardUGCSet_t_123 *d = (u_LeaderboardUGCSet_t_123 *)dst;
+    const w_LeaderboardUGCSet_t_123 *s = (const w_LeaderboardUGCSet_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+}
 #ifdef __x86_64__
 w64_LeaderboardUGCSet_t_123::operator u64_LeaderboardUGCSet_t_123() const
 {
     u64_LeaderboardUGCSet_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
+    LeaderboardUGCSet_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardUGCSet_t_123_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardUGCSet_t_123 *d = (w_LeaderboardUGCSet_t_123 *)dst;
+    const u_LeaderboardUGCSet_t_123 *s = (const u_LeaderboardUGCSet_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+}
+#ifdef __x86_64__
 u64_LeaderboardUGCSet_t_123::operator w64_LeaderboardUGCSet_t_123() const
 {
     w64_LeaderboardUGCSet_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
+    LeaderboardUGCSet_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12427,34 +12980,52 @@ u64_LeaderboardUGCSet_t_123::operator w64_LeaderboardUGCSet_t_123() const
 w32_LeaderboardUGCSet_t_123::operator u32_LeaderboardUGCSet_t_123() const
 {
     u32_LeaderboardUGCSet_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
-    return ret;
-}
-
-u32_LeaderboardUGCSet_t_123::operator w32_LeaderboardUGCSet_t_123() const
-{
-    w32_LeaderboardUGCSet_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
+    LeaderboardUGCSet_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_LeaderboardUGCSet_t_123::operator w32_LeaderboardUGCSet_t_123() const
+{
+    w32_LeaderboardUGCSet_t_123 ret;
+    LeaderboardUGCSet_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void LeaderboardUGCSet_t_111x_u_from_w(void *dst, const void *src)
+{
+    u_LeaderboardUGCSet_t_111x *d = (u_LeaderboardUGCSet_t_111x *)dst;
+    const w_LeaderboardUGCSet_t_111x *s = (const w_LeaderboardUGCSet_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+}
 #ifdef __i386__
 w32_LeaderboardUGCSet_t_111x::operator u32_LeaderboardUGCSet_t_111x() const
 {
     u32_LeaderboardUGCSet_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
+    LeaderboardUGCSet_t_111x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LeaderboardUGCSet_t_111x_w_from_u(void *dst, const void *src)
+{
+    w_LeaderboardUGCSet_t_111x *d = (w_LeaderboardUGCSet_t_111x *)dst;
+    const u_LeaderboardUGCSet_t_111x *s = (const u_LeaderboardUGCSet_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hSteamLeaderboard = s->m_hSteamLeaderboard;
+}
+#ifdef __i386__
 u32_LeaderboardUGCSet_t_111x::operator w32_LeaderboardUGCSet_t_111x() const
 {
     w32_LeaderboardUGCSet_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hSteamLeaderboard = this->m_hSteamLeaderboard;
+    LeaderboardUGCSet_t_111x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12507,20 +13078,37 @@ C_ASSERT( sizeof(u32_LobbyCreated_t_099u().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_LobbyCreated_t_099u, m_ulSteamIDLobby) == 4 );
 C_ASSERT( sizeof(u32_LobbyCreated_t_099u().m_ulSteamIDLobby) >= 8 );
 
+static void LobbyCreated_t_123_u_from_w(void *dst, const void *src)
+{
+    u_LobbyCreated_t_123 *d = (u_LobbyCreated_t_123 *)dst;
+    const w_LobbyCreated_t_123 *s = (const w_LobbyCreated_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulSteamIDLobby = s->m_ulSteamIDLobby;
+}
 #ifdef __x86_64__
 w64_LobbyCreated_t_123::operator u64_LobbyCreated_t_123() const
 {
     u64_LobbyCreated_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
+    LobbyCreated_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LobbyCreated_t_123_w_from_u(void *dst, const void *src)
+{
+    w_LobbyCreated_t_123 *d = (w_LobbyCreated_t_123 *)dst;
+    const u_LobbyCreated_t_123 *s = (const u_LobbyCreated_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulSteamIDLobby = s->m_ulSteamIDLobby;
+}
+#ifdef __x86_64__
 u64_LobbyCreated_t_123::operator w64_LobbyCreated_t_123() const
 {
     w64_LobbyCreated_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
+    LobbyCreated_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12529,34 +13117,52 @@ u64_LobbyCreated_t_123::operator w64_LobbyCreated_t_123() const
 w32_LobbyCreated_t_123::operator u32_LobbyCreated_t_123() const
 {
     u32_LobbyCreated_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
-    return ret;
-}
-
-u32_LobbyCreated_t_123::operator w32_LobbyCreated_t_123() const
-{
-    w32_LobbyCreated_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
+    LobbyCreated_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_LobbyCreated_t_123::operator w32_LobbyCreated_t_123() const
+{
+    w32_LobbyCreated_t_123 ret;
+    LobbyCreated_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void LobbyCreated_t_099u_u_from_w(void *dst, const void *src)
+{
+    u_LobbyCreated_t_099u *d = (u_LobbyCreated_t_099u *)dst;
+    const w_LobbyCreated_t_099u *s = (const w_LobbyCreated_t_099u *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulSteamIDLobby = s->m_ulSteamIDLobby;
+}
 #ifdef __i386__
 w32_LobbyCreated_t_099u::operator u32_LobbyCreated_t_099u() const
 {
     u32_LobbyCreated_t_099u ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
+    LobbyCreated_t_099u_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void LobbyCreated_t_099u_w_from_u(void *dst, const void *src)
+{
+    w_LobbyCreated_t_099u *d = (w_LobbyCreated_t_099u *)dst;
+    const u_LobbyCreated_t_099u *s = (const u_LobbyCreated_t_099u *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ulSteamIDLobby = s->m_ulSteamIDLobby;
+}
+#ifdef __i386__
 u32_LobbyCreated_t_099u::operator w32_LobbyCreated_t_099u() const
 {
     w32_LobbyCreated_t_099u ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulSteamIDLobby = this->m_ulSteamIDLobby;
+    LobbyCreated_t_099u_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12625,22 +13231,39 @@ C_ASSERT( sizeof(u32_MicroTxnAuthorizationResponse_t_109().m_ulOrderID) >= 8 );
 C_ASSERT( offsetof(u32_MicroTxnAuthorizationResponse_t_109, m_bAuthorized) == 12 );
 C_ASSERT( sizeof(u32_MicroTxnAuthorizationResponse_t_109().m_bAuthorized) >= 1 );
 
+static void MicroTxnAuthorizationResponse_t_123_u_from_w(void *dst, const void *src)
+{
+    u_MicroTxnAuthorizationResponse_t_123 *d = (u_MicroTxnAuthorizationResponse_t_123 *)dst;
+    const w_MicroTxnAuthorizationResponse_t_123 *s = (const w_MicroTxnAuthorizationResponse_t_123 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_bAuthorized = s->m_bAuthorized;
+}
 #ifdef __x86_64__
 w64_MicroTxnAuthorizationResponse_t_123::operator u64_MicroTxnAuthorizationResponse_t_123() const
 {
     u64_MicroTxnAuthorizationResponse_t_123 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
+    MicroTxnAuthorizationResponse_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void MicroTxnAuthorizationResponse_t_123_w_from_u(void *dst, const void *src)
+{
+    w_MicroTxnAuthorizationResponse_t_123 *d = (w_MicroTxnAuthorizationResponse_t_123 *)dst;
+    const u_MicroTxnAuthorizationResponse_t_123 *s = (const u_MicroTxnAuthorizationResponse_t_123 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_bAuthorized = s->m_bAuthorized;
+}
+#ifdef __x86_64__
 u64_MicroTxnAuthorizationResponse_t_123::operator w64_MicroTxnAuthorizationResponse_t_123() const
 {
     w64_MicroTxnAuthorizationResponse_t_123 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
+    MicroTxnAuthorizationResponse_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12649,38 +13272,54 @@ u64_MicroTxnAuthorizationResponse_t_123::operator w64_MicroTxnAuthorizationRespo
 w32_MicroTxnAuthorizationResponse_t_123::operator u32_MicroTxnAuthorizationResponse_t_123() const
 {
     u32_MicroTxnAuthorizationResponse_t_123 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
-    return ret;
-}
-
-u32_MicroTxnAuthorizationResponse_t_123::operator w32_MicroTxnAuthorizationResponse_t_123() const
-{
-    w32_MicroTxnAuthorizationResponse_t_123 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
+    MicroTxnAuthorizationResponse_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_MicroTxnAuthorizationResponse_t_123::operator w32_MicroTxnAuthorizationResponse_t_123() const
+{
+    w32_MicroTxnAuthorizationResponse_t_123 ret;
+    MicroTxnAuthorizationResponse_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void MicroTxnAuthorizationResponse_t_109_u_from_w(void *dst, const void *src)
+{
+    u_MicroTxnAuthorizationResponse_t_109 *d = (u_MicroTxnAuthorizationResponse_t_109 *)dst;
+    const w_MicroTxnAuthorizationResponse_t_109 *s = (const w_MicroTxnAuthorizationResponse_t_109 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_bAuthorized = s->m_bAuthorized;
+}
 #ifdef __i386__
 w32_MicroTxnAuthorizationResponse_t_109::operator u32_MicroTxnAuthorizationResponse_t_109() const
 {
     u32_MicroTxnAuthorizationResponse_t_109 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
+    MicroTxnAuthorizationResponse_t_109_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void MicroTxnAuthorizationResponse_t_109_w_from_u(void *dst, const void *src)
+{
+    w_MicroTxnAuthorizationResponse_t_109 *d = (w_MicroTxnAuthorizationResponse_t_109 *)dst;
+    const u_MicroTxnAuthorizationResponse_t_109 *s = (const u_MicroTxnAuthorizationResponse_t_109 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_bAuthorized = s->m_bAuthorized;
+}
+#ifdef __i386__
 u32_MicroTxnAuthorizationResponse_t_109::operator w32_MicroTxnAuthorizationResponse_t_109() const
 {
     w32_MicroTxnAuthorizationResponse_t_109 ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_bAuthorized = this->m_bAuthorized;
+    MicroTxnAuthorizationResponse_t_109_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12749,22 +13388,39 @@ C_ASSERT( sizeof(u32_PS3TrophiesInstalled_t_112x().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_PS3TrophiesInstalled_t_112x, m_ulRequiredDiskSpace) == 12 );
 C_ASSERT( sizeof(u32_PS3TrophiesInstalled_t_112x().m_ulRequiredDiskSpace) >= 8 );
 
+static void PS3TrophiesInstalled_t_123_u_from_w(void *dst, const void *src)
+{
+    u_PS3TrophiesInstalled_t_123 *d = (u_PS3TrophiesInstalled_t_123 *)dst;
+    const w_PS3TrophiesInstalled_t_123 *s = (const w_PS3TrophiesInstalled_t_123 *)src;
+
+    d->m_nGameID = s->m_nGameID;
+    d->m_eResult = s->m_eResult;
+    d->m_ulRequiredDiskSpace = s->m_ulRequiredDiskSpace;
+}
 #ifdef __x86_64__
 w64_PS3TrophiesInstalled_t_123::operator u64_PS3TrophiesInstalled_t_123() const
 {
     u64_PS3TrophiesInstalled_t_123 ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
+    PS3TrophiesInstalled_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void PS3TrophiesInstalled_t_123_w_from_u(void *dst, const void *src)
+{
+    w_PS3TrophiesInstalled_t_123 *d = (w_PS3TrophiesInstalled_t_123 *)dst;
+    const u_PS3TrophiesInstalled_t_123 *s = (const u_PS3TrophiesInstalled_t_123 *)src;
+
+    d->m_nGameID = s->m_nGameID;
+    d->m_eResult = s->m_eResult;
+    d->m_ulRequiredDiskSpace = s->m_ulRequiredDiskSpace;
+}
+#ifdef __x86_64__
 u64_PS3TrophiesInstalled_t_123::operator w64_PS3TrophiesInstalled_t_123() const
 {
     w64_PS3TrophiesInstalled_t_123 ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
+    PS3TrophiesInstalled_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12773,38 +13429,54 @@ u64_PS3TrophiesInstalled_t_123::operator w64_PS3TrophiesInstalled_t_123() const
 w32_PS3TrophiesInstalled_t_123::operator u32_PS3TrophiesInstalled_t_123() const
 {
     u32_PS3TrophiesInstalled_t_123 ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
-    return ret;
-}
-
-u32_PS3TrophiesInstalled_t_123::operator w32_PS3TrophiesInstalled_t_123() const
-{
-    w32_PS3TrophiesInstalled_t_123 ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
+    PS3TrophiesInstalled_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_PS3TrophiesInstalled_t_123::operator w32_PS3TrophiesInstalled_t_123() const
+{
+    w32_PS3TrophiesInstalled_t_123 ret;
+    PS3TrophiesInstalled_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void PS3TrophiesInstalled_t_112x_u_from_w(void *dst, const void *src)
+{
+    u_PS3TrophiesInstalled_t_112x *d = (u_PS3TrophiesInstalled_t_112x *)dst;
+    const w_PS3TrophiesInstalled_t_112x *s = (const w_PS3TrophiesInstalled_t_112x *)src;
+
+    d->m_nGameID = s->m_nGameID;
+    d->m_eResult = s->m_eResult;
+    d->m_ulRequiredDiskSpace = s->m_ulRequiredDiskSpace;
+}
 #ifdef __i386__
 w32_PS3TrophiesInstalled_t_112x::operator u32_PS3TrophiesInstalled_t_112x() const
 {
     u32_PS3TrophiesInstalled_t_112x ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
+    PS3TrophiesInstalled_t_112x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void PS3TrophiesInstalled_t_112x_w_from_u(void *dst, const void *src)
+{
+    w_PS3TrophiesInstalled_t_112x *d = (w_PS3TrophiesInstalled_t_112x *)dst;
+    const u_PS3TrophiesInstalled_t_112x *s = (const u_PS3TrophiesInstalled_t_112x *)src;
+
+    d->m_nGameID = s->m_nGameID;
+    d->m_eResult = s->m_eResult;
+    d->m_ulRequiredDiskSpace = s->m_ulRequiredDiskSpace;
+}
+#ifdef __i386__
 u32_PS3TrophiesInstalled_t_112x::operator w32_PS3TrophiesInstalled_t_112x() const
 {
     w32_PS3TrophiesInstalled_t_112x ret;
-    ret.m_nGameID = this->m_nGameID;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ulRequiredDiskSpace = this->m_ulRequiredDiskSpace;
+    PS3TrophiesInstalled_t_112x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12905,26 +13577,43 @@ C_ASSERT( sizeof(u32_RemoteStorageAppSyncProgress_t_111x().m_dAppPercentComplete
 C_ASSERT( offsetof(u32_RemoteStorageAppSyncProgress_t_111x, m_bUploading) == 276 );
 C_ASSERT( sizeof(u32_RemoteStorageAppSyncProgress_t_111x().m_bUploading) >= 1 );
 
+static void RemoteStorageAppSyncProgress_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageAppSyncProgress_t_123 *d = (u_RemoteStorageAppSyncProgress_t_123 *)dst;
+    const w_RemoteStorageAppSyncProgress_t_123 *s = (const w_RemoteStorageAppSyncProgress_t_123 *)src;
+
+    d->m_rgchCurrentFile = s->m_rgchCurrentFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_uBytesTransferredThisChunk = s->m_uBytesTransferredThisChunk;
+    d->m_dAppPercentComplete = s->m_dAppPercentComplete;
+    d->m_bUploading = s->m_bUploading;
+}
 #ifdef __x86_64__
 w64_RemoteStorageAppSyncProgress_t_123::operator u64_RemoteStorageAppSyncProgress_t_123() const
 {
     u64_RemoteStorageAppSyncProgress_t_123 ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
+    RemoteStorageAppSyncProgress_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageAppSyncProgress_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageAppSyncProgress_t_123 *d = (w_RemoteStorageAppSyncProgress_t_123 *)dst;
+    const u_RemoteStorageAppSyncProgress_t_123 *s = (const u_RemoteStorageAppSyncProgress_t_123 *)src;
+
+    d->m_rgchCurrentFile = s->m_rgchCurrentFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_uBytesTransferredThisChunk = s->m_uBytesTransferredThisChunk;
+    d->m_dAppPercentComplete = s->m_dAppPercentComplete;
+    d->m_bUploading = s->m_bUploading;
+}
+#ifdef __x86_64__
 u64_RemoteStorageAppSyncProgress_t_123::operator w64_RemoteStorageAppSyncProgress_t_123() const
 {
     w64_RemoteStorageAppSyncProgress_t_123 ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
+    RemoteStorageAppSyncProgress_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -12933,46 +13622,58 @@ u64_RemoteStorageAppSyncProgress_t_123::operator w64_RemoteStorageAppSyncProgres
 w32_RemoteStorageAppSyncProgress_t_123::operator u32_RemoteStorageAppSyncProgress_t_123() const
 {
     u32_RemoteStorageAppSyncProgress_t_123 ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
-    return ret;
-}
-
-u32_RemoteStorageAppSyncProgress_t_123::operator w32_RemoteStorageAppSyncProgress_t_123() const
-{
-    w32_RemoteStorageAppSyncProgress_t_123 ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
+    RemoteStorageAppSyncProgress_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageAppSyncProgress_t_123::operator w32_RemoteStorageAppSyncProgress_t_123() const
+{
+    w32_RemoteStorageAppSyncProgress_t_123 ret;
+    RemoteStorageAppSyncProgress_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageAppSyncProgress_t_111x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageAppSyncProgress_t_111x *d = (u_RemoteStorageAppSyncProgress_t_111x *)dst;
+    const w_RemoteStorageAppSyncProgress_t_111x *s = (const w_RemoteStorageAppSyncProgress_t_111x *)src;
+
+    d->m_rgchCurrentFile = s->m_rgchCurrentFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_uBytesTransferredThisChunk = s->m_uBytesTransferredThisChunk;
+    d->m_dAppPercentComplete = s->m_dAppPercentComplete;
+    d->m_bUploading = s->m_bUploading;
+}
 #ifdef __i386__
 w32_RemoteStorageAppSyncProgress_t_111x::operator u32_RemoteStorageAppSyncProgress_t_111x() const
 {
     u32_RemoteStorageAppSyncProgress_t_111x ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
+    RemoteStorageAppSyncProgress_t_111x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageAppSyncProgress_t_111x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageAppSyncProgress_t_111x *d = (w_RemoteStorageAppSyncProgress_t_111x *)dst;
+    const u_RemoteStorageAppSyncProgress_t_111x *s = (const u_RemoteStorageAppSyncProgress_t_111x *)src;
+
+    d->m_rgchCurrentFile = s->m_rgchCurrentFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_uBytesTransferredThisChunk = s->m_uBytesTransferredThisChunk;
+    d->m_dAppPercentComplete = s->m_dAppPercentComplete;
+    d->m_bUploading = s->m_bUploading;
+}
+#ifdef __i386__
 u32_RemoteStorageAppSyncProgress_t_111x::operator w32_RemoteStorageAppSyncProgress_t_111x() const
 {
     w32_RemoteStorageAppSyncProgress_t_111x ret;
-    ret.m_rgchCurrentFile = this->m_rgchCurrentFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_uBytesTransferredThisChunk = this->m_uBytesTransferredThisChunk;
-    ret.m_dAppPercentComplete = this->m_dAppPercentComplete;
-    ret.m_bUploading = this->m_bUploading;
+    RemoteStorageAppSyncProgress_t_111x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13025,20 +13726,37 @@ C_ASSERT( sizeof(u32_RemoteStorageDeletePublishedFileResult_t_116x().m_eResult) 
 C_ASSERT( offsetof(u32_RemoteStorageDeletePublishedFileResult_t_116x, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_RemoteStorageDeletePublishedFileResult_t_116x().m_nPublishedFileId) >= 8 );
 
+static void RemoteStorageDeletePublishedFileResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageDeletePublishedFileResult_t_123 *d = (u_RemoteStorageDeletePublishedFileResult_t_123 *)dst;
+    const w_RemoteStorageDeletePublishedFileResult_t_123 *s = (const w_RemoteStorageDeletePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageDeletePublishedFileResult_t_123::operator u64_RemoteStorageDeletePublishedFileResult_t_123() const
 {
     u64_RemoteStorageDeletePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageDeletePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageDeletePublishedFileResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageDeletePublishedFileResult_t_123 *d = (w_RemoteStorageDeletePublishedFileResult_t_123 *)dst;
+    const u_RemoteStorageDeletePublishedFileResult_t_123 *s = (const u_RemoteStorageDeletePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageDeletePublishedFileResult_t_123::operator w64_RemoteStorageDeletePublishedFileResult_t_123() const
 {
     w64_RemoteStorageDeletePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageDeletePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13047,34 +13765,52 @@ u64_RemoteStorageDeletePublishedFileResult_t_123::operator w64_RemoteStorageDele
 w32_RemoteStorageDeletePublishedFileResult_t_123::operator u32_RemoteStorageDeletePublishedFileResult_t_123() const
 {
     u32_RemoteStorageDeletePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStorageDeletePublishedFileResult_t_123::operator w32_RemoteStorageDeletePublishedFileResult_t_123() const
-{
-    w32_RemoteStorageDeletePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageDeletePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageDeletePublishedFileResult_t_123::operator w32_RemoteStorageDeletePublishedFileResult_t_123() const
+{
+    w32_RemoteStorageDeletePublishedFileResult_t_123 ret;
+    RemoteStorageDeletePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageDeletePublishedFileResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageDeletePublishedFileResult_t_116x *d = (u_RemoteStorageDeletePublishedFileResult_t_116x *)dst;
+    const w_RemoteStorageDeletePublishedFileResult_t_116x *s = (const w_RemoteStorageDeletePublishedFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStorageDeletePublishedFileResult_t_116x::operator u32_RemoteStorageDeletePublishedFileResult_t_116x() const
 {
     u32_RemoteStorageDeletePublishedFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageDeletePublishedFileResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageDeletePublishedFileResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageDeletePublishedFileResult_t_116x *d = (w_RemoteStorageDeletePublishedFileResult_t_116x *)dst;
+    const u_RemoteStorageDeletePublishedFileResult_t_116x *s = (const u_RemoteStorageDeletePublishedFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStorageDeletePublishedFileResult_t_116x::operator w32_RemoteStorageDeletePublishedFileResult_t_116x() const
 {
     w32_RemoteStorageDeletePublishedFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageDeletePublishedFileResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13247,28 +13983,45 @@ C_ASSERT( sizeof(u32_RemoteStorageDownloadUGCResult_t_111x().m_pchFileName) >= 4
 C_ASSERT( offsetof(u32_RemoteStorageDownloadUGCResult_t_111x, m_ulSteamIDOwner) == 24 );
 C_ASSERT( sizeof(u32_RemoteStorageDownloadUGCResult_t_111x().m_ulSteamIDOwner) >= 8 );
 
+static void RemoteStorageDownloadUGCResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageDownloadUGCResult_t_123 *d = (u_RemoteStorageDownloadUGCResult_t_123 *)dst;
+    const w_RemoteStorageDownloadUGCResult_t_123 *s = (const w_RemoteStorageDownloadUGCResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
 #ifdef __x86_64__
 w64_RemoteStorageDownloadUGCResult_t_123::operator u64_RemoteStorageDownloadUGCResult_t_123() const
 {
     u64_RemoteStorageDownloadUGCResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageDownloadUGCResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageDownloadUGCResult_t_123 *d = (w_RemoteStorageDownloadUGCResult_t_123 *)dst;
+    const u_RemoteStorageDownloadUGCResult_t_123 *s = (const u_RemoteStorageDownloadUGCResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
+#ifdef __x86_64__
 u64_RemoteStorageDownloadUGCResult_t_123::operator w64_RemoteStorageDownloadUGCResult_t_123() const
 {
     w64_RemoteStorageDownloadUGCResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13277,76 +14030,103 @@ u64_RemoteStorageDownloadUGCResult_t_123::operator w64_RemoteStorageDownloadUGCR
 w32_RemoteStorageDownloadUGCResult_t_123::operator u32_RemoteStorageDownloadUGCResult_t_123() const
 {
     u32_RemoteStorageDownloadUGCResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    return ret;
-}
-
-u32_RemoteStorageDownloadUGCResult_t_123::operator w32_RemoteStorageDownloadUGCResult_t_123() const
-{
-    w32_RemoteStorageDownloadUGCResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageDownloadUGCResult_t_123::operator w32_RemoteStorageDownloadUGCResult_t_123() const
+{
+    w32_RemoteStorageDownloadUGCResult_t_123 ret;
+    RemoteStorageDownloadUGCResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageDownloadUGCResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageDownloadUGCResult_t_116x *d = (u_RemoteStorageDownloadUGCResult_t_116x *)dst;
+    const w_RemoteStorageDownloadUGCResult_t_116x *s = (const w_RemoteStorageDownloadUGCResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
 #ifdef __i386__
 w32_RemoteStorageDownloadUGCResult_t_116x::operator u32_RemoteStorageDownloadUGCResult_t_116x() const
 {
     u32_RemoteStorageDownloadUGCResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    return ret;
-}
-
-u32_RemoteStorageDownloadUGCResult_t_116x::operator w32_RemoteStorageDownloadUGCResult_t_116x() const
-{
-    w32_RemoteStorageDownloadUGCResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+static void RemoteStorageDownloadUGCResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageDownloadUGCResult_t_116x *d = (w_RemoteStorageDownloadUGCResult_t_116x *)dst;
+    const u_RemoteStorageDownloadUGCResult_t_116x *s = (const u_RemoteStorageDownloadUGCResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
+#ifdef __i386__
+u32_RemoteStorageDownloadUGCResult_t_116x::operator w32_RemoteStorageDownloadUGCResult_t_116x() const
+{
+    w32_RemoteStorageDownloadUGCResult_t_116x ret;
+    RemoteStorageDownloadUGCResult_t_116x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageDownloadUGCResult_t_111x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageDownloadUGCResult_t_111x *d = (u_RemoteStorageDownloadUGCResult_t_111x *)dst;
+    const w_RemoteStorageDownloadUGCResult_t_111x *s = (const w_RemoteStorageDownloadUGCResult_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
 #ifdef __i386__
 w32_RemoteStorageDownloadUGCResult_t_111x::operator u32_RemoteStorageDownloadUGCResult_t_111x() const
 {
     u32_RemoteStorageDownloadUGCResult_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_111x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageDownloadUGCResult_t_111x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageDownloadUGCResult_t_111x *d = (w_RemoteStorageDownloadUGCResult_t_111x *)dst;
+    const u_RemoteStorageDownloadUGCResult_t_111x *s = (const u_RemoteStorageDownloadUGCResult_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_nAppID = s->m_nAppID;
+    d->m_nSizeInBytes = s->m_nSizeInBytes;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+}
+#ifdef __i386__
 u32_RemoteStorageDownloadUGCResult_t_111x::operator w32_RemoteStorageDownloadUGCResult_t_111x() const
 {
     w32_RemoteStorageDownloadUGCResult_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_nSizeInBytes = this->m_nSizeInBytes;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
+    RemoteStorageDownloadUGCResult_t_111x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13431,24 +14211,41 @@ C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x().m_n
 C_ASSERT( offsetof(u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x, m_rgPublishedFileId) == 12 );
 C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x().m_rgPublishedFileId) >= 400 );
 
+static void RemoteStorageEnumerateUserPublishedFilesResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *d = (u_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)dst;
+    const w_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *s = (const w_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123() const
 {
     u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *d = (w_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)dst;
+    const u_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *s = (const u_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator w64_RemoteStorageEnumerateUserPublishedFilesResult_t_123() const
 {
     w64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13457,42 +14254,56 @@ u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator w64_RemoteSto
 w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123() const
 {
     u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123() const
-{
-    w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123::operator w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123() const
+{
+    w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 ret;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageEnumerateUserPublishedFilesResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *d = (u_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)dst;
+    const w_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *s = (const w_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x::operator u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x() const
 {
     u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *d = (w_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)dst;
+    const u_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *s = (const u_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x::operator w32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x() const
 {
     w32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13577,24 +14388,41 @@ C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119()
 C_ASSERT( offsetof(u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119, m_rgPublishedFileId) == 12 );
 C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119().m_rgPublishedFileId) >= 400 );
 
+static void RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *d = (u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)dst;
+    const w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *s = (const w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123() const
 {
     u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *d = (w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)dst;
+    const u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *s = (const u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123() const
 {
     w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13603,42 +14431,56 @@ u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator w64_Remo
 w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123() const
 {
     u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123() const
-{
-    w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123::operator w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123() const
+{
+    w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 ret;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *d = (u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)dst;
+    const w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *s = (const w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119::operator u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119() const
 {
     u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *d = (w_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)dst;
+    const u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *s = (const u_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119::operator w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119() const
 {
     w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
+    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13739,26 +14581,43 @@ C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x().m_
 C_ASSERT( offsetof(u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x, m_rgRTimeSubscribed) == 412 );
 C_ASSERT( sizeof(u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x().m_rgRTimeSubscribed) >= 200 );
 
+static void RemoteStorageEnumerateUserSubscribedFilesResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *d = (u_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)dst;
+    const w_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *s = (const w_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgRTimeSubscribed = s->m_rgRTimeSubscribed;
+}
 #ifdef __x86_64__
 w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123() const
 {
     u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *d = (w_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)dst;
+    const u_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *s = (const u_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgRTimeSubscribed = s->m_rgRTimeSubscribed;
+}
+#ifdef __x86_64__
 u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123() const
 {
     w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13767,46 +14626,58 @@ u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator w64_RemoteSt
 w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123() const
 {
     u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
-    return ret;
-}
-
-u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123() const
-{
-    w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123::operator w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123() const
+{
+    w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 ret;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *d = (u_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)dst;
+    const w_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *s = (const w_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgRTimeSubscribed = s->m_rgRTimeSubscribed;
+}
 #ifdef __i386__
 w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x::operator u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x() const
 {
     u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *d = (w_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)dst;
+    const u_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *s = (const u_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgRTimeSubscribed = s->m_rgRTimeSubscribed;
+}
+#ifdef __i386__
 u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x::operator w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x() const
 {
     w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgRTimeSubscribed = this->m_rgRTimeSubscribed;
+    RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -13971,30 +14842,47 @@ C_ASSERT( sizeof(u32_RemoteStorageEnumerateWorkshopFilesResult_t_119().m_rgPubli
 C_ASSERT( offsetof(u32_RemoteStorageEnumerateWorkshopFilesResult_t_119, m_rgScore) == 412 );
 C_ASSERT( sizeof(u32_RemoteStorageEnumerateWorkshopFilesResult_t_119().m_rgScore) >= 200 );
 
+static void RemoteStorageEnumerateWorkshopFilesResult_t_125_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateWorkshopFilesResult_t_125 *d = (u_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)dst;
+    const w_RemoteStorageEnumerateWorkshopFilesResult_t_125 *s = (const w_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+    d->m_nAppId = s->m_nAppId;
+    d->m_unStartIndex = s->m_unStartIndex;
+}
 #ifdef __x86_64__
 w64_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator u64_RemoteStorageEnumerateWorkshopFilesResult_t_125() const
 {
     u64_RemoteStorageEnumerateWorkshopFilesResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
-    ret.m_nAppId = this->m_nAppId;
-    ret.m_unStartIndex = this->m_unStartIndex;
+    RemoteStorageEnumerateWorkshopFilesResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateWorkshopFilesResult_t_125 *d = (w_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)dst;
+    const u_RemoteStorageEnumerateWorkshopFilesResult_t_125 *s = (const u_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+    d->m_nAppId = s->m_nAppId;
+    d->m_unStartIndex = s->m_unStartIndex;
+}
+#ifdef __x86_64__
 u64_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator w64_RemoteStorageEnumerateWorkshopFilesResult_t_125() const
 {
     w64_RemoteStorageEnumerateWorkshopFilesResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
-    ret.m_nAppId = this->m_nAppId;
-    ret.m_unStartIndex = this->m_unStartIndex;
+    RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -14003,50 +14891,58 @@ u64_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator w64_RemoteStorageE
 w32_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator u32_RemoteStorageEnumerateWorkshopFilesResult_t_125() const
 {
     u32_RemoteStorageEnumerateWorkshopFilesResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
-    ret.m_nAppId = this->m_nAppId;
-    ret.m_unStartIndex = this->m_unStartIndex;
-    return ret;
-}
-
-u32_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator w32_RemoteStorageEnumerateWorkshopFilesResult_t_125() const
-{
-    w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
-    ret.m_nAppId = this->m_nAppId;
-    ret.m_unStartIndex = this->m_unStartIndex;
+    RemoteStorageEnumerateWorkshopFilesResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageEnumerateWorkshopFilesResult_t_125::operator w32_RemoteStorageEnumerateWorkshopFilesResult_t_125() const
+{
+    w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 ret;
+    RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageEnumerateWorkshopFilesResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateWorkshopFilesResult_t_123 *d = (u_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)dst;
+    const w_RemoteStorageEnumerateWorkshopFilesResult_t_123 *s = (const w_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+}
 #ifdef __x86_64__
 w64_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator u64_RemoteStorageEnumerateWorkshopFilesResult_t_123() const
 {
     u64_RemoteStorageEnumerateWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
+    RemoteStorageEnumerateWorkshopFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateWorkshopFilesResult_t_123 *d = (w_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)dst;
+    const u_RemoteStorageEnumerateWorkshopFilesResult_t_123 *s = (const u_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+}
+#ifdef __x86_64__
 u64_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator w64_RemoteStorageEnumerateWorkshopFilesResult_t_123() const
 {
     w64_RemoteStorageEnumerateWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
+    RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -14055,46 +14951,58 @@ u64_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator w64_RemoteStorageE
 w32_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator u32_RemoteStorageEnumerateWorkshopFilesResult_t_123() const
 {
     u32_RemoteStorageEnumerateWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
-    return ret;
-}
-
-u32_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator w32_RemoteStorageEnumerateWorkshopFilesResult_t_123() const
-{
-    w32_RemoteStorageEnumerateWorkshopFilesResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
+    RemoteStorageEnumerateWorkshopFilesResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageEnumerateWorkshopFilesResult_t_123::operator w32_RemoteStorageEnumerateWorkshopFilesResult_t_123() const
+{
+    w32_RemoteStorageEnumerateWorkshopFilesResult_t_123 ret;
+    RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageEnumerateWorkshopFilesResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageEnumerateWorkshopFilesResult_t_119 *d = (u_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)dst;
+    const w_RemoteStorageEnumerateWorkshopFilesResult_t_119 *s = (const w_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+}
 #ifdef __i386__
 w32_RemoteStorageEnumerateWorkshopFilesResult_t_119::operator u32_RemoteStorageEnumerateWorkshopFilesResult_t_119() const
 {
     u32_RemoteStorageEnumerateWorkshopFilesResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
+    RemoteStorageEnumerateWorkshopFilesResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageEnumerateWorkshopFilesResult_t_119 *d = (w_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)dst;
+    const u_RemoteStorageEnumerateWorkshopFilesResult_t_119 *s = (const u_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nResultsReturned = s->m_nResultsReturned;
+    d->m_nTotalResultCount = s->m_nTotalResultCount;
+    d->m_rgPublishedFileId = s->m_rgPublishedFileId;
+    d->m_rgScore = s->m_rgScore;
+}
+#ifdef __i386__
 u32_RemoteStorageEnumerateWorkshopFilesResult_t_119::operator w32_RemoteStorageEnumerateWorkshopFilesResult_t_119() const
 {
     w32_RemoteStorageEnumerateWorkshopFilesResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nResultsReturned = this->m_nResultsReturned;
-    ret.m_nTotalResultCount = this->m_nTotalResultCount;
-    ret.m_rgPublishedFileId = this->m_rgPublishedFileId;
-    ret.m_rgScore = this->m_rgScore;
+    RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -14179,22 +15087,39 @@ C_ASSERT( sizeof(u32_RemoteStorageFileShareResult_t_111x().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_RemoteStorageFileShareResult_t_111x, m_hFile) == 4 );
 C_ASSERT( sizeof(u32_RemoteStorageFileShareResult_t_111x().m_hFile) >= 8 );
 
+static void RemoteStorageFileShareResult_t_128x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageFileShareResult_t_128x *d = (u_RemoteStorageFileShareResult_t_128x *)dst;
+    const w_RemoteStorageFileShareResult_t_128x *s = (const w_RemoteStorageFileShareResult_t_128x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_rgchFilename = s->m_rgchFilename;
+}
 #ifdef __x86_64__
 w64_RemoteStorageFileShareResult_t_128x::operator u64_RemoteStorageFileShareResult_t_128x() const
 {
     u64_RemoteStorageFileShareResult_t_128x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_rgchFilename = this->m_rgchFilename;
+    RemoteStorageFileShareResult_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageFileShareResult_t_128x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageFileShareResult_t_128x *d = (w_RemoteStorageFileShareResult_t_128x *)dst;
+    const u_RemoteStorageFileShareResult_t_128x *s = (const u_RemoteStorageFileShareResult_t_128x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+    d->m_rgchFilename = s->m_rgchFilename;
+}
+#ifdef __x86_64__
 u64_RemoteStorageFileShareResult_t_128x::operator w64_RemoteStorageFileShareResult_t_128x() const
 {
     w64_RemoteStorageFileShareResult_t_128x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_rgchFilename = this->m_rgchFilename;
+    RemoteStorageFileShareResult_t_128x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -14203,36 +15128,52 @@ u64_RemoteStorageFileShareResult_t_128x::operator w64_RemoteStorageFileShareResu
 w32_RemoteStorageFileShareResult_t_128x::operator u32_RemoteStorageFileShareResult_t_128x() const
 {
     u32_RemoteStorageFileShareResult_t_128x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_rgchFilename = this->m_rgchFilename;
-    return ret;
-}
-
-u32_RemoteStorageFileShareResult_t_128x::operator w32_RemoteStorageFileShareResult_t_128x() const
-{
-    w32_RemoteStorageFileShareResult_t_128x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    ret.m_rgchFilename = this->m_rgchFilename;
+    RemoteStorageFileShareResult_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageFileShareResult_t_128x::operator w32_RemoteStorageFileShareResult_t_128x() const
+{
+    w32_RemoteStorageFileShareResult_t_128x ret;
+    RemoteStorageFileShareResult_t_128x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageFileShareResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageFileShareResult_t_123 *d = (u_RemoteStorageFileShareResult_t_123 *)dst;
+    const w_RemoteStorageFileShareResult_t_123 *s = (const w_RemoteStorageFileShareResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+}
 #ifdef __x86_64__
 w64_RemoteStorageFileShareResult_t_123::operator u64_RemoteStorageFileShareResult_t_123() const
 {
     u64_RemoteStorageFileShareResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
+    RemoteStorageFileShareResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageFileShareResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageFileShareResult_t_123 *d = (w_RemoteStorageFileShareResult_t_123 *)dst;
+    const u_RemoteStorageFileShareResult_t_123 *s = (const u_RemoteStorageFileShareResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+}
+#ifdef __x86_64__
 u64_RemoteStorageFileShareResult_t_123::operator w64_RemoteStorageFileShareResult_t_123() const
 {
     w64_RemoteStorageFileShareResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
+    RemoteStorageFileShareResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -14241,34 +15182,52 @@ u64_RemoteStorageFileShareResult_t_123::operator w64_RemoteStorageFileShareResul
 w32_RemoteStorageFileShareResult_t_123::operator u32_RemoteStorageFileShareResult_t_123() const
 {
     u32_RemoteStorageFileShareResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
-    return ret;
-}
-
-u32_RemoteStorageFileShareResult_t_123::operator w32_RemoteStorageFileShareResult_t_123() const
-{
-    w32_RemoteStorageFileShareResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
+    RemoteStorageFileShareResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageFileShareResult_t_123::operator w32_RemoteStorageFileShareResult_t_123() const
+{
+    w32_RemoteStorageFileShareResult_t_123 ret;
+    RemoteStorageFileShareResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageFileShareResult_t_111x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageFileShareResult_t_111x *d = (u_RemoteStorageFileShareResult_t_111x *)dst;
+    const w_RemoteStorageFileShareResult_t_111x *s = (const w_RemoteStorageFileShareResult_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+}
 #ifdef __i386__
 w32_RemoteStorageFileShareResult_t_111x::operator u32_RemoteStorageFileShareResult_t_111x() const
 {
     u32_RemoteStorageFileShareResult_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
+    RemoteStorageFileShareResult_t_111x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageFileShareResult_t_111x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageFileShareResult_t_111x *d = (w_RemoteStorageFileShareResult_t_111x *)dst;
+    const u_RemoteStorageFileShareResult_t_111x *s = (const u_RemoteStorageFileShareResult_t_111x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_hFile = s->m_hFile;
+}
+#ifdef __i386__
 u32_RemoteStorageFileShareResult_t_111x::operator w32_RemoteStorageFileShareResult_t_111x() const
 {
     w32_RemoteStorageFileShareResult_t_111x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_hFile = this->m_hFile;
+    RemoteStorageFileShareResult_t_111x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15233,58 +16192,75 @@ C_ASSERT( sizeof(u32_RemoteStorageGetPublishedFileDetailsResult_t_116x().m_bTags
 C_ASSERT( offsetof(u32_RemoteStorageGetPublishedFileDetailsResult_t_116x, m_pchFileName) == 1471 );
 C_ASSERT( sizeof(u32_RemoteStorageGetPublishedFileDetailsResult_t_116x().m_pchFileName) >= 260 );
 
+static void RemoteStorageGetPublishedFileDetailsResult_t_126_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_126 *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_126 *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_126 *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_126 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+}
 #ifdef __x86_64__
 w64_RemoteStorageGetPublishedFileDetailsResult_t_126::operator u64_RemoteStorageGetPublishedFileDetailsResult_t_126() const
 {
     u64_RemoteStorageGetPublishedFileDetailsResult_t_126 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
+    RemoteStorageGetPublishedFileDetailsResult_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_126 *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_126 *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_126 *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_126 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+}
+#ifdef __x86_64__
 u64_RemoteStorageGetPublishedFileDetailsResult_t_126::operator w64_RemoteStorageGetPublishedFileDetailsResult_t_126() const
 {
     w64_RemoteStorageGetPublishedFileDetailsResult_t_126 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
+    RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15293,108 +16269,88 @@ u64_RemoteStorageGetPublishedFileDetailsResult_t_126::operator w64_RemoteStorage
 w32_RemoteStorageGetPublishedFileDetailsResult_t_126::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_126() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_126 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedFileDetailsResult_t_126::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_126() const
-{
-    w32_RemoteStorageGetPublishedFileDetailsResult_t_126 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    ret.m_bAcceptedForUse = this->m_bAcceptedForUse;
+    RemoteStorageGetPublishedFileDetailsResult_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageGetPublishedFileDetailsResult_t_126::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_126() const
+{
+    w32_RemoteStorageGetPublishedFileDetailsResult_t_126 ret;
+    RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_123 *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_123 *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_123 *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+}
 #ifdef __x86_64__
 w64_RemoteStorageGetPublishedFileDetailsResult_t_123::operator u64_RemoteStorageGetPublishedFileDetailsResult_t_123() const
 {
     u64_RemoteStorageGetPublishedFileDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
+    RemoteStorageGetPublishedFileDetailsResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_123 *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_123 *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_123 *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+}
+#ifdef __x86_64__
 u64_RemoteStorageGetPublishedFileDetailsResult_t_123::operator w64_RemoteStorageGetPublishedFileDetailsResult_t_123() const
 {
     w64_RemoteStorageGetPublishedFileDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
+    RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15403,254 +16359,287 @@ u64_RemoteStorageGetPublishedFileDetailsResult_t_123::operator w64_RemoteStorage
 w32_RemoteStorageGetPublishedFileDetailsResult_t_123::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_123() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedFileDetailsResult_t_123::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_123() const
-{
-    w32_RemoteStorageGetPublishedFileDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
+    RemoteStorageGetPublishedFileDetailsResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageGetPublishedFileDetailsResult_t_123::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_123() const
+{
+    w32_RemoteStorageGetPublishedFileDetailsResult_t_123 ret;
+    RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_119x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_119x *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_119x *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_119x *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_119x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+}
 #ifdef __i386__
 w32_RemoteStorageGetPublishedFileDetailsResult_t_119x::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_119x() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_119x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedFileDetailsResult_t_119x::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_119x() const
-{
-    w32_RemoteStorageGetPublishedFileDetailsResult_t_119x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    ret.m_eFileType = this->m_eFileType;
+    RemoteStorageGetPublishedFileDetailsResult_t_119x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_119x *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_119x *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_119x *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_119x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_eFileType = s->m_eFileType;
+}
+#ifdef __i386__
+u32_RemoteStorageGetPublishedFileDetailsResult_t_119x::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_119x() const
+{
+    w32_RemoteStorageGetPublishedFileDetailsResult_t_119x ret;
+    RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_119 *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_119 *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_119 *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+}
 #ifdef __i386__
 w32_RemoteStorageGetPublishedFileDetailsResult_t_119::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_119() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedFileDetailsResult_t_119::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_119() const
-{
-    w32_RemoteStorageGetPublishedFileDetailsResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    ret.m_rgchURL = this->m_rgchURL;
+    RemoteStorageGetPublishedFileDetailsResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_119 *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_119 *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_119 *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+}
+#ifdef __i386__
+u32_RemoteStorageGetPublishedFileDetailsResult_t_119::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_119() const
+{
+    w32_RemoteStorageGetPublishedFileDetailsResult_t_119 ret;
+    RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_118_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_118 *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_118 *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_118 *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_118 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+}
 #ifdef __i386__
 w32_RemoteStorageGetPublishedFileDetailsResult_t_118::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_118() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_118 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedFileDetailsResult_t_118::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_118() const
-{
-    w32_RemoteStorageGetPublishedFileDetailsResult_t_118 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
-    ret.m_nFileSize = this->m_nFileSize;
-    ret.m_nPreviewFileSize = this->m_nPreviewFileSize;
+    RemoteStorageGetPublishedFileDetailsResult_t_118_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_118 *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_118 *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_118 *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_118 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+}
+#ifdef __i386__
+u32_RemoteStorageGetPublishedFileDetailsResult_t_118::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_118() const
+{
+    w32_RemoteStorageGetPublishedFileDetailsResult_t_118 ret;
+    RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedFileDetailsResult_t_116x *d = (u_RemoteStorageGetPublishedFileDetailsResult_t_116x *)dst;
+    const w_RemoteStorageGetPublishedFileDetailsResult_t_116x *s = (const w_RemoteStorageGetPublishedFileDetailsResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+}
 #ifdef __i386__
 w32_RemoteStorageGetPublishedFileDetailsResult_t_116x::operator u32_RemoteStorageGetPublishedFileDetailsResult_t_116x() const
 {
     u32_RemoteStorageGetPublishedFileDetailsResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
+    RemoteStorageGetPublishedFileDetailsResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedFileDetailsResult_t_116x *d = (w_RemoteStorageGetPublishedFileDetailsResult_t_116x *)dst;
+    const u_RemoteStorageGetPublishedFileDetailsResult_t_116x *s = (const u_RemoteStorageGetPublishedFileDetailsResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_pchFileName = s->m_pchFileName;
+}
+#ifdef __i386__
 u32_RemoteStorageGetPublishedFileDetailsResult_t_116x::operator w32_RemoteStorageGetPublishedFileDetailsResult_t_116x() const
 {
     w32_RemoteStorageGetPublishedFileDetailsResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nCreatorAppID = this->m_nCreatorAppID;
-    ret.m_nConsumerAppID = this->m_nConsumerAppID;
-    ret.m_rgchTitle = this->m_rgchTitle;
-    ret.m_rgchDescription = this->m_rgchDescription;
-    ret.m_hFile = this->m_hFile;
-    ret.m_hPreviewFile = this->m_hPreviewFile;
-    ret.m_ulSteamIDOwner = this->m_ulSteamIDOwner;
-    ret.m_rtimeCreated = this->m_rtimeCreated;
-    ret.m_rtimeUpdated = this->m_rtimeUpdated;
-    ret.m_eVisibility = this->m_eVisibility;
-    ret.m_bBanned = this->m_bBanned;
-    ret.m_rgchTags = this->m_rgchTags;
-    ret.m_bTagsTruncated = this->m_bTagsTruncated;
-    ret.m_pchFileName = this->m_pchFileName;
+    RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15767,28 +16756,45 @@ C_ASSERT( sizeof(u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119().m_nR
 C_ASSERT( offsetof(u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119, m_fScore) == 24 );
 C_ASSERT( sizeof(u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119().m_fScore) >= 4 );
 
+static void RemoteStorageGetPublishedItemVoteDetailsResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *d = (u_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)dst;
+    const w_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *s = (const w_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unPublishedFileId = s->m_unPublishedFileId;
+    d->m_nVotesFor = s->m_nVotesFor;
+    d->m_nVotesAgainst = s->m_nVotesAgainst;
+    d->m_nReports = s->m_nReports;
+    d->m_fScore = s->m_fScore;
+}
 #ifdef __x86_64__
 w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123() const
 {
     u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *d = (w_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)dst;
+    const u_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *s = (const u_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unPublishedFileId = s->m_unPublishedFileId;
+    d->m_nVotesFor = s->m_nVotesFor;
+    d->m_nVotesAgainst = s->m_nVotesAgainst;
+    d->m_nReports = s->m_nReports;
+    d->m_fScore = s->m_fScore;
+}
+#ifdef __x86_64__
 u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123() const
 {
     w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15797,50 +16803,60 @@ u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator w64_RemoteSto
 w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123() const
 {
     u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
-    return ret;
-}
-
-u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123() const
-{
-    w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123::operator w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123() const
+{
+    w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 ret;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageGetPublishedItemVoteDetailsResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *d = (u_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)dst;
+    const w_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *s = (const w_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unPublishedFileId = s->m_unPublishedFileId;
+    d->m_nVotesFor = s->m_nVotesFor;
+    d->m_nVotesAgainst = s->m_nVotesAgainst;
+    d->m_nReports = s->m_nReports;
+    d->m_fScore = s->m_fScore;
+}
 #ifdef __i386__
 w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119::operator u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119() const
 {
     u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *d = (w_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)dst;
+    const u_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *s = (const u_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_unPublishedFileId = s->m_unPublishedFileId;
+    d->m_nVotesFor = s->m_nVotesFor;
+    d->m_nVotesAgainst = s->m_nVotesAgainst;
+    d->m_nReports = s->m_nReports;
+    d->m_fScore = s->m_fScore;
+}
+#ifdef __i386__
 u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119::operator w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119() const
 {
     w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_unPublishedFileId = this->m_unPublishedFileId;
-    ret.m_nVotesFor = this->m_nVotesFor;
-    ret.m_nVotesAgainst = this->m_nVotesAgainst;
-    ret.m_nReports = this->m_nReports;
-    ret.m_fScore = this->m_fScore;
+    RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15925,22 +16941,39 @@ C_ASSERT( sizeof(u32_RemoteStoragePublishFileResult_t_116x().m_eResult) >= 4 );
 C_ASSERT( offsetof(u32_RemoteStoragePublishFileResult_t_116x, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_RemoteStoragePublishFileResult_t_116x().m_nPublishedFileId) >= 8 );
 
+static void RemoteStoragePublishFileResult_t_125_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStoragePublishFileResult_t_125 *d = (u_RemoteStoragePublishFileResult_t_125 *)dst;
+    const w_RemoteStoragePublishFileResult_t_125 *s = (const w_RemoteStoragePublishFileResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
 #ifdef __x86_64__
 w64_RemoteStoragePublishFileResult_t_125::operator u64_RemoteStoragePublishFileResult_t_125() const
 {
     u64_RemoteStoragePublishFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStoragePublishFileResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStoragePublishFileResult_t_125_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStoragePublishFileResult_t_125 *d = (w_RemoteStoragePublishFileResult_t_125 *)dst;
+    const u_RemoteStoragePublishFileResult_t_125 *s = (const u_RemoteStoragePublishFileResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
+#ifdef __x86_64__
 u64_RemoteStoragePublishFileResult_t_125::operator w64_RemoteStoragePublishFileResult_t_125() const
 {
     w64_RemoteStoragePublishFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStoragePublishFileResult_t_125_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15949,36 +16982,52 @@ u64_RemoteStoragePublishFileResult_t_125::operator w64_RemoteStoragePublishFileR
 w32_RemoteStoragePublishFileResult_t_125::operator u32_RemoteStoragePublishFileResult_t_125() const
 {
     u32_RemoteStoragePublishFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
-    return ret;
-}
-
-u32_RemoteStoragePublishFileResult_t_125::operator w32_RemoteStoragePublishFileResult_t_125() const
-{
-    w32_RemoteStoragePublishFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStoragePublishFileResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStoragePublishFileResult_t_125::operator w32_RemoteStoragePublishFileResult_t_125() const
+{
+    w32_RemoteStoragePublishFileResult_t_125 ret;
+    RemoteStoragePublishFileResult_t_125_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStoragePublishFileResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStoragePublishFileResult_t_123 *d = (u_RemoteStoragePublishFileResult_t_123 *)dst;
+    const w_RemoteStoragePublishFileResult_t_123 *s = (const w_RemoteStoragePublishFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStoragePublishFileResult_t_123::operator u64_RemoteStoragePublishFileResult_t_123() const
 {
     u64_RemoteStoragePublishFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStoragePublishFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStoragePublishFileResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStoragePublishFileResult_t_123 *d = (w_RemoteStoragePublishFileResult_t_123 *)dst;
+    const u_RemoteStoragePublishFileResult_t_123 *s = (const u_RemoteStoragePublishFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStoragePublishFileResult_t_123::operator w64_RemoteStoragePublishFileResult_t_123() const
 {
     w64_RemoteStoragePublishFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStoragePublishFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -15987,34 +17036,52 @@ u64_RemoteStoragePublishFileResult_t_123::operator w64_RemoteStoragePublishFileR
 w32_RemoteStoragePublishFileResult_t_123::operator u32_RemoteStoragePublishFileResult_t_123() const
 {
     u32_RemoteStoragePublishFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStoragePublishFileResult_t_123::operator w32_RemoteStoragePublishFileResult_t_123() const
-{
-    w32_RemoteStoragePublishFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStoragePublishFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStoragePublishFileResult_t_123::operator w32_RemoteStoragePublishFileResult_t_123() const
+{
+    w32_RemoteStoragePublishFileResult_t_123 ret;
+    RemoteStoragePublishFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStoragePublishFileResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStoragePublishFileResult_t_116x *d = (u_RemoteStoragePublishFileResult_t_116x *)dst;
+    const w_RemoteStoragePublishFileResult_t_116x *s = (const w_RemoteStoragePublishFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStoragePublishFileResult_t_116x::operator u32_RemoteStoragePublishFileResult_t_116x() const
 {
     u32_RemoteStoragePublishFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStoragePublishFileResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStoragePublishFileResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStoragePublishFileResult_t_116x *d = (w_RemoteStoragePublishFileResult_t_116x *)dst;
+    const u_RemoteStoragePublishFileResult_t_116x *s = (const u_RemoteStoragePublishFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStoragePublishFileResult_t_116x::operator w32_RemoteStoragePublishFileResult_t_116x() const
 {
     w32_RemoteStoragePublishFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStoragePublishFileResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16051,22 +17118,39 @@ C_ASSERT( sizeof(u32_RemoteStoragePublishedFileUpdated_t().m_nAppID) >= 4 );
 C_ASSERT( offsetof(u32_RemoteStoragePublishedFileUpdated_t, m_ulUnused) == 12 );
 C_ASSERT( sizeof(u32_RemoteStoragePublishedFileUpdated_t().m_ulUnused) >= 8 );
 
+static void RemoteStoragePublishedFileUpdated_t_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStoragePublishedFileUpdated_t *d = (u_RemoteStoragePublishedFileUpdated_t *)dst;
+    const w_RemoteStoragePublishedFileUpdated_t *s = (const w_RemoteStoragePublishedFileUpdated_t *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+    d->m_ulUnused = s->m_ulUnused;
+}
 #ifdef __x86_64__
 w64_RemoteStoragePublishedFileUpdated_t::operator u64_RemoteStoragePublishedFileUpdated_t() const
 {
     u64_RemoteStoragePublishedFileUpdated_t ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_ulUnused = this->m_ulUnused;
+    RemoteStoragePublishedFileUpdated_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStoragePublishedFileUpdated_t_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStoragePublishedFileUpdated_t *d = (w_RemoteStoragePublishedFileUpdated_t *)dst;
+    const u_RemoteStoragePublishedFileUpdated_t *s = (const u_RemoteStoragePublishedFileUpdated_t *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+    d->m_ulUnused = s->m_ulUnused;
+}
+#ifdef __x86_64__
 u64_RemoteStoragePublishedFileUpdated_t::operator w64_RemoteStoragePublishedFileUpdated_t() const
 {
     w64_RemoteStoragePublishedFileUpdated_t ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_ulUnused = this->m_ulUnused;
+    RemoteStoragePublishedFileUpdated_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16075,18 +17159,17 @@ u64_RemoteStoragePublishedFileUpdated_t::operator w64_RemoteStoragePublishedFile
 w32_RemoteStoragePublishedFileUpdated_t::operator u32_RemoteStoragePublishedFileUpdated_t() const
 {
     u32_RemoteStoragePublishedFileUpdated_t ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_ulUnused = this->m_ulUnused;
+    RemoteStoragePublishedFileUpdated_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RemoteStoragePublishedFileUpdated_t::operator w32_RemoteStoragePublishedFileUpdated_t() const
 {
     w32_RemoteStoragePublishedFileUpdated_t ret;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
-    ret.m_ulUnused = this->m_ulUnused;
+    RemoteStoragePublishedFileUpdated_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16155,22 +17238,39 @@ C_ASSERT( sizeof(u32_RemoteStorageSetUserPublishedFileActionResult_t_119().m_nPu
 C_ASSERT( offsetof(u32_RemoteStorageSetUserPublishedFileActionResult_t_119, m_eAction) == 12 );
 C_ASSERT( sizeof(u32_RemoteStorageSetUserPublishedFileActionResult_t_119().m_eAction) >= 4 );
 
+static void RemoteStorageSetUserPublishedFileActionResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageSetUserPublishedFileActionResult_t_123 *d = (u_RemoteStorageSetUserPublishedFileActionResult_t_123 *)dst;
+    const w_RemoteStorageSetUserPublishedFileActionResult_t_123 *s = (const w_RemoteStorageSetUserPublishedFileActionResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eAction = s->m_eAction;
+}
 #ifdef __x86_64__
 w64_RemoteStorageSetUserPublishedFileActionResult_t_123::operator u64_RemoteStorageSetUserPublishedFileActionResult_t_123() const
 {
     u64_RemoteStorageSetUserPublishedFileActionResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
+    RemoteStorageSetUserPublishedFileActionResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageSetUserPublishedFileActionResult_t_123 *d = (w_RemoteStorageSetUserPublishedFileActionResult_t_123 *)dst;
+    const u_RemoteStorageSetUserPublishedFileActionResult_t_123 *s = (const u_RemoteStorageSetUserPublishedFileActionResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eAction = s->m_eAction;
+}
+#ifdef __x86_64__
 u64_RemoteStorageSetUserPublishedFileActionResult_t_123::operator w64_RemoteStorageSetUserPublishedFileActionResult_t_123() const
 {
     w64_RemoteStorageSetUserPublishedFileActionResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
+    RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16179,38 +17279,54 @@ u64_RemoteStorageSetUserPublishedFileActionResult_t_123::operator w64_RemoteStor
 w32_RemoteStorageSetUserPublishedFileActionResult_t_123::operator u32_RemoteStorageSetUserPublishedFileActionResult_t_123() const
 {
     u32_RemoteStorageSetUserPublishedFileActionResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
-    return ret;
-}
-
-u32_RemoteStorageSetUserPublishedFileActionResult_t_123::operator w32_RemoteStorageSetUserPublishedFileActionResult_t_123() const
-{
-    w32_RemoteStorageSetUserPublishedFileActionResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
+    RemoteStorageSetUserPublishedFileActionResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageSetUserPublishedFileActionResult_t_123::operator w32_RemoteStorageSetUserPublishedFileActionResult_t_123() const
+{
+    w32_RemoteStorageSetUserPublishedFileActionResult_t_123 ret;
+    RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageSetUserPublishedFileActionResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageSetUserPublishedFileActionResult_t_119 *d = (u_RemoteStorageSetUserPublishedFileActionResult_t_119 *)dst;
+    const w_RemoteStorageSetUserPublishedFileActionResult_t_119 *s = (const w_RemoteStorageSetUserPublishedFileActionResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eAction = s->m_eAction;
+}
 #ifdef __i386__
 w32_RemoteStorageSetUserPublishedFileActionResult_t_119::operator u32_RemoteStorageSetUserPublishedFileActionResult_t_119() const
 {
     u32_RemoteStorageSetUserPublishedFileActionResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
+    RemoteStorageSetUserPublishedFileActionResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageSetUserPublishedFileActionResult_t_119 *d = (w_RemoteStorageSetUserPublishedFileActionResult_t_119 *)dst;
+    const u_RemoteStorageSetUserPublishedFileActionResult_t_119 *s = (const u_RemoteStorageSetUserPublishedFileActionResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eAction = s->m_eAction;
+}
+#ifdef __i386__
 u32_RemoteStorageSetUserPublishedFileActionResult_t_119::operator w32_RemoteStorageSetUserPublishedFileActionResult_t_119() const
 {
     w32_RemoteStorageSetUserPublishedFileActionResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eAction = this->m_eAction;
+    RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16255,20 +17371,37 @@ C_ASSERT( sizeof(u32_RemoteStorageSubscribePublishedFileResult_t_116x) >= 4 );
 C_ASSERT( offsetof(u32_RemoteStorageSubscribePublishedFileResult_t_116x, m_eResult) == 0 );
 C_ASSERT( sizeof(u32_RemoteStorageSubscribePublishedFileResult_t_116x().m_eResult) >= 4 );
 
+static void RemoteStorageSubscribePublishedFileResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageSubscribePublishedFileResult_t_123 *d = (u_RemoteStorageSubscribePublishedFileResult_t_123 *)dst;
+    const w_RemoteStorageSubscribePublishedFileResult_t_123 *s = (const w_RemoteStorageSubscribePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageSubscribePublishedFileResult_t_123::operator u64_RemoteStorageSubscribePublishedFileResult_t_123() const
 {
     u64_RemoteStorageSubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageSubscribePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageSubscribePublishedFileResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageSubscribePublishedFileResult_t_123 *d = (w_RemoteStorageSubscribePublishedFileResult_t_123 *)dst;
+    const u_RemoteStorageSubscribePublishedFileResult_t_123 *s = (const u_RemoteStorageSubscribePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageSubscribePublishedFileResult_t_123::operator w64_RemoteStorageSubscribePublishedFileResult_t_123() const
 {
     w64_RemoteStorageSubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageSubscribePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16277,16 +17410,17 @@ u64_RemoteStorageSubscribePublishedFileResult_t_123::operator w64_RemoteStorageS
 w32_RemoteStorageSubscribePublishedFileResult_t_123::operator u32_RemoteStorageSubscribePublishedFileResult_t_123() const
 {
     u32_RemoteStorageSubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageSubscribePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RemoteStorageSubscribePublishedFileResult_t_123::operator w32_RemoteStorageSubscribePublishedFileResult_t_123() const
 {
     w32_RemoteStorageSubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageSubscribePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16331,20 +17465,37 @@ C_ASSERT( sizeof(u32_RemoteStorageUnsubscribePublishedFileResult_t_116x) >= 4 );
 C_ASSERT( offsetof(u32_RemoteStorageUnsubscribePublishedFileResult_t_116x, m_eResult) == 0 );
 C_ASSERT( sizeof(u32_RemoteStorageUnsubscribePublishedFileResult_t_116x().m_eResult) >= 4 );
 
+static void RemoteStorageUnsubscribePublishedFileResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUnsubscribePublishedFileResult_t_123 *d = (u_RemoteStorageUnsubscribePublishedFileResult_t_123 *)dst;
+    const w_RemoteStorageUnsubscribePublishedFileResult_t_123 *s = (const w_RemoteStorageUnsubscribePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageUnsubscribePublishedFileResult_t_123::operator u64_RemoteStorageUnsubscribePublishedFileResult_t_123() const
 {
     u64_RemoteStorageUnsubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUnsubscribePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUnsubscribePublishedFileResult_t_123 *d = (w_RemoteStorageUnsubscribePublishedFileResult_t_123 *)dst;
+    const u_RemoteStorageUnsubscribePublishedFileResult_t_123 *s = (const u_RemoteStorageUnsubscribePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageUnsubscribePublishedFileResult_t_123::operator w64_RemoteStorageUnsubscribePublishedFileResult_t_123() const
 {
     w64_RemoteStorageUnsubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16353,16 +17504,17 @@ u64_RemoteStorageUnsubscribePublishedFileResult_t_123::operator w64_RemoteStorag
 w32_RemoteStorageUnsubscribePublishedFileResult_t_123::operator u32_RemoteStorageUnsubscribePublishedFileResult_t_123() const
 {
     u32_RemoteStorageUnsubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUnsubscribePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RemoteStorageUnsubscribePublishedFileResult_t_123::operator w32_RemoteStorageUnsubscribePublishedFileResult_t_123() const
 {
     w32_RemoteStorageUnsubscribePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16559,22 +17711,39 @@ C_ASSERT( sizeof(u32_RemoteStorageUpdatePublishedFileResult_t_116x().m_eResult) 
 C_ASSERT( offsetof(u32_RemoteStorageUpdatePublishedFileResult_t_116x, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_RemoteStorageUpdatePublishedFileResult_t_116x().m_nPublishedFileId) >= 8 );
 
+static void RemoteStorageUpdatePublishedFileResult_t_125_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUpdatePublishedFileResult_t_125 *d = (u_RemoteStorageUpdatePublishedFileResult_t_125 *)dst;
+    const w_RemoteStorageUpdatePublishedFileResult_t_125 *s = (const w_RemoteStorageUpdatePublishedFileResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
 #ifdef __x86_64__
 w64_RemoteStorageUpdatePublishedFileResult_t_125::operator u64_RemoteStorageUpdatePublishedFileResult_t_125() const
 {
     u64_RemoteStorageUpdatePublishedFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStorageUpdatePublishedFileResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUpdatePublishedFileResult_t_125_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUpdatePublishedFileResult_t_125 *d = (w_RemoteStorageUpdatePublishedFileResult_t_125 *)dst;
+    const u_RemoteStorageUpdatePublishedFileResult_t_125 *s = (const u_RemoteStorageUpdatePublishedFileResult_t_125 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_bUserNeedsToAcceptWorkshopLegalAgreement = s->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+}
+#ifdef __x86_64__
 u64_RemoteStorageUpdatePublishedFileResult_t_125::operator w64_RemoteStorageUpdatePublishedFileResult_t_125() const
 {
     w64_RemoteStorageUpdatePublishedFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStorageUpdatePublishedFileResult_t_125_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16583,36 +17752,52 @@ u64_RemoteStorageUpdatePublishedFileResult_t_125::operator w64_RemoteStorageUpda
 w32_RemoteStorageUpdatePublishedFileResult_t_125::operator u32_RemoteStorageUpdatePublishedFileResult_t_125() const
 {
     u32_RemoteStorageUpdatePublishedFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
-    return ret;
-}
-
-u32_RemoteStorageUpdatePublishedFileResult_t_125::operator w32_RemoteStorageUpdatePublishedFileResult_t_125() const
-{
-    w32_RemoteStorageUpdatePublishedFileResult_t_125 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_bUserNeedsToAcceptWorkshopLegalAgreement = this->m_bUserNeedsToAcceptWorkshopLegalAgreement;
+    RemoteStorageUpdatePublishedFileResult_t_125_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageUpdatePublishedFileResult_t_125::operator w32_RemoteStorageUpdatePublishedFileResult_t_125() const
+{
+    w32_RemoteStorageUpdatePublishedFileResult_t_125 ret;
+    RemoteStorageUpdatePublishedFileResult_t_125_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageUpdatePublishedFileResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUpdatePublishedFileResult_t_123 *d = (u_RemoteStorageUpdatePublishedFileResult_t_123 *)dst;
+    const w_RemoteStorageUpdatePublishedFileResult_t_123 *s = (const w_RemoteStorageUpdatePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageUpdatePublishedFileResult_t_123::operator u64_RemoteStorageUpdatePublishedFileResult_t_123() const
 {
     u64_RemoteStorageUpdatePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdatePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUpdatePublishedFileResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUpdatePublishedFileResult_t_123 *d = (w_RemoteStorageUpdatePublishedFileResult_t_123 *)dst;
+    const u_RemoteStorageUpdatePublishedFileResult_t_123 *s = (const u_RemoteStorageUpdatePublishedFileResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageUpdatePublishedFileResult_t_123::operator w64_RemoteStorageUpdatePublishedFileResult_t_123() const
 {
     w64_RemoteStorageUpdatePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdatePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16621,34 +17806,52 @@ u64_RemoteStorageUpdatePublishedFileResult_t_123::operator w64_RemoteStorageUpda
 w32_RemoteStorageUpdatePublishedFileResult_t_123::operator u32_RemoteStorageUpdatePublishedFileResult_t_123() const
 {
     u32_RemoteStorageUpdatePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStorageUpdatePublishedFileResult_t_123::operator w32_RemoteStorageUpdatePublishedFileResult_t_123() const
-{
-    w32_RemoteStorageUpdatePublishedFileResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdatePublishedFileResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageUpdatePublishedFileResult_t_123::operator w32_RemoteStorageUpdatePublishedFileResult_t_123() const
+{
+    w32_RemoteStorageUpdatePublishedFileResult_t_123 ret;
+    RemoteStorageUpdatePublishedFileResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageUpdatePublishedFileResult_t_116x_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUpdatePublishedFileResult_t_116x *d = (u_RemoteStorageUpdatePublishedFileResult_t_116x *)dst;
+    const w_RemoteStorageUpdatePublishedFileResult_t_116x *s = (const w_RemoteStorageUpdatePublishedFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStorageUpdatePublishedFileResult_t_116x::operator u32_RemoteStorageUpdatePublishedFileResult_t_116x() const
 {
     u32_RemoteStorageUpdatePublishedFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdatePublishedFileResult_t_116x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUpdatePublishedFileResult_t_116x *d = (w_RemoteStorageUpdatePublishedFileResult_t_116x *)dst;
+    const u_RemoteStorageUpdatePublishedFileResult_t_116x *s = (const u_RemoteStorageUpdatePublishedFileResult_t_116x *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStorageUpdatePublishedFileResult_t_116x::operator w32_RemoteStorageUpdatePublishedFileResult_t_116x() const
 {
     w32_RemoteStorageUpdatePublishedFileResult_t_116x ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16701,20 +17904,37 @@ C_ASSERT( sizeof(u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119().m_eR
 C_ASSERT( offsetof(u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119().m_nPublishedFileId) >= 8 );
 
+static void RemoteStorageUpdateUserPublishedItemVoteResult_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *d = (u_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)dst;
+    const w_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *s = (const w_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123() const
 {
     u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *d = (w_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)dst;
+    const u_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *s = (const u_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123() const
 {
     w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16723,34 +17943,52 @@ u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator w64_RemoteSto
 w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123() const
 {
     u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    return ret;
-}
-
-u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123() const
-{
-    w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123::operator w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123() const
+{
+    w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 ret;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageUpdateUserPublishedItemVoteResult_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *d = (u_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)dst;
+    const w_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *s = (const w_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
 #ifdef __i386__
 w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119::operator u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119() const
 {
     u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *d = (w_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)dst;
+    const u_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *s = (const u_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __i386__
 u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119::operator w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119() const
 {
     w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
+    RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16819,22 +18057,39 @@ C_ASSERT( sizeof(u32_RemoteStorageUserVoteDetails_t_119().m_nPublishedFileId) >=
 C_ASSERT( offsetof(u32_RemoteStorageUserVoteDetails_t_119, m_eVote) == 12 );
 C_ASSERT( sizeof(u32_RemoteStorageUserVoteDetails_t_119().m_eVote) >= 4 );
 
+static void RemoteStorageUserVoteDetails_t_123_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUserVoteDetails_t_123 *d = (u_RemoteStorageUserVoteDetails_t_123 *)dst;
+    const w_RemoteStorageUserVoteDetails_t_123 *s = (const w_RemoteStorageUserVoteDetails_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eVote = s->m_eVote;
+}
 #ifdef __x86_64__
 w64_RemoteStorageUserVoteDetails_t_123::operator u64_RemoteStorageUserVoteDetails_t_123() const
 {
     u64_RemoteStorageUserVoteDetails_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
+    RemoteStorageUserVoteDetails_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUserVoteDetails_t_123_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUserVoteDetails_t_123 *d = (w_RemoteStorageUserVoteDetails_t_123 *)dst;
+    const u_RemoteStorageUserVoteDetails_t_123 *s = (const u_RemoteStorageUserVoteDetails_t_123 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eVote = s->m_eVote;
+}
+#ifdef __x86_64__
 u64_RemoteStorageUserVoteDetails_t_123::operator w64_RemoteStorageUserVoteDetails_t_123() const
 {
     w64_RemoteStorageUserVoteDetails_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
+    RemoteStorageUserVoteDetails_t_123_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16843,38 +18098,54 @@ u64_RemoteStorageUserVoteDetails_t_123::operator w64_RemoteStorageUserVoteDetail
 w32_RemoteStorageUserVoteDetails_t_123::operator u32_RemoteStorageUserVoteDetails_t_123() const
 {
     u32_RemoteStorageUserVoteDetails_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
-    return ret;
-}
-
-u32_RemoteStorageUserVoteDetails_t_123::operator w32_RemoteStorageUserVoteDetails_t_123() const
-{
-    w32_RemoteStorageUserVoteDetails_t_123 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
+    RemoteStorageUserVoteDetails_t_123_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_RemoteStorageUserVoteDetails_t_123::operator w32_RemoteStorageUserVoteDetails_t_123() const
+{
+    w32_RemoteStorageUserVoteDetails_t_123 ret;
+    RemoteStorageUserVoteDetails_t_123_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void RemoteStorageUserVoteDetails_t_119_u_from_w(void *dst, const void *src)
+{
+    u_RemoteStorageUserVoteDetails_t_119 *d = (u_RemoteStorageUserVoteDetails_t_119 *)dst;
+    const w_RemoteStorageUserVoteDetails_t_119 *s = (const w_RemoteStorageUserVoteDetails_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eVote = s->m_eVote;
+}
 #ifdef __i386__
 w32_RemoteStorageUserVoteDetails_t_119::operator u32_RemoteStorageUserVoteDetails_t_119() const
 {
     u32_RemoteStorageUserVoteDetails_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
+    RemoteStorageUserVoteDetails_t_119_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoteStorageUserVoteDetails_t_119_w_from_u(void *dst, const void *src)
+{
+    w_RemoteStorageUserVoteDetails_t_119 *d = (w_RemoteStorageUserVoteDetails_t_119 *)dst;
+    const u_RemoteStorageUserVoteDetails_t_119 *s = (const u_RemoteStorageUserVoteDetails_t_119 *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eVote = s->m_eVote;
+}
+#ifdef __i386__
 u32_RemoteStorageUserVoteDetails_t_119::operator w32_RemoteStorageUserVoteDetails_t_119() const
 {
     w32_RemoteStorageUserVoteDetails_t_119 ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_eVote = this->m_eVote;
+    RemoteStorageUserVoteDetails_t_119_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16911,22 +18182,39 @@ C_ASSERT( sizeof(u32_RemoveAppDependencyResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_RemoveAppDependencyResult_t, m_nAppID) == 12 );
 C_ASSERT( sizeof(u32_RemoveAppDependencyResult_t().m_nAppID) >= 4 );
 
+static void RemoveAppDependencyResult_t_u_from_w(void *dst, const void *src)
+{
+    u_RemoveAppDependencyResult_t *d = (u_RemoveAppDependencyResult_t *)dst;
+    const w_RemoveAppDependencyResult_t *s = (const w_RemoveAppDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+}
 #ifdef __x86_64__
 w64_RemoveAppDependencyResult_t::operator u64_RemoveAppDependencyResult_t() const
 {
     u64_RemoveAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    RemoveAppDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoveAppDependencyResult_t_w_from_u(void *dst, const void *src)
+{
+    w_RemoveAppDependencyResult_t *d = (w_RemoveAppDependencyResult_t *)dst;
+    const u_RemoveAppDependencyResult_t *s = (const u_RemoveAppDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nAppID = s->m_nAppID;
+}
+#ifdef __x86_64__
 u64_RemoveAppDependencyResult_t::operator w64_RemoveAppDependencyResult_t() const
 {
     w64_RemoveAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    RemoveAppDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16935,18 +18223,17 @@ u64_RemoveAppDependencyResult_t::operator w64_RemoveAppDependencyResult_t() cons
 w32_RemoveAppDependencyResult_t::operator u32_RemoveAppDependencyResult_t() const
 {
     u32_RemoveAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    RemoveAppDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RemoveAppDependencyResult_t::operator w32_RemoveAppDependencyResult_t() const
 {
     w32_RemoveAppDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nAppID = this->m_nAppID;
+    RemoveAppDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -16983,22 +18270,39 @@ C_ASSERT( sizeof(u32_RemoveUGCDependencyResult_t().m_nPublishedFileId) >= 8 );
 C_ASSERT( offsetof(u32_RemoveUGCDependencyResult_t, m_nChildPublishedFileId) == 12 );
 C_ASSERT( sizeof(u32_RemoveUGCDependencyResult_t().m_nChildPublishedFileId) >= 8 );
 
+static void RemoveUGCDependencyResult_t_u_from_w(void *dst, const void *src)
+{
+    u_RemoveUGCDependencyResult_t *d = (u_RemoveUGCDependencyResult_t *)dst;
+    const w_RemoveUGCDependencyResult_t *s = (const w_RemoveUGCDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nChildPublishedFileId = s->m_nChildPublishedFileId;
+}
 #ifdef __x86_64__
 w64_RemoveUGCDependencyResult_t::operator u64_RemoveUGCDependencyResult_t() const
 {
     u64_RemoveUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    RemoveUGCDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RemoveUGCDependencyResult_t_w_from_u(void *dst, const void *src)
+{
+    w_RemoveUGCDependencyResult_t *d = (w_RemoveUGCDependencyResult_t *)dst;
+    const u_RemoveUGCDependencyResult_t *s = (const u_RemoveUGCDependencyResult_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_nChildPublishedFileId = s->m_nChildPublishedFileId;
+}
+#ifdef __x86_64__
 u64_RemoveUGCDependencyResult_t::operator w64_RemoveUGCDependencyResult_t() const
 {
     w64_RemoveUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    RemoveUGCDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17007,18 +18311,17 @@ u64_RemoveUGCDependencyResult_t::operator w64_RemoveUGCDependencyResult_t() cons
 w32_RemoveUGCDependencyResult_t::operator u32_RemoveUGCDependencyResult_t() const
 {
     u32_RemoveUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    RemoveUGCDependencyResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RemoveUGCDependencyResult_t::operator w32_RemoveUGCDependencyResult_t() const
 {
     w32_RemoveUGCDependencyResult_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_nPublishedFileId = this->m_nPublishedFileId;
-    ret.m_nChildPublishedFileId = this->m_nChildPublishedFileId;
+    RemoveUGCDependencyResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17055,22 +18358,39 @@ C_ASSERT( sizeof(u32_RequestPlayersForGameFinalResultCallback_t().m_ullSearchID)
 C_ASSERT( offsetof(u32_RequestPlayersForGameFinalResultCallback_t, m_ullUniqueGameID) == 12 );
 C_ASSERT( sizeof(u32_RequestPlayersForGameFinalResultCallback_t().m_ullUniqueGameID) >= 8 );
 
+static void RequestPlayersForGameFinalResultCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_RequestPlayersForGameFinalResultCallback_t *d = (u_RequestPlayersForGameFinalResultCallback_t *)dst;
+    const w_RequestPlayersForGameFinalResultCallback_t *s = (const w_RequestPlayersForGameFinalResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+    d->m_ullUniqueGameID = s->m_ullUniqueGameID;
+}
 #ifdef __x86_64__
 w64_RequestPlayersForGameFinalResultCallback_t::operator u64_RequestPlayersForGameFinalResultCallback_t() const
 {
     u64_RequestPlayersForGameFinalResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameFinalResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RequestPlayersForGameFinalResultCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_RequestPlayersForGameFinalResultCallback_t *d = (w_RequestPlayersForGameFinalResultCallback_t *)dst;
+    const u_RequestPlayersForGameFinalResultCallback_t *s = (const u_RequestPlayersForGameFinalResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+    d->m_ullUniqueGameID = s->m_ullUniqueGameID;
+}
+#ifdef __x86_64__
 u64_RequestPlayersForGameFinalResultCallback_t::operator w64_RequestPlayersForGameFinalResultCallback_t() const
 {
     w64_RequestPlayersForGameFinalResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameFinalResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17079,18 +18399,17 @@ u64_RequestPlayersForGameFinalResultCallback_t::operator w64_RequestPlayersForGa
 w32_RequestPlayersForGameFinalResultCallback_t::operator u32_RequestPlayersForGameFinalResultCallback_t() const
 {
     u32_RequestPlayersForGameFinalResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameFinalResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RequestPlayersForGameFinalResultCallback_t::operator w32_RequestPlayersForGameFinalResultCallback_t() const
 {
     w32_RequestPlayersForGameFinalResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameFinalResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17119,20 +18438,37 @@ C_ASSERT( sizeof(u32_RequestPlayersForGameProgressCallback_t().m_eResult) >= 4 )
 C_ASSERT( offsetof(u32_RequestPlayersForGameProgressCallback_t, m_ullSearchID) == 4 );
 C_ASSERT( sizeof(u32_RequestPlayersForGameProgressCallback_t().m_ullSearchID) >= 8 );
 
+static void RequestPlayersForGameProgressCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_RequestPlayersForGameProgressCallback_t *d = (u_RequestPlayersForGameProgressCallback_t *)dst;
+    const w_RequestPlayersForGameProgressCallback_t *s = (const w_RequestPlayersForGameProgressCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+}
 #ifdef __x86_64__
 w64_RequestPlayersForGameProgressCallback_t::operator u64_RequestPlayersForGameProgressCallback_t() const
 {
     u64_RequestPlayersForGameProgressCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
+    RequestPlayersForGameProgressCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RequestPlayersForGameProgressCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_RequestPlayersForGameProgressCallback_t *d = (w_RequestPlayersForGameProgressCallback_t *)dst;
+    const u_RequestPlayersForGameProgressCallback_t *s = (const u_RequestPlayersForGameProgressCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+}
+#ifdef __x86_64__
 u64_RequestPlayersForGameProgressCallback_t::operator w64_RequestPlayersForGameProgressCallback_t() const
 {
     w64_RequestPlayersForGameProgressCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
+    RequestPlayersForGameProgressCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17141,16 +18477,17 @@ u64_RequestPlayersForGameProgressCallback_t::operator w64_RequestPlayersForGameP
 w32_RequestPlayersForGameProgressCallback_t::operator u32_RequestPlayersForGameProgressCallback_t() const
 {
     u32_RequestPlayersForGameProgressCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
+    RequestPlayersForGameProgressCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RequestPlayersForGameProgressCallback_t::operator w32_RequestPlayersForGameProgressCallback_t() const
 {
     w32_RequestPlayersForGameProgressCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
+    RequestPlayersForGameProgressCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17243,36 +18580,53 @@ C_ASSERT( sizeof(u32_RequestPlayersForGameResultCallback_t().m_nSuggestedTeamInd
 C_ASSERT( offsetof(u32_RequestPlayersForGameResultCallback_t, m_ullUniqueGameID) == 48 );
 C_ASSERT( sizeof(u32_RequestPlayersForGameResultCallback_t().m_ullUniqueGameID) >= 8 );
 
+static void RequestPlayersForGameResultCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_RequestPlayersForGameResultCallback_t *d = (u_RequestPlayersForGameResultCallback_t *)dst;
+    const w_RequestPlayersForGameResultCallback_t *s = (const w_RequestPlayersForGameResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+    d->m_SteamIDPlayerFound = s->m_SteamIDPlayerFound;
+    d->m_SteamIDLobby = s->m_SteamIDLobby;
+    d->m_ePlayerAcceptState = s->m_ePlayerAcceptState;
+    d->m_nPlayerIndex = s->m_nPlayerIndex;
+    d->m_nTotalPlayersFound = s->m_nTotalPlayersFound;
+    d->m_nTotalPlayersAcceptedGame = s->m_nTotalPlayersAcceptedGame;
+    d->m_nSuggestedTeamIndex = s->m_nSuggestedTeamIndex;
+    d->m_ullUniqueGameID = s->m_ullUniqueGameID;
+}
 #ifdef __x86_64__
 w64_RequestPlayersForGameResultCallback_t::operator u64_RequestPlayersForGameResultCallback_t() const
 {
     u64_RequestPlayersForGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_SteamIDPlayerFound = this->m_SteamIDPlayerFound;
-    ret.m_SteamIDLobby = this->m_SteamIDLobby;
-    ret.m_ePlayerAcceptState = this->m_ePlayerAcceptState;
-    ret.m_nPlayerIndex = this->m_nPlayerIndex;
-    ret.m_nTotalPlayersFound = this->m_nTotalPlayersFound;
-    ret.m_nTotalPlayersAcceptedGame = this->m_nTotalPlayersAcceptedGame;
-    ret.m_nSuggestedTeamIndex = this->m_nSuggestedTeamIndex;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void RequestPlayersForGameResultCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_RequestPlayersForGameResultCallback_t *d = (w_RequestPlayersForGameResultCallback_t *)dst;
+    const u_RequestPlayersForGameResultCallback_t *s = (const u_RequestPlayersForGameResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->m_ullSearchID = s->m_ullSearchID;
+    d->m_SteamIDPlayerFound = s->m_SteamIDPlayerFound;
+    d->m_SteamIDLobby = s->m_SteamIDLobby;
+    d->m_ePlayerAcceptState = s->m_ePlayerAcceptState;
+    d->m_nPlayerIndex = s->m_nPlayerIndex;
+    d->m_nTotalPlayersFound = s->m_nTotalPlayersFound;
+    d->m_nTotalPlayersAcceptedGame = s->m_nTotalPlayersAcceptedGame;
+    d->m_nSuggestedTeamIndex = s->m_nSuggestedTeamIndex;
+    d->m_ullUniqueGameID = s->m_ullUniqueGameID;
+}
+#ifdef __x86_64__
 u64_RequestPlayersForGameResultCallback_t::operator w64_RequestPlayersForGameResultCallback_t() const
 {
     w64_RequestPlayersForGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_SteamIDPlayerFound = this->m_SteamIDPlayerFound;
-    ret.m_SteamIDLobby = this->m_SteamIDLobby;
-    ret.m_ePlayerAcceptState = this->m_ePlayerAcceptState;
-    ret.m_nPlayerIndex = this->m_nPlayerIndex;
-    ret.m_nTotalPlayersFound = this->m_nTotalPlayersFound;
-    ret.m_nTotalPlayersAcceptedGame = this->m_nTotalPlayersAcceptedGame;
-    ret.m_nSuggestedTeamIndex = this->m_nSuggestedTeamIndex;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17281,32 +18635,17 @@ u64_RequestPlayersForGameResultCallback_t::operator w64_RequestPlayersForGameRes
 w32_RequestPlayersForGameResultCallback_t::operator u32_RequestPlayersForGameResultCallback_t() const
 {
     u32_RequestPlayersForGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_SteamIDPlayerFound = this->m_SteamIDPlayerFound;
-    ret.m_SteamIDLobby = this->m_SteamIDLobby;
-    ret.m_ePlayerAcceptState = this->m_ePlayerAcceptState;
-    ret.m_nPlayerIndex = this->m_nPlayerIndex;
-    ret.m_nTotalPlayersFound = this->m_nTotalPlayersFound;
-    ret.m_nTotalPlayersAcceptedGame = this->m_nTotalPlayersAcceptedGame;
-    ret.m_nSuggestedTeamIndex = this->m_nSuggestedTeamIndex;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_RequestPlayersForGameResultCallback_t::operator w32_RequestPlayersForGameResultCallback_t() const
 {
     w32_RequestPlayersForGameResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.m_ullSearchID = this->m_ullSearchID;
-    ret.m_SteamIDPlayerFound = this->m_SteamIDPlayerFound;
-    ret.m_SteamIDLobby = this->m_SteamIDLobby;
-    ret.m_ePlayerAcceptState = this->m_ePlayerAcceptState;
-    ret.m_nPlayerIndex = this->m_nPlayerIndex;
-    ret.m_nTotalPlayersFound = this->m_nTotalPlayersFound;
-    ret.m_nTotalPlayersAcceptedGame = this->m_nTotalPlayersAcceptedGame;
-    ret.m_nSuggestedTeamIndex = this->m_nSuggestedTeamIndex;
-    ret.m_ullUniqueGameID = this->m_ullUniqueGameID;
+    RequestPlayersForGameResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17375,30 +18714,47 @@ C_ASSERT( sizeof(u32_SteamInputConfigurationLoaded_t().m_bUsesSteamInputAPI) >= 
 C_ASSERT( offsetof(u32_SteamInputConfigurationLoaded_t, m_bUsesGamepadAPI) == 29 );
 C_ASSERT( sizeof(u32_SteamInputConfigurationLoaded_t().m_bUsesGamepadAPI) >= 1 );
 
+static void SteamInputConfigurationLoaded_t_u_from_w(void *dst, const void *src)
+{
+    u_SteamInputConfigurationLoaded_t *d = (u_SteamInputConfigurationLoaded_t *)dst;
+    const w_SteamInputConfigurationLoaded_t *s = (const w_SteamInputConfigurationLoaded_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulDeviceHandle = s->m_ulDeviceHandle;
+    d->m_ulMappingCreator = s->m_ulMappingCreator;
+    d->m_unMajorRevision = s->m_unMajorRevision;
+    d->m_unMinorRevision = s->m_unMinorRevision;
+    d->m_bUsesSteamInputAPI = s->m_bUsesSteamInputAPI;
+    d->m_bUsesGamepadAPI = s->m_bUsesGamepadAPI;
+}
 #ifdef __x86_64__
 w64_SteamInputConfigurationLoaded_t::operator u64_SteamInputConfigurationLoaded_t() const
 {
     u64_SteamInputConfigurationLoaded_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_ulMappingCreator = this->m_ulMappingCreator;
-    ret.m_unMajorRevision = this->m_unMajorRevision;
-    ret.m_unMinorRevision = this->m_unMinorRevision;
-    ret.m_bUsesSteamInputAPI = this->m_bUsesSteamInputAPI;
-    ret.m_bUsesGamepadAPI = this->m_bUsesGamepadAPI;
+    SteamInputConfigurationLoaded_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamInputConfigurationLoaded_t_w_from_u(void *dst, const void *src)
+{
+    w_SteamInputConfigurationLoaded_t *d = (w_SteamInputConfigurationLoaded_t *)dst;
+    const u_SteamInputConfigurationLoaded_t *s = (const u_SteamInputConfigurationLoaded_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulDeviceHandle = s->m_ulDeviceHandle;
+    d->m_ulMappingCreator = s->m_ulMappingCreator;
+    d->m_unMajorRevision = s->m_unMajorRevision;
+    d->m_unMinorRevision = s->m_unMinorRevision;
+    d->m_bUsesSteamInputAPI = s->m_bUsesSteamInputAPI;
+    d->m_bUsesGamepadAPI = s->m_bUsesGamepadAPI;
+}
+#ifdef __x86_64__
 u64_SteamInputConfigurationLoaded_t::operator w64_SteamInputConfigurationLoaded_t() const
 {
     w64_SteamInputConfigurationLoaded_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_ulMappingCreator = this->m_ulMappingCreator;
-    ret.m_unMajorRevision = this->m_unMajorRevision;
-    ret.m_unMinorRevision = this->m_unMinorRevision;
-    ret.m_bUsesSteamInputAPI = this->m_bUsesSteamInputAPI;
-    ret.m_bUsesGamepadAPI = this->m_bUsesGamepadAPI;
+    SteamInputConfigurationLoaded_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17407,26 +18763,17 @@ u64_SteamInputConfigurationLoaded_t::operator w64_SteamInputConfigurationLoaded_
 w32_SteamInputConfigurationLoaded_t::operator u32_SteamInputConfigurationLoaded_t() const
 {
     u32_SteamInputConfigurationLoaded_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_ulMappingCreator = this->m_ulMappingCreator;
-    ret.m_unMajorRevision = this->m_unMajorRevision;
-    ret.m_unMinorRevision = this->m_unMinorRevision;
-    ret.m_bUsesSteamInputAPI = this->m_bUsesSteamInputAPI;
-    ret.m_bUsesGamepadAPI = this->m_bUsesGamepadAPI;
+    SteamInputConfigurationLoaded_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamInputConfigurationLoaded_t::operator w32_SteamInputConfigurationLoaded_t() const
 {
     w32_SteamInputConfigurationLoaded_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_ulMappingCreator = this->m_ulMappingCreator;
-    ret.m_unMajorRevision = this->m_unMajorRevision;
-    ret.m_unMinorRevision = this->m_unMinorRevision;
-    ret.m_bUsesSteamInputAPI = this->m_bUsesSteamInputAPI;
-    ret.m_bUsesGamepadAPI = this->m_bUsesGamepadAPI;
+    SteamInputConfigurationLoaded_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17479,26 +18826,43 @@ C_ASSERT( sizeof(u32_SteamInputGamepadSlotChange_t().m_nOldGamepadSlot) >= 4 );
 C_ASSERT( offsetof(u32_SteamInputGamepadSlotChange_t, m_nNewGamepadSlot) == 20 );
 C_ASSERT( sizeof(u32_SteamInputGamepadSlotChange_t().m_nNewGamepadSlot) >= 4 );
 
+static void SteamInputGamepadSlotChange_t_u_from_w(void *dst, const void *src)
+{
+    u_SteamInputGamepadSlotChange_t *d = (u_SteamInputGamepadSlotChange_t *)dst;
+    const w_SteamInputGamepadSlotChange_t *s = (const w_SteamInputGamepadSlotChange_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulDeviceHandle = s->m_ulDeviceHandle;
+    d->m_eDeviceType = s->m_eDeviceType;
+    d->m_nOldGamepadSlot = s->m_nOldGamepadSlot;
+    d->m_nNewGamepadSlot = s->m_nNewGamepadSlot;
+}
 #ifdef __x86_64__
 w64_SteamInputGamepadSlotChange_t::operator u64_SteamInputGamepadSlotChange_t() const
 {
     u64_SteamInputGamepadSlotChange_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_eDeviceType = this->m_eDeviceType;
-    ret.m_nOldGamepadSlot = this->m_nOldGamepadSlot;
-    ret.m_nNewGamepadSlot = this->m_nNewGamepadSlot;
+    SteamInputGamepadSlotChange_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamInputGamepadSlotChange_t_w_from_u(void *dst, const void *src)
+{
+    w_SteamInputGamepadSlotChange_t *d = (w_SteamInputGamepadSlotChange_t *)dst;
+    const u_SteamInputGamepadSlotChange_t *s = (const u_SteamInputGamepadSlotChange_t *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_ulDeviceHandle = s->m_ulDeviceHandle;
+    d->m_eDeviceType = s->m_eDeviceType;
+    d->m_nOldGamepadSlot = s->m_nOldGamepadSlot;
+    d->m_nNewGamepadSlot = s->m_nNewGamepadSlot;
+}
+#ifdef __x86_64__
 u64_SteamInputGamepadSlotChange_t::operator w64_SteamInputGamepadSlotChange_t() const
 {
     w64_SteamInputGamepadSlotChange_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_eDeviceType = this->m_eDeviceType;
-    ret.m_nOldGamepadSlot = this->m_nOldGamepadSlot;
-    ret.m_nNewGamepadSlot = this->m_nNewGamepadSlot;
+    SteamInputGamepadSlotChange_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17507,22 +18871,17 @@ u64_SteamInputGamepadSlotChange_t::operator w64_SteamInputGamepadSlotChange_t() 
 w32_SteamInputGamepadSlotChange_t::operator u32_SteamInputGamepadSlotChange_t() const
 {
     u32_SteamInputGamepadSlotChange_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_eDeviceType = this->m_eDeviceType;
-    ret.m_nOldGamepadSlot = this->m_nOldGamepadSlot;
-    ret.m_nNewGamepadSlot = this->m_nNewGamepadSlot;
+    SteamInputGamepadSlotChange_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamInputGamepadSlotChange_t::operator w32_SteamInputGamepadSlotChange_t() const
 {
     w32_SteamInputGamepadSlotChange_t ret;
-    ret.m_unAppID = this->m_unAppID;
-    ret.m_ulDeviceHandle = this->m_ulDeviceHandle;
-    ret.m_eDeviceType = this->m_eDeviceType;
-    ret.m_nOldGamepadSlot = this->m_nOldGamepadSlot;
-    ret.m_nNewGamepadSlot = this->m_nNewGamepadSlot;
+    SteamInputGamepadSlotChange_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17559,22 +18918,39 @@ C_ASSERT( sizeof(u32_SteamInventoryStartPurchaseResult_t().m_ulOrderID) >= 8 );
 C_ASSERT( offsetof(u32_SteamInventoryStartPurchaseResult_t, m_ulTransID) == 12 );
 C_ASSERT( sizeof(u32_SteamInventoryStartPurchaseResult_t().m_ulTransID) >= 8 );
 
+static void SteamInventoryStartPurchaseResult_t_u_from_w(void *dst, const void *src)
+{
+    u_SteamInventoryStartPurchaseResult_t *d = (u_SteamInventoryStartPurchaseResult_t *)dst;
+    const w_SteamInventoryStartPurchaseResult_t *s = (const w_SteamInventoryStartPurchaseResult_t *)src;
+
+    d->m_result = s->m_result;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_ulTransID = s->m_ulTransID;
+}
 #ifdef __x86_64__
 w64_SteamInventoryStartPurchaseResult_t::operator u64_SteamInventoryStartPurchaseResult_t() const
 {
     u64_SteamInventoryStartPurchaseResult_t ret;
-    ret.m_result = this->m_result;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_ulTransID = this->m_ulTransID;
+    SteamInventoryStartPurchaseResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamInventoryStartPurchaseResult_t_w_from_u(void *dst, const void *src)
+{
+    w_SteamInventoryStartPurchaseResult_t *d = (w_SteamInventoryStartPurchaseResult_t *)dst;
+    const u_SteamInventoryStartPurchaseResult_t *s = (const u_SteamInventoryStartPurchaseResult_t *)src;
+
+    d->m_result = s->m_result;
+    d->m_ulOrderID = s->m_ulOrderID;
+    d->m_ulTransID = s->m_ulTransID;
+}
+#ifdef __x86_64__
 u64_SteamInventoryStartPurchaseResult_t::operator w64_SteamInventoryStartPurchaseResult_t() const
 {
     w64_SteamInventoryStartPurchaseResult_t ret;
-    ret.m_result = this->m_result;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_ulTransID = this->m_ulTransID;
+    SteamInventoryStartPurchaseResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17583,18 +18959,17 @@ u64_SteamInventoryStartPurchaseResult_t::operator w64_SteamInventoryStartPurchas
 w32_SteamInventoryStartPurchaseResult_t::operator u32_SteamInventoryStartPurchaseResult_t() const
 {
     u32_SteamInventoryStartPurchaseResult_t ret;
-    ret.m_result = this->m_result;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_ulTransID = this->m_ulTransID;
+    SteamInventoryStartPurchaseResult_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamInventoryStartPurchaseResult_t::operator w32_SteamInventoryStartPurchaseResult_t() const
 {
     w32_SteamInventoryStartPurchaseResult_t ret;
-    ret.m_result = this->m_result;
-    ret.m_ulOrderID = this->m_ulOrderID;
-    ret.m_ulTransID = this->m_ulTransID;
+    SteamInventoryStartPurchaseResult_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17695,22 +19070,39 @@ C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151().m_info) >= 
 C_ASSERT( offsetof(u32_SteamNetConnectionStatusChangedCallback_t_151, m_eOldState) == 572 );
 C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151().m_eOldState) >= 4 );
 
+static void SteamNetConnectionStatusChangedCallback_t_153a_u_from_w(void *dst, const void *src)
+{
+    u_SteamNetConnectionStatusChangedCallback_t_153a *d = (u_SteamNetConnectionStatusChangedCallback_t_153a *)dst;
+    const w_SteamNetConnectionStatusChangedCallback_t_153a *s = (const w_SteamNetConnectionStatusChangedCallback_t_153a *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
 #ifdef __x86_64__
 w64_SteamNetConnectionStatusChangedCallback_t_153a::operator u64_SteamNetConnectionStatusChangedCallback_t_153a() const
 {
     u64_SteamNetConnectionStatusChangedCallback_t_153a ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_153a_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamNetConnectionStatusChangedCallback_t_153a_w_from_u(void *dst, const void *src)
+{
+    w_SteamNetConnectionStatusChangedCallback_t_153a *d = (w_SteamNetConnectionStatusChangedCallback_t_153a *)dst;
+    const u_SteamNetConnectionStatusChangedCallback_t_153a *s = (const u_SteamNetConnectionStatusChangedCallback_t_153a *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
+#ifdef __x86_64__
 u64_SteamNetConnectionStatusChangedCallback_t_153a::operator w64_SteamNetConnectionStatusChangedCallback_t_153a() const
 {
     w64_SteamNetConnectionStatusChangedCallback_t_153a ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_153a_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17719,38 +19111,54 @@ u64_SteamNetConnectionStatusChangedCallback_t_153a::operator w64_SteamNetConnect
 w32_SteamNetConnectionStatusChangedCallback_t_153a::operator u32_SteamNetConnectionStatusChangedCallback_t_153a() const
 {
     u32_SteamNetConnectionStatusChangedCallback_t_153a ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-
-u32_SteamNetConnectionStatusChangedCallback_t_153a::operator w32_SteamNetConnectionStatusChangedCallback_t_153a() const
-{
-    w32_SteamNetConnectionStatusChangedCallback_t_153a ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_153a_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_SteamNetConnectionStatusChangedCallback_t_153a::operator w32_SteamNetConnectionStatusChangedCallback_t_153a() const
+{
+    w32_SteamNetConnectionStatusChangedCallback_t_153a ret;
+    SteamNetConnectionStatusChangedCallback_t_153a_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void SteamNetConnectionStatusChangedCallback_t_144_u_from_w(void *dst, const void *src)
+{
+    u_SteamNetConnectionStatusChangedCallback_t_144 *d = (u_SteamNetConnectionStatusChangedCallback_t_144 *)dst;
+    const w_SteamNetConnectionStatusChangedCallback_t_144 *s = (const w_SteamNetConnectionStatusChangedCallback_t_144 *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
 #ifdef __x86_64__
 w64_SteamNetConnectionStatusChangedCallback_t_144::operator u64_SteamNetConnectionStatusChangedCallback_t_144() const
 {
     u64_SteamNetConnectionStatusChangedCallback_t_144 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_144_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamNetConnectionStatusChangedCallback_t_144_w_from_u(void *dst, const void *src)
+{
+    w_SteamNetConnectionStatusChangedCallback_t_144 *d = (w_SteamNetConnectionStatusChangedCallback_t_144 *)dst;
+    const u_SteamNetConnectionStatusChangedCallback_t_144 *s = (const u_SteamNetConnectionStatusChangedCallback_t_144 *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
+#ifdef __x86_64__
 u64_SteamNetConnectionStatusChangedCallback_t_144::operator w64_SteamNetConnectionStatusChangedCallback_t_144() const
 {
     w64_SteamNetConnectionStatusChangedCallback_t_144 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_144_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17759,38 +19167,54 @@ u64_SteamNetConnectionStatusChangedCallback_t_144::operator w64_SteamNetConnecti
 w32_SteamNetConnectionStatusChangedCallback_t_144::operator u32_SteamNetConnectionStatusChangedCallback_t_144() const
 {
     u32_SteamNetConnectionStatusChangedCallback_t_144 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-
-u32_SteamNetConnectionStatusChangedCallback_t_144::operator w32_SteamNetConnectionStatusChangedCallback_t_144() const
-{
-    w32_SteamNetConnectionStatusChangedCallback_t_144 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_144_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_SteamNetConnectionStatusChangedCallback_t_144::operator w32_SteamNetConnectionStatusChangedCallback_t_144() const
+{
+    w32_SteamNetConnectionStatusChangedCallback_t_144 ret;
+    SteamNetConnectionStatusChangedCallback_t_144_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void SteamNetConnectionStatusChangedCallback_t_151_u_from_w(void *dst, const void *src)
+{
+    u_SteamNetConnectionStatusChangedCallback_t_151 *d = (u_SteamNetConnectionStatusChangedCallback_t_151 *)dst;
+    const w_SteamNetConnectionStatusChangedCallback_t_151 *s = (const w_SteamNetConnectionStatusChangedCallback_t_151 *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
 #ifdef __x86_64__
 w64_SteamNetConnectionStatusChangedCallback_t_151::operator u64_SteamNetConnectionStatusChangedCallback_t_151() const
 {
     u64_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_151_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamNetConnectionStatusChangedCallback_t_151_w_from_u(void *dst, const void *src)
+{
+    w_SteamNetConnectionStatusChangedCallback_t_151 *d = (w_SteamNetConnectionStatusChangedCallback_t_151 *)dst;
+    const u_SteamNetConnectionStatusChangedCallback_t_151 *s = (const u_SteamNetConnectionStatusChangedCallback_t_151 *)src;
+
+    d->m_hConn = s->m_hConn;
+    d->m_info = s->m_info;
+    d->m_eOldState = s->m_eOldState;
+}
+#ifdef __x86_64__
 u64_SteamNetConnectionStatusChangedCallback_t_151::operator w64_SteamNetConnectionStatusChangedCallback_t_151() const
 {
     w64_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_151_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -17799,18 +19223,17 @@ u64_SteamNetConnectionStatusChangedCallback_t_151::operator w64_SteamNetConnecti
 w32_SteamNetConnectionStatusChangedCallback_t_151::operator u32_SteamNetConnectionStatusChangedCallback_t_151() const
 {
     u32_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_151_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamNetConnectionStatusChangedCallback_t_151::operator w32_SteamNetConnectionStatusChangedCallback_t_151() const
 {
     w32_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
+    SteamNetConnectionStatusChangedCallback_t_151_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18287,20 +19710,37 @@ C_ASSERT( sizeof(u32_SteamPartyBeaconLocation_t().m_eType) >= 4 );
 C_ASSERT( offsetof(u32_SteamPartyBeaconLocation_t, m_ulLocationID) == 4 );
 C_ASSERT( sizeof(u32_SteamPartyBeaconLocation_t().m_ulLocationID) >= 8 );
 
+static void SteamPartyBeaconLocation_t_u_from_w(void *dst, const void *src)
+{
+    u_SteamPartyBeaconLocation_t *d = (u_SteamPartyBeaconLocation_t *)dst;
+    const w_SteamPartyBeaconLocation_t *s = (const w_SteamPartyBeaconLocation_t *)src;
+
+    d->m_eType = s->m_eType;
+    d->m_ulLocationID = s->m_ulLocationID;
+}
 #ifdef __x86_64__
 w64_SteamPartyBeaconLocation_t::operator u64_SteamPartyBeaconLocation_t() const
 {
     u64_SteamPartyBeaconLocation_t ret;
-    ret.m_eType = this->m_eType;
-    ret.m_ulLocationID = this->m_ulLocationID;
+    SteamPartyBeaconLocation_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamPartyBeaconLocation_t_w_from_u(void *dst, const void *src)
+{
+    w_SteamPartyBeaconLocation_t *d = (w_SteamPartyBeaconLocation_t *)dst;
+    const u_SteamPartyBeaconLocation_t *s = (const u_SteamPartyBeaconLocation_t *)src;
+
+    d->m_eType = s->m_eType;
+    d->m_ulLocationID = s->m_ulLocationID;
+}
+#ifdef __x86_64__
 u64_SteamPartyBeaconLocation_t::operator w64_SteamPartyBeaconLocation_t() const
 {
     w64_SteamPartyBeaconLocation_t ret;
-    ret.m_eType = this->m_eType;
-    ret.m_ulLocationID = this->m_ulLocationID;
+    SteamPartyBeaconLocation_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18309,16 +19749,17 @@ u64_SteamPartyBeaconLocation_t::operator w64_SteamPartyBeaconLocation_t() const
 w32_SteamPartyBeaconLocation_t::operator u32_SteamPartyBeaconLocation_t() const
 {
     u32_SteamPartyBeaconLocation_t ret;
-    ret.m_eType = this->m_eType;
-    ret.m_ulLocationID = this->m_ulLocationID;
+    SteamPartyBeaconLocation_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamPartyBeaconLocation_t::operator w32_SteamPartyBeaconLocation_t() const
 {
     w32_SteamPartyBeaconLocation_t ret;
-    ret.m_eType = this->m_eType;
-    ret.m_ulLocationID = this->m_ulLocationID;
+    SteamPartyBeaconLocation_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18387,20 +19828,37 @@ C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_126) >= 9760 );
 C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_126, m_details) == 0 );
 C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_126().m_details) >= 9760 );
 
+static void SteamUGCRequestUGCDetailsResult_t_128x_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCRequestUGCDetailsResult_t_128x *d = (u_SteamUGCRequestUGCDetailsResult_t_128x *)dst;
+    const w_SteamUGCRequestUGCDetailsResult_t_128x *s = (const w_SteamUGCRequestUGCDetailsResult_t_128x *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
 #ifdef __x86_64__
 w64_SteamUGCRequestUGCDetailsResult_t_128x::operator u64_SteamUGCRequestUGCDetailsResult_t_128x() const
 {
     u64_SteamUGCRequestUGCDetailsResult_t_128x ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamUGCRequestUGCDetailsResult_t_128x_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCRequestUGCDetailsResult_t_128x *d = (w_SteamUGCRequestUGCDetailsResult_t_128x *)dst;
+    const u_SteamUGCRequestUGCDetailsResult_t_128x *s = (const u_SteamUGCRequestUGCDetailsResult_t_128x *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
+#ifdef __x86_64__
 u64_SteamUGCRequestUGCDetailsResult_t_128x::operator w64_SteamUGCRequestUGCDetailsResult_t_128x() const
 {
     w64_SteamUGCRequestUGCDetailsResult_t_128x ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_128x_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18409,34 +19867,52 @@ u64_SteamUGCRequestUGCDetailsResult_t_128x::operator w64_SteamUGCRequestUGCDetai
 w32_SteamUGCRequestUGCDetailsResult_t_128x::operator u32_SteamUGCRequestUGCDetailsResult_t_128x() const
 {
     u32_SteamUGCRequestUGCDetailsResult_t_128x ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
-    return ret;
-}
-
-u32_SteamUGCRequestUGCDetailsResult_t_128x::operator w32_SteamUGCRequestUGCDetailsResult_t_128x() const
-{
-    w32_SteamUGCRequestUGCDetailsResult_t_128x ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_128x_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_SteamUGCRequestUGCDetailsResult_t_128x::operator w32_SteamUGCRequestUGCDetailsResult_t_128x() const
+{
+    w32_SteamUGCRequestUGCDetailsResult_t_128x ret;
+    SteamUGCRequestUGCDetailsResult_t_128x_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void SteamUGCRequestUGCDetailsResult_t_129_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCRequestUGCDetailsResult_t_129 *d = (u_SteamUGCRequestUGCDetailsResult_t_129 *)dst;
+    const w_SteamUGCRequestUGCDetailsResult_t_129 *s = (const w_SteamUGCRequestUGCDetailsResult_t_129 *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
 #ifdef __x86_64__
 w64_SteamUGCRequestUGCDetailsResult_t_129::operator u64_SteamUGCRequestUGCDetailsResult_t_129() const
 {
     u64_SteamUGCRequestUGCDetailsResult_t_129 ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_129_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamUGCRequestUGCDetailsResult_t_129_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCRequestUGCDetailsResult_t_129 *d = (w_SteamUGCRequestUGCDetailsResult_t_129 *)dst;
+    const u_SteamUGCRequestUGCDetailsResult_t_129 *s = (const u_SteamUGCRequestUGCDetailsResult_t_129 *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
+#ifdef __x86_64__
 u64_SteamUGCRequestUGCDetailsResult_t_129::operator w64_SteamUGCRequestUGCDetailsResult_t_129() const
 {
     w64_SteamUGCRequestUGCDetailsResult_t_129 ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_129_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18445,32 +19921,50 @@ u64_SteamUGCRequestUGCDetailsResult_t_129::operator w64_SteamUGCRequestUGCDetail
 w32_SteamUGCRequestUGCDetailsResult_t_129::operator u32_SteamUGCRequestUGCDetailsResult_t_129() const
 {
     u32_SteamUGCRequestUGCDetailsResult_t_129 ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
-    return ret;
-}
-
-u32_SteamUGCRequestUGCDetailsResult_t_129::operator w32_SteamUGCRequestUGCDetailsResult_t_129() const
-{
-    w32_SteamUGCRequestUGCDetailsResult_t_129 ret;
-    ret.m_details = this->m_details;
-    ret.m_bCachedData = this->m_bCachedData;
+    SteamUGCRequestUGCDetailsResult_t_129_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
+
+#ifdef __i386__
+u32_SteamUGCRequestUGCDetailsResult_t_129::operator w32_SteamUGCRequestUGCDetailsResult_t_129() const
+{
+    w32_SteamUGCRequestUGCDetailsResult_t_129 ret;
+    SteamUGCRequestUGCDetailsResult_t_129_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void SteamUGCRequestUGCDetailsResult_t_126_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCRequestUGCDetailsResult_t_126 *d = (u_SteamUGCRequestUGCDetailsResult_t_126 *)dst;
+    const w_SteamUGCRequestUGCDetailsResult_t_126 *s = (const w_SteamUGCRequestUGCDetailsResult_t_126 *)src;
+
+    d->m_details = s->m_details;
+}
 #ifdef __x86_64__
 w64_SteamUGCRequestUGCDetailsResult_t_126::operator u64_SteamUGCRequestUGCDetailsResult_t_126() const
 {
     u64_SteamUGCRequestUGCDetailsResult_t_126 ret;
-    ret.m_details = this->m_details;
+    SteamUGCRequestUGCDetailsResult_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SteamUGCRequestUGCDetailsResult_t_126_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCRequestUGCDetailsResult_t_126 *d = (w_SteamUGCRequestUGCDetailsResult_t_126 *)dst;
+    const u_SteamUGCRequestUGCDetailsResult_t_126 *s = (const u_SteamUGCRequestUGCDetailsResult_t_126 *)src;
+
+    d->m_details = s->m_details;
+}
+#ifdef __x86_64__
 u64_SteamUGCRequestUGCDetailsResult_t_126::operator w64_SteamUGCRequestUGCDetailsResult_t_126() const
 {
     w64_SteamUGCRequestUGCDetailsResult_t_126 ret;
-    ret.m_details = this->m_details;
+    SteamUGCRequestUGCDetailsResult_t_126_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18479,14 +19973,17 @@ u64_SteamUGCRequestUGCDetailsResult_t_126::operator w64_SteamUGCRequestUGCDetail
 w32_SteamUGCRequestUGCDetailsResult_t_126::operator u32_SteamUGCRequestUGCDetailsResult_t_126() const
 {
     u32_SteamUGCRequestUGCDetailsResult_t_126 ret;
-    ret.m_details = this->m_details;
+    SteamUGCRequestUGCDetailsResult_t_126_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SteamUGCRequestUGCDetailsResult_t_126::operator w32_SteamUGCRequestUGCDetailsResult_t_126() const
 {
     w32_SteamUGCRequestUGCDetailsResult_t_126 ret;
-    ret.m_details = this->m_details;
+    SteamUGCRequestUGCDetailsResult_t_126_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18523,22 +20020,39 @@ C_ASSERT( sizeof(u32_SubmitPlayerResultResultCallback_t().ullUniqueGameID) >= 8 
 C_ASSERT( offsetof(u32_SubmitPlayerResultResultCallback_t, steamIDPlayer) == 12 );
 C_ASSERT( sizeof(u32_SubmitPlayerResultResultCallback_t().steamIDPlayer) >= 8 );
 
+static void SubmitPlayerResultResultCallback_t_u_from_w(void *dst, const void *src)
+{
+    u_SubmitPlayerResultResultCallback_t *d = (u_SubmitPlayerResultResultCallback_t *)dst;
+    const w_SubmitPlayerResultResultCallback_t *s = (const w_SubmitPlayerResultResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->ullUniqueGameID = s->ullUniqueGameID;
+    d->steamIDPlayer = s->steamIDPlayer;
+}
 #ifdef __x86_64__
 w64_SubmitPlayerResultResultCallback_t::operator u64_SubmitPlayerResultResultCallback_t() const
 {
     u64_SubmitPlayerResultResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
-    ret.steamIDPlayer = this->steamIDPlayer;
+    SubmitPlayerResultResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+static void SubmitPlayerResultResultCallback_t_w_from_u(void *dst, const void *src)
+{
+    w_SubmitPlayerResultResultCallback_t *d = (w_SubmitPlayerResultResultCallback_t *)dst;
+    const u_SubmitPlayerResultResultCallback_t *s = (const u_SubmitPlayerResultResultCallback_t *)src;
+
+    d->m_eResult = s->m_eResult;
+    d->ullUniqueGameID = s->ullUniqueGameID;
+    d->steamIDPlayer = s->steamIDPlayer;
+}
+#ifdef __x86_64__
 u64_SubmitPlayerResultResultCallback_t::operator w64_SubmitPlayerResultResultCallback_t() const
 {
     w64_SubmitPlayerResultResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
-    ret.steamIDPlayer = this->steamIDPlayer;
+    SubmitPlayerResultResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -18547,18 +20061,17 @@ u64_SubmitPlayerResultResultCallback_t::operator w64_SubmitPlayerResultResultCal
 w32_SubmitPlayerResultResultCallback_t::operator u32_SubmitPlayerResultResultCallback_t() const
 {
     u32_SubmitPlayerResultResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
-    ret.steamIDPlayer = this->steamIDPlayer;
+    SubmitPlayerResultResultCallback_t_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
+#endif
 
+
+#ifdef __i386__
 u32_SubmitPlayerResultResultCallback_t::operator w32_SubmitPlayerResultResultCallback_t() const
 {
     w32_SubmitPlayerResultResultCallback_t ret;
-    ret.m_eResult = this->m_eResult;
-    ret.ullUniqueGameID = this->ullUniqueGameID;
-    ret.steamIDPlayer = this->steamIDPlayer;
+    SubmitPlayerResultResultCallback_t_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif

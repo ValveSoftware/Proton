@@ -455,6 +455,8 @@ class BasicType:
         return False
 
 
+written_converters = set()
+
 class Struct:
     def __init__(self, sdkver, abi, cursor):
         self._cursor = cursor
@@ -555,17 +557,36 @@ class Struct:
 
     def write_converter(self, prefix, path_conv_fields):
         version = all_versions[sdkver][self.name]
+        from_abi = self._abi[0]
+        func_name = f'{version}_{prefix[0]}_from_{from_abi}'
+        if not func_name in written_converters:
+            written_converters.add(func_name)
+            out(f'static void {func_name}(void *dst, const void *src)\n')
+            out(u'{\n')
+            out(f'    {prefix[0]}_{version} *d = ({prefix[0]}_{version} *)dst;\n')
+            out(f'    const {from_abi}_{version} *s = (const {from_abi}_{version} *)src;\n\n')
+            for field in self.fields:
+                if field.name not in path_conv_fields:
+                    out(f'    d->{field.name} = s->{field.name};\n')
+                else:
+                    out(f'    steamclient_unix_path_to_dos_path(1, s->{field.name}, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);\n')
+                    out(f'    d->{field.name} = g_tmppath;\n')
+            out(u'}\n')
+
+        if self._abi[1:3] == '64':
+            out(u'#ifdef __x86_64__\n')
+        elif self._abi[1:3] == '32':
+            out(u'#ifdef __i386__\n')
+        else:
+            assert False
+
         out(f'{self._abi}_{version}::operator {prefix}{version}() const\n')
         out(u'{\n')
         out(f'    {prefix}{version} ret;\n')
-        for field in self.fields:
-            if field.name not in path_conv_fields:
-                out(f'    ret.{field.name} = this->{field.name};\n')
-            else:
-                out(f'    steamclient_unix_path_to_dos_path(1, this->{field.name}, g_tmppath, TEMP_PATH_BUFFER_LENGTH, 1);\n')
-                out(f'    ret.{field.name} = g_tmppath;\n')
+        out(f'    {func_name}((void *)&ret, (const void *)this);\n')
         out(u'    return ret;\n')
         out(u'}\n')
+        out(u'#endif\n\n')
 
     def needs_conversion(self, other):
         if other.id in self._conv_cache:
@@ -1631,18 +1652,14 @@ with open('unixlib_generated.cpp', 'w') as file:
             path_conv_fields = PATH_CONV_STRUCTS.get(name, {})
 
             if abis["w64"].needs_conversion(abis["u64"]):
-                out(u'#ifdef __x86_64__\n')
                 abis['w64'].write_converter('u64_', {})
                 out(u'\n')
                 abis['u64'].write_converter('w64_', path_conv_fields)
-                out(u'#endif\n\n')
 
             if abis["w32"].needs_conversion(abis["u32"]):
-                out(u'#ifdef __i386__\n')
                 abis['w32'].write_converter('u32_', {})
                 out(u'\n')
                 abis['u32'].write_converter('w32_', path_conv_fields)
-                out(u'#endif\n\n')
 
     out(u'void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg )\n')
     out(u'{\n')
