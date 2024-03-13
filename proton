@@ -1123,6 +1123,7 @@ def default_compat_config():
                 "2080180", #Go Home Annie Demo
                 "1939100", #Go Home Annie
                 "108710", #Alan Wake
+                "435150", #Divinity: Original Sin 2 - Definitive Edition
                 ]:
             ret.add("disablenvapi")
 
