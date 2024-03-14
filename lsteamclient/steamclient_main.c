@@ -359,12 +359,12 @@ void execute_pending_callbacks(void)
         {
         case SOCKETS_DEBUG_OUTPUT:
             TRACE( "SOCKETS_DEBUG_OUTPUT func %p, type %u, msg %s.\n", params.callback->sockets_debug_output.pfnFunc,
-                   params.callback->sockets_debug_output.type, wine_dbgstr_a( params.callback->sockets_debug_output.msg ) );
+                   params.callback->sockets_debug_output.type, debugstr_a( params.callback->sockets_debug_output.msg ) );
             params.callback->sockets_debug_output.pfnFunc( params.callback->sockets_debug_output.type, params.callback->sockets_debug_output.msg );
             break;
         case WARNING_MESSAGE_HOOK:
             TRACE( "WARNING_MESSAGE_HOOK func %p, severity %d, msg %s.\n", params.callback->warning_message_hook.pFunction,
-                   params.callback->warning_message_hook.severity, wine_dbgstr_a( params.callback->warning_message_hook.msg ) );
+                   params.callback->warning_message_hook.severity, debugstr_a( params.callback->warning_message_hook.msg ) );
             params.callback->warning_message_hook.pFunction( params.callback->warning_message_hook.severity, params.callback->warning_message_hook.msg );
             break;
         case CALL_CDECL_FUNC_DATA:
@@ -398,7 +398,7 @@ void execute_pending_callbacks(void)
             break;
         case CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST:
             TRACE( "CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST iface %p, name %s, score %u, time_played %f.\n", params.callback->add_player_to_list.iface,
-                   params.callback->add_player_to_list.name, params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played );
+                   debugstr_a( params.callback->add_player_to_list.name ), params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played );
             CALL_VTBL_FUNC( params.callback->add_player_to_list.iface, 0, void, (void *, const char *, int32_t, float), (params.callback->add_player_to_list.iface,
                             params.callback->add_player_to_list.name, params.callback->add_player_to_list.score, params.callback->add_player_to_list.time_played) );
             break;
@@ -406,7 +406,7 @@ void execute_pending_callbacks(void)
         {
             const char *value = params.callback->rules_responded.rule_and_value + strlen( params.callback->rules_responded.rule_and_value ) + 1;
             TRACE( "CALL_IFACE_VTABLE_0_RULES_RESPONDED iface %p, rule %s, value %s.\n", params.callback->rules_responded.iface,
-                   params.callback->rules_responded.rule_and_value, value );
+                   debugstr_a( params.callback->rules_responded.rule_and_value ), debugstr_a( value ) );
             CALL_VTBL_FUNC( params.callback->rules_responded.iface, 0, void, (void *, const char *, const char *), (params.callback->rules_responded.iface,
                             params.callback->rules_responded.rule_and_value, value) );
             break;
