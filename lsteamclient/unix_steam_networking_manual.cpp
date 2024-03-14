@@ -593,6 +593,13 @@ NTSTATUS ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( void *arg
     return 0;
 }
 
+template <typename T> void free_callback_obj(T *obj)
+{
+    obj->w_iface = (struct w_steam_iface *)0xdeadbeef;
+    *(void **)obj = (void *)0xdeadbeef;
+    delete obj;
+}
+
 struct SteamMatchmakingServerListResponse_099u : u_ISteamMatchmakingServerListResponse_099u
 {
     struct w_steam_iface *w_iface;
@@ -614,6 +621,8 @@ void SteamMatchmakingServerListResponse_099u::ServerFailedToRespond( int32_t iSe
 void SteamMatchmakingServerListResponse_099u::RefreshComplete( uint32_t response )
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_2, (intptr_t)response, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 u_ISteamMatchmakingServerListResponse_099u *create_LinuxISteamMatchmakingServerListResponse_099u( void *win )
@@ -625,6 +634,7 @@ u_ISteamMatchmakingServerListResponse_099u *create_LinuxISteamMatchmakingServerL
     if (!(ret = new SteamMatchmakingServerListResponse_099u())) return NULL;
     ret->w_iface = (struct w_steam_iface *)win;
 
+    TRACE("-> %p.\n", ret);
     return ret;
 }
 
@@ -649,6 +659,8 @@ void SteamMatchmakingServerListResponse_106::ServerFailedToRespond( void *hReque
 void SteamMatchmakingServerListResponse_106::RefreshComplete( void *hRequest, uint32_t response )
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_2, (intptr_t)hRequest, (intptr_t)response, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 u_ISteamMatchmakingServerListResponse_106 *create_LinuxISteamMatchmakingServerListResponse_106( void *win )
@@ -660,6 +672,7 @@ u_ISteamMatchmakingServerListResponse_106 *create_LinuxISteamMatchmakingServerLi
     if (!(ret = new SteamMatchmakingServerListResponse_106())) return NULL;
     ret->w_iface = (struct w_steam_iface *)win;
 
+    TRACE("-> %p.\n", ret);
     return ret;
 }
 
@@ -673,11 +686,15 @@ struct SteamMatchmakingPingResponse : u_ISteamMatchmakingPingResponse
 void SteamMatchmakingPingResponse::ServerResponded( gameserveritem_t_105 *server )
 {
     queue_vtable_callback_0_server_responded( this->w_iface, server );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 void SteamMatchmakingPingResponse::ServerFailedToRespond(void)
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_1, 0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 struct u_ISteamMatchmakingPingResponse *create_LinuxISteamMatchmakingPingResponse( void *win )
@@ -688,6 +705,7 @@ struct u_ISteamMatchmakingPingResponse *create_LinuxISteamMatchmakingPingRespons
     if (!(ret = new SteamMatchmakingPingResponse())) return NULL;
     ret->w_iface = (struct w_steam_iface *)win;
 
+    TRACE("-> %p.\n", ret);
     return ret;
 }
 
@@ -707,11 +725,15 @@ void SteamMatchmakingPlayersResponse::AddPlayerToList(const char *pchName, int n
 void SteamMatchmakingPlayersResponse::PlayersFailedToRespond(void)
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_1, 0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 void SteamMatchmakingPlayersResponse::PlayersRefreshComplete(void)
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_2, 0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 struct u_ISteamMatchmakingPlayersResponse *create_LinuxISteamMatchmakingPlayersResponse( void *win )
@@ -722,6 +744,7 @@ struct u_ISteamMatchmakingPlayersResponse *create_LinuxISteamMatchmakingPlayersR
     if (!(ret = new SteamMatchmakingPlayersResponse())) return NULL;
     ret->w_iface = (struct w_steam_iface *)win;
 
+    TRACE("-> %p.\n", ret);
     return ret;
 }
 
@@ -741,11 +764,15 @@ void SteamMatchmakingRulesResponse::RulesResponded(const char *pchRule, const ch
 void SteamMatchmakingRulesResponse::RulesFailedToRespond(void)
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_1, 0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 void SteamMatchmakingRulesResponse::RulesRefreshComplete(void)
 {
     queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_2, 0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
 }
 
 struct u_ISteamMatchmakingRulesResponse *create_LinuxISteamMatchmakingRulesResponse( void *win )
@@ -756,6 +783,7 @@ struct u_ISteamMatchmakingRulesResponse *create_LinuxISteamMatchmakingRulesRespo
     if (!(ret = new SteamMatchmakingRulesResponse())) return NULL;
     ret->w_iface = (struct w_steam_iface *)win;
 
+    TRACE("-> %p.\n", ret);
     return ret;
 }
 
