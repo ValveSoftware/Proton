@@ -1299,11 +1299,6 @@ class Session:
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
 
-        #hide Nvidia GPUs if NVK is being used as dxvk-nvapi doesn't support it ootb yet
-        #dxvk is doing similar hidding on their side
-        #this option can be overriden with WINE_HIDE_NVK=0
-        self.env.setdefault("WINE_HIDE_NVK", "1")
-
         if "wined3d11" in self.compat_config:
             self.compat_config.add("wined3d")
 
