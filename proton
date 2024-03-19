@@ -229,9 +229,9 @@ def copyfile_reflink(srcname, dstname):
                 while bytes_to_copy > 0:
                     bytes_to_copy -= copy_file_range(src.fileno(), dst.fileno(), bytes_to_copy)
         except OSError as e:
-            if e.errno not in (errno.EXDEV, errno.ENOSYS, errno.EINVAL):
+            if e.errno not in (errno.EXDEV, errno.ENOSYS, errno.EINVAL, errno.EOPNOTSUPP):
                 raise e
-            if e.errno == errno.ENOSYS:
+            if e.errno == errno.ENOSYS or e.errno == errno.EOPNOTSUPP:
                 copyfile = shutil.copyfile
             shutil.copyfile(srcname, dstname)
 
