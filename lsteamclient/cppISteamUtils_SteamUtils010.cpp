@@ -304,3 +304,11 @@ NTSTATUS ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput( void *args )
     return 0;
 }
 
+NTSTATUS ISteamUtils_SteamUtils010_DismissGamepadTextInput( void *args )
+{
+    struct ISteamUtils_SteamUtils010_DismissGamepadTextInput_params *params = (struct ISteamUtils_SteamUtils010_DismissGamepadTextInput_params *)args;
+    struct u_ISteamUtils_SteamUtils010 *iface = (struct u_ISteamUtils_SteamUtils010 *)params->linux_side;
+    params->_ret = iface->DismissGamepadTextInput(  );
+    return 0;
+}
+

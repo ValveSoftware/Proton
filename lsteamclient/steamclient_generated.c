@@ -97,6 +97,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"SteamClient018", &create_winISteamClient_SteamClient018},
     {"SteamClient019", &create_winISteamClient_SteamClient019},
     {"SteamClient020", &create_winISteamClient_SteamClient020},
+    {"SteamClient021", &create_winISteamClient_SteamClient021},
     {"SteamController003", &create_winISteamController_SteamController003},
     {"SteamController004", &create_winISteamController_SteamController004},
     {"SteamController005", &create_winISteamController_SteamController005},

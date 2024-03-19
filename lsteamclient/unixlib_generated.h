@@ -24216,6 +24216,327 @@ struct ISteamClient_SteamClient020_DestroyAllInterfaces_params
     struct u_steam_iface *linux_side;
 };
 
+struct ISteamClient_SteamClient021_CreateSteamPipe_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+};
+
+struct ISteamClient_SteamClient021_BReleaseSteamPipe_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct ISteamClient_SteamClient021_ConnectToGlobalUser_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct ISteamClient_SteamClient021_CreateLocalUser_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    int32_t *phSteamPipe;
+    uint32_t eAccountType;
+};
+
+struct ISteamClient_SteamClient021_ReleaseUser_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t hSteamPipe;
+    int32_t hUser;
+};
+
+struct ISteamClient_SteamClient021_GetISteamUser_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamUser*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamGameServer_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamGameServer*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_SetLocalIPBinding_params
+{
+    struct u_steam_iface *linux_side;
+    const SteamIPAddress_t *unIP;
+    uint16_t usPort;
+};
+
+struct ISteamClient_SteamClient021_GetISteamFriends_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamFriends*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamUtils_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamUtils*/ *_ret;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamMatchmaking_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamMatchmaking*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamMatchmakingServers_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamMatchmakingServers*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamGenericInterface_params
+{
+    struct u_steam_iface *linux_side;
+    void *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamUserStats_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamUserStats*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamGameServerStats_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamGameServerStats*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamApps_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamApps*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamNetworking_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamNetworking*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamRemoteStorage_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamRemoteStorage*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamScreenshots_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamScreenshots*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamGameSearch_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamGameSearch*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_RunFrame_params
+{
+    struct u_steam_iface *linux_side;
+};
+
+struct ISteamClient_SteamClient021_GetIPCCallCount_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+};
+
+struct ISteamClient_SteamClient021_SetWarningMessageHook_params
+{
+    struct u_steam_iface *linux_side;
+    void (*W_CDECL pFunction)(int32_t, const char *);
+};
+
+struct ISteamClient_SteamClient021_BShutdownIfAllPipesClosed_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
+struct ISteamClient_SteamClient021_GetISteamHTTP_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamHTTP*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamController_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamController*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamUGC_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamUGC*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamMusic_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamMusic*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamMusicRemote_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamMusicRemote*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamHTMLSurface_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamHTMLSurface*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_steam_iface *linux_side;
+    void (*W_CDECL _a)(void);
+};
+
+struct ISteamClient_SteamClient021_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_steam_iface *linux_side;
+    void (*W_CDECL _a)(void);
+};
+
+struct ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t (*W_CDECL func)(int32_t);
+};
+
+struct ISteamClient_SteamClient021_GetISteamInventory_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamInventory*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamVideo_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamVideo*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamParentalSettings_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamParentalSettings*/ *_ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamInput_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamInput*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamParties_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamParties*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_GetISteamRemotePlay_params
+{
+    struct u_steam_iface *linux_side;
+    void /*ISteamRemotePlay*/ *_ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct ISteamClient_SteamClient021_DestroyAllInterfaces_params
+{
+    struct u_steam_iface *linux_side;
+};
+
 struct ISteamController_SteamController003_Init_params
 {
     struct u_steam_iface *linux_side;
@@ -45559,6 +45880,12 @@ struct ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput_params
     int8_t _ret;
 };
 
+struct ISteamUtils_SteamUtils010_DismissGamepadTextInput_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
 #include <poppack.h>
 
 enum unix_funcs
@@ -48599,6 +48926,46 @@ enum unix_funcs
     unix_ISteamClient_SteamClient020_GetISteamParties,
     unix_ISteamClient_SteamClient020_GetISteamRemotePlay,
     unix_ISteamClient_SteamClient020_DestroyAllInterfaces,
+    unix_ISteamClient_SteamClient021_CreateSteamPipe,
+    unix_ISteamClient_SteamClient021_BReleaseSteamPipe,
+    unix_ISteamClient_SteamClient021_ConnectToGlobalUser,
+    unix_ISteamClient_SteamClient021_CreateLocalUser,
+    unix_ISteamClient_SteamClient021_ReleaseUser,
+    unix_ISteamClient_SteamClient021_GetISteamUser,
+    unix_ISteamClient_SteamClient021_GetISteamGameServer,
+    unix_ISteamClient_SteamClient021_SetLocalIPBinding,
+    unix_ISteamClient_SteamClient021_GetISteamFriends,
+    unix_ISteamClient_SteamClient021_GetISteamUtils,
+    unix_ISteamClient_SteamClient021_GetISteamMatchmaking,
+    unix_ISteamClient_SteamClient021_GetISteamMatchmakingServers,
+    unix_ISteamClient_SteamClient021_GetISteamGenericInterface,
+    unix_ISteamClient_SteamClient021_GetISteamUserStats,
+    unix_ISteamClient_SteamClient021_GetISteamGameServerStats,
+    unix_ISteamClient_SteamClient021_GetISteamApps,
+    unix_ISteamClient_SteamClient021_GetISteamNetworking,
+    unix_ISteamClient_SteamClient021_GetISteamRemoteStorage,
+    unix_ISteamClient_SteamClient021_GetISteamScreenshots,
+    unix_ISteamClient_SteamClient021_GetISteamGameSearch,
+    unix_ISteamClient_SteamClient021_RunFrame,
+    unix_ISteamClient_SteamClient021_GetIPCCallCount,
+    unix_ISteamClient_SteamClient021_SetWarningMessageHook,
+    unix_ISteamClient_SteamClient021_BShutdownIfAllPipesClosed,
+    unix_ISteamClient_SteamClient021_GetISteamHTTP,
+    unix_ISteamClient_SteamClient021_GetISteamController,
+    unix_ISteamClient_SteamClient021_GetISteamUGC,
+    unix_ISteamClient_SteamClient021_GetISteamMusic,
+    unix_ISteamClient_SteamClient021_GetISteamMusicRemote,
+    unix_ISteamClient_SteamClient021_GetISteamHTMLSurface,
+    unix_ISteamClient_SteamClient021_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess,
+    unix_ISteamClient_SteamClient021_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess,
+    unix_ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess,
+    unix_ISteamClient_SteamClient021_GetISteamInventory,
+    unix_ISteamClient_SteamClient021_GetISteamVideo,
+    unix_ISteamClient_SteamClient021_GetISteamParentalSettings,
+    unix_ISteamClient_SteamClient021_GetISteamInput,
+    unix_ISteamClient_SteamClient021_GetISteamParties,
+    unix_ISteamClient_SteamClient021_GetISteamRemotePlay,
+    unix_ISteamClient_SteamClient021_DestroyAllInterfaces,
     unix_ISteamController_SteamController003_Init,
     unix_ISteamController_SteamController003_Shutdown,
     unix_ISteamController_SteamController003_RunFrame,
@@ -51428,6 +51795,7 @@ enum unix_funcs
     unix_ISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput,
     unix_ISteamUtils_SteamUtils010_SetGameLauncherMode,
     unix_ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput,
+    unix_ISteamUtils_SteamUtils010_DismissGamepadTextInput,
 };
 
 #ifdef __cplusplus

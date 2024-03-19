@@ -92,6 +92,7 @@ extern struct w_steam_iface *create_winISteamClient_SteamClient017(void *);
 extern struct w_steam_iface *create_winISteamClient_SteamClient018(void *);
 extern struct w_steam_iface *create_winISteamClient_SteamClient019(void *);
 extern struct w_steam_iface *create_winISteamClient_SteamClient020(void *);
+extern struct w_steam_iface *create_winISteamClient_SteamClient021(void *);
 extern struct w_steam_iface *create_winISteamController_SteamController003(void *);
 extern struct w_steam_iface *create_winISteamController_SteamController004(void *);
 extern struct w_steam_iface *create_winISteamController_SteamController005(void *);

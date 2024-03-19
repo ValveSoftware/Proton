@@ -248,6 +248,15 @@ NTSTATUS ISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProc
     return 0;
 }
 
+NTSTATUS ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess( void *args )
+{
+    struct ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params = (struct ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *)args;
+    struct u_ISteamClient_SteamClient021 *iface = (struct u_ISteamClient_SteamClient021 *)params->linux_side;
+    uint32_t (*U_CDECL lin_func)(int32_t) = manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func_156( params->func );
+    iface->Set_SteamAPI_CCheckCallbackRegisteredInProcess( lin_func );
+    return 0;
+}
+
 NTSTATUS steamclient_next_callback( void *args )
 {
     struct steamclient_next_callback_params *params = (struct steamclient_next_callback_params *)args;

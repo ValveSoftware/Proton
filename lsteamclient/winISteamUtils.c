@@ -2522,6 +2522,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck, 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput, 24)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_SetGameLauncherMode, 8)
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput, 4)
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_DismissGamepadTextInput, 4)
 
 uint32_t __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceAppActive(struct w_steam_iface *_this)
 {
@@ -2980,6 +2981,17 @@ int8_t __thiscall winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(s
     return params._ret;
 }
 
+int8_t __thiscall winISteamUtils_SteamUtils010_DismissGamepadTextInput(struct w_steam_iface *_this)
+{
+    struct ISteamUtils_SteamUtils010_DismissGamepadTextInput_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUtils_SteamUtils010_DismissGamepadTextInput, &params );
+    return params._ret;
+}
+
 extern vtable_ptr winISteamUtils_SteamUtils010_vtable;
 
 DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils010, 0, ".?AVISteamUtils@@")
@@ -3024,6 +3036,7 @@ __ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils010_vtables)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_SetGameLauncherMode)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_DismissGamepadTextInput)
     );
 __ASM_BLOCK_END
 
@@ -3031,7 +3044,7 @@ struct w_steam_iface *create_winISteamUtils_SteamUtils010(void *u_iface)
 {
     struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "SteamUtils010");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils010_vtable, 38, "SteamUtils010");
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils010_vtable, 39, "SteamUtils010");
     r->u_iface = u_iface;
     return r;
 }
