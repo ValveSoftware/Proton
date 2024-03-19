@@ -1096,6 +1096,7 @@ def default_compat_config():
                 "383120", #Empyrion - Galactic Survival
                 "2371630", #Sword Art Online: Integral Factor
                 "460790", #Bayonetta
+                "273590", #Descent 3
                 ]:
             ret.add("gamedrive")
 
@@ -1121,6 +1122,9 @@ def default_compat_config():
                 "1418100", #Swords of Legends Online
                 "2080180", #Go Home Annie Demo
                 "1939100", #Go Home Annie
+                "108710", #Alan Wake
+                "435150", #Divinity: Original Sin 2 - Definitive Edition
+                "505170", #Carmageddon: Max Damage
                 ]:
             ret.add("disablenvapi")
 
