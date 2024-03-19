@@ -3044,6 +3044,46 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamClient_SteamClient020_GetISteamParties,
     ISteamClient_SteamClient020_GetISteamRemotePlay,
     ISteamClient_SteamClient020_DestroyAllInterfaces,
+    ISteamClient_SteamClient021_CreateSteamPipe,
+    ISteamClient_SteamClient021_BReleaseSteamPipe,
+    ISteamClient_SteamClient021_ConnectToGlobalUser,
+    ISteamClient_SteamClient021_CreateLocalUser,
+    ISteamClient_SteamClient021_ReleaseUser,
+    ISteamClient_SteamClient021_GetISteamUser,
+    ISteamClient_SteamClient021_GetISteamGameServer,
+    ISteamClient_SteamClient021_SetLocalIPBinding,
+    ISteamClient_SteamClient021_GetISteamFriends,
+    ISteamClient_SteamClient021_GetISteamUtils,
+    ISteamClient_SteamClient021_GetISteamMatchmaking,
+    ISteamClient_SteamClient021_GetISteamMatchmakingServers,
+    ISteamClient_SteamClient021_GetISteamGenericInterface,
+    ISteamClient_SteamClient021_GetISteamUserStats,
+    ISteamClient_SteamClient021_GetISteamGameServerStats,
+    ISteamClient_SteamClient021_GetISteamApps,
+    ISteamClient_SteamClient021_GetISteamNetworking,
+    ISteamClient_SteamClient021_GetISteamRemoteStorage,
+    ISteamClient_SteamClient021_GetISteamScreenshots,
+    ISteamClient_SteamClient021_GetISteamGameSearch,
+    ISteamClient_SteamClient021_RunFrame,
+    ISteamClient_SteamClient021_GetIPCCallCount,
+    ISteamClient_SteamClient021_SetWarningMessageHook,
+    ISteamClient_SteamClient021_BShutdownIfAllPipesClosed,
+    ISteamClient_SteamClient021_GetISteamHTTP,
+    ISteamClient_SteamClient021_GetISteamController,
+    ISteamClient_SteamClient021_GetISteamUGC,
+    ISteamClient_SteamClient021_GetISteamMusic,
+    ISteamClient_SteamClient021_GetISteamMusicRemote,
+    ISteamClient_SteamClient021_GetISteamHTMLSurface,
+    ISteamClient_SteamClient021_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess,
+    ISteamClient_SteamClient021_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess,
+    ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess,
+    ISteamClient_SteamClient021_GetISteamInventory,
+    ISteamClient_SteamClient021_GetISteamVideo,
+    ISteamClient_SteamClient021_GetISteamParentalSettings,
+    ISteamClient_SteamClient021_GetISteamInput,
+    ISteamClient_SteamClient021_GetISteamParties,
+    ISteamClient_SteamClient021_GetISteamRemotePlay,
+    ISteamClient_SteamClient021_DestroyAllInterfaces,
     ISteamController_SteamController003_Init,
     ISteamController_SteamController003_Shutdown,
     ISteamController_SteamController003_RunFrame,
@@ -5873,6 +5913,7 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput,
     ISteamUtils_SteamUtils010_SetGameLauncherMode,
     ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput,
+    ISteamUtils_SteamUtils010_DismissGamepadTextInput,
 };
 
 C_ASSERT( sizeof(SteamNetworkingIPAddr) >= 18 );
@@ -8423,6 +8464,190 @@ u32_AddUGCDependencyResult_t::operator w32_AddUGCDependencyResult_t() const
 }
 #endif
 
+C_ASSERT( sizeof(w64_CSteamAPIContext_141) >= 176 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamClient) == 0 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamClient) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUser) == 8 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUser) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamFriends) == 16 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamFriends) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUtils) == 24 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUtils) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMatchmaking) == 32 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMatchmaking) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamGameSearch) == 40 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamGameSearch) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUserStats) == 48 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUserStats) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamApps) == 56 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamApps) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 64 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamNetworking) == 72 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamNetworking) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamRemoteStorage) == 80 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamScreenshots) == 88 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamScreenshots) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamHTTP) == 96 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamHTTP) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pController) == 104 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pController) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUGC) == 112 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUGC) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMusic) == 120 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMusic) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMusicRemote) == 128 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMusicRemote) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamHTMLSurface) == 136 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamInventory) == 144 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamInventory) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamVideo) == 152 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamVideo) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamParentalSettings) == 160 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamParentalSettings) >= 8 );
+C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamInput) == 168 );
+C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamInput) >= 8 );
+
+C_ASSERT( sizeof(u64_CSteamAPIContext_141) >= 176 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamClient) == 0 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamClient) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUser) == 8 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUser) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamFriends) == 16 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamFriends) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUtils) == 24 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUtils) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMatchmaking) == 32 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMatchmaking) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamGameSearch) == 40 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamGameSearch) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUserStats) == 48 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUserStats) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamApps) == 56 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamApps) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 64 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamNetworking) == 72 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamNetworking) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamRemoteStorage) == 80 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamScreenshots) == 88 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamScreenshots) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamHTTP) == 96 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamHTTP) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pController) == 104 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pController) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUGC) == 112 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUGC) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMusic) == 120 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMusic) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMusicRemote) == 128 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMusicRemote) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamHTMLSurface) == 136 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamInventory) == 144 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamInventory) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamVideo) == 152 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamVideo) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamParentalSettings) == 160 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamParentalSettings) >= 8 );
+C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamInput) == 168 );
+C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamInput) >= 8 );
+
+C_ASSERT( sizeof(w32_CSteamAPIContext_141) >= 88 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamClient) == 0 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamClient) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUser) == 4 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUser) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamFriends) == 8 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamFriends) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUtils) == 12 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUtils) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMatchmaking) == 16 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMatchmaking) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamGameSearch) == 20 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamGameSearch) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUserStats) == 24 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUserStats) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamApps) == 28 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamApps) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 32 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamNetworking) == 36 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamNetworking) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamRemoteStorage) == 40 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamScreenshots) == 44 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamScreenshots) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamHTTP) == 48 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamHTTP) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pController) == 52 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pController) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUGC) == 56 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUGC) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMusic) == 60 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMusic) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMusicRemote) == 64 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMusicRemote) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamHTMLSurface) == 68 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamInventory) == 72 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamInventory) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamVideo) == 76 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamVideo) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamParentalSettings) == 80 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamParentalSettings) >= 4 );
+C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamInput) == 84 );
+C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamInput) >= 4 );
+
+C_ASSERT( sizeof(u32_CSteamAPIContext_141) >= 88 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamClient) == 0 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamClient) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUser) == 4 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUser) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamFriends) == 8 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamFriends) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUtils) == 12 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUtils) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMatchmaking) == 16 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMatchmaking) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamGameSearch) == 20 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamGameSearch) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUserStats) == 24 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUserStats) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamApps) == 28 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamApps) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 32 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamNetworking) == 36 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamNetworking) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamRemoteStorage) == 40 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamScreenshots) == 44 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamScreenshots) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamHTTP) == 48 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamHTTP) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pController) == 52 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pController) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUGC) == 56 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUGC) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMusic) == 60 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMusic) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMusicRemote) == 64 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMusicRemote) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamHTMLSurface) == 68 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamInventory) == 72 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamInventory) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamVideo) == 76 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamVideo) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamParentalSettings) == 80 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamParentalSettings) >= 4 );
+C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamInput) == 84 );
+C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamInput) >= 4 );
+
 C_ASSERT( sizeof(w64_CSteamAPIContext_143) >= 184 );
 C_ASSERT( offsetof(w64_CSteamAPIContext_143, m_pSteamClient) == 0 );
 C_ASSERT( sizeof(w64_CSteamAPIContext_143().m_pSteamClient) >= 8 );
@@ -8990,190 +9215,6 @@ C_ASSERT( offsetof(u32_CSteamAPIContext_137, m_pSteamVideo) == 76 );
 C_ASSERT( sizeof(u32_CSteamAPIContext_137().m_pSteamVideo) >= 4 );
 C_ASSERT( offsetof(u32_CSteamAPIContext_137, m_pSteamParentalSettings) == 80 );
 C_ASSERT( sizeof(u32_CSteamAPIContext_137().m_pSteamParentalSettings) >= 4 );
-
-C_ASSERT( sizeof(w64_CSteamAPIContext_141) >= 176 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamClient) == 0 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamClient) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUser) == 8 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUser) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamFriends) == 16 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamFriends) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUtils) == 24 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUtils) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMatchmaking) == 32 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMatchmaking) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUserStats) == 40 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUserStats) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamApps) == 48 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamApps) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 56 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamNetworking) == 64 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamNetworking) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamRemoteStorage) == 72 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamScreenshots) == 80 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamScreenshots) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamHTTP) == 88 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamHTTP) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUnifiedMessages) == 96 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUnifiedMessages) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pController) == 104 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pController) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamUGC) == 112 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamUGC) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamAppList) == 120 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamAppList) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMusic) == 128 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMusic) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamMusicRemote) == 136 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamMusicRemote) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamHTMLSurface) == 144 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamInventory) == 152 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamInventory) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamVideo) == 160 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamVideo) >= 8 );
-C_ASSERT( offsetof(w64_CSteamAPIContext_141, m_pSteamParentalSettings) == 168 );
-C_ASSERT( sizeof(w64_CSteamAPIContext_141().m_pSteamParentalSettings) >= 8 );
-
-C_ASSERT( sizeof(u64_CSteamAPIContext_141) >= 176 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamClient) == 0 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamClient) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUser) == 8 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUser) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamFriends) == 16 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamFriends) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUtils) == 24 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUtils) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMatchmaking) == 32 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMatchmaking) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUserStats) == 40 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUserStats) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamApps) == 48 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamApps) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 56 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamNetworking) == 64 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamNetworking) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamRemoteStorage) == 72 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamScreenshots) == 80 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamScreenshots) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamHTTP) == 88 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamHTTP) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUnifiedMessages) == 96 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUnifiedMessages) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pController) == 104 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pController) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamUGC) == 112 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamUGC) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamAppList) == 120 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamAppList) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMusic) == 128 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMusic) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamMusicRemote) == 136 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamMusicRemote) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamHTMLSurface) == 144 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamInventory) == 152 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamInventory) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamVideo) == 160 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamVideo) >= 8 );
-C_ASSERT( offsetof(u64_CSteamAPIContext_141, m_pSteamParentalSettings) == 168 );
-C_ASSERT( sizeof(u64_CSteamAPIContext_141().m_pSteamParentalSettings) >= 8 );
-
-C_ASSERT( sizeof(w32_CSteamAPIContext_141) >= 88 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamClient) == 0 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamClient) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUser) == 4 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUser) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamFriends) == 8 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamFriends) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUtils) == 12 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUtils) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMatchmaking) == 16 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMatchmaking) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUserStats) == 20 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUserStats) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamApps) == 24 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamApps) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 28 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamNetworking) == 32 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamNetworking) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamRemoteStorage) == 36 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamScreenshots) == 40 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamScreenshots) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamHTTP) == 44 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamHTTP) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUnifiedMessages) == 48 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUnifiedMessages) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pController) == 52 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pController) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamUGC) == 56 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamUGC) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamAppList) == 60 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamAppList) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMusic) == 64 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMusic) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamMusicRemote) == 68 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamMusicRemote) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamHTMLSurface) == 72 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamInventory) == 76 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamInventory) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamVideo) == 80 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamVideo) >= 4 );
-C_ASSERT( offsetof(w32_CSteamAPIContext_141, m_pSteamParentalSettings) == 84 );
-C_ASSERT( sizeof(w32_CSteamAPIContext_141().m_pSteamParentalSettings) >= 4 );
-
-C_ASSERT( sizeof(u32_CSteamAPIContext_141) >= 88 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamClient) == 0 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamClient) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUser) == 4 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUser) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamFriends) == 8 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamFriends) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUtils) == 12 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUtils) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMatchmaking) == 16 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMatchmaking) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUserStats) == 20 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUserStats) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamApps) == 24 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamApps) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMatchmakingServers) == 28 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMatchmakingServers) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamNetworking) == 32 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamNetworking) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamRemoteStorage) == 36 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamRemoteStorage) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamScreenshots) == 40 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamScreenshots) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamHTTP) == 44 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamHTTP) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUnifiedMessages) == 48 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUnifiedMessages) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pController) == 52 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pController) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamUGC) == 56 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamUGC) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamAppList) == 60 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamAppList) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMusic) == 64 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMusic) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamMusicRemote) == 68 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamMusicRemote) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamHTMLSurface) == 72 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamHTMLSurface) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamInventory) == 76 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamInventory) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamVideo) == 80 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamVideo) >= 4 );
-C_ASSERT( offsetof(u32_CSteamAPIContext_141, m_pSteamParentalSettings) == 84 );
-C_ASSERT( sizeof(u32_CSteamAPIContext_141().m_pSteamParentalSettings) >= 4 );
 
 C_ASSERT( sizeof(w64_CSteamGameServerAPIContext_152) >= 64 );
 C_ASSERT( offsetof(w64_CSteamGameServerAPIContext_152, m_pSteamClient) == 0 );
@@ -20079,221 +20120,221 @@ u32_SubmitPlayerResultResultCallback_t::operator w32_SubmitPlayerResultResultCal
 #ifdef __i386__
 const struct callback_def callback_data[] =
 {
-    { 152, 158, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 159, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     /*{ 152, 122, 24, 16, MicroTxnAuthorizationResponse_t_109_w_from_u },*/
-    { 209, 158, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 159, 40, 32, GSReputation_t_123_w_from_u },
     /*{ 209, 122, 40, 32, GSReputation_t_108_w_from_u },*/
-    { 513, 158, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 159, 16, 12, LobbyCreated_t_123_w_from_u },
     /*{ 513, 122, 16, 12, LobbyCreated_t_099u_w_from_u },*/
-    { 1023, 158, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 158, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 159, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 159, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     /*{ 1106, 122, 32, 28, LeaderboardScoreUploaded_t_104_w_from_u },*/
-    { 1111, 158, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 159, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     /*{ 1111, 122, 16, 12, LeaderboardUGCSet_t_111x_w_from_u },*/
-    { 1112, 158, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 159, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     /*{ 1112, 122, 24, 20, PS3TrophiesInstalled_t_112x_w_from_u },*/
-    { 1221, 158, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 159, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     /*{ 1303, 122, 288, 280, RemoteStorageAppSyncProgress_t_111x_w_from_u },*/
-    { 1307, 158, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 159, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     /*{ 1307, 122, 16, 12, RemoteStorageFileShareResult_t_111x_w_from_u },*/
     { 1308, 116, 40, 32, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 158, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 159, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     /*{ 1309, 122, 16, 12, RemoteStoragePublishFileResult_t_116x_w_from_u },*/
     { 1310, 117, 1744, 1732, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 158, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 159, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     /*{ 1311, 122, 16, 12, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },*/
-    { 1312, 158, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 159, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     /*{ 1312, 122, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },*/
-    { 1313, 158, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 159, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 158, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 159, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     /*{ 1314, 122, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },*/
-    { 1315, 158, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 159, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 158, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 159, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     /*{ 1316, 122, 16, 12, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },*/
-    { 1317, 158, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 159, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     /*{ 1317, 122, 296, 288, RemoteStorageDownloadUGCResult_t_116x_w_from_u },*/
-    { 1318, 158, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 159, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     /*{ 1318, 122, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },*/
     { 1318, 119, 9752, 9740, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },
     { 1318, 118, 9496, 9484, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 158, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 159, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     /*{ 1319, 122, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },*/
-    { 1320, 158, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 159, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     /*{ 1320, 122, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },*/
-    { 1324, 158, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 159, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     /*{ 1324, 122, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },*/
-    { 1325, 158, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 159, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     /*{ 1325, 122, 24, 16, RemoteStorageUserVoteDetails_t_119_w_from_u },*/
-    { 1326, 158, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 159, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     /*{ 1326, 122, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },*/
-    { 1327, 158, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 159, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     /*{ 1327, 122, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },*/
-    { 1330, 158, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 158, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 159, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 159, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     /*{ 2101, 122, 24, 20, HTTPRequestCompleted_t_115_w_from_u },*/
-    { 2102, 158, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 159, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     /*{ 2102, 122, 16, 12, HTTPRequestHeadersReceived_t_121x_w_from_u },*/
-    { 2103, 158, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 159, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     /*{ 2103, 122, 24, 20, HTTPRequestDataReceived_t_121x_w_from_u },*/
-    { 2803, 158, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 158, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
-    { 3402, 158, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
+    { 2803, 159, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 159, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 158, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 158, 16, 12, ItemInstalled_t_w_from_u },
-    { 3406, 158, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 158, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 158, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 158, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 158, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 158, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 158, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 158, 48, 48, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 158, 20, 20, HTML_StartRequest_t_w_from_u },
-    { 4505, 158, 24, 24, HTML_URLChanged_t_w_from_u },
-    { 4506, 158, 12, 12, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 158, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 158, 8, 8, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 158, 20, 20, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 158, 8, 8, HTML_JSAlert_t_w_from_u },
-    { 4515, 158, 8, 8, HTML_JSConfirm_t_w_from_u },
-    { 4516, 158, 12, 12, HTML_FileOpenDialog_t_w_from_u },
+    { 3403, 159, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 159, 16, 12, ItemInstalled_t_w_from_u },
+    { 3406, 159, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 159, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 159, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 159, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 159, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 159, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 159, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 159, 48, 48, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 159, 20, 20, HTML_StartRequest_t_w_from_u },
+    { 4505, 159, 24, 24, HTML_URLChanged_t_w_from_u },
+    { 4506, 159, 12, 12, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 159, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 159, 8, 8, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 159, 20, 20, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 159, 8, 8, HTML_JSAlert_t_w_from_u },
+    { 4515, 159, 8, 8, HTML_JSConfirm_t_w_from_u },
+    { 4516, 159, 12, 12, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 16, 16, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 158, 28, 28, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 159, 28, 28, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 24, 24, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 158, 8, 8, HTML_StatusText_t_w_from_u },
-    { 4524, 158, 8, 8, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 158, 8, 8, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 158, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 158, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 158, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 158, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 158, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 158, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 158, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 158, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 159, 8, 8, HTML_StatusText_t_w_from_u },
+    { 4524, 159, 8, 8, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 159, 8, 8, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 159, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 159, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 159, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 159, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 159, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 159, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 159, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 159, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 #ifdef __x86_64__
 const struct callback_def callback_data[] =
 {
-    { 152, 158, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 159, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     { 152, 122, 24, 24, MicroTxnAuthorizationResponse_t_109_w_from_u },
-    { 209, 158, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 159, 40, 32, GSReputation_t_123_w_from_u },
     { 209, 122, 40, 40, GSReputation_t_108_w_from_u },
-    { 513, 158, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 159, 16, 12, LobbyCreated_t_123_w_from_u },
     { 513, 122, 16, 16, LobbyCreated_t_099u_w_from_u },
-    { 1023, 158, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 158, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 159, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 159, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     { 1106, 122, 32, 32, LeaderboardScoreUploaded_t_104_w_from_u },
-    { 1111, 158, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 159, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     { 1111, 122, 16, 16, LeaderboardUGCSet_t_111x_w_from_u },
-    { 1112, 158, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 159, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     { 1112, 122, 24, 24, PS3TrophiesInstalled_t_112x_w_from_u },
-    { 1221, 158, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 159, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     { 1303, 122, 288, 288, RemoteStorageAppSyncProgress_t_111x_w_from_u },
-    { 1307, 158, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 159, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     { 1307, 122, 16, 16, RemoteStorageFileShareResult_t_111x_w_from_u },
     { 1308, 116, 40, 40, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 158, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 159, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     { 1309, 122, 16, 16, RemoteStoragePublishFileResult_t_116x_w_from_u },
     { 1310, 117, 1744, 1744, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 158, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 159, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     { 1311, 122, 16, 16, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },
-    { 1312, 158, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 159, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     { 1312, 122, 416, 416, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },
-    { 1313, 158, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 159, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 158, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 159, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     { 1314, 122, 616, 616, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },
-    { 1315, 158, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 159, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 158, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 159, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     { 1316, 122, 16, 16, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },
-    { 1317, 158, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 159, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     { 1317, 122, 296, 296, RemoteStorageDownloadUGCResult_t_116x_w_from_u },
-    { 1318, 158, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 159, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     { 1318, 122, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },
     /*{ 1318, 119, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },*/
     { 1318, 118, 9496, 9496, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 158, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 159, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     { 1319, 122, 616, 616, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },
-    { 1320, 158, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 159, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     { 1320, 122, 32, 32, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },
-    { 1324, 158, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 159, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     { 1324, 122, 16, 16, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },
-    { 1325, 158, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 159, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     { 1325, 122, 24, 24, RemoteStorageUserVoteDetails_t_119_w_from_u },
-    { 1326, 158, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 159, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     { 1326, 122, 416, 416, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },
-    { 1327, 158, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 159, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     { 1327, 122, 24, 24, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },
-    { 1330, 158, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 158, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 159, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 159, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     { 2101, 122, 24, 24, HTTPRequestCompleted_t_115_w_from_u },
-    { 2102, 158, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 159, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     { 2102, 122, 16, 16, HTTPRequestHeadersReceived_t_121x_w_from_u },
-    { 2103, 158, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 159, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     { 2103, 122, 24, 24, HTTPRequestDataReceived_t_121x_w_from_u },
-    { 2803, 158, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 158, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
-    { 3402, 158, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
+    { 2803, 159, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 159, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 158, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 158, 16, 12, ItemInstalled_t_w_from_u },
-    { 3406, 158, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 158, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 158, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 158, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 158, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 158, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 158, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 158, 56, 52, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 158, 40, 32, HTML_StartRequest_t_w_from_u },
-    { 4505, 158, 48, 36, HTML_URLChanged_t_w_from_u },
-    { 4506, 158, 24, 20, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 158, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 158, 16, 12, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 158, 32, 24, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 158, 16, 12, HTML_JSAlert_t_w_from_u },
-    { 4515, 158, 16, 12, HTML_JSConfirm_t_w_from_u },
-    { 4516, 158, 24, 20, HTML_FileOpenDialog_t_w_from_u },
+    { 3403, 159, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 159, 16, 12, ItemInstalled_t_w_from_u },
+    { 3406, 159, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 159, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 159, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 159, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 159, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 159, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 159, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 159, 56, 52, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 159, 40, 32, HTML_StartRequest_t_w_from_u },
+    { 4505, 159, 48, 36, HTML_URLChanged_t_w_from_u },
+    { 4506, 159, 24, 20, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 159, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 159, 16, 12, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 159, 32, 24, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 159, 16, 12, HTML_JSAlert_t_w_from_u },
+    { 4515, 159, 16, 12, HTML_JSConfirm_t_w_from_u },
+    { 4516, 159, 24, 20, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 24, 20, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 158, 40, 32, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 159, 40, 32, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 32, 28, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 158, 16, 12, HTML_StatusText_t_w_from_u },
-    { 4524, 158, 16, 12, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 158, 16, 12, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 158, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 158, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 158, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 158, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 158, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 158, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 158, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 158, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 159, 16, 12, HTML_StatusText_t_w_from_u },
+    { 4524, 159, 16, 12, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 159, 16, 12, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 159, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 159, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 159, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 159, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 159, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 159, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 159, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 159, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 const unsigned int callback_data_size = ARRAY_SIZE(callback_data);

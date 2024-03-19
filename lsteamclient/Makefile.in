@@ -71,6 +71,7 @@ SOURCES = \
 	cppISteamClient_SteamClient018.cpp \
 	cppISteamClient_SteamClient019.cpp \
 	cppISteamClient_SteamClient020.cpp \
+	cppISteamClient_SteamClient021.cpp \
 	cppISteamController_SteamController003.cpp \
 	cppISteamController_SteamController004.cpp \
 	cppISteamController_SteamController005.cpp \

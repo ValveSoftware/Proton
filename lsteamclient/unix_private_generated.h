@@ -6064,6 +6064,7 @@ struct u_ISteamUtils_SteamUtils010
     virtual int8_t ShowFloatingGamepadTextInput( uint32_t, int32_t, int32_t, int32_t, int32_t ) = 0;
     virtual void SetGameLauncherMode( int8_t ) = 0;
     virtual int8_t DismissFloatingGamepadTextInput(  ) = 0;
+    virtual int8_t DismissGamepadTextInput(  ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -7036,6 +7037,52 @@ struct u_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002
     virtual int8_t BGetSessionClientResolution( uint32_t, int32_t *, int32_t * ) = 0;
     virtual int8_t BStartRemotePlayTogether( int8_t ) = 0;
     virtual int8_t BSendRemotePlayTogetherInvite( CSteamID ) = 0;
+#endif /* __cplusplus */
+};
+
+struct u_ISteamClient_SteamClient021
+{
+#ifdef __cplusplus
+    virtual int32_t CreateSteamPipe(  ) = 0;
+    virtual int8_t BReleaseSteamPipe( int32_t ) = 0;
+    virtual int32_t ConnectToGlobalUser( int32_t ) = 0;
+    virtual int32_t CreateLocalUser( int32_t *, uint32_t ) = 0;
+    virtual void ReleaseUser( int32_t, int32_t ) = 0;
+    virtual void /*ISteamUser*/ * GetISteamUser( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamGameServer*/ * GetISteamGameServer( int32_t, int32_t, const char * ) = 0;
+    virtual void SetLocalIPBinding( const SteamIPAddress_t *, uint16_t ) = 0;
+    virtual void /*ISteamFriends*/ * GetISteamFriends( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamUtils*/ * GetISteamUtils( int32_t, const char * ) = 0;
+    virtual void /*ISteamMatchmaking*/ * GetISteamMatchmaking( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamMatchmakingServers*/ * GetISteamMatchmakingServers( int32_t, int32_t, const char * ) = 0;
+    virtual void * GetISteamGenericInterface( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamUserStats*/ * GetISteamUserStats( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamGameServerStats*/ * GetISteamGameServerStats( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamApps*/ * GetISteamApps( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamNetworking*/ * GetISteamNetworking( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamRemoteStorage*/ * GetISteamRemoteStorage( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamScreenshots*/ * GetISteamScreenshots( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamGameSearch*/ * GetISteamGameSearch( int32_t, int32_t, const char * ) = 0;
+    virtual void RunFrame(  ) = 0;
+    virtual uint32_t GetIPCCallCount(  ) = 0;
+    virtual void SetWarningMessageHook( void (*U_CDECL )(int32_t, const char *) ) = 0;
+    virtual int8_t BShutdownIfAllPipesClosed(  ) = 0;
+    virtual void /*ISteamHTTP*/ * GetISteamHTTP( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamController*/ * GetISteamController( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamUGC*/ * GetISteamUGC( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamMusic*/ * GetISteamMusic( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamMusicRemote*/ * GetISteamMusicRemote( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamHTMLSurface*/ * GetISteamHTMLSurface( int32_t, int32_t, const char * ) = 0;
+    virtual void DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void (*U_CDECL )(void) ) = 0;
+    virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess( uint32_t (*U_CDECL )(int32_t) ) = 0;
+    virtual void /*ISteamInventory*/ * GetISteamInventory( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamVideo*/ * GetISteamVideo( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamParentalSettings*/ * GetISteamParentalSettings( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamInput*/ * GetISteamInput( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamParties*/ * GetISteamParties( int32_t, int32_t, const char * ) = 0;
+    virtual void /*ISteamRemotePlay*/ * GetISteamRemotePlay( int32_t, int32_t, const char * ) = 0;
+    virtual void DestroyAllInterfaces(  ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -10061,6 +10108,46 @@ NTSTATUS ISteamClient_SteamClient020_GetISteamInput( void * );
 NTSTATUS ISteamClient_SteamClient020_GetISteamParties( void * );
 NTSTATUS ISteamClient_SteamClient020_GetISteamRemotePlay( void * );
 NTSTATUS ISteamClient_SteamClient020_DestroyAllInterfaces( void * );
+NTSTATUS ISteamClient_SteamClient021_CreateSteamPipe( void * );
+NTSTATUS ISteamClient_SteamClient021_BReleaseSteamPipe( void * );
+NTSTATUS ISteamClient_SteamClient021_ConnectToGlobalUser( void * );
+NTSTATUS ISteamClient_SteamClient021_CreateLocalUser( void * );
+NTSTATUS ISteamClient_SteamClient021_ReleaseUser( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamUser( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamGameServer( void * );
+NTSTATUS ISteamClient_SteamClient021_SetLocalIPBinding( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamFriends( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamUtils( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamMatchmaking( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamMatchmakingServers( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamGenericInterface( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamUserStats( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamGameServerStats( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamApps( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamNetworking( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamRemoteStorage( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamScreenshots( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamGameSearch( void * );
+NTSTATUS ISteamClient_SteamClient021_RunFrame( void * );
+NTSTATUS ISteamClient_SteamClient021_GetIPCCallCount( void * );
+NTSTATUS ISteamClient_SteamClient021_SetWarningMessageHook( void * );
+NTSTATUS ISteamClient_SteamClient021_BShutdownIfAllPipesClosed( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamHTTP( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamController( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamUGC( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamMusic( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamMusicRemote( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamHTMLSurface( void * );
+NTSTATUS ISteamClient_SteamClient021_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( void * );
+NTSTATUS ISteamClient_SteamClient021_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( void * );
+NTSTATUS ISteamClient_SteamClient021_Set_SteamAPI_CCheckCallbackRegisteredInProcess( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamInventory( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamVideo( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamParentalSettings( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamInput( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamParties( void * );
+NTSTATUS ISteamClient_SteamClient021_GetISteamRemotePlay( void * );
+NTSTATUS ISteamClient_SteamClient021_DestroyAllInterfaces( void * );
 NTSTATUS ISteamController_SteamController003_Init( void * );
 NTSTATUS ISteamController_SteamController003_Shutdown( void * );
 NTSTATUS ISteamController_SteamController003_RunFrame( void * );
@@ -12890,6 +12977,7 @@ NTSTATUS ISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck( void * );
 NTSTATUS ISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput( void * );
 NTSTATUS ISteamUtils_SteamUtils010_SetGameLauncherMode( void * );
 NTSTATUS ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput( void * );
+NTSTATUS ISteamUtils_SteamUtils010_DismissGamepadTextInput( void * );
 
 #ifdef __cplusplus
 } /* extern "C" */
