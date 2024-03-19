@@ -30,7 +30,21 @@ Attaching to process 2263566
 0x000075dce0cd788d in ?? ()
 ```
 
-You can use `source` [wine's
+With Proton Experimental, GDB should be able to load the symbols right
+away. However, for the most seamless experience you will want to use a
+custom version of GDB with a couple of patches to better integrate with
+Wine.
+
+You can find this fork at https://gitlab.winehq.org/rbernon/binutils-gdb,
+which you can build with `configure && make all-gdb && make install-gdb`.
+Make sure to have python development packages installed, as GDB python
+support will be required.
+
+With this custom GDB you can `source` [Wine's custom unwinder](https://github.com/ValveSoftware/wine/blob/experimental_9.0/tools/gdbunwind.py)
+in your `~/.gdbinit`, and you will get backtraces across PE / unix boundaries.
+
+
+With older Proton you can use `source` [wine's
 gdbinit](https://github.com/ValveSoftware/wine/blob/proton_8.0/tools/gdbinit.py)
 to make `load-symbol-files` command available that uses `/proc/$pid/maps` to
 load the symbols:
