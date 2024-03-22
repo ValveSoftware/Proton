@@ -1406,6 +1406,9 @@ class Session:
         if "noopwr" in self.compat_config:
             self.env["WINE_DISABLE_VULKAN_OPWR"] = "1"
 
+        if "xalia" in self.compat_config and "PROTON_USE_XALIA" not in self.env:
+            self.env["PROTON_USE_XALIA"] = "1"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
