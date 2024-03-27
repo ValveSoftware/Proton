@@ -698,8 +698,8 @@ void *alloc_callback_wtou( int id, void *callback, int *callback_len )
 
     if (!best)
     {
-        WARN( "len %d is too small for callback %d.\n", *callback_len, id );
-        return callback;
+        ERR( "len %d is too small for callback %d, using default.\n", *callback_len, id );
+        best = find_first_callback_def_by_id( id );
     }
     if (best->w_callback_len != *callback_len)
         WARN( "Found len %d for id %d, len %d.\n", best->w_callback_len, id, *callback_len );
@@ -726,7 +726,10 @@ void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w
             best = c;
             break;
         }
-        if (!best && c->u_callback_len == u_callback_len && c->w_callback_len <= w_callback_len)
+        if ((!best || best->w_callback_len > w_callback_len)
+             && c->u_callback_len == u_callback_len && c->w_callback_len <= w_callback_len)
+            best = c;
+        if (!best && c->u_callback_len == u_callback_len)
             best = c;
         ++c;
     }
