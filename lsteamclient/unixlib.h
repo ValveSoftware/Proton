@@ -216,10 +216,11 @@ struct networking_message
 
 #include <poppack.h>
 
+NTSTATUS steamclient_call( unsigned int code, void *args, const char *name );
+
 #define STEAMCLIENT_CALL( code, args )                                     \
     ({                                                                     \
-        NTSTATUS status = WINE_UNIX_CALL( unix_ ## code, args );           \
-        if (status) WARN( #code " failed, status %#x\n", (UINT)status );   \
+        NTSTATUS status = steamclient_call( unix_ ## code, args, #code );  \
         assert( !status );                                                 \
         status;                                                            \
     })
