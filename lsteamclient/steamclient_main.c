@@ -73,6 +73,19 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
+NTSTATUS steamclient_call( unsigned int code, void *args, const char *name )
+{
+    NTSTATUS status = WINE_UNIX_CALL( code, args );
+
+    if (status == STATUS_ACCESS_VIOLATION)
+    {
+        ERR( "Access violation in %s.\n", name );
+        RaiseException( status, 0, 0, NULL );
+    }
+    if (status) WARN( "%s failed, status %#x\n", name, (UINT)status );
+    return status;
+}
+
 static BYTE *alloc_start, *alloc_end;
 
 static int8_t allocated_from_steamclient_dll( void *ptr )
