@@ -401,7 +401,9 @@ WINE_SOURCE_ARGS = \
   --exclude dlls/winevulkan/vulkan_thunks.c \
   --exclude dlls/winevulkan/vulkan_thunks.h \
   --exclude dlls/winevulkan/winevulkan.json \
-  --exclude dlls/winevulkan/winevulkan.spec
+  --exclude dlls/winevulkan/winevulkan.spec \
+  --exclude dlls/ntdll/ntsyscalls.h \
+  --exclude dlls/win32u/win32syscalls.h \
 
 WINE_CONFIGURE_ARGS = \
   --enable-werror \
