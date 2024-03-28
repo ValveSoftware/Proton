@@ -421,9 +421,9 @@ $(eval $(call rules-autoconf,wine,32))
 $(eval $(call rules-autoconf,wine,64))
 
 $(OBJ)/.wine-post-source:
-	-cd $(WINE_SRC) && tools/make_specfiles
 	cd $(WINE_SRC) && tools/make_requests
 	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan -x vk.xml
+	-cd $(WINE_SRC) && tools/make_specfiles
 	touch $@
 
 $(OBJ)/.wine-post-build64:
