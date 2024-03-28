@@ -470,6 +470,9 @@ $(eval $(call rules-makedep,vrclient,64))
 DXVK_SOURCE_DATE_EPOCH32 := $(shell expr $(BASE_SOURCE_DATE_EPOCH32) - 1)
 DXVK_SOURCE_DATE_EPOCH64 := $(shell expr $(BASE_SOURCE_DATE_EPOCH64) - 1)
 
+DXVK_SOURCE_ARGS = \
+  --exclude version.h.in \
+
 DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
 DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
 DXVK_DEPENDS = glslang
