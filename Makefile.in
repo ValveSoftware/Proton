@@ -96,6 +96,7 @@ include $(SRC)/make/rules-cmake.mk
 include $(SRC)/make/rules-autoconf.mk
 include $(SRC)/make/rules-configure.mk
 include $(SRC)/make/rules-winemaker.mk
+include $(SRC)/make/rules-wine-requests.mk
 include $(SRC)/make/rules-cargo.mk
 
 
@@ -404,6 +405,9 @@ WINE_SOURCE_ARGS = \
   --exclude dlls/winevulkan/winevulkan.spec \
   --exclude dlls/ntdll/ntsyscalls.h \
   --exclude dlls/win32u/win32syscalls.h \
+  --exclude include/wine/server_protocol.h \
+  --exclude server/request.h \
+  --exclude server/trace.c \
 
 WINE_CONFIGURE_ARGS = \
   --enable-werror \
@@ -423,9 +427,9 @@ WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
 $(eval $(call rules-autoconf,wine,64))
+$(eval $(call rules-wine-requests,wine))
 
 $(OBJ)/.wine-post-source:
-	cd $(WINE_SRC) && tools/make_requests
 	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan -x vk.xml
 	-cd $(WINE_SRC) && tools/make_specfiles
 	touch $@
