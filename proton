@@ -1144,6 +1144,14 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
+        if appid in [
+                "20530", # Red Faction
+                "72850", # The Elder Scrolls V: Skyrim
+                "397950", # Clustertruck
+                "712180", # Mugsters
+                ]:
+            ret.add("xalia")
+
     return ret
 
 default_cpu_limit = {
