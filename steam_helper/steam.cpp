@@ -188,6 +188,10 @@ static void setup_steam_registry(void)
     else if (!strcmp( language, "vietnamese" )) locale = "vi_VN.UTF-8";
     else WINE_FIXME( "Unsupported game language %s\n", wine_dbgstr_a(language) );
 
+    /* HACK: Bug 23597 Granado Espada Japan (1219160) launcher needs Japanese locale to display correctly */
+    if (appid == 1219160)
+        locale = "ja_JP.UTF-8";
+
     if (locale)
     {
         WINE_FIXME( "Game language %s, defaulting LC_CTYPE / LC_MESSAGES to %s.\n", wine_dbgstr_a(language), locale );
