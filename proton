@@ -1148,6 +1148,19 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
+        if appid in [
+                "7000", # Tomb Raider: Legend
+                "8000", # Tomb Raider: Anniversary
+                "22300", # Fallout 3
+                "22370", # Fallout 3: Game of the Year Edition
+                "72850", # The Elder Scrolls V: Skyrim
+                "377160", # Fallout 4
+                "397950", # Clustertruck
+                "489830", # The Elder Scrolls V: Skyrim Special Edition
+                "712180", # Mugsters
+                ]:
+            ret.add("xalia")
+
     return ret
 
 default_cpu_limit = {
