@@ -1075,12 +1075,12 @@ all-dist: $(DIST_XALIA)
 DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR32)/wine/dxvk
-	cp -a $< $@
+	cp -af $< $@
 
 DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR64)/wine/dxvk
-	cp -a $< $@
+	cp -af $< $@
 
 all-dist: $(DIST_OVR32) $(DIST_OVR64)
 
