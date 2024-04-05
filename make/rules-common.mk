@@ -46,6 +46,8 @@ all-build: $(1)-build
 $$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-build$(3)
 $$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-post-build$(3)
 
+$(2)_SOURCE_DATE_EPOCH$(3) ?= $$(BASE_SOURCE_DATE_EPOCH$(3))
+
 ifneq ($(UNSTRIPPED_BUILD),)
 $$(OBJ)/.$(1)-dist$(3):
 	@echo ":: installing $(3)bit $(1)..." >&2
@@ -111,6 +113,7 @@ $(2)_LIBFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
 # RC and WIDL are intentionally always using CROSS target, as their
 # native version doesn't exist.
 
+
 $(2)_ENV$(3) = \
     CARGO_TARGET_$$(call toupper,$$(CARGO_TARGET_$(3)))_LINKER="$$(TARGET_$(4)$(3))-gcc" \
     CCACHE_BASEDIR="$$(CCACHE_BASEDIR)" \
@@ -131,6 +134,7 @@ $(2)_ENV$(3) = \
     CPPFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
     CXXFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
     LDFLAGS="$$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$($(4)LDFLAGS)" \
+    SOURCE_DATE_EPOCH="$$($(2)_SOURCE_DATE_EPOCH$(3))" \
 
 ifneq ($(4),CROSS)
 
