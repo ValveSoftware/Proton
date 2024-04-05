@@ -30,6 +30,10 @@ ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include Makefile.in directly, run ./configure.sh to generate Makefile)
 endif
 
+SOURCE_DATE_EPOCH ?= $(shell date +%s)
+MFLAGS += BASE_SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
+unexport SOURCE_DATE_EPOCH
+
 DST_BASE := $(OBJ)/dist
 DST_DIR := $(DST_BASE)/files
 DST_LIBDIR32 := $(DST_DIR)/lib
@@ -72,6 +76,9 @@ $(DST_DIR):
 	mkdir -p $@
 
 ifeq ($(CONTAINER),1) # inside the container
+BASE_SOURCE_DATE_EPOCH32 := $(BASE_SOURCE_DATE_EPOCH)
+BASE_SOURCE_DATE_EPOCH64 := $(shell expr $(BASE_SOURCE_DATE_EPOCH) - 10)
+
 # all, all-dist and dist are basically synonyms
 .PHONY: all all-dist dist
 all: all-dist | $(DST_DIR)
@@ -528,6 +535,10 @@ $(eval $(call rules-makedep,vrclient,64))
 ## dxvk
 ##
 
+# wine builds DLLs with the same names, we need to differentiate the timestamps
+DXVK_SOURCE_DATE_EPOCH32 := $(shell expr $(BASE_SOURCE_DATE_EPOCH32) - 1)
+DXVK_SOURCE_DATE_EPOCH64 := $(shell expr $(BASE_SOURCE_DATE_EPOCH64) - 1)
+
 DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
 DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
 DXVK_DEPENDS = glslang
@@ -621,6 +632,10 @@ $(OBJ)/.vkd3d-post-build32:
 ##
 ## vkd3d-proton
 ##
+
+# wine builds DLLs with the same names, we need to differentiate the timestamps
+VKD3D_PROTON_SOURCE_DATE_EPOCH32 := $(shell expr $(BASE_SOURCE_DATE_EPOCH32) - 2)
+VKD3D_PROTON_SOURCE_DATE_EPOCH64 := $(shell expr $(BASE_SOURCE_DATE_EPOCH64) - 2)
 
 VKD3D_PROTON_SOURCE_ARGS = \
   --exclude vkd3d_build.h.in \
@@ -728,23 +743,6 @@ $(OBJ)/.eac-build32:
 	touch $@
 
 endif
-
-# HACK: we need to order those builds so that timestamps are different between
-# 32 and 64 bit versions of the dlls. Otherwise there's a significant chance for
-# conflict when creating symbol storage. We also have to make sure that projects
-# which build alternative versions of the DLLs do not share the same timestamps.
-#
-# This is a temporary solution that only lowers the chance of conflicts.
-# Binutils 2.42 (not released yet at the time of writing this) will introduce
-# support for SOURCE_DATE_EPOCH which we should use instead.
-$(OBJ)/.wine-build64: $(OBJ)/.wine-build32
-$(OBJ)/.vkd3d-proton-build32: $(OBJ)/.wine-build64
-$(OBJ)/.vkd3d-proton-build64: $(OBJ)/.vkd3d-proton-build32
-$(OBJ)/.dxvk-build32: $(OBJ)/.wine-build64
-$(OBJ)/.dxvk-build64: $(OBJ)/.dxvk-build32
-$(OBJ)/.dxvk-lsteamclient64: $(OBJ)/.dxvk-lsteamclient32
-$(OBJ)/.vkd3d-build64: $(OBJ)/.vkd3d-build32
-# nvapi and vrclient dlls have distinct names for 64 bit versions
 
 ##
 ## Windows Symbol Store creation
