@@ -58,10 +58,10 @@ $$(OBJ)/.$(1)-dist$(3):
 	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' -or -iname '*.h' ')' \
 	    -printf '--only-keep-debug\0%p\0$$(DST_LIBDIR$(3))/%p.debug\0' | \
-	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
+	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy -p --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' -or -iname '*.h' ')' \
 	    -printf '--add-gnu-debuglink=$$(DST_LIBDIR$(3))/%p.debug\0--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P$$(J) -n4 objcopy --file-alignment=4096 --set-section-flags .text=contents,alloc,load,readonly,code
+	    xargs $(--verbose?) -0 -r -P$$(J) -n4 objcopy -p --file-alignment=4096 --set-section-flags .text=contents,alloc,load,readonly,code
 	touch $$@
 else
 $$(OBJ)/.$(1)-dist$(3):
@@ -77,7 +77,7 @@ $$(OBJ)/.$(1)-dist$(3):
 	    -printf '$$(DST_LIBDIR$(3))/%p.debug\0' | xargs $(--verbose?) -0 -r -P$$(J) rm -f
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' -or -iname '*.h' ')' \
 	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096 --set-section-flags .text=contents,alloc,load,readonly,code
+	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy -p --file-alignment=4096 --set-section-flags .text=contents,alloc,load,readonly,code
 	touch $$@
 endif
 
@@ -157,10 +157,10 @@ endif
 endef
 
 ifneq ($(UNSTRIPPED_BUILD),)
-install-strip = objcopy --file-alignment=4096 --only-keep-debug $(1) $(2)/$(notdir $(1)).debug && \
-                objcopy --file-alignment=4096 --add-gnu-debuglink=$(2)/$(notdir $(1)).debug --strip-debug $(1) $(2)/$(notdir $(1))
+install-strip = objcopy -p --file-alignment=4096 --only-keep-debug $(1) $(2)/$(notdir $(1)).debug && \
+                objcopy -p --file-alignment=4096 --add-gnu-debuglink=$(2)/$(notdir $(1)).debug --strip-debug $(1) $(2)/$(notdir $(1))
 else
-install-strip = objcopy --file-alignment=4096 --strip-debug $(1) $(2)/$(notdir $(1)) && rm -f $(2)/$(notdir $(1)).debug
+install-strip = objcopy -p --file-alignment=4096 --strip-debug $(1) $(2)/$(notdir $(1)) && rm -f $(2)/$(notdir $(1)).debug
 endif
 
 TARGET_32 := i686-linux-gnu
