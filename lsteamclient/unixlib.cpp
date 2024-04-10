@@ -492,6 +492,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
         char *unix_path;
         uint32_t r;
 
+        if (is_url) while (*src == '/') ++src;
         r = ntdll_umbstowcs( src, -1, srcW + 4, PATH_MAX - 4 );
         if (r == 0) unix_path = NULL;
         else
