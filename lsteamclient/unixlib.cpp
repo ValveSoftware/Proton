@@ -503,7 +503,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
         if (!unix_path)
         {
             WARN( "Unable to convert DOS filename to unix: %s\n", src );
-            return NULL;
+            goto done;
         }
 
         lstrcpynA( dst, unix_path, PATH_MAX );
