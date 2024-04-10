@@ -433,6 +433,74 @@ NTSTATUS steamclient_Steam_NotifyMissingInterface( void *args )
 
 #define IS_ABSOLUTE( x ) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
 
+static void collapse_path( WCHAR *path, UINT mark )
+{
+    WCHAR *p, *next;
+
+    /* convert every / into a \ */
+    for (p = path; *p; p++) if (*p == '/') *p = '\\';
+
+    /* collapse duplicate backslashes */
+    next = path + std::max( 1u, mark );
+    for (p = next; *p; p++) if (*p != '\\' || next[-1] != '\\') *next++ = *p;
+    *next = 0;
+
+    p = path + mark;
+    while (*p)
+    {
+        if (*p == '.')
+        {
+            switch(p[1])
+            {
+            case '\\': /* .\ component */
+                next = p + 2;
+                memmove( p, next, (wcslen(next) + 1) * sizeof(WCHAR) );
+                continue;
+            case 0:  /* final . */
+                if (p > path + mark) p--;
+                *p = 0;
+                continue;
+            case '.':
+                if (p[2] == '\\')  /* ..\ component */
+                {
+                    next = p + 3;
+                    if (p > path + mark)
+                    {
+                        p--;
+                        while (p > path + mark && p[-1] != '\\') p--;
+                    }
+                    memmove( p, next, (wcslen(next) + 1) * sizeof(WCHAR) );
+                    continue;
+                }
+                else if (!p[2])  /* final .. */
+                {
+                    if (p > path + mark)
+                    {
+                        p--;
+                        while (p > path + mark && p[-1] != '\\') p--;
+                        if (p > path + mark) p--;
+                    }
+                    *p = 0;
+                    continue;
+                }
+                break;
+            }
+        }
+        /* skip to the next component */
+        while (*p && *p != '\\') p++;
+        if (*p == '\\')
+        {
+            /* remove last dot in previous dir name */
+            if (p > path + mark && p[-1] == '.') memmove( p-1, p, (wcslen(p) + 1) * sizeof(WCHAR) );
+            else p++;
+        }
+    }
+
+    /* remove trailing spaces and dots (yes, Windows really does that, don't ask) */
+    while (p > path + mark && (p[-1] == ' ' || p[-1] == '.')) p--;
+    *p = 0;
+}
+
 static char *get_unix_file_name( const WCHAR *path )
 {
     UNICODE_STRING nt_name;
@@ -488,7 +556,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
     if (IS_ABSOLUTE( src ))
     {
         /* absolute path, use wine conversion */
-        WCHAR srcW[PATH_MAX] = {'\\', '?', '?', '\\', 0}, *tmp;
+        WCHAR srcW[PATH_MAX] = {'\\', '?', '?', '\\', 0};
         char *unix_path;
         uint32_t r;
 
@@ -497,7 +565,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
         if (r == 0) unix_path = NULL;
         else
         {
-            for (tmp = srcW; *tmp; ++tmp) if (*tmp == '/') *tmp = '\\';
+            collapse_path( srcW, 4 );
             unix_path = get_unix_file_name( srcW );
         }
 
@@ -544,7 +612,7 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
     size_t len;
     const char **s;
     char **out, **o;
-    WCHAR scratch[PATH_MAX] = {'\\', '?', '?', '\\', 0}, *tmp;
+    WCHAR scratch[PATH_MAX] = {'\\', '?', '?', '\\', 0};
 
     TRACE( "src %p\n", src );
 
@@ -561,7 +629,7 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
         if (IS_ABSOLUTE( *s ))
         {
             ntdll_umbstowcs( *s, -1, scratch + 4, PATH_MAX - 4 );
-            for (tmp = scratch; *tmp; ++tmp) if (*tmp == '/') *tmp = '\\';
+            collapse_path( scratch, 4 );
             *o = get_unix_file_name( scratch );
         }
         else
