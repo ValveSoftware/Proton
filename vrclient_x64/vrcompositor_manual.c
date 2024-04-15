@@ -7,6 +7,7 @@
 #define COBJMACROS
 #include "d3d11_4.h"
 #include "dxvk-interop.h"
+#include "vkd3d-proton-interop.h"
 #include "vrclient_private.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -23,6 +24,8 @@ struct submit_state
     VkImageSubresourceRange subresources;
     IDXGIVkInteropSurface *dxvk_surface;
     IDXGIVkInteropDevice *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device;
+    ID3D12CommandQueue *d3d12_queue;
 };
 
 static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
@@ -109,6 +112,240 @@ static void free_compositor_texture_dxvk( struct submit_state *state )
                                                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout );
     state->dxvk_device->lpVtbl->Release( state->dxvk_device );
     state->dxvk_surface->lpVtbl->Release( state->dxvk_surface );
+}
+
+void free_compositor_data_d3d12_device(void)
+{
+    if (!compositor_data.vk_device) return;
+
+    for (int i = 0; i < ARRAY_SIZE(compositor_data.vk_fences); i++)
+    {
+        if (compositor_data.vk_fences[i] == VK_NULL_HANDLE)
+            continue;
+        compositor_data.p_vkDestroyFence(compositor_data.vk_device, compositor_data.vk_fences[i], NULL);
+    }
+    compositor_data.p_vkFreeCommandBuffers(compositor_data.vk_device, compositor_data.vk_command_pool, 3, compositor_data.vk_command_buffers);
+    compositor_data.p_vkDestroyCommandPool(compositor_data.vk_device, compositor_data.vk_command_pool, NULL);
+
+    IUnknown_Release(compositor_data.d3d12_device);
+    IUnknown_Release(compositor_data.d3d12_queue);
+    compositor_data.d3d12_device = NULL;
+    compositor_data.d3d12_queue = NULL;
+    compositor_data.vk_device = VK_NULL_HANDLE;
+    compositor_data.vk_queue = VK_NULL_HANDLE;
+    compositor_data.command_buffer_index = 0;
+    memset(compositor_data.vk_fences, 0, sizeof(compositor_data.vk_fences));
+    memset(compositor_data.vk_command_buffers, 0, sizeof(compositor_data.vk_command_buffers));
+}
+
+static void compositor_data_set_d3d12_device(ID3D12DXVKInteropDevice *d3d12_device, ID3D12CommandQueue *d3d12_queue, const w_VRVulkanTextureData_t *vkdata)
+{
+        const WCHAR winevulkan_dll[] = L"winevulkan.dll";
+        HMODULE winevulkan = NULL;
+        PFN_vkGetDeviceProcAddr p_vkGetDeviceProcAddr = NULL;
+        VkCommandPoolCreateInfo create_info = {
+            .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+            .flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+            .pNext = NULL,
+            .queueFamilyIndex = vkdata->m_nQueueFamilyIndex,
+        };
+        VkCommandBufferAllocateInfo allocate_info = {
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+            .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+            .commandBufferCount = ARRAY_SIZE(compositor_data.vk_command_buffers),
+        };
+
+        if (compositor_data.d3d12_device == d3d12_device)
+        {
+            if (compositor_data.d3d12_queue != d3d12_queue)
+            {
+                IUnknown_Release(compositor_data.d3d12_queue);
+                compositor_data.d3d12_queue = d3d12_queue;
+                IUnknown_AddRef(d3d12_queue);
+                compositor_data.vk_queue = vkdata->m_pQueue;
+            }
+            return;
+        }
+
+        free_compositor_data_d3d12_device();
+        compositor_data.d3d12_device = d3d12_device;
+        compositor_data.d3d12_queue = d3d12_queue;
+        IUnknown_AddRef(compositor_data.d3d12_device);
+        IUnknown_AddRef(compositor_data.d3d12_queue);
+
+        compositor_data.vk_device = vkdata->m_pDevice;
+        compositor_data.vk_queue = vkdata->m_pQueue;
+
+        winevulkan = LoadLibraryW(winevulkan_dll);
+        p_vkGetDeviceProcAddr = (void *)GetProcAddress(winevulkan, "vkGetDeviceProcAddr");
+#define X(proc) compositor_data.p_##proc = (void *)p_vkGetDeviceProcAddr(compositor_data.vk_device, #proc);
+        VK_PROCS
+#undef X
+
+        compositor_data.p_vkCreateCommandPool(compositor_data.vk_device, &create_info, NULL, &compositor_data.vk_command_pool);
+
+        allocate_info.commandPool = compositor_data.vk_command_pool;
+        compositor_data.p_vkAllocateCommandBuffers(compositor_data.vk_device, &allocate_info, compositor_data.vk_command_buffers);
+}
+
+static void transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout)
+{
+    VkCommandBufferBeginInfo begin_info = {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+    };
+    VkImageMemoryBarrier barrier = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+        .oldLayout = from_layout,
+        .newLayout = to_layout,
+        .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .image = image,
+        .subresourceRange = *subres,
+        .srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT,
+        .dstAccessMask = VK_ACCESS_MEMORY_READ_BIT,
+    };
+    VkCommandBuffer command_buffer = compositor_data.vk_command_buffers[compositor_data.command_buffer_index];
+    VkFence *fence = &compositor_data.vk_fences[compositor_data.command_buffer_index];
+    VkSubmitInfo submit_info = {
+        .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .commandBufferCount = 1,
+        .pCommandBuffers = &command_buffer,
+    };
+
+    if (from_layout == to_layout) return;
+
+    if (*fence == VK_NULL_HANDLE)
+    {
+        VkFenceCreateInfo create_info = {
+            .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+            .pNext = NULL,
+            .flags = 0
+        };
+        if (compositor_data.p_vkCreateFence(compositor_data.vk_device, &create_info, NULL, fence) != VK_SUCCESS)
+        {
+            ERR("Cannot create fence\n");
+            return;
+        }
+    }
+    else if (compositor_data.p_vkWaitForFences(compositor_data.vk_device, 1, fence, VK_FALSE, 1000000000) != VK_SUCCESS)
+    {
+        ERR("Failed to wait for fence\n");
+        return;
+    }
+
+    compositor_data.p_vkResetFences(compositor_data.vk_device, 1, fence);
+    compositor_data.p_vkBeginCommandBuffer(command_buffer, &begin_info);
+    compositor_data.p_vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+            0, 0, NULL, 0, NULL, 1, &barrier);
+    compositor_data.p_vkEndCommandBuffer(command_buffer);
+    compositor_data.p_vkQueueSubmit(compositor_data.vk_queue, 1, &submit_info, *fence);
+    compositor_data.command_buffer_index = (compositor_data.command_buffer_index + 1) % ARRAY_SIZE(compositor_data.vk_command_buffers);
+}
+
+static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
+                                                         struct submit_state *state, uint32_t array_index )
+{
+    static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty |
+            Submit_TextureWithPose;
+    HRESULT hr;
+    w_VRVulkanTextureData_t vkdata;
+    VkImageCreateInfo image_info;
+    ID3D12Resource *resource_iface;
+    ID3D12CommandQueue *queue_iface;
+    w_D3D12TextureData_t *texture_data = texture->handle;
+
+    TRACE( "texture = %p\n", texture );
+
+    if (!(resource_iface = texture_data->m_pResource) || !(queue_iface = texture_data->m_pCommandQueue))
+    {
+        WARN( "Invalid D3D12 texture %p.\n", texture );
+        return texture;
+    }
+
+    hr = queue_iface->lpVtbl->GetDevice( queue_iface, &IID_ID3D12DXVKInteropDevice, (void **)&state->d3d12_device );
+    if (FAILED(hr))
+    {
+        WARN( "Failed to get vkd3d-proton device.\n" );
+        return texture;
+    }
+
+    state->texture.texture = vrclient_translate_texture_d3d12( texture, &vkdata, state->d3d12_device, resource_iface, queue_iface, &state->image_layout,
+                                                               &image_info );
+
+    state->vkdata.m_nImage = vkdata.m_nImage;
+    state->vkdata.m_pDevice = vkdata.m_pDevice;
+    state->vkdata.m_pPhysicalDevice = vkdata.m_pPhysicalDevice;
+    state->vkdata.m_pInstance = vkdata.m_pInstance;
+    state->vkdata.m_pQueue = vkdata.m_pQueue;
+    state->vkdata.m_nQueueFamilyIndex = vkdata.m_nQueueFamilyIndex;
+    state->vkdata.m_nWidth = vkdata.m_nWidth;
+    state->vkdata.m_nHeight = vkdata.m_nHeight;
+    state->vkdata.m_nFormat = vkdata.m_nFormat;
+    state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
+    state->texture.texture.handle = &state->vkdata;
+
+    if (*flags & Submit_TextureWithDepth)
+    {
+        WARN( "Ignoring depth.\n" );
+        *flags &= ~Submit_TextureWithDepth;
+    }
+
+    if (*flags & Submit_TextureWithPose)
+        ((w_VRTextureWithPose_t *)&state->texture.texture)->mDeviceToAbsoluteTracking =
+                ((w_VRTextureWithPose_t*)texture)->mDeviceToAbsoluteTracking;
+
+    if (*flags & ~supported_flags) FIXME( "Unhandled flags %#x.\n", *flags );
+
+    state->d3d12_queue = queue_iface;
+    compositor_data_set_d3d12_device(state->d3d12_device, state->d3d12_queue, &vkdata);
+    IUnknown_Release(state->d3d12_device);
+
+    if (image_info.arrayLayers > 1 || array_index != ~0u)
+    {
+        TRACE( "arrayLayers %u.\n", image_info.arrayLayers );
+        state->vkdata.m_unArrayIndex = array_index != ~0u ? array_index : eye;
+        state->vkdata.m_unArraySize = image_info.arrayLayers;
+        *flags = *flags | Submit_VulkanTextureWithArrayData;
+    }
+
+    state->subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    state->subresources.baseMipLevel = 0;
+    state->subresources.levelCount = image_info.mipLevels;
+    state->subresources.baseArrayLayer = 0;
+    state->subresources.layerCount = image_info.arrayLayers;
+
+    state->d3d12_device->lpVtbl->LockCommandQueue( state->d3d12_device, queue_iface );
+    transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
+    return &state->texture.texture;
+}
+
+static void free_compositor_texture_d3d12( struct submit_state *state )
+{
+    if (!state->d3d12_device) return;
+
+    transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout);
+    state->d3d12_device->lpVtbl->UnlockCommandQueue( state->d3d12_device, state->d3d12_queue );
+}
+
+static const w_Texture_t *load_compositor_texture( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
+                                                   struct submit_state *state, uint32_t array_index )
+{
+    switch (texture->eType)
+    {
+    case TextureType_DirectX:
+        return load_compositor_texture_dxvk( eye, texture, flags, state, array_index );
+    case TextureType_DirectX12:
+        return load_compositor_texture_d3d12( eye, texture, flags, state, array_index );
+    default: return texture;
+    }
+}
+
+static void free_compositor_texture( uint32_t type, struct submit_state *state )
+{
+    if (type == TextureType_DirectX) free_compositor_texture_dxvk( state );
+    else if (type == TextureType_DirectX12) free_compositor_texture_d3d12( state );
 }
 
 struct set_skybox_override_state
@@ -206,27 +443,36 @@ static void set_skybox_override_done( const w_Texture_t *textures, uint32_t coun
 
 static void post_present_handoff_init( void *linux_side, unsigned int version )
 {
-    if (!compositor_data.dxvk_device) return;
-    compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
+    /* I sure hope no application will submit both D3D11 and D3D12 textures... */
+    if (compositor_data.dxvk_device)
+        compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.d3d12_device)
+        compositor_data.d3d12_device->lpVtbl->LockCommandQueue( compositor_data.d3d12_device, compositor_data.d3d12_queue );
 }
 
 static void post_present_handoff_done(void)
 {
     compositor_data.handoff_called = TRUE;
-    if (!compositor_data.dxvk_device) return;
-    compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.dxvk_device)
+        compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.d3d12_device)
+        compositor_data.d3d12_device->lpVtbl->UnlockCommandQueue( compositor_data.d3d12_device, compositor_data.d3d12_queue );
 }
 
 static void wait_get_poses_init( void *linux_side )
 {
-    if (!compositor_data.dxvk_device) return;
-    compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.dxvk_device)
+        compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.d3d12_device)
+        compositor_data.d3d12_device->lpVtbl->LockCommandQueue( compositor_data.d3d12_device, compositor_data.d3d12_queue );
 }
 
 static void wait_get_poses_done( void *linux_side )
 {
-    if (!compositor_data.dxvk_device) return;
-    compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.dxvk_device)
+        compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue( compositor_data.dxvk_device );
+    if (compositor_data.d3d12_device)
+        compositor_data.d3d12_device->lpVtbl->UnlockCommandQueue( compositor_data.d3d12_device, compositor_data.d3d12_queue );
 }
 
 uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_iface *_this,
@@ -245,10 +491,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_009_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -293,10 +538,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_010_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -341,10 +585,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_011_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -389,10 +632,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_012_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -437,10 +679,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_013_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -485,10 +726,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_014_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -533,10 +773,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_015_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -600,10 +839,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_016_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -667,10 +905,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_017_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -734,10 +971,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_018_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -801,10 +1037,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_019_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -868,10 +1103,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_020_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -951,10 +1185,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_021_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1050,10 +1283,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_022_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1149,10 +1381,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_024_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1248,10 +1479,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_026_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1347,10 +1577,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_027_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1446,10 +1675,9 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_028_Submit( struct w_steam_if
     TRACE( "_this %p, eEye %u, pTexture %p (eType %u), pBounds %p, nSubmitFlags %#x\n", _this, eEye, pTexture, pTexture->eType, pBounds, nSubmitFlags );
 
     compositor_data.handoff_called = FALSE;
-    if (pTexture->eType == TextureType_DirectX)
-        params.pTexture = load_compositor_texture_dxvk( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
+    params.pTexture = load_compositor_texture( eEye, pTexture, &params.nSubmitFlags, &state, ~0u );
     VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_Submit, &params );
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return params._ret;
 }
 
@@ -1479,6 +1707,21 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex( str
         VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_Submit, &params );
         ret = params._ret;
     }
+    else if (pTexture->eType == TextureType_DirectX12)
+    {
+        struct IVRCompositor_IVRCompositor_028_Submit_params params =
+        {
+            .linux_side = _this->u_iface,
+            .eEye = eEye,
+            .pTexture = pTexture,
+            .pBounds = pBounds,
+            .nSubmitFlags = nSubmitFlags,
+        };
+
+        params.pTexture = load_compositor_texture_d3d12( eEye, pTexture, &params.nSubmitFlags, &state, unTextureArrayIndex );
+        VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_Submit, &params );
+        ret = params._ret;
+    }
     else
     {
         struct IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex_params params =
@@ -1494,7 +1737,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_028_SubmitWithArrayIndex( str
         VRCLIENT_CALL( IVRCompositor_IVRCompositor_028_SubmitWithArrayIndex, &params );
         ret = params._ret;
     }
-    if (pTexture->eType == TextureType_DirectX) free_compositor_texture_dxvk( &state );
+    free_compositor_texture( pTexture->eType, &state );
     return ret;
 }
 
