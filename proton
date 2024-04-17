@@ -1112,6 +1112,7 @@ def default_compat_config():
         if appid in [
                 "21980", #Call of Juarez: Bound in Blood
                 "553850", #Helldivers 2
+                "2055290", #Sonic Colors: Ultimate
                 ]:
             ret.add("heapzeromemory")
 
