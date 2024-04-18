@@ -1358,7 +1358,10 @@ class XrParam(object):
             elif self.type in ["XrVector2f"]:
                 self.format_str = "%f, %f"
                 self.format_conv = "{0}.x, {0}.y"
-            elif self.type in ["VisualID", "xcb_visualid_t", "VkInstance", "XrPosef"]:
+            elif self.type in ["XrPosef"]:
+                self.format_str = "{{%f, %f, %f, %f}, {%f %f %f}}"
+                self.format_conv = "{0}.orientation.x, {0}.orientation.y, {0}.orientation.z, {0}.orientation.w, {0}.position.x, {0}.position.y, {0}.position.z"
+            elif self.type in ["VisualID", "xcb_visualid_t", "VkInstance"]:
                 # Don't care about Linux specific types.
                 self.format_str = ""
             else:
