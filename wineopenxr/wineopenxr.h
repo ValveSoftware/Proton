@@ -1545,13 +1545,13 @@ typedef struct XrHandJointLocationsEXT XrHandJointLocationsEXT;
 typedef struct XrSpatialAnchorSpaceCreateInfoMSFT XrSpatialAnchorSpaceCreateInfoMSFT;
 typedef struct XrControllerModelStateMSFT XrControllerModelStateMSFT;
 typedef struct XrNewSceneComputeInfoMSFT XrNewSceneComputeInfoMSFT;
+typedef void (XRAPI_PTR * PFN_xrVoidFunction)(
+void);
 typedef XrBool32 (XRAPI_PTR * PFN_xrDebugUtilsMessengerCallbackEXT)(
     XrDebugUtilsMessageSeverityFlagsEXT messageSeverity,
     XrDebugUtilsMessageTypeFlagsEXT messageTypes,
     const XrDebugUtilsMessengerCallbackDataEXT *callbackData,
     void *userData);
-typedef void (XRAPI_PTR * PFN_xrVoidFunction)(
-void);
 
 struct XrActionCreateInfo
 {
