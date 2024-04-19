@@ -770,11 +770,12 @@ class XrFunction(object):
 
 
 class XrFunctionPointer(object):
-    def __init__(self, _type, name, members):
+    def __init__(self, _type, name, members, params_text):
         self.name = name
         self.members = members
         self.type = _type
         self.required = False
+        self.params_text = params_text
 
     @staticmethod
     def from_xml(funcpointer):
@@ -811,7 +812,19 @@ class XrFunctionPointer(object):
 
         _type = funcpointer.text
         name = funcpointer.find("name").text
-        return XrFunctionPointer(_type, name, members)
+        params_text = None
+        if members == []:
+            index = 0
+            for elem_part in funcpointer.itertext():
+                index = index + 1
+                if index == 3:
+                    p = re.findall(r'\([^)]*\)', elem_part)
+                    params_text = next(iter(p), None)
+                    if params_text:
+                        params_text = params_text[1:-1]
+                    break
+
+        return XrFunctionPointer(_type, name, members, params_text)
 
     def definition(self):
         text = "{0} {1})(\n".format(self.type, self.name)
@@ -824,6 +837,8 @@ class XrFunctionPointer(object):
                     first = False
                 else:
                     text += ",\n    " + m.definition()
+        elif self.params_text is not None:
+            text += self.params_text
         else:
             # Just make the compiler happy by adding a void parameter.
             text += "void"
