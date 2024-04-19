@@ -1750,6 +1750,8 @@ class XrStruct(Sequence):
             return True
 
         for m in self.members:
+            if m.type == self.name:
+                continue
             if m.needs_conversion():
                 return True
         return False
