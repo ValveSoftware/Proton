@@ -35,6 +35,11 @@
 #pragma pop_macro("_WIN32")
 #pragma pop_macro("__cdecl")
 
+typedef struct XrApiLayerCreateInfo XrApiLayerCreateInfo;
+typedef struct XrNegotiateLoaderInfo XrNegotiateLoaderInfo;
+typedef struct XrNegotiateApiLayerRequest XrNegotiateApiLayerRequest;
+typedef struct XrNegotiateRuntimeRequest XrNegotiateRuntimeRequest;
+
 #include "openxr_private.h"
 
 #include "wine/vulkan_driver.h"
@@ -858,6 +863,13 @@ cleanup:
     return res;
 }
 
+XrResult WINAPI wine_xrCreateApiLayerInstance(const XrInstanceCreateInfo *info, const XrApiLayerCreateInfo *layerInfo, XrInstance *instance)
+{
+    WINE_TRACE("%p, %p, %p\n", info, layerInfo, instance);
+
+    return wine_xrCreateInstance(info, instance);
+}
+
 XrResult WINAPI wine_xrDestroyInstance(XrInstance instance)
 {
     wine_XrInstance *wine_instance = (wine_XrInstance *)instance;
@@ -1061,10 +1073,10 @@ XrResult WINAPI wine_xrDestroySession(XrSession session)
     return XR_SUCCESS;
 }
 
-XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(
-        const XrNegotiateLoaderInfo_win *loaderInfo,
-        XrNegotiateRuntimeRequest_win *runtimeRequest)
+XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(const XrNegotiateLoaderInfo *info, XrNegotiateRuntimeRequest *request)
 {
+    const XrNegotiateLoaderInfo_win *loaderInfo = (const XrNegotiateLoaderInfo_win *)info;
+    XrNegotiateRuntimeRequest_win *runtimeRequest = (XrNegotiateRuntimeRequest_win *)request;
     XrResult res;
 
     WINE_TRACE("%p %p\n", loaderInfo, runtimeRequest);
@@ -1358,6 +1370,8 @@ XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventDa
     WINE_TRACE("%p, %p\n", instance, eventData);
 
     res = xrPollEvent(((wine_XrInstance *)instance)->instance, eventData);
+
+    WINE_TRACE("eventData->type %#x\n", eventData->type);
 
     if(res == XR_SUCCESS){
         switch(eventData->type){

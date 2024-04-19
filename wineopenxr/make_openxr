@@ -62,7 +62,7 @@ LOGGER = logging.Logger("openxr")
 LOGGER.addHandler(logging.StreamHandler())
 
 XR_XML_VERSION = "1.0.11"
-WINE_XR_VERSION = (1, 0)
+WINE_XR_VERSION = (1, 1)
 
 # Filenames to create.
 WINE_OPENXR_H = "./wineopenxr.h"
@@ -145,6 +145,9 @@ DRIVER_VERSION = 1
 FUNCTION_OVERRIDES = {
     # Global functions
     "xrCreateInstance" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrCreateApiLayerInstance" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrNegotiateLoaderRuntimeInterface" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrNegotiateLoaderApiLayerInterface" : {"dispatch" : False, "driver" : False, "thunk" : False},
     "xrDestroyInstance" : {"dispatch" : False, "driver" : True, "thunk" : False},
 
     "xrCreateSession" : {"dispatch" : True, "driver" : True, "thunk" : False},
@@ -173,6 +176,12 @@ FUNCTION_OVERRIDES = {
     "xrDestroySwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEndFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
 }
+
+NOT_OUR_FUNCTIONS = [
+    # xr.xml defines that as a part of XR_LOADER_VERSION_1_0 commands but it looks like only layers should provide it
+    # (through dll export).
+    "xrNegotiateLoaderApiLayerInterface",
+]
 
 STRUCT_CHAIN_CONVERSIONS = [
     "XrInstanceCreateInfo",
@@ -1352,7 +1361,7 @@ class XrParam(object):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "HANDLE":
                 self.format_str = "%p"
-            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT"]:
+            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT", "XrMarkerML"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["XrVector2f"]:
@@ -2538,7 +2547,8 @@ class XrRegistry(object):
         # calls out in the 3 types of functions: device, global and instance.
         instance_funcs = []
         for func in funcs.values():
-            instance_funcs.append(func)
+            if not func.name in NOT_OUR_FUNCTIONS:
+                instance_funcs.append(func)
 
         # Sort function lists by name and store them.
         self.instance_funcs = sorted(instance_funcs, key=lambda func: func.name)
