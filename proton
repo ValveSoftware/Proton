@@ -1110,6 +1110,7 @@ def default_compat_config():
             ret.add("heapdelayfree")
 
         if appid in [
+                "21980", #Call of Juarez: Bound in Blood
                 "553850", #Helldivers 2
                 ]:
             ret.add("heapzeromemory")
