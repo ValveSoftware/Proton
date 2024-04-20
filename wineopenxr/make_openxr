@@ -217,6 +217,10 @@ STRUCT_CHAIN_CONVERSIONS = [
     "XrInstanceCreateInfo",
 ]
 
+STRUCTS_PUT_FIRST = [
+    "XrUuid",
+    "XrExtent3Df",
+]
 
 class Direction(Enum):
     """ Parameter direction: input, output, input_output. """
@@ -1561,7 +1565,7 @@ class XrParam(object):
 class XrStruct(Sequence):
     """ Class which represents the type union and struct. """
 
-    def __init__(self, name, members, returnedonly, structextends, alias=None, union=False):
+    def __init__(self, name, members, returnedonly, structextends, alias=None, union=False, dep_level=1000):
         self.name = name
         self.members = members
         self.returnedonly = returnedonly
@@ -1572,6 +1576,7 @@ class XrStruct(Sequence):
         self.type_info = None # To be set later.
         self.struct_extensions = []
         self.aliased_by = []
+        self.dep_level = dep_level
 
     def __getitem__(self, i):
         return self.members[i]
@@ -1607,7 +1612,11 @@ class XrStruct(Sequence):
             xr_member = XrMember.from_xml(member)
             members.append(xr_member)
 
-        return XrStruct(name, members, returnedonly, structextends, union=union)
+        if name in STRUCTS_PUT_FIRST:
+            dep_level = 0
+        else:
+            dep_level = 1000
+        return XrStruct(name, members, returnedonly, structextends, union=union, dep_level=dep_level)
 
     @staticmethod
     def decouple_structs(structs):
@@ -2943,7 +2952,7 @@ class XrRegistry(object):
         self.enums = OrderedDict(sorted(self.enums.items()))
         self.funcpointers = funcpointers
         self.handles = sorted(handles, key=lambda handle: handle.name)
-        self.structs = sorted(structs, key=lambda struct: struct.name)
+        self.structs = sorted(structs, key=lambda struct: (struct.dep_level, struct.name))
 
 def collect_element_text(e):
     return "".join(e.itertext())
