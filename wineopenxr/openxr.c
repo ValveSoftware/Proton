@@ -15,6 +15,8 @@
 #include "d3d11_3.h"
 #include "d3d12.h"
 
+#include "wine/rbtree.h"
+
 /* we want to use the native linux header */
 #pragma push_macro("_WIN32")
 #pragma push_macro("__cdecl")
@@ -81,6 +83,26 @@ static char *wineopenxr_strdup(const char *src)
     char *r = heap_alloc(l);
     strcpy(r, src);
     return r;
+}
+
+struct handle_instance_lookup_entry
+{
+    struct rb_entry entry;
+    uint64_t handle;
+    struct openxr_instance_funcs *funcs;
+};
+
+static struct rb_tree handle_instance_lookup;
+static SRWLOCK handle_instance_lookup_lock = SRWLOCK_INIT;
+static struct wine_XrInstance *last_instance;
+
+static int wrapper_entry_compare(const void *key, const struct rb_entry *entry)
+{
+    struct handle_instance_lookup_entry *wrapper = RB_ENTRY_VALUE(entry, struct handle_instance_lookup_entry, entry);
+    const uint64_t *handle = key;
+    if (*handle < wrapper->handle) return -1;
+    if (*handle > wrapper->handle) return 1;
+    return 0;
 }
 
 VkDevice(*get_native_VkDevice)(VkDevice);
@@ -587,6 +609,7 @@ XrResult load_host_openxr_loader(void)
 
     load_vk_unwrappers();
 
+    rb_init(&handle_instance_lookup, wrapper_entry_compare);
     return XR_SUCCESS;
 }
 
@@ -825,6 +848,7 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 #undef USE_XR_FUNC
 
     *instance = (XrInstance)wine_instance;
+    last_instance = wine_instance;
 
 cleanup:
     for(i = 0; i < our_createInfo.enabledExtensionCount; ++i)
@@ -1034,486 +1058,6 @@ XrResult WINAPI wine_xrDestroySession(XrSession session)
     heap_free(wine_session->composition_layers);
     heap_free(wine_session);
 
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateHandTrackerEXT(XrSession session, const XrHandTrackerCreateInfoEXT *createInfo,
-        XrHandTrackerEXT *handTracker)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrHandTrackerEXT *wine_handTracker;
-    XrResult res;
-
-    WINE_TRACE("%p, %p, %p\n", session, createInfo, handTracker);
-
-    wine_handTracker = heap_alloc_zero(sizeof(*wine_handTracker));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateHandTrackerEXT(wine_session->session, createInfo, &wine_handTracker->hand_tracker);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateHandTrackerEXT failed: %d\n", res);
-        heap_free(wine_handTracker);
-        return res;
-    }
-
-    wine_handTracker->wine_session = wine_session;
-
-    *handTracker = (XrHandTrackerEXT)wine_handTracker;
-
-    WINE_TRACE("allocated wine handTracker %p for native handTracker %p\n",
-            wine_handTracker, wine_handTracker->hand_tracker);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyHandTrackerEXT(XrHandTrackerEXT handTracker)
-{
-    wine_XrHandTrackerEXT *wine_handTracker = (wine_XrHandTrackerEXT *)handTracker;
-    XrResult res;
-
-    WINE_TRACE("%p\n", handTracker);
-
-    res = wine_handTracker->wine_session->wine_instance->funcs.p_xrDestroyHandTrackerEXT(wine_handTracker->hand_tracker);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrDestroyHandTrackerEXT failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_handTracker);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateSpatialAnchorMSFT(XrSession session,
-        const XrSpatialAnchorCreateInfoMSFT *createInfo, XrSpatialAnchorMSFT *anchor)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrSpatialAnchorMSFT *wine_anchor;
-    XrResult res;
-
-    WINE_TRACE("%p, %p, %p\n", session, createInfo, anchor);
-
-    wine_anchor = heap_alloc_zero(sizeof(*wine_anchor));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorMSFT(wine_session->session, createInfo, &wine_anchor->spatial_anchor);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSpatialAnchorMSFT failed: %d\n", res);
-        heap_free(wine_anchor);
-        return res;
-    }
-
-    wine_anchor->wine_session = wine_session;
-
-    *anchor = (XrSpatialAnchorMSFT)wine_anchor;
-
-    WINE_TRACE("allocated wine spatialAnchor %p for native spatialAnchor %p\n",
-            wine_anchor, wine_anchor->spatial_anchor);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateSpatialAnchorFromPersistedNameMSFT(XrSession session,
-        const XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT *create_info,
-        XrSpatialAnchorMSFT *anchor)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrSpatialAnchorMSFT *wine_anchor;
-    XrResult res;
-
-    WINE_TRACE("%p, %p, %p\n", session, create_info, anchor);
-
-    wine_anchor = heap_alloc_zero(sizeof(*wine_anchor));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorFromPersistedNameMSFT(wine_session->session,
-            create_info, &wine_anchor->spatial_anchor);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSpatialAnchorFromPersistedNameMSFT failed: %d\n", res);
-        heap_free(wine_anchor);
-        return res;
-    }
-
-    wine_anchor->wine_session = wine_session;
-
-    *anchor = (XrSpatialAnchorMSFT)wine_anchor;
-
-    WINE_TRACE("allocated wine spatialAnchor %p for native spatialAnchor %p\n",
-            wine_anchor, wine_anchor->spatial_anchor);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
-{
-    wine_XrSpatialAnchorMSFT *wine_anchor = (wine_XrSpatialAnchorMSFT *)anchor;
-    XrResult res;
-
-    WINE_TRACE("%p\n", anchor);
-
-    res = wine_anchor->wine_session->wine_instance->funcs.p_xrDestroySpatialAnchorMSFT(wine_anchor->spatial_anchor);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrDestroySpatialAnchorMSFT failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_anchor);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateSpatialAnchorStoreConnectionMSFT(XrSession session, XrSpatialAnchorStoreConnectionMSFT *anchor_store)
-{
-    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store;
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    XrResult res;
-
-    WINE_TRACE("%p, %p\n", session, anchor_store);
-
-    wine_anchor_store = heap_alloc_zero(sizeof(*wine_anchor_store));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorStoreConnectionMSFT(wine_session->session,
-            &wine_anchor_store->spatial_anchor_store_connection);
-
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
-        heap_free(wine_anchor_store);
-        return res;
-    }
-
-    wine_anchor_store->wine_session = wine_session;
-
-    *anchor_store = (XrSpatialAnchorStoreConnectionMSFT)wine_anchor_store;
-
-    WINE_TRACE("allocated wine_anchor_store %p for native spatial_anchor_store_connection %p\n",
-            wine_anchor_store, wine_anchor_store->spatial_anchor_store_connection);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroySpatialAnchorStoreConnectionMSFT(XrSpatialAnchorStoreConnectionMSFT anchor_store)
-{
-    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store
-            = (wine_XrSpatialAnchorStoreConnectionMSFT *)anchor_store;
-    XrResult res;
-
-    WINE_TRACE("%p\n", anchor_store);
-
-    res = wine_anchor_store->wine_session->wine_instance->funcs.p_xrDestroySpatialAnchorStoreConnectionMSFT
-            (wine_anchor_store->spatial_anchor_store_connection);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrDestroySpatialAnchorStoreConnectionMSFT failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_anchor_store);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateSceneObserverMSFT(XrSession session,
-        const XrSceneObserverCreateInfoMSFT *createInfo, XrSceneObserverMSFT *observer)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrSceneObserverMSFT *wine_scene_observer_msft;
-    XrResult res;
-
-    WINE_TRACE("%p, %p, %p\n", session, createInfo, observer);
-
-    wine_scene_observer_msft = heap_alloc_zero(sizeof(*wine_scene_observer_msft));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateSceneObserverMSFT(wine_session->session,
-            createInfo, &wine_scene_observer_msft->scene_observer_msft);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSceneObserverMSFT failed: %d\n", res);
-        heap_free(wine_scene_observer_msft);
-        return res;
-    }
-
-    wine_scene_observer_msft->wine_session = wine_session;
-
-    *observer = (XrSceneObserverMSFT)wine_scene_observer_msft;
-
-    WINE_TRACE("allocated wine sceneObserver %p for native sceneObserver %p\n",
-            wine_scene_observer_msft, wine_scene_observer_msft->scene_observer_msft);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroySceneObserverMSFT(XrSceneObserverMSFT observer)
-{
-    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
-    XrResult res;
-
-    WINE_TRACE("%p\n", observer);
-
-    res = wine_observer->wine_session->wine_instance->funcs.p_xrDestroySceneObserverMSFT(wine_observer->scene_observer_msft);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrDestroySceneObserverMSFT failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_observer);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateSceneMSFT(XrSceneObserverMSFT observer,
-        const XrSceneCreateInfoMSFT *createInfo, XrSceneMSFT *scene)
-{
-    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
-    wine_XrSceneMSFT *wine_scene_msft;
-    XrResult res;
-
-    WINE_TRACE("%p, %p, %p\n", observer, createInfo, scene);
-
-    wine_scene_msft = heap_alloc_zero(sizeof(*wine_scene_msft));
-
-    res = wine_observer->wine_session->wine_instance->funcs.p_xrCreateSceneMSFT(wine_observer->scene_observer_msft,
-            createInfo, &wine_scene_msft->scene_msft);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSceneMSFT failed: %d\n", res);
-        heap_free(wine_scene_msft);
-        return res;
-    }
-
-    wine_scene_msft->wine_scene_observer_msft = wine_observer;
-
-    *scene = (XrSceneMSFT)wine_scene_msft;
-
-    WINE_TRACE("allocated wine sceneMSFT %p for native sceneMSFT %p\n",
-            wine_scene_msft, wine_scene_msft->scene_msft);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroySceneMSFT(XrSceneMSFT scene)
-{
-    wine_XrSceneMSFT *wine_scene = (wine_XrSceneMSFT *)scene;
-    XrResult res;
-
-    WINE_TRACE("%p\n", scene);
-
-    res = wine_scene->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrDestroySceneMSFT(wine_scene->scene_msft);
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrDestroySceneMSFT failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_scene);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateFoveationProfileFB(XrSession session, const XrFoveationProfileCreateInfoFB *create_info,
-        XrFoveationProfileFB *profile)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrFoveationProfileFB *wine_foveation_profile;
-    XrResult res;
-
-    WINE_TRACE("%p, %p\n", session, profile);
-
-    wine_foveation_profile = heap_alloc_zero(sizeof(*wine_foveation_profile));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateFoveationProfileFB(wine_session->session, create_info,
-            &wine_foveation_profile->foveation_profile);
-
-    if(res != XR_SUCCESS){
-        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
-        heap_free(wine_foveation_profile);
-        return res;
-    }
-
-    wine_foveation_profile->wine_session = wine_session;
-
-    *profile = (XrFoveationProfileFB)wine_foveation_profile;
-
-    WINE_TRACE("allocated wine_foveation_profile %p for native foveation_profile %p.\n",
-            wine_foveation_profile, wine_foveation_profile->foveation_profile);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyFoveationProfileFB(XrFoveationProfileFB profile)
-{
-    wine_XrFoveationProfileFB *wine_profile = (wine_XrFoveationProfileFB *)profile;
-    XrResult res;
-
-    WINE_TRACE("%p\n", profile);
-
-    res = wine_profile->wine_session->wine_instance->funcs.p_xrDestroyFoveationProfileFB(wine_profile->foveation_profile);
-    if(res != XR_SUCCESS){
-        WINE_WARN("rDestroyFoveationProfileFB failed: %d\n", res);
-        return res;
-    }
-
-    heap_free(wine_profile);
-
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateGeometryInstanceFB(XrSession session, const XrGeometryInstanceCreateInfoFB *create_info,
-        XrGeometryInstanceFB *out)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    XrGeometryInstanceCreateInfoFB our_create_info;
-    wine_XrGeometryInstanceFB *wine_instance;
-    XrResult res;
-
-    WINE_TRACE("%p %p %p\n", session, create_info, out);
-
-    wine_instance = heap_alloc_zero(sizeof(*wine_instance));
-    our_create_info = *create_info;
-    our_create_info.layer = ((wine_XrPassthroughLayerFB *)create_info->layer)->layer;
-    our_create_info.mesh = ((wine_XrTriangleMeshFB *)create_info->mesh)->mesh;
-
-    res = wine_session->wine_instance->funcs.p_xrCreateGeometryInstanceFB(wine_session->session, &our_create_info,
-            &wine_instance->instance);
-    if(res != XR_SUCCESS)
-    {
-        WINE_WARN("Failed, res %d\n", res);
-        heap_free(wine_instance);
-        return res;
-    }
-    wine_instance->wine_session = wine_session;
-    *out = (XrGeometryInstanceFB)wine_instance;
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyGeometryInstanceFB(XrGeometryInstanceFB instance)
-{
-    wine_XrGeometryInstanceFB *wine_instance = (wine_XrGeometryInstanceFB *)instance;
-    XrResult res;
-
-    WINE_TRACE("%p\n", instance);
-
-    res = wine_instance->wine_session->wine_instance->funcs.p_xrDestroyGeometryInstanceFB(wine_instance->instance);
-    if(res != XR_SUCCESS){
-        WINE_WARN("Failed, res %d\n", res);
-        return res;
-    }
-    heap_free(wine_instance);
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreateTriangleMeshFB(XrSession session, const XrTriangleMeshCreateInfoFB *create_info,
-        XrTriangleMeshFB *out)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrTriangleMeshFB *wine_mesh;
-    XrResult res;
-
-    WINE_TRACE("%p %p %p\n", session, create_info, out);
-
-    wine_mesh = heap_alloc_zero(sizeof(*wine_mesh));
-
-    res = wine_session->wine_instance->funcs.p_xrCreateTriangleMeshFB(wine_session->session, create_info,
-            &wine_mesh->mesh);
-    if(res != XR_SUCCESS)
-    {
-        WINE_WARN("Failed, res %d\n", res);
-        heap_free(wine_mesh);
-        return res;
-    }
-    wine_mesh->wine_session = wine_session;
-    *out = (XrTriangleMeshFB)wine_mesh;
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyTriangleMeshFB(XrTriangleMeshFB mesh)
-{
-    wine_XrTriangleMeshFB *wine_mesh = (wine_XrTriangleMeshFB *)mesh;
-    XrResult res;
-
-    WINE_TRACE("%p\n", mesh);
-
-    res = wine_mesh->wine_session->wine_instance->funcs.p_xrDestroyTriangleMeshFB(wine_mesh->mesh);
-    if(res != XR_SUCCESS){
-        WINE_WARN("Failed, res %d\n", res);
-        return res;
-    }
-    heap_free(wine_mesh);
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreatePassthroughFB(XrSession session, const XrPassthroughCreateInfoFB *create_info,
-        XrPassthroughFB *out)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    wine_XrPassthroughFB *wine_passthrough;
-    XrResult res;
-
-    WINE_TRACE("%p %p %p\n", session, create_info, out);
-
-    wine_passthrough = heap_alloc_zero(sizeof(*wine_passthrough));
-
-    res = wine_session->wine_instance->funcs.p_xrCreatePassthroughFB(wine_session->session, create_info,
-            &wine_passthrough->passthrough);
-    if(res != XR_SUCCESS)
-    {
-        WINE_WARN("Failed, res %d\n", res);
-        heap_free(wine_passthrough);
-        return res;
-    }
-    wine_passthrough->wine_session = wine_session;
-    *out = (XrPassthroughFB)wine_passthrough;
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyPassthroughFB(XrPassthroughFB passthrough)
-{
-    wine_XrPassthroughFB *wine_passthrough = (wine_XrPassthroughFB *)passthrough;
-    XrResult res;
-
-    WINE_TRACE("%p\n", passthrough);
-
-    res = wine_passthrough->wine_session->wine_instance->funcs.p_xrDestroyPassthroughFB(wine_passthrough->passthrough);
-    if(res != XR_SUCCESS){
-        WINE_WARN("Failed, res %d\n", res);
-        return res;
-    }
-    heap_free(wine_passthrough);
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrCreatePassthroughLayerFB(XrSession session, const XrPassthroughLayerCreateInfoFB *create_info,
-        XrPassthroughLayerFB *out)
-{
-    wine_XrSession *wine_session = (wine_XrSession *)session;
-    XrPassthroughLayerCreateInfoFB our_create_info;
-    wine_XrPassthroughLayerFB *wine_layer;
-    XrResult res;
-
-    WINE_TRACE("%p %p %p\n", session, create_info, out);
-
-    wine_layer = heap_alloc_zero(sizeof(*wine_layer));
-    our_create_info = *create_info;
-    our_create_info.passthrough = ((wine_XrPassthroughFB *)create_info->passthrough)->passthrough;
-
-    res = wine_session->wine_instance->funcs.p_xrCreatePassthroughLayerFB(wine_session->session, &our_create_info,
-            &wine_layer->layer);
-    if(res != XR_SUCCESS)
-    {
-        WINE_WARN("Failed, res %d\n", res);
-        heap_free(wine_layer);
-        return res;
-    }
-    wine_layer->wine_session = wine_session;
-    *out = (XrPassthroughLayerFB)wine_layer;
-    return XR_SUCCESS;
-}
-
-XrResult WINAPI wine_xrDestroyPassthroughLayerFB(XrPassthroughLayerFB layer)
-{
-    wine_XrPassthroughLayerFB *wine_layer = (wine_XrPassthroughLayerFB *)layer;
-    XrResult res;
-
-    WINE_TRACE("%p\n", layer);
-
-    res = wine_layer->wine_session->wine_instance->funcs.p_xrDestroyPassthroughLayerFB(wine_layer->layer);
-    if(res != XR_SUCCESS){
-        WINE_WARN("Failed, res %d\n", res);
-        return res;
-    }
-    heap_free(wine_layer);
     return XR_SUCCESS;
 }
 
@@ -2346,4 +1890,48 @@ XrResult WINAPI __wineopenxr_GetVulkanDeviceExtensions(uint32_t buflen, uint32_t
     strcpy(buf, WINE_VULKAN_DEVICE_EXTENSION_NAME);
 
     return XR_SUCCESS;
+}
+
+void register_dispatchable_handle(uint64_t handle, struct openxr_instance_funcs *funcs)
+{
+    struct handle_instance_lookup_entry *entry;
+
+    entry = heap_alloc_zero(sizeof(*entry));
+    entry->handle = handle;
+    entry->funcs = funcs;
+    AcquireSRWLockExclusive(&handle_instance_lookup_lock);
+    rb_put(&handle_instance_lookup, &handle, &entry->entry);
+    ReleaseSRWLockExclusive(&handle_instance_lookup_lock);
+}
+
+void unregister_dispatchable_handle(uint64_t handle)
+{
+    struct rb_entry *entry;
+
+    AcquireSRWLockExclusive(&handle_instance_lookup_lock);
+    if ((entry = rb_get(&handle_instance_lookup, &handle)))
+        rb_remove(&handle_instance_lookup, entry);
+    ReleaseSRWLockExclusive(&handle_instance_lookup_lock);
+    if (entry)
+        heap_free(entry);
+    else
+        WINE_ERR("handle %s not found.\n", wine_dbgstr_longlong(handle));
+}
+
+struct openxr_instance_funcs *get_dispatch_table(uint64_t handle)
+{
+    struct openxr_instance_funcs *funcs = NULL;
+    struct rb_entry *entry;
+
+    AcquireSRWLockExclusive(&handle_instance_lookup_lock);
+    if ((entry = rb_get(&handle_instance_lookup, &handle)))
+        funcs = RB_ENTRY_VALUE(entry, struct handle_instance_lookup_entry, entry)->funcs;
+    ReleaseSRWLockExclusive(&handle_instance_lookup_lock);
+
+    if (!funcs)
+    {
+        WINE_ERR("handle %s not found.\n", wine_dbgstr_longlong(handle));
+        funcs = &last_instance->funcs;
+    }
+    return funcs;
 }
