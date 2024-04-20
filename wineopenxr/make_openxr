@@ -119,20 +119,6 @@ UNSUPPORTED_EXTENSIONS = [
     # Deprecated extensions
     "XR_NV_external_memory_capabilities",
     "XR_NV_external_memory_win32",
-
-    # Not widely supported extensions which require handler wrapping
-    "XR_MSFT_spatial_graph_bridge",
-    "XR_ML_compat",
-    "XR_MSFT_hand_tracking_mesh",
-    "XR_FB_keyboard_tracking",
-    "XR_VARJO_marker_tracking",
-    "XR_HTC_facial_tracking",
-    "XR_FB_face_tracking",
-    "XR_HTC_passthrough",
-    "XR_FB_eye_tracking_social",
-    "XR_FB_spatial_entity_user",
-    "XR_FB_body_tracking",
-    "XR_FB_spatial_entity",
 ]
 
 ALLOWED_PROTECTS = [
