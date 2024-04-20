@@ -30,6 +30,25 @@
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
 
 #if defined(USE_STRUCT_CONVERSION)
+static inline void convert_XrKeyboardSpaceCreateInfoFB_win_to_host(const XrKeyboardSpaceCreateInfoFB *in, XrKeyboardSpaceCreateInfoFB_host *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = in->next;
+    out->trackedKeyboardId = in->trackedKeyboardId;
+}
+
+static inline void convert_XrMarkerSpaceCreateInfoVARJO_win_to_host(const XrMarkerSpaceCreateInfoVARJO *in, XrMarkerSpaceCreateInfoVARJO_host *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = in->next;
+    out->markerId = in->markerId;
+    out->poseInMarkerSpace = in->poseInMarkerSpace;
+}
+
 static inline void convert_XrSceneMeshBuffersGetInfoMSFT_win_to_host(const XrSceneMeshBuffersGetInfoMSFT *in, XrSceneMeshBuffersGetInfoMSFT_host *out)
 {
     if (!in) return;
@@ -37,6 +56,16 @@ static inline void convert_XrSceneMeshBuffersGetInfoMSFT_win_to_host(const XrSce
     out->type = in->type;
     out->next = in->next;
     out->meshBufferId = in->meshBufferId;
+}
+
+static inline void convert_XrKeyboardTrackingDescriptionFB_host_to_win(const XrKeyboardTrackingDescriptionFB_host *in, XrKeyboardTrackingDescriptionFB *out)
+{
+    if (!in) return;
+
+    out->trackedKeyboardId = in->trackedKeyboardId;
+    out->size = in->size;
+    out->flags = in->flags;
+    memcpy(out->name, in->name, XR_MAX_KEYBOARD_TRACKING_NAME_SIZE_FB * sizeof(char));
 }
 
 #endif /* USE_STRUCT_CONVERSION */
@@ -186,6 +215,46 @@ XrResult WINAPI wine_xrCreateActionSpace(XrSession session, const XrActionSpaceC
     return ret;
 }
 
+static XrResult WINAPI wine_xrCreateBodyTrackerFB(XrSession session, const XrBodyTrackerCreateInfoFB *createInfo, XrBodyTrackerFB *bodyTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, bodyTracker);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateBodyTrackerFB(((wine_XrSession *)session)->session, createInfo, bodyTracker);
+    if (!ret) register_dispatchable_handle((uint64_t)*bodyTracker, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
+static XrResult WINAPI wine_xrCreateEyeTrackerFB(XrSession session, const XrEyeTrackerCreateInfoFB *createInfo, XrEyeTrackerFB *eyeTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, eyeTracker);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateEyeTrackerFB(((wine_XrSession *)session)->session, createInfo, eyeTracker);
+    if (!ret) register_dispatchable_handle((uint64_t)*eyeTracker, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
+static XrResult WINAPI wine_xrCreateFaceTrackerFB(XrSession session, const XrFaceTrackerCreateInfoFB *createInfo, XrFaceTrackerFB *faceTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, faceTracker);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateFaceTrackerFB(((wine_XrSession *)session)->session, createInfo, faceTracker);
+    if (!ret) register_dispatchable_handle((uint64_t)*faceTracker, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
+static XrResult WINAPI wine_xrCreateFacialTrackerHTC(XrSession session, const XrFacialTrackerCreateInfoHTC *createInfo, XrFacialTrackerHTC *facialTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, facialTracker);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateFacialTrackerHTC(((wine_XrSession *)session)->session, createInfo, facialTracker);
+    if (!ret) register_dispatchable_handle((uint64_t)*facialTracker, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
 static XrResult WINAPI wine_xrCreateFoveationProfileFB(XrSession session, const XrFoveationProfileCreateInfoFB *createInfo, XrFoveationProfileFB *profile)
 {
     XrResult ret;
@@ -206,6 +275,16 @@ static XrResult WINAPI wine_xrCreateGeometryInstanceFB(XrSession session, const 
     return ret;
 }
 
+static XrResult WINAPI wine_xrCreateHandMeshSpaceMSFT(XrHandTrackerEXT handTracker, const XrHandMeshSpaceCreateInfoMSFT *createInfo, XrSpace *space)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", handTracker, createInfo, space);
+    ret = (*get_dispatch_table((uint64_t)(handTracker))).p_xrCreateHandMeshSpaceMSFT(handTracker, createInfo, space);
+    if (!ret) register_dispatchable_handle((uint64_t)*space, &((*get_dispatch_table((uint64_t)(handTracker)))));
+    return ret;
+}
+
 static XrResult WINAPI wine_xrCreateHandTrackerEXT(XrSession session, const XrHandTrackerCreateInfoEXT *createInfo, XrHandTrackerEXT *handTracker)
 {
     XrResult ret;
@@ -216,6 +295,48 @@ static XrResult WINAPI wine_xrCreateHandTrackerEXT(XrSession session, const XrHa
     return ret;
 }
 
+static XrResult WINAPI wine_xrCreateKeyboardSpaceFB(XrSession session, const XrKeyboardSpaceCreateInfoFB *createInfo, XrSpace *keyboardSpace)
+{
+#if defined(USE_STRUCT_CONVERSION)
+    XrResult result;
+    XrKeyboardSpaceCreateInfoFB_host createInfo_host;
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, keyboardSpace);
+
+    convert_XrKeyboardSpaceCreateInfoFB_win_to_host(createInfo, &createInfo_host);
+    result = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateKeyboardSpaceFB(((wine_XrSession *)session)->session, &createInfo_host, keyboardSpace);
+
+    return result;
+#else
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, keyboardSpace);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateKeyboardSpaceFB(((wine_XrSession *)session)->session, createInfo, keyboardSpace);
+    if (!ret) register_dispatchable_handle((uint64_t)*keyboardSpace, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+#endif
+}
+
+static XrResult WINAPI wine_xrCreateMarkerSpaceVARJO(XrSession session, const XrMarkerSpaceCreateInfoVARJO *createInfo, XrSpace *space)
+{
+#if defined(USE_STRUCT_CONVERSION)
+    XrResult result;
+    XrMarkerSpaceCreateInfoVARJO_host createInfo_host;
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, space);
+
+    convert_XrMarkerSpaceCreateInfoVARJO_win_to_host(createInfo, &createInfo_host);
+    result = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateMarkerSpaceVARJO(((wine_XrSession *)session)->session, &createInfo_host, space);
+
+    return result;
+#else
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, space);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateMarkerSpaceVARJO(((wine_XrSession *)session)->session, createInfo, space);
+    if (!ret) register_dispatchable_handle((uint64_t)*space, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+#endif
+}
+
 static XrResult WINAPI wine_xrCreatePassthroughFB(XrSession session, const XrPassthroughCreateInfoFB *createInfo, XrPassthroughFB *outPassthrough)
 {
     XrResult ret;
@@ -223,6 +344,16 @@ static XrResult WINAPI wine_xrCreatePassthroughFB(XrSession session, const XrPas
     WINE_TRACE("%p, %p, %p\n", session, createInfo, outPassthrough);
     ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreatePassthroughFB(((wine_XrSession *)session)->session, createInfo, outPassthrough);
     if (!ret) register_dispatchable_handle((uint64_t)*outPassthrough, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
+static XrResult WINAPI wine_xrCreatePassthroughHTC(XrSession session, const XrPassthroughCreateInfoHTC *createInfo, XrPassthroughHTC *passthrough)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, passthrough);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreatePassthroughHTC(((wine_XrSession *)session)->session, createInfo, passthrough);
+    if (!ret) register_dispatchable_handle((uint64_t)*passthrough, &(((wine_XrSession *)session)->wine_instance->funcs));
     return ret;
 }
 
@@ -266,6 +397,25 @@ static XrResult WINAPI wine_xrCreateSceneObserverMSFT(XrSession session, const X
     return ret;
 }
 
+static XrResult WINAPI wine_xrCreateSpaceUserFB(XrSession session, const XrSpaceUserCreateInfoFB *info, XrSpaceUserFB *user)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, info, user);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateSpaceUserFB(((wine_XrSession *)session)->session, info, user);
+    if (!ret) register_dispatchable_handle((uint64_t)*user, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
+static XrResult WINAPI wine_xrCreateSpatialAnchorFB(XrSession session, const XrSpatialAnchorCreateInfoFB *info, XrAsyncRequestIdFB *requestId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, info, requestId);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateSpatialAnchorFB(((wine_XrSession *)session)->session, info, requestId);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrCreateSpatialAnchorFromPersistedNameMSFT(XrSession session, const XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT *spatialAnchorCreateInfo, XrSpatialAnchorMSFT *spatialAnchor)
 {
     XrResult ret;
@@ -306,6 +456,16 @@ static XrResult WINAPI wine_xrCreateSpatialAnchorStoreConnectionMSFT(XrSession s
     return ret;
 }
 
+static XrResult WINAPI wine_xrCreateSpatialGraphNodeSpaceMSFT(XrSession session, const XrSpatialGraphNodeSpaceCreateInfoMSFT *createInfo, XrSpace *space)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, space);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateSpatialGraphNodeSpaceMSFT(((wine_XrSession *)session)->session, createInfo, space);
+    if (!ret) register_dispatchable_handle((uint64_t)*space, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
 static XrResult WINAPI wine_xrCreateTriangleMeshFB(XrSession session, const XrTriangleMeshCreateInfoFB *createInfo, XrTriangleMeshFB *outTriangleMesh)
 {
     XrResult ret;
@@ -340,6 +500,46 @@ XrResult WINAPI wine_xrDestroyActionSet(XrActionSet actionSet)
 
     WINE_TRACE("%p\n", actionSet);
     ret = xrDestroyActionSet(actionSet);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroyBodyTrackerFB(XrBodyTrackerFB bodyTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", bodyTracker);
+    ret = (*get_dispatch_table((uint64_t)(bodyTracker))).p_xrDestroyBodyTrackerFB(bodyTracker);
+    unregister_dispatchable_handle((uint64_t)bodyTracker);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroyEyeTrackerFB(XrEyeTrackerFB eyeTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", eyeTracker);
+    ret = (*get_dispatch_table((uint64_t)(eyeTracker))).p_xrDestroyEyeTrackerFB(eyeTracker);
+    unregister_dispatchable_handle((uint64_t)eyeTracker);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroyFaceTrackerFB(XrFaceTrackerFB faceTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", faceTracker);
+    ret = (*get_dispatch_table((uint64_t)(faceTracker))).p_xrDestroyFaceTrackerFB(faceTracker);
+    unregister_dispatchable_handle((uint64_t)faceTracker);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroyFacialTrackerHTC(XrFacialTrackerHTC facialTracker)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", facialTracker);
+    ret = (*get_dispatch_table((uint64_t)(facialTracker))).p_xrDestroyFacialTrackerHTC(facialTracker);
+    unregister_dispatchable_handle((uint64_t)facialTracker);
     return ret;
 }
 
@@ -379,6 +579,16 @@ static XrResult WINAPI wine_xrDestroyPassthroughFB(XrPassthroughFB passthrough)
 
     WINE_TRACE("%p\n", passthrough);
     ret = (*get_dispatch_table((uint64_t)(passthrough))).p_xrDestroyPassthroughFB(passthrough);
+    unregister_dispatchable_handle((uint64_t)passthrough);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroyPassthroughHTC(XrPassthroughHTC passthrough)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", passthrough);
+    ret = (*get_dispatch_table((uint64_t)(passthrough))).p_xrDestroyPassthroughHTC(passthrough);
     unregister_dispatchable_handle((uint64_t)passthrough);
     return ret;
 }
@@ -423,6 +633,16 @@ XrResult WINAPI wine_xrDestroySpace(XrSpace space)
     return ret;
 }
 
+static XrResult WINAPI wine_xrDestroySpaceUserFB(XrSpaceUserFB user)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", user);
+    ret = (*get_dispatch_table((uint64_t)(user))).p_xrDestroySpaceUserFB(user);
+    unregister_dispatchable_handle((uint64_t)user);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
 {
     XrResult ret;
@@ -440,6 +660,16 @@ static XrResult WINAPI wine_xrDestroySpatialAnchorStoreConnectionMSFT(XrSpatialA
     WINE_TRACE("%p\n", spatialAnchorStore);
     ret = (*get_dispatch_table((uint64_t)(spatialAnchorStore))).p_xrDestroySpatialAnchorStoreConnectionMSFT(spatialAnchorStore);
     unregister_dispatchable_handle((uint64_t)spatialAnchorStore);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrDestroySpatialGraphNodeBindingMSFT(XrSpatialGraphNodeBindingMSFT nodeBinding)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p\n", nodeBinding);
+    ret = (*get_dispatch_table((uint64_t)(nodeBinding))).p_xrDestroySpatialGraphNodeBindingMSFT(nodeBinding);
+    unregister_dispatchable_handle((uint64_t)nodeBinding);
     return ret;
 }
 
@@ -570,6 +800,15 @@ static XrResult WINAPI wine_xrEnumerateSceneComputeFeaturesMSFT(XrInstance insta
     return ret;
 }
 
+static XrResult WINAPI wine_xrEnumerateSpaceSupportedComponentsFB(XrSpace space, uint32_t componentTypeCapacityInput, uint32_t *componentTypeCountOutput, XrSpaceComponentTypeFB *componentTypes)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %u, %p, %p\n", space, componentTypeCapacityInput, componentTypeCountOutput, componentTypes);
+    ret = (*get_dispatch_table((uint64_t)(space))).p_xrEnumerateSpaceSupportedComponentsFB(space, componentTypeCapacityInput, componentTypeCountOutput, componentTypes);
+    return ret;
+}
+
 XrResult WINAPI wine_xrEnumerateViewConfigurationViews(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t viewCapacityInput, uint32_t *viewCountOutput, XrViewConfigurationView *views)
 {
     XrResult ret;
@@ -594,6 +833,15 @@ static XrResult WINAPI wine_xrEnumerateViveTrackerPathsHTCX(XrInstance instance,
 
     WINE_TRACE("%p, %u, %p, %p\n", instance, pathCapacityInput, pathCountOutput, paths);
     ret = ((wine_XrInstance *)instance)->funcs.p_xrEnumerateViveTrackerPathsHTCX(((wine_XrInstance *)instance)->instance, pathCapacityInput, pathCountOutput, paths);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrEraseSpaceFB(XrSession session, const XrSpaceEraseInfoFB *info, XrAsyncRequestIdFB *requestId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, info, requestId);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrEraseSpaceFB(((wine_XrSession *)session)->session, info, requestId);
     return ret;
 }
 
@@ -660,6 +908,15 @@ static XrResult WINAPI wine_xrGetAudioOutputDeviceGuidOculus(XrInstance instance
     return ret;
 }
 
+static XrResult WINAPI wine_xrGetBodySkeletonFB(XrBodyTrackerFB bodyTracker, XrBodySkeletonFB *skeleton)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p\n", bodyTracker, skeleton);
+    ret = (*get_dispatch_table((uint64_t)(bodyTracker))).p_xrGetBodySkeletonFB(bodyTracker, skeleton);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrGetControllerModelKeyMSFT(XrSession session, XrPath topLevelUserPath, XrControllerModelKeyStateMSFT *controllerModelKeyState)
 {
     XrResult ret;
@@ -714,6 +971,33 @@ static XrResult WINAPI wine_xrGetDisplayRefreshRateFB(XrSession session, float *
     return ret;
 }
 
+static XrResult WINAPI wine_xrGetEyeGazesFB(XrEyeTrackerFB eyeTracker, const XrEyeGazesInfoFB *gazeInfo, XrEyeGazesFB *eyeGazes)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", eyeTracker, gazeInfo, eyeGazes);
+    ret = (*get_dispatch_table((uint64_t)(eyeTracker))).p_xrGetEyeGazesFB(eyeTracker, gazeInfo, eyeGazes);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetFaceExpressionWeightsFB(XrFaceTrackerFB faceTracker, const XrFaceExpressionInfoFB *expressionInfo, XrFaceExpressionWeightsFB *expressionWeights)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", faceTracker, expressionInfo, expressionWeights);
+    ret = (*get_dispatch_table((uint64_t)(faceTracker))).p_xrGetFaceExpressionWeightsFB(faceTracker, expressionInfo, expressionWeights);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetFacialExpressionsHTC(XrFacialTrackerHTC facialTracker, XrFacialExpressionsHTC *facialExpressions)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p\n", facialTracker, facialExpressions);
+    ret = (*get_dispatch_table((uint64_t)(facialTracker))).p_xrGetFacialExpressionsHTC(facialTracker, facialExpressions);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrGetFoveationEyeTrackedStateMETA(XrSession session, XrFoveationEyeTrackedStateMETA *foveationState)
 {
     XrResult ret;
@@ -747,6 +1031,15 @@ XrResult WINAPI wine_xrGetInstanceProperties(XrInstance instance, XrInstanceProp
 
     WINE_TRACE("%p, %p\n", instance, instanceProperties);
     ret = xrGetInstanceProperties(((wine_XrInstance *)instance)->instance, instanceProperties);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetMarkerSizeVARJO(XrSession session, uint64_t markerId, XrExtent2Df *size)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(markerId), size);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetMarkerSizeVARJO(((wine_XrSession *)session)->session, markerId, size);
     return ret;
 }
 
@@ -833,6 +1126,96 @@ static XrResult WINAPI wine_xrGetSerializedSceneFragmentDataMSFT(XrSceneMSFT sce
     return ret;
 }
 
+static XrResult WINAPI wine_xrGetSpaceBoundary2DFB(XrSession session, XrSpace space, XrBoundary2DFB *boundary2DOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, boundary2DOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceBoundary2DFB(((wine_XrSession *)session)->session, space, boundary2DOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceBoundingBox2DFB(XrSession session, XrSpace space, XrRect2Df *boundingBox2DOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, boundingBox2DOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceBoundingBox2DFB(((wine_XrSession *)session)->session, space, boundingBox2DOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceBoundingBox3DFB(XrSession session, XrSpace space, XrRect3DfFB *boundingBox3DOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, boundingBox3DOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceBoundingBox3DFB(((wine_XrSession *)session)->session, space, boundingBox3DOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceComponentStatusFB(XrSpace space, XrSpaceComponentTypeFB componentType, XrSpaceComponentStatusFB *status)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %#x, %p\n", space, componentType, status);
+    ret = (*get_dispatch_table((uint64_t)(space))).p_xrGetSpaceComponentStatusFB(space, componentType, status);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceContainerFB(XrSession session, XrSpace space, XrSpaceContainerFB *spaceContainerOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, spaceContainerOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceContainerFB(((wine_XrSession *)session)->session, space, spaceContainerOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceRoomLayoutFB(XrSession session, XrSpace space, XrRoomLayoutFB *roomLayoutOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, roomLayoutOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceRoomLayoutFB(((wine_XrSession *)session)->session, space, roomLayoutOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceSemanticLabelsFB(XrSession session, XrSpace space, XrSemanticLabelsFB *semanticLabelsOutput)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, space, semanticLabelsOutput);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetSpaceSemanticLabelsFB(((wine_XrSession *)session)->session, space, semanticLabelsOutput);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceUserIdFB(XrSpaceUserFB user, XrSpaceUserIdFB *userId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p\n", user, userId);
+    ret = (*get_dispatch_table((uint64_t)(user))).p_xrGetSpaceUserIdFB(user, userId);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpaceUuidFB(XrSpace space, XrUuidEXT *uuid)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p\n", space, uuid);
+    ret = (*get_dispatch_table((uint64_t)(space))).p_xrGetSpaceUuidFB(space, uuid);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrGetSpatialGraphNodeBindingPropertiesMSFT(XrSpatialGraphNodeBindingMSFT nodeBinding, const XrSpatialGraphNodeBindingPropertiesGetInfoMSFT *getInfo, XrSpatialGraphNodeBindingPropertiesMSFT *properties)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", nodeBinding, getInfo, properties);
+    ret = (*get_dispatch_table((uint64_t)(nodeBinding))).p_xrGetSpatialGraphNodeBindingPropertiesMSFT(nodeBinding, getInfo, properties);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrGetSwapchainStateFB(XrSwapchain swapchain, XrSwapchainStateBaseHeaderFB *state)
 {
     XrResult ret;
@@ -902,6 +1285,15 @@ static XrResult WINAPI wine_xrLoadRenderModelFB(XrSession session, const XrRende
 
     WINE_TRACE("%p, %p, %p\n", session, info, buffer);
     ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrLoadRenderModelFB(((wine_XrSession *)session)->session, info, buffer);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrLocateBodyJointsFB(XrBodyTrackerFB bodyTracker, const XrBodyJointsLocateInfoFB *locateInfo, XrBodyJointLocationsFB *locations)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", bodyTracker, locateInfo, locations);
+    ret = (*get_dispatch_table((uint64_t)(bodyTracker))).p_xrLocateBodyJointsFB(bodyTracker, locateInfo, locations);
     return ret;
 }
 
@@ -1040,6 +1432,26 @@ static XrResult WINAPI wine_xrQuerySpacesFB(XrSession session, const XrSpaceQuer
     return ret;
 }
 
+static XrResult WINAPI wine_xrQuerySystemTrackedKeyboardFB(XrSession session, const XrKeyboardTrackingQueryFB *queryInfo, XrKeyboardTrackingDescriptionFB *keyboard)
+{
+#if defined(USE_STRUCT_CONVERSION)
+    XrResult result;
+    XrKeyboardTrackingDescriptionFB_host keyboard_host;
+    WINE_TRACE("%p, %p, %p\n", session, queryInfo, keyboard);
+
+    result = ((wine_XrSession *)session)->wine_instance->funcs.p_xrQuerySystemTrackedKeyboardFB(((wine_XrSession *)session)->session, queryInfo, &keyboard_host);
+
+    convert_XrKeyboardTrackingDescriptionFB_host_to_win(&keyboard_host, keyboard);
+    return result;
+#else
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, queryInfo, keyboard);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrQuerySystemTrackedKeyboardFB(((wine_XrSession *)session)->session, queryInfo, keyboard);
+    return ret;
+#endif
+}
+
 XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo)
 {
     XrResult ret;
@@ -1091,6 +1503,15 @@ static XrResult WINAPI wine_xrRetrieveSpaceQueryResultsFB(XrSession session, XrA
 
     WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(requestId), results);
     ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrRetrieveSpaceQueryResultsFB(((wine_XrSession *)session)->session, requestId, results);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrSaveSpaceFB(XrSession session, const XrSpaceSaveInfoFB *info, XrAsyncRequestIdFB *requestId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, info, requestId);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSaveSpaceFB(((wine_XrSession *)session)->session, info, requestId);
     return ret;
 }
 
@@ -1175,12 +1596,48 @@ static XrResult WINAPI wine_xrSetInputDeviceStateVector2fEXT(XrSession session, 
     return ret;
 }
 
+static XrResult WINAPI wine_xrSetMarkerTrackingPredictionVARJO(XrSession session, uint64_t markerId, XrBool32 enabled)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, 0x%s, %u\n", session, wine_dbgstr_longlong(markerId), enabled);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetMarkerTrackingPredictionVARJO(((wine_XrSession *)session)->session, markerId, enabled);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrSetMarkerTrackingTimeoutVARJO(XrSession session, uint64_t markerId, XrDuration timeout)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, 0x%s, 0x%s\n", session, wine_dbgstr_longlong(markerId), wine_dbgstr_longlong(timeout));
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetMarkerTrackingTimeoutVARJO(((wine_XrSession *)session)->session, markerId, timeout);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrSetMarkerTrackingVARJO(XrSession session, XrBool32 enabled)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %u\n", session, enabled);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetMarkerTrackingVARJO(((wine_XrSession *)session)->session, enabled);
+    return ret;
+}
+
 static XrResult WINAPI wine_xrSetPerformanceMetricsStateMETA(XrSession session, const XrPerformanceMetricsStateMETA *state)
 {
     XrResult ret;
 
     WINE_TRACE("%p, %p\n", session, state);
     ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetPerformanceMetricsStateMETA(((wine_XrSession *)session)->session, state);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrSetSpaceComponentStatusFB(XrSpace space, const XrSpaceComponentStatusSetInfoFB *info, XrAsyncRequestIdFB *requestId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", space, info, requestId);
+    ret = (*get_dispatch_table((uint64_t)(space))).p_xrSetSpaceComponentStatusFB(space, info, requestId);
     return ret;
 }
 
@@ -1199,6 +1656,15 @@ static XrResult WINAPI wine_xrSetViewOffsetVARJO(XrSession session, float offset
 
     WINE_TRACE("%p, %f\n", session, offset);
     ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetViewOffsetVARJO(((wine_XrSession *)session)->session, offset);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrShareSpacesFB(XrSession session, const XrSpaceShareInfoFB *info, XrAsyncRequestIdFB *requestId)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, info, requestId);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrShareSpacesFB(((wine_XrSession *)session)->session, info, requestId);
     return ret;
 }
 
@@ -1310,12 +1776,31 @@ static XrResult WINAPI wine_xrTriangleMeshGetVertexBufferFB(XrTriangleMeshFB mes
     return ret;
 }
 
+static XrResult WINAPI wine_xrTryCreateSpatialGraphStaticNodeBindingMSFT(XrSession session, const XrSpatialGraphStaticNodeBindingCreateInfoMSFT *createInfo, XrSpatialGraphNodeBindingMSFT *nodeBinding)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, nodeBinding);
+    ret = ((wine_XrSession *)session)->wine_instance->funcs.p_xrTryCreateSpatialGraphStaticNodeBindingMSFT(((wine_XrSession *)session)->session, createInfo, nodeBinding);
+    if (!ret) register_dispatchable_handle((uint64_t)*nodeBinding, &(((wine_XrSession *)session)->wine_instance->funcs));
+    return ret;
+}
+
 static XrResult WINAPI wine_xrUnpersistSpatialAnchorMSFT(XrSpatialAnchorStoreConnectionMSFT spatialAnchorStore, const XrSpatialAnchorPersistenceNameMSFT *spatialAnchorPersistenceName)
 {
     XrResult ret;
 
     WINE_TRACE("%p, %p\n", spatialAnchorStore, spatialAnchorPersistenceName);
     ret = (*get_dispatch_table((uint64_t)(spatialAnchorStore))).p_xrUnpersistSpatialAnchorMSFT(spatialAnchorStore, spatialAnchorPersistenceName);
+    return ret;
+}
+
+static XrResult WINAPI wine_xrUpdateHandMeshMSFT(XrHandTrackerEXT handTracker, const XrHandMeshUpdateInfoMSFT *updateInfo, XrHandMeshMSFT *handMesh)
+{
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", handTracker, updateInfo, handMesh);
+    ret = (*get_dispatch_table((uint64_t)(handTracker))).p_xrUpdateHandMeshMSFT(handTracker, updateInfo, handMesh);
     return ret;
 }
 
@@ -1362,20 +1847,31 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrCreateAction", &wine_xrCreateAction},
     {"xrCreateActionSet", &wine_xrCreateActionSet},
     {"xrCreateActionSpace", &wine_xrCreateActionSpace},
+    {"xrCreateBodyTrackerFB", &wine_xrCreateBodyTrackerFB},
+    {"xrCreateEyeTrackerFB", &wine_xrCreateEyeTrackerFB},
+    {"xrCreateFaceTrackerFB", &wine_xrCreateFaceTrackerFB},
+    {"xrCreateFacialTrackerHTC", &wine_xrCreateFacialTrackerHTC},
     {"xrCreateFoveationProfileFB", &wine_xrCreateFoveationProfileFB},
     {"xrCreateGeometryInstanceFB", &wine_xrCreateGeometryInstanceFB},
+    {"xrCreateHandMeshSpaceMSFT", &wine_xrCreateHandMeshSpaceMSFT},
     {"xrCreateHandTrackerEXT", &wine_xrCreateHandTrackerEXT},
     {"xrCreateInstance", &wine_xrCreateInstance},
+    {"xrCreateKeyboardSpaceFB", &wine_xrCreateKeyboardSpaceFB},
+    {"xrCreateMarkerSpaceVARJO", &wine_xrCreateMarkerSpaceVARJO},
     {"xrCreatePassthroughFB", &wine_xrCreatePassthroughFB},
+    {"xrCreatePassthroughHTC", &wine_xrCreatePassthroughHTC},
     {"xrCreatePassthroughLayerFB", &wine_xrCreatePassthroughLayerFB},
     {"xrCreateReferenceSpace", &wine_xrCreateReferenceSpace},
     {"xrCreateSceneMSFT", &wine_xrCreateSceneMSFT},
     {"xrCreateSceneObserverMSFT", &wine_xrCreateSceneObserverMSFT},
     {"xrCreateSession", &wine_xrCreateSession},
+    {"xrCreateSpaceUserFB", &wine_xrCreateSpaceUserFB},
+    {"xrCreateSpatialAnchorFB", &wine_xrCreateSpatialAnchorFB},
     {"xrCreateSpatialAnchorFromPersistedNameMSFT", &wine_xrCreateSpatialAnchorFromPersistedNameMSFT},
     {"xrCreateSpatialAnchorMSFT", &wine_xrCreateSpatialAnchorMSFT},
     {"xrCreateSpatialAnchorSpaceMSFT", &wine_xrCreateSpatialAnchorSpaceMSFT},
     {"xrCreateSpatialAnchorStoreConnectionMSFT", &wine_xrCreateSpatialAnchorStoreConnectionMSFT},
+    {"xrCreateSpatialGraphNodeSpaceMSFT", &wine_xrCreateSpatialGraphNodeSpaceMSFT},
     {"xrCreateSwapchain", &wine_xrCreateSwapchain},
     {"xrCreateTriangleMeshFB", &wine_xrCreateTriangleMeshFB},
     {"xrCreateVulkanDeviceKHR", &wine_xrCreateVulkanDeviceKHR},
@@ -1383,18 +1879,25 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrDeserializeSceneMSFT", &wine_xrDeserializeSceneMSFT},
     {"xrDestroyAction", &wine_xrDestroyAction},
     {"xrDestroyActionSet", &wine_xrDestroyActionSet},
+    {"xrDestroyBodyTrackerFB", &wine_xrDestroyBodyTrackerFB},
+    {"xrDestroyEyeTrackerFB", &wine_xrDestroyEyeTrackerFB},
+    {"xrDestroyFaceTrackerFB", &wine_xrDestroyFaceTrackerFB},
+    {"xrDestroyFacialTrackerHTC", &wine_xrDestroyFacialTrackerHTC},
     {"xrDestroyFoveationProfileFB", &wine_xrDestroyFoveationProfileFB},
     {"xrDestroyGeometryInstanceFB", &wine_xrDestroyGeometryInstanceFB},
     {"xrDestroyHandTrackerEXT", &wine_xrDestroyHandTrackerEXT},
     {"xrDestroyInstance", &wine_xrDestroyInstance},
     {"xrDestroyPassthroughFB", &wine_xrDestroyPassthroughFB},
+    {"xrDestroyPassthroughHTC", &wine_xrDestroyPassthroughHTC},
     {"xrDestroyPassthroughLayerFB", &wine_xrDestroyPassthroughLayerFB},
     {"xrDestroySceneMSFT", &wine_xrDestroySceneMSFT},
     {"xrDestroySceneObserverMSFT", &wine_xrDestroySceneObserverMSFT},
     {"xrDestroySession", &wine_xrDestroySession},
     {"xrDestroySpace", &wine_xrDestroySpace},
+    {"xrDestroySpaceUserFB", &wine_xrDestroySpaceUserFB},
     {"xrDestroySpatialAnchorMSFT", &wine_xrDestroySpatialAnchorMSFT},
     {"xrDestroySpatialAnchorStoreConnectionMSFT", &wine_xrDestroySpatialAnchorStoreConnectionMSFT},
+    {"xrDestroySpatialGraphNodeBindingMSFT", &wine_xrDestroySpatialGraphNodeBindingMSFT},
     {"xrDestroySwapchain", &wine_xrDestroySwapchain},
     {"xrDestroyTriangleMeshFB", &wine_xrDestroyTriangleMeshFB},
     {"xrEndFrame", &wine_xrEndFrame},
@@ -1412,11 +1915,13 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrEnumerateRenderModelPathsFB", &wine_xrEnumerateRenderModelPathsFB},
     {"xrEnumerateReprojectionModesMSFT", &wine_xrEnumerateReprojectionModesMSFT},
     {"xrEnumerateSceneComputeFeaturesMSFT", &wine_xrEnumerateSceneComputeFeaturesMSFT},
+    {"xrEnumerateSpaceSupportedComponentsFB", &wine_xrEnumerateSpaceSupportedComponentsFB},
     {"xrEnumerateSwapchainFormats", &wine_xrEnumerateSwapchainFormats},
     {"xrEnumerateSwapchainImages", &wine_xrEnumerateSwapchainImages},
     {"xrEnumerateViewConfigurationViews", &wine_xrEnumerateViewConfigurationViews},
     {"xrEnumerateViewConfigurations", &wine_xrEnumerateViewConfigurations},
     {"xrEnumerateViveTrackerPathsHTCX", &wine_xrEnumerateViveTrackerPathsHTCX},
+    {"xrEraseSpaceFB", &wine_xrEraseSpaceFB},
     {"xrGeometryInstanceSetTransformFB", &wine_xrGeometryInstanceSetTransformFB},
     {"xrGetActionStateBoolean", &wine_xrGetActionStateBoolean},
     {"xrGetActionStateFloat", &wine_xrGetActionStateFloat},
@@ -1424,6 +1929,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetActionStateVector2f", &wine_xrGetActionStateVector2f},
     {"xrGetAudioInputDeviceGuidOculus", &wine_xrGetAudioInputDeviceGuidOculus},
     {"xrGetAudioOutputDeviceGuidOculus", &wine_xrGetAudioOutputDeviceGuidOculus},
+    {"xrGetBodySkeletonFB", &wine_xrGetBodySkeletonFB},
     {"xrGetControllerModelKeyMSFT", &wine_xrGetControllerModelKeyMSFT},
     {"xrGetControllerModelPropertiesMSFT", &wine_xrGetControllerModelPropertiesMSFT},
     {"xrGetControllerModelStateMSFT", &wine_xrGetControllerModelStateMSFT},
@@ -1432,11 +1938,15 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetD3D12GraphicsRequirementsKHR", &wine_xrGetD3D12GraphicsRequirementsKHR},
     {"xrGetDeviceSampleRateFB", &wine_xrGetDeviceSampleRateFB},
     {"xrGetDisplayRefreshRateFB", &wine_xrGetDisplayRefreshRateFB},
+    {"xrGetEyeGazesFB", &wine_xrGetEyeGazesFB},
+    {"xrGetFaceExpressionWeightsFB", &wine_xrGetFaceExpressionWeightsFB},
+    {"xrGetFacialExpressionsHTC", &wine_xrGetFacialExpressionsHTC},
     {"xrGetFoveationEyeTrackedStateMETA", &wine_xrGetFoveationEyeTrackedStateMETA},
     {"xrGetHandMeshFB", &wine_xrGetHandMeshFB},
     {"xrGetInputSourceLocalizedName", &wine_xrGetInputSourceLocalizedName},
     {"xrGetInstanceProcAddr", &wine_xrGetInstanceProcAddr},
     {"xrGetInstanceProperties", &wine_xrGetInstanceProperties},
+    {"xrGetMarkerSizeVARJO", &wine_xrGetMarkerSizeVARJO},
     {"xrGetOpenGLGraphicsRequirementsKHR", &wine_xrGetOpenGLGraphicsRequirementsKHR},
     {"xrGetPerformanceMetricsStateMETA", &wine_xrGetPerformanceMetricsStateMETA},
     {"xrGetReferenceSpaceBoundsRect", &wine_xrGetReferenceSpaceBoundsRect},
@@ -1445,6 +1955,16 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetSceneComputeStateMSFT", &wine_xrGetSceneComputeStateMSFT},
     {"xrGetSceneMeshBuffersMSFT", &wine_xrGetSceneMeshBuffersMSFT},
     {"xrGetSerializedSceneFragmentDataMSFT", &wine_xrGetSerializedSceneFragmentDataMSFT},
+    {"xrGetSpaceBoundary2DFB", &wine_xrGetSpaceBoundary2DFB},
+    {"xrGetSpaceBoundingBox2DFB", &wine_xrGetSpaceBoundingBox2DFB},
+    {"xrGetSpaceBoundingBox3DFB", &wine_xrGetSpaceBoundingBox3DFB},
+    {"xrGetSpaceComponentStatusFB", &wine_xrGetSpaceComponentStatusFB},
+    {"xrGetSpaceContainerFB", &wine_xrGetSpaceContainerFB},
+    {"xrGetSpaceRoomLayoutFB", &wine_xrGetSpaceRoomLayoutFB},
+    {"xrGetSpaceSemanticLabelsFB", &wine_xrGetSpaceSemanticLabelsFB},
+    {"xrGetSpaceUserIdFB", &wine_xrGetSpaceUserIdFB},
+    {"xrGetSpaceUuidFB", &wine_xrGetSpaceUuidFB},
+    {"xrGetSpatialGraphNodeBindingPropertiesMSFT", &wine_xrGetSpatialGraphNodeBindingPropertiesMSFT},
     {"xrGetSwapchainStateFB", &wine_xrGetSwapchainStateFB},
     {"xrGetSystem", &wine_xrGetSystem},
     {"xrGetSystemProperties", &wine_xrGetSystemProperties},
@@ -1458,6 +1978,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetVulkanInstanceExtensionsKHR", &wine_xrGetVulkanInstanceExtensionsKHR},
     {"xrLoadControllerModelMSFT", &wine_xrLoadControllerModelMSFT},
     {"xrLoadRenderModelFB", &wine_xrLoadRenderModelFB},
+    {"xrLocateBodyJointsFB", &wine_xrLocateBodyJointsFB},
     {"xrLocateHandJointsEXT", &wine_xrLocateHandJointsEXT},
     {"xrLocateSceneComponentsMSFT", &wine_xrLocateSceneComponentsMSFT},
     {"xrLocateSpace", &wine_xrLocateSpace},
@@ -1474,12 +1995,14 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrPollEvent", &wine_xrPollEvent},
     {"xrQueryPerformanceMetricsCounterMETA", &wine_xrQueryPerformanceMetricsCounterMETA},
     {"xrQuerySpacesFB", &wine_xrQuerySpacesFB},
+    {"xrQuerySystemTrackedKeyboardFB", &wine_xrQuerySystemTrackedKeyboardFB},
     {"xrReleaseSwapchainImage", &wine_xrReleaseSwapchainImage},
     {"xrRequestDisplayRefreshRateFB", &wine_xrRequestDisplayRefreshRateFB},
     {"xrRequestExitSession", &wine_xrRequestExitSession},
     {"xrRequestSceneCaptureFB", &wine_xrRequestSceneCaptureFB},
     {"xrResultToString", &wine_xrResultToString},
     {"xrRetrieveSpaceQueryResultsFB", &wine_xrRetrieveSpaceQueryResultsFB},
+    {"xrSaveSpaceFB", &wine_xrSaveSpaceFB},
     {"xrSaveSpaceListFB", &wine_xrSaveSpaceListFB},
     {"xrSetColorSpaceFB", &wine_xrSetColorSpaceFB},
     {"xrSetDigitalLensControlALMALENCE", &wine_xrSetDigitalLensControlALMALENCE},
@@ -1489,9 +2012,14 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrSetInputDeviceStateBoolEXT", &wine_xrSetInputDeviceStateBoolEXT},
     {"xrSetInputDeviceStateFloatEXT", &wine_xrSetInputDeviceStateFloatEXT},
     {"xrSetInputDeviceStateVector2fEXT", &wine_xrSetInputDeviceStateVector2fEXT},
+    {"xrSetMarkerTrackingPredictionVARJO", &wine_xrSetMarkerTrackingPredictionVARJO},
+    {"xrSetMarkerTrackingTimeoutVARJO", &wine_xrSetMarkerTrackingTimeoutVARJO},
+    {"xrSetMarkerTrackingVARJO", &wine_xrSetMarkerTrackingVARJO},
     {"xrSetPerformanceMetricsStateMETA", &wine_xrSetPerformanceMetricsStateMETA},
+    {"xrSetSpaceComponentStatusFB", &wine_xrSetSpaceComponentStatusFB},
     {"xrSetTrackingOptimizationSettingsHintQCOM", &wine_xrSetTrackingOptimizationSettingsHintQCOM},
     {"xrSetViewOffsetVARJO", &wine_xrSetViewOffsetVARJO},
+    {"xrShareSpacesFB", &wine_xrShareSpacesFB},
     {"xrStopHapticFeedback", &wine_xrStopHapticFeedback},
     {"xrStringToPath", &wine_xrStringToPath},
     {"xrStructureTypeToString", &wine_xrStructureTypeToString},
@@ -1504,7 +2032,9 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrTriangleMeshEndVertexBufferUpdateFB", &wine_xrTriangleMeshEndVertexBufferUpdateFB},
     {"xrTriangleMeshGetIndexBufferFB", &wine_xrTriangleMeshGetIndexBufferFB},
     {"xrTriangleMeshGetVertexBufferFB", &wine_xrTriangleMeshGetVertexBufferFB},
+    {"xrTryCreateSpatialGraphStaticNodeBindingMSFT", &wine_xrTryCreateSpatialGraphStaticNodeBindingMSFT},
     {"xrUnpersistSpatialAnchorMSFT", &wine_xrUnpersistSpatialAnchorMSFT},
+    {"xrUpdateHandMeshMSFT", &wine_xrUpdateHandMeshMSFT},
     {"xrUpdateSwapchainFB", &wine_xrUpdateSwapchainFB},
     {"xrWaitFrame", &wine_xrWaitFrame},
     {"xrWaitSwapchainImage", &wine_xrWaitSwapchainImage},
@@ -1545,6 +2075,7 @@ static const char * const xr_extensions[] =
     "XR_EXT_uuid",
     "XR_EXT_view_configuration_depth_range",
     "XR_EXT_win32_appcontainer_compatible",
+    "XR_FB_body_tracking",
     "XR_FB_color_space",
     "XR_FB_composition_layer_alpha_blend",
     "XR_FB_composition_layer_depth_test",
@@ -1552,6 +2083,8 @@ static const char * const xr_extensions[] =
     "XR_FB_composition_layer_secure_content",
     "XR_FB_composition_layer_settings",
     "XR_FB_display_refresh_rate",
+    "XR_FB_eye_tracking_social",
+    "XR_FB_face_tracking",
     "XR_FB_foveation",
     "XR_FB_foveation_configuration",
     "XR_FB_foveation_vulkan",
@@ -1560,21 +2093,30 @@ static const char * const xr_extensions[] =
     "XR_FB_hand_tracking_mesh",
     "XR_FB_haptic_amplitude_envelope",
     "XR_FB_haptic_pcm",
+    "XR_FB_keyboard_tracking",
     "XR_FB_passthrough",
     "XR_FB_passthrough_keyboard_hands",
     "XR_FB_render_model",
+    "XR_FB_scene",
     "XR_FB_scene_capture",
     "XR_FB_space_warp",
+    "XR_FB_spatial_entity",
+    "XR_FB_spatial_entity_container",
     "XR_FB_spatial_entity_query",
+    "XR_FB_spatial_entity_sharing",
+    "XR_FB_spatial_entity_storage",
     "XR_FB_spatial_entity_storage_batch",
+    "XR_FB_spatial_entity_user",
     "XR_FB_swapchain_update_state",
     "XR_FB_swapchain_update_state_vulkan",
     "XR_FB_touch_controller_pro",
     "XR_FB_touch_controller_proximity",
     "XR_FB_triangle_mesh",
     "XR_HTCX_vive_tracker_interaction",
+    "XR_HTC_facial_tracking",
     "XR_HTC_foveation",
     "XR_HTC_hand_interaction",
+    "XR_HTC_passthrough",
     "XR_HTC_vive_cosmos_controller_interaction",
     "XR_HTC_vive_focus3_controller_interaction",
     "XR_HTC_vive_wrist_tracker_interaction",
@@ -1610,12 +2152,14 @@ static const char * const xr_extensions[] =
     "XR_MSFT_controller_model",
     "XR_MSFT_first_person_observer",
     "XR_MSFT_hand_interaction",
+    "XR_MSFT_hand_tracking_mesh",
     "XR_MSFT_holographic_window_attachment",
     "XR_MSFT_scene_understanding",
     "XR_MSFT_scene_understanding_serialization",
     "XR_MSFT_secondary_view_configuration",
     "XR_MSFT_spatial_anchor",
     "XR_MSFT_spatial_anchor_persistence",
+    "XR_MSFT_spatial_graph_bridge",
     "XR_MSFT_unbounded_reference_space",
     "XR_OCULUS_android_session_state_enable",
     "XR_OCULUS_audio_device_guid",
@@ -1626,6 +2170,7 @@ static const char * const xr_extensions[] =
     "XR_VARJO_composition_layer_depth_test",
     "XR_VARJO_environment_depth_estimation",
     "XR_VARJO_foveated_rendering",
+    "XR_VARJO_marker_tracking",
     "XR_VARJO_quad_views",
     "XR_VARJO_view_offset",
 };
