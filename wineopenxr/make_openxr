@@ -164,12 +164,6 @@ FUNCTION_OVERRIDES = {
     "xrCreateSession" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrDestroySession" : {"dispatch" : True, "driver" : True, "thunk" : False},
 
-    "xrCreateHandTrackerEXT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyHandTrackerEXT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-
-    "xrCreateSpatialAnchorMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroySpatialAnchorMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-
     "xrGetInstanceProcAddr" : {"dispatch" : False, "driver" : True, "thunk" : False},
     "xrEnumerateInstanceExtensionProperties" : {"dispatch" : False, "driver" : True, "thunk" : False},
 
@@ -192,25 +186,6 @@ FUNCTION_OVERRIDES = {
     "xrCreateSwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrDestroySwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEndFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
-
-    "xrCreateSceneObserverMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroySceneObserverMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreateSceneMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroySceneMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-
-    "xrCreateSpatialAnchorFromPersistedNameMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreateSpatialAnchorStoreConnectionMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroySpatialAnchorStoreConnectionMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreateFoveationProfileFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyFoveationProfileFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreateGeometryInstanceFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyGeometryInstanceFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreateTriangleMeshFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyTriangleMeshFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreatePassthroughFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyPassthroughFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrCreatePassthroughLayerFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
-    "xrDestroyPassthroughLayerFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
 }
 
 STRUCT_CHAIN_CONVERSIONS = [
@@ -220,6 +195,35 @@ STRUCT_CHAIN_CONVERSIONS = [
 STRUCTS_PUT_FIRST = [
     "XrUuid",
     "XrExtent3Df",
+]
+
+AUTO_MAPPED_HANDLES = [
+    "XrSpace",
+    "XrSpatialAnchorMSFT",
+    "XrSpatialAnchorStoreConnectionMSFT",
+    "XrHandTrackerEXT",
+    "XrExportedLocalizationMapML",
+    "XrMarkerDetectorML",
+    "XrSceneMSFT",
+    "XrSceneObserverMSFT",
+    "XrSpatialGraphNodeBindingMSFT",
+    "XrFoveationProfileFB",
+    "XrTriangleMeshFB",
+    "XrPassthroughFB",
+    "XrPassthroughLayerFB",
+    "XrGeometryInstanceFB",
+    "XrEnvironmentDepthProviderMETA",
+    "XrVirtualKeyboardMETA",
+    "XrPlaneDetectorEXT",
+    "XrEyeTrackerFB",
+    "XrSpaceUserFB",
+    "XrBodyTrackerFB",
+    "XrFaceTrackerFB",
+    "XrFaceTracker2FB",
+    "XrEnvironmentDepthSwapchainMETA",
+    "XrPassthroughHTC",
+    "XrFacialTrackerHTC",
+    "XrPassthroughColorLutMETA",
 ]
 
 class Direction(Enum):
@@ -633,6 +637,8 @@ class XrFunction(object):
     def body(self):
         body = ""
 
+        if self.type != "void":
+            body += "    {0} ret;\n\n".format(self.type)
         if not self.needs_private_thunk():
             body += "    {0}".format(self.trace())
 
@@ -644,13 +650,23 @@ class XrFunction(object):
             if self.type == "void":
                 body += "    {0}({1});\n".format(self.name, params)
             else:
-                body += "    return {0}({1});\n".format(self.name, params)
+                body += "    ret = {0}({1});\n".format(self.name, params)
         else:
             if self.type == "void":
                 body += "    {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
             else:
-                body += "    return {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
+                body += "    ret = {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
 
+        if "Destroy" in self.name:
+            for p in self.params:
+                if p.type in AUTO_MAPPED_HANDLES:
+                    body += "    unregister_dispatchable_handle((uint64_t){0});\n".format(p.name)
+        if "Create" in self.name:
+            for p in self.params:
+                if p.type in AUTO_MAPPED_HANDLES and p.is_pointer():
+                    body += "    if (!ret) register_dispatchable_handle((uint64_t)*{0}, &({1}));\n".format(p.name, self.params[0].dispatch_table())
+        if self.type != "void":
+            body += "    return ret;\n"
         return body
 
     def body_conversion(self):
@@ -883,8 +899,6 @@ class XrHandle(object):
             return "wine_session->wine_instance->funcs"
         if self.parent in ["XrActionSet"]:
             return "wine_action_set->wine_instance->funcs"
-        if self.parent in ["XrSceneObserverMSFT"]:
-            return "wine_scene_observer_msft->wine_session->wine_instance->funcs"
 
         LOGGER.error("Unhandled dispatchable parent: {0}".format(self.parent))
 
@@ -919,38 +933,19 @@ class XrHandle(object):
 
         native_handle_name = None
 
+        if self.name in AUTO_MAPPED_HANDLES:
+            return None
+
         if self.name == "XrInstance":
             native_handle_name = "instance"
         if self.name == "XrSession":
             native_handle_name = "session"
-        if self.name == "XrHandTrackerEXT":
-            native_handle_name = "hand_tracker"
-        if self.name == "XrSpatialAnchorMSFT":
-            native_handle_name = "spatial_anchor"
         if self.name == "XrSwapchain":
             native_handle_name = "swapchain"
         if self.name == "XrActionSet":
             return None
         if self.name == "XrAction":
             return None
-        if self.name == "XrSpace":
-            return None
-        if self.name == "XrGeometryInstanceFB":
-            native_handle_name = "instance"
-        if self.name == "XrPassthroughFB":
-            native_handle_name = "passthrough"
-        if self.name == "XrPassthroughLayerFB":
-            native_handle_name = "layer"
-        if self.name == "XrTriangleMeshFB":
-            native_handle_name = "mesh"
-        if self.name == "XrFoveationProfileFB":
-            native_handle_name = "foveation_profile"
-        if self.name == "XrSceneObserverMSFT":
-            native_handle_name = "scene_observer_msft"
-        if self.name == "XrSceneMSFT":
-            native_handle_name = "scene_msft"
-        if self.name == "XrSpatialAnchorStoreConnectionMSFT":
-            native_handle_name = "spatial_anchor_store_connection"
 
         if native_handle_name:
             return "((wine_{0} *){1})->{2}".format(self.name, name, native_handle_name)
@@ -1436,7 +1431,10 @@ class XrParam(object):
         if not self.is_dispatchable():
             return None
 
-        return "((wine_{0} *){1})->{2}".format(self.type, self.name, self.handle.dispatch_table())
+        if self.type in AUTO_MAPPED_HANDLES:
+            return "(*get_dispatch_table((uint64_t)({0})))".format(self.name)
+        else:
+            return "((wine_{0} *){1})->{2}".format(self.type, self.name, self.handle.dispatch_table())
 
     def format_string(self):
         return self.format_str
