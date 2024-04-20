@@ -1399,6 +1399,18 @@ XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventDa
                 evt->session = (XrSession)get_wrapped_XrSession(evt->session);
                 break;
             }
+            case XR_TYPE_EVENT_DATA_USER_PRESENCE_CHANGED_EXT:
+            {
+                XrEventDataUserPresenceChangedEXT *evt = (XrEventDataUserPresenceChangedEXT *)eventData;
+                evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+                break;
+            }
+            case XR_TYPE_EVENT_DATA_LOCALIZATION_CHANGED_ML:
+            {
+                XrEventDataLocalizationChangedML *evt = (XrEventDataLocalizationChangedML *)eventData;
+                evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+                break;
+            }
             default:
                 break;
         }
