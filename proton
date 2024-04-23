@@ -1204,7 +1204,9 @@ class Session:
             self.compat_config.add("forcelgadd")
 
         appid = os.environ.get("SteamGameId", 0)
-        if not "WINE_CPU_TOPOLOGY" in self.env and appid in default_cpu_limit:
+        if "PROTON_CPU_TOPOLOGY" in self.env:
+            self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
+        elif appid in default_cpu_limit:
             self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
 
     def init_wine(self):
