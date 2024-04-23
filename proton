@@ -1110,7 +1110,9 @@ def default_compat_config():
             ret.add("heapdelayfree")
 
         if appid in [
+                "21980", #Call of Juarez: Bound in Blood
                 "553850", #Helldivers 2
+                "2055290", #Sonic Colors: Ultimate
                 ]:
             ret.add("heapzeromemory")
 
@@ -1148,6 +1150,19 @@ def default_compat_config():
 
     return ret
 
+default_cpu_limit = {
+    "19900"     :  16,  # Far Cry 2
+    "298110"    :  16,  # Far Cry 4
+    "20920"     :  16,  # The Witcher 2: Assassins of Kings Enchanced Edition
+    "35130"     :  16,  # Lara Croft and the Guardian of Light
+    "55150"     :  16,  # Warhammer 40,000: Space Marine
+    "15620"     :  8,   # Warhammer 40,000: Dawn of War II
+    "20570"     :  8,   # Warhammer 40,000: Dawn of War II - Chaos Rising
+    "56400"     :  8,   # Warhammer 40,000: Dawn of War II - Retribution
+    "618970"    :  4,   # Outcast - Second Contact
+    "10150"     :  8,   # Prototype
+}
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1184,6 +1199,12 @@ class Session:
         #turn forcelgadd on by default unless it is disabled in compat config
         if not "noforcelgadd" in self.compat_config:
             self.compat_config.add("forcelgadd")
+
+        appid = os.environ.get("SteamGameId", 0)
+        if "PROTON_CPU_TOPOLOGY" in self.env:
+            self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
+        elif appid in default_cpu_limit:
+            self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
