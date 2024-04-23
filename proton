@@ -1161,6 +1161,7 @@ default_cpu_limit = {
     "56400"     :  8,   # Warhammer 40,000: Dawn of War II - Retribution
     "618970"    :  4,   # Outcast - Second Contact
     "10150"     :  8,   # Prototype
+    "2229830"   :  1,   # Command & Conquer and The Covert Operations
 }
 
 class Session:
