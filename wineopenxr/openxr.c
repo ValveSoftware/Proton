@@ -239,6 +239,7 @@ struct XrApiLayerNextInfo {
 
 static char *g_instance_extensions, *g_device_extensions;
 static uint32_t g_physdev_vid, g_physdev_pid;
+static XrVersion api_version = XR_CURRENT_API_VERSION;
 
 static char *strdupA(const char *s)
 {
@@ -445,7 +446,7 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
         .applicationInfo = {
             .applicationVersion = 0,
             .engineVersion = 0,
-            .apiVersion = XR_CURRENT_API_VERSION,
+            .apiVersion = api_version,
         },
         .enabledApiLayerCount = 0,
         .enabledApiLayerNames = NULL,
@@ -487,6 +488,13 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
     strcpy(xrCreateInfo.applicationInfo.engineName, "wineopenxr test instance");
 
     res = xrCreateInstance(&xrCreateInfo, &instance);
+    if (res == XR_ERROR_API_VERSION_UNSUPPORTED)
+    {
+        WINE_WARN("version %#llx unsupported.\n", (long long)api_version);
+        api_version = XR_MAKE_VERSION(1, 0, 0);
+        xrCreateInfo.applicationInfo.apiVersion = api_version;
+        res = xrCreateInstance(&xrCreateInfo, &instance);
+    }
     if(res != XR_SUCCESS){
         WINE_WARN("xrCreateInstance failed: %d\n", res);
         return res;
@@ -1108,7 +1116,7 @@ XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(const XrNegotiateLoaderIn
 
     runtimeRequest->runtimeInterfaceVersion = XR_CURRENT_LOADER_RUNTIME_VERSION;
     runtimeRequest->getInstanceProcAddr = (PFN_xrGetInstanceProcAddr)&wine_xrGetInstanceProcAddr;
-    runtimeRequest->runtimeApiVersion = XR_CURRENT_API_VERSION;
+    runtimeRequest->runtimeApiVersion = api_version;
 
     return XR_SUCCESS;
 }
