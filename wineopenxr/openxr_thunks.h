@@ -53,6 +53,7 @@ XrResult WINAPI wine_xrGetVulkanInstanceExtensionsKHR(XrInstance instance, XrSys
 XrResult WINAPI wine_xrNegotiateLoaderApiLayerInterface(const XrNegotiateLoaderInfo *loaderInfo, const char *layerName, XrNegotiateApiLayerRequest *apiLayerRequest);
 XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(const XrNegotiateLoaderInfo *loaderInfo, XrNegotiateRuntimeRequest *runtimeRequest);
 XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData);
+XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo);
 
 /* Private thunks */
 
