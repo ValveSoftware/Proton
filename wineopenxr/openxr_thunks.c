@@ -207,15 +207,6 @@ XrResult WINAPI wine_xrAttachSessionActionSets(XrSession session, const XrSessio
     return ret;
 }
 
-XrResult WINAPI wine_xrBeginFrame(XrSession session, const XrFrameBeginInfo *frameBeginInfo)
-{
-    XrResult ret;
-
-    WINE_TRACE("%p, %p\n", session, frameBeginInfo);
-    ret = xrBeginFrame(((wine_XrSession *)session)->session, frameBeginInfo);
-    return ret;
-}
-
 static XrResult WINAPI wine_xrBeginPlaneDetectionEXT(XrPlaneDetectorEXT planeDetector, const XrPlaneDetectorBeginInfoEXT *beginInfo)
 {
     XrResult ret;
