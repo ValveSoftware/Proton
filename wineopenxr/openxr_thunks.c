@@ -1989,15 +1989,6 @@ static XrResult WINAPI wine_xrQuerySystemTrackedKeyboardFB(XrSession session, co
 #endif
 }
 
-XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo)
-{
-    XrResult ret;
-
-    WINE_TRACE("%p, %p\n", swapchain, releaseInfo);
-    ret = xrReleaseSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, releaseInfo);
-    return ret;
-}
-
 static XrResult WINAPI wine_xrRequestDisplayRefreshRateFB(XrSession session, float displayRefreshRate)
 {
     XrResult ret;
