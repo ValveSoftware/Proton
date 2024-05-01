@@ -175,6 +175,7 @@ FUNCTION_OVERRIDES = {
     "xrCreateSwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrDestroySwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEndFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrBeginFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
 }
 
 NOT_OUR_FUNCTIONS = [
