@@ -686,7 +686,7 @@ static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
 
 static DWORD WINAPI initialize_vr_data(void *arg)
 {
-    int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions);
+    int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions, uint32_t *physdev_vid, uint32_t *physdev_pid);
     vr::IVRClientCore* (*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
     uint32_t instance_extensions_count, device_count;
     VkPhysicalDevice *phys_devices = NULL;
@@ -884,7 +884,8 @@ static DWORD WINAPI initialize_vr_data(void *arg)
                 (GetProcAddress(hwineopenxr, "__wineopenxr_get_extensions_internal"));
         if (p__wineopenxr_get_extensions_internal)
         {
-            if (!p__wineopenxr_get_extensions_internal(&xr_inst_ext, &xr_dev_ext))
+            uint32_t vid, pid;
+            if (!p__wineopenxr_get_extensions_internal(&xr_inst_ext, &xr_dev_ext, &vid, &pid))
             {
                 WINE_TRACE("Got XR extensions.\n");
                 if ((status = RegSetValueExA(vr_key, "openxr_vulkan_instance_extensions", 0, REG_SZ,
@@ -897,6 +898,18 @@ static DWORD WINAPI initialize_vr_data(void *arg)
                         (BYTE *)xr_dev_ext, strlen(xr_dev_ext) + 1)))
                 {
                     WINE_ERR("Could not set openxr_vulkan_device_extensions value, status %#x.\n", status);
+                    goto done;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_vid", 0, REG_DWORD,
+                        (BYTE *)&vid, sizeof(vid))))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_vid value, status %#x.\n", status);
+                    goto done;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_pid", 0, REG_DWORD,
+                        (BYTE *)&pid, sizeof(pid))))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_pid value, status %#x.\n", status);
                     goto done;
                 }
             }
