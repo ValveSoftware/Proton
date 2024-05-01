@@ -162,15 +162,6 @@ static XrResult WINAPI wine_xrAcquireEnvironmentDepthImageMETA(XrEnvironmentDept
     return ret;
 }
 
-XrResult WINAPI wine_xrAcquireSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageAcquireInfo *acquireInfo, uint32_t *index)
-{
-    XrResult ret;
-
-    WINE_TRACE("%p, %p, %p\n", swapchain, acquireInfo, index);
-    ret = xrAcquireSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, acquireInfo, index);
-    return ret;
-}
-
 static XrResult WINAPI wine_xrApplyForceFeedbackCurlMNDX(XrHandTrackerEXT handTracker, const XrForceFeedbackCurlApplyLocationsMNDX *locations)
 {
     XrResult ret;

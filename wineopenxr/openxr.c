@@ -1894,6 +1894,21 @@ XrResult WINAPI wine_xrBeginFrame(XrSession session, const XrFrameBeginInfo *fra
     return ret;
 }
 
+XrResult WINAPI wine_xrAcquireSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageAcquireInfo *acquireInfo, uint32_t *index)
+{
+    wine_XrSession *wine_session = ((wine_XrSwapchain *)swapchain)->wine_session;
+    IDXGIVkInteropDevice2 *dxvk_device;
+    XrResult ret;
+
+    WINE_TRACE("%p, %p, %p\n", swapchain, acquireInfo, index);
+    if ((dxvk_device = wine_session->wine_instance->dxvk_device))
+        dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    ret = xrAcquireSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, acquireInfo, index);
+    if (dxvk_device)
+        dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+    return ret;
+}
+
 /* wineopenxr API */
 XrResult WINAPI __wineopenxr_GetVulkanInstanceExtensions(uint32_t buflen, uint32_t *outlen, char *buf)
 {
