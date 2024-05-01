@@ -385,27 +385,39 @@ done:
     {
         if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, NULL, &size)))
         {
-            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", wait_status);
+            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", status);
             RegCloseKey(vr_key);
             return FALSE;
         }
         g_instance_extensions = heap_alloc(size);
         if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, (BYTE *)g_instance_extensions, &size)))
         {
-            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", wait_status);
+            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", status);
             RegCloseKey(vr_key);
             return FALSE;
         }
         if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, NULL, &size)))
         {
-            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", wait_status);
+            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", status);
             RegCloseKey(vr_key);
             return FALSE;
         }
         g_device_extensions = heap_alloc(size);
         if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, (BYTE *)g_device_extensions, &size)))
         {
-            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", wait_status);
+            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_vid", NULL, &type, (BYTE *)&g_physdev_vid, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_device_vid, status: %#x.\n", status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_pid", NULL, &type, (BYTE *)&g_physdev_pid, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_device_pid, status: %#x.\n", status);
             RegCloseKey(vr_key);
             return FALSE;
         }
@@ -416,7 +428,7 @@ done:
 }
 
 int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
-        char **ret_device_extensions)
+        char **ret_device_extensions, uint32_t *ret_physdev_vid, uint32_t *ret_physdev_pid)
 {
     PFN_xrGetVulkanInstanceExtensionsKHR pxrGetVulkanInstanceExtensionsKHR;
     PFN_xrGetSystem pxrGetSystem;
@@ -576,8 +588,8 @@ int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
     }
 
     vkGetPhysicalDeviceProperties(vk_physdev, &vk_dev_props);
-    g_physdev_vid = vk_dev_props.vendorID;
-    g_physdev_pid = vk_dev_props.deviceID;
+    *ret_physdev_vid = vk_dev_props.vendorID;
+    *ret_physdev_pid = vk_dev_props.deviceID;
 
     res = pxrGetVulkanDeviceExtensionsKHR(instance, system, 0, &len, NULL);
     if(res != XR_SUCCESS){
@@ -737,6 +749,7 @@ XrResult WINAPI wine_xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
         /* FIXME: what if we have two of the same adapters? */
         if(adapter_desc.VendorId == g_physdev_vid &&
                 adapter_desc.DeviceId == g_physdev_pid){
+            WINE_TRACE("Found DXGI adapter for %#04x:%#04x\n", g_physdev_vid, g_physdev_pid);
             break;
         }
     }
