@@ -10,6 +10,7 @@
 #include "winnls.h"
 #include "winuser.h"
 #include "winternl.h"
+#include "winsock2.h"
 
 #include "steamclient_private.h"
 
@@ -49,6 +50,7 @@ static char temp_path_buffer[TEMP_PATH_BUFFER_LENGTH];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
+static BOOL wsa_initialized;
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -67,6 +69,11 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             break;
         case DLL_PROCESS_DETACH:
             CloseHandle(steam_overlay_event);
+            if (wsa_initialized)
+            {
+                WSACleanup();
+                wsa_initialized = FALSE;
+            }
             break;
     }
 
@@ -347,6 +354,14 @@ static int load_steamclient(void)
         params.ignore_child_processes = ignore_child_processes;
 
     if (STEAMCLIENT_CALL( steamclient_init, &params )) return 0;
+    if (!wsa_initialized)
+    {
+        /* Some games depend on winsocks being initialized after initializing Steam API. */
+        WSADATA data;
+
+        WSAStartup(0x202, &data);
+        wsa_initialized = TRUE;
+    }
     return 1;
 }
 
