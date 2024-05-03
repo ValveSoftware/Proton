@@ -621,6 +621,9 @@ VKD3D_CONFIGURE_ARGS = \
   --without-ncurses \
   SONAME_LIBVULKAN=vulkan-1 \
 
+# LTO is enabled by default, but causes the build to fail. I havent't
+# investigated this yet.
+VKD3D_CFLAGS = -fno-lto
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
 VKD3D_DEPENDS = vulkan-headers spirv-headers
 
