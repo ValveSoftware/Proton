@@ -608,10 +608,10 @@ VKD3D_CONFIGURE_ARGS = \
   --disable-tests \
   --disable-demos \
   --without-ncurses \
+  SONAME_LIBVULKAN=vulkan-1 \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
 VKD3D_DEPENDS = vulkan-loader vulkan-headers spirv-headers
-VKD3D_CONFIGURE_ARGS = SONAME_LIBVULKAN=vulkan-1
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
 $(eval $(call rules-autoconf,vkd3d,32,CROSS))
