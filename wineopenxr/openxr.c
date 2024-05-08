@@ -1455,6 +1455,29 @@ XrResult WINAPI wine_xrGetSystem(XrInstance instance, const XrSystemGetInfo *get
     return res;
 }
 
+static BOOL is_vulkan_format_depth(VkFormat format)
+{
+    switch(format){
+    case VK_FORMAT_B8G8R8A8_SRGB:
+    case VK_FORMAT_B8G8R8A8_UNORM:
+    case VK_FORMAT_R8G8B8A8_SRGB:
+    case VK_FORMAT_R8G8B8A8_UNORM:
+    case VK_FORMAT_R32G32B32A32_SFLOAT:
+    case VK_FORMAT_R32G32B32_SFLOAT:
+    case VK_FORMAT_R16G16B16A16_SFLOAT:
+        return FALSE;
+    case VK_FORMAT_D32_SFLOAT:
+    case VK_FORMAT_D16_UNORM:
+    case VK_FORMAT_D24_UNORM_S8_UINT:
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+        return TRUE;
+
+    default:
+        WINE_WARN("Unknown vulkan format %#x", format);
+        return FALSE;
+    }
+}
+
 int64_t map_format_dxgi_to_vulkan(int64_t format)
 {
     switch(format){
@@ -1598,6 +1621,7 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
     wine_swapchain->create_info = *createInfo;
 
     if(wine_session->session_type == SESSION_TYPE_D3D11){
+        BOOL format_is_depth;
         our_createInfo = *createInfo;
         our_createInfo.format = map_format_dxgi_to_vulkan(createInfo->format);
         if(our_createInfo.format == VK_FORMAT_UNDEFINED){
@@ -1606,6 +1630,14 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
             return XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED;
         }
         createInfo = &our_createInfo;
+
+        format_is_depth = is_vulkan_format_depth(our_createInfo.format);
+        if ((createInfo->usageFlags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT) && format_is_depth){
+            WINE_WARN("Swapchain has a color attachment usage, but it's format is for depth\n");
+        }
+        if ((createInfo->usageFlags & XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) && !format_is_depth){
+            WINE_WARN("Swapchain has a depth/stencil usage, but it's format is for color\n");
+        }
     }
 
     res = xrCreateSwapchain(((wine_XrSession *)session)->session, createInfo, &wine_swapchain->swapchain);
