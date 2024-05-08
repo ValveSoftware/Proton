@@ -49,6 +49,8 @@ typedef struct wine_XrSession {
 
 typedef struct wine_XrSwapchain{
     XrSwapchain swapchain;
+    XrSwapchainImageBaseHeader *images;
+    uint32_t image_count;
     struct wine_XrSession *wine_session;
 
     XrSwapchainCreateInfo create_info;

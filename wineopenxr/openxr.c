@@ -1663,12 +1663,22 @@ XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
 
     WINE_TRACE("%p\n", swapchain);
 
+    if (wine_swapchain->image_count){
+        UINT i;
+        if (wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
+            XrSwapchainImageD3D11KHR *d3d11_images = (XrSwapchainImageD3D11KHR *)wine_swapchain->images;
+            for (i = 0; i < wine_swapchain->image_count; i++)
+                d3d11_images[i].texture->lpVtbl->Release(d3d11_images[i].texture);
+        }
+        heap_free(wine_swapchain->images);
+        wine_swapchain->image_count = 0;
+    }
+
     res = xrDestroySwapchain(wine_swapchain->swapchain);
     if(res != XR_SUCCESS){
         WINE_WARN("xrDestroySwapchain failed: %d\n", res);
         return res;
     }
-
     heap_free(wine_swapchain);
 
     return XR_SUCCESS;
@@ -1700,28 +1710,34 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
     wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
     wine_XrInstance *wine_instance = wine_swapchain->wine_session->wine_instance;
     XrResult res;
-    XrSwapchainImageVulkanKHR *our_images = NULL;
-    XrSwapchainImageBaseHeader *their_images = images;
+    XrSwapchainImageVulkanKHR *our_vk = NULL;
     HRESULT hr;
-    uint32_t i;
+    size_t image_size = 0;
+    uint32_t i, to_copy;
 
     WINE_TRACE("%p, %u, %p, %p\n", swapchain, imageCapacityInput, imageCountOutput, images);
+    if (wine_swapchain->wine_session->session_type != SESSION_TYPE_D3D11)
+        return xrEnumerateSwapchainImages(wine_swapchain->swapchain, imageCapacityInput, imageCountOutput, images);
 
-    if(images){
-        if(wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
-            our_images = heap_alloc(sizeof(*our_images) * imageCapacityInput);
-            for(i = 0; i < imageCapacityInput; ++i){
-                our_images[i].type = XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR;
-            }
-            images = (XrSwapchainImageBaseHeader *)our_images;
+    if (!wine_swapchain->image_count) {
+        uint32_t image_count;
+        res = xrEnumerateSwapchainImages(wine_swapchain->swapchain, 0, &image_count, NULL);
+        if (res != XR_SUCCESS)
+            return res;
+
+        our_vk = heap_alloc(sizeof(*our_vk) * image_count);
+        for(i = 0; i < image_count; ++i){
+            our_vk[i].type = XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR;
         }
-    }
 
-    res = xrEnumerateSwapchainImages(wine_swapchain->swapchain, imageCapacityInput, imageCountOutput, images);
+        res = xrEnumerateSwapchainImages(wine_swapchain->swapchain, image_count, &image_count, (XrSwapchainImageBaseHeader *)our_vk);
+        if (res != XR_SUCCESS){
+            heap_free(our_vk);
+            return res;
+        }
 
-    if(images && res == XR_SUCCESS){
         if(wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
-            XrSwapchainImageD3D11KHR *their_d3d11;
+            XrSwapchainImageD3D11KHR *our_d3d11;
             D3D11_TEXTURE2D_DESC1 desc;
 
             desc.Width = wine_swapchain->create_info.width;
@@ -1739,21 +1755,35 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
             desc.MiscFlags = 0;
             desc.TextureLayout = D3D11_TEXTURE_LAYOUT_UNDEFINED;
 
-            their_d3d11 = (XrSwapchainImageD3D11KHR *)their_images;
-            for(i = 0; i < *imageCountOutput; ++i){
+            our_d3d11 = heap_alloc(sizeof(XrSwapchainImageD3D11KHR) * image_count);
+            for(i = 0; i < image_count; ++i){
                 hr = wine_instance->dxvk_device->lpVtbl->CreateTexture2DFromVkImage(wine_instance->dxvk_device,
-                        &desc, our_images[i].image, &their_d3d11[i].texture);
+                        &desc, our_vk[i].image, &our_d3d11[i].texture);
                 if(FAILED(hr)){
+                    UINT j;
+                    for (j = 0; j < i; ++j){
+                        our_d3d11[i].texture->lpVtbl->Release(our_d3d11[i].texture);
+                    }
+                    heap_free(our_d3d11);
+                    heap_free(our_vk);
                     WINE_WARN("Failed to create DXVK texture from VkImage: %08x\n", hr);
-                    return XR_ERROR_INSTANCE_LOST;
+                    return XR_ERROR_RUNTIME_FAILURE;
                 }
-                WINE_TRACE("Successfully allocated texture %p\n", their_d3d11[i].texture);
+                WINE_TRACE("Successfully allocated texture %p\n", our_d3d11[i].texture);
             }
+            wine_swapchain->images = (XrSwapchainImageBaseHeader *)our_d3d11;
         }
+        heap_free(our_vk);
+        wine_swapchain->image_count = image_count;
     }
-    heap_free(our_images);
 
-    return res;
+    to_copy = min(wine_swapchain->image_count, imageCapacityInput);
+    *imageCountOutput = wine_swapchain->image_count;
+    if (wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
+        image_size = sizeof(XrSwapchainImageD3D11KHR);
+    }
+    memcpy(images, wine_swapchain->images, image_size * to_copy);
+    return XR_SUCCESS;
 }
 
 static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *wine_session,
