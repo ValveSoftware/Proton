@@ -20,6 +20,11 @@ typedef struct wine_XrInstance {
     XrSystemId systemId;
 
     IDXGIVkInteropDevice2 *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device;
+    ID3D12CommandQueue *d3d12_queue;
+
+    VkDevice vk_device;
+    VkQueue vk_queue;
 } wine_XrInstance;
 
 union CompositionLayer;

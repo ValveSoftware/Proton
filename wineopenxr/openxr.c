@@ -28,6 +28,7 @@
 #include "wine/vulkan.h"
 #define VULKAN_H_ 1// tell dxvk-interop not to include vulkan.h
 #include "dxvk-interop.h"
+#include "vkd3d-proton-interop.h"
 #undef WINE_VK_HOST
 #define XR_USE_GRAPHICS_API_D3D11 1
 #define XR_USE_GRAPHICS_API_D3D12 1
@@ -79,6 +80,7 @@ static struct
 substitute_extensions[] =
 {
     {"XR_KHR_D3D11_enable", "XR_KHR_vulkan_enable"},
+    {"XR_KHR_D3D12_enable", "XR_KHR_vulkan_enable"},
     {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE, TRUE},
 };
 
@@ -682,7 +684,6 @@ XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerNam
                 else
                     dst = (*propertyCountOutput)++;
                 strcpy(properties[dst].extensionName, substitute_extensions[j].win32_ext);
-                break;
             }
         }
     }
@@ -790,9 +791,13 @@ XrResult WINAPI wine_xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
 XrResult WINAPI wine_xrGetD3D12GraphicsRequirementsKHR(XrInstance instance,
         XrSystemId systemId, XrGraphicsRequirementsD3D12KHR *graphicsRequirements)
 {
-    WINE_FIXME("unimplemented\n");
-    /* FIXME */
-    return XR_ERROR_INITIALIZATION_FAILED;
+    XrGraphicsRequirementsD3D11KHR requirements;
+    XrResult result = wine_xrGetD3D11GraphicsRequirementsKHR(instance, systemId, &requirements);
+    if (result != XR_SUCCESS)
+        return result;
+    graphicsRequirements->adapterLuid = requirements.adapterLuid;
+    graphicsRequirements->minFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+    return XR_SUCCESS;
 }
 
 XrResult WINAPI wine_xrGetInstanceProcAddr(XrInstance instance, const char *fn_name, PFN_xrVoidFunction *out_fn)
@@ -906,6 +911,12 @@ XrResult WINAPI wine_xrDestroyInstance(XrInstance instance)
 
     if(wine_instance->dxvk_device)
         wine_instance->dxvk_device->lpVtbl->Release(wine_instance->dxvk_device);
+
+    if (wine_instance->d3d12_device)
+    {
+        wine_instance->d3d12_device->lpVtbl->Release(wine_instance->d3d12_device);
+        wine_instance->d3d12_queue->lpVtbl->Release(wine_instance->d3d12_queue);
+    }
 
     heap_free(wine_instance);
 
@@ -1038,6 +1049,60 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 our_create_info.next = &our_vk_binding;
                 createInfo = &our_create_info;
                 session_type = SESSION_TYPE_D3D11;
+
+                break;
+            }
+            case XR_TYPE_GRAPHICS_BINDING_D3D12_KHR:
+            {
+                const XrGraphicsBindingD3D12KHR *their_d3d12_binding = createInfo->next;
+                HRESULT hr;
+                UINT32 queue_index;
+                VkQueueFlags queue_flags;
+                ID3D12DeviceExt1 *device_ext;
+                hr = ID3D12Device_QueryInterface(their_d3d12_binding->device, &IID_ID3D12DXVKInteropDevice, (void**)&wine_instance->d3d12_device);
+                if (FAILED(hr))
+                {
+                    WINE_WARN("Given ID3D12Device doesn't support ID3D12DXVKInteropDevice. Only vkd3d-proton is supported.\n");
+                    return XR_ERROR_VALIDATION_FAILURE;
+                }
+                hr = ID3D12Device_QueryInterface(their_d3d12_binding->device, &IID_ID3D12DeviceExt1, (void **)&device_ext);
+                if (FAILED(hr))
+                {
+                    WINE_WARN("Given ID3D12Device doesn't support ID3D12DeviceExt1. Only vkd3d-proton is supported.\n");
+                    return XR_ERROR_VALIDATION_FAILURE;
+                }
+
+                our_vk_binding.type = XR_TYPE_GRAPHICS_BINDING_VULKAN_KHR;
+                our_vk_binding.next = NULL;
+
+                wine_instance->d3d12_queue = their_d3d12_binding->queue;
+                their_d3d12_binding->queue->lpVtbl->AddRef(their_d3d12_binding->queue);
+
+                wine_instance->d3d12_device->lpVtbl->GetVulkanHandles(wine_instance->d3d12_device,
+                        &our_vk_binding.instance, &our_vk_binding.physicalDevice, &our_vk_binding.device);
+                device_ext->lpVtbl->GetVulkanQueueInfoEx(device_ext, their_d3d12_binding->queue,
+                        &wine_instance->vk_queue, &queue_index, &queue_flags, &our_vk_binding.queueFamilyIndex);
+                device_ext->lpVtbl->Release(device_ext);
+
+                wine_instance->vk_device = our_vk_binding.device = get_native_VkDevice(our_vk_binding.device);
+                wine_instance->vk_queue = get_native_VkQueue(wine_instance->vk_queue);
+                our_vk_binding.queueIndex = queue_index;
+
+                our_vk_binding.instance = get_native_VkInstance(our_vk_binding.instance);
+
+                if ((res = do_vulkan_init(wine_instance, our_vk_binding.instance)) != XR_SUCCESS)
+                    return res;
+
+                if (wine_instance->vk_phys_dev != get_native_VkPhysicalDevice(our_vk_binding.physicalDevice))
+                    WINE_WARN("VK physical device does not match that from xrGetVulkanGraphicsDeviceKHR.\n");
+
+                our_vk_binding.physicalDevice = wine_instance->vk_phys_dev;
+
+                our_create_info = *createInfo;
+                our_create_info.next = &our_vk_binding;
+                createInfo = &our_create_info;
+
+                session_type = SESSION_TYPE_D3D12;
 
                 break;
             }
@@ -1572,7 +1637,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainFormats(XrSession session, uint32_t for
 
     WINE_TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
 
-    if (wine_session->session_type != SESSION_TYPE_D3D11)
+    if (wine_session->session_type != SESSION_TYPE_D3D11 && wine_session->session_type != SESSION_TYPE_D3D12)
         return xrEnumerateSwapchainFormats(wine_session->session, formatCapacityInput, formatCountOutput, formats);
 
     res = xrEnumerateSwapchainFormats(wine_session->session, 0, &real_format_count, NULL);
@@ -1620,7 +1685,7 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
     wine_swapchain = heap_alloc_zero(sizeof(*wine_swapchain));
     wine_swapchain->create_info = *createInfo;
 
-    if(wine_session->session_type == SESSION_TYPE_D3D11){
+    if(wine_session->session_type == SESSION_TYPE_D3D11 || wine_session->session_type == SESSION_TYPE_D3D12){
         BOOL format_is_depth;
         our_createInfo = *createInfo;
         our_createInfo.format = map_format_dxgi_to_vulkan(createInfo->format);
@@ -1656,6 +1721,18 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
     return XR_SUCCESS;
 }
 
+static void release_d3d12_resources(wine_XrSwapchain *wine_swapchain, uint32_t image_count)
+{
+    XrSwapchainImageD3D12KHR *d3d12_images = (XrSwapchainImageD3D12KHR *)wine_swapchain->images;
+    UINT i;
+    if (!image_count)
+        return;
+
+    for (i = 0; i < image_count; i++)
+        if (d3d12_images[i].texture)
+            d3d12_images[i].texture->lpVtbl->Release(d3d12_images[i].texture);
+}
+
 XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
 {
     wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
@@ -1669,7 +1746,8 @@ XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
             XrSwapchainImageD3D11KHR *d3d11_images = (XrSwapchainImageD3D11KHR *)wine_swapchain->images;
             for (i = 0; i < wine_swapchain->image_count; i++)
                 d3d11_images[i].texture->lpVtbl->Release(d3d11_images[i].texture);
-        }
+        } else if (wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D12)
+            release_d3d12_resources(wine_swapchain, wine_swapchain->image_count);
         heap_free(wine_swapchain->images);
         wine_swapchain->image_count = 0;
     }
@@ -1713,10 +1791,10 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
     XrSwapchainImageVulkanKHR *our_vk = NULL;
     HRESULT hr;
     size_t image_size = 0;
-    uint32_t i, to_copy;
+    uint32_t i;
 
     WINE_TRACE("%p, %u, %p, %p\n", swapchain, imageCapacityInput, imageCountOutput, images);
-    if (wine_swapchain->wine_session->session_type != SESSION_TYPE_D3D11)
+    if (wine_swapchain->wine_session->session_type != SESSION_TYPE_D3D11 && wine_swapchain->wine_session->session_type != SESSION_TYPE_D3D12)
         return xrEnumerateSwapchainImages(wine_swapchain->swapchain, imageCapacityInput, imageCountOutput, images);
 
     if (!wine_swapchain->image_count) {
@@ -1772,17 +1850,80 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
                 WINE_TRACE("Successfully allocated texture %p\n", our_d3d11[i].texture);
             }
             wine_swapchain->images = (XrSwapchainImageBaseHeader *)our_d3d11;
+        } else if(wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D12){
+            XrSwapchainImageD3D12KHR *our_d3d12;
+            D3D12_RESOURCE_DESC1 desc;
+            ID3D12DeviceExt1 *device_ext;
+            HRESULT hr = wine_instance->d3d12_device->lpVtbl->QueryInterface(wine_instance->d3d12_device, &IID_ID3D12DeviceExt1, (void **)&device_ext);
+            BOOL format_is_depth = is_vulkan_format_depth(map_format_dxgi_to_vulkan(wine_swapchain->create_info.format));
+            BOOL succeeded = TRUE;
+            if (FAILED(hr))
+            {
+                WINE_ERR("Cannot get vkd3d-proton interface: %08x\n", hr);
+                return XR_ERROR_VALIDATION_FAILURE;
+            }
+
+            desc.Alignment = 0;
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+            desc.Width = wine_swapchain->create_info.width;
+            desc.Height = wine_swapchain->create_info.height;
+            desc.MipLevels = wine_swapchain->create_info.mipCount;
+            desc.DepthOrArraySize = wine_swapchain->create_info.arraySize;
+            desc.Format = wine_swapchain->create_info.format;
+            WINE_TRACE("creating vkd3d-proton texture with dxgi format %d (%x)\n",
+                    desc.Format, desc.Format);
+            desc.SampleDesc.Count = wine_swapchain->create_info.sampleCount;
+            desc.SampleDesc.Quality = 0;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+            desc.Flags = 0;
+            if (!format_is_depth)
+                desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+            else
+            {
+                desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+                if (!(wine_swapchain->create_info.usageFlags & XR_SWAPCHAIN_USAGE_SAMPLED_BIT))
+                    desc.Flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+            }
+            if (wine_swapchain->create_info.usageFlags & XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT)
+                desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+            our_d3d12 = heap_alloc_zero(sizeof(XrSwapchainImageD3D12KHR) * image_count);
+            for(i = 0; i < image_count; ++i)
+            {
+                hr = device_ext->lpVtbl->CreateResourceFromBorrowedHandle(device_ext,
+                        &desc, our_vk[i].image, &our_d3d12[i].texture);
+                if(FAILED(hr))
+                {
+                    WINE_ERR("Failed to create vkd3d-proton texture from VkImage: %08x\n", hr);
+                    succeeded = FALSE;
+                    break;
+                }
+                WINE_TRACE("Successfully allocated texture %p\n", our_d3d12[i].texture);
+            }
+            device_ext->lpVtbl->Release(device_ext);
+
+            wine_swapchain->images = (XrSwapchainImageBaseHeader *)our_d3d12;
+            if (!succeeded)
+            {
+                release_d3d12_resources(wine_swapchain, image_count);
+                heap_free(wine_swapchain->images);
+                wine_swapchain->images = NULL;
+                heap_free(our_vk);
+                return XR_ERROR_RUNTIME_FAILURE;
+            }
         }
         heap_free(our_vk);
         wine_swapchain->image_count = image_count;
+        WINE_TRACE("image count %d\n", image_count);
     }
 
-    to_copy = min(wine_swapchain->image_count, imageCapacityInput);
     *imageCountOutput = wine_swapchain->image_count;
     if (wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D11){
         image_size = sizeof(XrSwapchainImageD3D11KHR);
+    } else if (wine_swapchain->wine_session->session_type == SESSION_TYPE_D3D12){
+        image_size = sizeof(XrSwapchainImageD3D12KHR);
     }
-    memcpy(images, wine_swapchain->images, image_size * to_copy);
+    memcpy(images, wine_swapchain->images, image_size * min(wine_swapchain->image_count, imageCapacityInput));
     return XR_SUCCESS;
 }
 
@@ -1917,6 +2058,7 @@ XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEn
     wine_XrSession *wine_session = (wine_XrSession *)session;
     uint32_t i, view_idx = 0, view_info_idx = 0;
     IDXGIVkInteropDevice2 *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device;
     XrFrameEndInfo our_frameEndInfo;
     XrResult res;
 
@@ -1946,9 +2088,16 @@ XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEn
         dxvk_device->lpVtbl->FlushRenderingCommands(dxvk_device);
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
     }
+    else if ((d3d12_device = wine_session->wine_instance->d3d12_device))
+    {
+        WINE_TRACE("Locking vkd3d-proton submission queue.\n");
+        d3d12_device->lpVtbl->LockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
+    }
     res = xrEndFrame(((wine_XrSession *)session)->session, &our_frameEndInfo);
     if (dxvk_device)
         dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+    else if (d3d12_device)
+        d3d12_device->lpVtbl->UnlockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
 
     return res;
 }
@@ -1976,6 +2125,10 @@ XrResult WINAPI wine_xrAcquireSwapchainImage(XrSwapchain swapchain, const XrSwap
     XrResult ret;
 
     WINE_TRACE("%p, %p, %p\n", swapchain, acquireInfo, index);
+
+    if (wine_session->session_type == SESSION_TYPE_D3D12)
+        return XR_ERROR_RUNTIME_FAILURE;
+
     if ((dxvk_device = wine_session->wine_instance->dxvk_device))
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
     ret = xrAcquireSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, acquireInfo, index);
@@ -1991,6 +2144,10 @@ XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwap
     XrResult ret;
 
     WINE_TRACE("%p, %p\n", swapchain, releaseInfo);
+
+    if (wine_session->session_type == SESSION_TYPE_D3D12)
+        return XR_ERROR_RUNTIME_FAILURE;
+
     if ((dxvk_device = wine_session->wine_instance->dxvk_device))
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
     ret = xrReleaseSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, releaseInfo);
