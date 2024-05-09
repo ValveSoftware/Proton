@@ -914,6 +914,7 @@ XrResult WINAPI wine_xrDestroyInstance(XrInstance instance)
 
     if (wine_instance->d3d12_device)
     {
+        wine_instance->p_vkDestroyCommandPool(wine_instance->vk_device, wine_instance->vk_command_pool, NULL);
         wine_instance->d3d12_device->lpVtbl->Release(wine_instance->d3d12_device);
         wine_instance->d3d12_queue->lpVtbl->Release(wine_instance->d3d12_queue);
     }
@@ -1055,6 +1056,11 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
             case XR_TYPE_GRAPHICS_BINDING_D3D12_KHR:
             {
                 const XrGraphicsBindingD3D12KHR *their_d3d12_binding = createInfo->next;
+                VkCommandPoolCreateInfo command_pool_create_info = {
+                    .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+                    .flags = 0,
+                    .pNext = NULL,
+                };
                 HRESULT hr;
                 UINT32 queue_index;
                 VkQueueFlags queue_flags;
@@ -1101,6 +1107,16 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 our_create_info = *createInfo;
                 our_create_info.next = &our_vk_binding;
                 createInfo = &our_create_info;
+
+#define X(proc) wine_instance->p_##proc = (void *)vkGetDeviceProcAddr(our_vk_binding.device, #proc);
+                VK_PROCS
+#undef X
+                command_pool_create_info.queueFamilyIndex = our_vk_binding.queueFamilyIndex;
+                if (wine_instance->p_vkCreateCommandPool(wine_instance->vk_device, &command_pool_create_info, NULL, &wine_instance->vk_command_pool) != VK_SUCCESS)
+                {
+                    WINE_WARN("vkCreateCommandPool failed\n");
+                    return XR_ERROR_RUNTIME_FAILURE;
+                }
 
                 session_type = SESSION_TYPE_D3D12;
 
@@ -1723,6 +1739,7 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreat
 
 static void release_d3d12_resources(wine_XrSwapchain *wine_swapchain, uint32_t image_count)
 {
+    wine_XrInstance *wine_instance = wine_swapchain->wine_session->wine_instance;
     XrSwapchainImageD3D12KHR *d3d12_images = (XrSwapchainImageD3D12KHR *)wine_swapchain->images;
     UINT i;
     if (!image_count)
@@ -1731,6 +1748,12 @@ static void release_d3d12_resources(wine_XrSwapchain *wine_swapchain, uint32_t i
     for (i = 0; i < image_count; i++)
         if (d3d12_images[i].texture)
             d3d12_images[i].texture->lpVtbl->Release(d3d12_images[i].texture);
+    wine_instance->p_vkFreeCommandBuffers(wine_instance->vk_device, wine_instance->vk_command_pool, image_count, wine_swapchain->cmd_release);
+    wine_instance->p_vkFreeCommandBuffers(wine_instance->vk_device, wine_instance->vk_command_pool, image_count, wine_swapchain->cmd_acquire);
+    heap_free(wine_swapchain->cmd_release);
+    heap_free(wine_swapchain->cmd_acquire);
+    heap_free(wine_swapchain->acquired);
+    heap_free(wine_swapchain->acquired_indices);
 }
 
 XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
@@ -1781,6 +1804,46 @@ static D3D11_USAGE d3d11usage_from_XrSwapchainUsageFlags(XrSwapchainUsageFlags f
         ret |= D3D11_BIND_SHADER_RESOURCE;
 
     return ret;
+}
+
+static VkResult record_transition_command(wine_XrInstance *instance, VkImage image, VkImageSubresourceRange subresource,
+        VkImageLayout from, VkImageLayout to, VkCommandBuffer *out_cmd)
+{
+    VkResult ret;
+    VkCommandBufferAllocateInfo command_buffer_allocate_info = {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+        .commandPool = instance->vk_command_pool,
+        .commandBufferCount = 1,
+    };
+    VkCommandBufferBeginInfo begin_info = {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .flags = 0,
+    };
+    VkImageMemoryBarrier barrier = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+        .oldLayout = from,
+        .newLayout = to,
+        .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .image = image,
+        .subresourceRange = subresource,
+        .srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT,
+        .dstAccessMask = VK_ACCESS_MEMORY_READ_BIT,
+    };
+
+    *out_cmd = VK_NULL_HANDLE;
+    if (from == to){
+        return VK_SUCCESS;
+    }
+
+    if ((ret = instance->p_vkAllocateCommandBuffers(instance->vk_device, &command_buffer_allocate_info, out_cmd)) != VK_SUCCESS)
+        return ret;
+    if ((ret = instance->p_vkBeginCommandBuffer(*out_cmd, &begin_info)) != VK_SUCCESS)
+        return ret;
+    instance->p_vkCmdPipelineBarrier(*out_cmd, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+            0, 0, NULL, 0, NULL, 1, &barrier);
+    return instance->p_vkEndCommandBuffer(*out_cmd);
 }
 
 XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t imageCapacityInput, uint32_t *imageCountOutput, XrSwapchainImageBaseHeader *images)
@@ -1857,6 +1920,16 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
             HRESULT hr = wine_instance->d3d12_device->lpVtbl->QueryInterface(wine_instance->d3d12_device, &IID_ID3D12DeviceExt1, (void **)&device_ext);
             BOOL format_is_depth = is_vulkan_format_depth(map_format_dxgi_to_vulkan(wine_swapchain->create_info.format));
             BOOL succeeded = TRUE;
+            const D3D12_RESOURCE_STATES incoming_state = format_is_depth ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_RENDER_TARGET;
+            const VkImageLayout vk_layout = format_is_depth ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            const VkImageSubresourceRange subresource =
+            {
+                .layerCount = wine_swapchain->create_info.arraySize,
+                .baseArrayLayer = 0,
+                .levelCount = wine_swapchain->create_info.mipCount,
+                .baseMipLevel = 0,
+                .aspectMask = format_is_depth ? (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT) : VK_IMAGE_ASPECT_COLOR_BIT,
+            };
             if (FAILED(hr))
             {
                 WINE_ERR("Cannot get vkd3d-proton interface: %08x\n", hr);
@@ -1902,7 +1975,28 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
             }
             device_ext->lpVtbl->Release(device_ext);
 
-            wine_swapchain->images = (XrSwapchainImageBaseHeader *)our_d3d12;
+            if (succeeded)
+            {
+                wine_swapchain->acquired = heap_alloc_zero(sizeof(BOOL) * image_count);
+                wine_swapchain->acquired_indices = heap_alloc(sizeof(uint32_t) * (image_count + 1));
+                wine_swapchain->acquired_count = wine_swapchain->acquired_start = 0;
+                wine_swapchain->images = (XrSwapchainImageBaseHeader *)our_d3d12;
+
+                wine_swapchain->cmd_release = heap_alloc_zero(sizeof(VkCommandBuffer) * image_count);
+                wine_swapchain->cmd_acquire = heap_alloc_zero(sizeof(VkCommandBuffer) * image_count);
+                for (i = 0; i < image_count; i++)
+                {
+                    VkImageLayout d3d12_vk_layout;
+                    wine_instance->d3d12_device->lpVtbl->GetVulkanImageLayout(wine_instance->d3d12_device, our_d3d12[i].texture, incoming_state, &d3d12_vk_layout);
+                    if (record_transition_command(wine_instance, our_vk[i].image, subresource, d3d12_vk_layout, vk_layout, &wine_swapchain->cmd_release[i]) != VK_SUCCESS ||
+                        record_transition_command(wine_instance, our_vk[i].image, subresource, vk_layout, d3d12_vk_layout, &wine_swapchain->cmd_acquire[i]) != VK_SUCCESS)
+                    {
+                        WINE_ERR("Failed to create command buffer for layout transition\n");
+                        succeeded = FALSE;
+                        break;
+                    }
+                }
+            }
             if (!succeeded)
             {
                 release_d3d12_resources(wine_swapchain, image_count);
@@ -2106,53 +2200,143 @@ XrResult WINAPI wine_xrBeginFrame(XrSession session, const XrFrameBeginInfo *fra
 {
     wine_XrSession *wine_session = (wine_XrSession *)session;
     IDXGIVkInteropDevice2 *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device;
     XrResult ret;
 
     WINE_TRACE("%p, %p\n", session, frameBeginInfo);
 
     if ((dxvk_device = wine_session->wine_instance->dxvk_device))
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    else if ((d3d12_device = wine_session->wine_instance->d3d12_device))
+        d3d12_device->lpVtbl->LockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
     ret = xrBeginFrame(((wine_XrSession *)session)->session, frameBeginInfo);
     if (dxvk_device)
         dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+    else if (d3d12_device)
+        d3d12_device->lpVtbl->UnlockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
     return ret;
 }
 
 XrResult WINAPI wine_xrAcquireSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageAcquireInfo *acquireInfo, uint32_t *index)
 {
-    wine_XrSession *wine_session = ((wine_XrSwapchain *)swapchain)->wine_session;
+    wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
+    wine_XrSession *wine_session = wine_swapchain->wine_session;
     IDXGIVkInteropDevice2 *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device;
     XrResult ret;
 
-    WINE_TRACE("%p, %p, %p\n", swapchain, acquireInfo, index);
-
-    if (wine_session->session_type == SESSION_TYPE_D3D12)
-        return XR_ERROR_RUNTIME_FAILURE;
+    WINE_TRACE("%p, %p, %p image count %d, acquired %d\n", swapchain, acquireInfo, index, wine_swapchain->image_count,
+            wine_swapchain->acquired_count);
 
     if ((dxvk_device = wine_session->wine_instance->dxvk_device))
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    else if ((d3d12_device = wine_session->wine_instance->d3d12_device))
+    {
+        if (wine_swapchain->acquired_count >= wine_swapchain->image_count)
+        {
+            WINE_WARN("Application has acquired all images but still tries to acquire more.\n");
+            return XR_ERROR_CALL_ORDER_INVALID;
+        }
+        d3d12_device->lpVtbl->LockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
+    }
     ret = xrAcquireSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, acquireInfo, index);
     if (dxvk_device)
+    {
         dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+        return ret;
+    }
+
+    if (!d3d12_device)
+        return ret;
+
+    if (ret == XR_SUCCESS)
+    {
+        if (!wine_swapchain->acquired[*index] && wine_swapchain->cmd_acquire[*index] != VK_NULL_HANDLE)
+        {
+            VkSubmitInfo submit_info =
+            {
+                .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                .commandBufferCount = 1,
+                .pCommandBuffers = &wine_swapchain->cmd_acquire[*index],
+            };
+
+            wine_session->wine_instance->p_vkQueueSubmit(wine_session->wine_instance->vk_queue, 1, &submit_info, VK_NULL_HANDLE);
+        }
+        if (!wine_swapchain->acquired[*index])
+        {
+            uint32_t next = (wine_swapchain->acquired_start + wine_swapchain->acquired_count) % wine_swapchain->image_count;
+            wine_swapchain->acquired[*index] = TRUE;
+            wine_swapchain->acquired_indices[next] = *index;
+            wine_swapchain->acquired_count += 1;
+        }
+        else
+            WINE_WARN("the application acquired the same image (index %d) again!?", *index);
+    }
+    d3d12_device->lpVtbl->UnlockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
     return ret;
 }
 
 XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo)
 {
-    wine_XrSession *wine_session = ((wine_XrSwapchain *)swapchain)->wine_session;
+    wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
+    wine_XrSession *wine_session = wine_swapchain->wine_session;
     IDXGIVkInteropDevice2 *dxvk_device;
+    ID3D12DXVKInteropDevice *d3d12_device = wine_session->wine_instance->d3d12_device;
     XrResult ret;
+    uint32_t index;
 
     WINE_TRACE("%p, %p\n", swapchain, releaseInfo);
-
-    if (wine_session->session_type == SESSION_TYPE_D3D12)
-        return XR_ERROR_RUNTIME_FAILURE;
-
     if ((dxvk_device = wine_session->wine_instance->dxvk_device))
         dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    else if (d3d12_device)
+    {
+        if (wine_swapchain->acquired_count == 0)
+        {
+            WINE_WARN("Application tried to release a swapchain image without having acquired it first.\n");
+            return XR_ERROR_CALL_ORDER_INVALID;
+        }
+
+        d3d12_device->lpVtbl->LockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
+
+        index = wine_swapchain->acquired_indices[wine_swapchain->acquired_start];
+        if (wine_swapchain->cmd_release[index] != VK_NULL_HANDLE)
+        {
+            VkSubmitInfo submit_info =
+            {
+                .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                .commandBufferCount = 1,
+                .pCommandBuffers = &wine_swapchain->cmd_release[index],
+            };
+
+            wine_session->wine_instance->p_vkQueueSubmit(wine_session->wine_instance->vk_queue, 1, &submit_info, VK_NULL_HANDLE);
+        }
+    }
     ret = xrReleaseSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, releaseInfo);
     if (dxvk_device)
+    {
         dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+        return ret;
+    }
+    if (!d3d12_device)
+        return ret;
+    if (ret != XR_SUCCESS && wine_swapchain->cmd_release[index] != VK_NULL_HANDLE)
+    {
+        VkSubmitInfo submit_info =
+        {
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+            .commandBufferCount = 1,
+            .pCommandBuffers = &wine_swapchain->cmd_acquire[index],
+        };
+        WINE_WARN("xrReleaseSwapchainImage failed, reverting layout transition\n");
+        wine_session->wine_instance->p_vkQueueSubmit(wine_session->wine_instance->vk_queue, 1, &submit_info, VK_NULL_HANDLE);
+    }
+    if (ret == XR_SUCCESS)
+    {
+        wine_swapchain->acquired[index] = FALSE;
+        wine_swapchain->acquired_start = (wine_swapchain->acquired_start + 1) % wine_swapchain->image_count;
+        wine_swapchain->acquired_count -= 1;
+    }
+    d3d12_device->lpVtbl->UnlockCommandQueue(d3d12_device, wine_session->wine_instance->d3d12_queue);
     return ret;
 }
 
