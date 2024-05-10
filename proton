@@ -1156,6 +1156,7 @@ default_cpu_limit = {
     "20920"     :  16,  # The Witcher 2: Assassins of Kings Enchanced Edition
     "35130"     :  16,  # Lara Croft and the Guardian of Light
     "55150"     :  16,  # Warhammer 40,000: Space Marine
+    "204450"    :  16,  # Call of Juarez: Gunslinger
     "15620"     :  8,   # Warhammer 40,000: Dawn of War II
     "20570"     :  8,   # Warhammer 40,000: Dawn of War II - Chaos Rising
     "56400"     :  8,   # Warhammer 40,000: Dawn of War II - Retribution
