@@ -133,3 +133,9 @@ Wine-dbg> info process
  000000d0 3        \_ 'explorer.exe'
  0000010c 3           \_ 'tabtip.exe'
 ```
+
+**NOTE:** If you need a predictable bus name instead of the unique connection
+name (the `:1.307` from example above) you can use `com.steampowered.App1234567`
+where 1234567 is the Steam App ID for the title you are debugging.
+
+You can always use a tool like `qdbus` to list available bus names.
