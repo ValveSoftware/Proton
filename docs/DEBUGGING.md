@@ -139,3 +139,48 @@ name (the `:1.307` from example above) you can use `com.steampowered.App1234567`
 where 1234567 is the Steam App ID for the title you are debugging.
 
 You can always use a tool like `qdbus` to list available bus names.
+
+
+Starting A Different Binary
+---------------------------
+
+If you want to start a different binary than the game's default you can use a
+few methods. All of the examples below will use `winecfg`.
+
+### Substitution
+
+You can use the following launch option:
+
+```
+echo "%command%" | sed 's/proton waitforexitandrun .*/proton waitforexitandrun winecfg/' | sh
+```
+
+The full substitution of `proton waitforexitandrun .*` is necessary as the
+original `%command%` is very long and may contain multiple mentions of `proton`
+or the original binary.
+
+### Pressure-Vessel Shell
+
+[Pressure-vessel][pv] allows to spawn an xterm instead of launching Proton. This
+can be accomplished by setting `PRESSURE_VESSEL_SHELL=instead`. The easiest way
+is to set the launch option to:
+
+[pv]: (https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/tree/main/pressure-vessel)
+
+`PRESSURE_VESSEL_SHELL=instead %command%`
+
+The original coommand is then contained in `$@`, e.g.:
+
+```
+/home/ivyl/.local/share/Steam/steamapps/common/SteamLinuxRuntime_sniper/pressure-vessel/bin/steam-runtime-launcher-interface-0 container-runtime /home/ivyl/.local/share/Steam/steamapps/common/Proton - Experimental/proton waitforexitandrun /home/ivyl/.local/share/Steam/steamapps/common/Game/Game.exe
+```
+
+From this point you can invoke `proton` script as all the required environment
+variables are set. If you are copying the path from `$@` make sure to escape or
+quote parts that contain spaces.
+
+To start `winecfg` something like this can be entered:
+
+```
+"/home/ivyl/.local/share/Steam/steamapps/common/Proton - Experimental/proton" waitforexitandrun winecfg
+```
