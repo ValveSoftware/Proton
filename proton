@@ -1106,6 +1106,7 @@ def default_compat_config():
                 "499100", #Dark Parables: The Exiled Prince Collector's Edition (499100)
                 "1404090", #Trivia Tricks
                 "2052410", #WITCH ON THE HOLY NIGHT
+                "789910", #Planet of the Apes: Last Frontier
                 ]:
             ret.add("heapdelayfree")
 
