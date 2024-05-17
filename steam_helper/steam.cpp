@@ -1356,8 +1356,10 @@ static BOOL steam_command_handler(int argc, char *argv[])
     typedef NTSTATUS (WINAPI *__WINE_UNIX_SPAWNVP)(char *const argv[], int wait);
     static __WINE_UNIX_SPAWNVP p__wine_unix_spawnvp;
     NTSTATUS status = STATUS_UNSUCCESSFUL;
+    BOOL restart_self = FALSE;
     char **unix_argv;
     HMODULE module;
+    const char *sgi;
     int i, j;
     static char *unix_steam[] =
     {
@@ -1369,6 +1371,33 @@ static BOOL steam_command_handler(int argc, char *argv[])
     /* If there are command line options, only forward steam:// and options start with - */
     if (argc > 1 && StrStrIA(argv[1], "steam://") != argv[1] && argv[1][0] != '-')
         return FALSE;
+
+    if (argc > 2 && !strcmp(argv[1], "--") && (sgi = getenv("SteamGameId")))
+    {
+        char s[64];
+
+        snprintf(s, sizeof(s), "steam://launch/%s", sgi);
+        if (!(restart_self = !strcmp(argv[2], s)))
+        {
+            snprintf(s, sizeof(s), "steam://rungameid/%s", sgi);
+            restart_self = !strcmp(argv[2], s);
+        }
+    }
+    if (restart_self)
+    {
+        HANDLE event;
+
+        event = OpenEventA(SYNCHRONIZE, FALSE, "PROTON_STEAM_EXE_RESTART_APP");
+        if (event)
+        {
+            SetEvent(event);
+            CloseHandle(event);
+            WINE_TRACE("Signalled app restart.\n");
+        }
+        else
+            WINE_ERR("Restart event not found.\n");
+        return TRUE;
+    }
 
     if (!p__wine_unix_spawnvp)
     {
@@ -1737,8 +1766,46 @@ int main(int argc, char *argv[])
 
     if(wait_handle != INVALID_HANDLE_VALUE)
     {
+        HANDLE waits[2];
+        DWORD ret;
+        int wait_count;
+
+        waits[0] = wait_handle;
+        waits[1] = NULL;
+        wait_count = 1;
+        if (game_process)
+        {
+            if ((waits[1] = CreateEventA(NULL, FALSE, FALSE, "PROTON_STEAM_EXE_RESTART_APP")))
+            {
+                ++wait_count;
+            }
+            else
+            {
+                WINE_ERR("Failed to create restart event, err %lu.\n", GetLastError());
+            }
+        }
         FreeConsole();
-        WaitForSingleObject(wait_handle, INFINITE);
+        while ((ret = WaitForMultipleObjects(wait_count, waits, FALSE, INFINITE) != WAIT_OBJECT_0))
+        {
+            BOOL should_await;
+
+            if (ret != WAIT_OBJECT_0 + 1)
+            {
+                WINE_ERR("Wait failed.\n");
+                break;
+            }
+            if (child != INVALID_HANDLE_VALUE)
+            {
+                if (WaitForSingleObject(child, 0) == WAIT_TIMEOUT)
+                {
+                    WINE_ERR("Child is still running, not restarting.\n");
+                    continue;
+                }
+                CloseHandle(child);
+            }
+            child = run_process(&should_await, game_process);
+        }
+        CloseHandle(waits[1]);
     }
 
     if (event != INVALID_HANDLE_VALUE)
