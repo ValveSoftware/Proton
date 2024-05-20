@@ -88,7 +88,11 @@ static BOOL networking_message_pool_receive_144( int32_t capacity, int32_t count
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_144 )->pool;
     int32_t i;
 
-    for (i = count; i < capacity; i++) messages[i]->m_pfnRelease( messages[i] );
+    for (i = count; i < capacity; i++)
+    {
+        messages[i]->m_pfnRelease( messages[i] );
+        messages[i] = NULL;
+    }
 
     if (count > 0)
     {
@@ -156,7 +160,11 @@ static BOOL networking_message_pool_receive_147( uint32_t capacity, uint32_t cou
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_147 )->pool;
     uint32_t i;
 
-    for (i = count; i < capacity; i++) messages[i]->m_pfnRelease( messages[i] );
+    for (i = count; i < capacity; i++)
+    {
+        messages[i]->m_pfnRelease( messages[i] );
+        messages[i] = NULL;
+    }
 
     if (count)
     {
@@ -224,7 +232,11 @@ static BOOL networking_message_pool_receive_153a( uint32_t capacity, uint32_t co
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_153a )->pool;
     uint32_t i;
 
-    for (i = count; i < capacity; i++) messages[i]->m_pfnRelease( messages[i] );
+    for (i = count; i < capacity; i++)
+    {
+        messages[i]->m_pfnRelease( messages[i] );
+        messages[i] = NULL;
+    }
 
     if (count)
     {
