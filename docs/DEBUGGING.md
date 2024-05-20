@@ -30,7 +30,7 @@ Attaching to process 2263566
 0x000075dce0cd788d in ?? ()
 ```
 
-With Proton Experimental, GDB should be able to load the symbols right
+With Proton Experimental (and >= 9.0-2), GDB should be able to load the symbols right
 away. However, for the most seamless experience you will want to use a
 custom version of GDB with a couple of patches to better integrate with
 Wine.
