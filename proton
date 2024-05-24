@@ -1149,6 +1149,8 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
+    if "STEAM_COMPAT_APP_ID" in os.environ:
+        appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
                 "7000", # Tomb Raider: Legend
                 "8000", # Tomb Raider: Anniversary
