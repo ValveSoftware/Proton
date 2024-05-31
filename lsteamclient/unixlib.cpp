@@ -805,8 +805,7 @@ void convert_callback_utow(int id, void *u_callback, int u_callback_len, void *w
     if (!best)
     {
         ERR( "Could not find id %d, u_callback_len %d, w_callback_len %d.\n", id, u_callback_len, w_callback_len );
-        memcpy( w_callback, u_callback, std::min(w_callback_len, u_callback_len) );
-        return;
+        best = find_first_callback_def_by_id( id );
     }
 
     if (best->w_callback_len != w_callback_len || best->u_callback_len != u_callback_len)
@@ -835,7 +834,10 @@ void callback_message_utow( const u_CallbackMsg_t *u_msg, w_CallbackMsg_t *w_msg
             ++c;
         }
         if (c == end || c->id != u_msg->m_iCallback)
-            WARN( "Unix len %d not found for callback %d.\n", u_msg->m_cubParam, u_msg->m_iCallback );
+        {
+            ERR( "Unix len %d not found for callback %d.\n", u_msg->m_cubParam, u_msg->m_iCallback );
+            len = find_first_callback_def_by_id( u_msg->m_iCallback )->w_callback_len;
+        }
     }
 
     w_msg->m_hSteamUser = u_msg->m_hSteamUser;
