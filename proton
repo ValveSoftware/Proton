@@ -1392,6 +1392,9 @@ class Session:
             #nvidia override
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
+        if os.environ.get("SteamGameId", 0) == "444930":
+            self.env["MESA_EXTENSION_OVERRIDE"] = "-GL_ARB_bindless_texture"
+
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
         else:
