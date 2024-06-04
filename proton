@@ -1097,6 +1097,7 @@ def default_compat_config():
                 "2371630", #Sword Art Online: Integral Factor
                 "460790", #Bayonetta
                 "273590", #Descent 3
+                "834530", #Yakuza Kiwami
                 ]:
             ret.add("gamedrive")
 
