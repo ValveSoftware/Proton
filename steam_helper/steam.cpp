@@ -130,6 +130,9 @@ static void setup_steam_registry(void)
     char buf[256];
     HKEY key;
     LSTATUS status;
+    const int system_locale_appids[] = {
+        1284210 /* Guild Wars 2 */
+    };
 
     ui_lang = SteamUtils()->GetSteamUILanguage();
     WINE_TRACE("UI language: %s\n", wine_dbgstr_a(ui_lang));
@@ -155,6 +158,18 @@ static void setup_steam_registry(void)
     language = SteamApps()->GetCurrentGameLanguage();
     languages = SteamApps()->GetAvailableGameLanguages();
     WINE_TRACE( "Game language %s, available %s\n", wine_dbgstr_a(language), wine_dbgstr_a(languages) );
+
+    if (strchr(languages, ',') == NULL) /* If there is a list of languages then respect that */
+    {
+        for (int i = 0; i < (sizeof(system_locale_appids) / sizeof(*system_locale_appids)); i++)
+        {
+            if (system_locale_appids[i] == appid)
+            {
+                WINE_TRACE("Not changing system locale for application %i\n",appid);
+                language = NULL;
+            }
+        }
+    }
 
     if (!language) locale = NULL;
     else if (!strcmp( language, "arabic" )) locale = "ar_001.UTF-8";
