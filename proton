@@ -1528,7 +1528,7 @@ if __name__ == "__main__":
         log("No compat data path?")
         sys.exit(1)
 
-    g_proton = Proton(os.path.realpath(os.path.dirname(sys.argv[0])))
+    g_proton = Proton(os.path.dirname(os.path.realpath(sys.argv[0])))
 
     g_proton.cleanup_legacy_dist()
     g_proton.do_steampipe_fixups()
