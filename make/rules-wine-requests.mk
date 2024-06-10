@@ -13,6 +13,14 @@ $$($(2)_SRC)/server/trace.c: | $$(OBJ)/.$(1)-post-source
 $$($(2)_SRC)/server/trace.c: $$($(2)_ORIGIN)/server/trace.c
 	cp -a $$< $$@
 
+$$(OBJ)/.$(1)-configure32: $$($(2)_SRC)/include/wine/server_protocol.h
+$$(OBJ)/.$(1)-configure32: $$($(2)_SRC)/server/request.h
+$$(OBJ)/.$(1)-configure32: $$($(2)_SRC)/server/trace.c
+
+$$(OBJ)/.$(1)-configure64: $$($(2)_SRC)/include/wine/server_protocol.h
+$$(OBJ)/.$(1)-configure64: $$($(2)_SRC)/server/request.h
+$$(OBJ)/.$(1)-configure64: $$($(2)_SRC)/server/trace.c
+
 $$(OBJ)/.$(1)-wine-requests: $$($(2)_SRC)/include/wine/server_protocol.h
 $$(OBJ)/.$(1)-wine-requests: $$($(2)_SRC)/server/request.h
 $$(OBJ)/.$(1)-wine-requests: $$($(2)_SRC)/server/trace.c
