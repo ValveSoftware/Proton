@@ -1169,6 +1169,11 @@ def default_compat_config():
                 ]:
             ret.add("xalia")
 
+        if appid in [
+                "255960", #Bad Mojo Redux
+                ]:
+            ret.add("gamedrive")
+
     return ret
 
 default_cpu_limit = {
