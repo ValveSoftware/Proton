@@ -15,7 +15,7 @@
 #
 define create-rules-source
 $(2)_SRC = $$(OBJ)/src-$(1)
-$(2)_ORIGIN = $(3)
+$(2)_ORIGIN = $(realpath $(3))
 
 $(1)-rebuild:
 .PHONY: $(1)-rebuild
