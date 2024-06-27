@@ -1492,6 +1492,9 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCo
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing, 4)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial, 12)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext, 8)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas, 12)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo, 32)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta, 8)
 
 int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(struct w_steam_iface *_this)
 {
@@ -1853,6 +1856,50 @@ int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(str
     return params._ret;
 }
 
+int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas(struct w_steam_iface *_this, int32_t *pnAvailable, int32_t *pnPrivate)
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pnAvailable = pnAvailable,
+        .pnPrivate = pnPrivate,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo(struct w_steam_iface *_this, int32_t iBetaIndex, uint32_t *punFlags, uint32_t *punBuildID, char *pchBetaName, int32_t cchBetaName, char *pchDescription, int32_t cchDescription)
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .iBetaIndex = iBetaIndex,
+        .punFlags = punFlags,
+        .punBuildID = punBuildID,
+        .pchBetaName = pchBetaName,
+        .cchBetaName = cchBetaName,
+        .pchDescription = pchDescription,
+        .cchDescription = cchDescription,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta(struct w_steam_iface *_this, const char *pchBetaName)
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pchBetaName = pchBetaName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchBetaName, -1);
+    STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta, &params );
+    return params._ret;
+}
+
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
 
 DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION008, 0, ".?AVISteamApps@@")
@@ -1889,6 +1936,9 @@ __ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtables)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta)
     );
 __ASM_BLOCK_END
 
@@ -1896,7 +1946,7 @@ struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *
 {
     struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMAPPS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 30, "STEAMAPPS_INTERFACE_VERSION008");
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 33, "STEAMAPPS_INTERFACE_VERSION008");
     r->u_iface = u_iface;
     return r;
 }

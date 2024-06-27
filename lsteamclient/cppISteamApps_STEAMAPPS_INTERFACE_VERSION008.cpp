@@ -248,3 +248,27 @@ NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext( void *args )
     return 0;
 }
 
+NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas( void *args )
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *)params->linux_side;
+    params->_ret = iface->GetNumBetas( params->pnAvailable, params->pnPrivate );
+    return 0;
+}
+
+NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo( void *args )
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *)params->linux_side;
+    params->_ret = iface->GetBetaInfo( params->iBetaIndex, params->punFlags, params->punBuildID, params->pchBetaName, params->cchBetaName, params->pchDescription, params->cchDescription );
+    return 0;
+}
+
+NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta( void *args )
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION008 *)params->linux_side;
+    params->_ret = iface->SetActiveBeta( params->pchBetaName );
+    return 0;
+}
+
