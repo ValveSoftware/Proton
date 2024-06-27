@@ -561,7 +561,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
         uint32_t r;
 
         if (is_url) while (*src == '/') ++src;
-        r = ntdll_umbstowcs( src, -1, srcW + 4, PATH_MAX - 4 );
+        r = ntdll_umbstowcs( src, strlen( src ) + 1, srcW + 4, PATH_MAX - 4 );
         if (r == 0) unix_path = NULL;
         else
         {
@@ -628,7 +628,7 @@ const char **steamclient_dos_to_unix_path_array( const char **src )
         TRACE( "  src[%zu] %s\n", s - src, debugstr_a(*s) );
         if (IS_ABSOLUTE( *s ))
         {
-            ntdll_umbstowcs( *s, -1, scratch + 4, PATH_MAX - 4 );
+            ntdll_umbstowcs( *s, strlen( *s ) + 1, scratch + 4, PATH_MAX - 4 );
             collapse_path( scratch, 4 );
             *o = get_unix_file_name( scratch );
         }
