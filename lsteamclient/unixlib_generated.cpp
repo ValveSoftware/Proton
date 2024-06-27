@@ -154,6 +154,9 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing,
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial,
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta,
     ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData,
     ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init,
     ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown,
@@ -2241,6 +2244,100 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUserUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUGCDetailsRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SendQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCResult,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCNumTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCTagDisplayName,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCPreviewURL,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCStatistic,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCNumAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCAdditionalPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCNumKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCKeyValueTag_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetNumSupportedGameVersions,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetSupportedGameVersionData,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCContentDescriptors,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_ReleaseQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddRequiredTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddRequiredTagGroup,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddExcludedTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnOnlyIDs,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnLongDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnTotalOnly,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetReturnPlaytimeStats,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetAllowCachedResponse,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetAdminQuery,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetCloudFileNameFilter,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetMatchAnyTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetSearchText,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetRankedByTrendDays,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetTimeCreatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetTimeUpdatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddRequiredKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RequestUGCDetails,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_StartItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemTitle,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemUpdateLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemVisibility,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemContent,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetAllowLegacyUpload,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveAllItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddItemKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_UpdateItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_UpdateItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetRequiredGameVersions,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SubmitItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetItemUpdateProgress,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddItemToFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveItemFromFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_UnsubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetNumSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetItemState,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetItemInstallInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetItemDownloadInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_DownloadItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_BInitWorkshopForGameServer,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_SuspendDownloads,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_StartPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_StopPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_StopPlaytimeTrackingForAllItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_AddAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_RemoveAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetAppDependencies,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_DeleteItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_ShowWorkshopEULA,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetWorkshopEULAStatus,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetUserContentDescriptorPreferences,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,
@@ -2599,6 +2696,10 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting,
     ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings,
     ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp,
+    ISteamVideo_STEAMVIDEO_INTERFACE_V007_GetVideoURL,
+    ISteamVideo_STEAMVIDEO_INTERFACE_V007_IsBroadcasting,
+    ISteamVideo_STEAMVIDEO_INTERFACE_V007_GetOPFSettings,
+    ISteamVideo_STEAMVIDEO_INTERFACE_V007_GetOPFStringForApp,
     ISteamClient_SteamClient006_CreateSteamPipe,
     ISteamClient_SteamClient006_BReleaseSteamPipe,
     ISteamClient_SteamClient006_CreateGlobalUser,
@@ -7662,6 +7763,230 @@ C_ASSERT( sizeof(gameserveritem_t_099u().m_szServerName) >= 64 );
 C_ASSERT( offsetof(gameserveritem_t_099u, m_szGameTags) == 236 );
 C_ASSERT( sizeof(gameserveritem_t_099u().m_szGameTags) >= 128 );
 
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160) >= 9784 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eResult) == 8 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eResult) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eFileType) == 12 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eFileType) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8160 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeCreated) == 8168 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeUpdated) == 8172 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8176 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eVisibility) == 8180 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bBanned) == 8184 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bBanned) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8185 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bTagsTruncated) == 8186 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchTags) == 8187 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_hFile) == 9216 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_hFile) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_hPreviewFile) == 9224 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_pchFileName) == 9232 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nFileSize) == 9492 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9496 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchURL) == 9500 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unVotesUp) == 9756 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unVotesDown) == 9760 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_flScore) == 9764 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_flScore) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unNumChildren) == 9768 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9776 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160) >= 9772 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eResult) == 8 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eResult) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eFileType) == 12 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eFileType) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8156 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeCreated) == 8164 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeUpdated) == 8168 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8172 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eVisibility) == 8176 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bBanned) == 8180 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bBanned) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8181 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bTagsTruncated) == 8182 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchTags) == 8183 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_hFile) == 9208 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_hFile) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_hPreviewFile) == 9216 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_pchFileName) == 9224 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nFileSize) == 9484 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9488 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchURL) == 9492 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unVotesUp) == 9748 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unVotesDown) == 9752 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_flScore) == 9756 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_flScore) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unNumChildren) == 9760 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9764 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160) >= 9784 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eResult) == 8 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eResult) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eFileType) == 12 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eFileType) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8160 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeCreated) == 8168 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeUpdated) == 8172 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8176 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eVisibility) == 8180 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bBanned) == 8184 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bBanned) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8185 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bTagsTruncated) == 8186 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchTags) == 8187 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_hFile) == 9216 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_hFile) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_hPreviewFile) == 9224 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_pchFileName) == 9232 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nFileSize) == 9492 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9496 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchURL) == 9500 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unVotesUp) == 9756 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unVotesDown) == 9760 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_flScore) == 9764 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_flScore) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unNumChildren) == 9768 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9776 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160) >= 9772 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eResult) == 8 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eResult) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eFileType) == 12 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eFileType) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8156 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeCreated) == 8164 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeUpdated) == 8168 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8172 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eVisibility) == 8176 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bBanned) == 8180 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bBanned) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8181 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bTagsTruncated) == 8182 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchTags) == 8183 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_hFile) == 9208 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_hFile) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_hPreviewFile) == 9216 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_pchFileName) == 9224 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nFileSize) == 9484 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9488 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchURL) == 9492 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unVotesUp) == 9748 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unVotesDown) == 9752 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_flScore) == 9756 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_flScore) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unNumChildren) == 9760 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9764 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+
 C_ASSERT( sizeof(w64_SteamUGCDetails_t_128x) >= 9776 );
 C_ASSERT( offsetof(w64_SteamUGCDetails_t_128x, m_nPublishedFileId) == 0 );
 C_ASSERT( sizeof(w64_SteamUGCDetails_t_128x().m_nPublishedFileId) >= 8 );
@@ -8085,6 +8410,110 @@ C_ASSERT( offsetof(u32_SteamUGCDetails_t_126, m_unVotesDown) == 9752 );
 C_ASSERT( sizeof(u32_SteamUGCDetails_t_126().m_unVotesDown) >= 4 );
 C_ASSERT( offsetof(u32_SteamUGCDetails_t_126, m_flScore) == 9756 );
 C_ASSERT( sizeof(u32_SteamUGCDetails_t_126().m_flScore) >= 4 );
+
+static void SteamUGCDetails_t_160_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCDetails_t_160 *d = (u_SteamUGCDetails_t_160 *)dst;
+    const w_SteamUGCDetails_t_160 *s = (const w_SteamUGCDetails_t_160 *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+    d->m_unNumChildren = s->m_unNumChildren;
+    d->m_ulTotalFilesSize = s->m_ulTotalFilesSize;
+}
+#ifdef __x86_64__
+w64_SteamUGCDetails_t_160::operator u64_SteamUGCDetails_t_160() const
+{
+    u64_SteamUGCDetails_t_160 ret;
+    SteamUGCDetails_t_160_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+static void SteamUGCDetails_t_160_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCDetails_t_160 *d = (w_SteamUGCDetails_t_160 *)dst;
+    const u_SteamUGCDetails_t_160 *s = (const u_SteamUGCDetails_t_160 *)src;
+
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_eResult = s->m_eResult;
+    d->m_eFileType = s->m_eFileType;
+    d->m_nCreatorAppID = s->m_nCreatorAppID;
+    d->m_nConsumerAppID = s->m_nConsumerAppID;
+    d->m_rgchTitle = s->m_rgchTitle;
+    d->m_rgchDescription = s->m_rgchDescription;
+    d->m_ulSteamIDOwner = s->m_ulSteamIDOwner;
+    d->m_rtimeCreated = s->m_rtimeCreated;
+    d->m_rtimeUpdated = s->m_rtimeUpdated;
+    d->m_rtimeAddedToUserList = s->m_rtimeAddedToUserList;
+    d->m_eVisibility = s->m_eVisibility;
+    d->m_bBanned = s->m_bBanned;
+    d->m_bAcceptedForUse = s->m_bAcceptedForUse;
+    d->m_bTagsTruncated = s->m_bTagsTruncated;
+    d->m_rgchTags = s->m_rgchTags;
+    d->m_hFile = s->m_hFile;
+    d->m_hPreviewFile = s->m_hPreviewFile;
+    d->m_pchFileName = s->m_pchFileName;
+    d->m_nFileSize = s->m_nFileSize;
+    d->m_nPreviewFileSize = s->m_nPreviewFileSize;
+    d->m_rgchURL = s->m_rgchURL;
+    d->m_unVotesUp = s->m_unVotesUp;
+    d->m_unVotesDown = s->m_unVotesDown;
+    d->m_flScore = s->m_flScore;
+    d->m_unNumChildren = s->m_unNumChildren;
+    d->m_ulTotalFilesSize = s->m_ulTotalFilesSize;
+}
+#ifdef __x86_64__
+u64_SteamUGCDetails_t_160::operator w64_SteamUGCDetails_t_160() const
+{
+    w64_SteamUGCDetails_t_160 ret;
+    SteamUGCDetails_t_160_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+#ifdef __i386__
+w32_SteamUGCDetails_t_160::operator u32_SteamUGCDetails_t_160() const
+{
+    u32_SteamUGCDetails_t_160 ret;
+    SteamUGCDetails_t_160_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+#ifdef __i386__
+u32_SteamUGCDetails_t_160::operator w32_SteamUGCDetails_t_160() const
+{
+    w32_SteamUGCDetails_t_160 ret;
+    SteamUGCDetails_t_160_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
 
 static void SteamUGCDetails_t_128x_u_from_w(void *dst, const void *src)
 {
@@ -12304,80 +12733,178 @@ u32_HTTPRequestHeadersReceived_t_121x::operator w32_HTTPRequestHeadersReceived_t
 }
 #endif
 
-C_ASSERT( sizeof(w64_ItemInstalled_t) >= 16 );
-C_ASSERT( offsetof(w64_ItemInstalled_t, m_unAppID) == 0 );
-C_ASSERT( sizeof(w64_ItemInstalled_t().m_unAppID) >= 4 );
-C_ASSERT( offsetof(w64_ItemInstalled_t, m_nPublishedFileId) == 8 );
-C_ASSERT( sizeof(w64_ItemInstalled_t().m_nPublishedFileId) >= 8 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_160) >= 32 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_unAppID) == 0 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_hLegacyContent) == 16 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_unManifestID) == 24 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(u64_ItemInstalled_t) >= 12 );
-C_ASSERT( offsetof(u64_ItemInstalled_t, m_unAppID) == 0 );
-C_ASSERT( sizeof(u64_ItemInstalled_t().m_unAppID) >= 4 );
-C_ASSERT( offsetof(u64_ItemInstalled_t, m_nPublishedFileId) == 4 );
-C_ASSERT( sizeof(u64_ItemInstalled_t().m_nPublishedFileId) >= 8 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_160) >= 28 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_unAppID) == 0 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_hLegacyContent) == 12 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_unManifestID) == 20 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(w32_ItemInstalled_t) >= 16 );
-C_ASSERT( offsetof(w32_ItemInstalled_t, m_unAppID) == 0 );
-C_ASSERT( sizeof(w32_ItemInstalled_t().m_unAppID) >= 4 );
-C_ASSERT( offsetof(w32_ItemInstalled_t, m_nPublishedFileId) == 8 );
-C_ASSERT( sizeof(w32_ItemInstalled_t().m_nPublishedFileId) >= 8 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_160) >= 32 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_unAppID) == 0 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_hLegacyContent) == 16 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_unManifestID) == 24 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(u32_ItemInstalled_t) >= 12 );
-C_ASSERT( offsetof(u32_ItemInstalled_t, m_unAppID) == 0 );
-C_ASSERT( sizeof(u32_ItemInstalled_t().m_unAppID) >= 4 );
-C_ASSERT( offsetof(u32_ItemInstalled_t, m_nPublishedFileId) == 4 );
-C_ASSERT( sizeof(u32_ItemInstalled_t().m_nPublishedFileId) >= 8 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_160) >= 28 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_unAppID) == 0 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_hLegacyContent) == 12 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_unManifestID) == 20 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_unManifestID) >= 8 );
 
-static void ItemInstalled_t_u_from_w(void *dst, const void *src)
+C_ASSERT( sizeof(w64_ItemInstalled_t_130) >= 16 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_130, m_unAppID) == 0 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_130().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_130, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_130().m_nPublishedFileId) >= 8 );
+
+C_ASSERT( sizeof(u64_ItemInstalled_t_130) >= 12 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_130, m_unAppID) == 0 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_130().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_130, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_130().m_nPublishedFileId) >= 8 );
+
+C_ASSERT( sizeof(w32_ItemInstalled_t_130) >= 16 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_130, m_unAppID) == 0 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_130().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_130, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_130().m_nPublishedFileId) >= 8 );
+
+C_ASSERT( sizeof(u32_ItemInstalled_t_130) >= 12 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_130, m_unAppID) == 0 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_130().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_130, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_130().m_nPublishedFileId) >= 8 );
+
+static void ItemInstalled_t_160_u_from_w(void *dst, const void *src)
 {
-    u_ItemInstalled_t *d = (u_ItemInstalled_t *)dst;
-    const w_ItemInstalled_t *s = (const w_ItemInstalled_t *)src;
+    u_ItemInstalled_t_160 *d = (u_ItemInstalled_t_160 *)dst;
+    const w_ItemInstalled_t_160 *s = (const w_ItemInstalled_t_160 *)src;
 
     d->m_unAppID = s->m_unAppID;
     d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_hLegacyContent = s->m_hLegacyContent;
+    d->m_unManifestID = s->m_unManifestID;
 }
 #ifdef __x86_64__
-w64_ItemInstalled_t::operator u64_ItemInstalled_t() const
+w64_ItemInstalled_t_160::operator u64_ItemInstalled_t_160() const
 {
-    u64_ItemInstalled_t ret;
-    ItemInstalled_t_u_from_w((void *)&ret, (const void *)this);
+    u64_ItemInstalled_t_160 ret;
+    ItemInstalled_t_160_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
 
-static void ItemInstalled_t_w_from_u(void *dst, const void *src)
+static void ItemInstalled_t_160_w_from_u(void *dst, const void *src)
 {
-    w_ItemInstalled_t *d = (w_ItemInstalled_t *)dst;
-    const u_ItemInstalled_t *s = (const u_ItemInstalled_t *)src;
+    w_ItemInstalled_t_160 *d = (w_ItemInstalled_t_160 *)dst;
+    const u_ItemInstalled_t_160 *s = (const u_ItemInstalled_t_160 *)src;
 
     d->m_unAppID = s->m_unAppID;
     d->m_nPublishedFileId = s->m_nPublishedFileId;
+    d->m_hLegacyContent = s->m_hLegacyContent;
+    d->m_unManifestID = s->m_unManifestID;
 }
 #ifdef __x86_64__
-u64_ItemInstalled_t::operator w64_ItemInstalled_t() const
+u64_ItemInstalled_t_160::operator w64_ItemInstalled_t_160() const
 {
-    w64_ItemInstalled_t ret;
-    ItemInstalled_t_w_from_u((void *)&ret, (const void *)this);
+    w64_ItemInstalled_t_160 ret;
+    ItemInstalled_t_160_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
 #ifdef __i386__
-w32_ItemInstalled_t::operator u32_ItemInstalled_t() const
+w32_ItemInstalled_t_160::operator u32_ItemInstalled_t_160() const
 {
-    u32_ItemInstalled_t ret;
-    ItemInstalled_t_u_from_w((void *)&ret, (const void *)this);
+    u32_ItemInstalled_t_160 ret;
+    ItemInstalled_t_160_u_from_w((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
 
 
 #ifdef __i386__
-u32_ItemInstalled_t::operator w32_ItemInstalled_t() const
+u32_ItemInstalled_t_160::operator w32_ItemInstalled_t_160() const
 {
-    w32_ItemInstalled_t ret;
-    ItemInstalled_t_w_from_u((void *)&ret, (const void *)this);
+    w32_ItemInstalled_t_160 ret;
+    ItemInstalled_t_160_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+static void ItemInstalled_t_130_u_from_w(void *dst, const void *src)
+{
+    u_ItemInstalled_t_130 *d = (u_ItemInstalled_t_130 *)dst;
+    const w_ItemInstalled_t_130 *s = (const w_ItemInstalled_t_130 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
+w64_ItemInstalled_t_130::operator u64_ItemInstalled_t_130() const
+{
+    u64_ItemInstalled_t_130 ret;
+    ItemInstalled_t_130_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+static void ItemInstalled_t_130_w_from_u(void *dst, const void *src)
+{
+    w_ItemInstalled_t_130 *d = (w_ItemInstalled_t_130 *)dst;
+    const u_ItemInstalled_t_130 *s = (const u_ItemInstalled_t_130 *)src;
+
+    d->m_unAppID = s->m_unAppID;
+    d->m_nPublishedFileId = s->m_nPublishedFileId;
+}
+#ifdef __x86_64__
+u64_ItemInstalled_t_130::operator w64_ItemInstalled_t_130() const
+{
+    w64_ItemInstalled_t_130 ret;
+    ItemInstalled_t_130_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+#ifdef __i386__
+w32_ItemInstalled_t_130::operator u32_ItemInstalled_t_130() const
+{
+    u32_ItemInstalled_t_130 ret;
+    ItemInstalled_t_130_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+#ifdef __i386__
+u32_ItemInstalled_t_130::operator w32_ItemInstalled_t_130() const
+{
+    w32_ItemInstalled_t_130 ret;
+    ItemInstalled_t_130_w_from_u((void *)&ret, (const void *)this);
     return ret;
 }
 #endif
@@ -19805,6 +20332,30 @@ u32_SteamPartyBeaconLocation_t::operator w32_SteamPartyBeaconLocation_t() const
 }
 #endif
 
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160) >= 9792 );
+C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9784 );
+C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9784 );
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160) >= 9776 );
+C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9772 );
+C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9772 );
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160) >= 9792 );
+C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9784 );
+C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9784 );
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160) >= 9776 );
+C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9772 );
+C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9772 );
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+
 C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_128x) >= 9784 );
 C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_128x, m_details) == 0 );
 C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_128x().m_details) >= 9776 );
@@ -19868,6 +20419,60 @@ C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_126().m_details) >= 9768 
 C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_126) >= 9760 );
 C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_126, m_details) == 0 );
 C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_126().m_details) >= 9760 );
+
+static void SteamUGCRequestUGCDetailsResult_t_160_u_from_w(void *dst, const void *src)
+{
+    u_SteamUGCRequestUGCDetailsResult_t_160 *d = (u_SteamUGCRequestUGCDetailsResult_t_160 *)dst;
+    const w_SteamUGCRequestUGCDetailsResult_t_160 *s = (const w_SteamUGCRequestUGCDetailsResult_t_160 *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
+#ifdef __x86_64__
+w64_SteamUGCRequestUGCDetailsResult_t_160::operator u64_SteamUGCRequestUGCDetailsResult_t_160() const
+{
+    u64_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    SteamUGCRequestUGCDetailsResult_t_160_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+static void SteamUGCRequestUGCDetailsResult_t_160_w_from_u(void *dst, const void *src)
+{
+    w_SteamUGCRequestUGCDetailsResult_t_160 *d = (w_SteamUGCRequestUGCDetailsResult_t_160 *)dst;
+    const u_SteamUGCRequestUGCDetailsResult_t_160 *s = (const u_SteamUGCRequestUGCDetailsResult_t_160 *)src;
+
+    d->m_details = s->m_details;
+    d->m_bCachedData = s->m_bCachedData;
+}
+#ifdef __x86_64__
+u64_SteamUGCRequestUGCDetailsResult_t_160::operator w64_SteamUGCRequestUGCDetailsResult_t_160() const
+{
+    w64_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    SteamUGCRequestUGCDetailsResult_t_160_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+#ifdef __i386__
+w32_SteamUGCRequestUGCDetailsResult_t_160::operator u32_SteamUGCRequestUGCDetailsResult_t_160() const
+{
+    u32_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    SteamUGCRequestUGCDetailsResult_t_160_u_from_w((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
+
+
+#ifdef __i386__
+u32_SteamUGCRequestUGCDetailsResult_t_160::operator w32_SteamUGCRequestUGCDetailsResult_t_160() const
+{
+    w32_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    SteamUGCRequestUGCDetailsResult_t_160_w_from_u((void *)&ret, (const void *)this);
+    return ret;
+}
+#endif
 
 static void SteamUGCRequestUGCDetailsResult_t_128x_u_from_w(void *dst, const void *src)
 {
@@ -20120,221 +20725,225 @@ u32_SubmitPlayerResultResultCallback_t::operator w32_SubmitPlayerResultResultCal
 #ifdef __i386__
 const struct callback_def callback_data[] =
 {
-    { 152, 159, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 160, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     /*{ 152, 122, 24, 16, MicroTxnAuthorizationResponse_t_109_w_from_u },*/
-    { 209, 159, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 160, 40, 32, GSReputation_t_123_w_from_u },
     /*{ 209, 122, 40, 32, GSReputation_t_108_w_from_u },*/
-    { 513, 159, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 160, 16, 12, LobbyCreated_t_123_w_from_u },
     /*{ 513, 122, 16, 12, LobbyCreated_t_099u_w_from_u },*/
-    { 1023, 159, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 159, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 160, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 160, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     /*{ 1106, 122, 32, 28, LeaderboardScoreUploaded_t_104_w_from_u },*/
-    { 1111, 159, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 160, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     /*{ 1111, 122, 16, 12, LeaderboardUGCSet_t_111x_w_from_u },*/
-    { 1112, 159, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 160, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     /*{ 1112, 122, 24, 20, PS3TrophiesInstalled_t_112x_w_from_u },*/
-    { 1221, 159, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 160, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     /*{ 1303, 122, 288, 280, RemoteStorageAppSyncProgress_t_111x_w_from_u },*/
-    { 1307, 159, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 160, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     /*{ 1307, 122, 16, 12, RemoteStorageFileShareResult_t_111x_w_from_u },*/
     { 1308, 116, 40, 32, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 159, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 160, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     /*{ 1309, 122, 16, 12, RemoteStoragePublishFileResult_t_116x_w_from_u },*/
     { 1310, 117, 1744, 1732, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 159, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 160, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     /*{ 1311, 122, 16, 12, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },*/
-    { 1312, 159, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 160, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     /*{ 1312, 122, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },*/
-    { 1313, 159, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 160, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 159, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 160, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     /*{ 1314, 122, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },*/
-    { 1315, 159, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 160, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 159, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 160, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     /*{ 1316, 122, 16, 12, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },*/
-    { 1317, 159, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 160, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     /*{ 1317, 122, 296, 288, RemoteStorageDownloadUGCResult_t_116x_w_from_u },*/
-    { 1318, 159, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 160, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     /*{ 1318, 122, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },*/
     { 1318, 119, 9752, 9740, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },
     { 1318, 118, 9496, 9484, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 159, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 160, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     /*{ 1319, 122, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },*/
-    { 1320, 159, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 160, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     /*{ 1320, 122, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },*/
-    { 1324, 159, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 160, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     /*{ 1324, 122, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },*/
-    { 1325, 159, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 160, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     /*{ 1325, 122, 24, 16, RemoteStorageUserVoteDetails_t_119_w_from_u },*/
-    { 1326, 159, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 160, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     /*{ 1326, 122, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },*/
-    { 1327, 159, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 160, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     /*{ 1327, 122, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },*/
-    { 1330, 159, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 159, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 160, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 160, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     /*{ 2101, 122, 24, 20, HTTPRequestCompleted_t_115_w_from_u },*/
-    { 2102, 159, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 160, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     /*{ 2102, 122, 16, 12, HTTPRequestHeadersReceived_t_121x_w_from_u },*/
-    { 2103, 159, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 160, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     /*{ 2103, 122, 24, 20, HTTPRequestDataReceived_t_121x_w_from_u },*/
-    { 2803, 159, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 159, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 2803, 160, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 160, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 160, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
     { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 159, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 159, 16, 12, ItemInstalled_t_w_from_u },
-    { 3406, 159, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 159, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 159, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 159, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 159, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 159, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 159, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 159, 48, 48, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 159, 20, 20, HTML_StartRequest_t_w_from_u },
-    { 4505, 159, 24, 24, HTML_URLChanged_t_w_from_u },
-    { 4506, 159, 12, 12, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 159, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 159, 8, 8, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 159, 20, 20, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 159, 8, 8, HTML_JSAlert_t_w_from_u },
-    { 4515, 159, 8, 8, HTML_JSConfirm_t_w_from_u },
-    { 4516, 159, 12, 12, HTML_FileOpenDialog_t_w_from_u },
+    { 3403, 160, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 160, 32, 28, ItemInstalled_t_160_w_from_u },
+    { 3405, 159, 16, 12, ItemInstalled_t_130_w_from_u },
+    { 3406, 160, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 160, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 160, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 160, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 160, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 160, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 160, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 160, 48, 48, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 160, 20, 20, HTML_StartRequest_t_w_from_u },
+    { 4505, 160, 24, 24, HTML_URLChanged_t_w_from_u },
+    { 4506, 160, 12, 12, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 160, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 160, 8, 8, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 160, 20, 20, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 160, 8, 8, HTML_JSAlert_t_w_from_u },
+    { 4515, 160, 8, 8, HTML_JSConfirm_t_w_from_u },
+    { 4516, 160, 12, 12, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 16, 16, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 159, 28, 28, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 160, 28, 28, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 24, 24, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 159, 8, 8, HTML_StatusText_t_w_from_u },
-    { 4524, 159, 8, 8, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 159, 8, 8, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 159, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 159, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 159, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 159, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 159, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 159, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 159, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 159, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 160, 8, 8, HTML_StatusText_t_w_from_u },
+    { 4524, 160, 8, 8, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 160, 8, 8, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 160, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 160, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 160, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 160, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 160, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 160, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 160, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 160, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 #ifdef __x86_64__
 const struct callback_def callback_data[] =
 {
-    { 152, 159, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 160, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     { 152, 122, 24, 24, MicroTxnAuthorizationResponse_t_109_w_from_u },
-    { 209, 159, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 160, 40, 32, GSReputation_t_123_w_from_u },
     { 209, 122, 40, 40, GSReputation_t_108_w_from_u },
-    { 513, 159, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 160, 16, 12, LobbyCreated_t_123_w_from_u },
     { 513, 122, 16, 16, LobbyCreated_t_099u_w_from_u },
-    { 1023, 159, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 159, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 160, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 160, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     { 1106, 122, 32, 32, LeaderboardScoreUploaded_t_104_w_from_u },
-    { 1111, 159, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 160, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     { 1111, 122, 16, 16, LeaderboardUGCSet_t_111x_w_from_u },
-    { 1112, 159, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 160, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     { 1112, 122, 24, 24, PS3TrophiesInstalled_t_112x_w_from_u },
-    { 1221, 159, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 160, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     { 1303, 122, 288, 288, RemoteStorageAppSyncProgress_t_111x_w_from_u },
-    { 1307, 159, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 160, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     { 1307, 122, 16, 16, RemoteStorageFileShareResult_t_111x_w_from_u },
     { 1308, 116, 40, 40, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 159, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 160, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     { 1309, 122, 16, 16, RemoteStoragePublishFileResult_t_116x_w_from_u },
     { 1310, 117, 1744, 1744, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 159, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 160, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     { 1311, 122, 16, 16, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },
-    { 1312, 159, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 160, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     { 1312, 122, 416, 416, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },
-    { 1313, 159, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 160, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 159, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 160, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     { 1314, 122, 616, 616, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },
-    { 1315, 159, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 160, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 159, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 160, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     { 1316, 122, 16, 16, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },
-    { 1317, 159, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 160, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     { 1317, 122, 296, 296, RemoteStorageDownloadUGCResult_t_116x_w_from_u },
-    { 1318, 159, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 160, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     { 1318, 122, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },
     /*{ 1318, 119, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },*/
     { 1318, 118, 9496, 9496, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 159, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 160, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     { 1319, 122, 616, 616, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },
-    { 1320, 159, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 160, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     { 1320, 122, 32, 32, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },
-    { 1324, 159, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 160, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     { 1324, 122, 16, 16, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },
-    { 1325, 159, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 160, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     { 1325, 122, 24, 24, RemoteStorageUserVoteDetails_t_119_w_from_u },
-    { 1326, 159, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 160, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     { 1326, 122, 416, 416, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },
-    { 1327, 159, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 160, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     { 1327, 122, 24, 24, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },
-    { 1330, 159, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 159, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 160, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 160, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     { 2101, 122, 24, 24, HTTPRequestCompleted_t_115_w_from_u },
-    { 2102, 159, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 160, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     { 2102, 122, 16, 16, HTTPRequestHeadersReceived_t_121x_w_from_u },
-    { 2103, 159, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 160, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     { 2103, 122, 24, 24, HTTPRequestDataReceived_t_121x_w_from_u },
-    { 2803, 159, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 159, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 2803, 160, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 160, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 160, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
     { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 159, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 159, 16, 12, ItemInstalled_t_w_from_u },
-    { 3406, 159, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 159, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 159, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 159, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 159, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 159, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 159, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 159, 56, 52, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 159, 40, 32, HTML_StartRequest_t_w_from_u },
-    { 4505, 159, 48, 36, HTML_URLChanged_t_w_from_u },
-    { 4506, 159, 24, 20, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 159, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 159, 16, 12, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 159, 32, 24, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 159, 16, 12, HTML_JSAlert_t_w_from_u },
-    { 4515, 159, 16, 12, HTML_JSConfirm_t_w_from_u },
-    { 4516, 159, 24, 20, HTML_FileOpenDialog_t_w_from_u },
+    { 3403, 160, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 160, 32, 28, ItemInstalled_t_160_w_from_u },
+    { 3405, 159, 16, 12, ItemInstalled_t_130_w_from_u },
+    { 3406, 160, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 160, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 160, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 160, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 160, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 160, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 160, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 160, 56, 52, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 160, 40, 32, HTML_StartRequest_t_w_from_u },
+    { 4505, 160, 48, 36, HTML_URLChanged_t_w_from_u },
+    { 4506, 160, 24, 20, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 160, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 160, 16, 12, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 160, 32, 24, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 160, 16, 12, HTML_JSAlert_t_w_from_u },
+    { 4515, 160, 16, 12, HTML_JSConfirm_t_w_from_u },
+    { 4516, 160, 24, 20, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 24, 20, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 159, 40, 32, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 160, 40, 32, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 32, 28, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 159, 16, 12, HTML_StatusText_t_w_from_u },
-    { 4524, 159, 16, 12, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 159, 16, 12, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 159, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 159, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 159, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 159, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 159, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 159, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 159, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 159, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 160, 16, 12, HTML_StatusText_t_w_from_u },
+    { 4524, 160, 16, 12, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 160, 16, 12, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 160, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 160, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 160, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 160, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 160, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 160, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 160, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 160, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 const unsigned int callback_data_size = ARRAY_SIZE(callback_data);

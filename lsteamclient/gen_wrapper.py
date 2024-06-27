@@ -11,6 +11,7 @@ import os
 import re
 
 SDK_VERSIONS = [
+    "160",
     "159",
     "158",
     "157",
