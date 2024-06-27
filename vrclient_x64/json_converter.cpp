@@ -72,7 +72,7 @@ char *vrclient_dos_to_unix_path( const char *src )
         char *unix_path;
         uint32_t r;
 
-        r = ntdll_umbstowcs( src, -1, srcW + 4, PATH_MAX - 4 );
+        r = ntdll_umbstowcs( src, strlen( src ) + 1, srcW + 4, PATH_MAX - 4 );
         if (r == 0) unix_path = NULL;
         else
         {
@@ -182,7 +182,7 @@ static bool convert_path_to_win(std::string &s)
     char *unix_path;
     uint32_t sz;
 
-    sz = ntdll_umbstowcs( s.c_str(), -1, srcW + 4, PATH_MAX - 4 );
+    sz = ntdll_umbstowcs( s.c_str(), strlen( s.c_str() ) + 1, srcW + 4, PATH_MAX - 4 );
     if (!sz) return false;
 
     for (tmp = srcW; *tmp; ++tmp) if (*tmp == '/') *tmp = '\\';
