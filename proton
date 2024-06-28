@@ -1029,6 +1029,8 @@ def default_compat_config():
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
+                #CW bug 23986
+                "1928420",
                 ]:
             ret.add("nomfdxgiman")
 
