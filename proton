@@ -1157,6 +1157,7 @@ def default_compat_config():
                 "397950", # Clustertruck
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
                 "712180", # Mugsters
+                "1818750", # MultiVersus
                 ]:
             ret.add("xalia")
 
