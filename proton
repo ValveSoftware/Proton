@@ -1027,6 +1027,8 @@ def default_compat_config():
                 "1522260", #Iragon: Prologue 18+
                 "2229300", #Iragon
                 "1097480", #Iragon 18+
+                #CW bug 23986
+                "1928420",
                 ]:
             ret.add("nomfdxgiman")
 
