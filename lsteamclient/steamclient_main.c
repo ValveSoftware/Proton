@@ -344,12 +344,12 @@ static int load_steamclient(void)
     char steam_app_id[4096], ignore_child_processes[4096];
     struct steamclient_init_params params = {.g_tmppath = temp_path_buffer};
 
-    if (!get_env_win(u"SteamAppId", steam_app_id, sizeof(steam_app_id)))
+    if (!get_env_win(L"SteamAppId", steam_app_id, sizeof(steam_app_id)))
         params.steam_app_id_unset = TRUE;
     else
         params.steam_app_id = steam_app_id;
 
-    if (!get_env_win(u"IgnoreChildProcesses", ignore_child_processes, sizeof(ignore_child_processes)))
+    if (!get_env_win(L"IgnoreChildProcesses", ignore_child_processes, sizeof(ignore_child_processes)))
         params.ignore_child_processes_unset = TRUE;
     else
         params.ignore_child_processes = ignore_child_processes;
