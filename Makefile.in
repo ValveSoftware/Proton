@@ -188,6 +188,7 @@ $(eval $(call rules-meson,gst_base,64))
 ##
 
 GST_GOOD_MESON_ARGS := \
+	-Dapetag=enabled \
 	-Dauto_features=disabled \
 	-Daudioparsers=enabled \
 	-Dautodetect=enabled \
