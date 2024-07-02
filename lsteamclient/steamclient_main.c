@@ -1,3 +1,5 @@
+#include "winsock2.h"
+
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,7 +12,6 @@
 #include "winnls.h"
 #include "winuser.h"
 #include "winternl.h"
-#include "winsock2.h"
 
 #include "steamclient_private.h"
 
