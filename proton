@@ -1022,9 +1022,6 @@ def default_compat_config():
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
 
-                #affected by CW bug 23184
-                "2229490", #Iragon: Prologue
-
                 #CW bug 23986
                 "1928420",
                 ]:
