@@ -1097,6 +1097,7 @@ def default_compat_config():
                 "460790", #Bayonetta
                 "273590", #Descent 3
                 "834530", #Yakuza Kiwami
+                "714010", #Aimlabs
                 ]:
             ret.add("gamedrive")
 
