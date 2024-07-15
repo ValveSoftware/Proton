@@ -684,9 +684,66 @@ static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
     return dlopen(info.dli_fname, RTLD_NOW);
 }
 
+
+static int WINAPI save_openxr_extensions_to_registry(HKEY vr_key){
+    int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions, uint32_t *physdev_vid, uint32_t *physdev_pid);
+    char *xr_inst_ext, *xr_dev_ext;
+    HMODULE hwineopenxr;
+    LSTATUS status;
+
+    if ((hwineopenxr = LoadLibraryA("wineopenxr.dll")))
+    {
+        p__wineopenxr_get_extensions_internal = reinterpret_cast<decltype(p__wineopenxr_get_extensions_internal)>
+                (GetProcAddress(hwineopenxr, "__wineopenxr_get_extensions_internal"));
+        if (p__wineopenxr_get_extensions_internal)
+        {
+            uint32_t vid, pid;
+            if (!p__wineopenxr_get_extensions_internal(&xr_inst_ext, &xr_dev_ext, &vid, &pid))
+            {
+                WINE_TRACE("Got XR extensions.\n");
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_instance_extensions", 0, REG_SZ,
+                        (BYTE *)xr_inst_ext, strlen(xr_inst_ext) + 1)))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_instance_extensions value, status %#x.\n", status);
+                    return STATUS_UNSUCCESSFUL;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_extensions", 0, REG_SZ,
+                        (BYTE *)xr_dev_ext, strlen(xr_dev_ext) + 1)))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_extensions value, status %#x.\n", status);
+                    return STATUS_UNSUCCESSFUL;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_vid", 0, REG_DWORD,
+                        (BYTE *)&vid, sizeof(vid))))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_vid value, status %#x.\n", status);
+                    return STATUS_UNSUCCESSFUL;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_pid", 0, REG_DWORD,
+                        (BYTE *)&pid, sizeof(pid))))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_pid value, status %#x.\n", status);
+                    return STATUS_UNSUCCESSFUL;
+                }
+            }
+        }
+        else
+        {
+            WINE_ERR("__wineopenxr_get_extensions_internal not found in wineopenxr.dll.\n");
+            return STATUS_UNSUCCESSFUL;
+        }
+        FreeLibrary(hwineopenxr);
+    }
+    else
+    {
+        WINE_WARN("Could not load wineopenxr.dll, err %u.\n", GetLastError());
+        return STATUS_UNSUCCESSFUL;
+    }
+    return STATUS_SUCCESS;
+}
+
 static DWORD WINAPI initialize_vr_data(void *arg)
 {
-    int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions, uint32_t *physdev_vid, uint32_t *physdev_pid);
     vr::IVRClientCore* (*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
     uint32_t instance_extensions_count, device_count;
     VkPhysicalDevice *phys_devices = NULL;
@@ -696,7 +753,6 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     VkApplicationInfo app_info = {};
     char *buffer = NULL, *new_buffer;
     vr::IVRClientCore* client_core;
-    char *xr_inst_ext, *xr_dev_ext;
     vr::IVRCompositor* compositor;
     VkInstance vk_instance = NULL;
     BOOL vr_initialized = FALSE;
@@ -707,7 +763,6 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     const char *env_str;
     unsigned int app_id;
     unsigned int length;
-    HMODULE hwineopenxr;
     void *lib_vrclient;
     void *unix_handle;
     DWORD hmd_present;
@@ -717,6 +772,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     VkResult res;
 
     WINE_TRACE("Starting VR info initialization.\n");
+    int openxr_extension_result = save_openxr_extensions_to_registry(vr_key);
 
     if (!(lib_vrclient = load_vrclient()))
     {
@@ -878,51 +934,15 @@ static DWORD WINAPI initialize_vr_data(void *arg)
         }
     }
 
-    if ((hwineopenxr = LoadLibraryA("wineopenxr.dll")))
-    {
-        p__wineopenxr_get_extensions_internal = reinterpret_cast<decltype(p__wineopenxr_get_extensions_internal)>
-                (GetProcAddress(hwineopenxr, "__wineopenxr_get_extensions_internal"));
-        if (p__wineopenxr_get_extensions_internal)
-        {
-            uint32_t vid, pid;
-            if (!p__wineopenxr_get_extensions_internal(&xr_inst_ext, &xr_dev_ext, &vid, &pid))
-            {
-                WINE_TRACE("Got XR extensions.\n");
-                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_instance_extensions", 0, REG_SZ,
-                        (BYTE *)xr_inst_ext, strlen(xr_inst_ext) + 1)))
-                {
-                    WINE_ERR("Could not set openxr_vulkan_instance_extensions value, status %#x.\n", status);
-                    goto done;
-                }
-                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_extensions", 0, REG_SZ,
-                        (BYTE *)xr_dev_ext, strlen(xr_dev_ext) + 1)))
-                {
-                    WINE_ERR("Could not set openxr_vulkan_device_extensions value, status %#x.\n", status);
-                    goto done;
-                }
-                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_vid", 0, REG_DWORD,
-                        (BYTE *)&vid, sizeof(vid))))
-                {
-                    WINE_ERR("Could not set openxr_vulkan_device_vid value, status %#x.\n", status);
-                    goto done;
-                }
-                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_pid", 0, REG_DWORD,
-                        (BYTE *)&pid, sizeof(pid))))
-                {
-                    WINE_ERR("Could not set openxr_vulkan_device_pid value, status %#x.\n", status);
-                    goto done;
-                }
-            }
+    /* When SteamVR is used as OpenXR runtime, it needs to be running for
+     * `save_openxr_extensions_to_registry` to succeed.
+     * If the previous probe was not sucessful, we can try a second time now. */
+    if (openxr_extension_result == STATUS_UNSUCCESSFUL) {
+        WINE_WARN("First attempt to get XR extensions failed. Trying again now that OpenVR is initialized.");
+        openxr_extension_result = save_openxr_extensions_to_registry(vr_key);
+        if(openxr_extension_result == STATUS_UNSUCCESSFUL) {
+            goto done;
         }
-        else
-        {
-            WINE_ERR("__wineopenxr_get_extensions_internal not found in wineopenxr.dll.\n");
-        }
-        FreeLibrary(hwineopenxr);
-    }
-    else
-    {
-        WINE_WARN("Could not load wineopenxr.dll, err %u.\n", GetLastError());
     }
 
     vr_status = 1;
