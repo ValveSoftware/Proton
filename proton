@@ -1137,7 +1137,6 @@ def default_compat_config():
                 "109600", #Neverwinter
                 "9900", #Star Trek Online
                 "9880", #Champions Online
-                "365360", #Battle Brothers
                 "202750", #Alan Wake's American Nightmare
                 ]:
             ret.add("disablenvapi")
