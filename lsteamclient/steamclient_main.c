@@ -342,6 +342,7 @@ static int load_steamclient(void)
 {
     char steam_app_id[4096], ignore_child_processes[4096];
     struct steamclient_init_params params = {.g_tmppath = temp_path_buffer};
+    DWORD saved_err = GetLastError();
 
     if (!get_env_win(u"SteamAppId", steam_app_id, sizeof(steam_app_id)))
         params.steam_app_id_unset = TRUE;
@@ -362,6 +363,7 @@ static int load_steamclient(void)
         WSAStartup(0x202, &data);
         wsa_initialized = TRUE;
     }
+    SetLastError(saved_err);
     return 1;
 }
 
