@@ -487,7 +487,11 @@ int8_t CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t
 
 next_event:
     STEAMCLIENT_CALL( steamclient_Steam_BGetCallback, &params );
-    if (!params._ret) return FALSE;
+    if (!params._ret)
+    {
+        SetLastError(0);
+        return FALSE;
+    }
 
     if (!(win_msg->m_pubParam = HeapAlloc( GetProcessHeap(), 0, win_msg->m_cubParam ))) return FALSE;
     last_callback_data = win_msg->m_pubParam;
