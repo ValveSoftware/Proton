@@ -537,6 +537,9 @@ class CompatData:
                     #proton 3.7 did not generate tracked_files, so copy it into place first
                     try_copy(g_proton.path("proton_3.7_tracked_files"), self.tracked_files_file)
                 self.remove_tracked_files()
+                path = self.prefix_dir + "/drive_c/Program Files (x86)/Ubisoft/Ubisoft Game Launcher/version.txt"
+                if file_exists(path, follow_symlinks=False) and os.path.isfile(path):
+                    os.remove(path)
                 return
 
             if old_proton_ver == "3.7" and old_prefix_ver == "1":
