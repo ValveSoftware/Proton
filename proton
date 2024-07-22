@@ -9,6 +9,7 @@ import os
 import shutil
 import errno
 import platform
+import resource
 import stat
 import subprocess
 import sys
@@ -1480,6 +1481,11 @@ class Session:
                         self.log_file.write("User settings " + var + ": " + used_user_settings[var] + "\n")
                     if var in self.env:
                         self.log_file.write("Effective " + var + ": " + self.env[var] + "\n")
+
+                # check for low fd limit
+                _soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
+                if hard_limit < 524288:
+                    self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit}\n")
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
