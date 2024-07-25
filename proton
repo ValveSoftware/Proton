@@ -54,13 +54,13 @@ def nonzero(s):
     return len(s) > 0 and s != "0"
 
 def prepend_to_env_str(env, variable, prepend_str, separator):
-    if not variable in env:
+    if variable not in env:
         env[variable] = prepend_str
     else:
         env[variable] = prepend_str + separator + env[variable]
 
 def append_to_env_str(env, variable, append_str, separator):
-    if not variable in env:
+    if variable not in env:
         env[variable] = append_str
     else:
         env[variable] = env[variable] + separator + append_str
@@ -264,8 +264,8 @@ def getmtimestr(*path_fragments):
         return "0"
 
 def try_get_game_library_dir():
-    if not "STEAM_COMPAT_INSTALL_PATH" in g_session.env or \
-            not "STEAM_COMPAT_LIBRARY_PATHS" in g_session.env:
+    if "STEAM_COMPAT_INSTALL_PATH" not in g_session.env or \
+            "STEAM_COMPAT_LIBRARY_PATHS" not in g_session.env:
         return None
 
     #find library path which is a subset of the game path
@@ -277,7 +277,7 @@ def try_get_game_library_dir():
     return None
 
 def try_get_steam_dir():
-    if not "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
+    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" not in g_session.env:
         return None
 
     return g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
@@ -515,7 +515,7 @@ class CompatData:
         if old_ver is None:
             return
 
-        if not '-' in old_ver:
+        if '-' not in old_ver:
             #How can this happen??
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #If it does, just let the Wine upgrade happen and hope it works...
@@ -1213,7 +1213,7 @@ class Session:
                     self.compat_config.add(cur)
 
         #turn forcelgadd on by default unless it is disabled in compat config
-        if not "noforcelgadd" in self.compat_config:
+        if "noforcelgadd" not in self.compat_config:
             self.compat_config.add("forcelgadd")
 
         appid = os.environ.get("SteamGameId", 0)
@@ -1265,7 +1265,7 @@ class Session:
         prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
     def check_environment(self, env_name, config_name):
-        if not env_name in self.env:
+        if env_name not in self.env:
             return False
         if nonzero(self.env[env_name]):
             self.compat_config.add(config_name)
@@ -1293,7 +1293,7 @@ class Session:
             #SteamGameId is not always available
             lfile_path = basedir + "/steam-proton.log"
         else:
-            if not "SteamGameId" in os.environ:
+            if "SteamGameId" not in os.environ:
                 return False
 
             lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
@@ -1314,7 +1314,7 @@ class Session:
             try:
                 import user_settings
                 for key, value in user_settings.user_settings.items():
-                    if not key in self.env:
+                    if key not in self.env:
                         self.env[key] = value
                         used_user_settings[key] = value
             except:
@@ -1370,7 +1370,7 @@ class Session:
         else:
             self.env["WINEESYNC"] = "1"
 
-        if not "noxim" in self.compat_config:
+        if "noxim" not in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
 
         if "nofsync" in self.compat_config:
@@ -1400,7 +1400,7 @@ class Session:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
         if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
+            if "VKD3D_FEATURE_LEVEL" not in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidevggpu" in self.compat_config:
@@ -1550,7 +1550,7 @@ class Session:
         return rc
 
 if __name__ == "__main__":
-    if not "STEAM_COMPAT_DATA_PATH" in os.environ:
+    if "STEAM_COMPAT_DATA_PATH" not in os.environ:
         log("No compat data path?")
         sys.exit(1)
 
