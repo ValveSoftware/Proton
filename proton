@@ -524,7 +524,7 @@ class CompatData:
         try:
             old_proton_ver, old_prefix_ver = old_ver.split('-')
             old_proton_maj, old_proton_min = old_proton_ver.split('.')
-            new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+            new_proton_ver, _              = CURRENT_PREFIX_VERSION.split('-')
             new_proton_maj, new_proton_min = new_proton_ver.split('.')
 
             if int(new_proton_maj) < int(old_proton_maj) or \
@@ -685,7 +685,7 @@ class CompatData:
             for line in tracked_files:
                 prev_tracked_files.add(line.strip())
         with open(self.tracked_files_file, "a") as tracked_files:
-            for src_dir, dirs, files in os.walk(g_proton.default_pfx_dir):
+            for src_dir, _, files in os.walk(g_proton.default_pfx_dir):
                 rel_dir = src_dir.replace(g_proton.default_pfx_dir, "", 1).lstrip('/')
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
@@ -1202,10 +1202,10 @@ class Session:
             config = os.environ["STEAM_COMPAT_CONFIG"]
 
             while config:
-                (cur, sep, config) = config.partition(',')
+                (cur, _, config) = config.partition(',')
                 if cur.startswith("cmdlineappend:"):
                     while comma_escaped(cur):
-                        (a, b, c) = config.partition(',')
+                        (a, _, c) = config.partition(',')
                         cur = cur[:-1] + ',' + a
                         config = c
                     self.cmdlineappend.append(cur[14:].replace('\\\\','\\'))
