@@ -1487,7 +1487,7 @@ class Session:
                 self.env["WINEDEBUG"] = "-all"
 
         if "PROTON_REMOTE_DEBUG_CMD" in self.env:
-            self.remote_debug_cmd = shlex.split(self.env.get("PROTON_REMOTE_DEBUG_CMD"))
+            self.remote_debug_cmd = shlex.split(self.env["PROTON_REMOTE_DEBUG_CMD"])
         else:
             self.remote_debug_cmd = None
 
