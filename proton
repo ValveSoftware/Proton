@@ -270,9 +270,9 @@ def try_get_game_library_dir():
 
     #find library path which is a subset of the game path
     library_paths = g_session.env["STEAM_COMPAT_LIBRARY_PATHS"].split(":")
-    for l in library_paths:
-        if l in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
-            return l
+    for path in library_paths:
+        if path in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
+            return path
 
     return None
 
@@ -1277,10 +1277,10 @@ class Session:
         try:
             if "PRESSURE_VESSEL_RUNTIME_BASE" in self.env:
                 with open(self.env["PRESSURE_VESSEL_RUNTIME_BASE"] + "/VERSIONS.txt", "r") as f:
-                    for l in f:
-                        l = l.strip()
-                        if len(l) > 0 and not l.startswith("#"):
-                            cleaned = l.split("#")[0].strip().replace("\t", " ")
+                    for line in f:
+                        line = line.strip()
+                        if len(line) > 0 and not line.startswith("#"):
+                            cleaned = line.split("#")[0].strip().replace("\t", " ")
                             split = cleaned.split(" ", maxsplit=1)
                             self.log_file.write(split[0] + ": " + split[1] + "\n")
         except (OSError, IOError, TypeError, KeyError):
