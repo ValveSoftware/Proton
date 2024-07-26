@@ -1317,7 +1317,7 @@ class Session:
                     if key not in self.env:
                         self.env[key] = value
                         used_user_settings[key] = value
-            except:
+            except Exception:
                 log("************************************************")
                 log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
                 log("%s" % sys.exc_info()[1])
