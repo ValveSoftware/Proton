@@ -173,7 +173,7 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
 
         if file_exists(dst + '.debug', follow_symlinks=False):
             os.remove(dst + '.debug')
-        elif link_debug:
+        elif link_debug and track_file:
             track_file.write(os.path.relpath(dst + '.debug', prefix) + '\n')
 
         if link_debug:
