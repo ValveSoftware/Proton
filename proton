@@ -142,7 +142,7 @@ def merge_user_dir(src, dst):
             extant_dirs += dst_dir
 
 def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, optional=False,
-             follow_symlinks=True, track_file=False, link_debug=False):
+             follow_symlinks=True, track_file=None, link_debug=False):
     try:
         if prefix is not None:
             dst = os.path.join(prefix, dst)
