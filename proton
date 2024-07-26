@@ -1312,7 +1312,7 @@ class Session:
         used_user_settings = {}
         if file_exists(g_proton.user_settings_file, follow_symlinks=True):
             try:
-                import user_settings
+                import user_settings # pyright: ignore [reportMissingImports]
                 for key, value in user_settings.user_settings.items():
                     if key not in self.env:
                         self.env[key] = value
