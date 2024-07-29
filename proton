@@ -1541,7 +1541,7 @@ class Session:
         if remote_debug_proc:
             remote_debug_proc.kill()
             try:
-                remote_debug_proc.communicate(2)
+                remote_debug_proc.communicate(timeout=2)
             except subprocess.TimeoutExpired:
                 log("terminate remote debugger")
                 remote_debug_proc.terminate()
