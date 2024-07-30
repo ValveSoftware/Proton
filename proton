@@ -1487,7 +1487,7 @@ class Session:
                 # check for low fd limit
                 _soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
                 if hard_limit < 524288:
-                    self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit}\n")
+                    self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit} (see https://github.com/ValveSoftware/Proton/wiki/File-Descriptors)\n")
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
