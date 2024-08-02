@@ -1554,7 +1554,10 @@ class Session:
             remote_debug_proc = None
 
         # CoD: Black Ops 3 workaround
-        if os.environ.get("SteamGameId", 0) == "311210":
+        if os.environ.get("SteamGameId", 0) in [
+                    "311210",   # CoD: Black Ops 3
+                    "1549250",  # Undecember
+                ]:
             argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
         else:
             argv = [g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"]
