@@ -1158,6 +1158,7 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
+    #options to also be enabled for prerequisite setup steps
     if "STEAM_COMPAT_APP_ID" in os.environ:
         appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
