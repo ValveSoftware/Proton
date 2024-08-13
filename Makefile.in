@@ -950,7 +950,7 @@ all-dist: $(DIST_GECKO32) $(DIST_GECKO64)
 ## wine-mono
 ##
 
-WINEMONO_VER := 9.1.0
+WINEMONO_VER := 9.2.0
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(OBJ)/.wine-mono-dist
