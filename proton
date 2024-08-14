@@ -1169,13 +1169,18 @@ def default_compat_config():
         appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
                 "7000", # Tomb Raider: Legend
+                "7200", # Trackmania United Forever
                 "8000", # Tomb Raider: Anniversary
+                "11020", # TrackMania Nations Forever
+                "15750", # Oddworld: Stranger's Wrath HD
                 "22300", # Fallout 3
                 "22370", # Fallout 3: Game of the Year Edition
+                "22380", # Fallout: New Vegas
                 "72850", # The Elder Scrolls V: Skyrim
                 "377160", # Fallout 4
                 "397950", # Clustertruck
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
+                "610190", # WARRIORS ALL-STARS
                 "712180", # Mugsters
                 "1818750", # MultiVersus
                 ]:
