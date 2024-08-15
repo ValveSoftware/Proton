@@ -1004,9 +1004,7 @@ class CompatData:
             setup_steam_dir_drive()
 
             # add Steam ffmpeg libraries to path
-            use_ffmpeg = "PROTON_NO_STEAM_FFMPEG" not in os.environ or not nonzero(os.environ["PROTON_NO_STEAM_FFMPEG"])
-            if use_ffmpeg and 'nosteamffmpeg' not in g_session.compat_config:
-                prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
+            prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
 
 def comma_escaped(s):
     escaped = False
