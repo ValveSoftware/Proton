@@ -1162,6 +1162,11 @@ def default_compat_config():
                 "712180", # Mugsters
                 ]:
             ret.add("xalia")
+        
+        if appid in [
+                "410900" # Forts
+                ]:
+            ret add("nativevulkanloader")
 
     return ret
 
