@@ -1490,6 +1490,12 @@ class Session:
                 if hard_limit < 524288:
                     self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit} (see https://github.com/ValveSoftware/Proton/wiki/File-Descriptors)\n")
 
+                if os.path.exists("/proc/sys/vm/max_map_count"):
+                    with open("/proc/sys/vm/max_map_count", "r") as f:
+                        max_map_count = int(f.read())
+                        if max_map_count < 1048576:
+                            self.log_file.write(f"WARNING: Low /proc/sys/vm/max_map_count: {max_map_count} will prevent some games from working\n")
+
                 self.log_file.write("======================\n")
                 self.log_file.flush()
             else:
