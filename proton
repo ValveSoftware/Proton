@@ -1193,6 +1193,7 @@ default_cpu_limit = {
     "618970"    :  4,   # Outcast - Second Contact
     "10150"     :  8,   # Prototype
     "2229830"   :  1,   # Command & Conquer and The Covert Operations
+    "787480"    :  16,  # Phoenix Wright: Ace Attorney Trilogy
 }
 
 class Session:
