@@ -1164,9 +1164,9 @@ def default_compat_config():
             ret.add("xalia")
         
         if appid in [
-                "410900" # Forts
+                "410900", # Forts
                 ]:
-            ret add("nativevulkanloader")
+            ret.add("nativevulkanloader")
 
     return ret
 
