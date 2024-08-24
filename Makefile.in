@@ -1150,6 +1150,10 @@ else
 	override DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
+ifeq ($(DISABLE_LABELING),1)
+	override DOCKER_OPTS := --security-opt label=disable $(DOCKER_OPTS)
+endif
+
 export CARGO_HOME := $(if $(CARGO_HOME),$(CARGO_HOME),$(HOME)/.cargo)
 override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS) -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
 
