@@ -88,6 +88,8 @@ static BOOL networking_message_pool_receive_144( int32_t capacity, int32_t count
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_144 )->pool;
     int32_t i;
 
+    if (count < 0) count = 0;
+
     for (i = count; i < capacity; i++)
     {
         messages[i]->m_pfnRelease( messages[i] );
@@ -155,10 +157,12 @@ static BOOL networking_message_pool_create_147( uint32_t count, w_SteamNetworkin
     return TRUE;
 }
 
-static BOOL networking_message_pool_receive_147( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_147 **messages )
+static BOOL networking_message_pool_receive_147( uint32_t capacity, int32_t count, w_SteamNetworkingMessage_t_147 **messages )
 {
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_147 )->pool;
     uint32_t i;
+
+    if (count < 0) count = 0;
 
     for (i = count; i < capacity; i++)
     {
@@ -227,10 +231,12 @@ static BOOL networking_message_pool_create_153a( uint32_t count, w_SteamNetworki
     return TRUE;
 }
 
-static BOOL networking_message_pool_receive_153a( uint32_t capacity, uint32_t count, w_SteamNetworkingMessage_t_153a **messages )
+static BOOL networking_message_pool_receive_153a( uint32_t capacity, int32_t count, w_SteamNetworkingMessage_t_153a **messages )
 {
     struct networking_message_pool *pool = CONTAINING_RECORD( messages[0], struct networking_message, w_msg_153a )->pool;
     uint32_t i;
+
+    if (count < 0) count = 0;
 
     for (i = count; i < capacity; i++)
     {
