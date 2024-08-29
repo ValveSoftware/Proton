@@ -821,11 +821,17 @@ class CompatData:
                     "xinput*.dll," +
 
                     #vcruntime redist
-                    "atl*.dll," +
+                    "atl1*.dll," +
+                    "atl.dll," +
                     "concrt*.dll," +
-                    "msvcp*.dll," +
-                    "msvcr*.dll," +
-                    "msvcm*.dll," +
+                    "msvcp1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcp7*.dll," +
+                    "msvcp6*.dll," +
+                    "msvcp_win.dll," +
+                    "msvcr1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcr7*.dll," +
                     "vcamp1*.dll," +
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
