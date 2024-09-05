@@ -1570,6 +1570,7 @@ class Session:
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) in [
                     "311210",   # CoD: Black Ops 3
+                    "1985810",  # CoD: Black Ops Cold War
                     "1549250",  # Undecember
                 ]:
             argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
