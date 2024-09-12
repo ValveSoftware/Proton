@@ -1170,6 +1170,7 @@ def default_compat_config():
         if appid in [
                 "7000", # Tomb Raider: Legend
                 "8000", # Tomb Raider: Anniversary
+                "15750", # Oddworld: Stranger's Wrath HD
                 "22300", # Fallout 3
                 "22370", # Fallout 3: Game of the Year Edition
                 "72850", # The Elder Scrolls V: Skyrim
