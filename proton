@@ -1176,6 +1176,7 @@ def default_compat_config():
                 "72850", # The Elder Scrolls V: Skyrim
                 "377160", # Fallout 4
                 "397950", # Clustertruck
+                "418620", # The TakeOver
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
                 "712180", # Mugsters
                 "1818750", # MultiVersus
