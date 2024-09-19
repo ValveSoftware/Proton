@@ -997,11 +997,14 @@ class CompatData:
 
                 # Try to detect known DLLs that ship with the NVIDIA Linux Driver
                 # and add them into the prefix
-                nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-                if nvidia_wine_dll_dir:
+                if g_session.nvidia_wine_dll_dir:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
-                        try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
-                                 prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        try_copy(g_session.nvidia_wine_dll_dir + "/" + dll,
+                                 "drive_c/windows/system32",
+                                 optional=True,
+                                 prefix=self.prefix_dir,
+                                 track_file=tracked_files,
+                                 link_debug=True)
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
@@ -1460,6 +1463,17 @@ class Session:
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
+        # NVIDIA software may check for the "DriverStore" by querying the
+        # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
+        # a given adapter. In the case where this path cannot be found, the
+        # `NVIDIA_WINE_DLL_DIR` environment variable is read as a fallback.
+        #
+        # TODO: Add support for populating NGXCore\NGXPath so we can remove the
+        # NGX copies done in setup_prefix(), and this environment variable.
+        self.nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
+        if self.nvidia_wine_dll_dir:
+            self.env["NVIDIA_WINE_DLL_DIR"] = self.nvidia_wine_dll_dir
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
