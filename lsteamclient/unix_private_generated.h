@@ -7189,6 +7189,16 @@ struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION020
 #endif /* __cplusplus */
 };
 
+struct u_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001
+{
+#ifdef __cplusplus
+    virtual void SetTimelineStateDescription( const char *, float ) = 0;
+    virtual void ClearTimelineStateDescription( float ) = 0;
+    virtual void AddTimelineEvent( const char *, const char *, const char *, uint32_t, float, float, uint32_t ) = 0;
+    virtual void SetTimelineGameMode( uint32_t ) = 0;
+#endif /* __cplusplus */
+};
+
 struct u_ISteamVideo_STEAMVIDEO_INTERFACE_V007
 {
 #ifdef __cplusplus
@@ -8372,6 +8382,10 @@ NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser( void *
 NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile( void * );
 NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked( void * );
 NTSTATUS ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary( void * );
+NTSTATUS ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineStateDescription( void * );
+NTSTATUS ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_ClearTimelineStateDescription( void * );
+NTSTATUS ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent( void * );
+NTSTATUS ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode( void * );
 NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest( void * );
 NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest( void * );
 NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest( void * );

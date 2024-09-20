@@ -2567,12 +2567,6 @@ typedef struct u_ISteamNetworkingCustomSignalingRecvContext u32_ISteamNetworking
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w_ISteamNetworkingCustomSignalingRecvContext;
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w64_ISteamNetworkingCustomSignalingRecvContext;
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w32_ISteamNetworkingCustomSignalingRecvContext;
-typedef struct u_ISteamTimeline u_ISteamTimeline;
-typedef struct u_ISteamTimeline u64_ISteamTimeline;
-typedef struct u_ISteamTimeline u32_ISteamTimeline;
-typedef struct w_ISteamTimeline w_ISteamTimeline;
-typedef struct w_ISteamTimeline w64_ISteamTimeline;
-typedef struct w_ISteamTimeline w32_ISteamTimeline;
 typedef struct u64_ItemInstalled_t_160 u64_ItemInstalled_t_160;
 typedef struct w64_ItemInstalled_t_160 w64_ItemInstalled_t_160;
 typedef struct u32_ItemInstalled_t_160 u32_ItemInstalled_t_160;
@@ -5858,26 +5852,6 @@ struct u_ISteamNetworkingCustomSignalingRecvContext
 #ifdef __cplusplus
     virtual u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
     virtual void SendRejectionSignal( const SteamNetworkingIdentity_144 *, const void *, int32_t ) = 0;
-#endif /* __cplusplus */
-};
-
-struct w_ISteamTimeline
-{
-#ifdef __cplusplus
-    virtual void SetTimelineStateDescription( const char *, float ) = 0;
-    virtual void ClearTimelineStateDescription( float ) = 0;
-    virtual void AddTimelineEvent( const char *, const char *, const char *, uint32_t, float, float, uint32_t ) = 0;
-    virtual void SetTimelineGameMode( uint32_t ) = 0;
-#endif /* __cplusplus */
-};
-
-struct u_ISteamTimeline
-{
-#ifdef __cplusplus
-    virtual void SetTimelineStateDescription( const char *, float ) = 0;
-    virtual void ClearTimelineStateDescription( float ) = 0;
-    virtual void AddTimelineEvent( const char *, const char *, const char *, uint32_t, float, float, uint32_t ) = 0;
-    virtual void SetTimelineGameMode( uint32_t ) = 0;
 #endif /* __cplusplus */
 };
 
