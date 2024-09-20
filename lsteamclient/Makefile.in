@@ -40,6 +40,7 @@ SOURCES = \
 	winISteamRemotePlay.c \
 	winISteamRemoteStorage.c \
 	winISteamScreenshots.c \
+	winISteamTimeline.c \
 	winISteamUGC.c \
 	winISteamUnifiedMessages.c \
 	winISteamUser.c \
@@ -182,6 +183,7 @@ SOURCES = \
 	cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001.cpp \
 	cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002.cpp \
 	cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003.cpp \
+	cppISteamTimeline_STEAMTIMELINE_INTERFACE_V001.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION001.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION002.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION003.cpp \

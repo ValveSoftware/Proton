@@ -45,6 +45,7 @@ extern struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_IN
 extern struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001(void *);
 extern struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002(void *);
 extern struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003(void *);
+extern struct w_steam_iface *create_winISteamTimeline_STEAMTIMELINE_INTERFACE_V001(void *);
 extern struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001(void *);
 extern struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002(void *);
 extern struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION003(void *);
