@@ -50,6 +50,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"STEAMSCREENSHOTS_INTERFACE_VERSION001", &create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001},
     {"STEAMSCREENSHOTS_INTERFACE_VERSION002", &create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002},
     {"STEAMSCREENSHOTS_INTERFACE_VERSION003", &create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003},
+    {"STEAMTIMELINE_INTERFACE_V001", &create_winISteamTimeline_STEAMTIMELINE_INTERFACE_V001},
     {"STEAMUGC_INTERFACE_VERSION001", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001},
     {"STEAMUGC_INTERFACE_VERSION002", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002},
     {"STEAMUGC_INTERFACE_VERSION003", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION003},
@@ -251,6 +252,7 @@ extern void init_winISteamParties_rtti( char * );
 extern void init_winISteamRemotePlay_rtti( char * );
 extern void init_winISteamRemoteStorage_rtti( char * );
 extern void init_winISteamScreenshots_rtti( char * );
+extern void init_winISteamTimeline_rtti( char * );
 extern void init_winISteamUGC_rtti( char * );
 extern void init_winISteamUnifiedMessages_rtti( char * );
 extern void init_winISteamUser_rtti( char * );
@@ -291,6 +293,7 @@ void init_rtti( char *base )
     init_winISteamRemotePlay_rtti( base );
     init_winISteamRemoteStorage_rtti( base );
     init_winISteamScreenshots_rtti( base );
+    init_winISteamTimeline_rtti( base );
     init_winISteamUGC_rtti( base );
     init_winISteamUnifiedMessages_rtti( base );
     init_winISteamUser_rtti( base );

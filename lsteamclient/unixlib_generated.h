@@ -9010,6 +9010,37 @@ struct ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotTo
     const char *pchVRFilename;
 };
 
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineStateDescription_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchDescription;
+    float flTimeDelta;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_ClearTimelineStateDescription_params
+{
+    struct u_steam_iface *linux_side;
+    float flTimeDelta;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchIcon;
+    const char *pchTitle;
+    const char *pchDescription;
+    uint32_t unPriority;
+    float flStartOffsetSeconds;
+    float flDurationSeconds;
+    uint32_t ePossibleClip;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t eMode;
+};
+
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params
 {
     struct u_steam_iface *linux_side;
@@ -47926,6 +47957,10 @@ enum unix_funcs
     unix_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile,
     unix_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked,
     unix_ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineStateDescription,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_ClearTimelineStateDescription,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest,
