@@ -165,6 +165,9 @@ SDK_SOURCES = {
     "steamnetworkingfakeip.h": [
         "ISteamNetworkingFakeUDPPort"
     ],
+    "isteamtimeline.h": [
+        "ISteamTimeline"
+    ],
 }
 
 SDK_CLASSES = {klass: source for source, klasses in SDK_SOURCES.items()
