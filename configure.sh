@@ -55,14 +55,19 @@ check_container_engine() {
         return 1
     fi
 
+    label_opt=""
+    if [[ -n $arg_disable_labeling ]]; then
+      label_opt="--security-opt label=disable"
+    fi
     touch permission_check
     local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+                                            $label_opt \
                                             --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
     if [[ $inner_uid == *"Permission denied"* ]]; then
-        err "The container cannot access files. Are you using SELinux?"
+        err "The container cannot access files. If you're using SELinux, try passing --disable-labeling or --relabel-volumes."
         die "Please read README.md and check your $1 setup works."
     elif [ "$inner_uid" -eq 0 ]; then
         # namespace maps the user as root or the build is performed as host's root
@@ -164,6 +169,9 @@ function configure() {
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
     fi
+    if [[ -n "$arg_disable_labeling" ]]; then
+      echo "DISABLE_LABELING := 1"
+    fi
     if [[ -n "$CONTAINER_MOUNT_OPTS" ]]; then
       echo "CONTAINER_MOUNT_OPTS := $CONTAINER_MOUNT_OPTS"
     fi
@@ -191,6 +199,7 @@ arg_protonsdk_image=""
 arg_build_name=""
 arg_container_engine=""
 arg_docker_opts=""
+arg_disable_labeling=""
 arg_relabel_volumes=""
 arg_enable_ccache=""
 arg_enable_bear=""
@@ -238,6 +247,8 @@ function parse_args() {
       val_used=1
     elif [[ $arg = --relabel-volumes ]]; then
       arg_relabel_volumes="1"
+    elif [[ $arg = --disable-labeling ]]; then
+      arg_disable_labeling="1"
     elif [[ $arg = --enable-ccache ]]; then
       arg_enable_ccache="1"
     elif [[ $arg = --enable-bear ]]; then
