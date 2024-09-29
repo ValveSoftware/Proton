@@ -893,6 +893,11 @@ static DWORD WINAPI initialize_vr_data(void *arg)
         }
     }
 
+    if (vr_initialized) {
+        client_core->Cleanup();
+        vr_initialized = FALSE;
+    }
+
     if ((hwineopenxr = LoadLibraryA("wineopenxr.dll")))
     {
         p__wineopenxr_get_extensions_internal = reinterpret_cast<decltype(p__wineopenxr_get_extensions_internal)>
