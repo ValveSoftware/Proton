@@ -1151,6 +1151,7 @@ def default_compat_config():
                 "202750", #Alan Wake's American Nightmare
                 "255220", #GRID Autosport
                 "44350", #GRID 2
+                "2176900", #Fablecraft
                 ]:
             ret.add("disablenvapi")
 
