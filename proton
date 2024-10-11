@@ -1128,6 +1128,11 @@ def default_compat_config():
             ret.add("heapzeromemory")
 
         if appid in [
+                "71230", #Crazy Taxi
+                ]:
+            ret.add("heaptopdown")
+
+        if appid in [
                 "2630", #Call of Duty 2
                 "1060210", #Disaster Report 4: Summer Memories
                 "414740", #RAID: World War II
@@ -1432,6 +1437,9 @@ class Session:
 
         if "heapzeromemory" in self.compat_config:
             self.env["WINE_HEAP_ZERO_MEMORY"] = "1"
+
+        if "heaptopdown" in self.compat_config:
+            self.env["WINE_HEAP_TOP_DOWN"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
