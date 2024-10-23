@@ -1107,6 +1107,7 @@ def default_compat_config():
                 "714010", #Aimlabs
                 "2249070", #Strip Fighter ZERO
                 "2526380", #Sword of Convallaria
+                "6030", #Star Wars - Jedi Knight II: Jedi Outcast
                 ]:
             ret.add("gamedrive")
 
