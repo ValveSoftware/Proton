@@ -267,6 +267,17 @@ MANUAL_METHODS = {
     "ISteamUtils_GetAPICallResult": lambda ver, abi: abi == 'u',
 }
 
+INITIATE_GAME_CONNECTION_GAMEID_FIX_INTERFACES = [
+    # 004 has a CGameID parameter, but it is passed by value
+    'ISteamUser_SteamUser005',
+    'ISteamUser_SteamUser006',
+    'ISteamUser_SteamUser007',
+    'ISteamUser_SteamUser008',
+    'ISteamUser_SteamUser009',
+    # Interface versions > 009 dropped the parameter
+    # Interface versions > 020 have this function deprecated
+]
+
 
 DEFINE_INTERFACE_VERSION = re.compile(r'^#define\s*(?P<name>STEAM(?:\w*)_VERSION(?:\w*))\s*"(?P<version>.*)"')
 
@@ -767,7 +778,7 @@ class Class:
             # CGameID -> CGameID &
             # Windows side follows the prototype in the header while Linux
             # steamclient treats gameID parameter as pointer
-            if self.full_name == 'ISteamUser_SteamUser008' \
+            if self.full_name in INITIATE_GAME_CONNECTION_GAMEID_FIX_INTERFACES \
                and method.name == 'InitiateGameConnection':
                 types[3] = 'CGameID *'
 
@@ -1024,9 +1035,9 @@ def handle_method_cpp(method, classname, out):
     # CGameID -> CGameID &
     # Windows side follows the prototype in the header while Linux
     # steamclient treats gameID parameter as pointer
-    if klass.full_name == 'ISteamUser_SteamUser008' \
+    if klass.full_name in INITIATE_GAME_CONNECTION_GAMEID_FIX_INTERFACES \
        and method.name == 'InitiateGameConnection':
-        params[3] = f'&{params[3]}'
+        params[3] = f'&{params[3]}' # CGameID -> CGameID &
 
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 

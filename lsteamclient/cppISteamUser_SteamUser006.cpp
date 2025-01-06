@@ -81,7 +81,7 @@ NTSTATUS ISteamUser_SteamUser006_InitiateGameConnection( void *args )
 {
     struct ISteamUser_SteamUser006_InitiateGameConnection_params *params = (struct ISteamUser_SteamUser006_InitiateGameConnection_params *)args;
     struct u_ISteamUser_SteamUser006 *iface = (struct u_ISteamUser_SteamUser006 *)params->linux_side;
-    params->_ret = iface->InitiateGameConnection( params->pBlob, params->cbMaxBlob, params->steamID, params->gameID, params->unIPServer, params->usPortServer, params->bSecure );
+    params->_ret = iface->InitiateGameConnection( params->pBlob, params->cbMaxBlob, params->steamID, &params->gameID, params->unIPServer, params->usPortServer, params->bSecure );
     return 0;
 }
 
