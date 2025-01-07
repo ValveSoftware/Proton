@@ -781,6 +781,8 @@ class Class:
             if self.full_name in INITIATE_GAME_CONNECTION_GAMEID_FIX_INTERFACES \
                and method.name == 'InitiateGameConnection':
                 types[3] = 'CGameID *'
+            if self.full_name in ['ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001', 'ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002']:
+                types[0] = f'CGameID *'
 
             if type(method) is Destructor:
                 out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
@@ -1038,6 +1040,8 @@ def handle_method_cpp(method, classname, out):
     if klass.full_name in INITIATE_GAME_CONNECTION_GAMEID_FIX_INTERFACES \
        and method.name == 'InitiateGameConnection':
         params[3] = f'&{params[3]}' # CGameID -> CGameID &
+    if klass.full_name in ['ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001', 'ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002']:
+        params[0] = f'&{params[0]}' # CGameID -> CGameID &
 
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 

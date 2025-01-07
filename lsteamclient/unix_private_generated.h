@@ -169,28 +169,28 @@ struct u_ISteamMatchmakingServers_SteamMatchMakingServers001
 struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001
 {
 #ifdef __cplusplus
-    virtual uint32_t GetNumStats( CGameID ) = 0;
-    virtual const char * GetStatName( CGameID, uint32_t ) = 0;
-    virtual uint32_t GetStatType( CGameID, const char * ) = 0;
-    virtual uint32_t GetNumAchievements( CGameID ) = 0;
-    virtual const char * GetAchievementName( CGameID, uint32_t ) = 0;
-    virtual uint32_t GetNumGroupAchievements( CGameID ) = 0;
-    virtual const char * GetGroupAchievementName( CGameID, uint32_t ) = 0;
-    virtual int8_t RequestCurrentStats( CGameID ) = 0;
-    virtual int8_t GetStat( CGameID, const char *, int32_t * ) = 0;
-    virtual int8_t GetStat( CGameID, const char *, float * ) = 0;
-    virtual int8_t SetStat( CGameID, const char *, int32_t ) = 0;
-    virtual int8_t SetStat( CGameID, const char *, float ) = 0;
-    virtual int8_t UpdateAvgRateStat( CGameID, const char *, float, double ) = 0;
-    virtual int8_t GetAchievement( CGameID, const char *, int8_t * ) = 0;
-    virtual int8_t GetGroupAchievement( CGameID, const char *, int8_t * ) = 0;
-    virtual int8_t SetAchievement( CGameID, const char * ) = 0;
-    virtual int8_t SetGroupAchievement( CGameID, const char * ) = 0;
-    virtual int8_t StoreStats( CGameID ) = 0;
-    virtual int8_t ClearAchievement( CGameID, const char * ) = 0;
-    virtual int8_t ClearGroupAchievement( CGameID, const char * ) = 0;
-    virtual int32_t GetAchievementIcon( CGameID, const char * ) = 0;
-    virtual const char * GetAchievementDisplayAttribute( CGameID, const char *, const char * ) = 0;
+    virtual uint32_t GetNumStats( CGameID * ) = 0;
+    virtual const char * GetStatName( CGameID *, uint32_t ) = 0;
+    virtual uint32_t GetStatType( CGameID *, const char * ) = 0;
+    virtual uint32_t GetNumAchievements( CGameID * ) = 0;
+    virtual const char * GetAchievementName( CGameID *, uint32_t ) = 0;
+    virtual uint32_t GetNumGroupAchievements( CGameID * ) = 0;
+    virtual const char * GetGroupAchievementName( CGameID *, uint32_t ) = 0;
+    virtual int8_t RequestCurrentStats( CGameID * ) = 0;
+    virtual int8_t GetStat( CGameID *, const char *, int32_t * ) = 0;
+    virtual int8_t GetStat( CGameID *, const char *, float * ) = 0;
+    virtual int8_t SetStat( CGameID *, const char *, int32_t ) = 0;
+    virtual int8_t SetStat( CGameID *, const char *, float ) = 0;
+    virtual int8_t UpdateAvgRateStat( CGameID *, const char *, float, double ) = 0;
+    virtual int8_t GetAchievement( CGameID *, const char *, int8_t * ) = 0;
+    virtual int8_t GetGroupAchievement( CGameID *, const char *, int8_t * ) = 0;
+    virtual int8_t SetAchievement( CGameID *, const char * ) = 0;
+    virtual int8_t SetGroupAchievement( CGameID *, const char * ) = 0;
+    virtual int8_t StoreStats( CGameID * ) = 0;
+    virtual int8_t ClearAchievement( CGameID *, const char * ) = 0;
+    virtual int8_t ClearGroupAchievement( CGameID *, const char * ) = 0;
+    virtual int32_t GetAchievementIcon( CGameID *, const char * ) = 0;
+    virtual const char * GetAchievementDisplayAttribute( CGameID *, const char *, const char * ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -400,24 +400,24 @@ struct u_ISteamFriends_SteamFriends002
 struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002
 {
 #ifdef __cplusplus
-    virtual uint32_t GetNumStats( CGameID ) = 0;
-    virtual const char * GetStatName( CGameID, uint32_t ) = 0;
-    virtual uint32_t GetStatType( CGameID, const char * ) = 0;
-    virtual uint32_t GetNumAchievements( CGameID ) = 0;
-    virtual const char * GetAchievementName( CGameID, uint32_t ) = 0;
-    virtual int8_t RequestCurrentStats( CGameID ) = 0;
-    virtual int8_t GetStat( CGameID, const char *, int32_t * ) = 0;
-    virtual int8_t GetStat( CGameID, const char *, float * ) = 0;
-    virtual int8_t SetStat( CGameID, const char *, int32_t ) = 0;
-    virtual int8_t SetStat( CGameID, const char *, float ) = 0;
-    virtual int8_t UpdateAvgRateStat( CGameID, const char *, float, double ) = 0;
-    virtual int8_t GetAchievement( CGameID, const char *, int8_t * ) = 0;
-    virtual int8_t SetAchievement( CGameID, const char * ) = 0;
-    virtual int8_t ClearAchievement( CGameID, const char * ) = 0;
-    virtual int8_t StoreStats( CGameID ) = 0;
-    virtual int32_t GetAchievementIcon( CGameID, const char * ) = 0;
-    virtual const char * GetAchievementDisplayAttribute( CGameID, const char *, const char * ) = 0;
-    virtual int8_t IndicateAchievementProgress( CGameID, const char *, uint32_t, uint32_t ) = 0;
+    virtual uint32_t GetNumStats( CGameID * ) = 0;
+    virtual const char * GetStatName( CGameID *, uint32_t ) = 0;
+    virtual uint32_t GetStatType( CGameID *, const char * ) = 0;
+    virtual uint32_t GetNumAchievements( CGameID * ) = 0;
+    virtual const char * GetAchievementName( CGameID *, uint32_t ) = 0;
+    virtual int8_t RequestCurrentStats( CGameID * ) = 0;
+    virtual int8_t GetStat( CGameID *, const char *, int32_t * ) = 0;
+    virtual int8_t GetStat( CGameID *, const char *, float * ) = 0;
+    virtual int8_t SetStat( CGameID *, const char *, int32_t ) = 0;
+    virtual int8_t SetStat( CGameID *, const char *, float ) = 0;
+    virtual int8_t UpdateAvgRateStat( CGameID *, const char *, float, double ) = 0;
+    virtual int8_t GetAchievement( CGameID *, const char *, int8_t * ) = 0;
+    virtual int8_t SetAchievement( CGameID *, const char * ) = 0;
+    virtual int8_t ClearAchievement( CGameID *, const char * ) = 0;
+    virtual int8_t StoreStats( CGameID * ) = 0;
+    virtual int32_t GetAchievementIcon( CGameID *, const char * ) = 0;
+    virtual const char * GetAchievementDisplayAttribute( CGameID *, const char *, const char * ) = 0;
+    virtual int8_t IndicateAchievementProgress( CGameID *, const char *, uint32_t, uint32_t ) = 0;
 #endif /* __cplusplus */
 };
 

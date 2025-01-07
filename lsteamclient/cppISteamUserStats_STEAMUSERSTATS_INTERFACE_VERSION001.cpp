@@ -9,7 +9,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats( void *
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetNumStats( params->nGameID );
+    params->_ret = iface->GetNumStats( &params->nGameID );
     return 0;
 }
 
@@ -17,7 +17,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName( void *
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetStatName( params->nGameID, params->iStat );
+    params->_ret = iface->GetStatName( &params->nGameID, params->iStat );
     return 0;
 }
 
@@ -25,7 +25,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType( void *
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetStatType( params->nGameID, params->pchName );
+    params->_ret = iface->GetStatType( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -33,7 +33,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetNumAchievements( params->nGameID );
+    params->_ret = iface->GetNumAchievements( &params->nGameID );
     return 0;
 }
 
@@ -41,7 +41,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetAchievementName( params->nGameID, params->iAchievement );
+    params->_ret = iface->GetAchievementName( &params->nGameID, params->iAchievement );
     return 0;
 }
 
@@ -49,7 +49,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievem
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetNumGroupAchievements( params->nGameID );
+    params->_ret = iface->GetNumGroupAchievements( &params->nGameID );
     return 0;
 }
 
@@ -57,7 +57,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetGroupAchievementName( params->nGameID, params->iAchievement );
+    params->_ret = iface->GetGroupAchievementName( &params->nGameID, params->iAchievement );
     return 0;
 }
 
@@ -65,7 +65,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->RequestCurrentStats( params->nGameID );
+    params->_ret = iface->RequestCurrentStats( &params->nGameID );
     return 0;
 }
 
@@ -73,7 +73,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat( void *args
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetStat( params->nGameID, params->pchName, params->pData );
+    params->_ret = iface->GetStat( &params->nGameID, params->pchName, params->pData );
     return 0;
 }
 
@@ -81,7 +81,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2( void *ar
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetStat( params->nGameID, params->pchName, params->pData );
+    params->_ret = iface->GetStat( &params->nGameID, params->pchName, params->pData );
     return 0;
 }
 
@@ -89,7 +89,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat( void *args
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->SetStat( params->nGameID, params->pchName, params->nData );
+    params->_ret = iface->SetStat( &params->nGameID, params->pchName, params->nData );
     return 0;
 }
 
@@ -97,7 +97,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2( void *ar
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->SetStat( params->nGameID, params->pchName, params->fData );
+    params->_ret = iface->SetStat( &params->nGameID, params->pchName, params->fData );
     return 0;
 }
 
@@ -105,7 +105,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat( 
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->UpdateAvgRateStat( params->nGameID, params->pchName, params->flCountThisSession, params->dSessionLength );
+    params->_ret = iface->UpdateAvgRateStat( &params->nGameID, params->pchName, params->flCountThisSession, params->dSessionLength );
     return 0;
 }
 
@@ -113,7 +113,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement( voi
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetAchievement( params->nGameID, params->pchName, params->pbAchieved );
+    params->_ret = iface->GetAchievement( &params->nGameID, params->pchName, params->pbAchieved );
     return 0;
 }
 
@@ -121,7 +121,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetGroupAchievement( params->nGameID, params->pchName, params->pbAchieved );
+    params->_ret = iface->GetGroupAchievement( &params->nGameID, params->pchName, params->pbAchieved );
     return 0;
 }
 
@@ -129,7 +129,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement( voi
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->SetAchievement( params->nGameID, params->pchName );
+    params->_ret = iface->SetAchievement( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -137,7 +137,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->SetGroupAchievement( params->nGameID, params->pchName );
+    params->_ret = iface->SetGroupAchievement( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -145,7 +145,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats( void *a
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->StoreStats( params->nGameID );
+    params->_ret = iface->StoreStats( &params->nGameID );
     return 0;
 }
 
@@ -153,7 +153,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement( v
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->ClearAchievement( params->nGameID, params->pchName );
+    params->_ret = iface->ClearAchievement( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -161,7 +161,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchieveme
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->ClearGroupAchievement( params->nGameID, params->pchName );
+    params->_ret = iface->ClearGroupAchievement( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -169,7 +169,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetAchievementIcon( params->nGameID, params->pchName );
+    params->_ret = iface->GetAchievementIcon( &params->nGameID, params->pchName );
     return 0;
 }
 
@@ -177,7 +177,7 @@ NTSTATUS ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDispl
 {
     struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute_params *params = (struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute_params *)args;
     struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *iface = (struct u_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *)params->linux_side;
-    params->_ret = iface->GetAchievementDisplayAttribute( params->nGameID, params->pchName, params->pchKey );
+    params->_ret = iface->GetAchievementDisplayAttribute( &params->nGameID, params->pchName, params->pchKey );
     return 0;
 }
 
