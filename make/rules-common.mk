@@ -150,6 +150,7 @@ $(2)_$(3)_ENV = \
 
 ifeq ($(1),wine)
 
+# aarch64 always builds wine with clang directly so build tools do not need to be specified
 $(2)_$(3)_ENV += \
     CROSSCFLAGS="$$($(2)_$(3)_INCFLAGS) $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS)" \
     CROSSLDFLAGS="$$($(2)_$(3)-windows_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$(LDFLAGS)" \
@@ -173,6 +174,10 @@ $(2)_$(3)_ENV += \
     x86_64_CXXFLAGS="$$($(2)_x86_64_INCFLAGS) -std=c++17 $$($(2)_CFLAGS) $$(x86_64_CFLAGS) $$(CFLAGS)" \
     x86_64_LDFLAGS="$$($(2)_x86_64-windows_LIBFLAGS) $$($(2)_x86_64_LIBFLAGS) $$($(2)_LDFLAGS) $$(x86_64_LDFLAGS) $$(LDFLAGS)" \
     x86_64_PKG_CONFIG_LIBDIR="/usr/lib/$$(x86_64-windows_LIBDIR)/pkgconfig:/usr/share/pkgconfig" \
+    aarch64_CFLAGS="$$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)" \
+    aarch64_CPPFLAGS="$$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)" \
+    aarch64_CXXFLAGS="$$($(2)_aarch64_INCFLAGS) -std=c++17 $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)" \
+    aarch64_LDFLAGS="$$($(2)_aarch64_LIBFLAGS) $$($(2)_LDFLAGS) $$(aarch64_LDFLAGS) $$(LDFLAGS)" \
 
 endif
 
@@ -187,17 +192,23 @@ endif
 
 i386-unix_TARGET := i686-linux-gnu
 x86_64-unix_TARGET := x86_64-linux-gnu
+aarch64-unix_TARGET := aarch64-linux-gnu
 i386-windows_TARGET := i686-w64-mingw32
 x86_64-windows_TARGET := x86_64-w64-mingw32
+aarch64-windows_TARGET := arm64ec-w64-mingw32
 
 i386-unix_LIBDIR := i386-linux-gnu
 x86_64-unix_LIBDIR := x86_64-linux-gnu
+aarch64-unix_LIBDIR := aarch64-linux-gnu
 i386-windows_LIBDIR := i386-w64-mingw32
 x86_64-windows_LIBDIR := x86_64-w64-mingw32
+aarch64-windows_LIBDIR := arm64ec-w64-mingw32
 
 $(OBJ)/.%-i386-post-build:
 	touch $@
 $(OBJ)/.%-x86_64-post-build:
+	touch $@
+$(OBJ)/.%-aarch64-post-build:
 	touch $@
 
 rules-common = $(call create-rules-common,$(1),$(call toupper,$(1)),$(2),$(3))

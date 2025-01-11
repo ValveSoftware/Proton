@@ -68,6 +68,7 @@ endef
 
 i386_MESON_CPU := x86
 x86_64_MESON_CPU := x86_64
+aarch64_MESON_CPU := aarch64
 
 unix_MESON_SYSTEM := linux
 windows_MESON_SYSTEM := windows
