@@ -121,7 +121,7 @@ def make_default_pfx(default_pfx_dir, dist_dir):
     local_env = dict(os.environ)
     libdir = dist_dir + '/lib/'
 
-    ld_path = ':'.join([libdir + "x86_64-linux-gnu", libdir + "i386-linux-gnu"])
+    ld_path = ':'.join([libdir + "x86_64-linux-gnu", libdir + "aarch64-linux-gnu", libdir + "i386-linux-gnu"])
     local_env["LD_LIBRARY_PATH"] = ld_path
     local_env["WINEPREFIX"] = default_pfx_dir
     local_env["WINEDEBUG"] = "-all"

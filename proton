@@ -86,6 +86,8 @@ def file_is_wine_builtin_dll(path):
                     '/lib/wine/i386-windows',
                     '/lib/wine/x86_64-unix',
                     '/lib/wine/x86_64-windows',
+                    '/lib/wine/aarch64-unix',
+                    '/lib/wine/aarch64-windows',
                     # old paths
                     '/lib/wine',
                     '/lib/wine/fakedlls',
@@ -530,7 +532,12 @@ class Proton:
         self.wineserver_bin = self.bin_dir + "wineserver"
         self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
 
-        if os.environ.get("PROTON_USE_WOW64", None) == "1" or not file_exists(self.wine_bin, follow_symlinks=True):
+        if os.environ.get("PROTON_USE_ARM64", None) == "1" or platform.machine() == 'aarch64':
+            self.bin_dir = self.path("files/bin-arm64/")
+            self.wine_bin = self.bin_dir + "wine"
+            self.wine64_bin = self.bin_dir + "wine"
+            self.wineserver_bin = self.bin_dir + "wineserver"
+        elif os.environ.get("PROTON_USE_WOW64", None) == "1" or not file_exists(self.wine_bin, follow_symlinks=True):
             self.bin_dir = self.path("files/bin-wow64/")
             self.wine_bin = self.bin_dir + "wine"
             self.wine64_bin = self.bin_dir + "wine"
@@ -779,7 +786,9 @@ class CompatData:
     def pfx_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
-            if os.path.dirname(contents).endswith(('/lib/wine/i386-unix', '/lib/wine/i386-windows', '/lib/wine/x86_64-unix', '/lib/wine/x86_64-windows',
+            if os.path.dirname(contents).endswith(('/lib/wine/i386-unix', '/lib/wine/i386-windows',
+                                                   '/lib/wine/x86_64-unix', '/lib/wine/x86_64-windows',
+                                                   '/lib/wine/aarch64-unix', '/lib/wine/aarch64-windows',
                                                    # old paths:
                                                    '/lib64/wine/x86_64-unix', '/lib64/wine/x86_64-windows')):
                 # wine builtin dll
@@ -1533,11 +1542,12 @@ class Session:
             # Allow wine to restore this when calling an external app.
             self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
 
-        prepend_to_env_str(self.env, ld_path_var, g_proton.lib_dir + "x86_64-linux-gnu:" + g_proton.lib_dir + "i386-linux-gnu", ":")
+        ld_library_path = [g_proton.lib_dir + "x86_64-linux-gnu", g_proton.lib_dir + "aarch64-linux-gnu", g_proton.lib_dir + "i386-linux-gnu"]
+        prepend_to_env_str(self.env, ld_path_var, ':'.join(ld_library_path), ":")
 
         self.env["WINEDLLPATH"] = ':'.join([g_proton.lib_dir + "vkd3d", g_proton.lib_dir + "wine"])
 
-        self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib_dir + "x86_64-linux-gnu/gstreamer-1.0" + ":" + g_proton.lib_dir + "i386-linux-gnu/gstreamer-1.0"
+        self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = ':'.join([lib + "/gstreamer-1.0" for lib in ld_library_path])
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
