@@ -49,21 +49,35 @@ dependency_command() {
 CONTAINER_MOUNT_OPTS=""
 
 check_container_engine() {
-    stat "Trying $1."
-    if ! cmd $1 run --rm $2; then
-        info "$1 is unable to run the container."
+    # Check if we're actually running Podman masquerading as Docker
+    if [ "$1" = "docker" ] && [ -f "$(which docker)" ]; then
+        if cat "$(which docker)" | grep -q "bin/podman"; then
+            info "Detected Docker command is actually Podman"
+            # return 1 to force use podman directly
+            return 1
+        else
+            ENGINE="$1"
+        fi
+    else
+        ENGINE="$1"
+    fi
+
+    stat "Trying $ENGINE."
+
+    if ! cmd "$ENGINE" run --rm "$2"; then
+        info "$ENGINE is unable to run the container."
         return 1
     fi
 
     touch permission_check
-    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
-                                            --rm $2 \
-                                            stat --format "%u" /test/permission_check 2>&1)"
+    local inner_uid="$($ENGINE run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+                                        --rm "$2" \
+                                        stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
     if [[ $inner_uid == *"Permission denied"* ]]; then
         err "The container cannot access files. Are you using SELinux?"
-        die "Please read README.md and check your $1 setup works."
+        die "Please read README.md and check your $ENGINE setup works."
     elif [ "$inner_uid" -eq 0 ]; then
         # namespace maps the user as root or the build is performed as host's root
         ROOTLESS_CONTAINER=1
@@ -71,7 +85,7 @@ check_container_engine() {
         ROOTLESS_CONTAINER=0
     else
         err "File owner's UID doesn't map to 0 or $(id -u) in the container."
-        die "Don't know how to map permissions. Please check your $1 setup."
+        die "Don't know how to map permissions. Please check your $ENGINE setup."
     fi
 }
 
