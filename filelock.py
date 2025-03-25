@@ -294,7 +294,7 @@ class BaseFileLock(object):
         """
         Releases the file lock.
 
-        Please note, that the lock is only completly released, if the lock
+        Please note, that the lock is only completely released, if the lock
         counter is 0.
 
         Also note, that the lock file itself is not automatically deleted.

@@ -717,12 +717,12 @@ inline bool CSteamID::IsValid() const
 // generic invalid CSteamID
 #define k_steamIDNil CSteamID()
 
-// This steamID comes from a user game connection to an out of date GS that hasnt implemented the protocol
+// This steamID comes from a user game connection to an out of date GS that hasn't implemented the protocol
 // to provide its steamID
 #define k_steamIDOutofDateGS CSteamID( 0, 0, k_EUniverseInvalid, k_EAccountTypeInvalid )
 // This steamID comes from a user game connection to an sv_lan GS
 #define k_steamIDLanModeGS CSteamID( 0, 0, k_EUniversePublic, k_EAccountTypeInvalid )
-// This steamID can come from a user game connection to a GS that has just booted but hasnt yet even initialized
+// This steamID can come from a user game connection to a GS that has just booted but hasn't yet even initialized
 // its steam3 component and started logging on.
 #define k_steamIDNotInitYetGS CSteamID( 1, 0, k_EUniverseInvalid, k_EAccountTypeInvalid )
 // This steamID can come from a user game connection to a GS that isn't using the steam authentication system but still

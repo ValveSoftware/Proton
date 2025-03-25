@@ -78,7 +78,7 @@ public:
 	virtual void TrackAppUsageEvent( CGameID gameID, int eAppUsageEvent, const char *pchExtraInfo = "" ) = 0;
 
 	// get the local storage folder for current Steam account to write application data, e.g. save games, configs etc.
-	// this will usually be something like "C:\Progam Files\Steam\userdata\<SteamID>\<AppID>\local"
+	// this will usually be something like "C:\Program Files\Steam\userdata\<SteamID>\<AppID>\local"
 	virtual bool GetUserDataFolder( char *pchBuffer, int cubBuffer ) = 0;
 
 	// Starts voice recording. Once started, use GetVoice() to get the data

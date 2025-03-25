@@ -544,7 +544,7 @@ VKD3D_CONFIGURE_ARGS = \
   --without-ncurses \
   SONAME_LIBVULKAN=vulkan-1 \
 
-# LTO is enabled by default, but causes the build to fail. I havent't
+# LTO is enabled by default, but causes the build to fail. I haven't
 # investigated this yet.
 VKD3D_CFLAGS = -fno-lto
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
@@ -1235,7 +1235,7 @@ targets:
 	$(info make                   - create a normal proton build in dist/)
 	$(info make install           - install the proton build locally in $(STEAM_DIR))
 	$(info make deploy            - create a build ready to be uploaded to steamworks in deploy/)
-	$(info make redist            - create an easily sharable proton redistributable in redist/)
+	$(info make redist            - create an easily shareable proton redistributable in redist/)
 	$(info make module=xyz module - build the selected wine dll)
 
 

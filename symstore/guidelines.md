@@ -10,7 +10,7 @@ These minidumps are fully reloadable under Microsoft tools (WinDbg or
 Visual Studio) when the binaries of the Proton system files are made
 available to the debugging tool.
 It's mandatory for reloading a minidump created with a given Proton
-version that the very same Proton system files are made avaiable to
+version that the very same Proton system files are made available to
 the machine running the debugging tool.
 
 If the right version is not installed, the debugging tool will likely

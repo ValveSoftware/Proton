@@ -130,7 +130,7 @@ public:
 
 	// returns the name another user - guaranteed to not be NULL.
 	// same rules as GetFriendPersonaState() apply as to whether or not the user knowns the name of the other user
-	// note that on first joining a lobby, chat room or game server the local user will not known the name of the other users automatically; that information will arrive asyncronously
+	// note that on first joining a lobby, chat room or game server the local user will not known the name of the other users automatically; that information will arrive asynchronously
 	// 
 	virtual const char *GetFriendPersonaName( CSteamID steamIDFriend ) = 0;
 

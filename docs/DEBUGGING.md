@@ -169,7 +169,7 @@ is to set the launch option to:
 
 `PRESSURE_VESSEL_SHELL=instead %command%`
 
-The original coommand is then contained in `$@`, e.g.:
+The original command is then contained in `$@`, e.g.:
 
 ```
 /home/ivyl/.local/share/Steam/steamapps/common/SteamLinuxRuntime_sniper/pressure-vessel/bin/steam-runtime-launcher-interface-0 container-runtime /home/ivyl/.local/share/Steam/steamapps/common/Proton - Experimental/proton waitforexitandrun /home/ivyl/.local/share/Steam/steamapps/common/Game/Game.exe

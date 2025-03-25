@@ -1306,7 +1306,7 @@ def default_compat_config():
 default_cpu_limit = {
     "19900"     :  16,  # Far Cry 2
     "298110"    :  16,  # Far Cry 4
-    "20920"     :  16,  # The Witcher 2: Assassins of Kings Enchanced Edition
+    "20920"     :  16,  # The Witcher 2: Assassins of Kings Enhanced Edition
     "35130"     :  16,  # Lara Croft and the Guardian of Light
     "55150"     :  16,  # Warhammer 40,000: Space Marine
     "204450"    :  16,  # Call of Juarez: Gunslinger
