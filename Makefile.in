@@ -1294,6 +1294,16 @@ $(OVR_x86_64_DIST): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
 
 all-dist: $(OVR_i386_DIST) $(OVR_x86_64_DIST)
 
+ifneq ($(findstring aarch64,$(unix_ARCHS)),)
+OVR_aarch64_DIST := $(DST_LIBDIR)/wine/dxvk/aarch64-windows/openvr_api_dxvk.dll
+
+$(OVR_aarch64_DIST): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_LIBDIR)/wine/dxvk/aarch64-windows
+	cp -af $< $@
+
+all-dist: $(OVR_aarch64_DIST)
+endif
+
 
 ##
 ## default_pfx
