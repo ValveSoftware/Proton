@@ -5,7 +5,9 @@ IMPORTS    = advapi32
 x86_64_MODULE   = vrclient_x64.dll
 x86_64_UNIXLIB  = vrclient_x64.so
 aarch64_MODULE  = vrclient_x64.dll
+arm64ec_MODULE  = vrclient_x64.dll
 aarch64_UNIXLIB = vrclient_x64.so
+arm64ec_UNIXLIB = vrclient_x64.so
 
 EXTRADEFS = -DGNUC
 
