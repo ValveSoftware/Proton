@@ -50,7 +50,7 @@ def make_relative_symlink(target, linkname):
     rel = os.path.relpath(target, os.path.dirname(linkname))
     os.symlink(rel, linkname)
 
-def setup_dll_symlinks(default_pfx_dir, dist_dir):
+def setup_dll_symlinks(default_pfx_dir, dist_dir, arm64):
     skip_dlls = [ 'amd_ags_x64.dll' ]
     for walk_dir, dirs, files in os.walk(default_pfx_dir):
         for file_ in files:
@@ -62,7 +62,7 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                 if bitness == 32:
                     libdir = os.path.join(dist_dir, 'lib/wine/i386-windows')
                 elif bitness == 64:
-                    libdir = os.path.join(dist_dir, 'lib/wine/x86_64-windows')
+                    libdir = os.path.join(dist_dir, f'lib/wine/{"aarch64" if arm64 else "x86_64"}-windows')
                 else:
                     continue
                 if os.path.exists(os.path.join(libdir, file_)):
@@ -117,23 +117,26 @@ def fixup_drive_links(default_pfx_dir):
             if ":" in dir_:
                 os.remove(os.path.join(walk_dir, dir_))
 
-def make_default_pfx(default_pfx_dir, dist_dir):
+def make_default_pfx(default_pfx_dir, dist_dir, arm64):
     local_env = dict(os.environ)
     libdir = dist_dir + '/lib/'
 
-    ld_path = ':'.join([libdir + "x86_64-linux-gnu", libdir + "aarch64-linux-gnu", libdir + "i386-linux-gnu"])
+    system_libdir = ["/usr/aarch64-linux-gnu/lib"] if arm64 else []
+    ld_path = ':'.join([libdir + "x86_64-linux-gnu", libdir + "aarch64-linux-gnu", libdir + "i386-linux-gnu"] + system_libdir)
     local_env["LD_LIBRARY_PATH"] = ld_path
     local_env["WINEPREFIX"] = default_pfx_dir
     local_env["WINEDEBUG"] = "-all"
     local_env["WINEDLLPATH"] = libdir + "vkd3d"
     runtime_args = []
 
+
+    bin_dir = os.path.join(dist_dir, 'bin-arm64' if arm64 else 'bin')
     subprocess.run(runtime_args + ["/bin/bash", "-c",
-        os.path.join(dist_dir, 'bin', 'wine') + " wineboot && " +
-        os.path.join(dist_dir, 'bin', 'wineserver') + " -w"],
+        os.path.join(bin_dir, 'wine') + " wineboot && " +
+        os.path.join(bin_dir, 'wineserver') + " -w"],
 
         env=local_env, check=True)
-    setup_dll_symlinks(default_pfx_dir, dist_dir)
+    setup_dll_symlinks(default_pfx_dir, dist_dir, arm64)
     fixup_drive_links(default_pfx_dir)
 
     filter_registry(os.path.join(default_pfx_dir, 'user.reg'))
@@ -141,4 +144,4 @@ def make_default_pfx(default_pfx_dir, dist_dir):
 
 if __name__ == '__main__':
     import sys
-    make_default_pfx(sys.argv[1], sys.argv[2])
+    make_default_pfx(sys.argv[1], sys.argv[2], int(sys.argv[3]) == 1)

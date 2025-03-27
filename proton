@@ -536,6 +536,7 @@ class Proton:
 
         if os.environ.get("PROTON_USE_ARM64", None) == "1" or platform.machine() == 'aarch64':
             self.host_pe_arch = "aarch64-windows"
+            self.default_pfx_dir = self.path("files/share/default_pfx_arm64/")
             self.bin_dir = self.path("files/bin-arm64/")
             self.wine_bin = self.bin_dir + "wine"
             self.wine64_bin = self.bin_dir + "wine"
