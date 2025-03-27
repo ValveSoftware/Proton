@@ -69,3 +69,6 @@
 [submodule "vosk-api"]
 	path = vosk-api
 	url = https://github.com/alphacep/vosk-api
+[submodule "FEX"]
+	path = FEX
+	url = https://github.com/FEX-Emu/FEX/
