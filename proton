@@ -1080,7 +1080,7 @@ class CompatData:
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 makedirs(self.prefix_dir + "/drive_c/openxr")
-                try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", "drive_c/openxr",
+                try_copy(g_proton.dist_dir + "share/openxr/wineopenxr64.json", "drive_c/openxr",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 if use_wined3d:

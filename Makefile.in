@@ -426,13 +426,11 @@ $(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
 $(eval $(call rules-makedep,wineopenxr,x86_64))
 $(eval $(call rules-makedep,wineopenxr,aarch64))
 
-DIST_WINEOPENXR64_JSON := $(DIST_PREFIX)/drive_c/openxr/wineopenxr64.json
+WINEOPENXR64_JSON := $(DST_DIR)/share/openxr/wineopenxr64.json
 $(WINEOPENXR_SRC)/wineopenxr64.json: wineopenxr
-$(DIST_WINEOPENXR64_JSON): $(WINEOPENXR_SRC)/wineopenxr64.json default_pfx
+$(WINEOPENXR64_JSON): $(WINEOPENXR_SRC)/wineopenxr64.json
 	mkdir -p $(dir $@)
 	cp -a $< $@
-
-all-dist: $(DIST_WINEOPENXR64_JSON)
 
 
 ##
@@ -1269,7 +1267,7 @@ all-dist: $(OVR_i386_DIST) $(OVR_x86_64_DIST)
 ## default_pfx
 ##
 
-default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr dxvk dxvk-nvapi vkd3d-proton
+default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr $(WINEOPENXR64_JSON) dxvk dxvk-nvapi vkd3d-proton
 	find $(DST_LIBDIR)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 ifneq ($(findstring x86_64,$(unix_ARCHS)),)
