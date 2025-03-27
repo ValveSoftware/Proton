@@ -842,6 +842,37 @@ $(OBJ)/.vkd3d-proton-post-source:
 
 
 ##
+## FEX
+##
+
+ifneq ($(findstring aarch64,$(unix_ARCHS)),)
+FEX_CMAKE_ARGS = \
+  -DENABLE_FEXCORE_PROFILER=True -DCMAKE_BUILD_TYPE=Release -DENABLE_LTO=False \
+  -DBUILD_TESTS=False -DOVERRIDE_VERSION=0000
+
+FEX_ARM64EC_CMAKE_ARGS = \
+  $(FEX_CMAKE_ARGS) \
+  -DCMAKE_TOOLCHAIN_FILE=$(FEX_ARM64EC_SRC)/Data/CMake/toolchain_mingw.cmake \
+  -DCMAKE_INSTALL_LIBDIR=$(FEX_ARM64EC_aarch64_DST)/lib/wine/aarch64-windows \
+  -DMINGW_TRIPLE=arm64ec-w64-mingw32
+
+$(eval $(call rules-source,fex-arm64ec,$(SRCDIR)/FEX))
+$(eval $(call rules-cmake,fex-arm64ec,aarch64,windows))
+
+FEX_WOW64_CMAKE_ARGS = \
+  $(FEX_CMAKE_ARGS) \
+  -DCMAKE_TOOLCHAIN_FILE=$(FEX_WOW64_SRC)/Data/CMake/toolchain_mingw.cmake \
+  -DCMAKE_INSTALL_LIBDIR=$(FEX_WOW64_aarch64_DST)/lib/wine/aarch64-windows \
+  -DMINGW_TRIPLE=aarch64-w64-mingw32
+
+$(eval $(call rules-source,fex-wow64,$(SRCDIR)/FEX))
+$(eval $(call rules-cmake,fex-wow64,aarch64,windows))
+
+default_pfx: fex-arm64ec fex-wow64
+endif
+
+
+##
 ## BattlEye Bridge
 ##
 
