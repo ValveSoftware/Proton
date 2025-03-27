@@ -734,7 +734,6 @@ DXVK_NVAPI_aarch64_MESON_ARGS = --bindir=$(DXVK_NVAPI_aarch64_DST)/lib/wine/nvap
 $(eval $(call rules-source,dxvk-nvapi,$(SRCDIR)/dxvk-nvapi))
 $(eval $(call rules-meson,dxvk-nvapi,i386,windows))
 $(eval $(call rules-meson,dxvk-nvapi,x86_64,windows))
-$(eval $(call rules-meson,dxvk-nvapi,aarch64,windows))
 
 $(OBJ)/.dxvk-nvapi-post-source:
 	mkdir -p $(DST_LIBDIR)/wine/nvapi
