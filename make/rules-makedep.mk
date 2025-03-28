@@ -50,13 +50,13 @@ $$(OBJ)/.$(1)-$(3)-configure: $$(OBJ)/.wine-$$(HOST_ARCH)-tools
 	    -e '/^aarch64_CFLAGS/c aarch64_CFLAGS = $$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
 	    -e '/^aarch64_CPPFLAGS/c aarch64_CPPFLAGS = $$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
 	    -e '/^aarch64_CXXFLAGS/c aarch64_CXXFLAGS = $$($(2)_aarch64_INCFLAGS) -std=c++17 $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
-	    -e '/^aarch64_LDFLAGS/c aarch64_LDFLAGS = $$($(2)_aarch64_LIBFLAGS) $$($(2)_LDFLAGS) $$(aarch64_LDFLAGS) $$(LDFLAGS)' \
+	    -e '/^aarch64_LDFLAGS/c aarch64_LDFLAGS = $$($(2)_aarch64_LIBFLAGS) $$(aarch64_LDFLAGS) $$(LDFLAGS)' \
 	    \
 	    -e '/^arm64ec_CC/a arm64ec_CXX = $$(aarch64-windows_TARGET)-g++' \
 	    -e '/^arm64ec_CFLAGS/c arm64ec_CFLAGS = $$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
 	    -e '/^arm64ec_CPPFLAGS/c arm64ec_CPPFLAGS = $$($(2)_aarch64_INCFLAGS) $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
 	    -e '/^arm64ec_CXXFLAGS/c arm64ec_CXXFLAGS = $$($(2)_aarch64_INCFLAGS) -std=c++17 $$($(2)_CFLAGS) $$(aarch64_CFLAGS) $$(CFLAGS)' \
-	    -e '/^arm64ec_LDFLAGS/c arm64ec_LDFLAGS = $$($(2)_aarch64_LIBFLAGS) $$($(2)_LDFLAGS) $$(aarch64_LDFLAGS) $$(LDFLAGS)' \
+	    -e '/^arm64ec_LDFLAGS/c arm64ec_LDFLAGS = $$($(2)_aarch64_LIBFLAGS) $$(aarch64_LDFLAGS) $$(LDFLAGS)' \
 	    \
 	    $$(WINE_$(3)_OBJ)/Makefile > $$($(2)_$(3)_OBJ)/Makefile
 
