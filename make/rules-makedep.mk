@@ -7,6 +7,16 @@ define create-rules-makedep
 $(call create-rules-common,$(1),$(2),$(3),unix)
 ifneq ($(findstring $(3)-unix,$(ARCHS)),)
 
+$(2)_x86_64_DEPS := $$(call toupper,$$($(2)_DEPENDS)) $$(call toupper,$$($(2)_x86_64_DEPENDS))
+$(2)_x86_64_INCFLAGS = $$(foreach d,$$($(2)_x86_64_DEPS),-I$$($$(d)_x86_64_INCDIR))
+$(2)_x86_64-windows_LIBFLAGS = $$(foreach d,$$($(2)_x86_64_DEPS),-L$$($$(d)_x86_64_LIBDIR)/$$(x86_64-windows_LIBDIR))
+$(2)_i386_DEPS := $$(call toupper,$$($(2)_DEPENDS)) $$(call toupper,$$($(2)_i386_DEPENDS))
+$(2)_i386_INCFLAGS = $$(foreach d,$$($(2)_i386_DEPS),-I$$($$(d)_i386_INCDIR))
+$(2)_i386-windows_LIBFLAGS = $$(foreach d,$$($(2)_i386_DEPS),-L$$($$(d)_i386_LIBDIR)/$$(i386-windows_LIBDIR))
+$(2)_aarch64_DEPS := $$(call toupper,$$($(2)_DEPENDS)) $$(call toupper,$$($(2)_aarch64_DEPENDS))
+$(2)_aarch64_INCFLAGS = $$(foreach d,$$($(2)_aarch64_DEPS),-I$$($$(d)_aarch64_INCDIR))
+$(2)_aarch64-windows_LIBFLAGS = $$(foreach d,$$($(2)_aarch64_DEPS),-L$$($$(d)_aarch64_LIBDIR)/$$(aarch64-windows_LIBDIR))
+
 $$(OBJ)/.$(1)-$(3)-configure: $$(OBJ)/.wine-$$(HOST_ARCH)-tools
 	@echo ":: configuring $(1)-$(3)..." >&2
 
@@ -22,7 +32,7 @@ $$(OBJ)/.$(1)-$(3)-configure: $$(OBJ)/.wine-$$(HOST_ARCH)-tools
 	    -e '/^CFLAGS/c CFLAGS = $$($(2)_$(3)_INCFLAGS) $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS)' \
 	    -e '/^CPPFLAGS/c CPPFLAGS = $$($(2)_$(3)_INCFLAGS) $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS)' \
 	    -e '/^CXXFLAGS/c CXXFLAGS = $$($(2)_$(3)_INCFLAGS) -std=c++17 $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS)' \
-	    -e '/^LDFLAGS/c LDFLAGS = $$($(2)_$(3)-$(4)_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$(LDFLAGS) -L$$(WINE_$(3)_LIBDIR)/wine/$(3)-unix -l:ntdll.so' \
+	    -e '/^LDFLAGS/c LDFLAGS = $$($(2)_$(3)-unix_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$(LDFLAGS)' \
 	    \
 	    -e '/^x86_64_CC/a x86_64_CXX = $$(x86_64-windows_TARGET)-g++' \
 	    -e '/^x86_64_CFLAGS/c x86_64_CFLAGS = $$($(2)_x86_64_INCFLAGS) $$($(2)_CFLAGS) $$(x86_64_CFLAGS) $$(CFLAGS)' \
