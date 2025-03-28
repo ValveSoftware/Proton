@@ -4,6 +4,7 @@
 #   $(3): build target arch
 #   $(4): build target os
 define create-rules-common
+ifneq ($$(findstring $(3)-$(4),$$(ARCHS)),)
 $(2)_$(3)_OBJ := $$(OBJ)/obj-$(1)-$(3)
 $(2)_$(3)_DST := $$(OBJ)/dst-$(1)-$(3)
 $(2)_$(3)_DEPS := $$(call toupper,$$($(2)_DEPENDS)) $$(call toupper,$$($(2)_$(3)_DEPENDS))
@@ -45,16 +46,6 @@ all-$(3)-build $(1)-build: $(1)-$(3)-build
 all-build: $(1)-build
 .PHONY: all-build
 
-
-ifeq ($$(findstring $(3)-$(4),$$(ARCHS)),)
-$$(OBJ)/.$(1)-$(3)-configure:
-	touch $$@
-$$(OBJ)/.$(1)-$(3)-build:
-	touch $$@
-$$(OBJ)/.$(1)-$(3)-dist:
-	touch $$@
-else
-
 $$(OBJ)/.$(1)-$(3)-dist: $$(OBJ)/.$(1)-$(3)-build
 $$(OBJ)/.$(1)-$(3)-dist: $$(OBJ)/.$(1)-$(3)-post-build
 
@@ -84,8 +75,6 @@ else
 	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR)/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n3 $(OBJCOPY) $(OBJCOPY_FLAGS) --set-section-flags .text=contents,alloc,load,readonly,code
 	touch $$@
-endif
-
 endif
 
 $(1)-$(3)-dist: $$(OBJ)/.$(1)-$(3)-dist
@@ -181,6 +170,7 @@ $(2)_$(3)_ENV += \
 
 endif
 
+endif
 endef
 
 ifneq ($(UNSTRIPPED_BUILD),)
