@@ -117,7 +117,8 @@ function configure() {
   if [[ -n $build_name ]]; then
     info "Configuring with build name: $build_name"
   else
-    build_name="$DEFAULT_BUILD_NAME" info "No build name specified, using default: $build_name"
+    build_name="$DEFAULT_BUILD_NAME"
+    info "No build name specified, using default: $build_name"
   fi
 
   if [[ ${build_name,,} == *proton* ]]; then
