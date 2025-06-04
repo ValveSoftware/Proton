@@ -180,7 +180,7 @@ static int load_vrclient(void)
     return vrclient_loaded;
 }
 
-void * __stdcall HmdSystemFactory(const char *name, int *return_code)
+void *CDECL HmdSystemFactory(const char *name, int *return_code)
 {
     struct vrclient_HmdSystemFactory_params params = {.name = name, .return_code = return_code};
     TRACE("name: %s, return_code: %p\n", name, return_code);
@@ -189,7 +189,7 @@ void * __stdcall HmdSystemFactory(const char *name, int *return_code)
     return create_win_interface( name, params._ret );
 }
 
-void * __stdcall VRClientCoreFactory(const char *name, int *return_code)
+void *CDECL VRClientCoreFactory(const char *name, int *return_code)
 {
     struct vrclient_VRClientCoreFactory_params params = {.name = name, .return_code = return_code};
     TRACE("name: %s, return_code: %p\n", name, return_code);
