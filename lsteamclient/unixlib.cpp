@@ -941,7 +941,7 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
     {
         if (strncmp( src, file_prot, 7 ) != 0)
         {
-            strcpy( dst, src );
+            strncat( dst, src, sizeof(buffer) - 1 );
             goto done;
         }
 
