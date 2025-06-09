@@ -11,6 +11,8 @@ import os
 import re
 
 SDK_VERSIONS = [
+    "162",
+    "161",
     "160",
     "159",
     "158",
@@ -1175,7 +1177,7 @@ def handle_class(klass):
 
 
 def parse(sources, sdkver, abi):
-    args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
+    args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/', '-I/usr/include/x86_64-linux-gnu/']
     if abi[0] == 'w':
         args += ["-D_WIN32", "-U__linux__"]
         args += ["-fms-extensions", "-mms-bitfields"]

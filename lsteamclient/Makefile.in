@@ -96,6 +96,7 @@ SOURCES = \
 	cppISteamFriends_SteamFriends014.cpp \
 	cppISteamFriends_SteamFriends015.cpp \
 	cppISteamFriends_SteamFriends017.cpp \
+	cppISteamFriends_SteamFriends018.cpp \
 	cppISteamGameCoordinator_SteamGameCoordinator001.cpp \
 	cppISteamGameSearch_SteamMatchGameSearch001.cpp \
 	cppISteamGameServer_SteamGameServer002.cpp \
@@ -165,6 +166,7 @@ SOURCES = \
 	cppISteamParties_SteamParties002.cpp \
 	cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001.cpp \
 	cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002.cpp \
+	cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003.cpp \
 	cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001.cpp \
 	cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002.cpp \
 	cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003.cpp \
@@ -184,6 +186,7 @@ SOURCES = \
 	cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002.cpp \
 	cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003.cpp \
 	cppISteamTimeline_STEAMTIMELINE_INTERFACE_V001.cpp \
+	cppISteamTimeline_STEAMTIMELINE_INTERFACE_V004.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION001.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION002.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION003.cpp \
@@ -202,6 +205,7 @@ SOURCES = \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION017.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION018.cpp \
 	cppISteamUGC_STEAMUGC_INTERFACE_VERSION020.cpp \
+	cppISteamUGC_STEAMUGC_INTERFACE_VERSION021.cpp \
 	cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.cpp \
 	cppISteamUser_SteamUser004.cpp \
 	cppISteamUser_SteamUser005.cpp \
@@ -235,6 +239,7 @@ SOURCES = \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010.cpp \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011.cpp \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012.cpp \
+	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013.cpp \
 	cppISteamUtils_SteamUtils002.cpp \
 	cppISteamUtils_SteamUtils004.cpp \
 	cppISteamUtils_SteamUtils005.cpp \

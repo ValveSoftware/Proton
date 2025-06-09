@@ -1191,6 +1191,15 @@ def default_compat_config():
                 "2249070", #Strip Fighter ZERO
                 "1845910", #Dragon Age: The Veilguard
                 "6030", #Star Wars - Jedi Knight II: Jedi Outcast
+                "2842040", #Star Wars Outlaws
+                "245300", #Disney Epic Mickey 2: The Power of Two
+                "2594920", #Atelier Resleriana: Forgotten Alchemy and the Polar Night Liberator
+                "3209830", #Stronghold Crusader: Definitive Edition Demo
+                "3024040", #Stronghold Crusader: Definitive Edition
+                "2433890", #Stronghold: Definitive Edition Demo
+                "2140020", #Stronghold: Definitive Edition
+                "3314070", #The Sims 2 Legacy Collection
+                "2709570", #Supermarket Together
                 "2564460", #Banter
                 ]:
             ret.add("gamedrive")

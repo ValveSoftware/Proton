@@ -18251,6 +18251,1535 @@ struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION020(void *u_
     return r;
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest, 32)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag, 28)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName, 28)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview, 40)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag, 36)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2, 28)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData, 32)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors, 24)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems, 8)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo, 28)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads, 8)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems, 4)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency, 20)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA, 4)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus, 4)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally, 16)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder, 12)
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unAccountID = unAccountID,
+        .eListType = eListType,
+        .eMatchingUGCType = eMatchingUGCType,
+        .eSortOrder = eSortOrder,
+        .nCreatorAppID = nCreatorAppID,
+        .nConsumerAppID = nConsumerAppID,
+        .unPage = unPage,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eQueryType = eQueryType,
+        .eMatchingeMatchingUGCTypeFileType = eMatchingeMatchingUGCTypeFileType,
+        .nCreatorAppID = nCreatorAppID,
+        .nConsumerAppID = nConsumerAppID,
+        .unPage = unPage,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2_params params =
+    {
+        .linux_side = _this->u_iface,
+        .eQueryType = eQueryType,
+        .eMatchingeMatchingUGCTypeFileType = eMatchingeMatchingUGCTypeFileType,
+        .nCreatorAppID = nCreatorAppID,
+        .nConsumerAppID = nConsumerAppID,
+        .pchCursor = pchCursor,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchCursor, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileID = pvecPublishedFileID,
+        .unNumPublishedFileIDs = unNumPublishedFileIDs,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, w_SteamUGCDetails_t_160 *pDetails)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pDetails = pDetails,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .indexTag = indexTag,
+        .pchValue = pchValue,
+        .cchValueSize = cchValueSize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .indexTag = indexTag,
+        .pchValue = pchValue,
+        .cchValueSize = cchValueSize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pchURL = pchURL,
+        .cchURLSize = cchURLSize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pchMetadata = pchMetadata,
+        .cchMetadatasize = cchMetadatasize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pvecPublishedFileID = pvecPublishedFileID,
+        .cMaxEntries = cMaxEntries,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .eStatType = eStatType,
+        .pStatValue = pStatValue,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .previewIndex = previewIndex,
+        .pchURLOrVideoID = pchURLOrVideoID,
+        .cchURLSize = cchURLSize,
+        .pchOriginalFileName = pchOriginalFileName,
+        .cchOriginalFileNameSize = cchOriginalFileNameSize,
+        .pPreviewType = pPreviewType,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .keyValueTagIndex = keyValueTagIndex,
+        .pchKey = pchKey,
+        .cchKeySize = cchKeySize,
+        .pchValue = pchValue,
+        .cchValueSize = cchValueSize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+        .cchValueSize = cchValueSize,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t versionIndex, char *pchGameBranchMin, char *pchGameBranchMax, uint32_t cchGameBranchSize)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .versionIndex = versionIndex,
+        .pchGameBranchMin = pchGameBranchMin,
+        .pchGameBranchMax = pchGameBranchMax,
+        .cchGameBranchSize = cchGameBranchSize,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pvecDescriptors = pvecDescriptors,
+        .cMaxEntries = cMaxEntries,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pTagName = pTagName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const w_SteamParamStringArray_t *pTagGroups)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pTagGroups = pTagGroups,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pTagName = pTagName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pTagName, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnOnlyIDs)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnOnlyIDs = bReturnOnlyIDs,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnKeyValueTags)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnKeyValueTags = bReturnKeyValueTags,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnLongDescription)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnLongDescription = bReturnLongDescription,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnMetadata)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnMetadata = bReturnMetadata,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnChildren)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnChildren = bReturnChildren,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnAdditionalPreviews)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnAdditionalPreviews = bReturnAdditionalPreviews,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, int8_t bReturnTotalOnly)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bReturnTotalOnly = bReturnTotalOnly,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .unDays = unDays,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchLanguage = pchLanguage,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .unMaxAgeSeconds = unMaxAgeSeconds,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery(struct w_steam_iface *_this, uint64_t handle, int8_t bAdminQuery)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bAdminQuery = bAdminQuery,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pMatchCloudFileName = pMatchCloudFileName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pMatchCloudFileName, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, int8_t bMatchAnyTag)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bMatchAnyTag = bMatchAnyTag,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pSearchText = pSearchText,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pSearchText, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .unDays = unDays,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .rtStart = rtStart,
+        .rtEnd = rtEnd,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .rtStart = rtStart,
+        .rtEnd = rtEnd,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pKey = pKey,
+        .pValue = pValue,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pKey, -1);
+    IsBadStringPtrA(pValue, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .unMaxAgeSeconds = unMaxAgeSeconds,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nConsumerAppId = nConsumerAppId,
+        .eFileType = eFileType,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nConsumerAppId = nConsumerAppId,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchTitle = pchTitle,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchTitle, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchDescription = pchDescription,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchDescription, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchLanguage = pchLanguage,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchLanguage, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchMetaData = pchMetaData,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchMetaData, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .eVisibility = eVisibility,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const w_SteamParamStringArray_t *pTags, int8_t bAllowAdminTags)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .updateHandle = updateHandle,
+        .pTags = pTags,
+        .bAllowAdminTags = bAllowAdminTags,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pszContentFolder = pszContentFolder,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszContentFolder, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pszPreviewFile = pszPreviewFile,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, int8_t bAllowLegacyUpload)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .bAllowLegacyUpload = bAllowLegacyUpload,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchKey = pchKey,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchKey = pchKey,
+        .pchValue = pchValue,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchKey, -1);
+    IsBadStringPtrA(pchValue, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pszPreviewFile = pszPreviewFile,
+        .type = type,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pszVideoID = pszVideoID,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pszPreviewFile = pszPreviewFile,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszPreviewFile, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+        .pszVideoID = pszVideoID,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszVideoID, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .index = index,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .descid = descid,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .descid = descid,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions(struct w_steam_iface *_this, uint64_t handle, const char *pszGameBranchMin, const char *pszGameBranchMax)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pszGameBranchMin = pszGameBranchMin,
+        .pszGameBranchMax = pszGameBranchMax,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszGameBranchMin, -1);
+    IsBadStringPtrA(pszGameBranchMax, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .pchChangeNote = pchChangeNote,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchChangeNote, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress_params params =
+    {
+        .linux_side = _this->u_iface,
+        .handle = handle,
+        .punBytesProcessed = punBytesProcessed,
+        .punBytesTotal = punBytesTotal,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, int8_t bVoteUp)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .bVoteUp = bVoteUp,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nAppId = nAppId,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nAppId = nAppId,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems(struct w_steam_iface *_this, int8_t bIncludeLocallyDisabled)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bIncludeLocallyDisabled = bIncludeLocallyDisabled,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries, int8_t bIncludeLocallyDisabled)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileID = pvecPublishedFileID,
+        .cMaxEntries = cMaxEntries,
+        .bIncludeLocallyDisabled = bIncludeLocallyDisabled,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .punSizeOnDisk = punSizeOnDisk,
+        .pchFolder = pchFolder,
+        .cchFolderSize = cchFolderSize,
+        .punTimeStamp = punTimeStamp,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .punBytesDownloaded = punBytesDownloaded,
+        .punBytesTotal = punBytesTotal,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, int8_t bHighPriority)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .bHighPriority = bHighPriority,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer_params params =
+    {
+        .linux_side = _this->u_iface,
+        .unWorkshopDepotID = unWorkshopDepotID,
+        .pszFolder = pszFolder,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszFolder, -1);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads(struct w_steam_iface *_this, int8_t bSuspend)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads_params params =
+    {
+        .linux_side = _this->u_iface,
+        .bSuspend = bSuspend,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads, &params );
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileID = pvecPublishedFileID,
+        .unNumPublishedFileIDs = unNumPublishedFileIDs,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileID = pvecPublishedFileID,
+        .unNumPublishedFileIDs = unNumPublishedFileIDs,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nParentPublishedFileID = nParentPublishedFileID,
+        .nChildPublishedFileID = nChildPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nParentPublishedFileID = nParentPublishedFileID,
+        .nChildPublishedFileID = nChildPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .nAppID = nAppID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+        .nAppID = nAppID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem_params params =
+    {
+        .linux_side = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA(struct w_steam_iface *_this)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus(struct w_steam_iface *_this)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus_params params =
+    {
+        .linux_side = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences(struct w_steam_iface *_this, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecDescriptors = pvecDescriptors,
+        .cMaxEntries = cMaxEntries,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally(struct w_steam_iface *_this, uint64_t *pvecPublishedFileIDs, uint32_t unNumPublishedFileIDs, int8_t bDisabledLocally)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileIDs = pvecPublishedFileIDs,
+        .unNumPublishedFileIDs = unNumPublishedFileIDs,
+        .bDisabledLocally = bDisabledLocally,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder(struct w_steam_iface *_this, uint64_t *pvecPublishedFileIDs, uint32_t unNumPublishedFileIDs)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder_params params =
+    {
+        .linux_side = _this->u_iface,
+        .pvecPublishedFileIDs = pvecPublishedFileIDs,
+        .unNumPublishedFileIDs = unNumPublishedFileIDs,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder, &params );
+    return params._ret;
+}
+
+extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtable;
+
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION021, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtables)
+    __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION021,
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder)
+    );
+__ASM_BLOCK_END
+
+struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION021(void *u_iface)
+{
+    struct w_steam_iface *r = alloc_mem_for_iface(sizeof(struct w_steam_iface), "STEAMUGC_INTERFACE_VERSION021");
+    TRACE("-> %p\n", r);
+    r->vtable = alloc_vtable(&winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtable, 96, "STEAMUGC_INTERFACE_VERSION021");
+    r->u_iface = u_iface;
+    return r;
+}
+
 void init_winISteamUGC_rtti( char *base )
 {
 #ifdef __x86_64__
@@ -18272,5 +19801,6 @@ void init_winISteamUGC_rtti( char *base )
     init_winISteamUGC_STEAMUGC_INTERFACE_VERSION017_rtti( base );
     init_winISteamUGC_STEAMUGC_INTERFACE_VERSION018_rtti( base );
     init_winISteamUGC_STEAMUGC_INTERFACE_VERSION020_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION021_rtti( base );
 #endif /* __x86_64__ */
 }

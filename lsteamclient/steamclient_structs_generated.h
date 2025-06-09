@@ -169,9 +169,17 @@ struct AvatarImageLoaded_t
 };
 #pragma pack( pop )
 
-typedef struct BroadcastUploadStart_t BroadcastUploadStart_t;
+typedef struct BroadcastUploadStart_t_161 BroadcastUploadStart_t_161;
 #pragma pack( push, 1 )
-struct BroadcastUploadStart_t
+struct BroadcastUploadStart_t_161
+{
+    int8_t m_bIsRTMP;
+};
+#pragma pack( pop )
+
+typedef struct BroadcastUploadStart_t_132x BroadcastUploadStart_t_132x;
+#pragma pack( push, 1 )
+struct BroadcastUploadStart_t_132x
 {
     uint8_t __pad_0[1];
 };
@@ -354,9 +362,25 @@ struct EquippedProfileItemsChanged_t
 };
 #pragma pack( pop )
 
-typedef struct EquippedProfileItems_t EquippedProfileItems_t;
+typedef struct EquippedProfileItems_t_161 EquippedProfileItems_t_161;
 #pragma pack( push, 4 )
-struct EquippedProfileItems_t
+struct EquippedProfileItems_t_161
+{
+    uint32_t m_eResult;
+    CSteamID m_steamID;
+    int8_t m_bHasAnimatedAvatar;
+    int8_t m_bHasAvatarFrame;
+    int8_t m_bHasProfileModifier;
+    int8_t m_bHasProfileBackground;
+    int8_t m_bHasMiniProfileBackground;
+    int8_t m_bFromCache;
+    uint8_t __pad_18[2];
+};
+#pragma pack( pop )
+
+typedef struct EquippedProfileItems_t_154 EquippedProfileItems_t_154;
+#pragma pack( push, 4 )
+struct EquippedProfileItems_t_154
 {
     uint32_t m_eResult;
     CSteamID m_steamID;
@@ -1437,6 +1461,48 @@ struct RegisterActivationCodeResponse_t
 };
 #pragma pack( pop )
 
+typedef struct RemotePlayInputKey_t RemotePlayInputKey_t;
+#pragma pack( push, 4 )
+struct RemotePlayInputKey_t
+{
+    int32_t m_eScancode;
+    uint32_t m_unModifiers;
+    uint32_t m_unKeycode;
+};
+#pragma pack( pop )
+
+typedef struct RemotePlayInputMouseMotion_t RemotePlayInputMouseMotion_t;
+#pragma pack( push, 4 )
+struct RemotePlayInputMouseMotion_t
+{
+    int8_t m_bAbsolute;
+    uint8_t __pad_1[3];
+    float m_flNormalizedX;
+    float m_flNormalizedY;
+    int32_t m_nDeltaX;
+    int32_t m_nDeltaY;
+};
+#pragma pack( pop )
+
+typedef struct RemotePlayInputMouseWheel_t RemotePlayInputMouseWheel_t;
+#pragma pack( push, 4 )
+struct RemotePlayInputMouseWheel_t
+{
+    uint32_t m_eDirection;
+    float m_flAmount;
+};
+#pragma pack( pop )
+
+typedef struct RemotePlayInput_t RemotePlayInput_t;
+#pragma pack( push, 4 )
+struct RemotePlayInput_t
+{
+    uint32_t m_unSessionID;
+    uint32_t m_eType;
+    struct { uint8_t _[56]; } data;
+};
+#pragma pack( pop )
+
 typedef struct RemoteStorageAppSyncStatusCheck_t RemoteStorageAppSyncStatusCheck_t;
 #pragma pack( push, 4 )
 struct RemoteStorageAppSyncStatusCheck_t
@@ -2055,6 +2121,28 @@ typedef struct SteamShutdown_t SteamShutdown_t;
 struct SteamShutdown_t
 {
     uint8_t __pad_0[1];
+};
+#pragma pack( pop )
+
+typedef struct SteamTimelineEventRecordingExists_t SteamTimelineEventRecordingExists_t;
+#pragma pack( push, 8 )
+struct SteamTimelineEventRecordingExists_t
+{
+    uint64_t m_ulEventID;
+    int8_t m_bRecordingExists;
+    uint8_t __pad_9[7];
+};
+#pragma pack( pop )
+
+typedef struct SteamTimelineGamePhaseRecordingExists_t SteamTimelineGamePhaseRecordingExists_t;
+#pragma pack( push, 8 )
+struct SteamTimelineGamePhaseRecordingExists_t
+{
+    char (m_rgchPhaseID)[64];
+    uint64_t m_ulRecordingMS;
+    uint64_t m_ulLongestClipMS;
+    uint32_t m_unClipCount;
+    uint32_t m_unScreenshotCount;
 };
 #pragma pack( pop )
 

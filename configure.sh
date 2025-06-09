@@ -64,6 +64,9 @@ check_container_engine() {
     if [[ $inner_uid == *"Permission denied"* ]]; then
         err "The container cannot access files. Are you using SELinux?"
         die "Please read README.md and check your $1 setup works."
+    elif [[ $inner_uid == *"Emulate Docker CLI"* ]]; then
+        err "Detected podman-docker in use without the warning being silenced."
+        die "Please create /etc/containers/nodocker or specify --container-engine=podman."
     elif [ "$inner_uid" -eq 0 ]; then
         # namespace maps the user as root or the build is performed as host's root
         ROOTLESS_CONTAINER=1

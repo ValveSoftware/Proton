@@ -4036,6 +4036,115 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayToge
     CSteamID steamIDFriend;
 };
 
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionCount_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionID_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    int32_t iSessionIndex;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionSteamID_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientFormFactor_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BGetSessionClientResolution_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint32_t unSessionID;
+    int32_t *pnResolutionX;
+    int32_t *pnResolutionY;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_ShowRemotePlayTogetherUI_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BSendRemotePlayTogetherInvite_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BEnableRemotePlayTogetherDirectInput_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_DisableRemotePlayTogetherDirectInput_params
+{
+    struct u_steam_iface *linux_side;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetInput_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    RemotePlayInput_t *pInput;
+    uint32_t unMaxEvents;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseVisibility_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t unSessionID;
+    int8_t bVisible;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t unSessionID;
+    float flNormalizedX;
+    float flNormalizedY;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    int32_t nWidth;
+    int32_t nHeight;
+    int32_t nHotX;
+    int32_t nHotY;
+    const void *pBGRA;
+    int32_t nPitch;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t unSessionID;
+    uint32_t unCursorID;
+};
+
 struct ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite_params
 {
     struct u_steam_iface *linux_side;
@@ -9039,6 +9148,145 @@ struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode_params
 {
     struct u_steam_iface *linux_side;
     uint32_t eMode;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineTooltip_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchDescription;
+    float flTimeDelta;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_ClearTimelineTooltip_params
+{
+    struct u_steam_iface *linux_side;
+    float flTimeDelta;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineGameMode_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t eMode;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddInstantaneousTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchTitle;
+    const char *pchDescription;
+    const char *pchIcon;
+    uint32_t unIconPriority;
+    float flStartOffsetSeconds;
+    uint32_t ePossibleClip;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddRangeTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchTitle;
+    const char *pchDescription;
+    const char *pchIcon;
+    uint32_t unIconPriority;
+    float flStartOffsetSeconds;
+    float flDuration;
+    uint32_t ePossibleClip;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartRangeTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchTitle;
+    const char *pchDescription;
+    const char *pchIcon;
+    uint32_t unPriority;
+    float flStartOffsetSeconds;
+    uint32_t ePossibleClip;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_UpdateRangeTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t ulEvent;
+    const char *pchTitle;
+    const char *pchDescription;
+    const char *pchIcon;
+    uint32_t unPriority;
+    uint32_t ePossibleClip;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndRangeTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t ulEvent;
+    float flEndOffsetSeconds;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_RemoveTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t ulEvent;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesEventRecordingExist_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t ulEvent;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartGamePhase_params
+{
+    struct u_steam_iface *linux_side;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndGamePhase_params
+{
+    struct u_steam_iface *linux_side;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseID_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchPhaseID;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesGamePhaseRecordingExist_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchPhaseID;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddGamePhaseTag_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchTagName;
+    const char *pchTagIcon;
+    const char *pchTagGroup;
+    uint32_t unPriority;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseAttribute_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchAttributeGroup;
+    const char *pchAttributeValue;
+    uint32_t unPriority;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToGamePhase_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchPhaseID;
+};
+
+struct ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToTimelineEvent_params
+{
+    struct u_steam_iface *linux_side;
+    const uint64_t ulEvent;
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params
@@ -18616,6 +18864,818 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetUserContentDescriptorPreferenc
     uint32_t cMaxEntries;
 };
 
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t unAccountID;
+    uint32_t eListType;
+    uint32_t eMatchingUGCType;
+    uint32_t eSortOrder;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    const char *pchCursor;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    w_SteamUGCDetails_t_160 *pDetails;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    char *pchURL;
+    uint32_t cchURLSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    char *pchMetadata;
+    uint32_t cchMetadatasize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint64_t *pvecPublishedFileID;
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t eStatType;
+    uint64_t *pStatValue;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t previewIndex;
+    char *pchURLOrVideoID;
+    uint32_t cchURLSize;
+    char *pchOriginalFileName;
+    uint32_t cchOriginalFileNameSize;
+    uint32_t *pPreviewType;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t keyValueTagIndex;
+    char *pchKey;
+    uint32_t cchKeySize;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pchKey;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t versionIndex;
+    char *pchGameBranchMin;
+    char *pchGameBranchMax;
+    uint32_t cchGameBranchSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t *pvecDescriptors;
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pTagName;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const w_SteamParamStringArray_t *pTagGroups;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pTagName;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnOnlyIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnKeyValueTags;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnLongDescription;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnMetadata;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnChildren;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnAdditionalPreviews;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnTotalOnly;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchLanguage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAdminQuery;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pMatchCloudFileName;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bMatchAnyTag;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pSearchText;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pKey;
+    const char *pValue;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint32_t eFileType;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchTitle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchDescription;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchLanguage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchMetaData;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t eVisibility;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t updateHandle;
+    const w_SteamParamStringArray_t *pTags;
+    int8_t bAllowAdminTags;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszContentFolder;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszPreviewFile;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAllowLegacyUpload;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchKey;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchKey;
+    const char *pchValue;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszPreviewFile;
+    uint32_t type;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszVideoID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pszPreviewFile;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pszVideoID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszGameBranchMin;
+    const char *pszGameBranchMax;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t handle;
+    const char *pchChangeNote;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t handle;
+    uint64_t *punBytesProcessed;
+    uint64_t *punBytesTotal;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bVoteUp;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    int8_t bIncludeLocallyDisabled;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t cMaxEntries;
+    int8_t bIncludeLocallyDisabled;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    uint64_t *punSizeOnDisk;
+    char *pchFolder;
+    uint32_t cchFolderSize;
+    uint32_t *punTimeStamp;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    uint64_t *punBytesDownloaded;
+    uint64_t *punBytesTotal;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bHighPriority;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint32_t unWorkshopDepotID;
+    const char *pszFolder;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t bSuspend;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint32_t *pvecDescriptors;
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t *pvecPublishedFileIDs;
+    uint32_t unNumPublishedFileIDs;
+    int8_t bDisabledLocally;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t *pvecPublishedFileIDs;
+    uint32_t unNumPublishedFileIDs;
+};
+
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params
 {
     struct u_steam_iface *linux_side;
@@ -21446,6 +22506,365 @@ struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgres
 };
 
 struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    float *pfMinProgress;
+    float *pfMaxProgress;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    int32_t *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    float *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    int32_t nData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    float fData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UpdateAvgRateStat_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    float flCountThisSession;
+    double dSessionLength;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievement_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    int8_t *pbAchieved;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetAchievement_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ClearAchievement_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAndUnlockTime_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    int8_t *pbAchieved;
+    uint32_t *punUnlockTime;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_StoreStats_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementIcon_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    const char *pchName;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementDisplayAttribute_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    const char *pchName;
+    const char *pchKey;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_IndicateAchievementProgress_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    uint32_t nCurProgress;
+    uint32_t nMaxProgress;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumAchievements_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    uint32_t iAchievement;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestUserStats_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamIDUser;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    const char *pchName;
+    int32_t *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    const char *pchName;
+    float *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievement_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    const char *pchName;
+    int8_t *pbAchieved;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievementAndUnlockTime_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    const char *pchName;
+    int8_t *pbAchieved;
+    uint32_t *punUnlockTime;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ResetAllStats_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    int8_t bAchievementsToo;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindOrCreateLeaderboard_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchLeaderboardName;
+    uint32_t eLeaderboardSortMethod;
+    uint32_t eLeaderboardDisplayType;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindLeaderboard_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    const char *pchLeaderboardName;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    uint64_t hSteamLeaderboard;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardEntryCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    uint64_t hSteamLeaderboard;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardSortMethod_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t hSteamLeaderboard;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardDisplayType_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    uint64_t hSteamLeaderboard;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntries_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
+    uint32_t eLeaderboardDataRequest;
+    int32_t nRangeStart;
+    int32_t nRangeEnd;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntriesForUsers_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
+    CSteamID *prgUsers;
+    int32_t cUsers;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetDownloadedLeaderboardEntry_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    uint64_t hSteamLeaderboardEntries;
+    int32_t index;
+    w_LeaderboardEntry_t_123 *pLeaderboardEntry;
+    int32_t *pDetails;
+    int32_t cDetailsMax;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UploadLeaderboardScore_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
+    uint32_t eLeaderboardUploadScoreMethod;
+    int32_t nScore;
+    const int32_t *pScoreDetails;
+    int32_t cScoreDetailsCount;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_AttachLeaderboardUGC_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint64_t hSteamLeaderboard;
+    uint64_t hUGC;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumberOfCurrentPlayers_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalAchievementPercentages_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetMostAchievedAchievementInfo_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    char *pchName;
+    uint32_t unNameBufLen;
+    float *pflPercent;
+    int8_t *pbAchieved;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNextMostAchievedAchievementInfo_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    int32_t iIteratorPrevious;
+    char *pchName;
+    uint32_t unNameBufLen;
+    float *pflPercent;
+    int8_t *pbAchieved;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAchievedPercent_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    float *pflPercent;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalStats_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    int32_t nHistoryDays;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchStatName;
+    int64_t *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat_2_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchStatName;
+    double *pData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    const char *pchStatName;
+    int64_t *pData;
+    uint32_t cubData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory_2_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    const char *pchStatName;
+    double *pData;
+    uint32_t cubData;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchName;
+    int32_t *pnMinProgress;
+    int32_t *pnMaxProgress;
+};
+
+struct ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits_2_params
 {
     struct u_steam_iface *linux_side;
     int8_t _ret;
@@ -31823,6 +33242,573 @@ struct ISteamFriends_SteamFriends017_GetProfileItemPropertyString_params
 };
 
 struct ISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    CSteamID steamID;
+    uint32_t itemType;
+    uint32_t prop;
+};
+
+struct ISteamFriends_SteamFriends018_GetPersonaName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+};
+
+struct ISteamFriends_SteamFriends018_GetPersonaState_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    int32_t iFriendFlags;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    int32_t iFriend;
+    int32_t iFriendFlags;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendRelationship_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendPersonaState_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendPersonaName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendGamePlayed_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+    FriendGameInfo_t *pFriendGameInfo;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendPersonaNameHistory_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDFriend;
+    int32_t iPersonaName;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendSteamLevel_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetPlayerNickname_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDPlayer;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendsGroupCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendsGroupIDByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    int16_t _ret;
+    int32_t iFG;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendsGroupName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    int16_t friendsGroupID;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendsGroupMembersCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    int16_t friendsGroupID;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendsGroupMembersList_params
+{
+    struct u_steam_iface *linux_side;
+    int16_t friendsGroupID;
+    CSteamID *pOutSteamIDMembers;
+    int32_t nMembersCount;
+};
+
+struct ISteamFriends_SteamFriends018_HasFriend_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+    int32_t iFriendFlags;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    int32_t iClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanName_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanTag_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanActivityCounts_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClan;
+    int32_t *pnOnline;
+    int32_t *pnInGame;
+    int32_t *pnChatting;
+};
+
+struct ISteamFriends_SteamFriends018_DownloadClanActivityCounts_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID *psteamIDClans;
+    int32_t cClansToRequest;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendCountFromSource_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDSource;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendFromSourceByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    CSteamID steamIDSource;
+    int32_t iFriend;
+};
+
+struct ISteamFriends_SteamFriends018_IsUserInSource_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    CSteamID steamIDSource;
+};
+
+struct ISteamFriends_SteamFriends018_SetInGameVoiceSpeaking_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID steamIDUser;
+    int8_t bSpeaking;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlay_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchDialog;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayToUser_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchDialog;
+    CSteamID steamID;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayToWebPage_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchURL;
+    uint32_t eMode;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayToStore_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t nAppID;
+    uint32_t eFlag;
+};
+
+struct ISteamFriends_SteamFriends018_SetPlayedWith_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID steamIDUserPlayedWith;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialog_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID steamIDLobby;
+};
+
+struct ISteamFriends_SteamFriends018_GetSmallFriendAvatar_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetMediumFriendAvatar_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetLargeFriendAvatar_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_RequestUserInformation_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDUser;
+    int8_t bRequireNameOnly;
+};
+
+struct ISteamFriends_SteamFriends018_RequestClanOfficerList_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanOwner_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanOfficerCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanOfficerByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    CSteamID steamIDClan;
+    int32_t iOfficer;
+};
+
+struct ISteamFriends_SteamFriends018_SetRichPresence_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchKey;
+    const char *pchValue;
+};
+
+struct ISteamFriends_SteamFriends018_ClearRichPresence_params
+{
+    struct u_steam_iface *linux_side;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendRichPresence_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDFriend;
+    const char *pchKey;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamIDFriend;
+    int32_t iKey;
+};
+
+struct ISteamFriends_SteamFriends018_RequestFriendRichPresence_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_InviteUserToGame_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+    const char *pchConnectString;
+};
+
+struct ISteamFriends_SteamFriends018_GetCoplayFriendCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+};
+
+struct ISteamFriends_SteamFriends018_GetCoplayFriend_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    int32_t iCoplayFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendCoplayTime_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendCoplayGame_params
+{
+    struct u_steam_iface *linux_side;
+    uint32_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamFriends_SteamFriends018_JoinClanChatRoom_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_LeaveClanChatRoom_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanChatMemberCount_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetChatMemberByIndex_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID *_ret;
+    CSteamID steamIDClan;
+    int32_t iUser;
+};
+
+struct ISteamFriends_SteamFriends018_SendClanChatMessage_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClanChat;
+    const char *pchText;
+};
+
+struct ISteamFriends_SteamFriends018_GetClanChatMessage_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDClanChat;
+    int32_t iMessage;
+    void *prgchText;
+    int32_t cchTextMax;
+    uint32_t *peChatEntryType;
+    CSteamID *psteamidChatter;
+};
+
+struct ISteamFriends_SteamFriends018_IsClanChatAdmin_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClanChat;
+    CSteamID steamIDUser;
+};
+
+struct ISteamFriends_SteamFriends018_IsClanChatWindowOpenInSteam_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClanChat;
+};
+
+struct ISteamFriends_SteamFriends018_OpenClanChatWindowInSteam_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClanChat;
+};
+
+struct ISteamFriends_SteamFriends018_CloseClanChatWindowInSteam_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClanChat;
+};
+
+struct ISteamFriends_SteamFriends018_SetListenForFriendsMessages_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    int8_t bInterceptEnabled;
+};
+
+struct ISteamFriends_SteamFriends018_ReplyToFriendMessage_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+    const char *pchMsgToSend;
+};
+
+struct ISteamFriends_SteamFriends018_GetFriendMessage_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+    CSteamID steamIDFriend;
+    int32_t iMessageID;
+    void *pvData;
+    int32_t cubData;
+    uint32_t *peChatEntryType;
+};
+
+struct ISteamFriends_SteamFriends018_GetFollowerCount_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamID;
+};
+
+struct ISteamFriends_SteamFriends018_IsFollowing_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamID;
+};
+
+struct ISteamFriends_SteamFriends018_EnumerateFollowingList_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    uint32_t unStartIndex;
+};
+
+struct ISteamFriends_SteamFriends018_IsClanPublic_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_IsClanOfficialGameGroup_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamIDClan;
+};
+
+struct ISteamFriends_SteamFriends018_GetNumChatsWithUnreadPriorityMessages_params
+{
+    struct u_steam_iface *linux_side;
+    int32_t _ret;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayRemotePlayTogetherInviteDialog_params
+{
+    struct u_steam_iface *linux_side;
+    CSteamID steamIDLobby;
+};
+
+struct ISteamFriends_SteamFriends018_RegisterProtocolInOverlayBrowser_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    const char *pchProtocol;
+};
+
+struct ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialogConnectString_params
+{
+    struct u_steam_iface *linux_side;
+    const char *pchConnectString;
+};
+
+struct ISteamFriends_SteamFriends018_RequestEquippedProfileItems_params
+{
+    struct u_steam_iface *linux_side;
+    uint64_t _ret;
+    CSteamID steamID;
+};
+
+struct ISteamFriends_SteamFriends018_BHasEquippedProfileItem_params
+{
+    struct u_steam_iface *linux_side;
+    int8_t _ret;
+    CSteamID steamID;
+    uint32_t itemType;
+};
+
+struct ISteamFriends_SteamFriends018_GetProfileItemPropertyString_params
+{
+    struct u_steam_iface *linux_side;
+    const char *_ret;
+    CSteamID steamID;
+    uint32_t itemType;
+    uint32_t prop;
+};
+
+struct ISteamFriends_SteamFriends018_GetProfileItemPropertyUint_params
 {
     struct u_steam_iface *linux_side;
     uint32_t _ret;
@@ -47326,6 +49312,21 @@ enum unix_funcs
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution,
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether,
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionCount,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionID,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionSteamID,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientName,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientFormFactor,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BGetSessionClientResolution,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_ShowRemotePlayTogetherUI,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BSendRemotePlayTogetherInvite,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BEnableRemotePlayTogetherDirectInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_DisableRemotePlayTogetherDirectInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseVisibility,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead,
@@ -47961,6 +49962,24 @@ enum unix_funcs
     unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_ClearTimelineStateDescription,
     unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent,
     unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineTooltip,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_ClearTimelineTooltip,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineGameMode,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddInstantaneousTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddRangeTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartRangeTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_UpdateRangeTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndRangeTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_RemoveTimelineEvent,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesEventRecordingExist,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartGamePhase,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndGamePhase,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseID,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesGamePhaseRecordingExist,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddGamePhaseTag,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseAttribute,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToGamePhase,
+    unix_ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToTimelineEvent,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest,
@@ -49104,6 +51123,102 @@ enum unix_funcs
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_ShowWorkshopEULA,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetWorkshopEULAStatus,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetUserContentDescriptorPreferences,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,
@@ -49456,6 +51571,50 @@ enum unix_funcs
     unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2,
     unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits,
     unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UpdateAvgRateStat,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievement,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetAchievement,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ClearAchievement,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAndUnlockTime,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_StoreStats,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementIcon,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementDisplayAttribute,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_IndicateAchievementProgress,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumAchievements,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementName,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestUserStats,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievement,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievementAndUnlockTime,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ResetAllStats,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindOrCreateLeaderboard,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindLeaderboard,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardName,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardEntryCount,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardSortMethod,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardDisplayType,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntries,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntriesForUsers,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetDownloadedLeaderboardEntry,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UploadLeaderboardScore,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_AttachLeaderboardUGC,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumberOfCurrentPlayers,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalAchievementPercentages,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetMostAchievedAchievementInfo,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNextMostAchievedAchievementInfo,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAchievedPercent,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalStats,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory_2,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits,
+    unix_ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits_2,
     unix_ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL,
     unix_ISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting,
     unix_ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL,
@@ -50832,6 +52991,84 @@ enum unix_funcs
     unix_ISteamFriends_SteamFriends017_BHasEquippedProfileItem,
     unix_ISteamFriends_SteamFriends017_GetProfileItemPropertyString,
     unix_ISteamFriends_SteamFriends017_GetProfileItemPropertyUint,
+    unix_ISteamFriends_SteamFriends018_GetPersonaName,
+    unix_ISteamFriends_SteamFriends018_GetPersonaState,
+    unix_ISteamFriends_SteamFriends018_GetFriendCount,
+    unix_ISteamFriends_SteamFriends018_GetFriendByIndex,
+    unix_ISteamFriends_SteamFriends018_GetFriendRelationship,
+    unix_ISteamFriends_SteamFriends018_GetFriendPersonaState,
+    unix_ISteamFriends_SteamFriends018_GetFriendPersonaName,
+    unix_ISteamFriends_SteamFriends018_GetFriendGamePlayed,
+    unix_ISteamFriends_SteamFriends018_GetFriendPersonaNameHistory,
+    unix_ISteamFriends_SteamFriends018_GetFriendSteamLevel,
+    unix_ISteamFriends_SteamFriends018_GetPlayerNickname,
+    unix_ISteamFriends_SteamFriends018_GetFriendsGroupCount,
+    unix_ISteamFriends_SteamFriends018_GetFriendsGroupIDByIndex,
+    unix_ISteamFriends_SteamFriends018_GetFriendsGroupName,
+    unix_ISteamFriends_SteamFriends018_GetFriendsGroupMembersCount,
+    unix_ISteamFriends_SteamFriends018_GetFriendsGroupMembersList,
+    unix_ISteamFriends_SteamFriends018_HasFriend,
+    unix_ISteamFriends_SteamFriends018_GetClanCount,
+    unix_ISteamFriends_SteamFriends018_GetClanByIndex,
+    unix_ISteamFriends_SteamFriends018_GetClanName,
+    unix_ISteamFriends_SteamFriends018_GetClanTag,
+    unix_ISteamFriends_SteamFriends018_GetClanActivityCounts,
+    unix_ISteamFriends_SteamFriends018_DownloadClanActivityCounts,
+    unix_ISteamFriends_SteamFriends018_GetFriendCountFromSource,
+    unix_ISteamFriends_SteamFriends018_GetFriendFromSourceByIndex,
+    unix_ISteamFriends_SteamFriends018_IsUserInSource,
+    unix_ISteamFriends_SteamFriends018_SetInGameVoiceSpeaking,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlay,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayToUser,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayToWebPage,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayToStore,
+    unix_ISteamFriends_SteamFriends018_SetPlayedWith,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialog,
+    unix_ISteamFriends_SteamFriends018_GetSmallFriendAvatar,
+    unix_ISteamFriends_SteamFriends018_GetMediumFriendAvatar,
+    unix_ISteamFriends_SteamFriends018_GetLargeFriendAvatar,
+    unix_ISteamFriends_SteamFriends018_RequestUserInformation,
+    unix_ISteamFriends_SteamFriends018_RequestClanOfficerList,
+    unix_ISteamFriends_SteamFriends018_GetClanOwner,
+    unix_ISteamFriends_SteamFriends018_GetClanOfficerCount,
+    unix_ISteamFriends_SteamFriends018_GetClanOfficerByIndex,
+    unix_ISteamFriends_SteamFriends018_SetRichPresence,
+    unix_ISteamFriends_SteamFriends018_ClearRichPresence,
+    unix_ISteamFriends_SteamFriends018_GetFriendRichPresence,
+    unix_ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyCount,
+    unix_ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyByIndex,
+    unix_ISteamFriends_SteamFriends018_RequestFriendRichPresence,
+    unix_ISteamFriends_SteamFriends018_InviteUserToGame,
+    unix_ISteamFriends_SteamFriends018_GetCoplayFriendCount,
+    unix_ISteamFriends_SteamFriends018_GetCoplayFriend,
+    unix_ISteamFriends_SteamFriends018_GetFriendCoplayTime,
+    unix_ISteamFriends_SteamFriends018_GetFriendCoplayGame,
+    unix_ISteamFriends_SteamFriends018_JoinClanChatRoom,
+    unix_ISteamFriends_SteamFriends018_LeaveClanChatRoom,
+    unix_ISteamFriends_SteamFriends018_GetClanChatMemberCount,
+    unix_ISteamFriends_SteamFriends018_GetChatMemberByIndex,
+    unix_ISteamFriends_SteamFriends018_SendClanChatMessage,
+    unix_ISteamFriends_SteamFriends018_GetClanChatMessage,
+    unix_ISteamFriends_SteamFriends018_IsClanChatAdmin,
+    unix_ISteamFriends_SteamFriends018_IsClanChatWindowOpenInSteam,
+    unix_ISteamFriends_SteamFriends018_OpenClanChatWindowInSteam,
+    unix_ISteamFriends_SteamFriends018_CloseClanChatWindowInSteam,
+    unix_ISteamFriends_SteamFriends018_SetListenForFriendsMessages,
+    unix_ISteamFriends_SteamFriends018_ReplyToFriendMessage,
+    unix_ISteamFriends_SteamFriends018_GetFriendMessage,
+    unix_ISteamFriends_SteamFriends018_GetFollowerCount,
+    unix_ISteamFriends_SteamFriends018_IsFollowing,
+    unix_ISteamFriends_SteamFriends018_EnumerateFollowingList,
+    unix_ISteamFriends_SteamFriends018_IsClanPublic,
+    unix_ISteamFriends_SteamFriends018_IsClanOfficialGameGroup,
+    unix_ISteamFriends_SteamFriends018_GetNumChatsWithUnreadPriorityMessages,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayRemotePlayTogetherInviteDialog,
+    unix_ISteamFriends_SteamFriends018_RegisterProtocolInOverlayBrowser,
+    unix_ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialogConnectString,
+    unix_ISteamFriends_SteamFriends018_RequestEquippedProfileItems,
+    unix_ISteamFriends_SteamFriends018_BHasEquippedProfileItem,
+    unix_ISteamFriends_SteamFriends018_GetProfileItemPropertyString,
+    unix_ISteamFriends_SteamFriends018_GetProfileItemPropertyUint,
     unix_ISteamGameCoordinator_SteamGameCoordinator001_SendMessage,
     unix_ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable,
     unix_ISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage,

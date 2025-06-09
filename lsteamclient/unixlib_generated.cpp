@@ -564,6 +564,21 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BGetSessionClientResolution,
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BStartRemotePlayTogether,
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002_BSendRemotePlayTogetherInvite,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionCount,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionID,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionSteamID,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientName,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetSessionClientFormFactor,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BGetSessionClientResolution,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_ShowRemotePlayTogetherUI,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BSendRemotePlayTogetherInvite,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_BEnableRemotePlayTogetherDirectInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_DisableRemotePlayTogetherDirectInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_GetInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseVisibility,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead,
@@ -1199,6 +1214,24 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_ClearTimelineStateDescription,
     ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent,
     ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineGameMode,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineTooltip,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_ClearTimelineTooltip,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineGameMode,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddInstantaneousTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddRangeTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartRangeTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_UpdateRangeTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndRangeTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_RemoveTimelineEvent,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesEventRecordingExist,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartGamePhase,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_EndGamePhase,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseID,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesGamePhaseRecordingExist,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddGamePhaseTag,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseAttribute,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToGamePhase,
+    ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToTimelineEvent,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest,
@@ -2342,6 +2375,102 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_ShowWorkshopEULA,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetWorkshopEULAStatus,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetUserContentDescriptorPreferences,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryAllUGCRequest_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUGCDetailsRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SendQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCTagDisplayName,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCPreviewURL,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCStatistic,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCAdditionalPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCKeyValueTag_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSupportedGameVersions,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSupportedGameVersionData,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCContentDescriptors,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ReleaseQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredTagGroup,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddExcludedTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnOnlyIDs,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnLongDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnTotalOnly,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetReturnPlaytimeStats,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowCachedResponse,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAdminQuery,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetCloudFileNameFilter,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetMatchAnyTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSearchText,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRankedByTrendDays,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeCreatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetTimeUpdatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddRequiredKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RequestUGCDetails,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTitle,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemUpdateLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemVisibility,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemContent,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetAllowLegacyUpload,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAllItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UpdateItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetRequiredGameVersions,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubmitItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemUpdateProgress,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddItemToFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveItemFromFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_UnsubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemState,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemInstallInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetItemDownloadInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DownloadItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_BInitWorkshopForGameServer,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SuspendDownloads,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StartPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_StopPlaytimeTrackingForAllItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_AddAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_RemoveAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetAppDependencies,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_DeleteItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_ShowWorkshopEULA,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEULAStatus,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,
@@ -2694,6 +2823,50 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2,
     ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits,
     ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UpdateAvgRateStat,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievement,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetAchievement,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ClearAchievement,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAndUnlockTime,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_StoreStats,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementIcon,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementDisplayAttribute,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_IndicateAchievementProgress,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumAchievements,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementName,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestUserStats,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievement,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievementAndUnlockTime,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ResetAllStats,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindOrCreateLeaderboard,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindLeaderboard,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardName,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardEntryCount,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardSortMethod,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetLeaderboardDisplayType,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntries,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_DownloadLeaderboardEntriesForUsers,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetDownloadedLeaderboardEntry,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UploadLeaderboardScore,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_AttachLeaderboardUGC,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNumberOfCurrentPlayers,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalAchievementPercentages,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetMostAchievedAchievementInfo,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetNextMostAchievedAchievementInfo,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAchievedPercent,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_RequestGlobalStats,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory_2,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits,
+    ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits_2,
     ISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL,
     ISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting,
     ISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL,
@@ -4070,6 +4243,84 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamFriends_SteamFriends017_BHasEquippedProfileItem,
     ISteamFriends_SteamFriends017_GetProfileItemPropertyString,
     ISteamFriends_SteamFriends017_GetProfileItemPropertyUint,
+    ISteamFriends_SteamFriends018_GetPersonaName,
+    ISteamFriends_SteamFriends018_GetPersonaState,
+    ISteamFriends_SteamFriends018_GetFriendCount,
+    ISteamFriends_SteamFriends018_GetFriendByIndex,
+    ISteamFriends_SteamFriends018_GetFriendRelationship,
+    ISteamFriends_SteamFriends018_GetFriendPersonaState,
+    ISteamFriends_SteamFriends018_GetFriendPersonaName,
+    ISteamFriends_SteamFriends018_GetFriendGamePlayed,
+    ISteamFriends_SteamFriends018_GetFriendPersonaNameHistory,
+    ISteamFriends_SteamFriends018_GetFriendSteamLevel,
+    ISteamFriends_SteamFriends018_GetPlayerNickname,
+    ISteamFriends_SteamFriends018_GetFriendsGroupCount,
+    ISteamFriends_SteamFriends018_GetFriendsGroupIDByIndex,
+    ISteamFriends_SteamFriends018_GetFriendsGroupName,
+    ISteamFriends_SteamFriends018_GetFriendsGroupMembersCount,
+    ISteamFriends_SteamFriends018_GetFriendsGroupMembersList,
+    ISteamFriends_SteamFriends018_HasFriend,
+    ISteamFriends_SteamFriends018_GetClanCount,
+    ISteamFriends_SteamFriends018_GetClanByIndex,
+    ISteamFriends_SteamFriends018_GetClanName,
+    ISteamFriends_SteamFriends018_GetClanTag,
+    ISteamFriends_SteamFriends018_GetClanActivityCounts,
+    ISteamFriends_SteamFriends018_DownloadClanActivityCounts,
+    ISteamFriends_SteamFriends018_GetFriendCountFromSource,
+    ISteamFriends_SteamFriends018_GetFriendFromSourceByIndex,
+    ISteamFriends_SteamFriends018_IsUserInSource,
+    ISteamFriends_SteamFriends018_SetInGameVoiceSpeaking,
+    ISteamFriends_SteamFriends018_ActivateGameOverlay,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayToUser,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayToWebPage,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayToStore,
+    ISteamFriends_SteamFriends018_SetPlayedWith,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialog,
+    ISteamFriends_SteamFriends018_GetSmallFriendAvatar,
+    ISteamFriends_SteamFriends018_GetMediumFriendAvatar,
+    ISteamFriends_SteamFriends018_GetLargeFriendAvatar,
+    ISteamFriends_SteamFriends018_RequestUserInformation,
+    ISteamFriends_SteamFriends018_RequestClanOfficerList,
+    ISteamFriends_SteamFriends018_GetClanOwner,
+    ISteamFriends_SteamFriends018_GetClanOfficerCount,
+    ISteamFriends_SteamFriends018_GetClanOfficerByIndex,
+    ISteamFriends_SteamFriends018_SetRichPresence,
+    ISteamFriends_SteamFriends018_ClearRichPresence,
+    ISteamFriends_SteamFriends018_GetFriendRichPresence,
+    ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyCount,
+    ISteamFriends_SteamFriends018_GetFriendRichPresenceKeyByIndex,
+    ISteamFriends_SteamFriends018_RequestFriendRichPresence,
+    ISteamFriends_SteamFriends018_InviteUserToGame,
+    ISteamFriends_SteamFriends018_GetCoplayFriendCount,
+    ISteamFriends_SteamFriends018_GetCoplayFriend,
+    ISteamFriends_SteamFriends018_GetFriendCoplayTime,
+    ISteamFriends_SteamFriends018_GetFriendCoplayGame,
+    ISteamFriends_SteamFriends018_JoinClanChatRoom,
+    ISteamFriends_SteamFriends018_LeaveClanChatRoom,
+    ISteamFriends_SteamFriends018_GetClanChatMemberCount,
+    ISteamFriends_SteamFriends018_GetChatMemberByIndex,
+    ISteamFriends_SteamFriends018_SendClanChatMessage,
+    ISteamFriends_SteamFriends018_GetClanChatMessage,
+    ISteamFriends_SteamFriends018_IsClanChatAdmin,
+    ISteamFriends_SteamFriends018_IsClanChatWindowOpenInSteam,
+    ISteamFriends_SteamFriends018_OpenClanChatWindowInSteam,
+    ISteamFriends_SteamFriends018_CloseClanChatWindowInSteam,
+    ISteamFriends_SteamFriends018_SetListenForFriendsMessages,
+    ISteamFriends_SteamFriends018_ReplyToFriendMessage,
+    ISteamFriends_SteamFriends018_GetFriendMessage,
+    ISteamFriends_SteamFriends018_GetFollowerCount,
+    ISteamFriends_SteamFriends018_IsFollowing,
+    ISteamFriends_SteamFriends018_EnumerateFollowingList,
+    ISteamFriends_SteamFriends018_IsClanPublic,
+    ISteamFriends_SteamFriends018_IsClanOfficialGameGroup,
+    ISteamFriends_SteamFriends018_GetNumChatsWithUnreadPriorityMessages,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayRemotePlayTogetherInviteDialog,
+    ISteamFriends_SteamFriends018_RegisterProtocolInOverlayBrowser,
+    ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialogConnectString,
+    ISteamFriends_SteamFriends018_RequestEquippedProfileItems,
+    ISteamFriends_SteamFriends018_BHasEquippedProfileItem,
+    ISteamFriends_SteamFriends018_GetProfileItemPropertyString,
+    ISteamFriends_SteamFriends018_GetProfileItemPropertyUint,
     ISteamGameCoordinator_SteamGameCoordinator001_SendMessage,
     ISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable,
     ISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage,
@@ -6175,7 +6426,11 @@ C_ASSERT( sizeof(AvatarImageLoaded_t().m_iWide) >= 4 );
 C_ASSERT( offsetof(AvatarImageLoaded_t, m_iTall) == 16 );
 C_ASSERT( sizeof(AvatarImageLoaded_t().m_iTall) >= 4 );
 
-C_ASSERT( sizeof(BroadcastUploadStart_t) >= 1 );
+C_ASSERT( sizeof(BroadcastUploadStart_t_161) >= 1 );
+C_ASSERT( offsetof(BroadcastUploadStart_t_161, m_bIsRTMP) == 0 );
+C_ASSERT( sizeof(BroadcastUploadStart_t_161().m_bIsRTMP) >= 1 );
+
+C_ASSERT( sizeof(BroadcastUploadStart_t_132x) >= 1 );
 
 C_ASSERT( sizeof(BroadcastUploadStop_t) >= 4 );
 C_ASSERT( offsetof(BroadcastUploadStop_t, m_eResult) == 0 );
@@ -6319,21 +6574,39 @@ C_ASSERT( sizeof(EquippedProfileItemsChanged_t) >= 8 );
 C_ASSERT( offsetof(EquippedProfileItemsChanged_t, m_steamID) == 0 );
 C_ASSERT( sizeof(EquippedProfileItemsChanged_t().m_steamID) >= 8 );
 
-C_ASSERT( sizeof(EquippedProfileItems_t) >= 20 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_eResult) == 0 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_eResult) >= 4 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_steamID) == 4 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_steamID) >= 8 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_bHasAnimatedAvatar) == 12 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_bHasAnimatedAvatar) >= 1 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_bHasAvatarFrame) == 13 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_bHasAvatarFrame) >= 1 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_bHasProfileModifier) == 14 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_bHasProfileModifier) >= 1 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_bHasProfileBackground) == 15 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_bHasProfileBackground) >= 1 );
-C_ASSERT( offsetof(EquippedProfileItems_t, m_bHasMiniProfileBackground) == 16 );
-C_ASSERT( sizeof(EquippedProfileItems_t().m_bHasMiniProfileBackground) >= 1 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161) >= 20 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_eResult) == 0 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_eResult) >= 4 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_steamID) == 4 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_steamID) >= 8 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bHasAnimatedAvatar) == 12 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bHasAnimatedAvatar) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bHasAvatarFrame) == 13 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bHasAvatarFrame) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bHasProfileModifier) == 14 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bHasProfileModifier) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bHasProfileBackground) == 15 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bHasProfileBackground) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bHasMiniProfileBackground) == 16 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bHasMiniProfileBackground) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_161, m_bFromCache) == 17 );
+C_ASSERT( sizeof(EquippedProfileItems_t_161().m_bFromCache) >= 1 );
+
+C_ASSERT( sizeof(EquippedProfileItems_t_154) >= 20 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_eResult) == 0 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_eResult) >= 4 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_steamID) == 4 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_steamID) >= 8 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_bHasAnimatedAvatar) == 12 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_bHasAnimatedAvatar) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_bHasAvatarFrame) == 13 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_bHasAvatarFrame) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_bHasProfileModifier) == 14 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_bHasProfileModifier) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_bHasProfileBackground) == 15 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_bHasProfileBackground) >= 1 );
+C_ASSERT( offsetof(EquippedProfileItems_t_154, m_bHasMiniProfileBackground) == 16 );
+C_ASSERT( sizeof(EquippedProfileItems_t_154().m_bHasMiniProfileBackground) >= 1 );
 
 C_ASSERT( sizeof(FavoritesListAccountsUpdated_t) >= 4 );
 C_ASSERT( offsetof(FavoritesListAccountsUpdated_t, m_eResult) == 0 );
@@ -7073,6 +7346,40 @@ C_ASSERT( sizeof(RegisterActivationCodeResponse_t().m_eResult) >= 4 );
 C_ASSERT( offsetof(RegisterActivationCodeResponse_t, m_unPackageRegistered) == 4 );
 C_ASSERT( sizeof(RegisterActivationCodeResponse_t().m_unPackageRegistered) >= 4 );
 
+C_ASSERT( sizeof(RemotePlayInputKey_t) >= 12 );
+C_ASSERT( offsetof(RemotePlayInputKey_t, m_eScancode) == 0 );
+C_ASSERT( sizeof(RemotePlayInputKey_t().m_eScancode) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputKey_t, m_unModifiers) == 4 );
+C_ASSERT( sizeof(RemotePlayInputKey_t().m_unModifiers) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputKey_t, m_unKeycode) == 8 );
+C_ASSERT( sizeof(RemotePlayInputKey_t().m_unKeycode) >= 4 );
+
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t) >= 20 );
+C_ASSERT( offsetof(RemotePlayInputMouseMotion_t, m_bAbsolute) == 0 );
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t().m_bAbsolute) >= 1 );
+C_ASSERT( offsetof(RemotePlayInputMouseMotion_t, m_flNormalizedX) == 4 );
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t().m_flNormalizedX) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputMouseMotion_t, m_flNormalizedY) == 8 );
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t().m_flNormalizedY) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputMouseMotion_t, m_nDeltaX) == 12 );
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t().m_nDeltaX) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputMouseMotion_t, m_nDeltaY) == 16 );
+C_ASSERT( sizeof(RemotePlayInputMouseMotion_t().m_nDeltaY) >= 4 );
+
+C_ASSERT( sizeof(RemotePlayInputMouseWheel_t) >= 8 );
+C_ASSERT( offsetof(RemotePlayInputMouseWheel_t, m_eDirection) == 0 );
+C_ASSERT( sizeof(RemotePlayInputMouseWheel_t().m_eDirection) >= 4 );
+C_ASSERT( offsetof(RemotePlayInputMouseWheel_t, m_flAmount) == 4 );
+C_ASSERT( sizeof(RemotePlayInputMouseWheel_t().m_flAmount) >= 4 );
+
+C_ASSERT( sizeof(RemotePlayInput_t) >= 64 );
+C_ASSERT( offsetof(RemotePlayInput_t, m_unSessionID) == 0 );
+C_ASSERT( sizeof(RemotePlayInput_t().m_unSessionID) >= 4 );
+C_ASSERT( offsetof(RemotePlayInput_t, m_eType) == 4 );
+C_ASSERT( sizeof(RemotePlayInput_t().m_eType) >= 4 );
+C_ASSERT( offsetof(RemotePlayInput_t, data) == 8 );
+C_ASSERT( sizeof(RemotePlayInput_t().data) >= 56 );
+
 C_ASSERT( sizeof(RemoteStorageAppSyncStatusCheck_t) >= 8 );
 C_ASSERT( offsetof(RemoteStorageAppSyncStatusCheck_t, m_nAppID) == 0 );
 C_ASSERT( sizeof(RemoteStorageAppSyncStatusCheck_t().m_nAppID) >= 4 );
@@ -7522,6 +7829,24 @@ C_ASSERT( offsetof(SteamServersDisconnected_t, m_eResult) == 0 );
 C_ASSERT( sizeof(SteamServersDisconnected_t().m_eResult) >= 4 );
 
 C_ASSERT( sizeof(SteamShutdown_t) >= 1 );
+
+C_ASSERT( sizeof(SteamTimelineEventRecordingExists_t) >= 16 );
+C_ASSERT( offsetof(SteamTimelineEventRecordingExists_t, m_ulEventID) == 0 );
+C_ASSERT( sizeof(SteamTimelineEventRecordingExists_t().m_ulEventID) >= 8 );
+C_ASSERT( offsetof(SteamTimelineEventRecordingExists_t, m_bRecordingExists) == 8 );
+C_ASSERT( sizeof(SteamTimelineEventRecordingExists_t().m_bRecordingExists) >= 1 );
+
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t) >= 88 );
+C_ASSERT( offsetof(SteamTimelineGamePhaseRecordingExists_t, m_rgchPhaseID) == 0 );
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t().m_rgchPhaseID) >= 64 );
+C_ASSERT( offsetof(SteamTimelineGamePhaseRecordingExists_t, m_ulRecordingMS) == 64 );
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t().m_ulRecordingMS) >= 8 );
+C_ASSERT( offsetof(SteamTimelineGamePhaseRecordingExists_t, m_ulLongestClipMS) == 72 );
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t().m_ulLongestClipMS) >= 8 );
+C_ASSERT( offsetof(SteamTimelineGamePhaseRecordingExists_t, m_unClipCount) == 80 );
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t().m_unClipCount) >= 4 );
+C_ASSERT( offsetof(SteamTimelineGamePhaseRecordingExists_t, m_unScreenshotCount) == 84 );
+C_ASSERT( sizeof(SteamTimelineGamePhaseRecordingExists_t().m_unScreenshotCount) >= 4 );
 
 C_ASSERT( sizeof(SteamUGCQueryCompleted_t_143) >= 280 );
 C_ASSERT( offsetof(SteamUGCQueryCompleted_t_143, m_handle) == 0 );
@@ -20729,225 +21054,225 @@ u32_SubmitPlayerResultResultCallback_t::operator w32_SubmitPlayerResultResultCal
 #ifdef __i386__
 const struct callback_def callback_data[] =
 {
-    { 152, 160, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 162, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     /*{ 152, 122, 24, 16, MicroTxnAuthorizationResponse_t_109_w_from_u },*/
-    { 209, 160, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 162, 40, 32, GSReputation_t_123_w_from_u },
     /*{ 209, 122, 40, 32, GSReputation_t_108_w_from_u },*/
-    { 513, 160, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 162, 16, 12, LobbyCreated_t_123_w_from_u },
     /*{ 513, 122, 16, 12, LobbyCreated_t_099u_w_from_u },*/
-    { 1023, 160, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 160, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 162, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 162, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     /*{ 1106, 122, 32, 28, LeaderboardScoreUploaded_t_104_w_from_u },*/
-    { 1111, 160, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 162, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     /*{ 1111, 122, 16, 12, LeaderboardUGCSet_t_111x_w_from_u },*/
-    { 1112, 160, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 161, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     /*{ 1112, 122, 24, 20, PS3TrophiesInstalled_t_112x_w_from_u },*/
-    { 1221, 160, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 162, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     /*{ 1303, 122, 288, 280, RemoteStorageAppSyncProgress_t_111x_w_from_u },*/
-    { 1307, 160, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 162, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     /*{ 1307, 122, 16, 12, RemoteStorageFileShareResult_t_111x_w_from_u },*/
     { 1308, 116, 40, 32, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 160, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 162, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     /*{ 1309, 122, 16, 12, RemoteStoragePublishFileResult_t_116x_w_from_u },*/
     { 1310, 117, 1744, 1732, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 160, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 162, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     /*{ 1311, 122, 16, 12, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },*/
-    { 1312, 160, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 162, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     /*{ 1312, 122, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },*/
-    { 1313, 160, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 162, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 160, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 162, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     /*{ 1314, 122, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },*/
-    { 1315, 160, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 162, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 160, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 162, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     /*{ 1316, 122, 16, 12, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },*/
-    { 1317, 160, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 162, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     /*{ 1317, 122, 296, 288, RemoteStorageDownloadUGCResult_t_116x_w_from_u },*/
-    { 1318, 160, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 162, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     /*{ 1318, 122, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },*/
     { 1318, 119, 9752, 9740, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },
     { 1318, 118, 9496, 9484, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 160, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 162, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     /*{ 1319, 122, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },*/
-    { 1320, 160, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 162, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     /*{ 1320, 122, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },*/
-    { 1324, 160, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 162, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     /*{ 1324, 122, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },*/
-    { 1325, 160, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 162, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     /*{ 1325, 122, 24, 16, RemoteStorageUserVoteDetails_t_119_w_from_u },*/
-    { 1326, 160, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 162, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     /*{ 1326, 122, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },*/
-    { 1327, 160, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 162, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     /*{ 1327, 122, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },*/
-    { 1330, 160, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 160, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 162, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 162, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     /*{ 2101, 122, 24, 20, HTTPRequestCompleted_t_115_w_from_u },*/
-    { 2102, 160, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 162, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     /*{ 2102, 122, 16, 12, HTTPRequestHeadersReceived_t_121x_w_from_u },*/
-    { 2103, 160, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 162, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     /*{ 2103, 122, 24, 20, HTTPRequestDataReceived_t_121x_w_from_u },*/
-    { 2803, 160, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 160, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
-    { 3402, 160, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
+    { 2803, 162, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 162, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 162, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
     { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 160, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 160, 32, 28, ItemInstalled_t_160_w_from_u },
+    { 3403, 162, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 162, 32, 28, ItemInstalled_t_160_w_from_u },
     { 3405, 159, 16, 12, ItemInstalled_t_130_w_from_u },
-    { 3406, 160, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 160, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 160, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 160, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 160, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 160, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 160, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 160, 48, 48, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 160, 20, 20, HTML_StartRequest_t_w_from_u },
-    { 4505, 160, 24, 24, HTML_URLChanged_t_w_from_u },
-    { 4506, 160, 12, 12, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 160, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 160, 8, 8, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 160, 20, 20, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 160, 8, 8, HTML_JSAlert_t_w_from_u },
-    { 4515, 160, 8, 8, HTML_JSConfirm_t_w_from_u },
-    { 4516, 160, 12, 12, HTML_FileOpenDialog_t_w_from_u },
+    { 3406, 162, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 162, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 162, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 162, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 162, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 162, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 162, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 162, 48, 48, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 162, 20, 20, HTML_StartRequest_t_w_from_u },
+    { 4505, 162, 24, 24, HTML_URLChanged_t_w_from_u },
+    { 4506, 162, 12, 12, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 162, 8, 8, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 162, 8, 8, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 162, 20, 20, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 162, 8, 8, HTML_JSAlert_t_w_from_u },
+    { 4515, 162, 8, 8, HTML_JSConfirm_t_w_from_u },
+    { 4516, 162, 12, 12, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 16, 16, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 160, 28, 28, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 162, 28, 28, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 24, 24, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 160, 8, 8, HTML_StatusText_t_w_from_u },
-    { 4524, 160, 8, 8, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 160, 8, 8, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 160, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 160, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 160, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 160, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 160, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 160, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 160, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 160, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 162, 8, 8, HTML_StatusText_t_w_from_u },
+    { 4524, 162, 8, 8, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 162, 8, 8, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 162, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 162, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 162, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 162, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 162, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 162, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 162, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 162, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 #ifdef __x86_64__
 const struct callback_def callback_data[] =
 {
-    { 152, 160, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
+    { 152, 162, 24, 16, MicroTxnAuthorizationResponse_t_123_w_from_u },
     { 152, 122, 24, 24, MicroTxnAuthorizationResponse_t_109_w_from_u },
-    { 209, 160, 40, 32, GSReputation_t_123_w_from_u },
+    { 209, 162, 40, 32, GSReputation_t_123_w_from_u },
     { 209, 122, 40, 40, GSReputation_t_108_w_from_u },
-    { 513, 160, 16, 12, LobbyCreated_t_123_w_from_u },
+    { 513, 162, 16, 12, LobbyCreated_t_123_w_from_u },
     { 513, 122, 16, 16, LobbyCreated_t_099u_w_from_u },
-    { 1023, 160, 40, 36, FileDetailsResult_t_w_from_u },
-    { 1106, 160, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
+    { 1023, 162, 40, 36, FileDetailsResult_t_w_from_u },
+    { 1106, 162, 32, 28, LeaderboardScoreUploaded_t_123_w_from_u },
     { 1106, 122, 32, 32, LeaderboardScoreUploaded_t_104_w_from_u },
-    { 1111, 160, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
+    { 1111, 162, 16, 12, LeaderboardUGCSet_t_123_w_from_u },
     { 1111, 122, 16, 16, LeaderboardUGCSet_t_111x_w_from_u },
-    { 1112, 160, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
+    { 1112, 161, 24, 20, PS3TrophiesInstalled_t_123_w_from_u },
     { 1112, 122, 24, 24, PS3TrophiesInstalled_t_112x_w_from_u },
-    { 1221, 160, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
+    { 1221, 162, 712, 704, SteamNetConnectionStatusChangedCallback_t_153a_w_from_u },
     /*{ 1221, 152, 712, 704, SteamNetConnectionStatusChangedCallback_t_144_w_from_u },*/
     { 1221, 151, 584, 576, SteamNetConnectionStatusChangedCallback_t_151_w_from_u },
     { 1303, 151, 288, 280, RemoteStorageAppSyncProgress_t_123_w_from_u },
     { 1303, 122, 288, 288, RemoteStorageAppSyncProgress_t_111x_w_from_u },
-    { 1307, 160, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
+    { 1307, 162, 280, 272, RemoteStorageFileShareResult_t_128x_w_from_u },
     { 1307, 128, 16, 12, RemoteStorageFileShareResult_t_123_w_from_u },
     { 1307, 122, 16, 16, RemoteStorageFileShareResult_t_111x_w_from_u },
     { 1308, 116, 40, 40, RemoteStorageDownloadUGCResult_t_111x_w_from_u },
-    { 1309, 160, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
+    { 1309, 162, 24, 16, RemoteStoragePublishFileResult_t_125_w_from_u },
     { 1309, 124, 16, 12, RemoteStoragePublishFileResult_t_123_w_from_u },
     { 1309, 122, 16, 16, RemoteStoragePublishFileResult_t_116x_w_from_u },
     { 1310, 117, 1744, 1744, RemoteStorageGetPublishedFileDetailsResult_t_116x_w_from_u },
-    { 1311, 160, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
+    { 1311, 162, 16, 12, RemoteStorageDeletePublishedFileResult_t_123_w_from_u },
     { 1311, 122, 16, 16, RemoteStorageDeletePublishedFileResult_t_116x_w_from_u },
-    { 1312, 160, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
+    { 1312, 162, 416, 412, RemoteStorageEnumerateUserPublishedFilesResult_t_123_w_from_u },
     { 1312, 122, 416, 416, RemoteStorageEnumerateUserPublishedFilesResult_t_116x_w_from_u },
-    { 1313, 160, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
+    { 1313, 162, 16, 12, RemoteStorageSubscribePublishedFileResult_t_123_w_from_u },
     { 1313, 122, 4, 4, nullptr },
-    { 1314, 160, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
+    { 1314, 162, 616, 612, RemoteStorageEnumerateUserSubscribedFilesResult_t_123_w_from_u },
     { 1314, 122, 616, 616, RemoteStorageEnumerateUserSubscribedFilesResult_t_116x_w_from_u },
-    { 1315, 160, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
+    { 1315, 162, 16, 12, RemoteStorageUnsubscribePublishedFileResult_t_123_w_from_u },
     { 1315, 122, 4, 4, nullptr },
-    { 1316, 160, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
+    { 1316, 162, 24, 16, RemoteStorageUpdatePublishedFileResult_t_125_w_from_u },
     { 1316, 124, 16, 12, RemoteStorageUpdatePublishedFileResult_t_123_w_from_u },
     { 1316, 122, 16, 16, RemoteStorageUpdatePublishedFileResult_t_116x_w_from_u },
-    { 1317, 160, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
+    { 1317, 162, 296, 288, RemoteStorageDownloadUGCResult_t_123_w_from_u },
     { 1317, 122, 296, 296, RemoteStorageDownloadUGCResult_t_116x_w_from_u },
-    { 1318, 160, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
+    { 1318, 162, 9760, 9748, RemoteStorageGetPublishedFileDetailsResult_t_126_w_from_u },
     { 1318, 125, 9752, 9744, RemoteStorageGetPublishedFileDetailsResult_t_123_w_from_u },
     { 1318, 122, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119x_w_from_u },
     /*{ 1318, 119, 9752, 9752, RemoteStorageGetPublishedFileDetailsResult_t_119_w_from_u },*/
     { 1318, 118, 9496, 9496, RemoteStorageGetPublishedFileDetailsResult_t_118_w_from_u },
-    { 1319, 160, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
+    { 1319, 162, 624, 620, RemoteStorageEnumerateWorkshopFilesResult_t_125_w_from_u },
     { 1319, 124, 616, 612, RemoteStorageEnumerateWorkshopFilesResult_t_123_w_from_u },
     { 1319, 122, 616, 616, RemoteStorageEnumerateWorkshopFilesResult_t_119_w_from_u },
-    { 1320, 160, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
+    { 1320, 162, 32, 28, RemoteStorageGetPublishedItemVoteDetailsResult_t_123_w_from_u },
     { 1320, 122, 32, 32, RemoteStorageGetPublishedItemVoteDetailsResult_t_119_w_from_u },
-    { 1324, 160, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
+    { 1324, 162, 16, 12, RemoteStorageUpdateUserPublishedItemVoteResult_t_123_w_from_u },
     { 1324, 122, 16, 16, RemoteStorageUpdateUserPublishedItemVoteResult_t_119_w_from_u },
-    { 1325, 160, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
+    { 1325, 162, 24, 16, RemoteStorageUserVoteDetails_t_123_w_from_u },
     { 1325, 122, 24, 24, RemoteStorageUserVoteDetails_t_119_w_from_u },
-    { 1326, 160, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
+    { 1326, 162, 416, 412, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123_w_from_u },
     { 1326, 122, 416, 416, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119_w_from_u },
-    { 1327, 160, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
+    { 1327, 162, 24, 16, RemoteStorageSetUserPublishedFileActionResult_t_123_w_from_u },
     { 1327, 122, 24, 24, RemoteStorageSetUserPublishedFileActionResult_t_119_w_from_u },
-    { 1330, 160, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
-    { 2101, 160, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
+    { 1330, 162, 24, 20, RemoteStoragePublishedFileUpdated_t_w_from_u },
+    { 2101, 162, 32, 24, HTTPRequestCompleted_t_132x_w_from_u },
     { 2101, 132, 24, 20, HTTPRequestCompleted_t_123_w_from_u },
     { 2101, 122, 24, 24, HTTPRequestCompleted_t_115_w_from_u },
-    { 2102, 160, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
+    { 2102, 162, 16, 12, HTTPRequestHeadersReceived_t_123_w_from_u },
     { 2102, 122, 16, 16, HTTPRequestHeadersReceived_t_121x_w_from_u },
-    { 2103, 160, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
+    { 2103, 162, 24, 20, HTTPRequestDataReceived_t_123_w_from_u },
     { 2103, 122, 24, 24, HTTPRequestDataReceived_t_121x_w_from_u },
-    { 2803, 160, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
-    { 2804, 160, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
-    { 3402, 160, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
+    { 2803, 162, 40, 32, SteamInputConfigurationLoaded_t_w_from_u },
+    { 2804, 162, 32, 24, SteamInputGamepadSlotChange_t_w_from_u },
+    { 3402, 162, 9792, 9776, SteamUGCRequestUGCDetailsResult_t_160_w_from_u },
     { 3402, 159, 9784, 9768, SteamUGCRequestUGCDetailsResult_t_128x_w_from_u },
     { 3402, 129, 9776, 9764, SteamUGCRequestUGCDetailsResult_t_129_w_from_u },
     { 3402, 128, 9768, 9760, SteamUGCRequestUGCDetailsResult_t_126_w_from_u },
-    { 3403, 160, 24, 16, CreateItemResult_t_w_from_u },
-    { 3405, 160, 32, 28, ItemInstalled_t_160_w_from_u },
+    { 3403, 162, 24, 16, CreateItemResult_t_w_from_u },
+    { 3405, 162, 32, 28, ItemInstalled_t_160_w_from_u },
     { 3405, 159, 16, 12, ItemInstalled_t_130_w_from_u },
-    { 3406, 160, 24, 16, DownloadItemResult_t_w_from_u },
-    { 3412, 160, 24, 20, AddUGCDependencyResult_t_w_from_u },
-    { 3413, 160, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
-    { 3414, 160, 24, 16, AddAppDependencyResult_t_w_from_u },
-    { 3415, 160, 24, 16, RemoveAppDependencyResult_t_w_from_u },
-    { 3416, 160, 152, 148, GetAppDependenciesResult_t_w_from_u },
-    { 3417, 160, 16, 12, DeleteItemResult_t_w_from_u },
-    { 4502, 160, 56, 52, HTML_NeedsPaint_t_w_from_u },
-    { 4503, 160, 40, 32, HTML_StartRequest_t_w_from_u },
-    { 4505, 160, 48, 36, HTML_URLChanged_t_w_from_u },
-    { 4506, 160, 24, 20, HTML_FinishedRequest_t_w_from_u },
-    { 4507, 160, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
-    { 4508, 160, 16, 12, HTML_ChangedTitle_t_w_from_u },
-    { 4513, 160, 32, 24, HTML_LinkAtPosition_t_w_from_u },
-    { 4514, 160, 16, 12, HTML_JSAlert_t_w_from_u },
-    { 4515, 160, 16, 12, HTML_JSConfirm_t_w_from_u },
-    { 4516, 160, 24, 20, HTML_FileOpenDialog_t_w_from_u },
+    { 3406, 162, 24, 16, DownloadItemResult_t_w_from_u },
+    { 3412, 162, 24, 20, AddUGCDependencyResult_t_w_from_u },
+    { 3413, 162, 24, 20, RemoveUGCDependencyResult_t_w_from_u },
+    { 3414, 162, 24, 16, AddAppDependencyResult_t_w_from_u },
+    { 3415, 162, 24, 16, RemoveAppDependencyResult_t_w_from_u },
+    { 3416, 162, 152, 148, GetAppDependenciesResult_t_w_from_u },
+    { 3417, 162, 16, 12, DeleteItemResult_t_w_from_u },
+    { 4502, 162, 56, 52, HTML_NeedsPaint_t_w_from_u },
+    { 4503, 162, 40, 32, HTML_StartRequest_t_w_from_u },
+    { 4505, 162, 48, 36, HTML_URLChanged_t_w_from_u },
+    { 4506, 162, 24, 20, HTML_FinishedRequest_t_w_from_u },
+    { 4507, 162, 16, 12, HTML_OpenLinkInNewTab_t_w_from_u },
+    { 4508, 162, 16, 12, HTML_ChangedTitle_t_w_from_u },
+    { 4513, 162, 32, 24, HTML_LinkAtPosition_t_w_from_u },
+    { 4514, 162, 16, 12, HTML_JSAlert_t_w_from_u },
+    { 4515, 162, 16, 12, HTML_JSConfirm_t_w_from_u },
+    { 4516, 162, 24, 20, HTML_FileOpenDialog_t_w_from_u },
     { 4517, 132, 24, 20, HTML_ComboNeedsPaint_t_w_from_u },
-    { 4521, 160, 40, 32, HTML_NewWindow_t_132x_w_from_u },
+    { 4521, 162, 40, 32, HTML_NewWindow_t_132x_w_from_u },
     { 4521, 132, 32, 28, HTML_NewWindow_t_130x_w_from_u },
-    { 4523, 160, 16, 12, HTML_StatusText_t_w_from_u },
-    { 4524, 160, 16, 12, HTML_ShowToolTip_t_w_from_u },
-    { 4525, 160, 16, 12, HTML_UpdateToolTip_t_w_from_u },
-    { 4704, 160, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
-    { 5211, 160, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
-    { 5212, 160, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
-    { 5213, 160, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
-    { 5214, 160, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
-    { 5215, 160, 16, 12, EndGameResultCallback_t_w_from_u },
-    { 5301, 160, 280, 276, JoinPartyCallback_t_w_from_u },
-    { 5302, 160, 16, 12, CreateBeaconCallback_t_w_from_u },
+    { 4523, 162, 16, 12, HTML_StatusText_t_w_from_u },
+    { 4524, 162, 16, 12, HTML_ShowToolTip_t_w_from_u },
+    { 4525, 162, 16, 12, HTML_UpdateToolTip_t_w_from_u },
+    { 4704, 162, 24, 20, SteamInventoryStartPurchaseResult_t_w_from_u },
+    { 5211, 162, 16, 12, RequestPlayersForGameProgressCallback_t_w_from_u },
+    { 5212, 162, 64, 56, RequestPlayersForGameResultCallback_t_w_from_u },
+    { 5213, 162, 24, 20, RequestPlayersForGameFinalResultCallback_t_w_from_u },
+    { 5214, 162, 24, 20, SubmitPlayerResultResultCallback_t_w_from_u },
+    { 5215, 162, 16, 12, EndGameResultCallback_t_w_from_u },
+    { 5301, 162, 280, 276, JoinPartyCallback_t_w_from_u },
+    { 5302, 162, 16, 12, CreateBeaconCallback_t_w_from_u },
 };
 #endif
 const unsigned int callback_data_size = ARRAY_SIZE(callback_data);
