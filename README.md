@@ -331,6 +331,9 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 | `noopwr`              | `WINE_DISABLE_VULKAN_OPWR`               | Enable hack to disable Vulkan other process window rendering which sometimes causes issues on Wayland due to blit being one frame behind. |
 | `hidenvgpu`           | `PROTON_HIDE_NVIDIA_GPU`           | Force Nvidia GPUs to always be reported as AMD GPUs. Some games require this if they depend on Windows-only Nvidia driver functionality. See also DXVK's nvapiHack config, which only affects reporting from Direct3D. |
 |                       | `WINE_FULLSCREEN_INTEGER_SCALING`  | Enable integer scaling mode, to give sharp pixels when upscaling. |
+|                       | `PROTON_ENABLE_IO_PRIORITY`        | Enable IO and CPU priority optimizations to improve game responsiveness during heavy IO activity like recording. Set to `0` to disable. Default: `1` (enabled). |
+|                       | `PROTON_IO_PRIORITY`               | Set IO scheduling priority for games (0-7, lower = higher priority). Default: `2` (high priority). Only used when `PROTON_ENABLE_IO_PRIORITY=1`. |
+|                       | `PROTON_NICE_VALUE`                | Set CPU scheduling priority (nice value) for games (-20 to 19, lower = higher priority). Default: `-2` (slightly higher priority). Requires proper system configuration. |
 | `cmdlineappend:`      |                                    | Append the string after the colon as an argument to the game command. May be specified more than once. Escape commas and backslashes with a backslash. |
 | `xalia` or `noxalia`  | `PROTON_USE_XALIA`                 | Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces, or set to 0 to disable. The default is to enable it dynamically based on window contents. |
 | `fnad3d11`            | `FNA3D_FORCE_DRIVER=D3D11`         | Force FNA to use D3D11 for rendering. |

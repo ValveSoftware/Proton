@@ -1944,7 +1944,72 @@ class Session:
     def run_proc(self, args, local_env=None):
         if local_env is None:
             local_env = self.env
-        return subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
+        
+        # Check if IO priority optimization is enabled (default: enabled)
+        enable_io_priority = os.environ.get("PROTON_ENABLE_IO_PRIORITY", "1") == "1"
+        
+        # Set up IO and CPU scheduling for better performance during heavy IO activity
+        def preexec_fn():
+            if not enable_io_priority:
+                return
+                
+            try:
+                # Set IO scheduling class to best-effort with high priority (lower value = higher priority)
+                # This helps games maintain responsiveness during heavy IO operations like recording
+                # ioprio_set(IOPRIO_WHO_PROCESS, pid, IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, priority))
+                # IOPRIO_CLASS_BE = 1, priority 2 (range 0-7, 0=highest)
+                import ctypes
+                libc = ctypes.CDLL("libc.so.6", use_errno=True)
+                
+                # Constants for ioprio_set
+                IOPRIO_WHO_PROCESS = 1
+                IOPRIO_CLASS_BE = 1  # Best-effort scheduling class
+                
+                def IOPRIO_PRIO_VALUE(ioprio_class, ioprio_data):
+                    return (ioprio_class << 13) | ioprio_data
+                
+                # Allow user to customize IO priority (default: 2 = high priority)
+                io_priority = int(os.environ.get("PROTON_IO_PRIORITY", "2"))
+                if io_priority < 0 or io_priority > 7:
+                    io_priority = 2  # Fallback to safe default
+                
+                # Set IO priority to best-effort class with specified priority
+                ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, io_priority)
+                result = libc.ioprio_set(IOPRIO_WHO_PROCESS, 0, ioprio)
+                if result != 0:
+                    # If ioprio_set fails, it's not critical - log and continue
+                    errno = ctypes.get_errno()
+                    log(f"Warning: Could not set IO priority (errno: {errno}). Continuing anyway.")
+                
+                # Set CPU scheduler priority (nice value) to slightly higher than normal
+                # This gives games a small CPU scheduling advantage during heavy IO
+                try:
+                    # Allow user to customize nice value (default: -2 = slightly higher priority)
+                    nice_value = int(os.environ.get("PROTON_NICE_VALUE", "-2"))
+                    if nice_value < -20 or nice_value > 19:
+                        nice_value = -2  # Fallback to safe default
+                    
+                    os.setpriority(os.PRIO_PROCESS, 0, nice_value)
+                except OSError as e:
+                    # If we can't set negative nice (higher priority), try positive nice
+                    if e.errno == 1:  # EPERM - Operation not permitted
+                        try:
+                            # Set nice value to 0 (normal priority) as fallback
+                            os.setpriority(os.PRIO_PROCESS, 0, 0)
+                        except OSError:
+                            # If even that fails, continue without changing priority
+                            log("Warning: Could not adjust process priority. Consider configuring /etc/security/limits.conf for better performance.")
+                    else:
+                        log(f"Warning: Could not set process priority: {e}")
+                        
+            except Exception as e:
+                # Don't fail the whole process if priority setting fails
+                log(f"Warning: Could not configure process scheduling: {e}")
+        
+        if enable_io_priority:
+            return subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file, preexec_fn=preexec_fn)
+        else:
+            return subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
     def run(self):
         if shutil.which('steam-runtime-launcher-interface-0') is not None:
