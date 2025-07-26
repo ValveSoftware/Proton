@@ -250,12 +250,25 @@ def try_copyfile(src, dst):
         if file_exists(dst, follow_symlinks=False):
             os.remove(dst)
         copyfile(src, dst)
+    except FileNotFoundError as e:
+        log(f"File not found error while copying from \"{src}\" to \"{dst}\": {e.strerror}")
     except PermissionError as e:
         if e.errno == errno.EPERM:
-            #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
-            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+            log(f"Permission error while copying to \"{dst}\": {e.strerror}")
         else:
+            log(f"Permission error with code {e.errno} while copying to \"{dst}\": {e.strerror}")
             raise
+    except OSError as e:
+        if e.errno in (errno.ENOSPC, errno.EDQUOT):
+            log(f"Disk space error while copying from \"{src}\" to \"{dst}\": {e.strerror}")
+        elif e.errno == errno.EIO:
+            log(f"I/O error while copying from \"{src}\" to \"{dst}\": {e.strerror}")
+        else:
+            log(f"OS error while copying from \"{src}\" to \"{dst}\": {e.strerror}")
+        raise
+    except Exception as e:
+        log(f"Unexpected error while copying from \"{src}\" to \"{dst}\": {str(e)}")
+        raise
 
 def getmtimestr(*path_fragments):
     path = os.path.join(*path_fragments)
