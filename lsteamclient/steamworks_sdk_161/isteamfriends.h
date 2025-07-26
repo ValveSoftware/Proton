@@ -108,7 +108,7 @@ const uint16 k_usFriendGameInfoQueryPort_NotInitialized = 0xFFFF;		// We haven't
 const uint16 k_usFriendGameInfoQueryPort_Error          = 0xFFFE;		// We were unable to get the query port for this server.  Was #define QUERY_PORT_ERROR in older versions of Steamworks SDK.
 
 // maximum number of characters in a user's name. Two flavors; one for UTF-8 and one for UTF-16.
-// The UTF-8 version has to be very generous to accomodate characters that get large when encoded
+// The UTF-8 version has to be very generous to accommodate characters that get large when encoded
 // in UTF-8.
 enum
 {
@@ -235,7 +235,7 @@ public:
 
 	// returns the name another user - guaranteed to not be NULL.
 	// same rules as GetFriendPersonaState() apply as to whether or not the user knowns the name of the other user
-	// note that on first joining a lobby, chat room or game server the local user will not known the name of the other users automatically; that information will arrive asyncronously
+	// note that on first joining a lobby, chat room or game server the local user will not known the name of the other users automatically; that information will arrive asynchronously
 	// 
 	virtual const char *GetFriendPersonaName( CSteamID steamIDFriend ) = 0;
 

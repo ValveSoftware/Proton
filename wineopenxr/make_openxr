@@ -1326,7 +1326,7 @@ class XrParam(object):
 
             self._direction = Direction.OUTPUT
         else:
-            # This should mostly be right. Count variables can be inout, but we don't care about these yet.
+            # This should mostly be right. Count variables can be input, but we don't care about these yet.
             self._direction = Direction.OUTPUT
 
     def _set_format_string(self):

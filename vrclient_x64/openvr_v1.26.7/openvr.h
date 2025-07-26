@@ -5281,7 +5281,7 @@ namespace vr
 
 		/** Terminate a vr profiler event
 		* The event associated with hHandle will be considered completed when this method is called.
-		* The current time will be used assocaited to the termination time of the event, and
+		* The current time will be used associated to the termination time of the event, and
 		* pchMessage will be used as the event title. */
 		virtual EVRDebugError FinishVrProfilerEvent( VrProfilerEventHandle_t hHandle, const char *pchMessage ) = 0;
 

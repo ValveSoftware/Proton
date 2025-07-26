@@ -93,7 +93,7 @@ typedef struct ScePadTriggerEffectMultiplePositionFeedbackParam{
 /**
  *E  
  *  @brief parameter for setting the trigger effect to Feedback3 mode.
- *         Slope Feedback Mode: The motor arm pushes back trigger between two spedified control points.
+ *         Slope Feedback Mode: The motor arm pushes back trigger between two specified control points.
  *                              Stiffness of the trigger is changing depending on the set place.
  **/
 typedef struct ScePadTriggerEffectSlopeFeedbackParam{

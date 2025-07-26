@@ -285,7 +285,7 @@ struct VRTextureBounds_t
 };
 
 
-/** Allows the applicaiton to control how scene textures are used by the compositor when calling Submit. */
+/** Allows the application to control how scene textures are used by the compositor when calling Submit. */
 enum VRSubmitFlags_t
 {
 	// Simple render path. App submits rendered left and right eye images with no lens distortion correction applied.
