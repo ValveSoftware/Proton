@@ -10,8 +10,6 @@ FROM @PROTONSDK_URLBASE@/mingw-pthreads-i686:@MINGW_VERSION@ AS mingw-pthreads-i
 FROM @PROTONSDK_URLBASE@/mingw-pthreads-x86_64:@MINGW_VERSION@ AS mingw-pthreads-x86_64
 FROM @PROTONSDK_URLBASE@/mingw-widl-i686:@MINGW_VERSION@ AS mingw-widl-i686
 FROM @PROTONSDK_URLBASE@/mingw-widl-x86_64:@MINGW_VERSION@ AS mingw-widl-x86_64
-FROM @PROTONSDK_URLBASE@/gcc-i686-linux-gnu:@GCC_VERSION@ AS gcc-linux-i686
-FROM @PROTONSDK_URLBASE@/gcc-x86_64-linux-gnu:@GCC_VERSION@ AS gcc-linux-x86_64
 FROM @PROTONSDK_URLBASE@/gcc-i686-w64-mingw32:@GCC_VERSION@ AS gcc-mingw-i686
 FROM @PROTONSDK_URLBASE@/gcc-x86_64-w64-mingw32:@GCC_VERSION@ AS gcc-mingw-x86_64
 
@@ -28,8 +26,6 @@ COPY --from=mingw-pthreads-i686   /opt/usr /usr
 COPY --from=mingw-pthreads-x86_64 /opt/usr /usr
 COPY --from=mingw-widl-i686       /opt/usr /usr
 COPY --from=mingw-widl-x86_64     /opt/usr /usr
-COPY --from=gcc-linux-i686        /opt/usr /usr
-COPY --from=gcc-linux-x86_64      /opt/usr /usr
 COPY --from=gcc-mingw-i686        /opt/usr /usr
 COPY --from=gcc-mingw-x86_64      /opt/usr /usr
 
@@ -49,7 +45,7 @@ RUN wget -q @RUST_URLBASE@/@RUST_SOURCE_i686@ \
 RUN bash -c 'ls /opt/rust/bin/* | xargs -n1 -I{} ln -sf {} /usr/bin/'
 
 RUN bash -c 'mkdir -p /usr/lib/ccache && ls /usr/bin/{,*-}{cc,c++,gcc,g++}{,-[0-9]*} | sed -re s:/bin:/lib/ccache: | xargs -n1 ln -sf ../../bin/ccache'
-ENV PATH=/usr/lib/ccache:$PATH
+ENV PATH=/usr/lib/ccache:/usr/lib/gcc-14/bin:$PATH
 
 RUN apt-get install -y \
   autoconf-archive \
