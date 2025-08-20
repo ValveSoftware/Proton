@@ -835,6 +835,9 @@ class Class:
                and method.name == 'InitiateGameConnection':
                 types[3] = 'CGameID *'
 
+            if self.full_name == 'ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002':
+                types[0] = 'CGameID *'
+
             if type(method) is Destructor:
                 out(f'    virtual ~{prefix}{self.full_name}( {", ".join(types)} ) = 0;\n')
             else:
@@ -1121,6 +1124,9 @@ def handle_method_cpp(method, classname, out, wow64):
     if klass.full_name == 'ISteamUser_SteamUser008' \
        and method.name == 'InitiateGameConnection':
         params[3] = f'&{params[3]}'
+
+    if klass.full_name == 'ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002':
+        params[0] = f'&{params[0]}'
 
     out(f'iface->{method.spelling}( {", ".join(params)} );\n')
 
