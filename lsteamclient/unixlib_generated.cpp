@@ -2283,6 +2283,97 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUserUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUGCDetailsRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SendQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCResult,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTagDisplayName,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCPreviewURL,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCStatistic,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCAdditionalPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_2,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCContentDescriptors,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ReleaseQueryUGCRequest,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTagGroup,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddExcludedTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnOnlyIDs,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnLongDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnChildren,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnAdditionalPreviews,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnTotalOnly,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnPlaytimeStats,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowCachedResponse,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAdminQuery,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetCloudFileNameFilter,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetMatchAnyTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetSearchText,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetRankedByTrendDays,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeCreatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeUpdatedDateRange,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RequestUGCDetails,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTitle,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemDescription,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemUpdateLanguage,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemMetadata,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemVisibility,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemContent,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowLegacyUpload,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAllItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemKeyValueTags,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemKeyValueTag,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewFile,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewVideo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemPreview,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveContentDescriptor,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubmitItemUpdate,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemUpdateProgress,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserItemVote,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemToFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemFromFavorites,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UnsubscribeItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetNumSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetSubscribedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemState,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemInstallInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemDownloadInfo,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DownloadItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_BInitWorkshopForGameServer,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SuspendDownloads,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTracking,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTrackingForAllItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAppDependency,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetAppDependencies,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DeleteItem,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ShowWorkshopEULA,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetWorkshopEULAStatus,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserContentDescriptorPreferences,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUserUGCRequest,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest_2,
@@ -8552,6 +8643,97 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUserUGCRequest,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_2,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUGCDetailsRequest,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SendQueryUGCRequest,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCResult,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTagDisplayName,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCPreviewURL,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCMetadata,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCChildren,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCStatistic,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumAdditionalPreviews,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCAdditionalPreview,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumKeyValueTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_2,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCContentDescriptors,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ReleaseQueryUGCRequest,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTagGroup,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddExcludedTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnOnlyIDs,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnKeyValueTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnLongDescription,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnMetadata,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnChildren,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnAdditionalPreviews,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnTotalOnly,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnPlaytimeStats,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetLanguage,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowCachedResponse,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAdminQuery,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetCloudFileNameFilter,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetMatchAnyTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetSearchText,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetRankedByTrendDays,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeCreatedDateRange,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeUpdatedDateRange,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredKeyValueTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RequestUGCDetails,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateItem,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartItemUpdate,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTitle,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemDescription,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemUpdateLanguage,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemMetadata,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemVisibility,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemContent,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemPreview,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowLegacyUpload,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAllItemKeyValueTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemKeyValueTags,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemKeyValueTag,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewFile,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewVideo,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewFile,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewVideo,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemPreview,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddContentDescriptor,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveContentDescriptor,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubmitItemUpdate,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemUpdateProgress,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetUserItemVote,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserItemVote,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemToFavorites,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemFromFavorites,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubscribeItem,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UnsubscribeItem,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetNumSubscribedItems,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetSubscribedItems,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemState,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemInstallInfo,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemDownloadInfo,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DownloadItem,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_BInitWorkshopForGameServer,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SuspendDownloads,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartPlaytimeTracking,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTracking,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTrackingForAllItems,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddDependency,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveDependency,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddAppDependency,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAppDependency,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetAppDependencies,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DeleteItem,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ShowWorkshopEULA,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetWorkshopEULAStatus,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserContentDescriptorPreferences,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUserUGCRequest,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest_2,
@@ -14363,229 +14545,229 @@ C_ASSERT( sizeof(gameserveritem_t_099u().m_szServerName) >= 64 );
 C_ASSERT( offsetof(gameserveritem_t_099u, m_szGameTags) == 236 );
 C_ASSERT( sizeof(gameserveritem_t_099u().m_szGameTags) >= 128 );
 
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160) >= 9784 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eResult) == 8 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eResult) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eFileType) == 12 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eFileType) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8160 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeCreated) == 8168 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeUpdated) == 8172 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8176 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_eVisibility) == 8180 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bBanned) == 8184 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bBanned) >= 1 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8185 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_bTagsTruncated) == 8186 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchTags) == 8187 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_hFile) == 9216 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_hFile) >= 8 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_hPreviewFile) == 9224 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_pchFileName) == 9232 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nFileSize) == 9492 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9496 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_rgchURL) == 9500 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unVotesUp) == 9756 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unVotesDown) == 9760 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_flScore) == 9764 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_flScore) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_unNumChildren) == 9768 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
-C_ASSERT( offsetof(w64_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9776 );
-C_ASSERT( sizeof(w64_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x) >= 9784 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_eResult) == 8 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_eResult) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_eFileType) == 12 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_eFileType) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_ulSteamIDOwner) == 8160 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rtimeCreated) == 8168 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rtimeUpdated) == 8172 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rtimeAddedToUserList) == 8176 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_eVisibility) == 8180 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_bBanned) == 8184 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_bBanned) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_bAcceptedForUse) == 8185 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_bTagsTruncated) == 8186 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rgchTags) == 8187 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_hFile) == 9216 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_hFile) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_hPreviewFile) == 9224 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_pchFileName) == 9232 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_nFileSize) == 9492 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_nPreviewFileSize) == 9496 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_rgchURL) == 9500 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_unVotesUp) == 9756 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_unVotesDown) == 9760 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_flScore) == 9764 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_flScore) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_unNumChildren) == 9768 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(w64_SteamUGCDetails_t_159x, m_ulTotalFilesSize) == 9776 );
+C_ASSERT( sizeof(w64_SteamUGCDetails_t_159x().m_ulTotalFilesSize) >= 8 );
 
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160) >= 9772 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eResult) == 8 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eResult) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eFileType) == 12 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eFileType) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8156 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeCreated) == 8164 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeUpdated) == 8168 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8172 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_eVisibility) == 8176 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bBanned) == 8180 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bBanned) >= 1 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8181 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_bTagsTruncated) == 8182 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchTags) == 8183 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_hFile) == 9208 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_hFile) >= 8 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_hPreviewFile) == 9216 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_pchFileName) == 9224 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nFileSize) == 9484 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9488 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_rgchURL) == 9492 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unVotesUp) == 9748 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unVotesDown) == 9752 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_flScore) == 9756 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_flScore) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_unNumChildren) == 9760 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
-C_ASSERT( offsetof(u64_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9764 );
-C_ASSERT( sizeof(u64_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x) >= 9772 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_eResult) == 8 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_eResult) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_eFileType) == 12 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_eFileType) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_ulSteamIDOwner) == 8156 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rtimeCreated) == 8164 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rtimeUpdated) == 8168 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rtimeAddedToUserList) == 8172 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_eVisibility) == 8176 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_bBanned) == 8180 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_bBanned) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_bAcceptedForUse) == 8181 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_bTagsTruncated) == 8182 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rgchTags) == 8183 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_hFile) == 9208 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_hFile) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_hPreviewFile) == 9216 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_pchFileName) == 9224 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_nFileSize) == 9484 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_nPreviewFileSize) == 9488 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_rgchURL) == 9492 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_unVotesUp) == 9748 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_unVotesDown) == 9752 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_flScore) == 9756 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_flScore) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_unNumChildren) == 9760 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(u64_SteamUGCDetails_t_159x, m_ulTotalFilesSize) == 9764 );
+C_ASSERT( sizeof(u64_SteamUGCDetails_t_159x().m_ulTotalFilesSize) >= 8 );
 
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160) >= 9784 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eResult) == 8 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eResult) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eFileType) == 12 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eFileType) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8160 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeCreated) == 8168 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeUpdated) == 8172 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8176 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_eVisibility) == 8180 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bBanned) == 8184 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bBanned) >= 1 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8185 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_bTagsTruncated) == 8186 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchTags) == 8187 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_hFile) == 9216 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_hFile) >= 8 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_hPreviewFile) == 9224 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_pchFileName) == 9232 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nFileSize) == 9492 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9496 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_rgchURL) == 9500 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unVotesUp) == 9756 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unVotesDown) == 9760 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_flScore) == 9764 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_flScore) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_unNumChildren) == 9768 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
-C_ASSERT( offsetof(w32_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9776 );
-C_ASSERT( sizeof(w32_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x) >= 9784 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_eResult) == 8 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_eResult) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_eFileType) == 12 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_eFileType) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_ulSteamIDOwner) == 8160 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rtimeCreated) == 8168 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rtimeUpdated) == 8172 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rtimeAddedToUserList) == 8176 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_eVisibility) == 8180 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_bBanned) == 8184 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_bBanned) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_bAcceptedForUse) == 8185 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_bTagsTruncated) == 8186 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rgchTags) == 8187 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_hFile) == 9216 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_hFile) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_hPreviewFile) == 9224 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_pchFileName) == 9232 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_nFileSize) == 9492 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_nPreviewFileSize) == 9496 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_rgchURL) == 9500 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_unVotesUp) == 9756 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_unVotesDown) == 9760 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_flScore) == 9764 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_flScore) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_unNumChildren) == 9768 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(w32_SteamUGCDetails_t_159x, m_ulTotalFilesSize) == 9776 );
+C_ASSERT( sizeof(w32_SteamUGCDetails_t_159x().m_ulTotalFilesSize) >= 8 );
 
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160) >= 9772 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nPublishedFileId) == 0 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eResult) == 8 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eResult) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eFileType) == 12 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eFileType) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nCreatorAppID) == 16 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nCreatorAppID) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nConsumerAppID) == 20 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nConsumerAppID) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchTitle) == 24 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchTitle) >= 129 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchDescription) == 153 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchDescription) >= 8000 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_ulSteamIDOwner) == 8156 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_ulSteamIDOwner) >= 8 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeCreated) == 8164 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeCreated) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeUpdated) == 8168 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeUpdated) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rtimeAddedToUserList) == 8172 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rtimeAddedToUserList) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_eVisibility) == 8176 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_eVisibility) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bBanned) == 8180 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bBanned) >= 1 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bAcceptedForUse) == 8181 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bAcceptedForUse) >= 1 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_bTagsTruncated) == 8182 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_bTagsTruncated) >= 1 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchTags) == 8183 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchTags) >= 1025 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_hFile) == 9208 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_hFile) >= 8 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_hPreviewFile) == 9216 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_hPreviewFile) >= 8 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_pchFileName) == 9224 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_pchFileName) >= 260 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nFileSize) == 9484 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nFileSize) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_nPreviewFileSize) == 9488 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_nPreviewFileSize) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_rgchURL) == 9492 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_rgchURL) >= 256 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unVotesUp) == 9748 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unVotesUp) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unVotesDown) == 9752 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unVotesDown) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_flScore) == 9756 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_flScore) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_unNumChildren) == 9760 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_unNumChildren) >= 4 );
-C_ASSERT( offsetof(u32_SteamUGCDetails_t_160, m_ulTotalFilesSize) == 9764 );
-C_ASSERT( sizeof(u32_SteamUGCDetails_t_160().m_ulTotalFilesSize) >= 8 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x) >= 9772 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_nPublishedFileId) == 0 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_eResult) == 8 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_eResult) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_eFileType) == 12 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_eFileType) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_nCreatorAppID) == 16 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_nCreatorAppID) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_nConsumerAppID) == 20 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_nConsumerAppID) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rgchTitle) == 24 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rgchTitle) >= 129 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rgchDescription) == 153 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rgchDescription) >= 8000 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_ulSteamIDOwner) == 8156 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_ulSteamIDOwner) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rtimeCreated) == 8164 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rtimeCreated) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rtimeUpdated) == 8168 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rtimeUpdated) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rtimeAddedToUserList) == 8172 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rtimeAddedToUserList) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_eVisibility) == 8176 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_eVisibility) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_bBanned) == 8180 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_bBanned) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_bAcceptedForUse) == 8181 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_bAcceptedForUse) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_bTagsTruncated) == 8182 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_bTagsTruncated) >= 1 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rgchTags) == 8183 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rgchTags) >= 1025 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_hFile) == 9208 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_hFile) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_hPreviewFile) == 9216 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_hPreviewFile) >= 8 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_pchFileName) == 9224 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_pchFileName) >= 260 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_nFileSize) == 9484 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_nFileSize) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_nPreviewFileSize) == 9488 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_nPreviewFileSize) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_rgchURL) == 9492 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_rgchURL) >= 256 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_unVotesUp) == 9748 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_unVotesUp) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_unVotesDown) == 9752 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_unVotesDown) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_flScore) == 9756 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_flScore) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_unNumChildren) == 9760 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_unNumChildren) >= 4 );
+C_ASSERT( offsetof(u32_SteamUGCDetails_t_159x, m_ulTotalFilesSize) == 9764 );
+C_ASSERT( sizeof(u32_SteamUGCDetails_t_159x().m_ulTotalFilesSize) >= 8 );
 
 C_ASSERT( sizeof(w64_SteamUGCDetails_t_128x) >= 9776 );
 C_ASSERT( offsetof(w64_SteamUGCDetails_t_128x, m_nPublishedFileId) == 0 );
@@ -15012,9 +15194,9 @@ C_ASSERT( offsetof(u32_SteamUGCDetails_t_126, m_flScore) == 9756 );
 C_ASSERT( sizeof(u32_SteamUGCDetails_t_126().m_flScore) >= 4 );
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w64_SteamUGCDetails_t_160::operator u64_SteamUGCDetails_t_160() const
+w64_SteamUGCDetails_t_159x::operator u64_SteamUGCDetails_t_159x() const
 {
-    u64_SteamUGCDetails_t_160 ret;
+    u64_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -15047,9 +15229,9 @@ w64_SteamUGCDetails_t_160::operator u64_SteamUGCDetails_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamUGCDetails_t_160::operator w64_SteamUGCDetails_t_160() const
+u64_SteamUGCDetails_t_159x::operator w64_SteamUGCDetails_t_159x() const
 {
-    w64_SteamUGCDetails_t_160 ret;
+    w64_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -15082,9 +15264,9 @@ u64_SteamUGCDetails_t_160::operator w64_SteamUGCDetails_t_160() const
 #endif
 
 #ifdef __i386__
-w32_SteamUGCDetails_t_160::operator u32_SteamUGCDetails_t_160() const
+w32_SteamUGCDetails_t_159x::operator u32_SteamUGCDetails_t_159x() const
 {
-    u32_SteamUGCDetails_t_160 ret;
+    u32_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -15117,9 +15299,9 @@ w32_SteamUGCDetails_t_160::operator u32_SteamUGCDetails_t_160() const
 #endif
 
 #ifdef __i386__
-u32_SteamUGCDetails_t_160::operator w32_SteamUGCDetails_t_160() const
+u32_SteamUGCDetails_t_159x::operator w32_SteamUGCDetails_t_159x() const
 {
-    w32_SteamUGCDetails_t_160 ret;
+    w32_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -15152,9 +15334,9 @@ u32_SteamUGCDetails_t_160::operator w32_SteamUGCDetails_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_SteamUGCDetails_t_160::operator u64_SteamUGCDetails_t_160() const
+w32_SteamUGCDetails_t_159x::operator u64_SteamUGCDetails_t_159x() const
 {
-    u64_SteamUGCDetails_t_160 ret;
+    u64_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -15187,9 +15369,9 @@ w32_SteamUGCDetails_t_160::operator u64_SteamUGCDetails_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamUGCDetails_t_160::operator w32_SteamUGCDetails_t_160() const
+u64_SteamUGCDetails_t_159x::operator w32_SteamUGCDetails_t_159x() const
 {
-    w32_SteamUGCDetails_t_160 ret;
+    w32_SteamUGCDetails_t_159x ret;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_eResult = this->m_eResult;
     ret.m_eFileType = this->m_eFileType;
@@ -18761,45 +18943,45 @@ u64_HTTPRequestHeadersReceived_t_121x::operator w32_HTTPRequestHeadersReceived_t
 }
 #endif
 
-C_ASSERT( sizeof(w64_ItemInstalled_t_160) >= 32 );
-C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_unAppID) == 0 );
-C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_unAppID) >= 4 );
-C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_nPublishedFileId) == 8 );
-C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_hLegacyContent) == 16 );
-C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
-C_ASSERT( offsetof(w64_ItemInstalled_t_160, m_unManifestID) == 24 );
-C_ASSERT( sizeof(w64_ItemInstalled_t_160().m_unManifestID) >= 8 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_159x) >= 32 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_159x, m_unAppID) == 0 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_159x().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_159x, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_159x, m_hLegacyContent) == 16 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_159x().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(w64_ItemInstalled_t_159x, m_unManifestID) == 24 );
+C_ASSERT( sizeof(w64_ItemInstalled_t_159x().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(u64_ItemInstalled_t_160) >= 28 );
-C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_unAppID) == 0 );
-C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_unAppID) >= 4 );
-C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_nPublishedFileId) == 4 );
-C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_hLegacyContent) == 12 );
-C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
-C_ASSERT( offsetof(u64_ItemInstalled_t_160, m_unManifestID) == 20 );
-C_ASSERT( sizeof(u64_ItemInstalled_t_160().m_unManifestID) >= 8 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_159x) >= 28 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_159x, m_unAppID) == 0 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_159x().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_159x, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_159x, m_hLegacyContent) == 12 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_159x().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(u64_ItemInstalled_t_159x, m_unManifestID) == 20 );
+C_ASSERT( sizeof(u64_ItemInstalled_t_159x().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(w32_ItemInstalled_t_160) >= 32 );
-C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_unAppID) == 0 );
-C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_unAppID) >= 4 );
-C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_nPublishedFileId) == 8 );
-C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_hLegacyContent) == 16 );
-C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
-C_ASSERT( offsetof(w32_ItemInstalled_t_160, m_unManifestID) == 24 );
-C_ASSERT( sizeof(w32_ItemInstalled_t_160().m_unManifestID) >= 8 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_159x) >= 32 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_159x, m_unAppID) == 0 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_159x().m_unAppID) >= 4 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_159x, m_nPublishedFileId) == 8 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_159x, m_hLegacyContent) == 16 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_159x().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(w32_ItemInstalled_t_159x, m_unManifestID) == 24 );
+C_ASSERT( sizeof(w32_ItemInstalled_t_159x().m_unManifestID) >= 8 );
 
-C_ASSERT( sizeof(u32_ItemInstalled_t_160) >= 28 );
-C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_unAppID) == 0 );
-C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_unAppID) >= 4 );
-C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_nPublishedFileId) == 4 );
-C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_nPublishedFileId) >= 8 );
-C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_hLegacyContent) == 12 );
-C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_hLegacyContent) >= 8 );
-C_ASSERT( offsetof(u32_ItemInstalled_t_160, m_unManifestID) == 20 );
-C_ASSERT( sizeof(u32_ItemInstalled_t_160().m_unManifestID) >= 8 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_159x) >= 28 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_159x, m_unAppID) == 0 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_159x().m_unAppID) >= 4 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_159x, m_nPublishedFileId) == 4 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_159x().m_nPublishedFileId) >= 8 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_159x, m_hLegacyContent) == 12 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_159x().m_hLegacyContent) >= 8 );
+C_ASSERT( offsetof(u32_ItemInstalled_t_159x, m_unManifestID) == 20 );
+C_ASSERT( sizeof(u32_ItemInstalled_t_159x().m_unManifestID) >= 8 );
 
 C_ASSERT( sizeof(w64_ItemInstalled_t_130) >= 16 );
 C_ASSERT( offsetof(w64_ItemInstalled_t_130, m_unAppID) == 0 );
@@ -18826,9 +19008,9 @@ C_ASSERT( offsetof(u32_ItemInstalled_t_130, m_nPublishedFileId) == 4 );
 C_ASSERT( sizeof(u32_ItemInstalled_t_130().m_nPublishedFileId) >= 8 );
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w64_ItemInstalled_t_160::operator u64_ItemInstalled_t_160() const
+w64_ItemInstalled_t_159x::operator u64_ItemInstalled_t_159x() const
 {
-    u64_ItemInstalled_t_160 ret;
+    u64_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -18838,9 +19020,9 @@ w64_ItemInstalled_t_160::operator u64_ItemInstalled_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_ItemInstalled_t_160::operator w64_ItemInstalled_t_160() const
+u64_ItemInstalled_t_159x::operator w64_ItemInstalled_t_159x() const
 {
-    w64_ItemInstalled_t_160 ret;
+    w64_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -18850,9 +19032,9 @@ u64_ItemInstalled_t_160::operator w64_ItemInstalled_t_160() const
 #endif
 
 #ifdef __i386__
-w32_ItemInstalled_t_160::operator u32_ItemInstalled_t_160() const
+w32_ItemInstalled_t_159x::operator u32_ItemInstalled_t_159x() const
 {
-    u32_ItemInstalled_t_160 ret;
+    u32_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -18862,9 +19044,9 @@ w32_ItemInstalled_t_160::operator u32_ItemInstalled_t_160() const
 #endif
 
 #ifdef __i386__
-u32_ItemInstalled_t_160::operator w32_ItemInstalled_t_160() const
+u32_ItemInstalled_t_159x::operator w32_ItemInstalled_t_159x() const
 {
-    w32_ItemInstalled_t_160 ret;
+    w32_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -18874,9 +19056,9 @@ u32_ItemInstalled_t_160::operator w32_ItemInstalled_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_ItemInstalled_t_160::operator u64_ItemInstalled_t_160() const
+w32_ItemInstalled_t_159x::operator u64_ItemInstalled_t_159x() const
 {
-    u64_ItemInstalled_t_160 ret;
+    u64_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -18886,9 +19068,9 @@ w32_ItemInstalled_t_160::operator u64_ItemInstalled_t_160() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_ItemInstalled_t_160::operator w32_ItemInstalled_t_160() const
+u64_ItemInstalled_t_159x::operator w32_ItemInstalled_t_159x() const
 {
-    w32_ItemInstalled_t_160 ret;
+    w32_ItemInstalled_t_159x ret;
     ret.m_unAppID = this->m_unAppID;
     ret.m_nPublishedFileId = this->m_nPublishedFileId;
     ret.m_hLegacyContent = this->m_hLegacyContent;
@@ -27347,29 +27529,29 @@ u64_SteamPartyBeaconLocation_t::operator w32_SteamPartyBeaconLocation_t() const
 }
 #endif
 
-C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160) >= 9792 );
-C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
-C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9784 );
-C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9784 );
-C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_159x) >= 9792 );
+C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_159x, m_details) == 0 );
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_159x().m_details) >= 9784 );
+C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_159x, m_bCachedData) == 9784 );
+C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_159x().m_bCachedData) >= 1 );
 
-C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160) >= 9776 );
-C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
-C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9772 );
-C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9772 );
-C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_159x) >= 9776 );
+C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_159x, m_details) == 0 );
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_159x().m_details) >= 9772 );
+C_ASSERT( offsetof(u64_SteamUGCRequestUGCDetailsResult_t_159x, m_bCachedData) == 9772 );
+C_ASSERT( sizeof(u64_SteamUGCRequestUGCDetailsResult_t_159x().m_bCachedData) >= 1 );
 
-C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160) >= 9792 );
-C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
-C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9784 );
-C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9784 );
-C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_159x) >= 9792 );
+C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_159x, m_details) == 0 );
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_159x().m_details) >= 9784 );
+C_ASSERT( offsetof(w32_SteamUGCRequestUGCDetailsResult_t_159x, m_bCachedData) == 9784 );
+C_ASSERT( sizeof(w32_SteamUGCRequestUGCDetailsResult_t_159x().m_bCachedData) >= 1 );
 
-C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160) >= 9776 );
-C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_160, m_details) == 0 );
-C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160().m_details) >= 9772 );
-C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_160, m_bCachedData) == 9772 );
-C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_160().m_bCachedData) >= 1 );
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_159x) >= 9776 );
+C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_159x, m_details) == 0 );
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_159x().m_details) >= 9772 );
+C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_159x, m_bCachedData) == 9772 );
+C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_159x().m_bCachedData) >= 1 );
 
 C_ASSERT( sizeof(w64_SteamUGCRequestUGCDetailsResult_t_128x) >= 9784 );
 C_ASSERT( offsetof(w64_SteamUGCRequestUGCDetailsResult_t_128x, m_details) == 0 );
@@ -27436,9 +27618,9 @@ C_ASSERT( offsetof(u32_SteamUGCRequestUGCDetailsResult_t_126, m_details) == 0 );
 C_ASSERT( sizeof(u32_SteamUGCRequestUGCDetailsResult_t_126().m_details) >= 9760 );
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w64_SteamUGCRequestUGCDetailsResult_t_160::operator u64_SteamUGCRequestUGCDetailsResult_t_160() const
+w64_SteamUGCRequestUGCDetailsResult_t_159x::operator u64_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    u64_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    u64_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27446,9 +27628,9 @@ w64_SteamUGCRequestUGCDetailsResult_t_160::operator u64_SteamUGCRequestUGCDetail
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamUGCRequestUGCDetailsResult_t_160::operator w64_SteamUGCRequestUGCDetailsResult_t_160() const
+u64_SteamUGCRequestUGCDetailsResult_t_159x::operator w64_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    w64_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    w64_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27456,9 +27638,9 @@ u64_SteamUGCRequestUGCDetailsResult_t_160::operator w64_SteamUGCRequestUGCDetail
 #endif
 
 #ifdef __i386__
-w32_SteamUGCRequestUGCDetailsResult_t_160::operator u32_SteamUGCRequestUGCDetailsResult_t_160() const
+w32_SteamUGCRequestUGCDetailsResult_t_159x::operator u32_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    u32_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    u32_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27466,9 +27648,9 @@ w32_SteamUGCRequestUGCDetailsResult_t_160::operator u32_SteamUGCRequestUGCDetail
 #endif
 
 #ifdef __i386__
-u32_SteamUGCRequestUGCDetailsResult_t_160::operator w32_SteamUGCRequestUGCDetailsResult_t_160() const
+u32_SteamUGCRequestUGCDetailsResult_t_159x::operator w32_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    w32_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    w32_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27476,9 +27658,9 @@ u32_SteamUGCRequestUGCDetailsResult_t_160::operator w32_SteamUGCRequestUGCDetail
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_SteamUGCRequestUGCDetailsResult_t_160::operator u64_SteamUGCRequestUGCDetailsResult_t_160() const
+w32_SteamUGCRequestUGCDetailsResult_t_159x::operator u64_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    u64_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    u64_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27486,9 +27668,9 @@ w32_SteamUGCRequestUGCDetailsResult_t_160::operator u64_SteamUGCRequestUGCDetail
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamUGCRequestUGCDetailsResult_t_160::operator w32_SteamUGCRequestUGCDetailsResult_t_160() const
+u64_SteamUGCRequestUGCDetailsResult_t_159x::operator w32_SteamUGCRequestUGCDetailsResult_t_159x() const
 {
-    w32_SteamUGCRequestUGCDetailsResult_t_160 ret;
+    w32_SteamUGCRequestUGCDetailsResult_t_159x ret;
     ret.m_details = this->m_details;
     ret.m_bCachedData = this->m_bCachedData;
     return ret;
@@ -27840,12 +28022,12 @@ const struct callback_def callback_data[] =
     /*{ 2103, 122, 24, 20 },*/
     { 2803, 162, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u32_SteamInputConfigurationLoaded_t *)s; } },
     { 2804, 162, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u32_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_159x *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_159x *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
     { 3403, 162, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u32_CreateItemResult_t *)s; } },
-    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u32_ItemInstalled_t_160 *)s; } },
+    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_159x *)d = *(const u32_ItemInstalled_t_159x *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w32_ItemInstalled_t_130 *)d = *(const u32_ItemInstalled_t_130 *)s; } },
     { 3406, 162, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u32_DownloadItemResult_t *)s; } },
     { 3412, 162, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u32_AddUGCDependencyResult_t *)s; } },
@@ -27952,12 +28134,12 @@ const struct callback_def wow64_callback_data[] =
     { 2103, 122, 24, 24, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_121x *)d = *(const u64_HTTPRequestDataReceived_t_121x *)s; } },
     { 2803, 162, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
     { 2804, 162, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_159x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_159x *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
     { 3403, 162, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
-    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
+    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_159x *)d = *(const u64_ItemInstalled_t_159x *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w32_ItemInstalled_t_130 *)d = *(const u64_ItemInstalled_t_130 *)s; } },
     { 3406, 162, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
     { 3412, 162, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },
@@ -28062,12 +28244,12 @@ const struct callback_def callback_data[] =
     { 2103, 122, 24, 24, []( void *d, const void *s ){ *(w64_HTTPRequestDataReceived_t_121x *)d = *(const u64_HTTPRequestDataReceived_t_121x *)s; } },
     { 2803, 162, 40, 32, []( void *d, const void *s ){ *(w64_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
     { 2804, 162, 32, 24, []( void *d, const void *s ){ *(w64_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 3402, 162, 9792, 9776, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_159x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_159x *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
     { 3403, 162, 24, 16, []( void *d, const void *s ){ *(w64_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
-    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w64_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
+    { 3405, 162, 32, 28, []( void *d, const void *s ){ *(w64_ItemInstalled_t_159x *)d = *(const u64_ItemInstalled_t_159x *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w64_ItemInstalled_t_130 *)d = *(const u64_ItemInstalled_t_130 *)s; } },
     { 3406, 162, 24, 16, []( void *d, const void *s ){ *(w64_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
     { 3412, 162, 24, 20, []( void *d, const void *s ){ *(w64_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },

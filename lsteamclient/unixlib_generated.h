@@ -36159,6 +36159,1534 @@ struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPre
     uint32_t cMaxEntries;
 };
 
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUserUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t unAccountID;
+    uint32_t eListType;
+    uint32_t eMatchingUGCType;
+    uint32_t eSortOrder;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUserUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t unAccountID;
+    uint32_t eListType;
+    uint32_t eMatchingUGCType;
+    uint32_t eSortOrder;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    uint32_t unPage;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_2_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    const char *pchCursor;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_2_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
+    uint32_t nCreatorAppID;
+    uint32_t nConsumerAppID;
+    W32_PTR(const char *pchCursor, pchCursor, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUGCDetailsRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUGCDetailsRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(uint64_t *pvecPublishedFileID, pvecPublishedFileID, uint64_t *);
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SendQueryUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t handle;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SendQueryUGCRequest_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCResult_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    w_SteamUGCDetails_t_159x *pDetails;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCResult_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(w32_SteamUGCDetails_t_159x *pDetails, pDetails, w32_SteamUGCDetails_t_159x *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumTags_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumTags_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    W32_PTR(char *pchValue, pchValue, char *);
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTagDisplayName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTagDisplayName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t indexTag;
+    W32_PTR(char *pchValue, pchValue, char *);
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCPreviewURL_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    char *pchURL;
+    uint32_t cchURLSize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCPreviewURL_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(char *pchURL, pchURL, char *);
+    uint32_t cchURLSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    char *pchMetadata;
+    uint32_t cchMetadatasize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(char *pchMetadata, pchMetadata, char *);
+    uint32_t cchMetadatasize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCChildren_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint64_t *pvecPublishedFileID;
+    uint32_t cMaxEntries;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCChildren_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(uint64_t *pvecPublishedFileID, pvecPublishedFileID, uint64_t *);
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCStatistic_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t eStatType;
+    uint64_t *pStatValue;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCStatistic_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t eStatType;
+    W32_PTR(uint64_t *pStatValue, pStatValue, uint64_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumAdditionalPreviews_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumAdditionalPreviews_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCAdditionalPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t previewIndex;
+    char *pchURLOrVideoID;
+    uint32_t cchURLSize;
+    char *pchOriginalFileName;
+    uint32_t cchOriginalFileNameSize;
+    uint32_t *pPreviewType;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCAdditionalPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t previewIndex;
+    W32_PTR(char *pchURLOrVideoID, pchURLOrVideoID, char *);
+    uint32_t cchURLSize;
+    W32_PTR(char *pchOriginalFileName, pchOriginalFileName, char *);
+    uint32_t cchOriginalFileNameSize;
+    W32_PTR(uint32_t *pPreviewType, pPreviewType, uint32_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumKeyValueTags_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumKeyValueTags_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t keyValueTagIndex;
+    char *pchKey;
+    uint32_t cchKeySize;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t keyValueTagIndex;
+    W32_PTR(char *pchKey, pchKey, char *);
+    uint32_t cchKeySize;
+    W32_PTR(char *pchValue, pchValue, char *);
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_2_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pchKey;
+    char *pchValue;
+    uint32_t cchValueSize;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_2_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(const char *pchKey, pchKey, const char *);
+    W32_PTR(char *pchValue, pchValue, char *);
+    uint32_t cchValueSize;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCContentDescriptors_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    uint32_t *pvecDescriptors;
+    uint32_t cMaxEntries;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCContentDescriptors_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(uint32_t *pvecDescriptors, pvecDescriptors, uint32_t *);
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ReleaseQueryUGCRequest_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ReleaseQueryUGCRequest_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pTagName;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pTagName, pTagName, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTagGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const w_SteamParamStringArray_t *pTagGroups;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTagGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const w32_SteamParamStringArray_t *pTagGroups, pTagGroups, const w32_SteamParamStringArray_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddExcludedTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pTagName;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddExcludedTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pTagName, pTagName, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnOnlyIDs_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnOnlyIDs;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnOnlyIDs_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnOnlyIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnKeyValueTags;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnKeyValueTags;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnLongDescription_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnLongDescription;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnLongDescription_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnLongDescription;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnMetadata;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnMetadata;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnChildren_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnChildren;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnChildren_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnChildren;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnAdditionalPreviews_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnAdditionalPreviews;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnAdditionalPreviews_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnAdditionalPreviews;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnTotalOnly_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnTotalOnly;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnTotalOnly_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bReturnTotalOnly;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnPlaytimeStats_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnPlaytimeStats_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetLanguage_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchLanguage;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetLanguage_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchLanguage, pchLanguage, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowCachedResponse_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowCachedResponse_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAdminQuery_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAdminQuery;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAdminQuery_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAdminQuery;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetCloudFileNameFilter_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pMatchCloudFileName;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetCloudFileNameFilter_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pMatchCloudFileName, pMatchCloudFileName, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetMatchAnyTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bMatchAnyTag;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetMatchAnyTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bMatchAnyTag;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetSearchText_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pSearchText;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetSearchText_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pSearchText, pSearchText, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetRankedByTrendDays_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetRankedByTrendDays_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t unDays;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeCreatedDateRange_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeCreatedDateRange_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeUpdatedDateRange_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeUpdatedDateRange_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t rtStart;
+    uint32_t rtEnd;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pKey;
+    const char *pValue;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pKey, pKey, const char *);
+    W32_PTR(const char *pValue, pValue, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RequestUGCDetails_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RequestUGCDetails_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t unMaxAgeSeconds;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint32_t eFileType;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint32_t eFileType;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartItemUpdate_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartItemUpdate_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nConsumerAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTitle_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchTitle;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTitle_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchTitle, pchTitle, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemDescription_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchDescription;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemDescription_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchDescription, pchDescription, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemUpdateLanguage_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchLanguage;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemUpdateLanguage_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchLanguage, pchLanguage, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchMetaData;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemMetadata_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchMetaData, pchMetaData, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemVisibility_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t eVisibility;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemVisibility_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t eVisibility;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t updateHandle;
+    const w_SteamParamStringArray_t *pTags;
+    int8_t bAllowAdminTags;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t updateHandle;
+    W32_PTR(const w32_SteamParamStringArray_t *pTags, pTags, const w32_SteamParamStringArray_t *);
+    int8_t bAllowAdminTags;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemContent_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszContentFolder;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemContent_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pszContentFolder, pszContentFolder, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszPreviewFile;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pszPreviewFile, pszPreviewFile, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowLegacyUpload_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAllowLegacyUpload;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowLegacyUpload_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    int8_t bAllowLegacyUpload;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAllItemKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAllItemKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchKey;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemKeyValueTags_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchKey, pchKey, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pchKey;
+    const char *pchValue;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemKeyValueTag_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchKey, pchKey, const char *);
+    W32_PTR(const char *pchValue, pchValue, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewFile_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszPreviewFile;
+    uint32_t type;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewFile_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pszPreviewFile, pszPreviewFile, const char *);
+    uint32_t type;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewVideo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    const char *pszVideoID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewVideo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pszVideoID, pszVideoID, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewFile_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pszPreviewFile;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewFile_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(const char *pszPreviewFile, pszPreviewFile, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewVideo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    const char *pszVideoID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewVideo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+    W32_PTR(const char *pszVideoID, pszVideoID, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemPreview_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t index;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddContentDescriptor_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddContentDescriptor_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveContentDescriptor_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveContentDescriptor_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t handle;
+    uint32_t descid;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubmitItemUpdate_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t handle;
+    const char *pchChangeNote;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubmitItemUpdate_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t handle;
+    W32_PTR(const char *pchChangeNote, pchChangeNote, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemUpdateProgress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    uint64_t *punBytesProcessed;
+    uint64_t *punBytesTotal;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemUpdateProgress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t handle;
+    W32_PTR(uint64_t *punBytesProcessed, punBytesProcessed, uint64_t *);
+    W32_PTR(uint64_t *punBytesTotal, punBytesTotal, uint64_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetUserItemVote_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bVoteUp;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetUserItemVote_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bVoteUp;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserItemVote_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserItemVote_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemToFavorites_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemToFavorites_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemFromFavorites_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemFromFavorites_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint32_t nAppId;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubscribeItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubscribeItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UnsubscribeItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UnsubscribeItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetNumSubscribedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetNumSubscribedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetSubscribedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t cMaxEntries;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetSubscribedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(uint64_t *pvecPublishedFileID, pvecPublishedFileID, uint64_t *);
+    uint32_t cMaxEntries;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemState_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemState_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemInstallInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    uint64_t *punSizeOnDisk;
+    char *pchFolder;
+    uint32_t cchFolderSize;
+    uint32_t *punTimeStamp;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemInstallInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    W32_PTR(uint64_t *punSizeOnDisk, punSizeOnDisk, uint64_t *);
+    W32_PTR(char *pchFolder, pchFolder, char *);
+    uint32_t cchFolderSize;
+    W32_PTR(uint32_t *punTimeStamp, punTimeStamp, uint32_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemDownloadInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    uint64_t *punBytesDownloaded;
+    uint64_t *punBytesTotal;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemDownloadInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    W32_PTR(uint64_t *punBytesDownloaded, punBytesDownloaded, uint64_t *);
+    W32_PTR(uint64_t *punBytesTotal, punBytesTotal, uint64_t *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DownloadItem_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bHighPriority;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DownloadItem_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+    int8_t bHighPriority;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_BInitWorkshopForGameServer_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unWorkshopDepotID;
+    const char *pszFolder;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_BInitWorkshopForGameServer_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unWorkshopDepotID;
+    W32_PTR(const char *pszFolder, pszFolder, const char *);
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SuspendDownloads_params
+{
+    struct u_iface u_iface;
+    int8_t bSuspend;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SuspendDownloads_params
+{
+    struct u_iface u_iface;
+    int8_t bSuspend;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartPlaytimeTracking_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartPlaytimeTracking_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(uint64_t *pvecPublishedFileID, pvecPublishedFileID, uint64_t *);
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTracking_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t *pvecPublishedFileID;
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTracking_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(uint64_t *pvecPublishedFileID, pvecPublishedFileID, uint64_t *);
+    uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTrackingForAllItems_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTrackingForAllItems_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nParentPublishedFileID;
+    uint64_t nChildPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddAppDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddAppDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAppDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAppDependency_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+    uint32_t nAppID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetAppDependencies_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetAppDependencies_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DeleteItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DeleteItem_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ShowWorkshopEULA_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ShowWorkshopEULA_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetWorkshopEULAStatus_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetWorkshopEULAStatus_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserContentDescriptorPreferences_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t *pvecDescriptors;
+    uint32_t cMaxEntries;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserContentDescriptorPreferences_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(uint32_t *pvecDescriptors, pvecDescriptors, uint32_t *);
+    uint32_t cMaxEntries;
+};
+
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUserUGCRequest_params
 {
     struct u_iface u_iface;
@@ -36265,7 +37793,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCResult_params
     int8_t _ret;
     uint64_t handle;
     uint32_t index;
-    w_SteamUGCDetails_t_160 *pDetails;
+    w_SteamUGCDetails_t_159x *pDetails;
 };
 
 struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCResult_params
@@ -36274,7 +37802,7 @@ struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCResult_params
     int8_t _ret;
     uint64_t handle;
     uint32_t index;
-    W32_PTR(w32_SteamUGCDetails_t_160 *pDetails, pDetails, w32_SteamUGCDetails_t_160 *);
+    W32_PTR(w32_SteamUGCDetails_t_159x *pDetails, pDetails, w32_SteamUGCDetails_t_159x *);
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION020_GetQueryUGCNumTags_params
@@ -37851,7 +39379,7 @@ struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params
     int8_t _ret;
     uint64_t handle;
     uint32_t index;
-    w_SteamUGCDetails_t_160 *pDetails;
+    w_SteamUGCDetails_t_159x *pDetails;
 };
 
 struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params
@@ -37860,7 +39388,7 @@ struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params
     int8_t _ret;
     uint64_t handle;
     uint32_t index;
-    W32_PTR(w32_SteamUGCDetails_t_160 *pDetails, pDetails, w32_SteamUGCDetails_t_160 *);
+    W32_PTR(w32_SteamUGCDetails_t_159x *pDetails, pDetails, w32_SteamUGCDetails_t_159x *);
 };
 
 struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCNumTags_params
@@ -99806,6 +101334,97 @@ enum unix_funcs
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUserUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryAllUGCRequest_2,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateQueryUGCDetailsRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SendQueryUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCResult,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCTagDisplayName,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCPreviewURL,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCChildren,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCStatistic,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumAdditionalPreviews,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCAdditionalPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCNumKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCKeyValueTag_2,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetQueryUGCContentDescriptors,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ReleaseQueryUGCRequest,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredTagGroup,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddExcludedTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnOnlyIDs,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnLongDescription,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnChildren,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnAdditionalPreviews,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnTotalOnly,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetReturnPlaytimeStats,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetLanguage,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowCachedResponse,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAdminQuery,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetCloudFileNameFilter,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetMatchAnyTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetSearchText,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetRankedByTrendDays,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeCreatedDateRange,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetTimeUpdatedDateRange,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddRequiredKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RequestUGCDetails,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_CreateItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartItemUpdate,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTitle,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemDescription,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemUpdateLanguage,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemMetadata,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemVisibility,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemContent,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetItemPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetAllowLegacyUpload,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAllItemKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemKeyValueTags,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemKeyValueTag,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewFile,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemPreviewVideo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewFile,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UpdateItemPreviewVideo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemPreview,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddContentDescriptor,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveContentDescriptor,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubmitItemUpdate,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemUpdateProgress,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SetUserItemVote,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserItemVote,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddItemToFavorites,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveItemFromFavorites,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SubscribeItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_UnsubscribeItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetNumSubscribedItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetSubscribedItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemState,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemInstallInfo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetItemDownloadInfo,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DownloadItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_BInitWorkshopForGameServer,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_SuspendDownloads,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StartPlaytimeTracking,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTracking,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_StopPlaytimeTrackingForAllItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_AddAppDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_RemoveAppDependency,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetAppDependencies,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_DeleteItem,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_ShowWorkshopEULA,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetWorkshopEULAStatus,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION019_GetUserContentDescriptorPreferences,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryUserUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION020_CreateQueryAllUGCRequest_2,

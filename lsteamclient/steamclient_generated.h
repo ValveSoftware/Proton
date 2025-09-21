@@ -65,6 +65,7 @@ extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION015( struct
 extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION016( struct u_iface );
 extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION017( struct u_iface );
 extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION018( struct u_iface );
+extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION019( struct u_iface );
 extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION020( struct u_iface );
 extern struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION021( struct u_iface );
 extern struct w_iface *create_winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001( struct u_iface );

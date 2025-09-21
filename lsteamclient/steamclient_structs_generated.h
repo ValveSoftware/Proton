@@ -2431,10 +2431,10 @@ struct gameserveritem_t_099u
 };
 #pragma pack( pop )
 
-typedef struct u64_SteamUGCDetails_t_160 u64_SteamUGCDetails_t_160;
-typedef struct w64_SteamUGCDetails_t_160 w64_SteamUGCDetails_t_160;
-typedef struct u32_SteamUGCDetails_t_160 u32_SteamUGCDetails_t_160;
-typedef struct w32_SteamUGCDetails_t_160 w32_SteamUGCDetails_t_160;
+typedef struct u64_SteamUGCDetails_t_159x u64_SteamUGCDetails_t_159x;
+typedef struct w64_SteamUGCDetails_t_159x w64_SteamUGCDetails_t_159x;
+typedef struct u32_SteamUGCDetails_t_159x u32_SteamUGCDetails_t_159x;
+typedef struct w32_SteamUGCDetails_t_159x w32_SteamUGCDetails_t_159x;
 typedef struct u64_SteamUGCDetails_t_128x u64_SteamUGCDetails_t_128x;
 typedef struct w64_SteamUGCDetails_t_128x w64_SteamUGCDetails_t_128x;
 typedef struct u32_SteamUGCDetails_t_128x u32_SteamUGCDetails_t_128x;
@@ -2631,10 +2631,10 @@ typedef struct u_ISteamNetworkingCustomSignalingRecvContext u32_ISteamNetworking
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w_ISteamNetworkingCustomSignalingRecvContext;
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w64_ISteamNetworkingCustomSignalingRecvContext;
 typedef struct w_ISteamNetworkingCustomSignalingRecvContext w32_ISteamNetworkingCustomSignalingRecvContext;
-typedef struct u64_ItemInstalled_t_160 u64_ItemInstalled_t_160;
-typedef struct w64_ItemInstalled_t_160 w64_ItemInstalled_t_160;
-typedef struct u32_ItemInstalled_t_160 u32_ItemInstalled_t_160;
-typedef struct w32_ItemInstalled_t_160 w32_ItemInstalled_t_160;
+typedef struct u64_ItemInstalled_t_159x u64_ItemInstalled_t_159x;
+typedef struct w64_ItemInstalled_t_159x w64_ItemInstalled_t_159x;
+typedef struct u32_ItemInstalled_t_159x u32_ItemInstalled_t_159x;
+typedef struct w32_ItemInstalled_t_159x w32_ItemInstalled_t_159x;
 typedef struct u64_ItemInstalled_t_130 u64_ItemInstalled_t_130;
 typedef struct w64_ItemInstalled_t_130 w64_ItemInstalled_t_130;
 typedef struct u32_ItemInstalled_t_130 u32_ItemInstalled_t_130;
@@ -2943,10 +2943,10 @@ typedef struct u64_SteamPartyBeaconLocation_t u64_SteamPartyBeaconLocation_t;
 typedef struct w64_SteamPartyBeaconLocation_t w64_SteamPartyBeaconLocation_t;
 typedef struct u32_SteamPartyBeaconLocation_t u32_SteamPartyBeaconLocation_t;
 typedef struct w32_SteamPartyBeaconLocation_t w32_SteamPartyBeaconLocation_t;
-typedef struct u64_SteamUGCRequestUGCDetailsResult_t_160 u64_SteamUGCRequestUGCDetailsResult_t_160;
-typedef struct w64_SteamUGCRequestUGCDetailsResult_t_160 w64_SteamUGCRequestUGCDetailsResult_t_160;
-typedef struct u32_SteamUGCRequestUGCDetailsResult_t_160 u32_SteamUGCRequestUGCDetailsResult_t_160;
-typedef struct w32_SteamUGCRequestUGCDetailsResult_t_160 w32_SteamUGCRequestUGCDetailsResult_t_160;
+typedef struct u64_SteamUGCRequestUGCDetailsResult_t_159x u64_SteamUGCRequestUGCDetailsResult_t_159x;
+typedef struct w64_SteamUGCRequestUGCDetailsResult_t_159x w64_SteamUGCRequestUGCDetailsResult_t_159x;
+typedef struct u32_SteamUGCRequestUGCDetailsResult_t_159x u32_SteamUGCRequestUGCDetailsResult_t_159x;
+typedef struct w32_SteamUGCRequestUGCDetailsResult_t_159x w32_SteamUGCRequestUGCDetailsResult_t_159x;
 typedef struct u64_SteamUGCRequestUGCDetailsResult_t_128x u64_SteamUGCRequestUGCDetailsResult_t_128x;
 typedef struct w64_SteamUGCRequestUGCDetailsResult_t_128x w64_SteamUGCRequestUGCDetailsResult_t_128x;
 typedef struct u32_SteamUGCRequestUGCDetailsResult_t_128x u32_SteamUGCRequestUGCDetailsResult_t_128x;
@@ -2964,7 +2964,7 @@ typedef struct w64_SubmitPlayerResultResultCallback_t w64_SubmitPlayerResultResu
 typedef struct u32_SubmitPlayerResultResultCallback_t u32_SubmitPlayerResultResultCallback_t;
 typedef struct w32_SubmitPlayerResultResultCallback_t w32_SubmitPlayerResultResultCallback_t;
 #pragma pack( push, 8 )
-struct w64_SteamUGCDetails_t_160
+struct w64_SteamUGCDetails_t_159x
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
@@ -2997,13 +2997,13 @@ struct w64_SteamUGCDetails_t_160
     uint8_t __pad_9772[4];
     uint64_t m_ulTotalFilesSize;
 #ifdef __cplusplus
-    operator u64_SteamUGCDetails_t_160() const;
+    operator u64_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u64_SteamUGCDetails_t_160
+struct u64_SteamUGCDetails_t_159x
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
@@ -3034,16 +3034,16 @@ struct u64_SteamUGCDetails_t_160
     uint32_t m_unNumChildren;
     uint64_t m_ulTotalFilesSize;
 #ifdef __cplusplus
-    operator w64_SteamUGCDetails_t_160() const;
+    operator w64_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator w32_SteamUGCDetails_t_160() const;
+    operator w32_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 8 )
-struct w32_SteamUGCDetails_t_160
+struct w32_SteamUGCDetails_t_159x
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
@@ -3076,16 +3076,16 @@ struct w32_SteamUGCDetails_t_160
     uint8_t __pad_9772[4];
     uint64_t m_ulTotalFilesSize;
 #ifdef __cplusplus
-    operator u32_SteamUGCDetails_t_160() const;
+    operator u32_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator u64_SteamUGCDetails_t_160() const;
+    operator u64_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u32_SteamUGCDetails_t_160
+struct u32_SteamUGCDetails_t_159x
 {
     uint64_t m_nPublishedFileId;
     uint32_t m_eResult;
@@ -3116,18 +3116,18 @@ struct u32_SteamUGCDetails_t_160
     uint32_t m_unNumChildren;
     uint64_t m_ulTotalFilesSize;
 #ifdef __cplusplus
-    operator w32_SteamUGCDetails_t_160() const;
+    operator w32_SteamUGCDetails_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #ifdef __i386__
-typedef w32_SteamUGCDetails_t_160 w_SteamUGCDetails_t_160;
-typedef u32_SteamUGCDetails_t_160 u_SteamUGCDetails_t_160;
+typedef w32_SteamUGCDetails_t_159x w_SteamUGCDetails_t_159x;
+typedef u32_SteamUGCDetails_t_159x u_SteamUGCDetails_t_159x;
 #endif
 #if defined(__x86_64__) || defined(__aarch64__)
-typedef w64_SteamUGCDetails_t_160 w_SteamUGCDetails_t_160;
-typedef u64_SteamUGCDetails_t_160 u_SteamUGCDetails_t_160;
+typedef w64_SteamUGCDetails_t_159x w_SteamUGCDetails_t_159x;
+typedef u64_SteamUGCDetails_t_159x u_SteamUGCDetails_t_159x;
 #endif
 
 #pragma pack( push, 8 )
@@ -5808,7 +5808,7 @@ struct u_ISteamNetworkingCustomSignalingRecvContext
 };
 
 #pragma pack( push, 8 )
-struct w64_ItemInstalled_t_160
+struct w64_ItemInstalled_t_159x
 {
     uint32_t m_unAppID;
     uint8_t __pad_4[4];
@@ -5816,29 +5816,29 @@ struct w64_ItemInstalled_t_160
     uint64_t m_hLegacyContent;
     uint64_t m_unManifestID;
 #ifdef __cplusplus
-    operator u64_ItemInstalled_t_160() const;
+    operator u64_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u64_ItemInstalled_t_160
+struct u64_ItemInstalled_t_159x
 {
     uint32_t m_unAppID;
     uint64_t m_nPublishedFileId;
     uint64_t m_hLegacyContent;
     uint64_t m_unManifestID;
 #ifdef __cplusplus
-    operator w64_ItemInstalled_t_160() const;
+    operator w64_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator w32_ItemInstalled_t_160() const;
+    operator w32_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 8 )
-struct w32_ItemInstalled_t_160
+struct w32_ItemInstalled_t_159x
 {
     uint32_t m_unAppID;
     uint8_t __pad_4[4];
@@ -5846,34 +5846,34 @@ struct w32_ItemInstalled_t_160
     uint64_t m_hLegacyContent;
     uint64_t m_unManifestID;
 #ifdef __cplusplus
-    operator u32_ItemInstalled_t_160() const;
+    operator u32_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator u64_ItemInstalled_t_160() const;
+    operator u64_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u32_ItemInstalled_t_160
+struct u32_ItemInstalled_t_159x
 {
     uint32_t m_unAppID;
     uint64_t m_nPublishedFileId;
     uint64_t m_hLegacyContent;
     uint64_t m_unManifestID;
 #ifdef __cplusplus
-    operator w32_ItemInstalled_t_160() const;
+    operator w32_ItemInstalled_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #ifdef __i386__
-typedef w32_ItemInstalled_t_160 w_ItemInstalled_t_160;
-typedef u32_ItemInstalled_t_160 u_ItemInstalled_t_160;
+typedef w32_ItemInstalled_t_159x w_ItemInstalled_t_159x;
+typedef u32_ItemInstalled_t_159x u_ItemInstalled_t_159x;
 #endif
 #if defined(__x86_64__) || defined(__aarch64__)
-typedef w64_ItemInstalled_t_160 w_ItemInstalled_t_160;
-typedef u64_ItemInstalled_t_160 u_ItemInstalled_t_160;
+typedef w64_ItemInstalled_t_159x w_ItemInstalled_t_159x;
+typedef u64_ItemInstalled_t_159x u_ItemInstalled_t_159x;
 #endif
 
 #pragma pack( push, 8 )
@@ -11095,66 +11095,66 @@ typedef u64_SteamPartyBeaconLocation_t u_SteamPartyBeaconLocation_t;
 #endif
 
 #pragma pack( push, 8 )
-struct w64_SteamUGCRequestUGCDetailsResult_t_160
+struct w64_SteamUGCRequestUGCDetailsResult_t_159x
 {
-    w64_SteamUGCDetails_t_160 m_details;
+    w64_SteamUGCDetails_t_159x m_details;
     int8_t m_bCachedData;
     uint8_t __pad_9785[7];
 #ifdef __cplusplus
-    operator u64_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator u64_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u64_SteamUGCRequestUGCDetailsResult_t_160
+struct u64_SteamUGCRequestUGCDetailsResult_t_159x
 {
-    u64_SteamUGCDetails_t_160 m_details;
+    u64_SteamUGCDetails_t_159x m_details;
     int8_t m_bCachedData;
     uint8_t __pad_9773[3];
 #ifdef __cplusplus
-    operator w64_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator w64_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator w32_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator w32_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 8 )
-struct w32_SteamUGCRequestUGCDetailsResult_t_160
+struct w32_SteamUGCRequestUGCDetailsResult_t_159x
 {
-    w32_SteamUGCDetails_t_160 m_details;
+    w32_SteamUGCDetails_t_159x m_details;
     int8_t m_bCachedData;
     uint8_t __pad_9785[7];
 #ifdef __cplusplus
-    operator u32_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator u32_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 #ifdef __cplusplus
-    operator u64_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator u64_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #pragma pack( push, 4 )
-struct u32_SteamUGCRequestUGCDetailsResult_t_160
+struct u32_SteamUGCRequestUGCDetailsResult_t_159x
 {
-    u32_SteamUGCDetails_t_160 m_details;
+    u32_SteamUGCDetails_t_159x m_details;
     int8_t m_bCachedData;
     uint8_t __pad_9773[3];
 #ifdef __cplusplus
-    operator w32_SteamUGCRequestUGCDetailsResult_t_160() const;
+    operator w32_SteamUGCRequestUGCDetailsResult_t_159x() const;
 #endif /* __cplusplus */
 };
 #pragma pack( pop )
 
 #ifdef __i386__
-typedef w32_SteamUGCRequestUGCDetailsResult_t_160 w_SteamUGCRequestUGCDetailsResult_t_160;
-typedef u32_SteamUGCRequestUGCDetailsResult_t_160 u_SteamUGCRequestUGCDetailsResult_t_160;
+typedef w32_SteamUGCRequestUGCDetailsResult_t_159x w_SteamUGCRequestUGCDetailsResult_t_159x;
+typedef u32_SteamUGCRequestUGCDetailsResult_t_159x u_SteamUGCRequestUGCDetailsResult_t_159x;
 #endif
 #if defined(__x86_64__) || defined(__aarch64__)
-typedef w64_SteamUGCRequestUGCDetailsResult_t_160 w_SteamUGCRequestUGCDetailsResult_t_160;
-typedef u64_SteamUGCRequestUGCDetailsResult_t_160 u_SteamUGCRequestUGCDetailsResult_t_160;
+typedef w64_SteamUGCRequestUGCDetailsResult_t_159x w_SteamUGCRequestUGCDetailsResult_t_159x;
+typedef u64_SteamUGCRequestUGCDetailsResult_t_159x u_SteamUGCRequestUGCDetailsResult_t_159x;
 #endif
 
 #pragma pack( push, 8 )
