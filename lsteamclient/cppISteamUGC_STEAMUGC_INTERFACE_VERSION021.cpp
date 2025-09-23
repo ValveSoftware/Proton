@@ -99,7 +99,7 @@ NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult( void *args )
 {
     struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
-    u_SteamUGCDetails_t_160 u_pDetails = *params->pDetails;
+    u_SteamUGCDetails_t_159x u_pDetails = *params->pDetails;
     params->_ret = iface->GetQueryUGCResult( params->handle, params->index, &u_pDetails );
     *params->pDetails = u_pDetails;
     return 0;
@@ -110,7 +110,7 @@ NTSTATUS wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult( void *
 {
     struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params *params = (struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetQueryUGCResult_params *)args;
     struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
-    u_SteamUGCDetails_t_160 u_pDetails = *params->pDetails;
+    u_SteamUGCDetails_t_159x u_pDetails = *params->pDetails;
     params->_ret = iface->GetQueryUGCResult( params->handle, params->index, &u_pDetails );
     *params->pDetails = u_pDetails;
     return 0;
