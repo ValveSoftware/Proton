@@ -1878,6 +1878,10 @@ class Session:
         else:
             argv = [g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"]
 
+        # CoD: Black Ops Cold War block to prevent game bans
+        if os.environ.get("SteamGameId", 0) == "1985810":
+            sys.exit(0)
+
         rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
