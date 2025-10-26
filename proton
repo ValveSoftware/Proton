@@ -1420,6 +1420,65 @@ def default_compat_config():
 
     return ret
 
+def get_intel_p_cores():
+    # Maps Intel CPU generation numbers to their respective names
+    INTEL_GEN_MODEL_CODES = (
+        151, # 12th Gen (Alder Lake)
+        183, # 13th Gen (Raptor Lake)
+        190, # 14th Gen (Raptor Lake Refresh)
+        201, # 15th Gen (Arrow Lake, early)
+    )
+
+    # Check if the CPU is Intel and is an appropriate generation
+    with open("/proc/cpuinfo") as f:
+        cpu_info = f.readlines()
+        is_intel = False
+
+        for line in cpu_info:
+            if line.startswith("vendor_id") and "GenuineIntel" in line:
+                is_intel = True
+                break
+
+        # Return None if not Intel CPU
+        if not is_intel:
+            return None
+
+        # Set is_intel back to false in case the generation test fails
+        is_intel = False
+        for line in cpu_info:
+            if line.startswith("model"):
+                for code in INTEL_GEN_MODEL_CODES:
+                    if f": {code}" in line:
+                        is_intel = True
+                        break
+            if is_intel:
+                break
+
+        # Return None CPU is not in supported generations
+        if not is_intel:
+            return None
+
+        # If the test succeeds, we proceed to return a list of P-cores in the CPU
+        # Start by checking the number of CPU cores
+        cpu_count = os.cpu_count()
+        if cpu_count is None:
+            return None
+
+        p_cores = []
+        for core in range(1, cpu_count, 2):  # Check only odd-numbered cores
+            try:
+                with open(f"/sys/devices/system/cpu/cpu{core}/topology/core_cpus_list") as core_file:
+                    core_type = core_file.read().strip()
+                    thread_list = core_type.split("-")
+
+                    if len(thread_list) == 2:
+                        p_cores.extend([int(thread_list[0]), int(thread_list[1])])
+            except FileNotFoundError:
+                # If the core_type file doesn't exist, we can't determine core type
+                return None
+
+        return (p_cores[0], p_cores[-1])
+
 default_cpu_limit = {
     "19900"     :  16,  # Far Cry 2
     "298110"    :  16,  # Far Cry 4
@@ -1440,6 +1499,10 @@ default_cpu_limit = {
     "70000"     :  28,  # Dino D-Day
     "115320"    :  8,   # Prototype 2
 }
+
+intel_p_core_limited = (
+    "1382330", # Persona 5 Strikers
+)
 
 class Session:
     def __init__(self):
@@ -1487,6 +1550,11 @@ class Session:
             self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
         elif appid in default_cpu_limit:
             self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
+
+        if appid in intel_p_core_limited:
+            p_core_list = get_intel_p_cores()
+            if p_core_list is not None:
+                self.env["taskset"] = f"-c {p_core_list[0]}-{p_core_list[1]}"
 
         if "WINE_HIDE_AMD_GPU" not in self.env and appid in [
                     "1282690",
