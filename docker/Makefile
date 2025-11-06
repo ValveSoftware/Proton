@@ -30,7 +30,7 @@ SOURCES_URLBASE = https://repo.steampowered.com/proton-sdk
 BINUTILS_URLBASE = $(SOURCES_URLBASE)
 GCC_URLBASE = $(SOURCES_URLBASE)
 MINGW_URLBASE = $(SOURCES_URLBASE)
-RUST_URLBASE = $(SOURCES_URLBASE)
+RUST_URLBASE = https://static.rust-lang.org/dist
 NINJA_URLBASE = $(SOURCES_URLBASE)
 AFDKO_URLBASE = $(SOURCES_URLBASE)
 LLVM_URLBASE = $(SOURCES_URLBASE)
@@ -41,6 +41,7 @@ GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
 MINGW_SOURCE = mingw-w64-v$(MINGW_VERSION).tar.bz2
 RUST_SOURCE_x86_64 = rust-$(RUST_VERSION)-x86_64-unknown-linux-gnu.tar.gz
 RUST_SOURCE_i686 = rust-$(RUST_VERSION)-i686-unknown-linux-gnu.tar.gz
+RUST_SOURCE_aarch64 = rust-$(RUST_VERSION)-aarch64-unknown-linux-gnu.tar.gz
 NINJA_SOURCE = ninja-$(NINJA_VERSION).zip
 AFDKO_SOURCE = afdko-$(AFDKO_VERSION).zip
 LLVM_SOURCE = llvm-$(LLVM_VERSION).tar.gz
@@ -51,6 +52,7 @@ GCC_SHA256 = a7b39bc69cbf9e25826c5a60ab26477001f7c08d85cec04bc0e29cabed6f3cc9
 MINGW_SHA256 = 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
 RUST_SHA256_x86_64 = 7be1acdac656d0b0b7e909e5c0d4ddf61c755c203ec26ebafbd306322335b361
 RUST_SHA256_i686 = dc931adeb2943dcadfbd29546481f0296fcb97a511421053ecae6586a85869b1
+RUST_SHA256_aarch64 = 7cf68cab37501d06fc55efcebf934a183e5cd4c804d1308c2907a3136a198c01
 NINJA_SHA256 = 5bfe6e147f39347f53777fce2fff324811297f12f4199623a9e3d5a9dc431d69
 AFDKO_SHA256 = 33b0e83b47bb7418594d9b10bd9907dbdc1df8ed0b6a9c385400490c32a46e1c
 LLVM_SHA256 = fba0618cf8de48ec05880c446edd756a2669157eab9d29949e971c77da10275f
@@ -77,8 +79,10 @@ DOCKER = docker
 	    -re 's!@RUST_URLBASE@!$(RUST_URLBASE)!g' \
 	    -re 's!@RUST_SOURCE_x86_64@!$(RUST_SOURCE_x86_64)!g' \
 	    -re 's!@RUST_SOURCE_i686@!$(RUST_SOURCE_i686)!g' \
+	    -re 's!@RUST_SOURCE_aarch64@!$(RUST_SOURCE_aarch64)!g' \
 	    -re 's!@RUST_SHA256_x86_64@!$(RUST_SHA256_x86_64)!g' \
 	    -re 's!@RUST_SHA256_i686@!$(RUST_SHA256_i686)!g' \
+	    -re 's!@RUST_SHA256_aarch64@!$(RUST_SHA256_aarch64)!g' \
 	    -re 's!@NINJA_VERSION@!$(NINJA_VERSION)!g' \
 	    -re 's!@NINJA_URLBASE@!$(NINJA_URLBASE)!g' \
 	    -re 's!@NINJA_SOURCE@!$(NINJA_SOURCE)!g' \
@@ -276,6 +280,7 @@ sources::
 	rm -f $(GCC_SOURCE)
 	rm -f $(RUST_SOURCE_x86_64)
 	rm -f $(RUST_SOURCE_i686)
+	rm -f $(RUST_SOURCE_aarch64)
 	rm -f $(NINJA_SOURCE)
 	rm -f $(LLVM_SOURCE)
 	rm -f $(LLVM_MINGW_SOURCE)
@@ -284,6 +289,7 @@ sources::
 	wget $(GCC_URLBASE)/$(GCC_SOURCE)
 	wget $(RUST_URLBASE)/$(RUST_SOURCE_x86_64)
 	wget $(RUST_URLBASE)/$(RUST_SOURCE_i686)
+	wget $(RUST_URLBASE)/$(RUST_SOURCE_aarch64)
 	wget $(NINJA_URLBASE)/$(NINJA_SOURCE)
 	wget $(LLVM_URLBASE)/$(LLVM_SOURCE)
 	wget $(LLVM_MINGW_URLBASE)/$(LLVM_MINGW_SOURCE)
@@ -292,6 +298,7 @@ sources::
 	echo $(GCC_SHA256) $(GCC_SOURCE) | sha256sum -c -
 	echo $(RUST_SHA256_x86_64) $(RUST_SOURCE_x86_64) | sha256sum -c -
 	echo $(RUST_SHA256_i686) $(RUST_SOURCE_i686) | sha256sum -c -
+	echo $(RUST_SHA256_aarch64) $(RUST_SOURCE_aarch64) | sha256sum -c -
 	echo $(NINJA_SHA256) $(NINJA_SOURCE) | sha256sum -c -
 	echo $(LLVM_SHA256) $(LLVM_SOURCE) | sha256sum -c -
 	echo $(LLVM_MINGW_SHA256) $(LLVM_MINGW_SOURCE) | sha256sum -c -

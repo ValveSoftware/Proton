@@ -3,18 +3,26 @@ FROM @PROTONSDK_URLBASE@/llvm-mingw:@LLVM_MINGW_VERSION@ AS llvm-mingw
 FROM @BASE_IMAGE@ AS base
 COPY --from=llvm-mingw            /opt/llvm-mingw /opt/llvm-mingw
 
-RUN wget -q @RUST_URLBASE@/@RUST_SOURCE_x86_64@ \
+ARG BUILD_ARCH
+
+RUN if [ "$BUILD_ARCH" = x86_64 ]; then wget -q @RUST_URLBASE@/@RUST_SOURCE_x86_64@ \
 && echo '@RUST_SHA256_x86_64@ @RUST_SOURCE_x86_64@' | sha256sum -c - \
 && tar xf @RUST_SOURCE_x86_64@ -C /tmp && rm @RUST_SOURCE_x86_64@ \
 && /tmp/rust-@RUST_VERSION@-x86_64-unknown-linux-gnu/install.sh --prefix=/opt/rust \
-&& rm -rf /tmp/rust-@RUST_VERSION@-x86_64-unknown-linux-gnu
+&& rm -rf /tmp/rust-@RUST_VERSION@-x86_64-unknown-linux-gnu; fi
 
-RUN wget -q @RUST_URLBASE@/@RUST_SOURCE_i686@ \
+RUN if [ "$BUILD_ARCH" = x86_64 ]; then wget -q @RUST_URLBASE@/@RUST_SOURCE_i686@ \
 && echo '@RUST_SHA256_i686@ @RUST_SOURCE_i686@' | sha256sum -c - \
 && tar xf @RUST_SOURCE_i686@ -C /tmp && rm @RUST_SOURCE_i686@ \
 && /tmp/rust-@RUST_VERSION@-i686-unknown-linux-gnu/install.sh --prefix=/opt/rust \
   --components=rust-std-i686-unknown-linux-gnu \
-&& rm -rf /tmp/rust-@RUST_VERSION@-i686-unknown-linux-gnu
+&& rm -rf /tmp/rust-@RUST_VERSION@-i686-unknown-linux-gnu; fi
+
+RUN if [ "$BUILD_ARCH" = aarch64 ]; then wget -q @RUST_URLBASE@/@RUST_SOURCE_aarch64@ \
+&& echo '@RUST_SHA256_aarch64@ @RUST_SOURCE_aarch64@' | sha256sum -c - \
+&& tar xf @RUST_SOURCE_aarch64@ -C /tmp && rm @RUST_SOURCE_aarch64@ \
+&& /tmp/rust-@RUST_VERSION@-aarch64-unknown-linux-gnu/install.sh --prefix=/opt/rust \
+&& rm -rf /tmp/rust-@RUST_VERSION@-aarch64-unknown-linux-gnu; fi
 
 RUN bash -c 'ls /opt/rust/bin/* | xargs -n1 -I{} ln -sf {} /usr/bin/'
 
