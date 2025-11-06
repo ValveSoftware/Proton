@@ -27,6 +27,22 @@ Docker, for both):
 `--proton-sdk-image=registry.gitlab.steamos.cloud/proton/sniper/sdk:latest`
 
 
+ARM64 Containers
+----------------
+
+To build:
+
+```
+make BUILD_ARCH=aarch64 proton-llvm
+```
+
+To use:
+
+```
+$PROTON_SRC/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/sniper/sdk/arm64:latest
+```
+
+
 Official Images
 ---------------
 
