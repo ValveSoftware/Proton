@@ -19,15 +19,6 @@ RUN wget -q @LLVM_URLBASE@/@LLVM_SOURCE@ \
 && patch -p1 < /tmp/llvm-0002-Add-non-power-of-two-testcase.patch \
 && rm /tmp/llvm-*.patch \
 && cd /tmp/llvm-mingw-@LLVM_MINGW_VERSION@ \
-&& ./build-llvm.sh --disable-lldb --disable-clang-tools-extra /opt/llvm-mingw \
-&& ./strip-llvm.sh /opt/llvm-mingw \
-&& env TOOLCHAIN_TARGET_OSES=mingw32 ./install-wrappers.sh /opt/llvm-mingw \
-&& ./build-mingw-w64.sh /opt/llvm-mingw --with-default-msvcrt=ucrt --disable-cfguard \
-&& ./build-mingw-w64-tools.sh /opt/llvm-mingw \
-&& ./build-compiler-rt.sh /opt/llvm-mingw --disable-cfguard \
-&& ./build-libcxx.sh /opt/llvm-mingw --disable-cfguard \
-&& ./build-mingw-w64-libraries.sh /opt/llvm-mingw --disable-cfguard \
-&& ./build-compiler-rt.sh /opt/llvm-mingw --build-sanitizers \
-&& ./build-openmp.sh /opt/llvm-mingw --disable-cfguard \
+&& ./build-all.sh /opt/llvm-mingw \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /tmp/llvm-mingw-@LLVM_MINGW_VERSION@
