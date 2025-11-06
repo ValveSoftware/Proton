@@ -1,6 +1,14 @@
 STEAMRT_VERSION = 3.0.20250826.159138
 STEAMRT_URLBASE = registry.gitlab.steamos.cloud
 
+BUILD_ARCH ?= x86_64
+
+HOST_ARCH = $(shell uname -m)
+
+ifneq ($(BUILD_ARCH),$(HOST_ARCH))
+	foo := $(warning Trying to build container for BUILD_ARCH=$(BUILD_ARCH) on $(HOST_ARCH). This may be not what you want.)
+endif
+
 PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/sniper/sdk
 PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
@@ -250,6 +258,7 @@ all: proton-llvm
 proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
 proton-llvm: proton-llvm.Dockerfile | llvm-mingw
 	$(DOCKER) build -f $< \
+	  --build-arg=BUILD_ARCH=$(BUILD_ARCH) \
 	  --cache-from=$(PROTONSDK_URLBASE) \
 	  -t $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION) \
 	  -t $(PROTONSDK_URLBASE)/llvm:latest \
