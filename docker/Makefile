@@ -9,13 +9,17 @@ ifneq ($(BUILD_ARCH),$(HOST_ARCH))
 	foo := $(warning Trying to build container for BUILD_ARCH=$(BUILD_ARCH) on $(HOST_ARCH). This may be not what you want.)
 endif
 
-PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/sniper/sdk
+ifeq ($(BUILD_ARCH),aarch64)
+	CONTAINER_URL_INFIX = /arm64
+endif
+
+PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/sniper/sdk$(CONTAINER_URL_INFIX)
 PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
 # docker caches, so we need something that don't change much
-BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:3.0.20250826.159138
+BASE_IMAGE := $(STEAMRT_URLBASE)/steamrt/sniper/sdk$(CONTAINER_URL_INFIX):3.0.20250826.159138
 
 BINUTILS_VERSION = 2.42
 GCC_VERSION = 14.2.0
@@ -225,7 +229,7 @@ $(eval $(call create-gcc-rules,x86_64,w64-mingw32))
 define create-proton-rules
 .PHONY: proton
 all: proton
-proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
+proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
 proton: proton.Dockerfile | gcc
 	$(DOCKER) build -f $$< \
 	  --cache-from=$(PROTONSDK_URLBASE) \
@@ -244,7 +248,7 @@ $(eval $(call create-proton-rules))
 
 .PHONY: llvm-mingw
 all: llvm-mingw
-llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
+llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
 llvm-mingw: llvm-mingw.Dockerfile
 	$(DOCKER) build -f $< \
 	  --cache-from=$(PROTONSDK_URLBASE)/llvm-mingw \
@@ -259,7 +263,7 @@ push::
 
 .PHONY: proton-llvm
 all: proton-llvm
-proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
+proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
 proton-llvm: proton-llvm.Dockerfile | llvm-mingw
 	$(DOCKER) build -f $< \
 	  --build-arg=BUILD_ARCH=$(BUILD_ARCH) \
