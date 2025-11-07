@@ -1375,7 +1375,8 @@ def default_compat_config():
             ret.add("disablenvapi")
 
         if appid in [
-                "1808500",
+                "1808500", #ARC Raiders
+                "2073850", #The Finals
                 ]:
             try:
                 with open('/proc/modules') as f:
