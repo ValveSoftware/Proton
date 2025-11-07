@@ -1,4 +1,8 @@
 FROM @BASE_IMAGE@ AS base
+
+COPY llvm-0001-Implement-varargs-support-in-clang.patch /tmp
+COPY llvm-0002-Add-non-power-of-two-testcase.patch /tmp
+
 RUN wget -q @LLVM_URLBASE@/@LLVM_SOURCE@ \
 && echo '@LLVM_SHA256@ @LLVM_SOURCE@' | sha256sum -c - \
 && tar xf @LLVM_SOURCE@ -C /tmp && rm @LLVM_SOURCE@ \
@@ -10,6 +14,10 @@ RUN wget -q @LLVM_URLBASE@/@LLVM_SOURCE@ \
 && tar xf @LLVM_MINGW_SOURCE@ -C /tmp && rm @LLVM_MINGW_SOURCE@ \
 && ln -s /tmp/llvm-project-llvmorg-@LLVM_VERSION@ /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/llvm-project \
 && ln -s /tmp/mingw-w64-v@MINGW_VERSION@ /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/mingw-w64 \
+&& cd /tmp/llvm-project-llvmorg-@LLVM_VERSION@ \
+&& patch -p1 < /tmp/llvm-0001-Implement-varargs-support-in-clang.patch \
+&& patch -p1 < /tmp/llvm-0002-Add-non-power-of-two-testcase.patch \
+&& rm /tmp/llvm-*.patch \
 && cd /tmp/llvm-mingw-@LLVM_MINGW_VERSION@ \
 && ./build-llvm.sh --disable-lldb --disable-clang-tools-extra /opt/llvm-mingw \
 && ./strip-llvm.sh /opt/llvm-mingw \
