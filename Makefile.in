@@ -91,10 +91,12 @@ ifeq ($(shell cc --version|grep 'clang'),)
 	CFLAGS += -Wl,--exclude-libs=libstdc++.a
 	TOOLCHAIN_PREFIX :=
 	OBJCOPY_FLAGS  := -p
+	MINGW_TYPE := gcc
 else
 	# CLANG-specific flags
 	TOOLCHAIN_PREFIX := llvm-
 	OBJCOPY_FLAGS  :=
+	MINGW_TYPE := clang
 	# TODO: move this to a configure option
 endif
 
@@ -588,7 +590,7 @@ WINE_SOURCE_ARGS = \
 
 WINE_AUTOCONF_ARGS = \
   --enable-werror \
-  --with-mingw \
+  --with-mingw=$(MINGW_TYPE) \
   --disable-tests
 
 WINE_x86_64_AUTOCONF_ARGS = \
