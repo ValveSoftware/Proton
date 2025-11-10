@@ -1314,6 +1314,7 @@ def default_compat_config():
                 "1286220", #Sea Power
                 "2827230", #Wild Assault
                 "3159330", #Assassin's Creed Shadows
+                "367500", #Dragon's Dogma: Dark Arisen
                 ]:
             ret.add("gamedrive")
 
