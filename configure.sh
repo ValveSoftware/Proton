@@ -127,6 +127,12 @@ function configure() {
     internal_tool_name=${build_name}-proton
   fi
 
+  local target_arch=x86_64
+  if [[ -n $arg_target_arch ]]; then
+    target_arch="$arg_target_arch"
+  fi
+  info "Build targetting: $target_arch"
+
   dependency_command make "GNU Make"
 
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
@@ -162,6 +168,7 @@ function configure() {
     echo ""
     echo "SRCDIR     := $(escape_for_make "$srcdir")"
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
+    echo "TARGET_ARCH := $(escape_for_make "$target_arch")"
     echo "INTERNAL_TOOL_NAME := $(escape_for_make "$internal_tool_name")"
 
     # SteamRT was specified, baking it into the Makefile
@@ -199,6 +206,7 @@ function configure() {
 
 arg_protonsdk_image=""
 arg_build_name=""
+arg_target_arch=""
 arg_container_engine=""
 arg_docker_opts=""
 arg_relabel_volumes=""
@@ -239,6 +247,9 @@ function parse_args() {
       arg_help=1
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
+      val_used=1
+    elif [[ $arg = --target-arch ]]; then
+      arg_target_arch="$val"
       val_used=1
     elif [[ $arg = --container-engine ]]; then
       arg_container_engine="$val"
@@ -297,6 +308,8 @@ usage() {
   "$1" "    --help / --usage     Show this help text and exit"
   "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
+  "$1" ""
+  "$1" "    --target-arch=<name> Builds for given architecture. x86_64 (default) and arm64 are supported."
   "$1" ""
   "$1" "    --container-engine=<engine> Which Docker-compatible container engine to use,"
   "$1" "                                e.g. podman. Tries to do autodiscovery when not specified."
