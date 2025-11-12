@@ -1263,6 +1263,7 @@ def default_compat_config():
 
         if appid in [
                 "257420", #Serious Sam 4
+                "2021880", #Ara: History Untold
                 ]:
             ret.add("hidevggpu")
 
