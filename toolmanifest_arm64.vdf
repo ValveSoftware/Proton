@@ -1,0 +1,8 @@
+"manifest"
+{
+  "version" "2"
+  "commandline" "/proton %verb%"
+  "require_tool_appid" "3810310"
+  "use_sessions" "1"
+  "compatmanager_layer_name" "proton"
+}

@@ -1326,7 +1326,7 @@ all-dist: default_pfx
 ## toolmanifest.vdf
 ##
 
-TOOLMANIFEST_VDF_SRC := toolmanifest_runtime.vdf
+TOOLMANIFEST_VDF_SRC := toolmanifest_$(TARGET_ARCH).vdf
 DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
 $(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
 	cp -a $< $@
