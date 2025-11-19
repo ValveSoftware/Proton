@@ -7903,6 +7903,618 @@ struct w_iface *create_winISteamClient_SteamClient021( struct u_iface u_iface )
     return r;
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_CreateSteamPipe, 4)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_BReleaseSteamPipe, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_ConnectToGlobalUser, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_CreateLocalUser, 12)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_ReleaseUser, 12)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamUser, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamGameServer, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_SetLocalIPBinding, 12)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamFriends, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamUtils, 12)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamMatchmaking, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamMatchmakingServers, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamGenericInterface, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamUserStats, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamGameServerStats, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamApps, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamNetworking, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamRemoteStorage, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamScreenshots, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_RunFrame, 4)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetIPCCallCount, 4)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_SetWarningMessageHook, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_BShutdownIfAllPipesClosed, 4)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamHTTP, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamController, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamUGC, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamMusic, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamHTMLSurface, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess, 8)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamInventory, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamVideo, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamParentalSettings, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamInput, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamParties, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_GetISteamRemotePlay, 16)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient023_DestroyAllInterfaces, 4)
+
+int32_t __thiscall winISteamClient_SteamClient023_CreateSteamPipe(struct w_iface *_this)
+{
+    struct ISteamClient_SteamClient023_CreateSteamPipe_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_CreateSteamPipe, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamClient_SteamClient023_BReleaseSteamPipe(struct w_iface *_this, int32_t hSteamPipe)
+{
+    struct ISteamClient_SteamClient023_BReleaseSteamPipe_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamPipe = hSteamPipe,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_BReleaseSteamPipe, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamClient_SteamClient023_ConnectToGlobalUser(struct w_iface *_this, int32_t hSteamPipe)
+{
+    struct ISteamClient_SteamClient023_ConnectToGlobalUser_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamPipe = hSteamPipe,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_ConnectToGlobalUser, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamClient_SteamClient023_CreateLocalUser(struct w_iface *_this, int32_t *phSteamPipe, uint32_t eAccountType)
+{
+    struct ISteamClient_SteamClient023_CreateLocalUser_params params =
+    {
+        .u_iface = _this->u_iface,
+        .phSteamPipe = phSteamPipe,
+        .eAccountType = eAccountType,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_CreateLocalUser, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamClient_SteamClient023_ReleaseUser(struct w_iface *_this, int32_t hSteamPipe, int32_t hUser)
+{
+    struct ISteamClient_SteamClient023_ReleaseUser_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamPipe = hSteamPipe,
+        .hUser = hUser,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_ReleaseUser, &params );
+}
+
+void /*ISteamUser*/ * __thiscall winISteamClient_SteamClient023_GetISteamUser(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamUser_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamUser, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient023_GetISteamGameServer(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamGameServer_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamGameServer, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void __thiscall winISteamClient_SteamClient023_SetLocalIPBinding(struct w_iface *_this, const SteamIPAddress_t *unIP, uint16_t usPort)
+{
+    struct ISteamClient_SteamClient023_SetLocalIPBinding_params params =
+    {
+        .u_iface = _this->u_iface,
+        .unIP = unIP,
+        .usPort = usPort,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_SetLocalIPBinding, &params );
+}
+
+void /*ISteamFriends*/ * __thiscall winISteamClient_SteamClient023_GetISteamFriends(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamFriends_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamFriends, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamUtils*/ * __thiscall winISteamClient_SteamClient023_GetISteamUtils(struct w_iface *_this, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamUtils_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamUtils, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamMatchmaking*/ * __thiscall winISteamClient_SteamClient023_GetISteamMatchmaking(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamMatchmaking_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamMatchmaking, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamMatchmakingServers*/ * __thiscall winISteamClient_SteamClient023_GetISteamMatchmakingServers(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamMatchmakingServers_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamMatchmakingServers, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void * __thiscall winISteamClient_SteamClient023_GetISteamGenericInterface(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamGenericInterface_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamGenericInterface, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamUserStats*/ * __thiscall winISteamClient_SteamClient023_GetISteamUserStats(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamUserStats_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamUserStats, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamGameServerStats*/ * __thiscall winISteamClient_SteamClient023_GetISteamGameServerStats(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamGameServerStats_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamGameServerStats, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamApps*/ * __thiscall winISteamClient_SteamClient023_GetISteamApps(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamApps_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamApps, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient023_GetISteamNetworking(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamNetworking_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamNetworking, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient023_GetISteamRemoteStorage(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamRemoteStorage_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamRemoteStorage, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamScreenshots*/ * __thiscall winISteamClient_SteamClient023_GetISteamScreenshots(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamScreenshots_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamScreenshots, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void __thiscall winISteamClient_SteamClient023_RunFrame(struct w_iface *_this)
+{
+    struct ISteamClient_SteamClient023_RunFrame_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_RunFrame, &params );
+}
+
+uint32_t __thiscall winISteamClient_SteamClient023_GetIPCCallCount(struct w_iface *_this)
+{
+    struct ISteamClient_SteamClient023_GetIPCCallCount_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetIPCCallCount, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamClient_SteamClient023_SetWarningMessageHook(struct w_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
+{
+    struct ISteamClient_SteamClient023_SetWarningMessageHook_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pFunction = pFunction,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_SetWarningMessageHook, &params );
+}
+
+int8_t __thiscall winISteamClient_SteamClient023_BShutdownIfAllPipesClosed(struct w_iface *_this)
+{
+    struct ISteamClient_SteamClient023_BShutdownIfAllPipesClosed_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_BShutdownIfAllPipesClosed, &params );
+    return params._ret;
+}
+
+void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient023_GetISteamHTTP(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamHTTP_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamHTTP, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamController*/ * __thiscall winISteamClient_SteamClient023_GetISteamController(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamController_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamController, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient023_GetISteamUGC(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamUGC_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamUGC, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient023_GetISteamMusic(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamMusic_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamMusic, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient023_GetISteamHTMLSurface(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamHTMLSurface_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamHTMLSurface, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void __thiscall winISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_iface *_this, void (*W_CDECL _a)(void))
+{
+    struct ISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
+    {
+        .u_iface = _this->u_iface,
+        ._a = _a,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess, &params );
+}
+
+void __thiscall winISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_iface *_this, void (*W_CDECL _a)(void))
+{
+    struct ISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
+    {
+        .u_iface = _this->u_iface,
+        ._a = _a,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess, &params );
+}
+
+void __thiscall winISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_iface *_this, uint32_t (*W_CDECL func)(int32_t))
+{
+    struct ISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
+    {
+        .u_iface = _this->u_iface,
+        .func = func,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess, &params );
+}
+
+void /*ISteamInventory*/ * __thiscall winISteamClient_SteamClient023_GetISteamInventory(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamInventory_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamInventory, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamVideo*/ * __thiscall winISteamClient_SteamClient023_GetISteamVideo(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamVideo_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamVideo, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient023_GetISteamParentalSettings(struct w_iface *_this, int32_t hSteamuser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamParentalSettings_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamuser = hSteamuser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamParentalSettings, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamInput*/ * __thiscall winISteamClient_SteamClient023_GetISteamInput(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamInput_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamInput, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamParties*/ * __thiscall winISteamClient_SteamClient023_GetISteamParties(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamParties_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamParties, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void /*ISteamRemotePlay*/ * __thiscall winISteamClient_SteamClient023_GetISteamRemotePlay(struct w_iface *_this, int32_t hSteamUser, int32_t hSteamPipe, const char *pchVersion)
+{
+    struct ISteamClient_SteamClient023_GetISteamRemotePlay_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hSteamUser = hSteamUser,
+        .hSteamPipe = hSteamPipe,
+        .pchVersion = pchVersion,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchVersion, -1);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_GetISteamRemotePlay, &params );
+    return create_win_interface( pchVersion, params._ret );
+}
+
+void __thiscall winISteamClient_SteamClient023_DestroyAllInterfaces(struct w_iface *_this)
+{
+    struct ISteamClient_SteamClient023_DestroyAllInterfaces_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamClient_SteamClient023_DestroyAllInterfaces, &params );
+}
+
+extern vtable_ptr winISteamClient_SteamClient023_vtable;
+
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient023, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient023_vtables)
+    __ASM_VTABLE(winISteamClient_SteamClient023,
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_CreateSteamPipe)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_BReleaseSteamPipe)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_ConnectToGlobalUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_CreateLocalUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_ReleaseUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamGameServer)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_SetLocalIPBinding)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamFriends)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamUtils)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamMatchmaking)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamMatchmakingServers)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamGenericInterface)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamUserStats)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamGameServerStats)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamApps)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamNetworking)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamRemoteStorage)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamScreenshots)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_RunFrame)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetIPCCallCount)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_SetWarningMessageHook)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_BShutdownIfAllPipesClosed)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamHTTP)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamController)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamUGC)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamMusic)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamHTMLSurface)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamInventory)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamVideo)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamParentalSettings)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamInput)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamParties)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_GetISteamRemotePlay)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient023_DestroyAllInterfaces)
+    );
+__ASM_BLOCK_END
+
+struct w_iface *create_winISteamClient_SteamClient023( struct u_iface u_iface )
+{
+    struct w_iface *r = alloc_mem_for_iface(sizeof(struct w_iface), "SteamClient023");
+    TRACE("-> %p\n", r);
+    r->vtable = alloc_vtable(&winISteamClient_SteamClient023_vtable, 38, "SteamClient023");
+    r->u_iface = u_iface;
+    return r;
+}
+
 void init_winISteamClient_rtti( char *base )
 {
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -7922,5 +8534,6 @@ void init_winISteamClient_rtti( char *base )
     init_winISteamClient_SteamClient019_rtti( base );
     init_winISteamClient_SteamClient020_rtti( base );
     init_winISteamClient_SteamClient021_rtti( base );
+    init_winISteamClient_SteamClient023_rtti( base );
 #endif /* defined(__x86_64__) || defined(__aarch64__) */
 }

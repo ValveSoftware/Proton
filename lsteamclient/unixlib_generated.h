@@ -54391,6 +54391,612 @@ struct wow64_ISteamClient_SteamClient021_DestroyAllInterfaces_params
     struct u_iface u_iface;
 };
 
+struct ISteamClient_SteamClient023_CreateSteamPipe_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct wow64_ISteamClient_SteamClient023_CreateSteamPipe_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct ISteamClient_SteamClient023_BReleaseSteamPipe_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct wow64_ISteamClient_SteamClient023_BReleaseSteamPipe_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct ISteamClient_SteamClient023_ConnectToGlobalUser_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct wow64_ISteamClient_SteamClient023_ConnectToGlobalUser_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    int32_t hSteamPipe;
+};
+
+struct ISteamClient_SteamClient023_CreateLocalUser_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    int32_t *phSteamPipe;
+    uint32_t eAccountType;
+};
+
+struct wow64_ISteamClient_SteamClient023_CreateLocalUser_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(int32_t *phSteamPipe, phSteamPipe, int32_t *);
+    uint32_t eAccountType;
+};
+
+struct ISteamClient_SteamClient023_ReleaseUser_params
+{
+    struct u_iface u_iface;
+    int32_t hSteamPipe;
+    int32_t hUser;
+};
+
+struct wow64_ISteamClient_SteamClient023_ReleaseUser_params
+{
+    struct u_iface u_iface;
+    int32_t hSteamPipe;
+    int32_t hUser;
+};
+
+struct ISteamClient_SteamClient023_GetISteamUser_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamUser_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamGameServer_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamGameServer_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_SetLocalIPBinding_params
+{
+    struct u_iface u_iface;
+    const SteamIPAddress_t *unIP;
+    uint16_t usPort;
+};
+
+struct wow64_ISteamClient_SteamClient023_SetLocalIPBinding_params
+{
+    struct u_iface u_iface;
+    W32_PTR(const SteamIPAddress_t *unIP, unIP, const SteamIPAddress_t *);
+    uint16_t usPort;
+};
+
+struct ISteamClient_SteamClient023_GetISteamFriends_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamFriends_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamUtils_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamUtils_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamMatchmaking_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamMatchmaking_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamMatchmakingServers_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamMatchmakingServers_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamGenericInterface_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamGenericInterface_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamUserStats_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamUserStats_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamGameServerStats_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamGameServerStats_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamApps_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamApps_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamNetworking_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamNetworking_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamRemoteStorage_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamRemoteStorage_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamScreenshots_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamScreenshots_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_RunFrame_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamClient_SteamClient023_RunFrame_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamClient_SteamClient023_GetIPCCallCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetIPCCallCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamClient_SteamClient023_SetWarningMessageHook_params
+{
+    struct u_iface u_iface;
+    void (*W_CDECL pFunction)(int32_t, const char *);
+};
+
+struct wow64_ISteamClient_SteamClient023_SetWarningMessageHook_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void (*W_CDECL pFunction)(int32_t, const char *), pFunction, void (*W_CDECL )(int32_t, const char *));
+};
+
+struct ISteamClient_SteamClient023_BShutdownIfAllPipesClosed_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamClient_SteamClient023_BShutdownIfAllPipesClosed_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamClient_SteamClient023_GetISteamHTTP_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamHTTP_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamController_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamController_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamUGC_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamUGC_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamMusic_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamMusic_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamHTMLSurface_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamHTMLSurface_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_iface u_iface;
+    void (*W_CDECL _a)(void);
+};
+
+struct wow64_ISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void (*W_CDECL _a)(void), _a, void (*W_CDECL )(void));
+};
+
+struct ISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_iface u_iface;
+    void (*W_CDECL _a)(void);
+};
+
+struct wow64_ISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void (*W_CDECL _a)(void), _a, void (*W_CDECL )(void));
+};
+
+struct ISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
+{
+    struct u_iface u_iface;
+    uint32_t (*W_CDECL func)(int32_t);
+};
+
+struct wow64_ISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
+{
+    struct u_iface u_iface;
+    W32_PTR(uint32_t (*W_CDECL func)(int32_t), func, uint32_t (*W_CDECL )(int32_t));
+};
+
+struct ISteamClient_SteamClient023_GetISteamInventory_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamInventory_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamVideo_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamVideo_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamParentalSettings_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamParentalSettings_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamuser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamInput_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamInput_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamParties_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamParties_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_GetISteamRemotePlay_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    const char *pchVersion;
+};
+
+struct wow64_ISteamClient_SteamClient023_GetISteamRemotePlay_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t hSteamUser;
+    int32_t hSteamPipe;
+    W32_PTR(const char *pchVersion, pchVersion, const char *);
+};
+
+struct ISteamClient_SteamClient023_DestroyAllInterfaces_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamClient_SteamClient023_DestroyAllInterfaces_params
+{
+    struct u_iface u_iface;
+};
+
 struct ISteamController_SteamController003_Init_params
 {
     struct u_iface u_iface;
@@ -101632,6 +102238,44 @@ enum unix_funcs
     unix_ISteamClient_SteamClient021_GetISteamParties,
     unix_ISteamClient_SteamClient021_GetISteamRemotePlay,
     unix_ISteamClient_SteamClient021_DestroyAllInterfaces,
+    unix_ISteamClient_SteamClient023_CreateSteamPipe,
+    unix_ISteamClient_SteamClient023_BReleaseSteamPipe,
+    unix_ISteamClient_SteamClient023_ConnectToGlobalUser,
+    unix_ISteamClient_SteamClient023_CreateLocalUser,
+    unix_ISteamClient_SteamClient023_ReleaseUser,
+    unix_ISteamClient_SteamClient023_GetISteamUser,
+    unix_ISteamClient_SteamClient023_GetISteamGameServer,
+    unix_ISteamClient_SteamClient023_SetLocalIPBinding,
+    unix_ISteamClient_SteamClient023_GetISteamFriends,
+    unix_ISteamClient_SteamClient023_GetISteamUtils,
+    unix_ISteamClient_SteamClient023_GetISteamMatchmaking,
+    unix_ISteamClient_SteamClient023_GetISteamMatchmakingServers,
+    unix_ISteamClient_SteamClient023_GetISteamGenericInterface,
+    unix_ISteamClient_SteamClient023_GetISteamUserStats,
+    unix_ISteamClient_SteamClient023_GetISteamGameServerStats,
+    unix_ISteamClient_SteamClient023_GetISteamApps,
+    unix_ISteamClient_SteamClient023_GetISteamNetworking,
+    unix_ISteamClient_SteamClient023_GetISteamRemoteStorage,
+    unix_ISteamClient_SteamClient023_GetISteamScreenshots,
+    unix_ISteamClient_SteamClient023_RunFrame,
+    unix_ISteamClient_SteamClient023_GetIPCCallCount,
+    unix_ISteamClient_SteamClient023_SetWarningMessageHook,
+    unix_ISteamClient_SteamClient023_BShutdownIfAllPipesClosed,
+    unix_ISteamClient_SteamClient023_GetISteamHTTP,
+    unix_ISteamClient_SteamClient023_GetISteamController,
+    unix_ISteamClient_SteamClient023_GetISteamUGC,
+    unix_ISteamClient_SteamClient023_GetISteamMusic,
+    unix_ISteamClient_SteamClient023_GetISteamHTMLSurface,
+    unix_ISteamClient_SteamClient023_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess,
+    unix_ISteamClient_SteamClient023_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess,
+    unix_ISteamClient_SteamClient023_Set_SteamAPI_CCheckCallbackRegisteredInProcess,
+    unix_ISteamClient_SteamClient023_GetISteamInventory,
+    unix_ISteamClient_SteamClient023_GetISteamVideo,
+    unix_ISteamClient_SteamClient023_GetISteamParentalSettings,
+    unix_ISteamClient_SteamClient023_GetISteamInput,
+    unix_ISteamClient_SteamClient023_GetISteamParties,
+    unix_ISteamClient_SteamClient023_GetISteamRemotePlay,
+    unix_ISteamClient_SteamClient023_DestroyAllInterfaces,
     unix_ISteamController_SteamController003_Init,
     unix_ISteamController_SteamController003_Shutdown,
     unix_ISteamController_SteamController003_RunFrame,

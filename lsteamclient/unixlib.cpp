@@ -270,6 +270,7 @@ static NTSTATUS ISteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess( Ifa
 
 LSTEAMCLIENT_UNIX_IMPL( ISteamClient, SteamClient020, Set_SteamAPI_CCheckCallbackRegisteredInProcess );
 LSTEAMCLIENT_UNIX_IMPL( ISteamClient, SteamClient021, Set_SteamAPI_CCheckCallbackRegisteredInProcess );
+LSTEAMCLIENT_UNIX_IMPL( ISteamClient, SteamClient023, Set_SteamAPI_CCheckCallbackRegisteredInProcess );
 
 template< typename Params >
 static NTSTATUS steamclient_next_callback( Params *params, bool wow64 )
