@@ -193,7 +193,7 @@ This requires ARM64 SDK container which for now has to be build locally. See
 
 You need to pass `--target-arch=arm64` and
 `--proton-sdk-image=registry.gitlab.steamos.cloud/proton/sniper/sdk/arm64/llvm:latest`
-(poiting to your local SDK image) to `configure.sh`.
+(pointing to your local SDK image) to `configure.sh`.
 
 It's not possible to use the resulting builds in x86 Steam running via FEX.
 
