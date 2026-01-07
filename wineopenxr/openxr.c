@@ -10,6 +10,7 @@
 #define WIN32_NO_STATUS
 #include "windef.h"
 #include "winnt.h"
+#include "winternl.h"
 #include "wine/server_protocol.h"
 
 #include "openxr_private.h"
@@ -395,11 +396,25 @@ NTSTATUS init_openxr(void *args) {
 #define NANOSECONDS_IN_A_SECOND 1000000000
 #define TICKSPERSEC             10000000
 
+static LONGLONG qpc_to_monotonic_offset(void)
+{
+  LARGE_INTEGER qpc;
+  struct timespec ts;
+  LONGLONG monotonic_qpc;
+
+  NtQueryPerformanceCounter(&qpc, NULL);
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  monotonic_qpc = (ULONGLONG)ts.tv_sec * TICKSPERSEC + ts.tv_nsec / (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
+
+  return qpc.QuadPart - monotonic_qpc;
+}
+
 XrResult wine_xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance,
                                                         const LARGE_INTEGER *performanceCounter,
                                                         XrTime *time) {
   wine_XrInstance *wine_instance = wine_instance_from_handle(instance);
   struct timespec ts;
+  LONGLONG monotonic_qpc;
   XrResult res;
 
   TRACE("instance %p, performanceCounter %p (%lld), time %p\n",
@@ -414,9 +429,10 @@ XrResult wine_xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance,
     return XR_ERROR_FUNCTION_UNSUPPORTED;
   }
 
-  /* Convert QPC ticks to timespec (Wine QPC is 10MHz = 100ns ticks). */
-  ts.tv_sec = performanceCounter->QuadPart / TICKSPERSEC;
-  ts.tv_nsec = (performanceCounter->QuadPart % TICKSPERSEC) * (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
+  monotonic_qpc = performanceCounter->QuadPart - qpc_to_monotonic_offset();
+
+  ts.tv_sec = monotonic_qpc / TICKSPERSEC;
+  ts.tv_nsec = (monotonic_qpc % TICKSPERSEC) * (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
 
   res = p_xrConvertTimespecTimeToTimeKHR(wine_instance->host_instance, &ts, time);
   if (res != XR_SUCCESS)
@@ -430,6 +446,7 @@ XrResult wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance,
                                                         LARGE_INTEGER *performanceCounter) {
   wine_XrInstance *wine_instance = wine_instance_from_handle(instance);
   struct timespec ts;
+  LONGLONG monotonic_qpc;
   XrResult res;
 
   TRACE("instance %p, time %lld, performanceCounter %p\n",
@@ -449,8 +466,9 @@ XrResult wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance,
     return res;
   }
 
-  performanceCounter->QuadPart = (ULONGLONG)ts.tv_sec * TICKSPERSEC +
-                                 ts.tv_nsec / (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
+  monotonic_qpc = (ULONGLONG)ts.tv_sec * TICKSPERSEC +
+                  ts.tv_nsec / (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
+  performanceCounter->QuadPart = monotonic_qpc + qpc_to_monotonic_offset();
 
   return XR_SUCCESS;
 }
