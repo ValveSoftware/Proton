@@ -148,8 +148,6 @@ MANUAL_UNIX_THUNKS = {
 
 # loader functions which are entirely manually implemented
 MANUAL_LOADER_FUNCTIONS = {
-    "xrConvertTimeToWin32PerformanceCounterKHR",
-    "xrConvertWin32PerformanceCounterToTimeKHR",
     "xrGetD3D11GraphicsRequirementsKHR",
     "xrGetD3D12GraphicsRequirementsKHR",
     "xrCreateApiLayerInstance",

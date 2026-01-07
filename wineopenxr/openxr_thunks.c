@@ -252,6 +252,30 @@ static NTSTATUS thunk64_xrComputeNewSceneMSFT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrConvertTimeToWin32PerformanceCounterKHR(void *args)
+{
+    struct xrConvertTimeToWin32PerformanceCounterKHR_params *params = args;
+
+    TRACE("%p, 0x%s, %p\n", params->instance, wine_dbgstr_longlong(params->time), params->performanceCounter);
+
+    params->result = wine_xrConvertTimeToWin32PerformanceCounterKHR(params->instance, params->time, params->performanceCounter);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrConvertWin32PerformanceCounterToTimeKHR(void *args)
+{
+    struct xrConvertWin32PerformanceCounterToTimeKHR_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->instance, params->performanceCounter, params->time);
+
+    params->result = wine_xrConvertWin32PerformanceCounterToTimeKHR(params->instance, params->performanceCounter, params->time);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreateAction(void *args)
 {
     struct xrCreateAction_params *params = args;
@@ -5032,6 +5056,8 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrChangeVirtualKeyboardTextContextMETA,
     thunk64_xrClearSpatialAnchorStoreMSFT,
     thunk64_xrComputeNewSceneMSFT,
+    thunk64_xrConvertTimeToWin32PerformanceCounterKHR,
+    thunk64_xrConvertWin32PerformanceCounterToTimeKHR,
     thunk64_xrCreateAction,
     thunk64_xrCreateActionSet,
     thunk64_xrCreateActionSpace,

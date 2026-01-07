@@ -170,6 +170,30 @@ XrResult WINAPI xrComputeNewSceneMSFT(XrSceneObserverMSFT sceneObserver, const X
     return params.result;
 }
 
+XrResult WINAPI xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance, XrTime time, LARGE_INTEGER *performanceCounter)
+{
+    struct xrConvertTimeToWin32PerformanceCounterKHR_params params;
+    NTSTATUS _status;
+    params.instance = instance;
+    params.time = time;
+    params.performanceCounter = performanceCounter;
+    _status = UNIX_CALL(xrConvertTimeToWin32PerformanceCounterKHR, &params);
+    assert(!_status && "xrConvertTimeToWin32PerformanceCounterKHR");
+    return params.result;
+}
+
+XrResult WINAPI xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance, const LARGE_INTEGER *performanceCounter, XrTime *time)
+{
+    struct xrConvertWin32PerformanceCounterToTimeKHR_params params;
+    NTSTATUS _status;
+    params.instance = instance;
+    params.performanceCounter = performanceCounter;
+    params.time = time;
+    _status = UNIX_CALL(xrConvertWin32PerformanceCounterToTimeKHR, &params);
+    assert(!_status && "xrConvertWin32PerformanceCounterToTimeKHR");
+    return params.result;
+}
+
 XrResult WINAPI xrCreateAction(XrActionSet actionSet, const XrActionCreateInfo *createInfo, XrAction *action)
 {
     struct xrCreateAction_params params;

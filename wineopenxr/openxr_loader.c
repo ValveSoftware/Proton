@@ -1667,22 +1667,6 @@ XrResult WINAPI xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo
   return params.result;
 }
 
-XrResult WINAPI xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance,
-                                                          XrTime time,
-                                                          LARGE_INTEGER *performanceCounter) {
-  FIXME("unimplemented\n");
-  /* FIXME */
-  return XR_ERROR_INITIALIZATION_FAILED;
-}
-
-XrResult WINAPI xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance,
-                                                          const LARGE_INTEGER *performanceCounter,
-                                                          XrTime *time) {
-  FIXME("unimplemented\n");
-  /* FIXME */
-  return XR_ERROR_INITIALIZATION_FAILED;
-}
-
 XrResult WINAPI xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
                                                   XrSystemId systemId,
                                                   XrGraphicsRequirementsD3D11KHR *graphicsRequirements) {

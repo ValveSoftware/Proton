@@ -25,6 +25,8 @@
 #define WINE_XR_VERSION XR_API_VERSION_1_1
 
 /* Functions for which we have custom implementations outside of the thunks. */
+XrResult wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance, XrTime time, LARGE_INTEGER *performanceCounter);
+XrResult wine_xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance, const LARGE_INTEGER *performanceCounter, XrTime *time);
 XrResult wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, XrInstance *instance);
 XrResult wine_xrCreateSession(XrInstance instance, const XrSessionCreateInfo *createInfo, XrSession *session);
 XrResult wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo *createInfo, XrSwapchain *swapchain);
