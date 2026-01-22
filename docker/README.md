@@ -1,9 +1,9 @@
-Proton (sniper) SDK
+Proton (steamrt4) SDK
 ====================
 
 These are the build rules that are used to create docker images to build
 Proton. The automated creation of the official images lives in
-<https://gitlab.steamos.cloud/proton/sniper/sdk>, but this can be
+<https://gitlab.steamos.cloud/proton/steamrt4/sdk>, but this can be
 used to create local images too.
 
 
@@ -16,15 +16,15 @@ Just run `make proton` in this directory. To use Podman instead run `make
 DOCKER=podman proton`.
 
 This will create container image tagged both as
-`registry.gitlab.steamos.cloud/proton/sniper/sdk:$SOME_VERSION-0-dev` and
-`registry.gitlab.steamos.cloud/proton/sniper/sdk:latest`
+`registry.gitlab.steamos.cloud/proton/steamrt4/sdk:$SOME_VERSION-0-dev` and
+`registry.gitlab.steamos.cloud/proton/steamrt4/sdk:latest`
 
 Look for lines `successfully tagged` at the bottom of the output.
 
 To use the just built container image for Proton build you can pass the following argument
 to `./configure.sh` (assuming you are using the same container engine, Podman or
 Docker, for both):
-`--proton-sdk-image=registry.gitlab.steamos.cloud/proton/sniper/sdk:latest`
+`--proton-sdk-image=registry.gitlab.steamos.cloud/proton/steamrt4/sdk:latest`
 
 
 ARM64 Containers
@@ -39,7 +39,7 @@ make BUILD_ARCH=aarch64 proton-llvm
 To use:
 
 ```
-$PROTON_SRC/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/sniper/sdk/arm64:latest
+$PROTON_SRC/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/steamrt4/sdk/arm64:latest
 ```
 
 
@@ -52,7 +52,7 @@ To update the official Proton SDK images:
    in this directory, test locally, commit and push the changes.
 
 2) Update `.gitlab-ci.yml` in the
-   [Proton SDK](https://gitlab.steamos.cloud/proton/sniper/sdk)
+   [Proton SDK](https://gitlab.steamos.cloud/proton/steamrt4/sdk)
    repository to point to the new commit, commit and push to trigger a
    new build of `-dev` images.
 
@@ -94,10 +94,4 @@ replacements done using `sed`.
 The <https://gitlab.steamos.cloud> CI uses Kaniko instead of Docker,
 with a bit of script conversion to generate commands usable there. More
 details are available in
-[Proton SDK](https://gitlab.steamos.cloud/proton/sniper/sdk).
-
-The `build-base` images are there to create a common ground to build the
-other elements of the toolchain. They are based on fairly recent (more
-than what `steamrt` provides), but they are only used temporarily to
-build a static version of the Binutils, MinGW and GCC binaries, which
-are then copied over the `steamrt` base image.
+[Proton SDK](https://gitlab.steamos.cloud/proton/steamrt4/sdk).

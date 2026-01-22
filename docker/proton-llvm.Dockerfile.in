@@ -60,19 +60,6 @@ RUN cd /tmp \
 && cd / \
 && rm -rf /tmp/ninja-@NINJA_VERSION@
 
-RUN cd /tmp \
-&& wget -q @AFDKO_URLBASE@/@AFDKO_SOURCE@ \
-&& echo '@AFDKO_SHA256@ @AFDKO_SOURCE@' | sha256sum -c - \
-&& unzip @AFDKO_SOURCE@ && rm @AFDKO_SOURCE@ \
-&& cd /tmp/afdko-@AFDKO_VERSION@ \
-&& mkdir build \
-&& cd build \
-&& CC=clang CXX=clang++ cmake .. -DCMAKE_BUILD_TYPE=Debug \
-&& CC=clang CXX=clang++ make \
-&& cp -f bin/* /usr/libexec/afdko/  \
-&& cd / \
-&& rm -rf /tmp/afdko-@AFDKO_VERSION@
-
 ENTRYPOINT ["/usr/bin/tini-static", "-s", "-g", "--"]
 
 CMD ["/bin/bash"]
