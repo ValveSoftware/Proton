@@ -118,11 +118,12 @@ endef
 $(eval $(call create-proton-rules))
 
 
+define create-llvm-mingw-rules
 .PHONY: llvm-mingw
 all: llvm-mingw
 llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
 llvm-mingw: llvm-mingw.Dockerfile
-	$(DOCKER) build -f $< \
+	$(DOCKER) build -f $$< \
 	  --cache-from=$(PROTONSDK_URLBASE)/llvm-mingw \
 	  -t $(PROTONSDK_URLBASE)/llvm-mingw:$(LLVM_MINGW_VERSION) \
 	  -t $(PROTONSDK_URLBASE)/llvm-mingw:latest \
@@ -132,12 +133,16 @@ pull::
 push::
 	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm-mingw:$(LLVM_MINGW_VERSION)
 	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm-mingw:latest
+endef
 
+$(eval $(call create-llvm-mingw-rules))
+
+define create-proton-llvm-rules
 .PHONY: proton-llvm
 all: proton-llvm
 proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
 proton-llvm: proton-llvm.Dockerfile | llvm-mingw
-	$(DOCKER) build -f $< \
+	$(DOCKER) build -f $$< \
 	  --build-arg=BUILD_ARCH=$(BUILD_ARCH) \
 	  --cache-from=$(PROTONSDK_URLBASE) \
 	  -t $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION) \
@@ -148,6 +153,9 @@ pull::
 push::
 	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION)
 	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm:latest
+endef
+
+$(eval $(call create-proton-llvm-rules))
 
 
 sources::
