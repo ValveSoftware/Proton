@@ -10,16 +10,22 @@ ifneq ($(BUILD_ARCH),$(HOST_ARCH))
 endif
 
 ifeq ($(BUILD_ARCH),aarch64)
-	CONTAINER_URL_INFIX = /arm64
+	STEAMRT_INFIX = /arm64
+	PROTON_INFIX = /arm64
+else ifeq ($(BUILD_ARCH),x86_64)
+	STEAMRT_INFIX =
+	PROTON_INFIX = /x86_64
+else
+	foo := $(error Unknown BUILD_ARCH $(BUILD_ARCH).)
 endif
 
-PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/steamrt4/sdk$(CONTAINER_URL_INFIX)
+PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/steamrt4/sdk$(PROTON_INFIX)
 PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
 # docker caches, so we need something that don't change much
-BASE_IMAGE := $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(CONTAINER_URL_INFIX):4.0.20260119.200228
+BASE_IMAGE := $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(STEAMRT_INFIX):4.0.20260119.200228
 
 MINGW_VERSION = 13.0.0
 RUST_VERSION = 1.68.0
@@ -121,7 +127,7 @@ $(eval $(call create-proton-rules))
 define create-llvm-mingw-rules
 .PHONY: llvm-mingw
 all: llvm-mingw
-llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
+llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(STEAMRT_INFIX):$(STEAMRT_VERSION)
 llvm-mingw: llvm-mingw.Dockerfile
 	$(DOCKER) build -f $$< \
 	  --cache-from=$(PROTONSDK_URLBASE)/llvm-mingw \
@@ -140,19 +146,19 @@ $(eval $(call create-llvm-mingw-rules))
 define create-proton-llvm-rules
 .PHONY: proton-llvm
 all: proton-llvm
-proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(CONTAINER_URL_INFIX):$(STEAMRT_VERSION)
+proton-llvm: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(STEAMRT_INFIX):$(STEAMRT_VERSION)
 proton-llvm: proton-llvm.Dockerfile | llvm-mingw
 	$(DOCKER) build -f $$< \
 	  --build-arg=BUILD_ARCH=$(BUILD_ARCH) \
 	  --cache-from=$(PROTONSDK_URLBASE) \
-	  -t $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION) \
-	  -t $(PROTONSDK_URLBASE)/llvm:latest \
+	  -t $(PROTONSDK_URLBASE)-llvm:$(PROTONSDK_VERSION) \
+	  -t $(PROTONSDK_URLBASE)-llvm:latest \
 	  context
 pull::
-	-$(DOCKER) pull $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION)
+	-$(DOCKER) pull $(PROTONSDK_URLBASE)-llvm:$(PROTONSDK_VERSION)
 push::
-	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm:$(PROTONSDK_VERSION)
-	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm:latest
+	$(DOCKER) push $(PROTONSDK_URLBASE)-llvm:$(PROTONSDK_VERSION)
+	$(DOCKER) push $(PROTONSDK_URLBASE)-llvm:latest
 endef
 
 $(eval $(call create-proton-llvm-rules))
