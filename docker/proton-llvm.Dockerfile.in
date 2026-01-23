@@ -1,4 +1,4 @@
-FROM @PROTONSDK_URLBASE@/llvm-mingw:@LLVM_MINGW_VERSION@ AS llvm-mingw
+FROM @PROTONSDK_URLBASE@-llvm-mingw:@LLVM_MINGW_VERSION@ AS llvm-mingw
 
 FROM @BASE_IMAGE@ AS base
 COPY --from=llvm-mingw            /opt/llvm-mingw /opt/llvm-mingw

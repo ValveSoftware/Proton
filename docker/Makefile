@@ -131,14 +131,14 @@ llvm-mingw: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/steamrt4/sdk$(STEAMRT_INFIX)
 llvm-mingw: llvm-mingw.Dockerfile
 	$(DOCKER) build -f $$< \
 	  --cache-from=$(PROTONSDK_URLBASE)/llvm-mingw \
-	  -t $(PROTONSDK_URLBASE)/llvm-mingw:$(LLVM_MINGW_VERSION) \
-	  -t $(PROTONSDK_URLBASE)/llvm-mingw:latest \
+	  -t $(PROTONSDK_URLBASE)-llvm-mingw:$(LLVM_MINGW_VERSION) \
+	  -t $(PROTONSDK_URLBASE)-llvm-mingw:latest \
 	  context
 pull::
-	-$(DOCKER) pull $(PROTONSDK_URLBASE)/llvm-mingw:$(LLVM_MINGW_VERSION)
+	-$(DOCKER) pull $(PROTONSDK_URLBASE)-llvm-mingw:$(LLVM_MINGW_VERSION)
 push::
-	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm-mingw:$(LLVM_MINGW_VERSION)
-	$(DOCKER) push $(PROTONSDK_URLBASE)/llvm-mingw:latest
+	$(DOCKER) push $(PROTONSDK_URLBASE)-llvm-mingw:$(LLVM_MINGW_VERSION)
+	$(DOCKER) push $(PROTONSDK_URLBASE)-llvm-mingw:latest
 endef
 
 $(eval $(call create-llvm-mingw-rules))
