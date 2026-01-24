@@ -9965,32 +9965,6 @@ u64_RenderModel_TextureMap_t_1237::operator w64_RenderModel_TextureMap_t_1237() 
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_RenderModel_TextureMap_t_1237::operator u64_RenderModel_TextureMap_t_1237() const
-{
-    u64_RenderModel_TextureMap_t_1237 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    ret.format = this->format;
-    ret.unMipLevels = this->unMipLevels;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_RenderModel_TextureMap_t_1237::operator w32_RenderModel_TextureMap_t_1237() const
-{
-    w32_RenderModel_TextureMap_t_1237 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    ret.format = this->format;
-    ret.unMipLevels = this->unMipLevels;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
 w64_RenderModel_TextureMap_t_11111::operator u64_RenderModel_TextureMap_t_11111() const
 {
     u64_RenderModel_TextureMap_t_11111 ret;
@@ -10015,30 +9989,6 @@ u64_RenderModel_TextureMap_t_11111::operator w64_RenderModel_TextureMap_t_11111(
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_RenderModel_TextureMap_t_11111::operator u64_RenderModel_TextureMap_t_11111() const
-{
-    u64_RenderModel_TextureMap_t_11111 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    ret.format = this->format;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_RenderModel_TextureMap_t_11111::operator w32_RenderModel_TextureMap_t_11111() const
-{
-    w32_RenderModel_TextureMap_t_11111 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    ret.format = this->format;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
 w64_RenderModel_TextureMap_t_090::operator u64_RenderModel_TextureMap_t_090() const
 {
     u64_RenderModel_TextureMap_t_090 ret;
@@ -10053,28 +10003,6 @@ w64_RenderModel_TextureMap_t_090::operator u64_RenderModel_TextureMap_t_090() co
 u64_RenderModel_TextureMap_t_090::operator w64_RenderModel_TextureMap_t_090() const
 {
     w64_RenderModel_TextureMap_t_090 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-w32_RenderModel_TextureMap_t_090::operator u64_RenderModel_TextureMap_t_090() const
-{
-    u64_RenderModel_TextureMap_t_090 ret;
-    ret.unWidth = this->unWidth;
-    ret.unHeight = this->unHeight;
-    ret.rubTextureMapData = this->rubTextureMapData;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_RenderModel_TextureMap_t_090::operator w32_RenderModel_TextureMap_t_090() const
-{
-    w32_RenderModel_TextureMap_t_090 ret;
     ret.unWidth = this->unWidth;
     ret.unHeight = this->unHeight;
     ret.rubTextureMapData = this->rubTextureMapData;
@@ -16593,32 +16521,6 @@ u64_RenderModel_t_0912::operator w64_RenderModel_t_0912() const
 #endif
 
 #if defined(__x86_64__) || defined(__aarch64__)
-w32_RenderModel_t_0912::operator u64_RenderModel_t_0912() const
-{
-    u64_RenderModel_t_0912 ret;
-    ret.rVertexData = this->rVertexData;
-    ret.unVertexCount = this->unVertexCount;
-    ret.rIndexData = this->rIndexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    ret.diffuseTextureId = this->diffuseTextureId;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_RenderModel_t_0912::operator w32_RenderModel_t_0912() const
-{
-    w32_RenderModel_t_0912 ret;
-    ret.rVertexData = this->rVertexData;
-    ret.unVertexCount = this->unVertexCount;
-    ret.rIndexData = this->rIndexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    ret.diffuseTextureId = this->diffuseTextureId;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
 w64_RenderModel_t_090::operator u64_RenderModel_t_090() const
 {
     u64_RenderModel_t_090 ret;
@@ -16636,34 +16538,6 @@ w64_RenderModel_t_090::operator u64_RenderModel_t_090() const
 u64_RenderModel_t_090::operator w64_RenderModel_t_090() const
 {
     w64_RenderModel_t_090 ret;
-    ret.ulInternalHandle = this->ulInternalHandle;
-    ret.rVertexData = this->rVertexData;
-    ret.unVertexCount = this->unVertexCount;
-    ret.rIndexData = this->rIndexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    ret.diffuseTexture = this->diffuseTexture;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-w32_RenderModel_t_090::operator u64_RenderModel_t_090() const
-{
-    u64_RenderModel_t_090 ret;
-    ret.ulInternalHandle = this->ulInternalHandle;
-    ret.rVertexData = this->rVertexData;
-    ret.unVertexCount = this->unVertexCount;
-    ret.rIndexData = this->rIndexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    ret.diffuseTexture = this->diffuseTexture;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_RenderModel_t_090::operator w32_RenderModel_t_090() const
-{
-    w32_RenderModel_t_090 ret;
     ret.ulInternalHandle = this->ulInternalHandle;
     ret.rVertexData = this->rVertexData;
     ret.unVertexCount = this->unVertexCount;

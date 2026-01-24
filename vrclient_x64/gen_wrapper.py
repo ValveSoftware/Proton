@@ -229,6 +229,8 @@ MANUAL_STRUCTS = [
 ]
 MANUAL_WOW64_STRUCTS = [
     "HiddenAreaMesh_t",
+    "RenderModel_t",
+    "RenderModel_TextureMap_t",
 ]
 
 UNIX_FUNCS = [

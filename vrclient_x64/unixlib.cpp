@@ -476,4 +476,110 @@ u64_HiddenAreaMesh_t::operator w32_HiddenAreaMesh_t() const
     ret.unTriangleCount = this->unTriangleCount;
     return ret;
 }
+
+w32_RenderModel_TextureMap_t_1237::operator u64_RenderModel_TextureMap_t_1237() const
+{
+    u64_RenderModel_TextureMap_t_1237 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    ret.format = this->format;
+    ret.unMipLevels = this->unMipLevels;
+    return ret;
+}
+
+u64_RenderModel_TextureMap_t_1237::operator w32_RenderModel_TextureMap_t_1237() const
+{
+    w32_RenderModel_TextureMap_t_1237 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    ret.format = this->format;
+    ret.unMipLevels = this->unMipLevels;
+    return ret;
+}
+
+w32_RenderModel_TextureMap_t_11111::operator u64_RenderModel_TextureMap_t_11111() const
+{
+    u64_RenderModel_TextureMap_t_11111 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    ret.format = this->format;
+    return ret;
+}
+
+u64_RenderModel_TextureMap_t_11111::operator w32_RenderModel_TextureMap_t_11111() const
+{
+    w32_RenderModel_TextureMap_t_11111 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    ret.format = this->format;
+    return ret;
+}
+
+w32_RenderModel_TextureMap_t_090::operator u64_RenderModel_TextureMap_t_090() const
+{
+    u64_RenderModel_TextureMap_t_090 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    return ret;
+}
+
+u64_RenderModel_TextureMap_t_090::operator w32_RenderModel_TextureMap_t_090() const
+{
+    w32_RenderModel_TextureMap_t_090 ret;
+    ret.unWidth = this->unWidth;
+    ret.unHeight = this->unHeight;
+    ret.rubTextureMapData = this->rubTextureMapData;
+    return ret;
+}
+
+w32_RenderModel_t_0912::operator u64_RenderModel_t_0912() const
+{
+    u64_RenderModel_t_0912 ret;
+    ret.rVertexData = this->rVertexData;
+    ret.unVertexCount = this->unVertexCount;
+    ret.rIndexData = this->rIndexData;
+    ret.unTriangleCount = this->unTriangleCount;
+    ret.diffuseTextureId = this->diffuseTextureId;
+    return ret;
+}
+
+u64_RenderModel_t_0912::operator w32_RenderModel_t_0912() const
+{
+    w32_RenderModel_t_0912 ret;
+    ret.rVertexData = this->rVertexData;
+    ret.unVertexCount = this->unVertexCount;
+    ret.rIndexData = this->rIndexData;
+    ret.unTriangleCount = this->unTriangleCount;
+    ret.diffuseTextureId = this->diffuseTextureId;
+    return ret;
+}
+
+w32_RenderModel_t_090::operator u64_RenderModel_t_090() const
+{
+    u64_RenderModel_t_090 ret;
+    ret.ulInternalHandle = this->ulInternalHandle;
+    ret.rVertexData = this->rVertexData;
+    ret.unVertexCount = this->unVertexCount;
+    ret.rIndexData = this->rIndexData;
+    ret.unTriangleCount = this->unTriangleCount;
+    ret.diffuseTexture = this->diffuseTexture;
+    return ret;
+}
+
+u64_RenderModel_t_090::operator w32_RenderModel_t_090() const
+{
+    w32_RenderModel_t_090 ret;
+    ret.ulInternalHandle = this->ulInternalHandle;
+    ret.rVertexData = this->rVertexData;
+    ret.unVertexCount = this->unVertexCount;
+    ret.rIndexData = this->rIndexData;
+    ret.unTriangleCount = this->unTriangleCount;
+    ret.diffuseTexture = this->diffuseTexture;
+    return ret;
+}
 #endif
