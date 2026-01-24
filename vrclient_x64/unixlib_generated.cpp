@@ -15730,26 +15730,6 @@ C_ASSERT( sizeof(u32_HiddenAreaMesh_t().pVertexData) >= 4 );
 C_ASSERT( offsetof(u32_HiddenAreaMesh_t, unTriangleCount) == 4 );
 C_ASSERT( sizeof(u32_HiddenAreaMesh_t().unTriangleCount) >= 4 );
 
-#if defined(__x86_64__) || defined(__aarch64__)
-w32_HiddenAreaMesh_t::operator u64_HiddenAreaMesh_t() const
-{
-    u64_HiddenAreaMesh_t ret;
-    ret.pVertexData = this->pVertexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_HiddenAreaMesh_t::operator w32_HiddenAreaMesh_t() const
-{
-    w32_HiddenAreaMesh_t ret;
-    ret.pVertexData = this->pVertexData;
-    ret.unTriangleCount = this->unTriangleCount;
-    return ret;
-}
-#endif
-
 C_ASSERT( sizeof(w64_InputAnalogActionData_t) >= 48 );
 C_ASSERT( offsetof(w64_InputAnalogActionData_t, bActive) == 0 );
 C_ASSERT( sizeof(w64_InputAnalogActionData_t().bActive) >= 1 );

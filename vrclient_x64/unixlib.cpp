@@ -440,3 +440,40 @@ VRCLIENT_UNIX_FUNC( vrclient_VRClientCoreFactory );
 VRCLIENT_UNIX_FUNC( vrclient_get_unix_buffer );
 
 VRCLIENT_UNIX_IMPL( IVRTrackedCamera, 001, GetVideoStreamFrame );
+
+/* manual conversion functions */
+static void *alloc_low_mem( ULONG_PTR size )
+{
+    SYSTEM_BASIC_INFORMATION info;
+    ULONG_PTR zero_bits;
+    void *ret = NULL;
+
+    NtQuerySystemInformation(SystemEmulationBasicInformation, &info, sizeof(info), NULL);
+    zero_bits = (ULONG_PTR)info.HighestUserAddress | 0x7fffffff;
+    NtAllocateVirtualMemory( GetCurrentProcess(), &ret, zero_bits, &size, MEM_COMMIT, PAGE_READWRITE );
+    return ret;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+w32_HiddenAreaMesh_t::operator u64_HiddenAreaMesh_t() const
+{
+    u64_HiddenAreaMesh_t ret;
+    ret.pVertexData = this->pVertexData;
+    ret.unTriangleCount = this->unTriangleCount;
+    return ret;
+}
+
+u64_HiddenAreaMesh_t::operator w32_HiddenAreaMesh_t() const
+{
+    w32_HiddenAreaMesh_t ret;
+    HmdVector2_t *ret_ptr;
+    unsigned int size;
+
+    size = this->unTriangleCount * 3 * sizeof(*this->pVertexData);
+    ret_ptr = (HmdVector2_t *)alloc_low_mem( size );
+    memcpy( ret_ptr, this->pVertexData, size );
+    ret.pVertexData = ret_ptr;
+    ret.unTriangleCount = this->unTriangleCount;
+    return ret;
+}
+#endif

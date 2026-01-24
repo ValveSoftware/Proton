@@ -41,7 +41,7 @@ struct ptr32
 
     struct ptr32& operator=( const Type ptr )
     {
-        assert( (UINT64)ptr == (UINT_PTR)ptr );
+        assert( (UINT64)ptr == (uint32_t)(UINT_PTR)ptr );
         this->value = (UINT_PTR)ptr;
         return *this;
     }

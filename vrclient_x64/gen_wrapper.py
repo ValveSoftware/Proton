@@ -228,6 +228,7 @@ MANUAL_STRUCTS = [
     "COpenVRContext", # not actually used
 ]
 MANUAL_WOW64_STRUCTS = [
+    "HiddenAreaMesh_t",
 ]
 
 UNIX_FUNCS = [
