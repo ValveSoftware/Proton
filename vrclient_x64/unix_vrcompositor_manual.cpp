@@ -265,13 +265,28 @@ static NTSTATUS IVRCompositor_SetSkyboxOverride( Iface *iface, Params *params, b
     return 0;
 }
 
-template< typename Params >
-static NTSTATUS IVRCompositor_Submit( struct u_IVRCompositor_IVRCompositor_008 *iface, Params *params, bool wow64 )
+static NTSTATUS IVRCompositor_Submit( struct u_IVRCompositor_IVRCompositor_008 *iface, struct IVRCompositor_IVRCompositor_008_Submit_params *params, bool wow64 )
 {
     u_VRTextureWithPoseAndDepth_t u_texture;
     u_VRVulkanTextureData_t u_depth_vkdata;
     u_VRVulkanTextureArrayData_t u_vkdata;
     w_Texture_t texture =
+    {
+        .handle = params->pTexture,
+        .eType = params->eTextureType,
+    };
+    u_Texture_t *submit = unwrap_submit_texture_data( &texture, params->nSubmitFlags,
+                                                      &u_texture, &u_vkdata, &u_depth_vkdata );
+    params->_ret = (uint32_t)iface->Submit( params->eEye, submit->eType, submit->handle, params->pBounds, params->nSubmitFlags );
+    return 0;
+}
+
+static NTSTATUS IVRCompositor_Submit( struct u_IVRCompositor_IVRCompositor_008 *iface, struct wow64_IVRCompositor_IVRCompositor_008_Submit_params *params, bool wow64 )
+{
+    u_VRTextureWithPoseAndDepth_t u_texture;
+    u_VRVulkanTextureData_t u_depth_vkdata;
+    u_VRVulkanTextureArrayData_t u_vkdata;
+    w32_Texture_t texture =
     {
         .handle = params->pTexture,
         .eType = params->eTextureType,
