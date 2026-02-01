@@ -35,6 +35,7 @@ from ctypes import c_void_p
 from ctypes import c_size_t
 from ctypes import c_ssize_t
 
+from appids import AppID
 from filelock import FileLock
 from random import randrange
 
@@ -863,8 +864,8 @@ class CompatData:
 
     def create_fonts_symlinks(self):
         ALTERNATIVES = {
-            ('1313860', 'arial.ttf'),    # FIFA 21
-            ('1506830', 'arial.ttf'),    # FIFA 22
+            (AppID.FIFA_21, 'arial.ttf'),    # 1313860
+            (AppID.FIFA_22, 'arial.ttf'),    # 1506830
         }
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
@@ -1196,187 +1197,187 @@ def default_compat_config():
         appid = os.environ["SteamAppId"]
         if appid in [
                 #affected by CW bug 19741
-                "1017900", #Age of Empires: Definitive Edition
+                AppID.AGE_OF_EMPIRES_DEFINITIVE_EDITION, # 1017900
 
                 #affected by CW bug 20240
-                "1331440", #FUSER
+                AppID.FUSER, # 1331440
 
                 #affected by Unity race
-                "2620730", #DEVIATOR - CW bug 24913
-                "2882920", #SSR Wives: The Murder Of My Winter Crush Demo - CW bug 25730
-                "2712910", #Spark & Kling - CW bug 25778
+                AppID.DEVIATOR, # 2620730
+                AppID.SSR_WIVES_THE_MURDER_OF_MY_WINTER_CRUSH_DEMO, # 2882920
+                AppID.SPARK_KLING, # 2712910
                 ]:
             ret.add("nomfdxgiman")
 
         if appid in [
                 # OPWR may be causing text input delays in login windows in these games on Wayland due to
                 # blit happening before presentation
-                "1172620", #Sea of Thieves
-                "962130", #Grounded
-                "495420", #State of Decay 2: Juggernaut Edition
-                "976730", #Halo: The Master Chief Collection
-                "1017900", #Age of Empires: Definitive Edition
-                "1056090", #Ori and the Will of the Wisps
-                "1293830", #Forza Horizon 4
-                "1551360", #Forza Horizon 5
-                "271590", #Grand Theft Auto V
-                "5699", #Grand Theft Auto V Premium Edition
-                "1174180", #Red Dead Redemption 2
-                "1404210", #Red Dead Online
-                "12210", #Grand Theft Auto IV: Complete Edition
-                "204100", #Max Payne 3
-                "110800", #L.A. Noire
-                "12200", #Bully: Scholarship Edition
-                "12120", #Grand Theft Auto: San Andreas
-                "12110", #Grand Theft Auto: Vice City
-                "12100", #Grand Theft Auto III
-                "722230", #L.A. Noire: The VR Case Files
-                "813780", #Age of Empires II: Definitive Edition
-                "933110", #Age of Empires III: Definitive Edition
-                "1466860", #Age of Empires IV
-                "1097840", #Gears 5
-                "1244950", #Battletoads
-                "1189800", #Bleeding Edge
-                "1184050", #Gears Tactics
-                "1240440", #Halo Infinite
-                "1250410", #Microsoft Flight Simulator
-                "1672970", #Minecraft Dungeons
-                "1180660", #Tell Me Why
-                "1238430", #Tell Me Why Chapter 2
-                "1266670", #Tell Me Why Chapter 3
+                AppID.SEA_OF_THIEVES, # 1172620
+                AppID.GROUNDED, # 962130
+                AppID.STATE_OF_DECAY_2_JUGGERNAUT_EDITION, # 495420
+                AppID.HALO_THE_MASTER_CHIEF_COLLECTION, # 976730
+                AppID.AGE_OF_EMPIRES_DEFINITIVE_EDITION, # 1017900
+                AppID.ORI_AND_THE_WILL_OF_THE_WISPS, # 1056090
+                AppID.FORZA_HORIZON_4, # 1293830
+                AppID.FORZA_HORIZON_5, # 1551360
+                AppID.GRAND_THEFT_AUTO_V, # 271590
+                AppID.GRAND_THEFT_AUTO_V_PREMIUM_EDITION, # 5699
+                AppID.RED_DEAD_REDEMPTION_2, # 1174180
+                AppID.RED_DEAD_ONLINE, # 1404210
+                AppID.GRAND_THEFT_AUTO_IV_COMPLETE_EDITION, # 12210
+                AppID.MAX_PAYNE_3, # 204100
+                AppID.L_A_NOIRE, # 110800
+                AppID.BULLY_SCHOLARSHIP_EDITION, # 12200
+                AppID.GRAND_THEFT_AUTO_SAN_ANDREAS, # 12120
+                AppID.GRAND_THEFT_AUTO_VICE_CITY, # 12110
+                AppID.GRAND_THEFT_AUTO_III, # 12100
+                AppID.L_A_NOIRE_THE_VR_CASE_FILES, # 722230
+                AppID.AGE_OF_EMPIRES_II_DEFINITIVE_EDITION, # 813780
+                AppID.AGE_OF_EMPIRES_III_DEFINITIVE_EDITION, # 933110
+                AppID.AGE_OF_EMPIRES_IV, # 1466860
+                AppID.GEARS_5, # 1097840
+                AppID.BATTLETOADS, # 1244950
+                AppID.BLEEDING_EDGE, # 1189800
+                AppID.GEARS_TACTICS, # 1184050
+                AppID.HALO_INFINITE, # 1240440
+                AppID.MICROSOFT_FLIGHT_SIMULATOR, # 1250410
+                AppID.MINECRAFT_DUNGEONS, # 1672970
+                AppID.TELL_ME_WHY, # 1180660
+                AppID.TELL_ME_WHY_CHAPTER_2, # 1238430
+                AppID.TELL_ME_WHY_CHAPTER_3, # 1266670
                 # Other issues arising from OWPR code path in apps, e. g., hitting unimplemented bits in
                 # d3dcompiler.
-                "230410", #Warframe
-                "3513350", #Wuthering Waves
+                AppID.WARFRAME, # 230410
+                AppID.WUTHERING_WAVES, # 3513350
                 "3728370",
                 ]:
             ret.add("noopwr")
 
         if appid in [
-                "2710",     #Act of War: Direct Action
-                "1621680",  #Sword and Fairy 4
+                AppID.ACT_OF_WAR_DIRECT_ACTION, # 2710
+                AppID.SWORD_AND_FAIRY_4, # 1621680
                 ]:
             ret.add("noforcelgadd")
 
         if appid in [
-                "257420", #Serious Sam 4
-                "2021880", #Ara: History Untold
+                AppID.SERIOUS_SAM_4, # 257420
+                AppID.ARA_HISTORY_UNTOLD, # 2021880
                 ]:
             ret.add("hidevggpu")
 
         if appid in [
-                "1977170", #Jusant
+                AppID.JUSANT, # 1977170
                 ]:
             ret.add("hideintelgpu")
 
         if appid in [
-                "1341820", #As Dusk falls
-                "280790", #Creativerse
-                "306130", #The Elder Scrolls Online
-                "24010", #Train Simulator
-                "374320", #DARK SOULS III
-                "65500", #Aura: Fate of the Ages
-                "4000", #Garry's Mod
-                "383120", #Empyrion - Galactic Survival
-                "2371630", #Sword Art Online: Integral Factor
-                "460790", #Bayonetta
-                "273590", #Descent 3
-                "834530", #Yakuza Kiwami
-                "2526380", #Sword of Convallaria
-                "1088710", #Yakuza 3 Remastered
-                "1105500", #Yakuza 4 Remastered
-                "714010", #Aimlabs
-                "2249070", #Strip Fighter ZERO
-                "1845910", #Dragon Age: The Veilguard
-                "6030", #Star Wars - Jedi Knight II: Jedi Outcast
-                "2842040", #Star Wars Outlaws
-                "245300", #Disney Epic Mickey 2: The Power of Two
-                "2594920", #Atelier Resleriana: Forgotten Alchemy and the Polar Night Liberator
-                "2586520", #Atelier Resleriana [JP]
-                "3209830", #Stronghold Crusader: Definitive Edition Demo
-                "3024040", #Stronghold Crusader: Definitive Edition
-                "2433890", #Stronghold: Definitive Edition Demo
-                "2140020", #Stronghold: Definitive Edition
-                "3314070", #The Sims 2 Legacy Collection
-                "2709570", #Supermarket Together
-                "2623190", #The Elder Scrolls IV: Oblivion Remastered
-                "2139460", #Once Human
-                "632360", #Risk of Rain 2
-                "2531310", #The Last of Us Part II Remastered
-                "2564460", #Banter
-                "2680010", #The First Berserker: Khazan
-                "3438330", #Firefly Village Demo
-                "3393740", #Firefly Village
-                "2840770", #Avatar: Frontiers of Pandora
-                "429660", #Tales of Berseria
-                "1286220", #Sea Power
-                "2827230", #Wild Assault
-                "3159330", #Assassin's Creed Shadows
-                "367500", #Dragon's Dogma: Dark Arisen
-                "1890220", #Figmin XR
+                AppID.AS_DUSK_FALLS, # 1341820
+                AppID.CREATIVERSE, # 280790
+                AppID.THE_ELDER_SCROLLS_ONLINE, # 306130
+                AppID.TRAIN_SIMULATOR, # 24010
+                AppID.DARK_SOULS_III, # 374320
+                AppID.AURA_FATE_OF_THE_AGES, # 65500
+                AppID.GARRYS_MOD, # 4000
+                AppID.EMPYRION_GALACTIC_SURVIVAL, # 383120
+                AppID.SWORD_ART_ONLINE_INTEGRAL_FACTOR, # 2371630
+                AppID.BAYONETTA, # 460790
+                AppID.DESCENT_3, # 273590
+                AppID.YAKUZA_KIWAMI, # 834530
+                AppID.SWORD_OF_CONVALLARIA, # 2526380
+                AppID.YAKUZA_3_REMASTERED, # 1088710
+                AppID.YAKUZA_4_REMASTERED, # 1105500
+                AppID.AIMLABS, # 714010
+                AppID.STRIP_FIGHTER_ZERO, # 2249070
+                AppID.DRAGON_AGE_THE_VEILGUARD, # 1845910
+                AppID.STAR_WARS_JEDI_KNIGHT_II_JEDI_OUTCAST, # 6030
+                AppID.STAR_WARS_OUTLAWS, # 2842040
+                AppID.DISNEY_EPIC_MICKEY_2_THE_POWER_OF_TWO, # 245300
+                AppID.ATELIER_RESLERIANA_FORGOTTEN_ALCHEMY_AND_THE_POLAR_NIGHT_LIBERATOR, # 2594920
+                AppID.ATELIER_RESLERIANA_JP, # 2586520
+                AppID.STRONGHOLD_CRUSADER_DEFINITIVE_EDITION_DEMO, # 3209830
+                AppID.STRONGHOLD_CRUSADER_DEFINITIVE_EDITION, # 3024040
+                AppID.STRONGHOLD_DEFINITIVE_EDITION_DEMO, # 2433890
+                AppID.STRONGHOLD_DEFINITIVE_EDITION, # 2140020
+                AppID.THE_SIMS_2_LEGACY_COLLECTION, # 3314070
+                AppID.SUPERMARKET_TOGETHER, # 2709570
+                AppID.THE_ELDER_SCROLLS_IV_OBLIVION_REMASTERED, # 2623190
+                AppID.ONCE_HUMAN, # 2139460
+                AppID.RISK_OF_RAIN_2, # 632360
+                AppID.THE_LAST_OF_US_PART_II_REMASTERED, # 2531310
+                AppID.BANTER, # 2564460
+                AppID.THE_FIRST_BERSERKER_KHAZAN, # 2680010
+                AppID.FIREFLY_VILLAGE_DEMO, # 3438330
+                AppID.FIREFLY_VILLAGE, # 3393740
+                AppID.AVATAR_FRONTIERS_OF_PANDORA, # 2840770
+                AppID.TALES_OF_BERSERIA, # 429660
+                AppID.SEA_POWER, # 1286220
+                AppID.WILD_ASSAULT, # 2827230
+                AppID.ASSASSINS_CREED_SHADOWS, # 3159330
+                AppID.DRAGONS_DOGMA_DARK_ARISEN, # 367500
+                AppID.FIGMIN_XR, # 1890220
                 ]:
             ret.add("gamedrive")
 
         if appid in [
-                "202990", #Call of Duty: Black Ops II - Multiplayer
-                "212910", #Call of Duty: Black Ops II - Zombies
-                "499100", #Dark Parables: The Exiled Prince Collector's Edition (499100)
-                "1404090", #Trivia Tricks
-                "2052410", #WITCH ON THE HOLY NIGHT
-                "789910", #Planet of the Apes: Last Frontier
-                "1183470", #Imperiums: Greek Wars
-                "876340", #VR Slots 3D
+                AppID.CALL_OF_DUTY_BLACK_OPS_II_MULTIPLAYER, # 202990
+                AppID.CALL_OF_DUTY_BLACK_OPS_II_ZOMBIES, # 212910
+                AppID.DARK_PARABLES_THE_EXILED_PRINCE_COLLECTORS_EDITION_499100, # 499100
+                AppID.TRIVIA_TRICKS, # 1404090
+                AppID.WITCH_ON_THE_HOLY_NIGHT, # 2052410
+                AppID.PLANET_OF_THE_APES_LAST_FRONTIER, # 789910
+                AppID.IMPERIUMS_GREEK_WARS, # 1183470
+                AppID.VR_SLOTS_3D, # 876340
                 ]:
             ret.add("heapdelayfree")
 
         if appid in [
-                "21980", #Call of Juarez: Bound in Blood
-                "553850", #Helldivers 2
-                "2055290", #Sonic Colors: Ultimate
+                AppID.CALL_OF_JUAREZ_BOUND_IN_BLOOD, # 21980
+                AppID.HELLDIVERS_2, # 553850
+                AppID.SONIC_COLORS_ULTIMATE, # 2055290
                 ]:
             ret.add("heapzeromemory")
 
         if appid in [
-                "71230", #Crazy Taxi
-                "3328910", #MySims Kingdom
+                AppID.CRAZY_TAXI, # 71230
+                AppID.MYSIMS_KINGDOM, # 3328910
                 ]:
             ret.add("heaptopdown")
 
         if appid in [
-                "2630", #Call of Duty 2
-                "1060210", #Disaster Report 4: Summer Memories
-                "414740", #RAID: World War II
-                "201510", #Flatout 3
-                "1233880", #Disgaea 4 Complete+
+                AppID.CALL_OF_DUTY_2, # 2630
+                AppID.DISASTER_REPORT_4_SUMMER_MEMORIES, # 1060210
+                AppID.RAID_WORLD_WAR_II, # 414740
+                AppID.FLATOUT_3, # 201510
+                AppID.DISGAEA_4_COMPLETE, # 1233880
                 ]:
             ret.add("nofsync")
             ret.add("noesync")
 
         if appid in [
                 # disable dxvknvapi for titles which dislike it
-                "1088850", #Marvel's Guardians of the Galaxy
-                "1418100", #Swords of Legends Online
-                "2080180", #Go Home Annie Demo
-                "1939100", #Go Home Annie
-                "435150", #Divinity: Original Sin 2 - Definitive Edition
-                "2176900", #Fablecraft
-                "2853730", #Skull and Bones
+                AppID.MARVELS_GUARDIANS_OF_THE_GALAXY, # 1088850
+                AppID.SWORDS_OF_LEGENDS_ONLINE, # 1418100
+                AppID.GO_HOME_ANNIE_DEMO, # 2080180
+                AppID.GO_HOME_ANNIE, # 1939100
+                AppID.DIVINITY_ORIGINAL_SIN_2_DEFINITIVE_EDITION, # 435150
+                AppID.FABLECRAFT, # 2176900
+                AppID.SKULL_AND_BONES, # 2853730
                 ]:
             ret.add("disablenvapi")
 
         if appid in [
-                "1808500", #ARC Raiders
-                "2073850", #The Finals
-                "108710", #Alan Wake
-                "202750", #Alan Wake's American Nightmare
-                "505170", #Carmageddon: Max Damage
-                "255220", #GRID Autosport
-                "44350", #GRID 2
-                "407810", #Hard Reset Redux
-                "233130", #Shadow Warrior
-                "2067160", #Simulakros
-                "2621010", #Simulakros Demo
-                "368500", #Assassin's Creed Syndicate
+                AppID.ARC_RAIDERS, # 1808500
+                AppID.THE_FINALS, # 2073850
+                AppID.ALAN_WAKE, # 108710
+                AppID.ALAN_WAKES_AMERICAN_NIGHTMARE, # 202750
+                AppID.CARMAGEDDON_MAX_DAMAGE, # 505170
+                AppID.GRID_AUTOSPORT, # 255220
+                AppID.GRID_2, # 44350
+                AppID.HARD_RESET_REDUX, # 407810
+                AppID.SHADOW_WARRIOR, # 233130
+                AppID.SIMULAKROS, # 2067160
+                AppID.SIMULAKROS_DEMO, # 2621010
+                AppID.ASSASSINS_CREED_SYNDICATE, # 368500
                 ]:
             try:
                 with open('/proc/modules') as f:
@@ -1388,26 +1389,26 @@ def default_compat_config():
 
 
         if appid in [
-                "2698940", #The Crew Motorfest
+                AppID.THE_CREW_MOTORFEST, # 2698940
                 ]:
             ret.add("hidenvgpu")
 
         if appid in [
-                "2395210", #Tony Hawk's Pro Skater 1 + 2
-                "1577120", #The Quarry
+                AppID.TONY_HAWKS_PRO_SKATER_1_2, # 2395210
+                AppID.THE_QUARRY, # 1577120
                 ]:
             ret.add("forcenvapi")
 
         if appid in [
-                "1252330" #Deathloop
+                AppID.DEATHLOOP, # 1252330
                 ]:
             ret.add("hideapu")
 
         if appid in [
-                "249610", # Galactic Arms Race
-                "287240", # Eterium Demo
-                "280200", # Eterium
-                "1072860", # Real Scary
+                AppID.GALACTIC_ARMS_RACE, # 249610
+                AppID.ETERIUM_DEMO, # 287240
+                AppID.ETERIUM, # 280200
+                AppID.REAL_SCARY, # 1072860
                 ]:
             ret.add("fnad3d11")
 
@@ -1416,19 +1417,19 @@ def default_compat_config():
         appid = os.environ["STEAM_COMPAT_APP_ID"]
 
         if appid in [
-                "3513350", #Wuthering Waves
+                AppID.WUTHERING_WAVES, # 3513350
                 ]:
             ret.add("noxalia")
 
         if appid in [
-                "255960", #Bad Mojo Redux
-                "2471120", #Rocket Jockey
+                AppID.BAD_MOJO_REDUX, # 255960
+                AppID.ROCKET_JOCKEY, # 2471120
                 ]:
             ret.add("gamedrive")
 
         if appid in [
-                "275850", #No Man's Sky
-                "2012840", #Portal with RTX
+                AppID.NO_MANS_SKY, # 275850
+                AppID.PORTAL_WITH_RTX, # 2012840
                 ]:
             ret.add("nohardwarescheduling")
 
@@ -1673,62 +1674,62 @@ class Session:
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
         if os.environ.get("SteamGameId", 0) in [
-                "661920", #Claybook
-                "558260", #Gravel
-                "386360", #SMITE
-                "487720", #Agony
-                "879420", #Agony UNRATED
-                "649950", #Ashen
-                "1150080", #Azur Lane: Crosswave
-                "463150", #BARRIER X
-                "420290", #Blackwake
-                "1092660", #Blair Witch
-                "1052070", #Burning Daylight
-                "399810", #Call of Cthulhu
-                "967390", #Chronos: Before the Ashes
-                "968870", #Close to the Sun
-                "544920", #Darwin Project
-                "1055610", #Deep Space Battle Simulator
-                "682990", #Drug Dealer Simulator
-                "551770", #ECHO
-                "392110", #ENDLESS Space 2
-                "447020", #Farming Simulator 17
-                "834280", #Fishing Sim World: Pro Tour
-                "890880", #FROSTBITE: Deadly Climate
-                "433530", #Heliborne - Enhanced Edition
-                "521890", #Hello Neighbor
-                "783170", #INSOMNIA: The Ark
-                "1195460", #Last Year
-                "1029890", #Layers of Fear 2 (2019)
-                "535850", #Micro Machines World Series
-                "711750", #Monster Energy Supercross - The Official Videogame
-                "882020", #Monster Energy Supercross - The Official Videogame 2
-                "824280", #Monster Jam Steel Titans
-                "775900", #MotoGP18
-                "415200", #Motorsport Manager
-                "748360", #MY HERO ONE'S JUSTICE
-                "1058450", #MY HERO ONE'S JUSTICE 2
-                "556180", #Mysterium: A Psychic Clue Game
-                "561600", #MXGP3 - The Official Motocross Videogame
-                "798290", #MXGP PRO
-                "366870", #Narcosis
-                "485030", #PLANET ALPHA
-                "469610", #Rick and Morty: Virtual Rick-ality
-                "759740", #RIDE 3
-                "1342260", #SAMURAI SHODOWN
-                "425670", #Seraph
-                "1096570", #SONG OF HORROR COMPLETE EDITION
-                "492230", #Space Hulk: Tactics
-                "996580", #Spyro Reignited Trilogy
-                "437630", #State of Mind
-                "442780", #STRAFE: Gold Edition
-                "433100", #The Town of Light
-                "406970", #The Uncertain: Last Quiet Day
-                "451520", #theBlu: Season 1
-                "1237970", #Titanfall® 2
-                "1051200", #Trover Saves the Universe
-                "285190", #Warhammer 40,000: Dawn of War III
-                "1133320", #Westworld Awakening
+                AppID.CLAYBOOK, # 661920
+                AppID.GRAVEL, # 558260
+                AppID.SMITE, # 386360
+                AppID.AGONY, # 487720
+                AppID.AGONY_UNRATED, # 879420
+                AppID.ASHEN, # 649950
+                AppID.AZUR_LANE_CROSSWAVE, # 1150080
+                AppID.BARRIER_X, # 463150
+                AppID.BLACKWAKE, # 420290
+                AppID.BLAIR_WITCH, # 1092660
+                AppID.BURNING_DAYLIGHT, # 1052070
+                AppID.CALL_OF_CTHULHU, # 399810
+                AppID.CHRONOS_BEFORE_THE_ASHES, # 967390
+                AppID.CLOSE_TO_THE_SUN, # 968870
+                AppID.DARWIN_PROJECT, # 544920
+                AppID.DEEP_SPACE_BATTLE_SIMULATOR, # 1055610
+                AppID.DRUG_DEALER_SIMULATOR, # 682990
+                AppID.ECHO, # 551770
+                AppID.ENDLESS_SPACE_2, # 392110
+                AppID.FARMING_SIMULATOR_17, # 447020
+                AppID.FISHING_SIM_WORLD_PRO_TOUR, # 834280
+                AppID.FROSTBITE_DEADLY_CLIMATE, # 890880
+                AppID.HELIBORNE_ENHANCED_EDITION, # 433530
+                AppID.HELLO_NEIGHBOR, # 521890
+                AppID.INSOMNIA_THE_ARK, # 783170
+                AppID.LAST_YEAR, # 1195460
+                AppID.LAYERS_OF_FEAR_2_2019, # 1029890
+                AppID.MICRO_MACHINES_WORLD_SERIES, # 535850
+                AppID.MONSTER_ENERGY_SUPERCROSS_THE_OFFICIAL_VIDEOGAME, # 711750
+                AppID.MONSTER_ENERGY_SUPERCROSS_THE_OFFICIAL_VIDEOGAME_2, # 882020
+                AppID.MONSTER_JAM_STEEL_TITANS, # 824280
+                AppID.MOTOGP18, # 775900
+                AppID.MOTORSPORT_MANAGER, # 415200
+                AppID.MY_HERO_ONES_JUSTICE, # 748360
+                AppID.MY_HERO_ONES_JUSTICE_2, # 1058450
+                AppID.MYSTERIUM_A_PSYCHIC_CLUE_GAME, # 556180
+                AppID.MXGP3_THE_OFFICIAL_MOTOCROSS_VIDEOGAME, # 561600
+                AppID.MXGP_PRO, # 798290
+                AppID.NARCOSIS, # 366870
+                AppID.PLANET_ALPHA, # 485030
+                AppID.RICK_AND_MORTY_VIRTUAL_RICK_ALITY, # 469610
+                AppID.RIDE_3, # 759740
+                AppID.SAMURAI_SHODOWN, # 1342260
+                AppID.SERAPH, # 425670
+                AppID.SONG_OF_HORROR_COMPLETE_EDITION, # 1096570
+                AppID.SPACE_HULK_TACTICS, # 492230
+                AppID.SPYRO_REIGNITED_TRILOGY, # 996580
+                AppID.STATE_OF_MIND, # 437630
+                AppID.STRAFE_GOLD_EDITION, # 442780
+                AppID.THE_TOWN_OF_LIGHT, # 433100
+                AppID.THE_UNCERTAIN_LAST_QUIET_DAY, # 406970
+                AppID.THEBLU_SEASON_1, # 451520
+                AppID.TITANFALL_2, # 1237970
+                AppID.TROVER_SAVES_THE_UNIVERSE, # 1051200
+                AppID.WARHAMMER_40_000_DAWN_OF_WAR_III, # 285190
+                AppID.WESTWORLD_AWAKENING, # 1133320
                 ]:
             self.env["OPENSSL_ia32cap"] = "~0x20000000"
 
@@ -1751,14 +1752,14 @@ class Session:
 
         if "PROTON_LIMIT_RESOLUTIONS" not in self.env:
             if os.environ.get("SteamGameId", 0) in [
-                    "39540", #SpellForce: Platinum Edition
+                    AppID.SPELLFORCE_PLATINUM_EDITION, # 39540
                     ]:
                 self.env["PROTON_LIMIT_RESOLUTIONS"] = "16"
             elif os.environ.get("SteamGameId", 0) in [
-                    "524220", #NieR: Automata
-                    "814380", #Sekiro: Shadows Die Twice
-                    "374320", #DARK SOULS III
-                    "357190", #Ultimate Marvel vs Capcom 3
+                    AppID.NIER_AUTOMATA, # 524220
+                    AppID.SEKIRO_SHADOWS_DIE_TWICE, # 814380
+                    AppID.DARK_SOULS_III, # 374320
+                    AppID.ULTIMATE_MARVEL_VS_CAPCOM_3, # 357190
                     ]:
                 self.env["PROTON_LIMIT_RESOLUTIONS"] = "32"
 
@@ -1822,7 +1823,7 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        if (os.environ.get("SteamGameId", 0) == "2322010" and    # God of War: Ragnarok
+        if (os.environ.get("SteamGameId", 0) == AppID.GOD_OF_WAR_RAGNAROK and    # 2322010
             os.environ.get("SteamDeck", 0) == "1"):
             # Disable hidraw for Sony DualShock and DualSense controllers.
             self.env["PROTON_DISABLE_HIDRAW"] = "0x054C/0x05C4,0x054C/0x09CC,0x054C/0x0BA0,0x054C/0x0CE6,0x054C/0x0DF2"
@@ -1963,8 +1964,8 @@ class Session:
 
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) in [
-                    "311210",   # CoD: Black Ops 3
-                    "1549250",  # Undecember
+                    AppID.COD_BLACK_OPS_3, # 311210
+                    AppID.UNDECEMBER, # 1549250
                 ]:
             argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
         else:
