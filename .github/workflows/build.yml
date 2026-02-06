@@ -1,0 +1,87 @@
+name: Build and Release Proton
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'proton_*'
+    paths-ignore:
+      - '.github/workflows/restore-readme.yml'
+      - '.github/README.md'
+  workflow_dispatch:
+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Set Build Metadata
+        id: meta
+        run: |
+          # Define values
+          DATE=$(date +'%Y%m%d')
+          REF=${{ github.ref_name }}
+          
+          # Set as Outputs (for context access)
+          echo "build_date=$DATE" >> $GITHUB_OUTPUT
+          echo "ref_name=$REF" >> $GITHUB_OUTPUT
+
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Fix Submodule URLs & Sync
+        run: |
+          sed -i 's|url = ../|url = https://github.com/ValveSoftware/|g' .gitmodules
+          git submodule update --init --recursive
+
+      - name: Configure & Build
+        run: |
+          chmod +x configure.sh
+          mkdir build && cd build
+          ../configure.sh --build-name="nonsteam-${{ steps.meta.outputs.ref_name }}"
+          make redist
+
+      - name: Create Tarball
+        id: pack
+        run: |
+          # Create the filename using the outputs from the meta step
+          FILENAME="proton-nonsteam-${{ steps.meta.outputs.ref_name }}-${{ steps.meta.outputs.build_date }}-b${{ github.run_number }}.tar.gz"
+          echo "fname=$FILENAME" >> $GITHUB_OUTPUT
+          
+          if [ -d "$GITHUB_WORKSPACE/build/redist" ]; then
+            tar -czf "$FILENAME" -C "$GITHUB_WORKSPACE/build/redist" .
+          else
+            echo "Build directory not found"
+            exit 1
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.pack.outputs.fname }}
+          path: ${{ steps.pack.outputs.fname }}
+          retention-days: 7
+
+      - name: Generate Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.pack.outputs.fname }}
+          tag_name: "nonsteam-${{ steps.meta.outputs.ref_name }}-${{ steps.meta.outputs.build_date }}-b${{ github.run_number }}"
+          body: |
+            Automated Nonsteam Build
+            - Branch/Tag: ${{ steps.meta.outputs.ref_name }}
+            - Build Date: ${{ steps.meta.outputs.build_date }}
+            - Build Number: ${{ github.run_number }}

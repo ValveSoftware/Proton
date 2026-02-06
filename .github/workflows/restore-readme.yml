@@ -1,0 +1,47 @@
+name: Restore Custom Readme
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'proton_*'
+    paths-ignore:
+      - 'README.md' # Prevents infinite loops
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace Readme
+        run: |
+          # Check if your custom readme exists in the .github folder
+          if [ -f ".github/README.md" ]; then
+            cp .github/README.md README.md
+            echo "Readme replaced successfully."
+          else
+            echo "Custom README.md not found in .github/"
+            exit 1
+          fi
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Only commit if there are actual changes
+          git add README.md
+          if git diff --staged --quiet; then
+            echo "No changes to README.md detected."
+          else
+            git commit -m "docs: restore custom readme after sync"
+            git push
+          fi
