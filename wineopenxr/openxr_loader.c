@@ -718,6 +718,10 @@ XrResult WINAPI xrDestroySession(XrSession session) {
     return params.result;
   }
 
+  EnterCriticalSection(&session_list_lock);
+  list_remove(&wine_session->entry);
+  LeaveCriticalSection(&session_list_lock);
+
   free(wine_session);
   return XR_SUCCESS;
 }
@@ -734,35 +738,60 @@ XrResult WINAPI xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData) {
   WINE_TRACE("eventData->type %#x\n", eventData->type);
 
   if (params.result == XR_SUCCESS) {
+    wine_XrSession *wrapped;
     switch (eventData->type) {
       case XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED: {
         XrEventDataInteractionProfileChanged *evt = (XrEventDataInteractionProfileChanged *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for interaction profile changed event\n", evt->session);
         break;
       }
       case XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED: {
         XrEventDataSessionStateChanged *evt = (XrEventDataSessionStateChanged *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for session state changed event\n", evt->session);
         break;
       }
       case XR_TYPE_EVENT_DATA_VISIBILITY_MASK_CHANGED_KHR: {
         XrEventDataVisibilityMaskChangedKHR *evt = (XrEventDataVisibilityMaskChangedKHR *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for visibility mask changed event\n", evt->session);
         break;
       }
       case XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING: {
         XrEventDataReferenceSpaceChangePending *evt = (XrEventDataReferenceSpaceChangePending *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for reference space change pending event\n", evt->session);
         break;
       }
       case XR_TYPE_EVENT_DATA_USER_PRESENCE_CHANGED_EXT: {
         XrEventDataUserPresenceChangedEXT *evt = (XrEventDataUserPresenceChangedEXT *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for user presence changed event\n", evt->session);
         break;
       }
       case XR_TYPE_EVENT_DATA_LOCALIZATION_CHANGED_ML: {
         XrEventDataLocalizationChangedML *evt = (XrEventDataLocalizationChangedML *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
+        wrapped = get_wrapped_XrSession(evt->session);
+        if (wrapped)
+          evt->session = (XrSession)wrapped;
+        else
+          WARN("Session %p not found in session list for localization changed event\n", evt->session);
         break;
       }
       default:
