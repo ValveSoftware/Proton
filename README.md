@@ -144,7 +144,7 @@ locally](#install-proton-locally) section for details.
 deploy Proton to Steam users via Steamworks.
 
 `make module=<module> module` - build both 32- and 64-bit versions of the
-specified wine module. This allows rapid iteration on one module. This target
+specified WINE module. This allows rapid iteration on one module. This target
 is only useful after building Proton.
 
 `make dxvk` / `make vkd3d-proton` - rebuild DXVK / vkd3d-proton.
@@ -152,9 +152,9 @@ is only useful after building Proton.
 
 ### Figuring Out What Failed To Build
 
-Proton build system invokes builds of many subprojects in parallel. If one
-subprojects fails there can be thousands of lines printed by other sub-builds
-before the top level exits. This can make the real reason of the build failing
+Proton's build system invokes builds of many subprojects in parallel. If one
+subproject fails, there can be thousands of lines printed by other sub-builds
+before the top-level exits. This can make the real reason for the build failing
 hard to find.
 
 Appending `2>&1 | tee build.log` will log the full build output to a `build.log`
@@ -249,8 +249,8 @@ and [docs/DEBUGGING-WINDOWS.md](docs/DEBUGGING-WINDOWS.md).
 
 For use with [clangd](https://clangd.llvm.org/) LSP server and similar tooling.
 
-Projects built using cmake or meson (e.g. vkd3d-proton) automatically come with
-`compile_commands.json`. For autotools (e.g. wine) you have to [configure the
+Projects built using CMake or Meson (e.g. vkd3d-proton) automatically come with
+`compile_commands.json`. For autotools (e.g. WINE) you have to [configure the
 build](#configuring-the-build) with `--enable-bear` that uses
 [bear](https://github.com/rizsotto/Bear) to create the compilation database.
 It's not on by default as it make the build slightly slower.
@@ -260,7 +260,7 @@ build subdirectory named `compile_commands/`.
 
 The paths are translated to point to the real source (i.e. not the rsynced
 copy). It still may depend on build directory for things like auto-generated
-`config.h` though and for wine it may be beneficial to run `tools/make_requests`
+`config.h` though and for WINE it may be beneficial to run `tools/make_requests`
 in you source directories as those changes are not committed.
 
 You can then configure your editor to use that file for clangd in a few ways:
@@ -303,7 +303,7 @@ option, set the variable to `0`. To use Steam's default configuration, do
 not specify the variable at all.
 
 All of the below are runtime options. They do not effect permanent changes to
-the Wine prefix. Removing the option will revert to the previous behavior.
+the WINE prefix. Removing the option will revert to the previous behavior.
 
 | Compat config string  | Environment Variable               | Description  |
 | :-------------------- | :--------------------------------- | :----------- |
@@ -320,7 +320,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 |                       | `HOST_LC_ALL`                      | Set value to a locale to override all other system locale settings for a game.  This variable should be used instead of `LC_ALL`. |
 | `disablenvapi`        | `PROTON_DISABLE_NVAPI`             | Disable NVIDIA's NVAPI GPU support library. |
 | `nativevulkanloader`  |                                    | Use the Vulkan loader shipped with the game instead of Proton's built-in Vulkan loader. This breaks VR support, but is required by a few games. |
-| `forcelgadd`          | `PROTON_FORCE_LARGE_ADDRESS_AWARE` | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables. Enabled by default. |
+| `forcelgadd`          | `PROTON_FORCE_LARGE_ADDRESS_AWARE` | Force WINE to enable the `LARGE_ADDRESS_AWARE` flag for all executables. Enabled by default. |
 | `heapdelayfree`       | `PROTON_HEAP_DELAY_FREE`           | Delay freeing some memory, to work around application use-after-free bugs. |
 | `gamedrive`           | `PROTON_SET_GAME_DRIVE`            | Create an S: drive which points to the Steam Library which contains the game. |
 | `noforcelgadd`        |                                    | Disable forcelgadd. If both this and `forcelgadd` are set, enabled wins. |
