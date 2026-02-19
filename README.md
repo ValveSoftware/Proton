@@ -320,7 +320,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 |                       | `HOST_LC_ALL`                      | Set value to a locale to override all other system locale settings for a game.  This variable should be used instead of `LC_ALL`. |
 | `disablenvapi`        | `PROTON_DISABLE_NVAPI`             | Disable NVIDIA's NVAPI GPU support library. |
 | `nativevulkanloader`  |                                    | Use the Vulkan loader shipped with the game instead of Proton's built-in Vulkan loader. This breaks VR support, but is required by a few games. |
-| `forcelgadd`          | `PROTON_FORCE_LARGE_ADDRESS_AWARE` | Force WINE to enable the `LARGE_ADDRESS_AWARE` flag for all executables. Enabled by default. |
+| `forcelgadd`          | `PROTON_FORCE_LARGE_ADDRESS_AWARE` | Force Wine to enable the `LARGE_ADDRESS_AWARE` flag for all executables. Enabled by default. |
 | `heapdelayfree`       | `PROTON_HEAP_DELAY_FREE`           | Delay freeing some memory, to work around application use-after-free bugs. |
 | `gamedrive`           | `PROTON_SET_GAME_DRIVE`            | Create an S: drive which points to the Steam Library which contains the game. |
 | `noforcelgadd`        |                                    | Disable forcelgadd. If both this and `forcelgadd` are set, enabled wins. |
