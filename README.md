@@ -144,7 +144,7 @@ locally](#install-proton-locally) section for details.
 deploy Proton to Steam users via Steamworks.
 
 `make module=<module> module` - build both 32- and 64-bit versions of the
-specified WINE module. This allows rapid iteration on one module. This target
+specified Wine module. This allows rapid iteration on one module. This target
 is only useful after building Proton.
 
 `make dxvk` / `make vkd3d-proton` - rebuild DXVK / vkd3d-proton.
@@ -260,7 +260,7 @@ build subdirectory named `compile_commands/`.
 
 The paths are translated to point to the real source (i.e. not the rsynced
 copy). It still may depend on build directory for things like auto-generated
-`config.h` though and for WINE it may be beneficial to run `tools/make_requests`
+`config.h` though and for Wine it may be beneficial to run `tools/make_requests`
 in you source directories as those changes are not committed.
 
 You can then configure your editor to use that file for clangd in a few ways:
@@ -303,7 +303,7 @@ option, set the variable to `0`. To use Steam's default configuration, do
 not specify the variable at all.
 
 All of the below are runtime options. They do not effect permanent changes to
-the WINE prefix. Removing the option will revert to the previous behavior.
+the Wine prefix. Removing the option will revert to the previous behavior.
 
 | Compat config string  | Environment Variable               | Description  |
 | :-------------------- | :--------------------------------- | :----------- |
