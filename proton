@@ -1125,10 +1125,8 @@ class CompatData:
                 icufiles = ["icuin68", "icuuc68", "icudt68"]
 
                 def copy_arm64x_forwarder_targets(d):
-                    print(d)
                     if g_proton.host_pe_arch == "aarch64-windows":
                         for arch in ["aarch64", "arm64ec"]:
-                            print(arch)
                             try_copy(g_proton.arch_pe_dir(d, False) + "/" + arch + "/" + f + ".dll", "drive_c/windows/system32/" + f + "_" + arch + ".dll",
                                     prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 

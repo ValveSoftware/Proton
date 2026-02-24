@@ -881,6 +881,9 @@ int main(int argc, char *argv[])
         /* For 2K Launcher. */
         event2 = CreateEventW( NULL, FALSE, FALSE, L"Global\\Valve_SteamIPC_Class" );
 
+        /* Create desktop window in main thread to prevent race with background thread. */
+        GetDesktopWindow();
+
         CreateThread(NULL, 0, create_steam_windows, NULL, 0, NULL);
 
         set_active_process_pid();

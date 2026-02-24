@@ -834,7 +834,7 @@ VKD3D_PROTON_SOURCE_ARGS = \
 VKD3D_PROTON_i386_MESON_ARGS = --bindir=$(VKD3D_PROTON_i386_DST)/lib/wine/vkd3d-proton/i386-windows
 VKD3D_PROTON_x86_64_MESON_ARGS = --bindir=$(VKD3D_PROTON_x86_64_DST)/lib/wine/vkd3d-proton/x86_64-windows
 VKD3D_PROTON_aarch64_MESON_ARGS = --bindir=$(VKD3D_PROTON_aarch64_DST)/lib/wine/vkd3d-proton/aarch64-windows/aarch64
-VKD3D_PROTON_arm64ec_MESON_ARGS = --bindir=$(VKD3D_PROTON_aarch64_DST)/lib/wine/vkd3d-proton/aarch64-windows/arm64ec
+VKD3D_PROTON_arm64ec_MESON_ARGS = --bindir=$(VKD3D_PROTON_arm64ec_DST)/lib/wine/vkd3d-proton/aarch64-windows/arm64ec
 VKD3D_PROTON_HOST_DEPENDS = glslang
 
 ifneq ($(UNSTRIPPED_BUILD),)
@@ -1270,7 +1270,7 @@ all-dist: $(DIST_WINEMONO)
 ## xalia
 ##
 
-XALIA_VER := 0.4.7
+XALIA_VER := 0.4.8
 XALIA_ZIP := xalia-$(XALIA_VER)-net48-mono.zip
 DIST_XALIA_DIR := $(DST_DIR)/share/xalia
 DIST_XALIA := $(OBJ)/.xalia-dist
