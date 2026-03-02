@@ -103,8 +103,6 @@ uint64_t __thiscall winISteamParties_SteamParties002_CreateBeacon(struct w_iface
         .pchMetadata = pchMetadata,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
-    IsBadStringPtrA(pchMetadata, -1);
     STEAMCLIENT_CALL( ISteamParties_SteamParties002_CreateBeacon, &params );
     return params._ret;
 }

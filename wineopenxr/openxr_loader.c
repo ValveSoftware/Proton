@@ -1938,6 +1938,7 @@ XrResult WINAPI xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId s
 /* wineopenxr API */
 XrResult WINAPI __wineopenxr_GetVulkanInstanceExtensions(uint32_t buflen, uint32_t *outlen, char *buf) {
   XrResult res;
+  size_t len;
 
   TRACE("\n");
 
@@ -1946,12 +1947,16 @@ XrResult WINAPI __wineopenxr_GetVulkanInstanceExtensions(uint32_t buflen, uint32
     return res;
   }
 
-  if (buflen < strlen(g_instance_extensions) + 1 || !buf) {
-    *outlen = strlen(g_instance_extensions) + 1;
+  /* OPTIMIZATION: Cache strlen result to avoid repeated calls.
+   * Previously strlen() was called 3 times on the same string. */
+  len = strlen(g_instance_extensions) + 1;
+
+  if (buflen < len || !buf) {
+    *outlen = len;
     return XR_SUCCESS;
   }
 
-  *outlen = strlen(g_instance_extensions) + 1;
+  *outlen = len;
   strcpy(buf, g_instance_extensions);
 
   return XR_SUCCESS;
@@ -1960,6 +1965,7 @@ XrResult WINAPI __wineopenxr_GetVulkanInstanceExtensions(uint32_t buflen, uint32
 /* wineopenxr API */
 XrResult WINAPI __wineopenxr_GetVulkanDeviceExtensions(uint32_t buflen, uint32_t *outlen, char *buf) {
   XrResult res;
+  size_t len;
 
   TRACE("\n");
 
@@ -1968,12 +1974,16 @@ XrResult WINAPI __wineopenxr_GetVulkanDeviceExtensions(uint32_t buflen, uint32_t
     return res;
   }
 
-  if (buflen < strlen(WINE_VULKAN_DEVICE_EXTENSION_NAME) + 1 || !buf) {
-    *outlen = strlen(WINE_VULKAN_DEVICE_EXTENSION_NAME) + 1;
+  /* OPTIMIZATION: Cache strlen result to avoid repeated calls.
+   * Previously strlen() was called 3 times on the same string. */
+  len = strlen(WINE_VULKAN_DEVICE_EXTENSION_NAME) + 1;
+
+  if (buflen < len || !buf) {
+    *outlen = len;
     return XR_SUCCESS;
   }
 
-  *outlen = strlen(WINE_VULKAN_DEVICE_EXTENSION_NAME) + 1;
+  *outlen = len;
   strcpy(buf, WINE_VULKAN_DEVICE_EXTENSION_NAME);
 
   return XR_SUCCESS;

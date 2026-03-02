@@ -170,10 +170,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus(st
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchMapName, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_Obsolete_GSSetStatus, &params );
     return params._ret;
 }
@@ -190,8 +186,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus(struct w
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSUpdateStatus, &params );
     return params._ret;
 }
@@ -232,8 +226,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType(struct 
         .pchVersion = pchVersion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSSetServerType, &params );
     return params._ret;
 }
@@ -254,8 +246,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetServerType2(struct
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSSetServerType2, &params );
     return params._ret;
 }
@@ -273,9 +263,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_GSUpdateStatus2(struct 
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSUpdateStatus2, &params );
     return params._ret;
 }
@@ -302,7 +289,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer002_GSSetUserData(struct w_
         .nFrags = nFrags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSSetUserData, &params );
     return params._ret;
 }
@@ -326,7 +312,6 @@ void __thiscall winISteamGameServer_SteamGameServer002_GSSetGameType(struct w_if
         .pchType = pchType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer002_GSSetGameType, &params );
 }
 
@@ -523,8 +508,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSetServerType(struct 
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSSetServerType, &params );
     return params._ret;
 }
@@ -542,9 +525,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer003_GSUpdateStatus(struct w
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSUpdateStatus, &params );
     return params._ret;
 }
@@ -571,7 +551,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer003_GSSetUserData(struct w_
         .nFrags = nFrags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSSetUserData, &params );
     return params._ret;
 }
@@ -595,7 +574,6 @@ void __thiscall winISteamGameServer_SteamGameServer003_GSSetGameType(struct w_if
         .pchType = pchType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSSetGameType, &params );
 }
 
@@ -608,7 +586,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer003_GSGetUserAchievementSta
         .pchAchievementName = pchAchievementName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAchievementName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus, &params );
     return params._ret;
 }
@@ -764,7 +741,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer004_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_BUpdateUserData, &params );
     return params._ret;
 }
@@ -785,8 +761,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer004_BSetServerType(struct w
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_BSetServerType, &params );
     return params._ret;
 }
@@ -804,9 +778,6 @@ void __thiscall winISteamGameServer_SteamGameServer004_UpdateServerStatus(struct
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_UpdateServerStatus, &params );
 }
 
@@ -829,7 +800,6 @@ void __thiscall winISteamGameServer_SteamGameServer004_SetGameType(struct w_ifac
         .pchGameType = pchGameType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_SetGameType, &params );
 }
 
@@ -842,7 +812,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer004_BGetUserAchievementStat
         .pchAchievementName = pchAchievementName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAchievementName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer004_BGetUserAchievementStatus, &params );
     return params._ret;
 }
@@ -996,7 +965,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer005_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_BUpdateUserData, &params );
     return params._ret;
 }
@@ -1016,8 +984,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer005_BSetServerType(struct w
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_BSetServerType, &params );
     return params._ret;
 }
@@ -1035,9 +1001,6 @@ void __thiscall winISteamGameServer_SteamGameServer005_UpdateServerStatus(struct
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_UpdateServerStatus, &params );
 }
 
@@ -1060,7 +1023,6 @@ void __thiscall winISteamGameServer_SteamGameServer005_SetGameType(struct w_ifac
         .pchGameType = pchGameType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_SetGameType, &params );
 }
 
@@ -1073,7 +1035,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer005_BGetUserAchievementStat
         .pchAchievementName = pchAchievementName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAchievementName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer005_BGetUserAchievementStatus, &params );
     return params._ret;
 }
@@ -1230,7 +1191,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer008_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_BUpdateUserData, &params );
     return params._ret;
 }
@@ -1250,8 +1210,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer008_BSetServerType(struct w
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_BSetServerType, &params );
     return params._ret;
 }
@@ -1269,9 +1227,6 @@ void __thiscall winISteamGameServer_SteamGameServer008_UpdateServerStatus(struct
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_UpdateServerStatus, &params );
 }
 
@@ -1294,7 +1249,6 @@ void __thiscall winISteamGameServer_SteamGameServer008_SetGameType(struct w_ifac
         .pchGameType = pchGameType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_SetGameType, &params );
 }
 
@@ -1307,7 +1261,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer008_BGetUserAchievementStat
         .pchAchievementName = pchAchievementName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAchievementName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer008_BGetUserAchievementStatus, &params );
     return params._ret;
 }
@@ -1503,7 +1456,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer009_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_BUpdateUserData, &params );
     return params._ret;
 }
@@ -1523,8 +1475,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer009_BSetServerType(struct w
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_BSetServerType, &params );
     return params._ret;
 }
@@ -1542,9 +1492,6 @@ void __thiscall winISteamGameServer_SteamGameServer009_UpdateServerStatus(struct
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_UpdateServerStatus, &params );
 }
 
@@ -1567,7 +1514,6 @@ void __thiscall winISteamGameServer_SteamGameServer009_SetGameType(struct w_ifac
         .pchGameType = pchGameType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameType, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_SetGameType, &params );
 }
 
@@ -1580,7 +1526,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer009_BGetUserAchievementStat
         .pchAchievementName = pchAchievementName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAchievementName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_BGetUserAchievementStatus, &params );
     return params._ret;
 }
@@ -1627,7 +1572,6 @@ void __thiscall winISteamGameServer_SteamGameServer009_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer009_SetGameData, &params );
 }
 
@@ -1807,7 +1751,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer010_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_BUpdateUserData, &params );
     return params._ret;
 }
@@ -1827,8 +1770,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer010_BSetServerType(struct w
         .bLANMode = bLANMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameDir, -1);
-    IsBadStringPtrA(pchVersion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_BSetServerType, &params );
     return params._ret;
 }
@@ -1846,9 +1787,6 @@ void __thiscall winISteamGameServer_SteamGameServer010_UpdateServerStatus(struct
         .pchMapName = pchMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchServerName, -1);
-    IsBadStringPtrA(pSpectatorServerName, -1);
-    IsBadStringPtrA(pchMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_UpdateServerStatus, &params );
 }
 
@@ -1871,7 +1809,6 @@ void __thiscall winISteamGameServer_SteamGameServer010_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_SetGameTags, &params );
 }
 
@@ -1928,7 +1865,6 @@ void __thiscall winISteamGameServer_SteamGameServer010_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer010_SetGameData, &params );
 }
 
@@ -2094,7 +2030,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer011_InitGameServer(struct w
         .pchVersionString = pchVersionString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVersionString, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_InitGameServer, &params );
     return params._ret;
 }
@@ -2107,7 +2042,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetProduct(struct w_iface
         .pszProduct = pszProduct,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszProduct, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetProduct, &params );
 }
 
@@ -2119,7 +2053,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetGameDescription(struct
         .pszGameDescription = pszGameDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszGameDescription, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetGameDescription, &params );
 }
 
@@ -2131,7 +2064,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetModDir(struct w_iface 
         .pszModDir = pszModDir,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszModDir, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetModDir, &params );
 }
 
@@ -2155,8 +2087,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_LogOn(struct w_iface *_th
         .pszPassword = pszPassword,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszAccountName, -1);
-    IsBadStringPtrA(pszPassword, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_LogOn, &params );
 }
 
@@ -2255,7 +2185,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetServerName(struct w_if
         .pszServerName = pszServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetServerName, &params );
 }
 
@@ -2267,7 +2196,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetMapName(struct w_iface
         .pszMapName = pszMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetMapName, &params );
 }
 
@@ -2301,7 +2229,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetSpectatorServerName(st
         .pszSpectatorServerName = pszSpectatorServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszSpectatorServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetSpectatorServerName, &params );
 }
 
@@ -2324,8 +2251,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetKeyValue(struct w_ifac
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pKey, -1);
-    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetKeyValue, &params );
 }
 
@@ -2337,7 +2262,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetGameTags, &params );
 }
 
@@ -2349,7 +2273,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetGameData, &params );
 }
 
@@ -2361,7 +2284,6 @@ void __thiscall winISteamGameServer_SteamGameServer011_SetRegion(struct w_iface 
         .pszRegion = pszRegion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszRegion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_SetRegion, &params );
 }
 
@@ -2413,7 +2335,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer011_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer011_BUpdateUserData, &params );
     return params._ret;
 }
@@ -2732,7 +2653,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer012_InitGameServer(struct w
         .pchVersionString = pchVersionString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVersionString, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_InitGameServer, &params );
     return params._ret;
 }
@@ -2745,7 +2665,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetProduct(struct w_iface
         .pszProduct = pszProduct,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszProduct, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetProduct, &params );
 }
 
@@ -2757,7 +2676,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetGameDescription(struct
         .pszGameDescription = pszGameDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszGameDescription, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetGameDescription, &params );
 }
 
@@ -2769,7 +2687,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetModDir(struct w_iface 
         .pszModDir = pszModDir,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszModDir, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetModDir, &params );
 }
 
@@ -2792,7 +2709,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_LogOn(struct w_iface *_th
         .pszToken = pszToken,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszToken, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_LogOn, &params );
 }
 
@@ -2891,7 +2807,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetServerName(struct w_if
         .pszServerName = pszServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetServerName, &params );
 }
 
@@ -2903,7 +2818,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetMapName(struct w_iface
         .pszMapName = pszMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetMapName, &params );
 }
 
@@ -2937,7 +2851,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetSpectatorServerName(st
         .pszSpectatorServerName = pszSpectatorServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszSpectatorServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetSpectatorServerName, &params );
 }
 
@@ -2960,8 +2873,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetKeyValue(struct w_ifac
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pKey, -1);
-    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetKeyValue, &params );
 }
 
@@ -2973,7 +2884,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetGameTags, &params );
 }
 
@@ -2985,7 +2895,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetGameData, &params );
 }
 
@@ -2997,7 +2906,6 @@ void __thiscall winISteamGameServer_SteamGameServer012_SetRegion(struct w_iface 
         .pszRegion = pszRegion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszRegion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_SetRegion, &params );
 }
 
@@ -3049,7 +2957,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer012_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer012_BUpdateUserData, &params );
     return params._ret;
 }
@@ -3368,7 +3275,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer013_InitGameServer(struct w
         .pchVersionString = pchVersionString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVersionString, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_InitGameServer, &params );
     return params._ret;
 }
@@ -3381,7 +3287,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetProduct(struct w_iface
         .pszProduct = pszProduct,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszProduct, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetProduct, &params );
 }
 
@@ -3393,7 +3298,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetGameDescription(struct
         .pszGameDescription = pszGameDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszGameDescription, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetGameDescription, &params );
 }
 
@@ -3405,7 +3309,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetModDir(struct w_iface 
         .pszModDir = pszModDir,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszModDir, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetModDir, &params );
 }
 
@@ -3428,7 +3331,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_LogOn(struct w_iface *_th
         .pszToken = pszToken,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszToken, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_LogOn, &params );
 }
 
@@ -3527,7 +3429,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetServerName(struct w_if
         .pszServerName = pszServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetServerName, &params );
 }
 
@@ -3539,7 +3440,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetMapName(struct w_iface
         .pszMapName = pszMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetMapName, &params );
 }
 
@@ -3573,7 +3473,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetSpectatorServerName(st
         .pszSpectatorServerName = pszSpectatorServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszSpectatorServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetSpectatorServerName, &params );
 }
 
@@ -3596,8 +3495,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetKeyValue(struct w_ifac
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pKey, -1);
-    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetKeyValue, &params );
 }
 
@@ -3609,7 +3506,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetGameTags, &params );
 }
 
@@ -3621,7 +3517,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetGameData, &params );
 }
 
@@ -3633,7 +3528,6 @@ void __thiscall winISteamGameServer_SteamGameServer013_SetRegion(struct w_iface 
         .pszRegion = pszRegion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszRegion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_SetRegion, &params );
 }
 
@@ -3685,7 +3579,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer013_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer013_BUpdateUserData, &params );
     return params._ret;
 }
@@ -4005,7 +3898,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer014_InitGameServer(struct w
         .pchVersionString = pchVersionString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVersionString, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_InitGameServer, &params );
     return params._ret;
 }
@@ -4018,7 +3910,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetProduct(struct w_iface
         .pszProduct = pszProduct,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszProduct, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetProduct, &params );
 }
 
@@ -4030,7 +3921,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetGameDescription(struct
         .pszGameDescription = pszGameDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszGameDescription, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetGameDescription, &params );
 }
 
@@ -4042,7 +3932,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetModDir(struct w_iface 
         .pszModDir = pszModDir,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszModDir, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetModDir, &params );
 }
 
@@ -4065,7 +3954,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_LogOn(struct w_iface *_th
         .pszToken = pszToken,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszToken, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_LogOn, &params );
 }
 
@@ -4164,7 +4052,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetServerName(struct w_if
         .pszServerName = pszServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetServerName, &params );
 }
 
@@ -4176,7 +4063,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetMapName(struct w_iface
         .pszMapName = pszMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetMapName, &params );
 }
 
@@ -4210,7 +4096,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetSpectatorServerName(st
         .pszSpectatorServerName = pszSpectatorServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszSpectatorServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetSpectatorServerName, &params );
 }
 
@@ -4233,8 +4118,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetKeyValue(struct w_ifac
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pKey, -1);
-    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetKeyValue, &params );
 }
 
@@ -4246,7 +4129,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetGameTags, &params );
 }
 
@@ -4258,7 +4140,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetGameData, &params );
 }
 
@@ -4270,7 +4151,6 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetRegion(struct w_iface 
         .pszRegion = pszRegion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszRegion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_SetRegion, &params );
 }
 
@@ -4496,7 +4376,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer014_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer014_BUpdateUserData, &params );
     return params._ret;
 }
@@ -4642,7 +4521,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer015_InitGameServer(struct w
         .pchVersionString = pchVersionString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVersionString, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_InitGameServer, &params );
     return params._ret;
 }
@@ -4655,7 +4533,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetProduct(struct w_iface
         .pszProduct = pszProduct,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszProduct, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetProduct, &params );
 }
 
@@ -4667,7 +4544,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetGameDescription(struct
         .pszGameDescription = pszGameDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszGameDescription, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetGameDescription, &params );
 }
 
@@ -4679,7 +4555,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetModDir(struct w_iface 
         .pszModDir = pszModDir,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszModDir, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetModDir, &params );
 }
 
@@ -4702,7 +4577,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_LogOn(struct w_iface *_th
         .pszToken = pszToken,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszToken, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_LogOn, &params );
 }
 
@@ -4801,7 +4675,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetServerName(struct w_if
         .pszServerName = pszServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetServerName, &params );
 }
 
@@ -4813,7 +4686,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetMapName(struct w_iface
         .pszMapName = pszMapName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszMapName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetMapName, &params );
 }
 
@@ -4847,7 +4719,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetSpectatorServerName(st
         .pszSpectatorServerName = pszSpectatorServerName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszSpectatorServerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetSpectatorServerName, &params );
 }
 
@@ -4870,8 +4741,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetKeyValue(struct w_ifac
         .pValue = pValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pKey, -1);
-    IsBadStringPtrA(pValue, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetKeyValue, &params );
 }
 
@@ -4883,7 +4752,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetGameTags(struct w_ifac
         .pchGameTags = pchGameTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameTags, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetGameTags, &params );
 }
 
@@ -4895,7 +4763,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetGameData(struct w_ifac
         .pchGameData = pchGameData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchGameData, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetGameData, &params );
 }
 
@@ -4907,7 +4774,6 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetRegion(struct w_iface 
         .pszRegion = pszRegion,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszRegion, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetRegion, &params );
 }
 
@@ -5134,7 +5000,6 @@ int8_t __thiscall winISteamGameServer_SteamGameServer015_BUpdateUserData(struct 
         .uScore = uScore,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPlayerName, -1);
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_BUpdateUserData, &params );
     return params._ret;
 }

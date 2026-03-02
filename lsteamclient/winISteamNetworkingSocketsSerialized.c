@@ -37,7 +37,6 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
         .pszReason = pszReason,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszReason, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure, &params );
 }
 
@@ -174,7 +173,6 @@ void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSeria
         .pszReason = pszReason,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszReason, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure, &params );
 }
 
@@ -199,7 +197,6 @@ int32_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSe
         .pszLauncherPartner = pszLauncherPartner,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszLauncherPartner, -1);
     STEAMCLIENT_CALL( ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON, &params );
     return params._ret;
 }

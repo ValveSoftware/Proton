@@ -81,7 +81,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_GetActivationCodeInfo(struct 
         .pchActivationCode = pchActivationCode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchActivationCode, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_GetActivationCodeInfo, &params );
     return params._ret;
 }
@@ -94,7 +93,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_PurchaseWithActivationCode(st
         .pchActivationCode = pchActivationCode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchActivationCode, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_PurchaseWithActivationCode, &params );
     return params._ret;
 }
@@ -220,15 +218,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_SetBillingAddress(struct w_if
         .pchPhone = pchPhone,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFirstName, -1);
-    IsBadStringPtrA(pchLastName, -1);
-    IsBadStringPtrA(pchAddress1, -1);
-    IsBadStringPtrA(pchAddress2, -1);
-    IsBadStringPtrA(pchCity, -1);
-    IsBadStringPtrA(pchPostcode, -1);
-    IsBadStringPtrA(pchState, -1);
-    IsBadStringPtrA(pchCountry, -1);
-    IsBadStringPtrA(pchPhone, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_SetBillingAddress, &params );
     return params._ret;
 }
@@ -270,15 +259,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_SetShippingAddress(struct w_i
         .pchPhone = pchPhone,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFirstName, -1);
-    IsBadStringPtrA(pchLastName, -1);
-    IsBadStringPtrA(pchAddress1, -1);
-    IsBadStringPtrA(pchAddress2, -1);
-    IsBadStringPtrA(pchCity, -1);
-    IsBadStringPtrA(pchPostcode, -1);
-    IsBadStringPtrA(pchState, -1);
-    IsBadStringPtrA(pchCountry, -1);
-    IsBadStringPtrA(pchPhone, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_SetShippingAddress, &params );
     return params._ret;
 }
@@ -318,12 +298,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_SetCardInfo(struct w_iface *_
         .pchCardCVV2 = pchCardCVV2,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchCardNumber, -1);
-    IsBadStringPtrA(pchCardHolderFirstName, -1);
-    IsBadStringPtrA(pchCardHolderLastName, -1);
-    IsBadStringPtrA(pchCardExpYear, -1);
-    IsBadStringPtrA(pchCardExpMonth, -1);
-    IsBadStringPtrA(pchCardCVV2, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_SetCardInfo, &params );
     return params._ret;
 }
@@ -606,7 +580,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_PurchaseWithMachineID(struct 
         .pchCustomData = pchCustomData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchCustomData, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_PurchaseWithMachineID, &params );
     return params._ret;
 }
@@ -622,8 +595,6 @@ int8_t __thiscall winISteamBilling_SteamBilling002_InitClickAndBuyPurchase(struc
         .pchCountryCode = pchCountryCode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchState, -1);
-    IsBadStringPtrA(pchCountryCode, -1);
     STEAMCLIENT_CALL( ISteamBilling_SteamBilling002_InitClickAndBuyPurchase, &params );
     return params._ret;
 }

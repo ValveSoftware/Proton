@@ -36,8 +36,6 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_A
         .nHeight = nHeight,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFilename, -1);
-    IsBadStringPtrA(pchThumbnailFilename, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary, &params );
     return params._ret;
 }
@@ -72,7 +70,6 @@ int8_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_Set
         .pchLocation = pchLocation,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation, &params );
     return params._ret;
 }
@@ -148,8 +145,6 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_A
         .nHeight = nHeight,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFilename, -1);
-    IsBadStringPtrA(pchThumbnailFilename, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary, &params );
     return params._ret;
 }
@@ -184,7 +179,6 @@ int8_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_Set
         .pchLocation = pchLocation,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation, &params );
     return params._ret;
 }
@@ -276,8 +270,6 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_A
         .nHeight = nHeight,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFilename, -1);
-    IsBadStringPtrA(pchThumbnailFilename, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary, &params );
     return params._ret;
 }
@@ -312,7 +304,6 @@ int8_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_Set
         .pchLocation = pchLocation,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation, &params );
     return params._ret;
 }
@@ -364,8 +355,6 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_A
         .pchVRFilename = pchVRFilename,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFilename, -1);
-    IsBadStringPtrA(pchVRFilename, -1);
     STEAMCLIENT_CALL( ISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary, &params );
     return params._ret;
 }

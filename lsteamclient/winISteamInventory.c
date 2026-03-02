@@ -323,7 +323,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefini
         .punValueBufferSizeOut = punValueBufferSizeOut,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty, &params );
     return params._ret;
 }
@@ -472,7 +471,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItem
         .punValueBufferSizeOut = punValueBufferSizeOut,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty, &params );
     return params._ret;
 }
@@ -746,7 +744,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefini
         .punValueBufferSizeOut = punValueBufferSizeOut,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionProperty, &params );
     return params._ret;
 }
@@ -861,7 +858,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_RemovePropert
         .pchPropertyName = pchPropertyName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_RemoveProperty, &params );
     return params._ret;
 }
@@ -877,8 +873,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty(s
         .pchPropertyValue = pchPropertyValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
-    IsBadStringPtrA(pchPropertyValue, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty, &params );
     return params._ret;
 }
@@ -894,7 +888,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2
         .bValue = bValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2, &params );
     return params._ret;
 }
@@ -910,7 +903,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3
         .nValue = nValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3, &params );
     return params._ret;
 }
@@ -926,7 +918,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4
         .flValue = flValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4, &params );
     return params._ret;
 }
@@ -1076,7 +1067,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItem
         .punValueBufferSizeOut = punValueBufferSizeOut,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty, &params );
     return params._ret;
 }
@@ -1350,7 +1340,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefini
         .punValueBufferSizeOut = punValueBufferSizeOut,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty, &params );
     return params._ret;
 }
@@ -1467,7 +1456,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemovePropert
         .pchPropertyName = pchPropertyName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_RemoveProperty, &params );
     return params._ret;
 }
@@ -1483,8 +1471,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty(s
         .pchPropertyValue = pchPropertyValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
-    IsBadStringPtrA(pchPropertyValue, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty, &params );
     return params._ret;
 }
@@ -1500,7 +1486,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2
         .bValue = bValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2, &params );
     return params._ret;
 }
@@ -1516,7 +1501,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3
         .nValue = nValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3, &params );
     return params._ret;
 }
@@ -1532,7 +1516,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4
         .flValue = flValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPropertyName, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4, &params );
     return params._ret;
 }
@@ -1559,7 +1542,6 @@ int8_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(s
         .pchItemToken = pchItemToken,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchItemToken, -1);
     STEAMCLIENT_CALL( ISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem, &params );
     return params._ret;
 }

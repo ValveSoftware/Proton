@@ -36,7 +36,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(s
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_GetUserStat, &params );
     return params._ret;
 }
@@ -51,7 +50,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_GetUserStat_2, &params );
     return params._ret;
 }
@@ -66,7 +64,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchiev
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_GetUserAchievement, &params );
     return params._ret;
 }
@@ -81,7 +78,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(s
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_SetUserStat, &params );
     return params._ret;
 }
@@ -96,7 +92,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat_2
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_SetUserStat_2, &params );
     return params._ret;
 }
@@ -112,7 +107,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_UpdateUserAvg
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateStat, &params );
     return params._ret;
 }
@@ -126,7 +120,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserAchiev
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_SetUserAchievement, &params );
     return params._ret;
 }
@@ -140,7 +133,6 @@ int8_t __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement, &params );
     return params._ret;
 }

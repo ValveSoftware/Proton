@@ -465,8 +465,10 @@ PATH_CONV_STRUCTS = {
     },
 }
 
+# OPTIMIZATION: Removed IsBadStringPtrA pre-touch validation. These calls are
+# slow (they touch memory pages) and officially discouraged by Microsoft. If
+# pointers are invalid, the subsequent Steam API call will fault anyway.
 PRETOUCH_TYPES = {
-    "const char *": "    IsBadStringPtrA({0}, -1);\n",
 }
 
 OUTSTR_PARAMS = {

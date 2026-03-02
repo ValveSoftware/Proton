@@ -17,7 +17,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineStateD
         .flTimeDelta = flTimeDelta,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_SetTimelineStateDescription, &params );
 }
 
@@ -46,9 +45,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent(
         .ePossibleClip = ePossibleClip,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchIcon, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V001_AddTimelineEvent, &params );
 }
 
@@ -113,7 +109,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineToolti
         .flTimeDelta = flTimeDelta,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetTimelineTooltip, &params );
 }
 
@@ -152,9 +147,6 @@ uint64_t __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddInstantane
         .ePossibleClip = ePossibleClip,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
-    IsBadStringPtrA(pchIcon, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddInstantaneousTimelineEvent, &params );
     return params._ret;
 }
@@ -173,9 +165,6 @@ uint64_t __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddRangeTimel
         .ePossibleClip = ePossibleClip,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
-    IsBadStringPtrA(pchIcon, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddRangeTimelineEvent, &params );
     return params._ret;
 }
@@ -193,9 +182,6 @@ uint64_t __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartRangeTim
         .ePossibleClip = ePossibleClip,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
-    IsBadStringPtrA(pchIcon, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_StartRangeTimelineEvent, &params );
     return params._ret;
 }
@@ -213,9 +199,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_UpdateRangeTimeli
         .ePossibleClip = ePossibleClip,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
-    IsBadStringPtrA(pchIcon, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_UpdateRangeTimelineEvent, &params );
 }
 
@@ -282,7 +265,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseID(st
         .pchPhaseID = pchPhaseID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPhaseID, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseID, &params );
 }
 
@@ -294,7 +276,6 @@ uint64_t __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesGamePhase
         .pchPhaseID = pchPhaseID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPhaseID, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_DoesGamePhaseRecordingExist, &params );
     return params._ret;
 }
@@ -310,9 +291,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddGamePhaseTag(s
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTagName, -1);
-    IsBadStringPtrA(pchTagIcon, -1);
-    IsBadStringPtrA(pchTagGroup, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_AddGamePhaseTag, &params );
 }
 
@@ -326,8 +304,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseAttri
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchAttributeGroup, -1);
-    IsBadStringPtrA(pchAttributeValue, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_SetGamePhaseAttribute, &params );
 }
 
@@ -339,7 +315,6 @@ void __thiscall winISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToGame
         .pchPhaseID = pchPhaseID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPhaseID, -1);
     STEAMCLIENT_CALL( ISteamTimeline_STEAMTIMELINE_INTERFACE_V004_OpenOverlayToGamePhase, &params );
 }
 

@@ -91,7 +91,6 @@ uint64_t __thiscall winISteamInput_SteamInput001_GetActionSetHandle(struct w_ifa
         .pszActionSetName = pszActionSetName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionSetName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput001_GetActionSetHandle, &params );
     return params._ret;
 }
@@ -176,7 +175,6 @@ uint64_t __thiscall winISteamInput_SteamInput001_GetDigitalActionHandle(struct w
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput001_GetDigitalActionHandle, &params );
     return params._ret;
 }
@@ -218,7 +216,6 @@ uint64_t __thiscall winISteamInput_SteamInput001_GetAnalogActionHandle(struct w_
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput001_GetAnalogActionHandle, &params );
     return params._ret;
 }
@@ -599,7 +596,6 @@ uint64_t __thiscall winISteamInput_SteamInput002_GetActionSetHandle(struct w_ifa
         .pszActionSetName = pszActionSetName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionSetName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput002_GetActionSetHandle, &params );
     return params._ret;
 }
@@ -684,7 +680,6 @@ uint64_t __thiscall winISteamInput_SteamInput002_GetDigitalActionHandle(struct w
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput002_GetDigitalActionHandle, &params );
     return params._ret;
 }
@@ -726,7 +721,6 @@ uint64_t __thiscall winISteamInput_SteamInput002_GetAnalogActionHandle(struct w_
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput002_GetAnalogActionHandle, &params );
     return params._ret;
 }
@@ -1098,7 +1092,6 @@ int8_t __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(st
         .pchInputActionManifestAbsolutePath = pchInputActionManifestAbsolutePath,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchInputActionManifestAbsolutePath, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_SetInputActionManifestFilePath, &params );
     return params._ret;
 }
@@ -1179,7 +1172,6 @@ uint64_t __thiscall winISteamInput_SteamInput005_GetActionSetHandle(struct w_ifa
         .pszActionSetName = pszActionSetName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionSetName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_GetActionSetHandle, &params );
     return params._ret;
 }
@@ -1264,7 +1256,6 @@ uint64_t __thiscall winISteamInput_SteamInput005_GetDigitalActionHandle(struct w
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_GetDigitalActionHandle, &params );
     return params._ret;
 }
@@ -1318,7 +1309,6 @@ uint64_t __thiscall winISteamInput_SteamInput005_GetAnalogActionHandle(struct w_
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput005_GetAnalogActionHandle, &params );
     return params._ret;
 }
@@ -1757,7 +1747,6 @@ int8_t __thiscall winISteamInput_SteamInput006_SetInputActionManifestFilePath(st
         .pchInputActionManifestAbsolutePath = pchInputActionManifestAbsolutePath,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchInputActionManifestAbsolutePath, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_SetInputActionManifestFilePath, &params );
     return params._ret;
 }
@@ -1838,7 +1827,6 @@ uint64_t __thiscall winISteamInput_SteamInput006_GetActionSetHandle(struct w_ifa
         .pszActionSetName = pszActionSetName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionSetName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_GetActionSetHandle, &params );
     return params._ret;
 }
@@ -1923,7 +1911,6 @@ uint64_t __thiscall winISteamInput_SteamInput006_GetDigitalActionHandle(struct w
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_GetDigitalActionHandle, &params );
     return params._ret;
 }
@@ -1977,7 +1964,6 @@ uint64_t __thiscall winISteamInput_SteamInput006_GetAnalogActionHandle(struct w_
         .pszActionName = pszActionName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszActionName, -1);
     STEAMCLIENT_CALL( ISteamInput_SteamInput006_GetAnalogActionHandle, &params );
     return params._ret;
 }

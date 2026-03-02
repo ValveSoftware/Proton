@@ -50,7 +50,6 @@ void __thiscall winISteamFriends_SteamFriends001_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_SetPersonaName, &params );
 }
 
@@ -171,7 +170,6 @@ int32_t __thiscall winISteamFriends_SteamFriends001_AddFriendByName(struct w_ifa
         .pchEmailOrAccountName = pchEmailOrAccountName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchEmailOrAccountName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_AddFriendByName, &params );
     return params._ret;
 }
@@ -210,7 +208,6 @@ void __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend(struct w_iface 
         .pchMsgBody = pchMsgBody,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgBody, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_SendMsgToFriend, &params );
 }
 
@@ -224,8 +221,6 @@ void __thiscall winISteamFriends_SteamFriends001_SetFriendRegValue(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_SetFriendRegValue, &params );
 }
 
@@ -238,7 +233,6 @@ const char * __thiscall winISteamFriends_SteamFriends001_GetFriendRegValue(struc
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_GetFriendRegValue, &params );
     return get_unix_buffer( params._ret );
 }
@@ -330,7 +324,6 @@ int8_t __thiscall winISteamFriends_SteamFriends001_InviteFriendByEmail(struct w_
         .pchEmailAccount = pchEmailAccount,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchEmailAccount, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends001_InviteFriendByEmail, &params );
     return params._ret;
 }
@@ -472,7 +465,6 @@ void __thiscall winISteamFriends_SteamFriends002_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends002_SetPersonaName, &params );
 }
 
@@ -570,8 +562,6 @@ void __thiscall winISteamFriends_SteamFriends002_SetFriendRegValue(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends002_SetFriendRegValue, &params );
 }
 
@@ -584,7 +574,6 @@ const char * __thiscall winISteamFriends_SteamFriends002_GetFriendRegValue(struc
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends002_GetFriendRegValue, &params );
     return get_unix_buffer( params._ret );
 }
@@ -663,7 +652,6 @@ int32_t __thiscall winISteamFriends_SteamFriends002_AddFriendByName(struct w_ifa
         .pchEmailOrAccountName = pchEmailOrAccountName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchEmailOrAccountName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends002_AddFriendByName, &params );
     return params._ret;
 }
@@ -676,7 +664,6 @@ int8_t __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(struct w_
         .pchEmailAccount = pchEmailAccount,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchEmailAccount, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends002_InviteFriendByEmail, &params );
     return params._ret;
 }
@@ -923,7 +910,6 @@ void __thiscall winISteamFriends_SteamFriends003_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends003_SetPersonaName, &params );
 }
 
@@ -1149,7 +1135,6 @@ void __thiscall winISteamFriends_SteamFriends003_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends003_ActivateGameOverlay, &params );
 }
 
@@ -1231,7 +1216,6 @@ void __thiscall winISteamFriends_SteamFriends004_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends004_SetPersonaName, &params );
 }
 
@@ -1458,7 +1442,6 @@ void __thiscall winISteamFriends_SteamFriends004_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends004_ActivateGameOverlay, &params );
 }
 
@@ -1544,7 +1527,6 @@ void __thiscall winISteamFriends_SteamFriends005_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends005_SetPersonaName, &params );
 }
 
@@ -1768,7 +1750,6 @@ void __thiscall winISteamFriends_SteamFriends005_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends005_ActivateGameOverlay, &params );
 }
 
@@ -1781,7 +1762,6 @@ void __thiscall winISteamFriends_SteamFriends005_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends005_ActivateGameOverlayToUser, &params );
 }
 
@@ -1793,7 +1773,6 @@ void __thiscall winISteamFriends_SteamFriends005_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends005_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -1907,7 +1886,6 @@ void __thiscall winISteamFriends_SteamFriends006_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends006_SetPersonaName, &params );
 }
 
@@ -2143,7 +2121,6 @@ void __thiscall winISteamFriends_SteamFriends006_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends006_ActivateGameOverlay, &params );
 }
 
@@ -2156,7 +2133,6 @@ void __thiscall winISteamFriends_SteamFriends006_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends006_ActivateGameOverlayToUser, &params );
 }
 
@@ -2168,7 +2144,6 @@ void __thiscall winISteamFriends_SteamFriends006_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends006_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -2297,7 +2272,6 @@ void __thiscall winISteamFriends_SteamFriends007_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends007_SetPersonaName, &params );
 }
 
@@ -2520,7 +2494,6 @@ void __thiscall winISteamFriends_SteamFriends007_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends007_ActivateGameOverlay, &params );
 }
 
@@ -2533,7 +2506,6 @@ void __thiscall winISteamFriends_SteamFriends007_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends007_ActivateGameOverlayToUser, &params );
 }
 
@@ -2545,7 +2517,6 @@ void __thiscall winISteamFriends_SteamFriends007_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends007_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -2718,7 +2689,6 @@ void __thiscall winISteamFriends_SteamFriends008_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends008_SetPersonaName, &params );
 }
 
@@ -2941,7 +2911,6 @@ void __thiscall winISteamFriends_SteamFriends008_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends008_ActivateGameOverlay, &params );
 }
 
@@ -2954,7 +2923,6 @@ void __thiscall winISteamFriends_SteamFriends008_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends008_ActivateGameOverlayToUser, &params );
 }
 
@@ -2966,7 +2934,6 @@ void __thiscall winISteamFriends_SteamFriends008_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends008_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -3230,7 +3197,6 @@ void __thiscall winISteamFriends_SteamFriends009_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_SetPersonaName, &params );
 }
 
@@ -3453,7 +3419,6 @@ void __thiscall winISteamFriends_SteamFriends009_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_ActivateGameOverlay, &params );
 }
 
@@ -3466,7 +3431,6 @@ void __thiscall winISteamFriends_SteamFriends009_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_ActivateGameOverlayToUser, &params );
 }
 
@@ -3478,7 +3442,6 @@ void __thiscall winISteamFriends_SteamFriends009_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -3635,8 +3598,6 @@ int8_t __thiscall winISteamFriends_SteamFriends009_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_SetRichPresence, &params );
     return params._ret;
 }
@@ -3660,7 +3621,6 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3699,7 +3659,6 @@ int8_t __thiscall winISteamFriends_SteamFriends009_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends009_InviteUserToGame, &params );
     return params._ret;
 }
@@ -3893,7 +3852,6 @@ void __thiscall winISteamFriends_SteamFriends010_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_SetPersonaName, &params );
 }
 
@@ -4144,7 +4102,6 @@ void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_ActivateGameOverlay, &params );
 }
 
@@ -4157,7 +4114,6 @@ void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_ActivateGameOverlayToUser, &params );
 }
 
@@ -4169,7 +4125,6 @@ void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -4326,8 +4281,6 @@ int8_t __thiscall winISteamFriends_SteamFriends010_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_SetRichPresence, &params );
     return params._ret;
 }
@@ -4351,7 +4304,6 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -4390,7 +4342,6 @@ int8_t __thiscall winISteamFriends_SteamFriends010_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_InviteUserToGame, &params );
     return params._ret;
 }
@@ -4502,7 +4453,6 @@ int8_t __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -4594,7 +4544,6 @@ int8_t __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends010_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -4775,7 +4724,6 @@ void __thiscall winISteamFriends_SteamFriends011_SetPersonaName(struct w_iface *
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_SetPersonaName, &params );
 }
 
@@ -5026,7 +4974,6 @@ void __thiscall winISteamFriends_SteamFriends011_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_ActivateGameOverlay, &params );
 }
 
@@ -5039,7 +4986,6 @@ void __thiscall winISteamFriends_SteamFriends011_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_ActivateGameOverlayToUser, &params );
 }
 
@@ -5051,7 +4997,6 @@ void __thiscall winISteamFriends_SteamFriends011_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -5208,8 +5153,6 @@ int8_t __thiscall winISteamFriends_SteamFriends011_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_SetRichPresence, &params );
     return params._ret;
 }
@@ -5233,7 +5176,6 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -5283,7 +5225,6 @@ int8_t __thiscall winISteamFriends_SteamFriends011_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_InviteUserToGame, &params );
     return params._ret;
 }
@@ -5395,7 +5336,6 @@ int8_t __thiscall winISteamFriends_SteamFriends011_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -5487,7 +5427,6 @@ int8_t __thiscall winISteamFriends_SteamFriends011_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends011_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -5708,7 +5647,6 @@ uint64_t __thiscall winISteamFriends_SteamFriends012_SetPersonaName(struct w_ifa
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_SetPersonaName, &params );
     return params._ret;
 }
@@ -5960,7 +5898,6 @@ void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_ActivateGameOverlay, &params );
 }
 
@@ -5973,7 +5910,6 @@ void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_ActivateGameOverlayToUser, &params );
 }
 
@@ -5985,7 +5921,6 @@ void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -6142,8 +6077,6 @@ int8_t __thiscall winISteamFriends_SteamFriends012_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_SetRichPresence, &params );
     return params._ret;
 }
@@ -6167,7 +6100,6 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -6217,7 +6149,6 @@ int8_t __thiscall winISteamFriends_SteamFriends012_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_InviteUserToGame, &params );
     return params._ret;
 }
@@ -6329,7 +6260,6 @@ int8_t __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -6421,7 +6351,6 @@ int8_t __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends012_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -6642,7 +6571,6 @@ uint64_t __thiscall winISteamFriends_SteamFriends013_SetPersonaName(struct w_ifa
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_SetPersonaName, &params );
     return params._ret;
 }
@@ -6894,7 +6822,6 @@ void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_ActivateGameOverlay, &params );
 }
 
@@ -6907,7 +6834,6 @@ void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_ActivateGameOverlayToUser, &params );
 }
 
@@ -6919,7 +6845,6 @@ void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -7077,8 +7002,6 @@ int8_t __thiscall winISteamFriends_SteamFriends013_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_SetRichPresence, &params );
     return params._ret;
 }
@@ -7102,7 +7025,6 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -7152,7 +7074,6 @@ int8_t __thiscall winISteamFriends_SteamFriends013_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_InviteUserToGame, &params );
     return params._ret;
 }
@@ -7264,7 +7185,6 @@ int8_t __thiscall winISteamFriends_SteamFriends013_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -7356,7 +7276,6 @@ int8_t __thiscall winISteamFriends_SteamFriends013_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends013_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -7578,7 +7497,6 @@ uint64_t __thiscall winISteamFriends_SteamFriends014_SetPersonaName(struct w_ifa
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_SetPersonaName, &params );
     return params._ret;
 }
@@ -7842,7 +7760,6 @@ void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_ActivateGameOverlay, &params );
 }
 
@@ -7855,7 +7772,6 @@ void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_ActivateGameOverlayToUser, &params );
 }
 
@@ -7867,7 +7783,6 @@ void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -8025,8 +7940,6 @@ int8_t __thiscall winISteamFriends_SteamFriends014_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_SetRichPresence, &params );
     return params._ret;
 }
@@ -8050,7 +7963,6 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -8100,7 +8012,6 @@ int8_t __thiscall winISteamFriends_SteamFriends014_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_InviteUserToGame, &params );
     return params._ret;
 }
@@ -8212,7 +8123,6 @@ int8_t __thiscall winISteamFriends_SteamFriends014_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -8304,7 +8214,6 @@ int8_t __thiscall winISteamFriends_SteamFriends014_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends014_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -8535,7 +8444,6 @@ uint64_t __thiscall winISteamFriends_SteamFriends015_SetPersonaName(struct w_ifa
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_SetPersonaName, &params );
     return params._ret;
 }
@@ -8871,7 +8779,6 @@ void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_ActivateGameOverlay, &params );
 }
 
@@ -8884,7 +8791,6 @@ void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_ActivateGameOverlayToUser, &params );
 }
 
@@ -8896,7 +8802,6 @@ void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage(st
         .pchURL = pchURL,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -9054,8 +8959,6 @@ int8_t __thiscall winISteamFriends_SteamFriends015_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_SetRichPresence, &params );
     return params._ret;
 }
@@ -9079,7 +8982,6 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -9129,7 +9031,6 @@ int8_t __thiscall winISteamFriends_SteamFriends015_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_InviteUserToGame, &params );
     return params._ret;
 }
@@ -9241,7 +9142,6 @@ int8_t __thiscall winISteamFriends_SteamFriends015_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -9333,7 +9233,6 @@ int8_t __thiscall winISteamFriends_SteamFriends015_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends015_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -9604,7 +9503,6 @@ uint64_t __thiscall winISteamFriends_SteamFriends017_SetPersonaName(struct w_ifa
         .pchPersonaName = pchPersonaName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPersonaName, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_SetPersonaName, &params );
     return params._ret;
 }
@@ -9940,7 +9838,6 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ActivateGameOverlay, &params );
 }
 
@@ -9953,7 +9850,6 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ActivateGameOverlayToUser, &params );
 }
 
@@ -9966,7 +9862,6 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(st
         .eMode = eMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -10124,8 +10019,6 @@ int8_t __thiscall winISteamFriends_SteamFriends017_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_SetRichPresence, &params );
     return params._ret;
 }
@@ -10149,7 +10042,6 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -10199,7 +10091,6 @@ int8_t __thiscall winISteamFriends_SteamFriends017_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_InviteUserToGame, &params );
     return params._ret;
 }
@@ -10311,7 +10202,6 @@ int8_t __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -10403,7 +10293,6 @@ int8_t __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -10514,7 +10403,6 @@ int8_t __thiscall winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrow
         .pchProtocol = pchProtocol,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchProtocol, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser, &params );
     return params._ret;
 }
@@ -10527,7 +10415,6 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString, &params );
 }
 
@@ -11103,7 +10990,6 @@ void __thiscall winISteamFriends_SteamFriends018_ActivateGameOverlay(struct w_if
         .pchDialog = pchDialog,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_ActivateGameOverlay, &params );
 }
 
@@ -11116,7 +11002,6 @@ void __thiscall winISteamFriends_SteamFriends018_ActivateGameOverlayToUser(struc
         .steamID = steamID,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDialog, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_ActivateGameOverlayToUser, &params );
 }
 
@@ -11129,7 +11014,6 @@ void __thiscall winISteamFriends_SteamFriends018_ActivateGameOverlayToWebPage(st
         .eMode = eMode,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_ActivateGameOverlayToWebPage, &params );
 }
 
@@ -11276,8 +11160,6 @@ int8_t __thiscall winISteamFriends_SteamFriends018_SetRichPresence(struct w_ifac
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_SetRichPresence, &params );
     return params._ret;
 }
@@ -11301,7 +11183,6 @@ const char * __thiscall winISteamFriends_SteamFriends018_GetFriendRichPresence(s
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_GetFriendRichPresence, &params );
     return get_unix_buffer( params._ret );
 }
@@ -11351,7 +11232,6 @@ int8_t __thiscall winISteamFriends_SteamFriends018_InviteUserToGame(struct w_ifa
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_InviteUserToGame, &params );
     return params._ret;
 }
@@ -11463,7 +11343,6 @@ int8_t __thiscall winISteamFriends_SteamFriends018_SendClanChatMessage(struct w_
         .pchText = pchText,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchText, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_SendClanChatMessage, &params );
     return params._ret;
 }
@@ -11555,7 +11434,6 @@ int8_t __thiscall winISteamFriends_SteamFriends018_ReplyToFriendMessage(struct w
         .pchMsgToSend = pchMsgToSend,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchMsgToSend, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_ReplyToFriendMessage, &params );
     return params._ret;
 }
@@ -11666,7 +11544,6 @@ int8_t __thiscall winISteamFriends_SteamFriends018_RegisterProtocolInOverlayBrow
         .pchProtocol = pchProtocol,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchProtocol, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_RegisterProtocolInOverlayBrowser, &params );
     return params._ret;
 }
@@ -11679,7 +11556,6 @@ void __thiscall winISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialog
         .pchConnectString = pchConnectString,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchConnectString, -1);
     STEAMCLIENT_CALL( ISteamFriends_SteamFriends018_ActivateGameOverlayInviteDialogConnectString, &params );
 }
 

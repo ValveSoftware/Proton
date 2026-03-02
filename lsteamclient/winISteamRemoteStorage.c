@@ -22,7 +22,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite, &params );
     return params._ret;
 }
@@ -35,7 +34,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize, &params );
     return params._ret;
 }
@@ -50,7 +48,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead, &params );
     return params._ret;
 }
@@ -63,7 +60,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists, &params );
     return params._ret;
 }
@@ -76,7 +72,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete, &params );
     return params._ret;
 }
@@ -162,7 +157,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite, &params );
     return params._ret;
 }
@@ -175,7 +169,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileSize, &params );
     return params._ret;
 }
@@ -190,7 +183,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileRead, &params );
     return params._ret;
 }
@@ -203,7 +195,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileExists, &params );
     return params._ret;
 }
@@ -301,7 +292,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite, &params );
     return params._ret;
 }
@@ -316,7 +306,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead, &params );
     return params._ret;
 }
@@ -329,7 +318,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileForget, &params );
     return params._ret;
 }
@@ -342,7 +330,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileDelete, &params );
     return params._ret;
 }
@@ -355,7 +342,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileShare, &params );
     return params._ret;
 }
@@ -368,7 +354,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileExists, &params );
     return params._ret;
 }
@@ -381,7 +366,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FilePersisted, &params );
     return params._ret;
 }
@@ -394,7 +378,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileSize, &params );
     return params._ret;
 }
@@ -407,7 +390,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -619,7 +601,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite, &params );
     return params._ret;
 }
@@ -634,7 +615,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead, &params );
     return params._ret;
 }
@@ -647,7 +627,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget, &params );
     return params._ret;
 }
@@ -660,7 +639,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileDelete, &params );
     return params._ret;
 }
@@ -673,7 +651,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare, &params );
     return params._ret;
 }
@@ -687,7 +664,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -700,7 +676,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileExists, &params );
     return params._ret;
 }
@@ -713,7 +688,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FilePersisted, &params );
     return params._ret;
 }
@@ -726,7 +700,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileSize, &params );
     return params._ret;
 }
@@ -739,7 +712,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -752,7 +724,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -975,7 +946,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite, &params );
     return params._ret;
 }
@@ -990,7 +960,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead, &params );
     return params._ret;
 }
@@ -1003,7 +972,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileForget, &params );
     return params._ret;
 }
@@ -1016,7 +984,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileDelete, &params );
     return params._ret;
 }
@@ -1029,7 +996,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileShare, &params );
     return params._ret;
 }
@@ -1043,7 +1009,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -1056,7 +1021,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileExists, &params );
     return params._ret;
 }
@@ -1069,7 +1033,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FilePersisted, &params );
     return params._ret;
 }
@@ -1082,7 +1045,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileSize, &params );
     return params._ret;
 }
@@ -1095,7 +1057,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -1108,7 +1069,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -1263,10 +1223,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishFile, &params );
     return params._ret;
 }
@@ -1284,10 +1240,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -1483,7 +1435,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite, &params );
     return params._ret;
 }
@@ -1498,7 +1449,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead, &params );
     return params._ret;
 }
@@ -1511,7 +1461,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileForget, &params );
     return params._ret;
 }
@@ -1524,7 +1473,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileDelete, &params );
     return params._ret;
 }
@@ -1537,7 +1485,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileShare, &params );
     return params._ret;
 }
@@ -1551,7 +1498,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -1564,7 +1510,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileExists, &params );
     return params._ret;
 }
@@ -1577,7 +1522,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FilePersisted, &params );
     return params._ret;
 }
@@ -1590,7 +1534,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileSize, &params );
     return params._ret;
 }
@@ -1603,7 +1546,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -1616,7 +1558,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -1786,10 +1727,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -1815,7 +1752,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -1829,7 +1765,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -1843,7 +1778,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -1857,7 +1791,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -1981,7 +1914,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -2052,10 +1984,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoURL, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo, &params );
     return params._ret;
 }
@@ -2226,7 +2154,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite, &params );
     return params._ret;
 }
@@ -2241,7 +2168,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead, &params );
     return params._ret;
 }
@@ -2254,7 +2180,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileForget, &params );
     return params._ret;
 }
@@ -2267,7 +2192,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileDelete, &params );
     return params._ret;
 }
@@ -2280,7 +2204,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileShare, &params );
     return params._ret;
 }
@@ -2294,7 +2217,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -2307,7 +2229,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileExists, &params );
     return params._ret;
 }
@@ -2320,7 +2241,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FilePersisted, &params );
     return params._ret;
 }
@@ -2333,7 +2253,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileSize, &params );
     return params._ret;
 }
@@ -2346,7 +2265,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -2359,7 +2277,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -2529,10 +2446,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -2558,7 +2471,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -2572,7 +2484,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -2586,7 +2497,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -2600,7 +2510,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -2724,7 +2633,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -2797,11 +2705,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo, &params );
     return params._ret;
 }
@@ -2976,7 +2879,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite, &params );
     return params._ret;
 }
@@ -2991,7 +2893,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead, &params );
     return params._ret;
 }
@@ -3004,7 +2905,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileForget, &params );
     return params._ret;
 }
@@ -3017,7 +2917,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileDelete, &params );
     return params._ret;
 }
@@ -3030,7 +2929,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileShare, &params );
     return params._ret;
 }
@@ -3044,7 +2942,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -3057,7 +2954,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -3108,7 +3004,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileExists, &params );
     return params._ret;
 }
@@ -3121,7 +3016,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FilePersisted, &params );
     return params._ret;
 }
@@ -3134,7 +3028,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileSize, &params );
     return params._ret;
 }
@@ -3147,7 +3040,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -3160,7 +3052,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -3330,10 +3221,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -3359,7 +3246,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -3373,7 +3259,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -3387,7 +3272,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -3401,7 +3285,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -3525,7 +3408,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -3598,11 +3480,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo, &params );
     return params._ret;
 }
@@ -3781,7 +3658,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite, &params );
     return params._ret;
 }
@@ -3796,7 +3672,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead, &params );
     return params._ret;
 }
@@ -3809,7 +3684,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileForget, &params );
     return params._ret;
 }
@@ -3822,7 +3696,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileDelete, &params );
     return params._ret;
 }
@@ -3835,7 +3708,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileShare, &params );
     return params._ret;
 }
@@ -3849,7 +3721,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -3862,7 +3733,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -3913,7 +3783,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileExists, &params );
     return params._ret;
 }
@@ -3926,7 +3795,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FilePersisted, &params );
     return params._ret;
 }
@@ -3939,7 +3807,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileSize, &params );
     return params._ret;
 }
@@ -3952,7 +3819,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION00
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -3965,7 +3831,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -4136,10 +4001,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -4165,7 +4026,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -4179,7 +4039,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -4193,7 +4052,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -4207,7 +4065,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -4331,7 +4188,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -4404,11 +4260,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo, &params );
     return params._ret;
 }
@@ -4588,7 +4439,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite, &params );
     return params._ret;
 }
@@ -4603,7 +4453,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead, &params );
     return params._ret;
 }
@@ -4616,7 +4465,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileForget, &params );
     return params._ret;
 }
@@ -4629,7 +4477,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileDelete, &params );
     return params._ret;
 }
@@ -4642,7 +4489,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileShare, &params );
     return params._ret;
 }
@@ -4656,7 +4502,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -4669,7 +4514,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -4720,7 +4564,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileExists, &params );
     return params._ret;
 }
@@ -4733,7 +4576,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FilePersisted, &params );
     return params._ret;
 }
@@ -4746,7 +4588,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileSize, &params );
     return params._ret;
 }
@@ -4759,7 +4600,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -4772,7 +4612,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -4944,10 +4783,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -4973,7 +4808,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -4987,7 +4821,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -5001,7 +4834,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -5015,7 +4847,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -5139,7 +4970,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -5212,11 +5042,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo, &params );
     return params._ret;
 }
@@ -5274,7 +5099,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation, &params );
     return params._ret;
 }
@@ -5412,7 +5236,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite, &params );
     return params._ret;
 }
@@ -5427,7 +5250,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead, &params );
     return params._ret;
 }
@@ -5440,7 +5262,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileForget, &params );
     return params._ret;
 }
@@ -5453,7 +5274,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileDelete, &params );
     return params._ret;
 }
@@ -5466,7 +5286,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileShare, &params );
     return params._ret;
 }
@@ -5480,7 +5299,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -5493,7 +5311,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -5544,7 +5361,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileExists, &params );
     return params._ret;
 }
@@ -5557,7 +5373,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FilePersisted, &params );
     return params._ret;
 }
@@ -5570,7 +5385,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize, &params );
     return params._ret;
 }
@@ -5583,7 +5397,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -5596,7 +5409,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -5768,10 +5580,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -5797,7 +5605,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -5811,7 +5618,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -5825,7 +5631,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -5839,7 +5644,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -5964,7 +5768,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -6037,11 +5840,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo, &params );
     return params._ret;
 }
@@ -6099,7 +5897,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation, &params );
     return params._ret;
 }
@@ -6237,7 +6034,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite, &params );
     return params._ret;
 }
@@ -6252,7 +6048,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead, &params );
     return params._ret;
 }
@@ -6265,7 +6060,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileForget, &params );
     return params._ret;
 }
@@ -6278,7 +6072,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileDelete, &params );
     return params._ret;
 }
@@ -6291,7 +6084,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileShare, &params );
     return params._ret;
 }
@@ -6305,7 +6097,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -6318,7 +6109,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -6369,7 +6159,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileExists, &params );
     return params._ret;
 }
@@ -6382,7 +6171,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FilePersisted, &params );
     return params._ret;
 }
@@ -6395,7 +6183,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileSize, &params );
     return params._ret;
 }
@@ -6408,7 +6195,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -6421,7 +6207,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -6594,10 +6379,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -6623,7 +6404,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -6637,7 +6417,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -6651,7 +6430,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -6665,7 +6443,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -6790,7 +6567,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -6863,11 +6639,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo, &params );
     return params._ret;
 }
@@ -6925,7 +6696,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation, &params );
     return params._ret;
 }
@@ -7066,7 +6836,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite, &params );
     return params._ret;
 }
@@ -7081,7 +6850,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileRead, &params );
     return params._ret;
 }
@@ -7096,7 +6864,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteAsync, &params );
     return params._ret;
 }
@@ -7111,7 +6878,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubToRead = cubToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileReadAsync, &params );
     return params._ret;
 }
@@ -7138,7 +6904,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileForget, &params );
     return params._ret;
 }
@@ -7151,7 +6916,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileDelete, &params );
     return params._ret;
 }
@@ -7164,7 +6928,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileShare, &params );
     return params._ret;
 }
@@ -7178,7 +6941,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -7191,7 +6953,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -7242,7 +7003,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileExists, &params );
     return params._ret;
 }
@@ -7255,7 +7015,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FilePersisted, &params );
     return params._ret;
 }
@@ -7268,7 +7027,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileSize, &params );
     return params._ret;
 }
@@ -7281,7 +7039,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -7294,7 +7051,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -7467,10 +7223,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -7496,7 +7248,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -7510,7 +7261,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -7524,7 +7274,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -7538,7 +7287,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -7663,7 +7411,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -7736,11 +7483,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo, &params );
     return params._ret;
 }
@@ -7798,7 +7540,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation, &params );
     return params._ret;
 }
@@ -7942,7 +7683,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite, &params );
     return params._ret;
 }
@@ -7957,7 +7697,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileRead, &params );
     return params._ret;
 }
@@ -7972,7 +7711,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteAsync, &params );
     return params._ret;
 }
@@ -7987,7 +7725,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubToRead = cubToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileReadAsync, &params );
     return params._ret;
 }
@@ -8014,7 +7751,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileForget, &params );
     return params._ret;
 }
@@ -8027,7 +7763,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileDelete, &params );
     return params._ret;
 }
@@ -8040,7 +7775,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileShare, &params );
     return params._ret;
 }
@@ -8054,7 +7788,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -8067,7 +7800,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -8118,7 +7850,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileExists, &params );
     return params._ret;
 }
@@ -8131,7 +7862,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FilePersisted, &params );
     return params._ret;
 }
@@ -8144,7 +7874,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileSize, &params );
     return params._ret;
 }
@@ -8157,7 +7886,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -8170,7 +7898,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -8343,10 +8070,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -8372,7 +8095,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -8386,7 +8108,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -8400,7 +8121,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -8414,7 +8134,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -8539,7 +8258,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -8612,11 +8330,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo, &params );
     return params._ret;
 }
@@ -8674,7 +8387,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation, &params );
     return params._ret;
 }
@@ -8822,7 +8534,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite, &params );
     return params._ret;
 }
@@ -8837,7 +8548,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .cubDataToRead = cubDataToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileRead, &params );
     return params._ret;
 }
@@ -8852,7 +8562,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteAsync, &params );
     return params._ret;
 }
@@ -8867,7 +8576,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .cubToRead = cubToRead,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileReadAsync, &params );
     return params._ret;
 }
@@ -8894,7 +8602,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileForget, &params );
     return params._ret;
 }
@@ -8907,7 +8614,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileDelete, &params );
     return params._ret;
 }
@@ -8920,7 +8626,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileShare, &params );
     return params._ret;
 }
@@ -8934,7 +8639,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .eRemoteStoragePlatform = eRemoteStoragePlatform,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_SetSyncPlatforms, &params );
     return params._ret;
 }
@@ -8947,7 +8651,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWriteStreamOpen, &params );
     return params._ret;
 }
@@ -8998,7 +8701,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileExists, &params );
     return params._ret;
 }
@@ -9011,7 +8713,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FilePersisted, &params );
     return params._ret;
 }
@@ -9024,7 +8725,6 @@ int32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileSize, &params );
     return params._ret;
 }
@@ -9037,7 +8737,6 @@ int64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION01
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetFileTimestamp, &params );
     return params._ret;
 }
@@ -9050,7 +8749,6 @@ uint32_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_GetSyncPlatforms, &params );
     return params._ret;
 }
@@ -9223,10 +8921,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .eWorkshopFileType = eWorkshopFileType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishWorkshopFile, &params );
     return params._ret;
 }
@@ -9252,7 +8946,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchFile = pchFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileFile, &params );
     return params._ret;
 }
@@ -9266,7 +8959,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchPreviewFile = pchPreviewFile,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchPreviewFile, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFilePreviewFile, &params );
     return params._ret;
 }
@@ -9280,7 +8972,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchTitle = pchTitle,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchTitle, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileTitle, &params );
     return params._ret;
 }
@@ -9294,7 +8985,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchDescription = pchDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileDescription, &params );
     return params._ret;
 }
@@ -9419,7 +9109,6 @@ int8_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016
         .pchChangeDescription = pchChangeDescription,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchChangeDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UpdatePublishedFileSetChangeDescription, &params );
     return params._ret;
 }
@@ -9492,11 +9181,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .pTags = pTags,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchVideoAccount, -1);
-    IsBadStringPtrA(pchVideoIdentifier, -1);
-    IsBadStringPtrA(pchPreviewFile, -1);
-    IsBadStringPtrA(pchTitle, -1);
-    IsBadStringPtrA(pchDescription, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_PublishVideo, &params );
     return params._ret;
 }
@@ -9554,7 +9238,6 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
         .unPriority = unPriority,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLocation, -1);
     STEAMCLIENT_CALL( ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_UGCDownloadToLocation, &params );
     return params._ret;
 }

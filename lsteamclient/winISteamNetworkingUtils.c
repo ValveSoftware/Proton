@@ -85,7 +85,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_ParsePingLoca
         .result = result,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszString, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils001_ParsePingLocationString, &params );
     return params._ret;
 }
@@ -269,7 +268,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIPAddr_ParseString, &params );
     return params._ret;
 }
@@ -296,7 +294,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString, &params );
     return params._ret;
 }
@@ -438,7 +435,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_ParsePingLoca
         .result = result,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszString, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils002_ParsePingLocationString, &params );
     return params._ret;
 }
@@ -611,7 +607,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIPAddr_ParseString, &params );
     return params._ret;
 }
@@ -638,7 +633,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString, &params );
     return params._ret;
 }
@@ -781,7 +775,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_ParsePingLoca
         .result = result,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszString, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils003_ParsePingLocationString, &params );
     return params._ret;
 }
@@ -954,7 +947,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ParseString, &params );
     return params._ret;
 }
@@ -981,7 +973,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString, &params );
     return params._ret;
 }
@@ -1128,7 +1119,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_ParsePingLoca
         .result = result,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszString, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_ParsePingLocationString, &params );
     return params._ret;
 }
@@ -1325,7 +1315,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_ParseString, &params );
     return params._ret;
 }
@@ -1364,7 +1353,6 @@ int8_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworki
         .pszStr = pszStr,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pszStr, -1);
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString, &params );
     return params._ret;
 }

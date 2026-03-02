@@ -199,19 +199,23 @@ uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk )
 typedef std::unordered_map< uint64_t, char * > glyph_cache;
 static glyph_cache input_cache, input_cache_svg, input_cache_png, xbox_cache, controller_cache;
 
+/* OPTIMIZATION: Use iterator from find() to avoid a second hash lookup.
+ * Previously this code used operator[] after find(), which computed the hash
+ * twice on cache miss. Now we use the iterator directly. */
 static const char *glyph_cache_lookup( glyph_cache &cache, const char *str, uint16_t origin,
                                        uint32_t flags, uint16_t size )
 {
     uint64_t key = (uint64_t)flags << 32 | (uint64_t)size << 16 | origin;
 
-    if (cache.find( key ) == cache.end())
+    auto iter = cache.find( key );
+    if (iter == cache.end())
     {
         char *dos_path = (char *)malloc( PATH_MAX );
         steamclient_unix_path_to_dos_path( 1, str, dos_path, PATH_MAX, 0 );
-        cache[key] = dos_path;
+        iter = cache.emplace( key, dos_path ).first;
     }
 
-    return cache[key];
+    return iter->second;
 }
 
 template< typename Iface, typename Params >

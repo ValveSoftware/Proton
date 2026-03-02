@@ -41,9 +41,12 @@ static BOOL networking_message_pool_alloc_data( uint32_t count, struct networkin
     return TRUE;
 }
 
+/* OPTIMIZATION: Use memset instead of SecureZeroMemory. SecureZeroMemory uses
+ * volatile writes to prevent compiler optimization, adding unnecessary overhead
+ * for game networking message buffers that don't contain sensitive data. */
 static void W_CDECL w_SteamNetworkingMessage_t_144_FreeData( w_SteamNetworkingMessage_t_144 *msg )
 {
-    if (msg->m_pData) SecureZeroMemory( msg->m_pData, msg->m_cbSize );
+    if (msg->m_pData) memset( msg->m_pData, 0, msg->m_cbSize );
 }
 
 static void W_CDECL w_SteamNetworkingMessage_t_144_Release( w_SteamNetworkingMessage_t_144 *msg )
@@ -51,7 +54,7 @@ static void W_CDECL w_SteamNetworkingMessage_t_144_Release( w_SteamNetworkingMes
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_144 );
 
     if (msg->m_pfnFreeData) msg->m_pfnFreeData( msg );
-    SecureZeroMemory( msg, sizeof(*msg) );
+    memset( msg, 0, sizeof(*msg) );
 
     networking_message_pool_release( message->pool );
 }
@@ -110,7 +113,7 @@ static void W_CDECL w_SteamNetworkingMessage_t_147_FreeData( w_SteamNetworkingMe
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_147 );
 
-    if (msg->m_pData) SecureZeroMemory( msg->m_pData, msg->m_cbSize );
+    if (msg->m_pData) memset( msg->m_pData, 0, msg->m_cbSize );
     if (!message->pool) HeapFree( GetProcessHeap(), 0, msg->m_pData );
 }
 
@@ -119,7 +122,7 @@ static void W_CDECL w_SteamNetworkingMessage_t_147_Release( w_SteamNetworkingMes
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_147 );
 
     if (msg->m_pfnFreeData) msg->m_pfnFreeData( msg );
-    SecureZeroMemory( msg, sizeof(*msg) );
+    memset( msg, 0, sizeof(*msg) );
 
     if (message->pool) networking_message_pool_release( message->pool );
     else
@@ -184,7 +187,7 @@ static void W_CDECL w_SteamNetworkingMessage_t_153a_FreeData( w_SteamNetworkingM
 {
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
 
-    if (msg->m_pData) SecureZeroMemory( msg->m_pData, msg->m_cbSize );
+    if (msg->m_pData) memset( msg->m_pData, 0, msg->m_cbSize );
     if (!message->pool) HeapFree( GetProcessHeap(), 0, msg->m_pData );
 }
 
@@ -193,7 +196,7 @@ static void W_CDECL w_SteamNetworkingMessage_t_153a_Release( w_SteamNetworkingMe
     struct networking_message *message = CONTAINING_RECORD( msg, struct networking_message, w_msg_153a );
 
     if (msg->m_pfnFreeData) msg->m_pfnFreeData( msg );
-    SecureZeroMemory( msg, sizeof(*msg) );
+    memset( msg, 0, sizeof(*msg) );
 
     if (message->pool) networking_message_pool_release( message->pool );
     else

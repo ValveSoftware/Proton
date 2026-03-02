@@ -71,8 +71,6 @@ uint64_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_
         .pchUserCSS = pchUserCSS,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchUserAgent, -1);
-    IsBadStringPtrA(pchUserCSS, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser, &params );
     return params._ret;
 }
@@ -98,8 +96,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Load
         .pchPostData = pchPostData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
-    IsBadStringPtrA(pchPostData, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL, &params );
 }
 
@@ -170,8 +166,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddH
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader, &params );
 }
 
@@ -184,7 +178,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Exec
         .pchScript = pchScript,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchScript, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript, &params );
 }
 
@@ -368,7 +361,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find
         .bReverse = bReverse,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchSearchStr, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find, &params );
 }
 
@@ -553,8 +545,6 @@ uint64_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_
         .pchUserCSS = pchUserCSS,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchUserAgent, -1);
-    IsBadStringPtrA(pchUserCSS, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_CreateBrowser, &params );
     return params._ret;
 }
@@ -580,8 +570,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Load
         .pchPostData = pchPostData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
-    IsBadStringPtrA(pchPostData, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL, &params );
 }
 
@@ -652,8 +640,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddH
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AddHeader, &params );
 }
 
@@ -666,7 +652,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Exec
         .pchScript = pchScript,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchScript, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_ExecuteJavascript, &params );
 }
 
@@ -850,7 +835,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find
         .bReverse = bReverse,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchSearchStr, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find, &params );
 }
 
@@ -892,10 +876,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetC
         .bHTTPOnly = bHTTPOnly,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchHostname, -1);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
-    IsBadStringPtrA(pchPath, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie, &params );
 }
 
@@ -1073,8 +1053,6 @@ uint64_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_
         .pchUserCSS = pchUserCSS,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchUserAgent, -1);
-    IsBadStringPtrA(pchUserCSS, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_CreateBrowser, &params );
     return params._ret;
 }
@@ -1100,8 +1078,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Load
         .pchPostData = pchPostData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
-    IsBadStringPtrA(pchPostData, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL, &params );
 }
 
@@ -1172,8 +1148,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddH
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AddHeader, &params );
 }
 
@@ -1186,7 +1160,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Exec
         .pchScript = pchScript,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchScript, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_ExecuteJavascript, &params );
 }
 
@@ -1370,7 +1343,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find
         .bReverse = bReverse,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchSearchStr, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find, &params );
 }
 
@@ -1412,10 +1384,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetC
         .bHTTPOnly = bHTTPOnly,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchHostname, -1);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
-    IsBadStringPtrA(pchPath, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie, &params );
 }
 
@@ -1607,8 +1575,6 @@ uint64_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_
         .pchUserCSS = pchUserCSS,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchUserAgent, -1);
-    IsBadStringPtrA(pchUserCSS, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser, &params );
     return params._ret;
 }
@@ -1634,8 +1600,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Load
         .pchPostData = pchPostData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
-    IsBadStringPtrA(pchPostData, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL, &params );
 }
 
@@ -1706,8 +1670,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddH
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AddHeader, &params );
 }
 
@@ -1720,7 +1682,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Exec
         .pchScript = pchScript,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchScript, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_ExecuteJavascript, &params );
 }
 
@@ -1904,7 +1865,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find
         .bReverse = bReverse,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchSearchStr, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find, &params );
 }
 
@@ -1946,10 +1906,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetC
         .bHTTPOnly = bHTTPOnly,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchHostname, -1);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
-    IsBadStringPtrA(pchPath, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie, &params );
 }
 
@@ -2155,8 +2111,6 @@ uint64_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_
         .pchUserCSS = pchUserCSS,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchUserAgent, -1);
-    IsBadStringPtrA(pchUserCSS, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser, &params );
     return params._ret;
 }
@@ -2182,8 +2136,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Load
         .pchPostData = pchPostData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchURL, -1);
-    IsBadStringPtrA(pchPostData, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL, &params );
 }
 
@@ -2254,8 +2206,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddH
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AddHeader, &params );
 }
 
@@ -2268,7 +2218,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Exec
         .pchScript = pchScript,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchScript, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_ExecuteJavascript, &params );
 }
 
@@ -2453,7 +2402,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find
         .bReverse = bReverse,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchSearchStr, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Find, &params );
 }
 
@@ -2495,10 +2443,6 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetC
         .bHTTPOnly = bHTTPOnly,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchHostname, -1);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
-    IsBadStringPtrA(pchPath, -1);
     STEAMCLIENT_CALL( ISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie, &params );
 }
 

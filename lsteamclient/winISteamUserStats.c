@@ -60,7 +60,6 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetSt
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType, &params );
     return params._ret;
 }
@@ -137,7 +136,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat, &params );
     return params._ret;
 }
@@ -152,7 +150,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2, &params );
     return params._ret;
 }
@@ -167,7 +164,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat, &params );
     return params._ret;
 }
@@ -182,7 +178,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2, &params );
     return params._ret;
 }
@@ -198,7 +193,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -213,7 +207,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement, &params );
     return params._ret;
 }
@@ -228,7 +221,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGrou
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement, &params );
     return params._ret;
 }
@@ -242,7 +234,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement, &params );
     return params._ret;
 }
@@ -256,7 +247,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGrou
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement, &params );
     return params._ret;
 }
@@ -282,7 +272,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement, &params );
     return params._ret;
 }
@@ -296,7 +285,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGr
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement, &params );
     return params._ret;
 }
@@ -310,7 +298,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -325,8 +312,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -424,7 +409,6 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetSt
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatType, &params );
     return params._ret;
 }
@@ -476,7 +460,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat, &params );
     return params._ret;
 }
@@ -491,7 +474,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStat_2, &params );
     return params._ret;
 }
@@ -506,7 +488,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat, &params );
     return params._ret;
 }
@@ -521,7 +502,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetStat_2, &params );
     return params._ret;
 }
@@ -537,7 +517,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -552,7 +531,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievement, &params );
     return params._ret;
 }
@@ -566,7 +544,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_SetAchievement, &params );
     return params._ret;
 }
@@ -580,7 +557,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_ClearAchievement, &params );
     return params._ret;
 }
@@ -606,7 +582,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -621,8 +596,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -638,7 +611,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -713,7 +685,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat, &params );
     return params._ret;
 }
@@ -727,7 +698,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2, &params );
     return params._ret;
 }
@@ -741,7 +711,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat, &params );
     return params._ret;
 }
@@ -755,7 +724,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetStat_2, &params );
     return params._ret;
 }
@@ -770,7 +738,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -784,7 +751,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievement, &params );
     return params._ret;
 }
@@ -797,7 +763,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_SetAchievement, &params );
     return params._ret;
 }
@@ -810,7 +775,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_ClearAchievement, &params );
     return params._ret;
 }
@@ -834,7 +798,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -848,8 +811,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -864,7 +825,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -938,7 +898,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat, &params );
     return params._ret;
 }
@@ -952,7 +911,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2, &params );
     return params._ret;
 }
@@ -966,7 +924,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat, &params );
     return params._ret;
 }
@@ -980,7 +937,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_2, &params );
     return params._ret;
 }
@@ -995,7 +951,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -1009,7 +964,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievement, &params );
     return params._ret;
 }
@@ -1022,7 +976,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetAchievement, &params );
     return params._ret;
 }
@@ -1035,7 +988,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_ClearAchievement, &params );
     return params._ret;
 }
@@ -1059,7 +1011,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -1073,8 +1024,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1089,7 +1038,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -1116,7 +1064,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat, &params );
     return params._ret;
 }
@@ -1131,7 +1078,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_2, &params );
     return params._ret;
 }
@@ -1146,7 +1092,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement, &params );
     return params._ret;
 }
@@ -1234,7 +1179,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat, &params );
     return params._ret;
 }
@@ -1248,7 +1192,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2, &params );
     return params._ret;
 }
@@ -1262,7 +1205,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat, &params );
     return params._ret;
 }
@@ -1276,7 +1218,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetStat_2, &params );
     return params._ret;
 }
@@ -1291,7 +1232,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -1305,7 +1245,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievement, &params );
     return params._ret;
 }
@@ -1318,7 +1257,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_SetAchievement, &params );
     return params._ret;
 }
@@ -1331,7 +1269,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ClearAchievement, &params );
     return params._ret;
 }
@@ -1355,7 +1292,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -1369,8 +1305,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1385,7 +1319,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -1412,7 +1345,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat, &params );
     return params._ret;
 }
@@ -1427,7 +1359,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserStat_2, &params );
     return params._ret;
 }
@@ -1442,7 +1373,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement, &params );
     return params._ret;
 }
@@ -1469,7 +1399,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -1482,7 +1411,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard, &params );
     return params._ret;
 }
@@ -1675,7 +1603,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat, &params );
     return params._ret;
 }
@@ -1689,7 +1616,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2, &params );
     return params._ret;
 }
@@ -1703,7 +1629,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat, &params );
     return params._ret;
 }
@@ -1717,7 +1642,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetStat_2, &params );
     return params._ret;
 }
@@ -1732,7 +1656,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -1746,7 +1669,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievement, &params );
     return params._ret;
 }
@@ -1759,7 +1681,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_SetAchievement, &params );
     return params._ret;
 }
@@ -1772,7 +1693,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ClearAchievement, &params );
     return params._ret;
 }
@@ -1796,7 +1716,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -1810,8 +1729,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1826,7 +1743,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -1853,7 +1769,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat, &params );
     return params._ret;
 }
@@ -1868,7 +1783,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserStat_2, &params );
     return params._ret;
 }
@@ -1883,7 +1797,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement, &params );
     return params._ret;
 }
@@ -1910,7 +1823,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -1923,7 +1835,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard, &params );
     return params._ret;
 }
@@ -2131,7 +2042,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat, &params );
     return params._ret;
 }
@@ -2145,7 +2055,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2, &params );
     return params._ret;
 }
@@ -2159,7 +2068,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat, &params );
     return params._ret;
 }
@@ -2173,7 +2081,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetStat_2, &params );
     return params._ret;
 }
@@ -2188,7 +2095,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -2202,7 +2108,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievement, &params );
     return params._ret;
 }
@@ -2215,7 +2120,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_SetAchievement, &params );
     return params._ret;
 }
@@ -2228,7 +2132,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ClearAchievement, &params );
     return params._ret;
 }
@@ -2243,7 +2146,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -2267,7 +2169,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -2281,8 +2182,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2297,7 +2196,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -2324,7 +2222,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat, &params );
     return params._ret;
 }
@@ -2339,7 +2236,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserStat_2, &params );
     return params._ret;
 }
@@ -2354,7 +2250,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievement, &params );
     return params._ret;
 }
@@ -2370,7 +2265,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -2397,7 +2291,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -2410,7 +2303,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard, &params );
     return params._ret;
 }
@@ -2621,7 +2513,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat, &params );
     return params._ret;
 }
@@ -2635,7 +2526,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2, &params );
     return params._ret;
 }
@@ -2649,7 +2539,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat, &params );
     return params._ret;
 }
@@ -2663,7 +2552,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetStat_2, &params );
     return params._ret;
 }
@@ -2678,7 +2566,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -2692,7 +2579,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievement, &params );
     return params._ret;
 }
@@ -2705,7 +2591,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_SetAchievement, &params );
     return params._ret;
 }
@@ -2718,7 +2603,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ClearAchievement, &params );
     return params._ret;
 }
@@ -2733,7 +2617,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -2757,7 +2640,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -2771,8 +2653,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2787,7 +2667,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -2814,7 +2693,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat, &params );
     return params._ret;
 }
@@ -2829,7 +2707,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserStat_2, &params );
     return params._ret;
 }
@@ -2844,7 +2721,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievement, &params );
     return params._ret;
 }
@@ -2860,7 +2736,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -2887,7 +2762,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -2900,7 +2774,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard, &params );
     return params._ret;
 }
@@ -3126,7 +2999,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat, &params );
     return params._ret;
 }
@@ -3140,7 +3012,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2, &params );
     return params._ret;
 }
@@ -3154,7 +3025,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat, &params );
     return params._ret;
 }
@@ -3168,7 +3038,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetStat_2, &params );
     return params._ret;
 }
@@ -3183,7 +3052,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -3197,7 +3065,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievement, &params );
     return params._ret;
 }
@@ -3210,7 +3077,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_SetAchievement, &params );
     return params._ret;
 }
@@ -3223,7 +3089,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ClearAchievement, &params );
     return params._ret;
 }
@@ -3238,7 +3103,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -3262,7 +3126,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -3276,8 +3139,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3292,7 +3153,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -3319,7 +3179,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat, &params );
     return params._ret;
 }
@@ -3334,7 +3193,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserStat_2, &params );
     return params._ret;
 }
@@ -3349,7 +3207,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievement, &params );
     return params._ret;
 }
@@ -3365,7 +3222,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -3392,7 +3248,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -3405,7 +3260,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard, &params );
     return params._ret;
 }
@@ -3655,7 +3509,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat, &params );
     return params._ret;
 }
@@ -3669,7 +3522,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2, &params );
     return params._ret;
 }
@@ -3683,7 +3535,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat, &params );
     return params._ret;
 }
@@ -3697,7 +3548,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_2, &params );
     return params._ret;
 }
@@ -3712,7 +3562,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -3726,7 +3575,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievement, &params );
     return params._ret;
 }
@@ -3739,7 +3587,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetAchievement, &params );
     return params._ret;
 }
@@ -3752,7 +3599,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ClearAchievement, &params );
     return params._ret;
 }
@@ -3767,7 +3613,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -3791,7 +3636,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -3805,8 +3649,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3821,7 +3663,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -3848,7 +3689,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat, &params );
     return params._ret;
 }
@@ -3863,7 +3703,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_2, &params );
     return params._ret;
 }
@@ -3878,7 +3717,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement, &params );
     return params._ret;
 }
@@ -3894,7 +3732,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -3921,7 +3758,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -3934,7 +3770,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard, &params );
     return params._ret;
 }
@@ -4123,7 +3958,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchi
         .pflPercent = pflPercent,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAchievedPercent, &params );
     return params._ret;
 }
@@ -4149,7 +3983,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat, &params );
     return params._ret;
 }
@@ -4163,7 +3996,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_2, &params );
     return params._ret;
 }
@@ -4178,7 +4010,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory, &params );
     return params._ret;
 }
@@ -4193,7 +4024,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2, &params );
     return params._ret;
 }
@@ -4321,7 +4151,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat, &params );
     return params._ret;
 }
@@ -4335,7 +4164,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2, &params );
     return params._ret;
 }
@@ -4349,7 +4177,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat, &params );
     return params._ret;
 }
@@ -4363,7 +4190,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetStat_2, &params );
     return params._ret;
 }
@@ -4378,7 +4204,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -4392,7 +4217,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievement, &params );
     return params._ret;
 }
@@ -4405,7 +4229,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_SetAchievement, &params );
     return params._ret;
 }
@@ -4418,7 +4241,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ClearAchievement, &params );
     return params._ret;
 }
@@ -4433,7 +4255,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -4457,7 +4278,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -4471,8 +4291,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -4487,7 +4305,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -4537,7 +4354,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat, &params );
     return params._ret;
 }
@@ -4552,7 +4368,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserStat_2, &params );
     return params._ret;
 }
@@ -4567,7 +4382,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievement, &params );
     return params._ret;
 }
@@ -4583,7 +4397,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -4610,7 +4423,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -4623,7 +4435,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard, &params );
     return params._ret;
 }
@@ -4812,7 +4623,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchi
         .pflPercent = pflPercent,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchievementAchievedPercent, &params );
     return params._ret;
 }
@@ -4838,7 +4648,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat, &params );
     return params._ret;
 }
@@ -4852,7 +4661,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2, &params );
     return params._ret;
 }
@@ -4867,7 +4675,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory, &params );
     return params._ret;
 }
@@ -4882,7 +4689,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2, &params );
     return params._ret;
 }
@@ -5014,7 +4820,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat, &params );
     return params._ret;
 }
@@ -5028,7 +4833,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2, &params );
     return params._ret;
 }
@@ -5042,7 +4846,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat, &params );
     return params._ret;
 }
@@ -5056,7 +4859,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetStat_2, &params );
     return params._ret;
 }
@@ -5071,7 +4873,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -5085,7 +4886,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievement, &params );
     return params._ret;
 }
@@ -5098,7 +4898,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_SetAchievement, &params );
     return params._ret;
 }
@@ -5111,7 +4910,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ClearAchievement, &params );
     return params._ret;
 }
@@ -5126,7 +4924,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -5150,7 +4947,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -5164,8 +4960,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -5180,7 +4974,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -5230,7 +5023,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat, &params );
     return params._ret;
 }
@@ -5245,7 +5037,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserStat_2, &params );
     return params._ret;
 }
@@ -5260,7 +5051,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievement, &params );
     return params._ret;
 }
@@ -5276,7 +5066,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -5303,7 +5092,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -5316,7 +5104,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard, &params );
     return params._ret;
 }
@@ -5505,7 +5292,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchi
         .pflPercent = pflPercent,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementAchievedPercent, &params );
     return params._ret;
 }
@@ -5531,7 +5317,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat, &params );
     return params._ret;
 }
@@ -5545,7 +5330,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStat_2, &params );
     return params._ret;
 }
@@ -5560,7 +5344,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory, &params );
     return params._ret;
 }
@@ -5575,7 +5358,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetGlobalStatHistory_2, &params );
     return params._ret;
 }
@@ -5590,7 +5372,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchi
         .pnMaxProgress = pnMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits, &params );
     return params._ret;
 }
@@ -5605,7 +5386,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchi
         .pfMaxProgress = pfMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2, &params );
     return params._ret;
 }
@@ -5727,7 +5507,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat, &params );
     return params._ret;
 }
@@ -5741,7 +5520,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetStat_2, &params );
     return params._ret;
 }
@@ -5755,7 +5533,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat
         .nData = nData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat, &params );
     return params._ret;
 }
@@ -5769,7 +5546,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat
         .fData = fData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetStat_2, &params );
     return params._ret;
 }
@@ -5784,7 +5560,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UpdateA
         .dSessionLength = dSessionLength,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_UpdateAvgRateStat, &params );
     return params._ret;
 }
@@ -5798,7 +5573,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchi
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievement, &params );
     return params._ret;
 }
@@ -5811,7 +5585,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetAchi
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_SetAchievement, &params );
     return params._ret;
 }
@@ -5824,7 +5597,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ClearAc
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_ClearAchievement, &params );
     return params._ret;
 }
@@ -5839,7 +5611,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchi
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -5863,7 +5634,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAch
         .pchName = pchName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementIcon, &params );
     return params._ret;
 }
@@ -5877,8 +5647,6 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_G
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementDisplayAttribute, &params );
     return get_unix_buffer( params._ret );
 }
@@ -5893,7 +5661,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_Indicat
         .nMaxProgress = nMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_IndicateAchievementProgress, &params );
     return params._ret;
 }
@@ -5943,7 +5710,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat, &params );
     return params._ret;
 }
@@ -5958,7 +5724,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUser
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserStat_2, &params );
     return params._ret;
 }
@@ -5973,7 +5738,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUser
         .pbAchieved = pbAchieved,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievement, &params );
     return params._ret;
 }
@@ -5989,7 +5753,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUser
         .punUnlockTime = punUnlockTime,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetUserAchievementAndUnlockTime, &params );
     return params._ret;
 }
@@ -6016,7 +5779,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindO
         .eLeaderboardDisplayType = eLeaderboardDisplayType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindOrCreateLeaderboard, &params );
     return params._ret;
 }
@@ -6029,7 +5791,6 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindL
         .pchLeaderboardName = pchLeaderboardName,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchLeaderboardName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_FindLeaderboard, &params );
     return params._ret;
 }
@@ -6218,7 +5979,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchi
         .pflPercent = pflPercent,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementAchievedPercent, &params );
     return params._ret;
 }
@@ -6244,7 +6004,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat, &params );
     return params._ret;
 }
@@ -6258,7 +6017,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlob
         .pData = pData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStat_2, &params );
     return params._ret;
 }
@@ -6273,7 +6031,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory, &params );
     return params._ret;
 }
@@ -6288,7 +6045,6 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlo
         .cubData = cubData,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchStatName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetGlobalStatHistory_2, &params );
     return params._ret;
 }
@@ -6303,7 +6059,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchi
         .pnMaxProgress = pnMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits, &params );
     return params._ret;
 }
@@ -6318,7 +6073,6 @@ int8_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchi
         .pfMaxProgress = pfMaxProgress,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchName, -1);
     STEAMCLIENT_CALL( ISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION013_GetAchievementProgressLimits_2, &params );
     return params._ret;
 }

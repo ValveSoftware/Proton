@@ -244,7 +244,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking001_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -259,8 +258,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking001_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking001_SetLobbyData, &params );
     return params._ret;
 }
@@ -275,7 +272,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -290,8 +286,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking001_SetLobbyMemberData(st
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking001_SetLobbyMemberData, &params );
     return params._ret;
 }
@@ -566,7 +560,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking002_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -581,8 +574,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking002_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking002_SetLobbyData, &params );
     return params._ret;
 }
@@ -597,7 +588,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking002_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -612,8 +602,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking002_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking002_SetLobbyMemberData, &params );
 }
 
@@ -822,8 +810,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilt
         .pchValueToMatch = pchValueToMatch,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilter, &params );
 }
 
@@ -837,7 +823,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNume
         .nComparisonType = nComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -945,7 +930,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -960,8 +944,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_SetLobbyData, &params );
     return params._ret;
 }
@@ -976,7 +958,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -991,8 +972,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData, &params );
 }
 
@@ -1271,8 +1250,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListFilt
         .pchValueToMatch = pchValueToMatch,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListFilter, &params );
 }
 
@@ -1286,7 +1263,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListNume
         .nComparisonType = nComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -1394,7 +1370,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1409,8 +1384,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking004_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_SetLobbyData, &params );
     return params._ret;
 }
@@ -1425,7 +1398,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1440,8 +1412,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking004_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking004_SetLobbyMemberData, &params );
 }
 
@@ -1711,8 +1681,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListFilt
         .pchValueToMatch = pchValueToMatch,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListFilter, &params );
 }
 
@@ -1726,7 +1694,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNume
         .nComparisonType = nComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -1749,7 +1716,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNear
         .nValueToBeCloseTo = nValueToBeCloseTo,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_AddRequestLobbyListNearValueFilter, &params );
 }
 
@@ -1847,7 +1813,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1862,8 +1827,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_SetLobbyData, &params );
     return params._ret;
 }
@@ -1878,7 +1841,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -1893,8 +1855,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking005_SetLobbyMemberData, &params );
 }
 
@@ -2204,8 +2164,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListFilt
         .pchValueToMatch = pchValueToMatch,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListFilter, &params );
 }
 
@@ -2219,7 +2177,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNume
         .nComparisonType = nComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -2232,7 +2189,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNear
         .nValueToBeCloseTo = nValueToBeCloseTo,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_AddRequestLobbyListNearValueFilter, &params );
 }
 
@@ -2332,7 +2288,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2347,8 +2302,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_SetLobbyData, &params );
     return params._ret;
 }
@@ -2363,7 +2316,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2378,8 +2330,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking006_SetLobbyMemberData, &params );
 }
 
@@ -2670,8 +2620,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStri
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStringFilter, &params );
 }
 
@@ -2685,7 +2633,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNume
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -2698,7 +2645,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNear
         .nValueToBeCloseTo = nValueToBeCloseTo,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNearValueFilter, &params );
 }
 
@@ -2810,7 +2756,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2825,8 +2770,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_SetLobbyData, &params );
     return params._ret;
 }
@@ -2869,7 +2812,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking007_DeleteLobbyData(struc
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_DeleteLobbyData, &params );
     return params._ret;
 }
@@ -2884,7 +2826,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -2899,8 +2840,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberData, &params );
 }
 
@@ -3225,8 +3164,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStri
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStringFilter, &params );
 }
 
@@ -3240,7 +3177,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNume
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -3253,7 +3189,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNear
         .nValueToBeCloseTo = nValueToBeCloseTo,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNearValueFilter, &params );
 }
 
@@ -3387,7 +3322,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3402,8 +3336,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_SetLobbyData, &params );
     return params._ret;
 }
@@ -3446,7 +3378,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking008_DeleteLobbyData(struc
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_DeleteLobbyData, &params );
     return params._ret;
 }
@@ -3461,7 +3392,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3476,8 +3406,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking008_SetLobbyMemberData, &params );
 }
 
@@ -3806,8 +3734,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStri
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
-    IsBadStringPtrA(pchValueToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter, &params );
 }
 
@@ -3821,7 +3747,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNume
         .eComparisonType = eComparisonType,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter, &params );
 }
 
@@ -3834,7 +3759,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNear
         .nValueToBeCloseTo = nValueToBeCloseTo,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKeyToMatch, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNearValueFilter, &params );
 }
 
@@ -3979,7 +3903,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyData(st
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_GetLobbyData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -3994,8 +3917,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyData(struct w
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_SetLobbyData, &params );
     return params._ret;
 }
@@ -4038,7 +3959,6 @@ int8_t __thiscall winISteamMatchmaking_SteamMatchMaking009_DeleteLobbyData(struc
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_DeleteLobbyData, &params );
     return params._ret;
 }
@@ -4053,7 +3973,6 @@ const char * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberD
         .pchKey = pchKey,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberData, &params );
     return get_unix_buffer( params._ret );
 }
@@ -4068,8 +3987,6 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyMemberData(stru
         .pchValue = pchValue,
     };
     TRACE("%p\n", _this);
-    IsBadStringPtrA(pchKey, -1);
-    IsBadStringPtrA(pchValue, -1);
     STEAMCLIENT_CALL( ISteamMatchmaking_SteamMatchMaking009_SetLobbyMemberData, &params );
 }
 
