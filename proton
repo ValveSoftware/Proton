@@ -1361,6 +1361,7 @@ def default_compat_config():
                 "435150", #Divinity: Original Sin 2 - Definitive Edition
                 "2176900", #Fablecraft
                 "2853730", #Skull and Bones
+                "2079120", #Warudo
                 ]:
             ret.add("disablenvapi")
 
