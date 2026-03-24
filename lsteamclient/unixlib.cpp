@@ -306,24 +306,93 @@ static bool (*p_Steam_IsKnownInterface)( const char * );
 static void (*p_Steam_NotifyMissingInterface)( int32_t, const char * );
 
 template< typename Params >
+static void deliver_callback( Params *params, u_CallbackMsg_t *u_msg, bool wow64 )
+{
+    auto *w_msg = &*params->w_msg;
+    w_msg->m_hSteamUser = u_msg->m_hSteamUser;
+    w_msg->m_iCallback = u_msg->m_iCallback;
+    w_msg->m_cubParam = callback_len_utow( u_msg->m_iCallback, u_msg->m_cubParam, false );
+    params->cookie = (UINT_PTR)u_msg;
+    params->_ret = true;
+}
+
+template< typename Params >
 static NTSTATUS steamclient_Steam_BGetCallback( Params *params, bool wow64 )
 {
     u_CallbackMsg_t *u_msg, u_msg_tmp;
-    auto *w_msg = &*params->w_msg;
+
+    /* On Linux, Steam's native callback queue can deliver HTML_NeedsPaint_t
+     * (4502) before HTML_URLChanged_t (4505) during page navigation. When
+     * a game sees a paint before the URL has changed, it may see stale page
+     * content and abort (e.g. Xbox Live GDK auth browser).
+     *
+     * This is particularly likely when GPU-accelerated rendering is disabled
+     * in Steam's web view settings, as software rendering causes callbacks
+     * to batch together. With GPU acceleration enabled, the callbacks are
+     * naturally spaced apart and this workaround rarely triggers.
+     *
+     * Fix: between StartRequest and URLChanged, stash NeedsPaint and deliver
+     * the next callback instead. Stale paints (rendered before URLChanged)
+     * are discarded. Once URLChanged arrives, paints flow normally. */
+    static u_CallbackMsg_t *s_deferred_paint = NULL;
+    static bool s_awaiting_url_change = false;
 
     if (!p_Steam_BGetCallback( params->pipe, &u_msg_tmp, params->ignored ))
-        params->_ret = false;
-    else
     {
-        u_msg = new u_CallbackMsg_t(u_msg_tmp);
-        TRACE( "id %d, u_size %d.\n", u_msg->m_iCallback, u_msg->m_cubParam );
-        w_msg->m_hSteamUser = u_msg->m_hSteamUser;
-        w_msg->m_iCallback = u_msg->m_iCallback;
-        w_msg->m_cubParam = callback_len_utow( u_msg->m_iCallback, u_msg->m_cubParam, false );
-        params->cookie = (UINT_PTR)u_msg;
-        params->_ret = true;
+        /* Discard the stale paint — its content was rendered before
+         * URLChanged so it shows the wrong page. A fresh NeedsPaint
+         * with correct content will arrive from Chromium shortly. */
+        if (s_deferred_paint)
+        {
+            TRACE( "discarding stale NeedsPaint\n" );
+            free( (void *)s_deferred_paint->m_pubParam );
+            delete s_deferred_paint;
+            s_deferred_paint = NULL;
+        }
+        params->_ret = false;
+        return 0;
     }
 
+    u_msg = new u_CallbackMsg_t(u_msg_tmp);
+    TRACE( "id %d, u_size %d.\n", u_msg->m_iCallback, u_msg->m_cubParam );
+
+    if (u_msg->m_iCallback == 4503) s_awaiting_url_change = true;
+    if (u_msg->m_iCallback == 4505) s_awaiting_url_change = false;
+
+    /* Between StartRequest and URLChanged, stash NeedsPaint and deliver
+     * the next callback instead. Deep-copy m_pubParam since
+     * FreeLastCallback invalidates Steam's buffer. */
+    while (u_msg->m_iCallback == 4502 && s_awaiting_url_change)
+    {
+        if (s_deferred_paint)
+        {
+            free( (void *)s_deferred_paint->m_pubParam );
+            delete s_deferred_paint;
+        }
+        s_deferred_paint = u_msg;
+        if (u_msg->m_cubParam > 0)
+        {
+            uint8_t *copy = (uint8_t *)malloc( u_msg->m_cubParam );
+            memcpy( copy, u_msg->m_pubParam, u_msg->m_cubParam );
+            s_deferred_paint->m_pubParam = copy;
+        }
+        p_Steam_FreeLastCallback( params->pipe );
+        TRACE( "stashing NeedsPaint (awaiting URLChanged)\n" );
+
+        if (!p_Steam_BGetCallback( params->pipe, &u_msg_tmp, params->ignored ))
+        {
+            /* Queue empty — hold paint for next poll */
+            TRACE( "NeedsPaint stashed, queue empty\n" );
+            params->_ret = false;
+            return 0;
+        }
+        u_msg = new u_CallbackMsg_t(u_msg_tmp);
+        TRACE( "id %d (after stash).\n", u_msg->m_iCallback );
+        if (u_msg->m_iCallback == 4503) s_awaiting_url_change = true;
+        if (u_msg->m_iCallback == 4505) s_awaiting_url_change = false;
+    }
+
+    deliver_callback( params, u_msg, wow64 );
     return 0;
 }
 
