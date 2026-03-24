@@ -1390,6 +1390,7 @@ def default_compat_config():
 
         if appid in [
                 "2698940", #The Crew Motorfest
+                "2079120", #Warudo
                 ]:
             ret.add("hidenvgpu")
 
