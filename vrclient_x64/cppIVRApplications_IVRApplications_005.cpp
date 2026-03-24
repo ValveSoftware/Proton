@@ -431,21 +431,3 @@ NTSTATUS wow64_IVRApplications_IVRApplications_005_IsQuitUserPromptRequested( vo
 }
 #endif
 
-NTSTATUS IVRApplications_IVRApplications_005_LaunchInternalProcess( void *args )
-{
-    struct IVRApplications_IVRApplications_005_LaunchInternalProcess_params *params = (struct IVRApplications_IVRApplications_005_LaunchInternalProcess_params *)args;
-    struct u_IVRApplications_IVRApplications_005 *iface = (struct u_IVRApplications_IVRApplications_005 *)params->u_iface;
-    params->_ret = iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
-    return 0;
-}
-
-#if defined(__x86_64__) || defined(__aarch64__)
-NTSTATUS wow64_IVRApplications_IVRApplications_005_LaunchInternalProcess( void *args )
-{
-    struct wow64_IVRApplications_IVRApplications_005_LaunchInternalProcess_params *params = (struct wow64_IVRApplications_IVRApplications_005_LaunchInternalProcess_params *)args;
-    struct u_IVRApplications_IVRApplications_005 *iface = (struct u_IVRApplications_IVRApplications_005 *)params->u_iface;
-    params->_ret = iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
-    return 0;
-}
-#endif
-

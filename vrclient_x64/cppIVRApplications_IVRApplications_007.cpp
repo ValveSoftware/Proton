@@ -521,24 +521,6 @@ NTSTATUS wow64_IVRApplications_IVRApplications_007_GetSceneApplicationStateNameF
 }
 #endif
 
-NTSTATUS IVRApplications_IVRApplications_007_LaunchInternalProcess( void *args )
-{
-    struct IVRApplications_IVRApplications_007_LaunchInternalProcess_params *params = (struct IVRApplications_IVRApplications_007_LaunchInternalProcess_params *)args;
-    struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->u_iface;
-    params->_ret = iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
-    return 0;
-}
-
-#if defined(__x86_64__) || defined(__aarch64__)
-NTSTATUS wow64_IVRApplications_IVRApplications_007_LaunchInternalProcess( void *args )
-{
-    struct wow64_IVRApplications_IVRApplications_007_LaunchInternalProcess_params *params = (struct wow64_IVRApplications_IVRApplications_007_LaunchInternalProcess_params *)args;
-    struct u_IVRApplications_IVRApplications_007 *iface = (struct u_IVRApplications_IVRApplications_007 *)params->u_iface;
-    params->_ret = iface->LaunchInternalProcess( params->pchBinaryPath, params->pchArguments, params->pchWorkingDirectory );
-    return 0;
-}
-#endif
-
 NTSTATUS IVRApplications_IVRApplications_007_GetCurrentSceneProcessId( void *args )
 {
     struct IVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params *params = (struct IVRApplications_IVRApplications_007_GetCurrentSceneProcessId_params *)args;

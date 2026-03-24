@@ -155,6 +155,7 @@ SOURCES = \
 	cppIVRTrackedCamera_IVRTrackedCamera_006.cpp \
 	json_converter.cpp \
 	jsoncpp.cpp \
+	unix_vrapplications_manual.cpp \
 	unix_vrclientcore_manual.cpp \
 	unix_vrcompositor_manual.cpp \
 	unix_vroverlay_manual.cpp \
