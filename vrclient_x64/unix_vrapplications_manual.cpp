@@ -23,6 +23,8 @@ static NTSTATUS IVRApplications_LaunchInternalProcess( Iface *iface, Params *par
 {
     static const char *pass_env[] =
     {
+        "LD_LIBRARY_PATH",
+        "PATH",
         "WINEARCH",
         "WINEPREFIX",
         "WINEDLLPATH",
@@ -37,6 +39,22 @@ static NTSTATUS IVRApplications_LaunchInternalProcess( Iface *iface, Params *par
         "WINE_HIDE_AMD_GPU",
         "WINE_HIDE_NVIDIA_GPU",
         "WINE_HIDE_VANGOGH_GPU",
+        "WINE_LARGE_ADDRESS_AWARE",
+        "WINE_CRASH_REPORT_DIR",
+        "PROTON_CRASH_REPORT_DIR",
+        "PROTON_VR_RUNTIME",
+        "WINE_MONO_TRACE",
+        "WINE_GST_REGISTRY_DIR",
+        "SteamOverlayGameId",
+        "WINE_CPU_TOPOLOGY",
+        "STEAM_FOSSILIZE_DUMP_PATH",
+        "STEAM_FOSSILIZE_DUMP_PATH_READ_ONLY",
+        "MESA_SHADER_CACHE_DIR",
+        "MESA_DISK_CACHE_READ_ONLY_FOZ_DBS",
+        "MESA_GLSL_CACHE_DIR",
+        "STEAM_COMPAT_SHADER_PATH",
+        "STEAM_COMPAT_TOOL_PATHS",
+        "STEAM_COMPAT_TRANSCODED_MEDIA_PATH",
     };
     char *preloader_path = NULL, *wine_path = NULL, *app_path = NULL, *work_dir = NULL, *s, *sgi;
     char args[64], script_fn[64], log_str[256];
