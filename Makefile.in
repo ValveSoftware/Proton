@@ -602,7 +602,8 @@ WINE_SOURCE_ARGS = \
 WINE_AUTOCONF_ARGS = \
   --enable-werror \
   --with-mingw=$(MINGW_TYPE) \
-  --disable-tests
+  --disable-tests \
+  --enable-build-id
 
 WINE_x86_64_AUTOCONF_ARGS = \
   --enable-archs=$(call list-join,$(comma),x86_64 $(filter-out x86_64 $(unix_ARCHS),$(windows_ARCHS))) \
