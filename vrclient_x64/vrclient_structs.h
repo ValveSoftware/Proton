@@ -141,6 +141,7 @@ enum EVRSubmitFlags
     Submit_TextureWithDepth = 0x10,
     Submit_FrameDiscontinuty = 0x20,
     Submit_VulkanTextureWithArrayData = 0x40,
+    Submit_TextureWithMotion = 0x200 | Submit_TextureWithPose | Submit_TextureWithDepth,
     Submit_GlArrayTexture = 0x80,
     Submit_Reserved2 = 0x08000,
     Submit_Reserved3 = 0x10000,

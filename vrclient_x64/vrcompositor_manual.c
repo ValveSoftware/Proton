@@ -18,22 +18,40 @@ struct submit_state
     {
         w_Texture_t texture;
         w_VRTextureWithPose_t texture_with_pose;
+        w_VRTextureWithPoseAndDepth_t texture_with_pose_and_depth;
+        w_VRTextureWithMotion_t texture_with_motion;
     } texture;
     w_VRVulkanTextureArrayData_t vkdata;
-    VkImageLayout image_layout;
-    VkImageSubresourceRange subresources;
-    IDXGIVkInteropSurface *dxvk_surface;
+    w_VRVulkanTextureData_t vkdata_depth, vkdata_motion;
+    VkImageLayout image_layout, depth_image_layout, motion_image_layout;
+    VkImageSubresourceRange subresources, depth_subresources, motion_subresources;
+    IDXGIVkInteropSurface *dxvk_surface, *depth_dxvk_surface, *motion_dxvk_surface;
     IDXGIVkInteropDevice *dxvk_device;
     ID3D12DXVKInteropDevice *d3d12_device;
     ID3D12DXVKInteropDevice2 *d3d12_device2;
     ID3D12CommandQueue *d3d12_queue;
 };
 
+static void dxvk_transition_image_layout( IDXGIVkInteropDevice *dxvk_device, IDXGIVkInteropSurface *dxvk_surface,
+                                          VkImageLayout image_layout, VkImageSubresourceRange *subresources,
+                                          VkImageCreateInfo *image_info )
+{
+    subresources->aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresources->baseMipLevel = 0;
+    subresources->levelCount = image_info->mipLevels;
+    subresources->baseArrayLayer = 0;
+    subresources->layerCount = image_info->arrayLayers;
+
+    dxvk_device->lpVtbl->TransitionSurfaceLayout( dxvk_device, dxvk_surface, subresources,
+                                                  image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+}
+
 static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Texture_t *texture, uint32_t *flags,
                                                         struct submit_state *state, uint32_t array_index )
 {
     static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty |
-            Submit_TextureWithPose;
+            Submit_TextureWithMotion;
+    IDXGIVkInteropDevice *dxvk_device;
     w_VRVulkanTextureData_t vkdata;
     VkImageCreateInfo image_info;
     IUnknown *texture_iface;
@@ -68,12 +86,6 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
     state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
     state->texture.texture.handle = &state->vkdata;
 
-    if (*flags & Submit_TextureWithDepth)
-    {
-        FIXME( "Ignoring depth.\n" );
-        *flags &= ~Submit_TextureWithDepth;
-    }
-
     if (*flags & Submit_TextureWithPose)
         ((w_VRTextureWithPose_t *)&state->texture.texture)->mDeviceToAbsoluteTracking =
                 ((w_VRTextureWithPose_t*)texture)->mDeviceToAbsoluteTracking;
@@ -90,14 +102,43 @@ static const w_Texture_t *load_compositor_texture_dxvk( uint32_t eye, const w_Te
         *flags = *flags | Submit_VulkanTextureWithArrayData;
     }
 
-    state->subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    state->subresources.baseMipLevel = 0;
-    state->subresources.levelCount = image_info.mipLevels;
-    state->subresources.baseArrayLayer = 0;
-    state->subresources.layerCount = image_info.arrayLayers;
-
-    state->dxvk_device->lpVtbl->TransitionSurfaceLayout( state->dxvk_device, state->dxvk_surface, &state->subresources,
-                                                         state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+    dxvk_transition_image_layout( state->dxvk_device, state->dxvk_surface, state->image_layout, &state->subresources,
+                                  &image_info );
+    if (*flags & Submit_TextureWithDepth)
+    {
+        state->texture.texture_with_pose_and_depth.depth.mProjection = ((w_VRTextureWithPoseAndDepth_t *)texture)->depth.mProjection;
+        state->texture.texture_with_pose_and_depth.depth.vRange = ((w_VRTextureWithPoseAndDepth_t *)texture)->depth.vRange;
+        if (((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle)
+        {
+            if (SUCCEEDED(texture_iface->lpVtbl->QueryInterface( ((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle,
+                                                                 &IID_IDXGIVkInteropSurface, (void **)&state->depth_dxvk_surface )))
+            {
+                vrclient_translate_texture_dxvk( texture, &state->vkdata_depth, state->depth_dxvk_surface, &dxvk_device, &state->depth_image_layout, &image_info );
+                state->texture.texture_with_pose_and_depth.depth.handle = &state->vkdata_depth;
+                dxvk_transition_image_layout( dxvk_device, state->depth_dxvk_surface, state->depth_image_layout, &state->depth_subresources,
+                                              &image_info );
+                state->dxvk_device->lpVtbl->Release( dxvk_device );
+            }
+            else ERR( "Invalid D3D11 depth texture %p.\n", ((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle );
+        }
+    }
+    if ((*flags & Submit_TextureWithMotion) == Submit_TextureWithMotion)
+    {
+        state->texture.texture_with_motion.motion.mDeltaPose = ((w_VRTextureWithMotion_t *)texture)->motion.mDeltaPose;
+        if (((w_VRTextureWithMotion_t*)texture)->motion.handle)
+        {
+            if (SUCCEEDED(texture_iface->lpVtbl->QueryInterface( ((w_VRTextureWithMotion_t*)texture)->motion.handle,
+                                                                 &IID_IDXGIVkInteropSurface, (void **)&state->motion_dxvk_surface )))
+            {
+                vrclient_translate_texture_dxvk( texture, &state->vkdata_motion, state->motion_dxvk_surface, &dxvk_device, &state->motion_image_layout, &image_info );
+                state->texture.texture_with_motion.motion.handle = &state->vkdata_motion;
+                dxvk_transition_image_layout( dxvk_device, state->motion_dxvk_surface, state->motion_image_layout, &state->motion_subresources,
+                                              &image_info );
+                state->dxvk_device->lpVtbl->Release( dxvk_device );
+            }
+            else ERR( "Invalid D3D11 motion texture %p.\n", ((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle );
+        }
+    }
     state->dxvk_device->lpVtbl->FlushRenderingCommands( state->dxvk_device );
     state->dxvk_device->lpVtbl->LockSubmissionQueue( state->dxvk_device );
 
@@ -111,6 +152,18 @@ static void free_compositor_texture_dxvk( struct submit_state *state )
     state->dxvk_device->lpVtbl->ReleaseSubmissionQueue( state->dxvk_device );
     state->dxvk_device->lpVtbl->TransitionSurfaceLayout( state->dxvk_device, state->dxvk_surface, &state->subresources,
                                                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout );
+    if (state->depth_dxvk_surface)
+    {
+        state->dxvk_device->lpVtbl->TransitionSurfaceLayout( state->dxvk_device, state->depth_dxvk_surface, &state->depth_subresources,
+                                                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->depth_image_layout );
+        state->dxvk_surface->lpVtbl->Release( state->depth_dxvk_surface );
+    }
+    if (state->motion_dxvk_surface)
+    {
+        state->dxvk_device->lpVtbl->TransitionSurfaceLayout( state->dxvk_device, state->motion_dxvk_surface, &state->motion_subresources,
+                                                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->motion_image_layout );
+        state->dxvk_surface->lpVtbl->Release( state->motion_dxvk_surface );
+    }
     state->dxvk_device->lpVtbl->Release( state->dxvk_device );
     state->dxvk_surface->lpVtbl->Release( state->dxvk_surface );
 }
@@ -253,7 +306,7 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
                                                          struct submit_state *state, uint32_t array_index )
 {
     static const uint32_t supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty |
-            Submit_TextureWithPose;
+            Submit_TextureWithMotion;
     HRESULT hr;
     w_VRVulkanTextureData_t vkdata;
     VkImageCreateInfo image_info;
@@ -296,12 +349,6 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
     state->vkdata.m_nSampleCount = vkdata.m_nSampleCount;
     state->texture.texture.handle = &state->vkdata;
 
-    if (*flags & Submit_TextureWithDepth)
-    {
-        FIXME( "Ignoring depth.\n" );
-        *flags &= ~Submit_TextureWithDepth;
-    }
-
     if (*flags & Submit_TextureWithPose)
         ((w_VRTextureWithPose_t *)&state->texture.texture)->mDeviceToAbsoluteTracking =
                 ((w_VRTextureWithPose_t*)texture)->mDeviceToAbsoluteTracking;
@@ -328,6 +375,51 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
 
     state->d3d12_device->lpVtbl->LockCommandQueue( state->d3d12_device, queue_iface );
     transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    if (*flags & Submit_TextureWithDepth)
+    {
+        w_D3D12TextureData_t *texture_data = ((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle;
+
+        state->texture.texture_with_pose_and_depth.depth.mProjection = ((w_VRTextureWithPoseAndDepth_t *)texture)->depth.mProjection;
+        state->texture.texture_with_pose_and_depth.depth.vRange = ((w_VRTextureWithPoseAndDepth_t *)texture)->depth.vRange;
+        if (texture_data)
+        {
+            if ((resource_iface = texture_data->m_pResource))
+            {
+                if (texture_data->m_pCommandQueue && texture_data->m_pCommandQueue != state->d3d12_queue)
+                    FIXME( "Separate queue for depth texture is not supported.\n" );
+                vrclient_translate_texture_d3d12( texture, &state->vkdata_depth, state->d3d12_device, resource_iface, queue_iface, &state->depth_image_layout,
+                                                  &image_info );
+                state->texture.texture_with_pose_and_depth.depth.handle = &state->vkdata_depth;
+                state->depth_subresources = state->subresources;
+                state->depth_subresources.levelCount = image_info.mipLevels;
+                state->depth_subresources.layerCount = image_info.arrayLayers;
+                transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources, state->depth_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            }
+            else ERR( "Invalid D3D12 depth texture %p.\n", texture_data );
+        }
+    }
+    if ((*flags & Submit_TextureWithMotion) == Submit_TextureWithMotion)
+    {
+        w_D3D12TextureData_t *texture_data = ((w_VRTextureWithMotion_t*)texture)->motion.handle;
+
+        state->texture.texture_with_motion.motion.mDeltaPose = ((w_VRTextureWithMotion_t *)texture)->motion.mDeltaPose;
+        if (texture_data)
+        {
+            if ((resource_iface = texture_data->m_pResource))
+            {
+                if (texture_data->m_pCommandQueue && texture_data->m_pCommandQueue != state->d3d12_queue)
+                    FIXME( "Separate queue for motion texture is not supported.\n" );
+                vrclient_translate_texture_d3d12( texture, &state->vkdata_motion, state->d3d12_device, resource_iface, queue_iface, &state->motion_image_layout,
+                                                  &image_info );
+                state->texture.texture_with_motion.motion.handle = &state->vkdata_motion;
+                state->motion_subresources = state->subresources;
+                state->motion_subresources.levelCount = image_info.mipLevels;
+                state->motion_subresources.layerCount = image_info.arrayLayers;
+                transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources, state->motion_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            }
+            else ERR( "Invalid D3D12 motion texture %p.\n", texture_data );
+        }
+    }
 
     return &state->texture.texture;
 }
@@ -337,6 +429,10 @@ static void free_compositor_texture_d3d12( struct submit_state *state )
     if (!state->d3d12_device) return;
 
     transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout);
+    if (state->vkdata_depth.m_nImage) transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources,
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->depth_image_layout);
+    if (state->vkdata_motion.m_nImage) transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources,
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->motion_image_layout);
     state->d3d12_device->lpVtbl->UnlockCommandQueue( state->d3d12_device, state->d3d12_queue );
 }
 

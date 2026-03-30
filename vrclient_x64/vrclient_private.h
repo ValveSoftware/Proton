@@ -68,8 +68,8 @@ struct compositor_data
     VkDevice vk_device;
     VkQueue vk_queue;
     VkCommandPool vk_command_pool;
-    VkCommandBuffer vk_command_buffers[4];
-    VkFence vk_fences[4];
+    VkCommandBuffer vk_command_buffers[12];
+    VkFence vk_fences[12];
     int command_buffer_index;
 
 #if defined(__x86_64__) || defined(__aarch64__)
