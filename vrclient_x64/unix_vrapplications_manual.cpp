@@ -134,8 +134,36 @@ done:
     return 0;
 }
 
+template< typename Iface, typename Params >
+static NTSTATUS IVRApplications_RegisterSubprocess( Iface *iface, Params *params, bool wow64 )
+{
+    HANDLE handle;
+    CLIENT_ID id;
+    int pid;
+
+    params->_ret = 102; /* VRApplicationError_NoApplication */
+    id.UniqueProcess = ULongToHandle(params->nPid);
+    id.UniqueThread  = 0;
+    if (NtOpenProcess( &handle, PROCESS_QUERY_INFORMATION, NULL, &id ))
+    {
+        ERR( "NtOpenProcess failed for %d.\n", params->nPid );
+        return 0;
+    }
+    if (NtQueryInformationProcess( handle, ProcessWineUnixPid, &pid, sizeof(pid), NULL ))
+    {
+        ERR( "NtQueryInformationProcess failed for %d.\n", params->nPid );
+        NtClose( handle );
+        return 0;
+    }
+    NtClose( handle );
+    params->_ret = iface->RegisterSubprocess( pid );
+    TRACE( "pid %04x, _ret %d.\n", params->nPid, params->_ret );
+    return 0;
+}
+
 VRCLIENT_UNIX_IMPL( IVRApplications, 004, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 005, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 006, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 007, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 008, LaunchInternalProcess );
+VRCLIENT_UNIX_IMPL( IVRApplications, 008, RegisterSubprocess );

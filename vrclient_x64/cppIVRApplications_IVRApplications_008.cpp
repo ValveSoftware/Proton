@@ -521,24 +521,6 @@ NTSTATUS wow64_IVRApplications_IVRApplications_008_GetSceneApplicationStateNameF
 }
 #endif
 
-NTSTATUS IVRApplications_IVRApplications_008_RegisterSubprocess( void *args )
-{
-    struct IVRApplications_IVRApplications_008_RegisterSubprocess_params *params = (struct IVRApplications_IVRApplications_008_RegisterSubprocess_params *)args;
-    struct u_IVRApplications_IVRApplications_008 *iface = (struct u_IVRApplications_IVRApplications_008 *)params->u_iface;
-    params->_ret = iface->RegisterSubprocess( params->nPid );
-    return 0;
-}
-
-#if defined(__x86_64__) || defined(__aarch64__)
-NTSTATUS wow64_IVRApplications_IVRApplications_008_RegisterSubprocess( void *args )
-{
-    struct wow64_IVRApplications_IVRApplications_008_RegisterSubprocess_params *params = (struct wow64_IVRApplications_IVRApplications_008_RegisterSubprocess_params *)args;
-    struct u_IVRApplications_IVRApplications_008 *iface = (struct u_IVRApplications_IVRApplications_008 *)params->u_iface;
-    params->_ret = iface->RegisterSubprocess( params->nPid );
-    return 0;
-}
-#endif
-
 NTSTATUS IVRApplications_IVRApplications_008_GetCurrentSceneProcessId( void *args )
 {
     struct IVRApplications_IVRApplications_008_GetCurrentSceneProcessId_params *params = (struct IVRApplications_IVRApplications_008_GetCurrentSceneProcessId_params *)args;
