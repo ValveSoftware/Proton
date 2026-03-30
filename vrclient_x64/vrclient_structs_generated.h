@@ -27,7 +27,7 @@ typedef struct VREvent_Chaperone_t VREvent_Chaperone_t;
 #pragma pack( push, 8 )
 struct VREvent_Chaperone_t
 {
-    uint64_t m_nPreviousUniverse;
+    uint64_t m_nPreviousUniverse_deprecated;
     uint64_t m_nCurrentUniverse;
 };
 #pragma pack( pop )
@@ -1335,6 +1335,15 @@ struct Compositor_TextureBounds
 };
 #pragma pack( pop )
 
+typedef struct DistortionCoordinate_t DistortionCoordinate_t;
+#pragma pack( push, 4 )
+struct DistortionCoordinate_t
+{
+    float u;
+    float v;
+};
+#pragma pack( pop )
+
 typedef struct DistortionCoordinates_t DistortionCoordinates_t;
 #pragma pack( push, 4 )
 struct DistortionCoordinates_t
@@ -1594,6 +1603,10 @@ typedef struct w64_VRTextureDepthInfo_t u64_VRTextureDepthInfo_t;
 typedef struct w64_VRTextureDepthInfo_t w64_VRTextureDepthInfo_t;
 typedef struct w32_VRTextureDepthInfo_t u32_VRTextureDepthInfo_t;
 typedef struct w32_VRTextureDepthInfo_t w32_VRTextureDepthInfo_t;
+typedef struct w64_VRTextureMotionInfo_t u64_VRTextureMotionInfo_t;
+typedef struct w64_VRTextureMotionInfo_t w64_VRTextureMotionInfo_t;
+typedef struct w32_VRTextureMotionInfo_t u32_VRTextureMotionInfo_t;
+typedef struct w32_VRTextureMotionInfo_t w32_VRTextureMotionInfo_t;
 typedef struct w64_AppOverrideKeys_t u64_AppOverrideKeys_t;
 typedef struct w64_AppOverrideKeys_t w64_AppOverrideKeys_t;
 typedef struct w32_AppOverrideKeys_t u32_AppOverrideKeys_t;
@@ -1908,6 +1921,10 @@ typedef struct w64_VRTextureWithDepth_t u64_VRTextureWithDepth_t;
 typedef struct w64_VRTextureWithDepth_t w64_VRTextureWithDepth_t;
 typedef struct w32_VRTextureWithDepth_t u32_VRTextureWithDepth_t;
 typedef struct w32_VRTextureWithDepth_t w32_VRTextureWithDepth_t;
+typedef struct w64_VRTextureWithMotion_t u64_VRTextureWithMotion_t;
+typedef struct w64_VRTextureWithMotion_t w64_VRTextureWithMotion_t;
+typedef struct w32_VRTextureWithMotion_t u32_VRTextureWithMotion_t;
+typedef struct w32_VRTextureWithMotion_t w32_VRTextureWithMotion_t;
 typedef struct w64_VRTextureWithPoseAndDepth_t u64_VRTextureWithPoseAndDepth_t;
 typedef struct w64_VRTextureWithPoseAndDepth_t w64_VRTextureWithPoseAndDepth_t;
 typedef struct w32_VRTextureWithPoseAndDepth_t u32_VRTextureWithPoseAndDepth_t;
@@ -2156,6 +2173,37 @@ typedef u32_VRTextureDepthInfo_t u_VRTextureDepthInfo_t;
 #if defined(__x86_64__) || defined(__aarch64__)
 typedef w64_VRTextureDepthInfo_t w_VRTextureDepthInfo_t;
 typedef u64_VRTextureDepthInfo_t u_VRTextureDepthInfo_t;
+#endif
+
+#pragma pack( push, 8 )
+struct w64_VRTextureMotionInfo_t
+{
+    W64_PTR(void *handle, handle, void *);
+    HmdMatrix44_t mDeltaPose;
+#ifdef __cplusplus
+    operator w32_VRTextureMotionInfo_t() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct w32_VRTextureMotionInfo_t
+{
+    W32_PTR(void *handle, handle, void *);
+    HmdMatrix44_t mDeltaPose;
+#ifdef __cplusplus
+    operator u64_VRTextureMotionInfo_t() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#ifdef __i386__
+typedef w32_VRTextureMotionInfo_t w_VRTextureMotionInfo_t;
+typedef u32_VRTextureMotionInfo_t u_VRTextureMotionInfo_t;
+#endif
+#if defined(__x86_64__) || defined(__aarch64__)
+typedef w64_VRTextureMotionInfo_t w_VRTextureMotionInfo_t;
+typedef u64_VRTextureMotionInfo_t u_VRTextureMotionInfo_t;
 #endif
 
 #pragma pack( push, 8 )
@@ -4428,10 +4476,10 @@ struct u_IVRDebug_IVRDebug_001
 #endif /* __cplusplus */
 };
 
-struct w_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002
+struct w_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_003
 {
 #ifdef __cplusplus
-    virtual int8_t NewSharedVulkanImage( uint32_t, uint32_t, uint32_t, int8_t, int8_t, int8_t, uint32_t, uint32_t, uint64_t * ) = 0;
+    virtual int8_t NewSharedVulkanImage( uint32_t, uint32_t, uint32_t, int8_t, int8_t, int8_t, uint32_t, uint32_t, uint32_t, uint32_t, uint64_t * ) = 0;
     virtual int8_t NewSharedVulkanBuffer( uint32_t, uint32_t, uint64_t * ) = 0;
     virtual int8_t NewSharedVulkanSemaphore( int8_t, uint64_t * ) = 0;
     virtual int8_t RefResource( uint64_t, uint64_t * ) = 0;
@@ -4440,14 +4488,14 @@ struct w_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002
     virtual int8_t GetDmabufModifiers( uint32_t, uint32_t, uint32_t *, uint64_t * ) = 0;
     virtual int8_t ImportDmabuf( uint32_t, w_DmabufAttributes_t *, uint64_t * ) = 0;
     virtual int8_t ReceiveSharedFd( uint64_t, int32_t * ) = 0;
-    virtual ~w_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002(  ) = 0;
+    virtual ~w_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_003(  ) = 0;
 #endif /* __cplusplus */
 };
 
-struct u_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002
+struct u_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_003
 {
 #ifdef __cplusplus
-    virtual int8_t NewSharedVulkanImage( uint32_t, uint32_t, uint32_t, int8_t, int8_t, int8_t, uint32_t, uint32_t, uint64_t * ) = 0;
+    virtual int8_t NewSharedVulkanImage( uint32_t, uint32_t, uint32_t, int8_t, int8_t, int8_t, uint32_t, uint32_t, uint32_t, uint32_t, uint64_t * ) = 0;
     virtual int8_t NewSharedVulkanBuffer( uint32_t, uint32_t, uint64_t * ) = 0;
     virtual int8_t NewSharedVulkanSemaphore( int8_t, uint64_t * ) = 0;
     virtual int8_t RefResource( uint64_t, uint64_t * ) = 0;
@@ -4456,7 +4504,7 @@ struct u_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002
     virtual int8_t GetDmabufModifiers( uint32_t, uint32_t, uint32_t *, uint64_t * ) = 0;
     virtual int8_t ImportDmabuf( uint32_t, u_DmabufAttributes_t *, uint64_t * ) = 0;
     virtual int8_t ReceiveSharedFd( uint64_t, int32_t * ) = 0;
-    virtual ~u_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_002(  ) = 0;
+    virtual ~u_IVRIPCResourceManagerClient_IVRIPCResourceManagerClient_003(  ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -7162,6 +7210,45 @@ typedef u32_VRTextureWithDepth_t u_VRTextureWithDepth_t;
 #if defined(__x86_64__) || defined(__aarch64__)
 typedef w64_VRTextureWithDepth_t w_VRTextureWithDepth_t;
 typedef u64_VRTextureWithDepth_t u_VRTextureWithDepth_t;
+#endif
+
+#pragma pack( push, 8 )
+struct w64_VRTextureWithMotion_t
+{
+    W64_PTR(void *handle, handle, void *);
+    uint32_t eType;
+    uint32_t eColorSpace;
+    HmdMatrix34_t mDeviceToAbsoluteTracking;
+    w64_VRTextureDepthInfo_t depth;
+    w64_VRTextureMotionInfo_t motion;
+#ifdef __cplusplus
+    operator w32_VRTextureWithMotion_t() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#pragma pack( push, 4 )
+struct w32_VRTextureWithMotion_t
+{
+    W32_PTR(void *handle, handle, void *);
+    uint32_t eType;
+    uint32_t eColorSpace;
+    HmdMatrix34_t mDeviceToAbsoluteTracking;
+    w32_VRTextureDepthInfo_t depth;
+    w32_VRTextureMotionInfo_t motion;
+#ifdef __cplusplus
+    operator u64_VRTextureWithMotion_t() const;
+#endif /* __cplusplus */
+};
+#pragma pack( pop )
+
+#ifdef __i386__
+typedef w32_VRTextureWithMotion_t w_VRTextureWithMotion_t;
+typedef u32_VRTextureWithMotion_t u_VRTextureWithMotion_t;
+#endif
+#if defined(__x86_64__) || defined(__aarch64__)
+typedef w64_VRTextureWithMotion_t w_VRTextureWithMotion_t;
+typedef u64_VRTextureWithMotion_t u_VRTextureWithMotion_t;
 #endif
 
 #pragma pack( push, 8 )

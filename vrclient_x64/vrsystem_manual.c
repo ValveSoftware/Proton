@@ -234,6 +234,12 @@ void __thiscall winIVRSystem_IVRSystem_023_GetDXGIOutputInfo( struct w_iface *_t
     *pnAdapterIndex = 0;
 }
 
+void __thiscall winIVRSystem_IVRSystem_026_GetDXGIOutputInfo( struct w_iface *_this, int32_t *pnAdapterIndex )
+{
+    FIXME( "%p\n", _this );
+    *pnAdapterIndex = 0;
+}
+
 static const WCHAR winevulkanW[] = {'w','i','n','e','v','u','l','k','a','n','.','d','l','l',0};
 
 void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance )
@@ -352,6 +358,29 @@ void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_iface *_thi
 }
 
 void __thiscall winIVRSystem_IVRSystem_023_GetOutputDevice( struct w_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance )
+{
+    struct IVRSystem_IVRSystem_023_GetOutputDevice_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pnDevice = pnDevice,
+        .textureType = textureType,
+        .pInstance = pInstance,
+    };
+    HMODULE winevulkan = LoadLibraryW(winevulkanW);
+
+    TRACE("%p\n", _this);
+    if (fixup_get_output_device_pre( winevulkan, &params.textureType, &params.pInstance ) != VK_SUCCESS)
+        *pnDevice = 0;
+    else
+    {
+        VRCLIENT_CALL( IVRSystem_IVRSystem_023_GetOutputDevice, &params );
+        fixup_get_output_device_post( winevulkan, pnDevice, &params.pInstance, textureType );
+    }
+
+    FreeLibrary(winevulkan);
+}
+
+void __thiscall winIVRSystem_IVRSystem_026_GetOutputDevice( struct w_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance )
 {
     struct IVRSystem_IVRSystem_023_GetOutputDevice_params params =
     {

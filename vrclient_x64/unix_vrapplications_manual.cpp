@@ -138,3 +138,4 @@ VRCLIENT_UNIX_IMPL( IVRApplications, 004, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 005, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 006, LaunchInternalProcess );
 VRCLIENT_UNIX_IMPL( IVRApplications, 007, LaunchInternalProcess );
+VRCLIENT_UNIX_IMPL( IVRApplications, 008, LaunchInternalProcess );

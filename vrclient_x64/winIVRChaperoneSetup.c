@@ -788,7 +788,7 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBo
     VRCLIENT_CALL( IVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo, &params );
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(struct w_iface *_this, HmdVector2_t *pPointBuffer, uint32_t unPointCount)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter(struct w_iface *_this, const HmdVector2_t *pPointBuffer, uint32_t unPointCount)
 {
     struct IVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingPerimeter_params params =
     {

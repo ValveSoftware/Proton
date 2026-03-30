@@ -183,6 +183,37 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     IVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum,
     IVRApplications_IVRApplications_007_LaunchInternalProcess,
     IVRApplications_IVRApplications_007_GetCurrentSceneProcessId,
+    IVRApplications_IVRApplications_008_AddApplicationManifest,
+    IVRApplications_IVRApplications_008_RemoveApplicationManifest,
+    IVRApplications_IVRApplications_008_IsApplicationInstalled,
+    IVRApplications_IVRApplications_008_GetApplicationCount,
+    IVRApplications_IVRApplications_008_GetApplicationKeyByIndex,
+    IVRApplications_IVRApplications_008_GetApplicationKeyByProcessId,
+    IVRApplications_IVRApplications_008_LaunchApplication,
+    IVRApplications_IVRApplications_008_LaunchTemplateApplication,
+    IVRApplications_IVRApplications_008_LaunchApplicationFromMimeType,
+    IVRApplications_IVRApplications_008_LaunchDashboardOverlay,
+    IVRApplications_IVRApplications_008_CancelApplicationLaunch,
+    IVRApplications_IVRApplications_008_IdentifyApplication,
+    IVRApplications_IVRApplications_008_GetApplicationProcessId,
+    IVRApplications_IVRApplications_008_GetApplicationsErrorNameFromEnum,
+    IVRApplications_IVRApplications_008_GetApplicationPropertyString,
+    IVRApplications_IVRApplications_008_GetApplicationPropertyBool,
+    IVRApplications_IVRApplications_008_GetApplicationPropertyUint64,
+    IVRApplications_IVRApplications_008_SetApplicationAutoLaunch,
+    IVRApplications_IVRApplications_008_GetApplicationAutoLaunch,
+    IVRApplications_IVRApplications_008_SetDefaultApplicationForMimeType,
+    IVRApplications_IVRApplications_008_GetDefaultApplicationForMimeType,
+    IVRApplications_IVRApplications_008_GetApplicationSupportedMimeTypes,
+    IVRApplications_IVRApplications_008_GetApplicationsThatSupportMimeType,
+    IVRApplications_IVRApplications_008_GetApplicationLaunchArguments,
+    IVRApplications_IVRApplications_008_GetStartingApplication,
+    IVRApplications_IVRApplications_008_GetSceneApplicationState,
+    IVRApplications_IVRApplications_008_PerformApplicationPrelaunchCheck,
+    IVRApplications_IVRApplications_008_GetSceneApplicationStateNameFromEnum,
+    IVRApplications_IVRApplications_008_LaunchInternalProcess,
+    IVRApplications_IVRApplications_008_RegisterSubprocess,
+    IVRApplications_IVRApplications_008_GetCurrentSceneProcessId,
     IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy,
     IVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy,
     IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize,
@@ -1296,6 +1327,40 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     IVRInput_IVRInput_010_IsUsingLegacyInput,
     IVRInput_IVRInput_010_OpenBindingUI,
     IVRInput_IVRInput_010_GetBindingVariant,
+    IVRInput_IVRInput_011_SetActionManifestPath,
+    IVRInput_IVRInput_011_GetActionSetHandle,
+    IVRInput_IVRInput_011_GetActionHandle,
+    IVRInput_IVRInput_011_GetInputSourceHandle,
+    IVRInput_IVRInput_011_UpdateActionState,
+    IVRInput_IVRInput_011_GetDigitalActionData,
+    IVRInput_IVRInput_011_GetAnalogActionData,
+    IVRInput_IVRInput_011_GetPoseActionDataRelativeToNow,
+    IVRInput_IVRInput_011_GetPoseActionDataForNextFrame,
+    IVRInput_IVRInput_011_GetSkeletalActionData,
+    IVRInput_IVRInput_011_GetDominantHand,
+    IVRInput_IVRInput_011_SetDominantHand,
+    IVRInput_IVRInput_011_GetEyeTrackingDataRelativeToNow,
+    IVRInput_IVRInput_011_GetEyeTrackingDataForNextFrame,
+    IVRInput_IVRInput_011_GetBoneCount,
+    IVRInput_IVRInput_011_GetBoneHierarchy,
+    IVRInput_IVRInput_011_GetBoneName,
+    IVRInput_IVRInput_011_GetSkeletalReferenceTransforms,
+    IVRInput_IVRInput_011_GetSkeletalTrackingLevel,
+    IVRInput_IVRInput_011_GetSkeletalBoneData,
+    IVRInput_IVRInput_011_GetSkeletalSummaryData,
+    IVRInput_IVRInput_011_GetSkeletalBoneDataCompressed,
+    IVRInput_IVRInput_011_DecompressSkeletalBoneData,
+    IVRInput_IVRInput_011_TriggerHapticVibrationAction,
+    IVRInput_IVRInput_011_GetActionOrigins,
+    IVRInput_IVRInput_011_GetOriginLocalizedName,
+    IVRInput_IVRInput_011_GetOriginTrackedDeviceInfo,
+    IVRInput_IVRInput_011_GetActionBindingInfo,
+    IVRInput_IVRInput_011_ShowActionOrigins,
+    IVRInput_IVRInput_011_ShowBindingsForActionSet,
+    IVRInput_IVRInput_011_GetComponentStateForBinding,
+    IVRInput_IVRInput_011_IsUsingLegacyInput,
+    IVRInput_IVRInput_011_OpenBindingUI,
+    IVRInput_IVRInput_011_GetBindingVariant,
     IVRMailbox_IVRMailbox_001_undoc1,
     IVRMailbox_IVRMailbox_001_undoc2,
     IVRMailbox_IVRMailbox_001_undoc3,
@@ -3927,6 +3992,57 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     IVRSystem_IVRSystem_023_AcknowledgeQuit_Exiting,
     IVRSystem_IVRSystem_023_GetAppContainerFilePaths,
     IVRSystem_IVRSystem_023_GetRuntimeVersion,
+    IVRSystem_IVRSystem_026_GetRecommendedRenderTargetSize,
+    IVRSystem_IVRSystem_026_GetProjectionMatrix,
+    IVRSystem_IVRSystem_026_GetProjectionRaw,
+    IVRSystem_IVRSystem_026_ComputeDistortion,
+    IVRSystem_IVRSystem_026_ComputeDistortionSet,
+    IVRSystem_IVRSystem_026_GetEyeToHeadTransform,
+    IVRSystem_IVRSystem_026_GetTimeSinceLastVsync,
+    IVRSystem_IVRSystem_026_GetD3D9AdapterIndex,
+    IVRSystem_IVRSystem_026_GetDXGIOutputInfo,
+    IVRSystem_IVRSystem_026_GetOutputDevice,
+    IVRSystem_IVRSystem_026_IsDisplayOnDesktop,
+    IVRSystem_IVRSystem_026_SetDisplayVisibility,
+    IVRSystem_IVRSystem_026_GetDeviceToAbsoluteTrackingPose,
+    IVRSystem_IVRSystem_026_GetSeatedZeroPoseToStandingAbsoluteTrackingPose,
+    IVRSystem_IVRSystem_026_GetRawZeroPoseToStandingAbsoluteTrackingPose,
+    IVRSystem_IVRSystem_026_GetSortedTrackedDeviceIndicesOfClass,
+    IVRSystem_IVRSystem_026_GetTrackedDeviceActivityLevel,
+    IVRSystem_IVRSystem_026_ApplyTransform,
+    IVRSystem_IVRSystem_026_GetTrackedDeviceIndexForControllerRole,
+    IVRSystem_IVRSystem_026_GetControllerRoleForTrackedDeviceIndex,
+    IVRSystem_IVRSystem_026_GetTrackedDeviceClass,
+    IVRSystem_IVRSystem_026_IsTrackedDeviceConnected,
+    IVRSystem_IVRSystem_026_GetBoolTrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetFloatTrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetInt32TrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetUint64TrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetMatrix34TrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetArrayTrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetStringTrackedDeviceProperty,
+    IVRSystem_IVRSystem_026_GetPropErrorNameFromEnum,
+    IVRSystem_IVRSystem_026_PollNextEvent,
+    IVRSystem_IVRSystem_026_PollNextEventWithPose,
+    IVRSystem_IVRSystem_026_PollNextEventWithPoseAndOverlays,
+    IVRSystem_IVRSystem_026_GetEventTypeNameFromEnum,
+    IVRSystem_IVRSystem_026_GetHiddenAreaMesh,
+    IVRSystem_IVRSystem_026_GetEyeTrackedFoveationCenter,
+    IVRSystem_IVRSystem_026_GetEyeTrackedFoveationCenterForProjection,
+    IVRSystem_IVRSystem_026_GetControllerState,
+    IVRSystem_IVRSystem_026_GetControllerStateWithPose,
+    IVRSystem_IVRSystem_026_TriggerHapticPulse,
+    IVRSystem_IVRSystem_026_GetButtonIdNameFromEnum,
+    IVRSystem_IVRSystem_026_GetControllerAxisTypeNameFromEnum,
+    IVRSystem_IVRSystem_026_IsInputAvailable,
+    IVRSystem_IVRSystem_026_IsSteamVRDrawingControllers,
+    IVRSystem_IVRSystem_026_ShouldApplicationPause,
+    IVRSystem_IVRSystem_026_ShouldApplicationReduceRenderingWork,
+    IVRSystem_IVRSystem_026_PerformFirmwareUpdate,
+    IVRSystem_IVRSystem_026_AcknowledgeQuit_Exiting,
+    IVRSystem_IVRSystem_026_GetAppContainerFilePaths,
+    IVRSystem_IVRSystem_026_GetRuntimeVersion,
+    IVRSystem_IVRSystem_026_SetSDKVersion,
     IVRTrackedCamera_IVRTrackedCamera_001_HasCamera,
     IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription,
     IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions,
@@ -4184,6 +4300,37 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_IVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum,
     wow64_IVRApplications_IVRApplications_007_LaunchInternalProcess,
     wow64_IVRApplications_IVRApplications_007_GetCurrentSceneProcessId,
+    wow64_IVRApplications_IVRApplications_008_AddApplicationManifest,
+    wow64_IVRApplications_IVRApplications_008_RemoveApplicationManifest,
+    wow64_IVRApplications_IVRApplications_008_IsApplicationInstalled,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationCount,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationKeyByIndex,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationKeyByProcessId,
+    wow64_IVRApplications_IVRApplications_008_LaunchApplication,
+    wow64_IVRApplications_IVRApplications_008_LaunchTemplateApplication,
+    wow64_IVRApplications_IVRApplications_008_LaunchApplicationFromMimeType,
+    wow64_IVRApplications_IVRApplications_008_LaunchDashboardOverlay,
+    wow64_IVRApplications_IVRApplications_008_CancelApplicationLaunch,
+    wow64_IVRApplications_IVRApplications_008_IdentifyApplication,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationProcessId,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationsErrorNameFromEnum,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationPropertyString,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationPropertyBool,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationPropertyUint64,
+    wow64_IVRApplications_IVRApplications_008_SetApplicationAutoLaunch,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationAutoLaunch,
+    wow64_IVRApplications_IVRApplications_008_SetDefaultApplicationForMimeType,
+    wow64_IVRApplications_IVRApplications_008_GetDefaultApplicationForMimeType,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationSupportedMimeTypes,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationsThatSupportMimeType,
+    wow64_IVRApplications_IVRApplications_008_GetApplicationLaunchArguments,
+    wow64_IVRApplications_IVRApplications_008_GetStartingApplication,
+    wow64_IVRApplications_IVRApplications_008_GetSceneApplicationState,
+    wow64_IVRApplications_IVRApplications_008_PerformApplicationPrelaunchCheck,
+    wow64_IVRApplications_IVRApplications_008_GetSceneApplicationStateNameFromEnum,
+    wow64_IVRApplications_IVRApplications_008_LaunchInternalProcess,
+    wow64_IVRApplications_IVRApplications_008_RegisterSubprocess,
+    wow64_IVRApplications_IVRApplications_008_GetCurrentSceneProcessId,
     wow64_IVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy,
     wow64_IVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy,
     wow64_IVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize,
@@ -5297,6 +5444,40 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_IVRInput_IVRInput_010_IsUsingLegacyInput,
     wow64_IVRInput_IVRInput_010_OpenBindingUI,
     wow64_IVRInput_IVRInput_010_GetBindingVariant,
+    wow64_IVRInput_IVRInput_011_SetActionManifestPath,
+    wow64_IVRInput_IVRInput_011_GetActionSetHandle,
+    wow64_IVRInput_IVRInput_011_GetActionHandle,
+    wow64_IVRInput_IVRInput_011_GetInputSourceHandle,
+    wow64_IVRInput_IVRInput_011_UpdateActionState,
+    wow64_IVRInput_IVRInput_011_GetDigitalActionData,
+    wow64_IVRInput_IVRInput_011_GetAnalogActionData,
+    wow64_IVRInput_IVRInput_011_GetPoseActionDataRelativeToNow,
+    wow64_IVRInput_IVRInput_011_GetPoseActionDataForNextFrame,
+    wow64_IVRInput_IVRInput_011_GetSkeletalActionData,
+    wow64_IVRInput_IVRInput_011_GetDominantHand,
+    wow64_IVRInput_IVRInput_011_SetDominantHand,
+    wow64_IVRInput_IVRInput_011_GetEyeTrackingDataRelativeToNow,
+    wow64_IVRInput_IVRInput_011_GetEyeTrackingDataForNextFrame,
+    wow64_IVRInput_IVRInput_011_GetBoneCount,
+    wow64_IVRInput_IVRInput_011_GetBoneHierarchy,
+    wow64_IVRInput_IVRInput_011_GetBoneName,
+    wow64_IVRInput_IVRInput_011_GetSkeletalReferenceTransforms,
+    wow64_IVRInput_IVRInput_011_GetSkeletalTrackingLevel,
+    wow64_IVRInput_IVRInput_011_GetSkeletalBoneData,
+    wow64_IVRInput_IVRInput_011_GetSkeletalSummaryData,
+    wow64_IVRInput_IVRInput_011_GetSkeletalBoneDataCompressed,
+    wow64_IVRInput_IVRInput_011_DecompressSkeletalBoneData,
+    wow64_IVRInput_IVRInput_011_TriggerHapticVibrationAction,
+    wow64_IVRInput_IVRInput_011_GetActionOrigins,
+    wow64_IVRInput_IVRInput_011_GetOriginLocalizedName,
+    wow64_IVRInput_IVRInput_011_GetOriginTrackedDeviceInfo,
+    wow64_IVRInput_IVRInput_011_GetActionBindingInfo,
+    wow64_IVRInput_IVRInput_011_ShowActionOrigins,
+    wow64_IVRInput_IVRInput_011_ShowBindingsForActionSet,
+    wow64_IVRInput_IVRInput_011_GetComponentStateForBinding,
+    wow64_IVRInput_IVRInput_011_IsUsingLegacyInput,
+    wow64_IVRInput_IVRInput_011_OpenBindingUI,
+    wow64_IVRInput_IVRInput_011_GetBindingVariant,
     wow64_IVRMailbox_IVRMailbox_001_undoc1,
     wow64_IVRMailbox_IVRMailbox_001_undoc2,
     wow64_IVRMailbox_IVRMailbox_001_undoc3,
@@ -7928,6 +8109,57 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_IVRSystem_IVRSystem_023_AcknowledgeQuit_Exiting,
     wow64_IVRSystem_IVRSystem_023_GetAppContainerFilePaths,
     wow64_IVRSystem_IVRSystem_023_GetRuntimeVersion,
+    wow64_IVRSystem_IVRSystem_026_GetRecommendedRenderTargetSize,
+    wow64_IVRSystem_IVRSystem_026_GetProjectionMatrix,
+    wow64_IVRSystem_IVRSystem_026_GetProjectionRaw,
+    wow64_IVRSystem_IVRSystem_026_ComputeDistortion,
+    wow64_IVRSystem_IVRSystem_026_ComputeDistortionSet,
+    wow64_IVRSystem_IVRSystem_026_GetEyeToHeadTransform,
+    wow64_IVRSystem_IVRSystem_026_GetTimeSinceLastVsync,
+    wow64_IVRSystem_IVRSystem_026_GetD3D9AdapterIndex,
+    wow64_IVRSystem_IVRSystem_026_GetDXGIOutputInfo,
+    wow64_IVRSystem_IVRSystem_026_GetOutputDevice,
+    wow64_IVRSystem_IVRSystem_026_IsDisplayOnDesktop,
+    wow64_IVRSystem_IVRSystem_026_SetDisplayVisibility,
+    wow64_IVRSystem_IVRSystem_026_GetDeviceToAbsoluteTrackingPose,
+    wow64_IVRSystem_IVRSystem_026_GetSeatedZeroPoseToStandingAbsoluteTrackingPose,
+    wow64_IVRSystem_IVRSystem_026_GetRawZeroPoseToStandingAbsoluteTrackingPose,
+    wow64_IVRSystem_IVRSystem_026_GetSortedTrackedDeviceIndicesOfClass,
+    wow64_IVRSystem_IVRSystem_026_GetTrackedDeviceActivityLevel,
+    wow64_IVRSystem_IVRSystem_026_ApplyTransform,
+    wow64_IVRSystem_IVRSystem_026_GetTrackedDeviceIndexForControllerRole,
+    wow64_IVRSystem_IVRSystem_026_GetControllerRoleForTrackedDeviceIndex,
+    wow64_IVRSystem_IVRSystem_026_GetTrackedDeviceClass,
+    wow64_IVRSystem_IVRSystem_026_IsTrackedDeviceConnected,
+    wow64_IVRSystem_IVRSystem_026_GetBoolTrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetFloatTrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetInt32TrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetUint64TrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetMatrix34TrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetArrayTrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetStringTrackedDeviceProperty,
+    wow64_IVRSystem_IVRSystem_026_GetPropErrorNameFromEnum,
+    wow64_IVRSystem_IVRSystem_026_PollNextEvent,
+    wow64_IVRSystem_IVRSystem_026_PollNextEventWithPose,
+    wow64_IVRSystem_IVRSystem_026_PollNextEventWithPoseAndOverlays,
+    wow64_IVRSystem_IVRSystem_026_GetEventTypeNameFromEnum,
+    wow64_IVRSystem_IVRSystem_026_GetHiddenAreaMesh,
+    wow64_IVRSystem_IVRSystem_026_GetEyeTrackedFoveationCenter,
+    wow64_IVRSystem_IVRSystem_026_GetEyeTrackedFoveationCenterForProjection,
+    wow64_IVRSystem_IVRSystem_026_GetControllerState,
+    wow64_IVRSystem_IVRSystem_026_GetControllerStateWithPose,
+    wow64_IVRSystem_IVRSystem_026_TriggerHapticPulse,
+    wow64_IVRSystem_IVRSystem_026_GetButtonIdNameFromEnum,
+    wow64_IVRSystem_IVRSystem_026_GetControllerAxisTypeNameFromEnum,
+    wow64_IVRSystem_IVRSystem_026_IsInputAvailable,
+    wow64_IVRSystem_IVRSystem_026_IsSteamVRDrawingControllers,
+    wow64_IVRSystem_IVRSystem_026_ShouldApplicationPause,
+    wow64_IVRSystem_IVRSystem_026_ShouldApplicationReduceRenderingWork,
+    wow64_IVRSystem_IVRSystem_026_PerformFirmwareUpdate,
+    wow64_IVRSystem_IVRSystem_026_AcknowledgeQuit_Exiting,
+    wow64_IVRSystem_IVRSystem_026_GetAppContainerFilePaths,
+    wow64_IVRSystem_IVRSystem_026_GetRuntimeVersion,
+    wow64_IVRSystem_IVRSystem_026_SetSDKVersion,
     wow64_IVRTrackedCamera_IVRTrackedCamera_001_HasCamera,
     wow64_IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription,
     wow64_IVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions,
@@ -8021,8 +8253,8 @@ C_ASSERT( offsetof(VREvent_AudioVolumeControl_t, fVolumeLevel) == 0 );
 C_ASSERT( sizeof(VREvent_AudioVolumeControl_t().fVolumeLevel) >= 4 );
 
 C_ASSERT( sizeof(VREvent_Chaperone_t) >= 16 );
-C_ASSERT( offsetof(VREvent_Chaperone_t, m_nPreviousUniverse) == 0 );
-C_ASSERT( sizeof(VREvent_Chaperone_t().m_nPreviousUniverse) >= 8 );
+C_ASSERT( offsetof(VREvent_Chaperone_t, m_nPreviousUniverse_deprecated) == 0 );
+C_ASSERT( sizeof(VREvent_Chaperone_t().m_nPreviousUniverse_deprecated) >= 8 );
 C_ASSERT( offsetof(VREvent_Chaperone_t, m_nCurrentUniverse) == 8 );
 C_ASSERT( sizeof(VREvent_Chaperone_t().m_nCurrentUniverse) >= 8 );
 
@@ -9620,6 +9852,12 @@ C_ASSERT( sizeof(Compositor_TextureBounds().uMax) >= 4 );
 C_ASSERT( offsetof(Compositor_TextureBounds, vMax) == 12 );
 C_ASSERT( sizeof(Compositor_TextureBounds().vMax) >= 4 );
 
+C_ASSERT( sizeof(DistortionCoordinate_t) >= 8 );
+C_ASSERT( offsetof(DistortionCoordinate_t, u) == 0 );
+C_ASSERT( sizeof(DistortionCoordinate_t().u) >= 4 );
+C_ASSERT( offsetof(DistortionCoordinate_t, v) == 4 );
+C_ASSERT( sizeof(DistortionCoordinate_t().v) >= 4 );
+
 C_ASSERT( sizeof(DistortionCoordinates_t) >= 24 );
 C_ASSERT( offsetof(DistortionCoordinates_t, rfRed) == 0 );
 C_ASSERT( sizeof(DistortionCoordinates_t().rfRed) >= 8 );
@@ -10114,6 +10352,50 @@ u64_VRTextureDepthInfo_t::operator w32_VRTextureDepthInfo_t() const
     ret.handle = this->handle;
     ret.mProjection = this->mProjection;
     ret.vRange = this->vRange;
+    return ret;
+}
+#endif
+
+C_ASSERT( sizeof(w64_VRTextureMotionInfo_t) >= 72 );
+C_ASSERT( offsetof(w64_VRTextureMotionInfo_t, handle) == 0 );
+C_ASSERT( sizeof(w64_VRTextureMotionInfo_t().handle) >= 8 );
+C_ASSERT( offsetof(w64_VRTextureMotionInfo_t, mDeltaPose) == 8 );
+C_ASSERT( sizeof(w64_VRTextureMotionInfo_t().mDeltaPose) >= 64 );
+
+C_ASSERT( sizeof(u64_VRTextureMotionInfo_t) >= 72 );
+C_ASSERT( offsetof(u64_VRTextureMotionInfo_t, handle) == 0 );
+C_ASSERT( sizeof(u64_VRTextureMotionInfo_t().handle) >= 8 );
+C_ASSERT( offsetof(u64_VRTextureMotionInfo_t, mDeltaPose) == 8 );
+C_ASSERT( sizeof(u64_VRTextureMotionInfo_t().mDeltaPose) >= 64 );
+
+C_ASSERT( sizeof(w32_VRTextureMotionInfo_t) >= 68 );
+C_ASSERT( offsetof(w32_VRTextureMotionInfo_t, handle) == 0 );
+C_ASSERT( sizeof(w32_VRTextureMotionInfo_t().handle) >= 4 );
+C_ASSERT( offsetof(w32_VRTextureMotionInfo_t, mDeltaPose) == 4 );
+C_ASSERT( sizeof(w32_VRTextureMotionInfo_t().mDeltaPose) >= 64 );
+
+C_ASSERT( sizeof(u32_VRTextureMotionInfo_t) >= 68 );
+C_ASSERT( offsetof(u32_VRTextureMotionInfo_t, handle) == 0 );
+C_ASSERT( sizeof(u32_VRTextureMotionInfo_t().handle) >= 4 );
+C_ASSERT( offsetof(u32_VRTextureMotionInfo_t, mDeltaPose) == 4 );
+C_ASSERT( sizeof(u32_VRTextureMotionInfo_t().mDeltaPose) >= 64 );
+
+#if defined(__x86_64__) || defined(__aarch64__)
+w32_VRTextureMotionInfo_t::operator u64_VRTextureMotionInfo_t() const
+{
+    u64_VRTextureMotionInfo_t ret;
+    ret.handle = this->handle;
+    ret.mDeltaPose = this->mDeltaPose;
+    return ret;
+}
+#endif
+
+#if defined(__x86_64__) || defined(__aarch64__)
+u64_VRTextureMotionInfo_t::operator w32_VRTextureMotionInfo_t() const
+{
+    w32_VRTextureMotionInfo_t ret;
+    ret.handle = this->handle;
+    ret.mDeltaPose = this->mDeltaPose;
     return ret;
 }
 #endif
@@ -19976,6 +20258,90 @@ u64_VRTextureWithDepth_t::operator w32_VRTextureWithDepth_t() const
     ret.eType = this->eType;
     ret.eColorSpace = this->eColorSpace;
     ret.depth = this->depth;
+    return ret;
+}
+#endif
+
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t) >= 216 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, handle) == 0 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().handle) >= 8 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, eType) == 8 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().eType) >= 4 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, eColorSpace) == 12 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().eColorSpace) >= 4 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, mDeviceToAbsoluteTracking) == 16 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().mDeviceToAbsoluteTracking) >= 48 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, depth) == 64 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().depth) >= 80 );
+C_ASSERT( offsetof(w64_VRTextureWithMotion_t, motion) == 144 );
+C_ASSERT( sizeof(w64_VRTextureWithMotion_t().motion) >= 72 );
+
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t) >= 216 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, handle) == 0 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().handle) >= 8 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, eType) == 8 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().eType) >= 4 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, eColorSpace) == 12 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().eColorSpace) >= 4 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, mDeviceToAbsoluteTracking) == 16 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().mDeviceToAbsoluteTracking) >= 48 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, depth) == 64 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().depth) >= 80 );
+C_ASSERT( offsetof(u64_VRTextureWithMotion_t, motion) == 144 );
+C_ASSERT( sizeof(u64_VRTextureWithMotion_t().motion) >= 72 );
+
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t) >= 204 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, handle) == 0 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().handle) >= 4 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, eType) == 4 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().eType) >= 4 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, eColorSpace) == 8 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().eColorSpace) >= 4 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, mDeviceToAbsoluteTracking) == 12 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().mDeviceToAbsoluteTracking) >= 48 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, depth) == 60 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().depth) >= 76 );
+C_ASSERT( offsetof(w32_VRTextureWithMotion_t, motion) == 136 );
+C_ASSERT( sizeof(w32_VRTextureWithMotion_t().motion) >= 68 );
+
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t) >= 204 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, handle) == 0 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().handle) >= 4 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, eType) == 4 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().eType) >= 4 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, eColorSpace) == 8 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().eColorSpace) >= 4 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, mDeviceToAbsoluteTracking) == 12 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().mDeviceToAbsoluteTracking) >= 48 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, depth) == 60 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().depth) >= 76 );
+C_ASSERT( offsetof(u32_VRTextureWithMotion_t, motion) == 136 );
+C_ASSERT( sizeof(u32_VRTextureWithMotion_t().motion) >= 68 );
+
+#if defined(__x86_64__) || defined(__aarch64__)
+w32_VRTextureWithMotion_t::operator u64_VRTextureWithMotion_t() const
+{
+    u64_VRTextureWithMotion_t ret;
+    ret.handle = this->handle;
+    ret.eType = this->eType;
+    ret.eColorSpace = this->eColorSpace;
+    ret.mDeviceToAbsoluteTracking = this->mDeviceToAbsoluteTracking;
+    ret.depth = this->depth;
+    ret.motion = this->motion;
+    return ret;
+}
+#endif
+
+#if defined(__x86_64__) || defined(__aarch64__)
+u64_VRTextureWithMotion_t::operator w32_VRTextureWithMotion_t() const
+{
+    w32_VRTextureWithMotion_t ret;
+    ret.handle = this->handle;
+    ret.eType = this->eType;
+    ret.eColorSpace = this->eColorSpace;
+    ret.mDeviceToAbsoluteTracking = this->mDeviceToAbsoluteTracking;
+    ret.depth = this->depth;
+    ret.motion = this->motion;
     return ret;
 }
 #endif
