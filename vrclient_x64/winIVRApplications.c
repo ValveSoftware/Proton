@@ -1420,19 +1420,7 @@ int8_t __thiscall winIVRApplications_IVRApplications_004_IsQuitUserPromptRequest
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
-{
-    struct IVRApplications_IVRApplications_004_LaunchInternalProcess_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pchBinaryPath = pchBinaryPath,
-        .pchArguments = pchArguments,
-        .pchWorkingDirectory = pchWorkingDirectory,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRApplications_IVRApplications_004_LaunchInternalProcess, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory);
 
 extern vtable_ptr winIVRApplications_IVRApplications_004_vtable;
 
@@ -1844,19 +1832,7 @@ int8_t __thiscall winIVRApplications_IVRApplications_005_IsQuitUserPromptRequest
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
-{
-    struct IVRApplications_IVRApplications_005_LaunchInternalProcess_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pchBinaryPath = pchBinaryPath,
-        .pchArguments = pchArguments,
-        .pchWorkingDirectory = pchWorkingDirectory,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRApplications_IVRApplications_005_LaunchInternalProcess, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory);
 
 extern vtable_ptr winIVRApplications_IVRApplications_005_vtable;
 
@@ -2359,19 +2335,7 @@ int8_t __thiscall winIVRApplications_IVRApplications_006_IsQuitUserPromptRequest
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
-{
-    struct IVRApplications_IVRApplications_006_LaunchInternalProcess_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pchBinaryPath = pchBinaryPath,
-        .pchArguments = pchArguments,
-        .pchWorkingDirectory = pchWorkingDirectory,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRApplications_IVRApplications_006_LaunchInternalProcess, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory);
 
 uint32_t __thiscall winIVRApplications_IVRApplications_006_GetCurrentSceneProcessId(struct w_iface *_this)
 {
@@ -2887,19 +2851,7 @@ const char * __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicati
     return get_unix_buffer( params._ret );
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
-{
-    struct IVRApplications_IVRApplications_007_LaunchInternalProcess_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pchBinaryPath = pchBinaryPath,
-        .pchArguments = pchArguments,
-        .pchWorkingDirectory = pchWorkingDirectory,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRApplications_IVRApplications_007_LaunchInternalProcess, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory);
 
 uint32_t __thiscall winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId(struct w_iface *_this)
 {
@@ -3414,19 +3366,7 @@ const char * __thiscall winIVRApplications_IVRApplications_008_GetSceneApplicati
     return get_unix_buffer( params._ret );
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_008_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
-{
-    struct IVRApplications_IVRApplications_008_LaunchInternalProcess_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pchBinaryPath = pchBinaryPath,
-        .pchArguments = pchArguments,
-        .pchWorkingDirectory = pchWorkingDirectory,
-    };
-    TRACE("%p\n", _this);
-    VRCLIENT_CALL( IVRApplications_IVRApplications_008_LaunchInternalProcess, &params );
-    return params._ret;
-}
+extern uint32_t __thiscall winIVRApplications_IVRApplications_008_LaunchInternalProcess(struct w_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory);
 
 uint32_t __thiscall winIVRApplications_IVRApplications_008_RegisterSubprocess(struct w_iface *_this, uint32_t nPid)
 {
