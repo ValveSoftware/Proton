@@ -245,7 +245,7 @@ UNIX_FUNCS = [
 ]
 
 MANUAL_METHODS = {
-    "IVRApplications_LaunchInternalProcess": lambda ver, abi: abi == 'u',
+    "IVRApplications_LaunchInternalProcess": True,
     "IVRApplications_RegisterSubprocess": lambda ver, abi: abi == 'u',
     "IVRClientCore_BIsHmdPresent": lambda ver, abi: abi == 'w',
     "IVRClientCore_Init": lambda ver, abi: True,

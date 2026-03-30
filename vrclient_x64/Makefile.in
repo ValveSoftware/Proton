@@ -13,6 +13,7 @@ EXTRADEFS = -DGNUC
 
 SOURCES = \
 	flatapi.c \
+	vrapplications_manual.c \
 	vrclient_generated.c \
 	vrclient_main.c \
 	vrcompositor_manual.c \
