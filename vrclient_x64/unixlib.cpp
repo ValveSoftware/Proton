@@ -284,7 +284,7 @@ static NTSTATUS vrclient_init_registry( Params *params, bool wow64 )
         *buffer = 0;
         compositor->GetVulkanDeviceExtensionsRequired( phys_devices[i], buffer, length );
 
-        sprintf( name, "PCIID:%04x:%04x", prop.vendorID, prop.deviceID );
+        sprintf( name, "PCIID:%04x:%04x", prop.vendorID, (uint16_t)prop.deviceID );
         TRACE( "%s: %s.\n", name, buffer );
         set_reg_ascii_str( params->vr_key, name, buffer );
 
