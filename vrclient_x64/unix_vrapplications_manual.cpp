@@ -23,6 +23,7 @@ static NTSTATUS IVRApplications_LaunchInternalProcess( Iface *iface, Params *par
 {
     static const char *pass_env[] =
     {
+        "DISPLAY",
         "LD_LIBRARY_PATH",
         "PATH",
         "WINEARCH",
