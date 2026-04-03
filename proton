@@ -1808,7 +1808,12 @@ class Session:
                 ]:
             self.env["OPENSSL_ia32cap"] = "~0x20000000"
 
-        if os.environ.get("SteamGameId", 0) == "500810":
+        if os.environ.get("SteamGameId", 0) in [
+                "500810",
+                "4249100",
+                "4249110",
+                "4249130",
+                ]:
             self.dlloverrides["ddraw"] = "n,b"
 
         # CW Bug 26050
