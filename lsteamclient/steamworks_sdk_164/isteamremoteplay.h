@@ -263,7 +263,7 @@ struct RemotePlayInput_t
 
 		// Unused space for future use
 		char padding[ 64 - ( sizeof( m_unSessionID ) + sizeof( m_eType ) ) ];
-	};
+	} data;
 };
 //COMPILE_TIME_ASSERT( sizeof( RemotePlayInput_t ) == 64 );
 
