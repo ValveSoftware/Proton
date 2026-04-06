@@ -260,6 +260,11 @@ static NTSTATUS IVRCompositor_GetVulkanDeviceExtensionsRequired( Iface *iface, P
         return 0;
     }
 
+    if (!host_device)
+    {
+        ERR( "NULL host device.\n" );
+        return 0;
+    }
     p_vkGetPhysicalDeviceProperties( host_device, &prop );
     sprintf( name, "VK_WINE_OPENVR_DEVICE_EXTS_PCIID_%04x_%04x", prop.vendorID, (uint16_t)prop.deviceID );
     setenv( name, buffer, 1 );
