@@ -1855,6 +1855,478 @@ struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta_params
     W32_PTR(const char *pchBetaName, pchBetaName, const char *);
 };
 
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsLowViolence_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsLowViolence_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsCybercafe_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsCybercafe_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsVACBanned_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsVACBanned_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentGameLanguage_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentGameLanguage_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAvailableGameLanguages_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAvailableGameLanguages_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedApp_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedApp_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsDlcInstalled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsDlcInstalled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetEarliestPurchaseUnixTime_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetEarliestPurchaseUnixTime_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t nAppID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFreeWeekend_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFreeWeekend_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDLCCount_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDLCCount_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BGetDLCDataByIndex_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iDLC;
+    uint32_t *pAppID;
+    int8_t *pbAvailable;
+    char *pchName;
+    int32_t cchNameBufferSize;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BGetDLCDataByIndex_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iDLC;
+    W32_PTR(uint32_t *pAppID, pAppID, uint32_t *);
+    W32_PTR(int8_t *pbAvailable, pbAvailable, int8_t *);
+    W32_PTR(char *pchName, pchName, char *);
+    int32_t cchNameBufferSize;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_InstallDLC_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_InstallDLC_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_UninstallDLC_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_UninstallDLC_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAppProofOfPurchaseKey_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAppProofOfPurchaseKey_params
+{
+    struct u_iface u_iface;
+    uint32_t nAppID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentBetaName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    char *pchName;
+    int32_t cchNameBufferSize;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentBetaName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(char *pchName, pchName, char *);
+    int32_t cchNameBufferSize;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_MarkContentCorrupt_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_MarkContentCorrupt_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bMissingFilesOnly;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetInstalledDepots_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t appID;
+    uint32_t *pvecDepots;
+    uint32_t cMaxDepots;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetInstalledDepots_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t appID;
+    W32_PTR(uint32_t *pvecDepots, pvecDepots, uint32_t *);
+    uint32_t cMaxDepots;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppInstallDir_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t appID;
+    char *pchFolder;
+    uint32_t cchFolderBufferSize;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppInstallDir_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t appID;
+    W32_PTR(char *pchFolder, pchFolder, char *);
+    uint32_t cchFolderBufferSize;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsAppInstalled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsAppInstalled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t appID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppOwner_params
+{
+    struct u_iface u_iface;
+    CSteamID *_ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppOwner_params
+{
+    struct u_iface u_iface;
+    W32_PTR(CSteamID *_ret, _ret, CSteamID *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchQueryParam_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    const char *pchKey;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchQueryParam_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    W32_PTR(const char *pchKey, pchKey, const char *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDlcDownloadProgress_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t nAppID;
+    uint64_t *punBytesDownloaded;
+    uint64_t *punBytesTotal;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDlcDownloadProgress_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t nAppID;
+    W32_PTR(uint64_t *punBytesDownloaded, punBytesDownloaded, uint64_t *);
+    W32_PTR(uint64_t *punBytesTotal, punBytesTotal, uint64_t *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppBuildId_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppBuildId_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAllProofOfPurchaseKeys_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAllProofOfPurchaseKeys_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    const char *pszFileName;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(const char *pszFileName, pszFileName, const char *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchCommandLine_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    char *pszCommandLine;
+    int32_t cubCommandLine;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchCommandLine_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(char *pszCommandLine, pszCommandLine, char *);
+    int32_t cubCommandLine;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFamilySharing_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFamilySharing_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsTimedTrial_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t *punSecondsAllowed;
+    uint32_t *punSecondsPlayed;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsTimedTrial_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(uint32_t *punSecondsAllowed, punSecondsAllowed, uint32_t *);
+    W32_PTR(uint32_t *punSecondsPlayed, punSecondsPlayed, uint32_t *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcContext_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t nAppID;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcContext_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t nAppID;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    int32_t *pnAvailable;
+    int32_t *pnPrivate;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(int32_t *pnAvailable, pnAvailable, int32_t *);
+    W32_PTR(int32_t *pnPrivate, pnPrivate, int32_t *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iBetaIndex;
+    uint32_t *punFlags;
+    uint32_t *punBuildID;
+    char *pchBetaName;
+    int32_t cchBetaName;
+    char *pchDescription;
+    int32_t cchDescription;
+    uint32_t *punLastUpdated;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iBetaIndex;
+    W32_PTR(uint32_t *punFlags, punFlags, uint32_t *);
+    W32_PTR(uint32_t *punBuildID, punBuildID, uint32_t *);
+    W32_PTR(char *pchBetaName, pchBetaName, char *);
+    int32_t cchBetaName;
+    W32_PTR(char *pchDescription, pchDescription, char *);
+    int32_t cchDescription;
+    W32_PTR(uint32_t *punLastUpdated, punLastUpdated, uint32_t *);
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    const char *pchBetaName;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(const char *pchBetaName, pchBetaName, const char *);
+};
+
 struct ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData_params
 {
     struct u_iface u_iface;
@@ -8275,6 +8747,294 @@ struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor_para
 };
 
 struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    uint32_t unCursorID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t iSessionIndex;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t iSessionIndex;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSessionRemotePlayTogether_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSessionRemotePlayTogether_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionSteamID_params
+{
+    struct u_iface u_iface;
+    CSteamID *_ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionSteamID_params
+{
+    struct u_iface u_iface;
+    W32_PTR(CSteamID *_ret, _ret, CSteamID *);
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionGuestID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionGuestID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSmallSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSmallSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetMediumSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetMediumSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetLargeSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetLargeSessionAvatar_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientFormFactor_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientFormFactor_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t unSessionID;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BGetSessionClientResolution_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unSessionID;
+    int32_t *pnResolutionX;
+    int32_t *pnResolutionY;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BGetSessionClientResolution_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unSessionID;
+    W32_PTR(int32_t *pnResolutionX, pnResolutionX, int32_t *);
+    W32_PTR(int32_t *pnResolutionY, pnResolutionY, int32_t *);
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_ShowRemotePlayTogetherUI_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_ShowRemotePlayTogetherUI_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSendRemotePlayTogetherInvite_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSendRemotePlayTogetherInvite_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    CSteamID steamIDFriend;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BEnableRemotePlayTogetherDirectInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BEnableRemotePlayTogetherDirectInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_DisableRemotePlayTogetherDirectInput_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_DisableRemotePlayTogetherDirectInput_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetInput_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    RemotePlayInput_t *pInput;
+    uint32_t unMaxEvents;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetInput_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(RemotePlayInput_t *pInput, pInput, RemotePlayInput_t *);
+    uint32_t unMaxEvents;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseVisibility_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    int8_t bVisible;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseVisibility_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    int8_t bVisible;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMousePosition_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    float flNormalizedX;
+    float flNormalizedY;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMousePosition_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    float flNormalizedX;
+    float flNormalizedY;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_CreateMouseCursor_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nWidth;
+    int32_t nHeight;
+    int32_t nHotX;
+    int32_t nHotY;
+    const void *pBGRA;
+    int32_t nPitch;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_CreateMouseCursor_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nWidth;
+    int32_t nHeight;
+    int32_t nHotX;
+    int32_t nHotY;
+    W32_PTR(const void *pBGRA, pBGRA, const void *);
+    int32_t nPitch;
+};
+
+struct ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseCursor_params
+{
+    struct u_iface u_iface;
+    uint32_t unSessionID;
+    uint32_t unCursorID;
+};
+
+struct wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseCursor_params
 {
     struct u_iface u_iface;
     uint32_t unSessionID;
@@ -39367,6 +40127,48 @@ struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder_p
     int8_t _ret;
     W32_PTR(uint64_t *pvecPublishedFileIDs, pvecPublishedFileIDs, uint64_t *);
     uint32_t unNumPublishedFileIDs;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t nPublishedFileID;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t *pvecPublishedFileIDs;
+    uint32_t cMaxEntries;
+};
+
+struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(uint64_t *pvecPublishedFileIDs, pvecPublishedFileIDs, uint64_t *);
+    uint32_t cMaxEntries;
 };
 
 struct ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params
@@ -84097,7 +84899,7 @@ struct ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionI
     uint32_t _ret;
     const SteamNetworkingIdentity_144 *identityRemote;
     SteamNetConnectionInfo_t_153a *pConnectionInfo;
-    SteamNetConnectionRealTimeStatus_t *pQuickStatus;
+    SteamNetConnectionRealTimeStatus_t_164 *pQuickStatus;
 };
 
 struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo_params
@@ -84106,7 +84908,7 @@ struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConne
     uint32_t _ret;
     W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
     W32_PTR(SteamNetConnectionInfo_t_153a *pConnectionInfo, pConnectionInfo, SteamNetConnectionInfo_t_153a *);
-    W32_PTR(SteamNetConnectionRealTimeStatus_t *pQuickStatus, pQuickStatus, SteamNetConnectionRealTimeStatus_t *);
+    W32_PTR(SteamNetConnectionRealTimeStatus_t_164 *pQuickStatus, pQuickStatus, SteamNetConnectionRealTimeStatus_t_164 *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP_params
@@ -87188,7 +87990,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeSt
     struct u_iface u_iface;
     uint32_t _ret;
     uint32_t hConn;
-    SteamNetConnectionRealTimeStatus_t *pStatus;
+    SteamNetConnectionRealTimeStatus_t_164 *pStatus;
     int32_t nLanes;
     SteamNetConnectionRealTimeLaneStatus_t *pLanes;
 };
@@ -87198,7 +88000,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionReal
     struct u_iface u_iface;
     uint32_t _ret;
     uint32_t hConn;
-    W32_PTR(SteamNetConnectionRealTimeStatus_t *pStatus, pStatus, SteamNetConnectionRealTimeStatus_t *);
+    W32_PTR(SteamNetConnectionRealTimeStatus_t_164 *pStatus, pStatus, SteamNetConnectionRealTimeStatus_t_164 *);
     int32_t nLanes;
     W32_PTR(SteamNetConnectionRealTimeLaneStatus_t *pLanes, pLanes, SteamNetConnectionRealTimeLaneStatus_t *);
 };
@@ -98990,6 +99792,39 @@ enum unix_funcs
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas,
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo,
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsLowViolence,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsCybercafe,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsVACBanned,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentGameLanguage,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAvailableGameLanguages,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedApp,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsDlcInstalled,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetEarliestPurchaseUnixTime,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFreeWeekend,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDLCCount,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BGetDLCDataByIndex,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_InstallDLC,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_UninstallDLC,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAppProofOfPurchaseKey,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentBetaName,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_MarkContentCorrupt,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetInstalledDepots,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppInstallDir,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsAppInstalled,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppOwner,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchQueryParam,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDlcDownloadProgress,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppBuildId,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAllProofOfPurchaseKeys,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchCommandLine,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFamilySharing,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsTimedTrial,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcContext,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta,
     unix_ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData,
     unix_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init,
     unix_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown,
@@ -99412,6 +100247,26 @@ enum unix_funcs
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition,
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor,
     unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionCount,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionID,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSessionRemotePlayTogether,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionSteamID,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionGuestID,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSmallSessionAvatar,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetMediumSessionAvatar,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetLargeSessionAvatar,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientName,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientFormFactor,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BGetSessionClientResolution,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_ShowRemotePlayTogetherUI,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSendRemotePlayTogetherInvite,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BEnableRemotePlayTogetherDirectInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_DisableRemotePlayTogetherDirectInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetInput,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseVisibility,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMousePosition,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_CreateMouseCursor,
+    unix_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseCursor,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize,
     unix_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead,
@@ -101304,6 +102159,9 @@ enum unix_funcs
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally,
     unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems,
+    unix_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     unix_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,

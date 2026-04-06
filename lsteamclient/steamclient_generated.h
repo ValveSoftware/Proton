@@ -9,6 +9,7 @@ extern struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION005( stru
 extern struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006( struct u_iface );
 extern struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007( struct u_iface );
 extern struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008( struct u_iface );
+extern struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION009( struct u_iface );
 extern struct w_iface *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001( struct u_iface );
 extern struct w_iface *create_winISteamController_STEAMCONTROLLER_INTERFACE_VERSION( struct u_iface );
 extern struct w_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001( struct u_iface );
@@ -28,6 +29,7 @@ extern struct w_iface *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_IN
 extern struct w_iface *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001( struct u_iface );
 extern struct w_iface *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION002( struct u_iface );
 extern struct w_iface *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003( struct u_iface );
+extern struct w_iface *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004( struct u_iface );
 extern struct w_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001( struct u_iface );
 extern struct w_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002( struct u_iface );
 extern struct w_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003( struct u_iface );

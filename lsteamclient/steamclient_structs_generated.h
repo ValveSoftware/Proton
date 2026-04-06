@@ -1919,9 +1919,31 @@ struct SteamNetConnectionRealTimeLaneStatus_t
 };
 #pragma pack( pop )
 
-typedef struct SteamNetConnectionRealTimeStatus_t SteamNetConnectionRealTimeStatus_t;
+typedef struct SteamNetConnectionRealTimeStatus_t_164 SteamNetConnectionRealTimeStatus_t_164;
 #pragma pack( push, 8 )
-struct SteamNetConnectionRealTimeStatus_t
+struct SteamNetConnectionRealTimeStatus_t_164
+{
+    uint32_t m_eState;
+    int32_t m_nPing;
+    float m_flConnectionQualityLocal;
+    float m_flConnectionQualityRemote;
+    float m_flOutPacketsPerSec;
+    float m_flOutBytesPerSec;
+    float m_flInPacketsPerSec;
+    float m_flInBytesPerSec;
+    int32_t m_nSendRateBytesPerSecond;
+    int32_t m_cbPendingUnreliable;
+    int32_t m_cbPendingReliable;
+    int32_t m_cbSentUnackedReliable;
+    int64_t m_usecQueueTime;
+    int32_t m_usecMaxJitter;
+    uint32_t (reserved)[15];
+};
+#pragma pack( pop )
+
+typedef struct SteamNetConnectionRealTimeStatus_t_153a SteamNetConnectionRealTimeStatus_t_153a;
+#pragma pack( push, 8 )
+struct SteamNetConnectionRealTimeStatus_t_153a
 {
     uint32_t m_eState;
     int32_t m_nPing;
@@ -2055,6 +2077,17 @@ struct SteamRelayNetworkStatus_t
     uint32_t m_eAvailNetworkConfig;
     uint32_t m_eAvailAnyRelay;
     char (m_debugMsg)[256];
+};
+#pragma pack( pop )
+
+typedef struct SteamRemotePlaySessionAvatarLoaded_t SteamRemotePlaySessionAvatarLoaded_t;
+#pragma pack( push, 4 )
+struct SteamRemotePlaySessionAvatarLoaded_t
+{
+    uint32_t m_unSessionID;
+    int32_t m_iImage;
+    int32_t m_iWide;
+    int32_t m_iTall;
 };
 #pragma pack( pop )
 

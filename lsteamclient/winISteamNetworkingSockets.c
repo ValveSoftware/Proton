@@ -2789,7 +2789,7 @@ int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnec
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus(struct w_iface *_this, uint32_t hConn, SteamNetConnectionRealTimeStatus_t *pStatus, int32_t nLanes, SteamNetConnectionRealTimeLaneStatus_t *pLanes)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus(struct w_iface *_this, uint32_t hConn, SteamNetConnectionRealTimeStatus_t_164 *pStatus, int32_t nLanes, SteamNetConnectionRealTimeLaneStatus_t *pLanes)
 {
     struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus_params params =
     {

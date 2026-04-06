@@ -18347,6 +18347,9 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetWorkshopEU
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused, 12)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems, 4)
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems, 12)
 
 uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_CreateQueryUserUGCRequest(struct w_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
@@ -19666,6 +19669,42 @@ int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoa
     return params._ret;
 }
 
+int8_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused(struct w_iface *_this, uint64_t nPublishedFileID)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params params =
+    {
+        .u_iface = _this->u_iface,
+        .nPublishedFileID = nPublishedFileID,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems(struct w_iface *_this)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems(struct w_iface *_this, uint64_t *pvecPublishedFileIDs, uint32_t cMaxEntries)
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pvecPublishedFileIDs = pvecPublishedFileIDs,
+        .cMaxEntries = cMaxEntries,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems, &params );
+    return params._ret;
+}
+
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtable;
 
 DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION021, 0, ".?AVISteamUGC@@")
@@ -19768,6 +19807,9 @@ __ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtables)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems)
     );
 __ASM_BLOCK_END
 
@@ -19775,7 +19817,7 @@ struct w_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION021( struct u_ifac
 {
     struct w_iface *r = alloc_mem_for_iface(sizeof(struct w_iface), "STEAMUGC_INTERFACE_VERSION021");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtable, 96, "STEAMUGC_INTERFACE_VERSION021");
+    r->vtable = alloc_vtable(&winISteamUGC_STEAMUGC_INTERFACE_VERSION021_vtable, 99, "STEAMUGC_INTERFACE_VERSION021");
     r->u_iface = u_iface;
     return r;
 }

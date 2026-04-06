@@ -63,7 +63,7 @@ int8_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseCh
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(struct w_iface *_this, const SteamNetworkingIdentity_144 *identityRemote, SteamNetConnectionInfo_t_153a *pConnectionInfo, SteamNetConnectionRealTimeStatus_t *pQuickStatus)
+uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(struct w_iface *_this, const SteamNetworkingIdentity_144 *identityRemote, SteamNetConnectionInfo_t_153a *pConnectionInfo, SteamNetConnectionRealTimeStatus_t_164 *pQuickStatus)
 {
     struct ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo_params params =
     {
